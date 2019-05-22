@@ -20,7 +20,7 @@ module SessionsHelper
   end
 
   def current_user
-    rts = cookies[remember_token_symbol] ? cookies[remember_token_symbol] : cookies['remember_token']
+    rts = cookies[remember_token_symbol] || cookies['remember_token']
     @current_user ||= User.find_by_remember_token(rts)
   end
 

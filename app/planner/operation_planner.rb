@@ -208,7 +208,7 @@ module OperationPlanner
 
       id: id,
       operation_type_id: operation_type_id,
-      status: override_status ? override_status : status,
+      status: override_status || status,
       ready: ready?,
       inputs: input_list,
       problem: problem

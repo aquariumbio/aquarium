@@ -12,7 +12,7 @@ class ObjectTypesController < ApplicationController
 
     respond_to do |format|
       format.html do # index.html.erb
-        @handler = params[:handler] ? params[:handler] : 'glassware'
+        @handler = params[:handler] || 'glassware'
         @all_handlers = ObjectType.pluck(:handler).uniq.sort
         @first = !@all_handlers.empty? ? @all_handlers[0] : 'no handlers'
         @object_types = ObjectType.all.sort_by(&:name)

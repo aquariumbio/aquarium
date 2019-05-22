@@ -142,7 +142,7 @@ class PlansController < ApplicationController
   end
 
   def route_name(r)
-    r ? r : 'null'
+    r || 'null'
   end
 
   def destroy

@@ -242,7 +242,7 @@ module Krill
             end
 
             t.set(fv.name,               fv.child_sample ? fv.child_sample.name : 'NO SAMPLE')
-             .set(collection_column(fv), fv.child_item_id ? fv.child_item_id : 'NO COLLECTION')
+             .set(collection_column(fv), fv.child_item_id || 'NO COLLECTION')
              .set(row_column(fv),        fv.row)
              .set(column_column(fv),     fv.column)
 
@@ -259,7 +259,7 @@ module Krill
             end
 
             t.set(fv.name,         fv.child_sample ? fv.child_sample.name : 'NO SAMPLE')
-             .set(item_column(fv), fv.child_item_id ? fv.child_item_id : 'NO ITEM')
+             .set(item_column(fv), fv.child_item_id || 'NO ITEM')
 
           end
 

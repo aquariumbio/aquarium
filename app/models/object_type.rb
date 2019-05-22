@@ -41,13 +41,13 @@ class ObjectType < ActiveRecord::Base
   def rows
     return unless handler == 'collection'
 
-    read_attribute(:rows) ? read_attribute(:rows) : 1
+    read_attribute(:rows) || 1
   end
 
   def columns
     return unless handler == 'collection'
 
-    read_attribute(:columns) ? read_attribute(:columns) : 12
+    read_attribute(:columns) || 12
   end
 
   def rows=(value)

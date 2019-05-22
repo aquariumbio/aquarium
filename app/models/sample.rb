@@ -113,7 +113,7 @@ class Sample < ActiveRecord::Base
 
             if ft.ftype == 'sample'
               child = if raw_fv[:new_child_sample]
-                        Sample.creator(raw_fv[:new_child_sample], user ? user : User.find(user_id))
+                        Sample.creator(raw_fv[:new_child_sample], user || User.find(user_id))
                       else
                         Sample.sample_from_identifier raw_fv[:child_sample_name]
                       end

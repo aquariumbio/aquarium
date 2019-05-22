@@ -169,7 +169,7 @@ module Marshall
   def self.plan_update(x)
 
     p = Plan.find(x[:id])
-    p.name = x[:name] ? x[:name] : 'New Plan'
+    p.name = x[:name] || 'New Plan'
     p.cost_limit = x[:cost_limit]
     p.status = x[:status]
     # p.user_id = @@user.id

@@ -8,7 +8,7 @@ class SearchController < ApplicationController
 
     @autocomplete = Sample.all.collect(&:name).concat(ObjectType.all.collect(&:name))
 
-    @query = params[:query] ? params[:query] : ''
+    @query = params[:query] || ''
 
     @results = if params[:type] == 'sample'
 

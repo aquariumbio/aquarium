@@ -8,7 +8,7 @@ class SamplesController < ApplicationController
   # GET /samples.json
   def index
 
-    @sample_type_id = params[:sample_type_id] ? params[:sample_type_id] : Sample.all.first.id
+    @sample_type_id = params[:sample_type_id] || Sample.all.first.id
     @sample_type = SampleType.find(@sample_type_id)
 
     @cookie_name = "sample_search_string_#{@sample_type.name}".to_sym
