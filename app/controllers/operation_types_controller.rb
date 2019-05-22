@@ -386,7 +386,7 @@ class OperationTypesController < ApplicationController
           issues = { notes: [], inconsistencies: [] }
           notes = []
 
-          if x.has_key?(:library)
+          if x.key?(:library)
             if params[:options][:resolution_method] == 'fail'
               issues = Library.import(x, current_user)
             elsif params[:options][:resolution_method] == 'rename-existing'
