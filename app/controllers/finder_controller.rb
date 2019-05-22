@@ -105,17 +105,14 @@ class FinderController < ApplicationController
   end
 
   def type
-
     t = params[:type].split '|'
 
     if SampleType.find_by_name(t.first)
       render json: { type: 'Samples' }
+    elsif ObjectType.find_by_name(t.first)
+      render json: { type: 'Items' }
     else
-      if ObjectType.find_by_name(t.first)
-        render json: { type: 'Items' }
-      else
-        render json: { type: 'Unknown' }
-      end
+      render json: { type: 'Unknown' }
     end
   end
 

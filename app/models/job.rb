@@ -153,14 +153,10 @@ class Job < ActiveRecord::Base
         "<a #{confirm} target=_top href='/krill/ui?job=#{id}'>#{el}</a>".html_safe
       end
 
-    else
-
-      if pc == Job.NOT_STARTED
-        "<a #{confirm} target=_top href='/interpreter/advance?job=#{id}'>#{el}</a>".html_safe
-      elsif pc != Job.COMPLETED
-        "<a #{confirm} target=_top href='/interpreter/current?job=#{id}'>#{el}</a>".html_safe
-      end
-
+    elsif pc == Job.NOT_STARTED
+      "<a #{confirm} target=_top href='/interpreter/advance?job=#{id}'>#{el}</a>".html_safe
+    elsif pc != Job.COMPLETED
+      "<a #{confirm} target=_top href='/interpreter/current?job=#{id}'>#{el}</a>".html_safe
     end
 
   end

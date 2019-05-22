@@ -77,14 +77,12 @@ class Item < ActiveRecord::Base
   def location
     if is_part
       'Part of Collection'
+    elsif locator
+      locator.to_s
+    elsif primitive_location
+      primitive_location
     else
-      if locator
-        locator.to_s
-      elsif primitive_location
-        primitive_location
-      else
-        'Unknown'
-      end
+      'Unknown'
     end
   end
 

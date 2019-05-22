@@ -136,35 +136,29 @@ module FieldValuer
   #
   # @return [Hash]  hash of property keys and values for this model
   def properties
-
     p = {}
 
     parent_type.field_types.each do |ft|
-
       values = field_values.select { |fv| fv.name == ft.name }.collect { |fv| basic_value ft, fv }
 
       if ft.array
         p[ft.name] = values
-      else
-        p[ft.name] = values[0] if values.length == 1
+      elsif values.length == 1
+        p[ft.name] = values[0]
       end
-
     end
 
     p
-
   end
 
   def value(field_type)
-
     result = field_values.select { |fv| fv.name == field_type.name }
 
     if field_type.array
       result
-    else
-      result[0] if result.length >= 1
+    elsif result.length >= 1
+      result[0]
     end
-
   end
 
   def field_type(name, role = nil)
