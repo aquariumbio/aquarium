@@ -31,20 +31,20 @@ class SampleTree
     samp[:user_login] = @sample.user.login
 
     samp[:items].each do |i|
-      begin
-        i['data'] = JSON.parse i['data']
-        if i['data']['from']
-          i['data']['from'] = if i['data']['from'].class == String
-                                [Item.find_by_id(i['data']['from']).as_json(include: :object_type)]
-                              else
-                                i['data']['from'].collect do |id|
-                                  Item.find_by_id(id).as_json(include: :object_type)
-                                end
+
+      i['data'] = JSON.parse i['data']
+      if i['data']['from']
+        i['data']['from'] = if i['data']['from'].class == String
+                              [Item.find_by_id(i['data']['from']).as_json(include: :object_type)]
+                            else
+                              i['data']['from'].collect do |id|
+                                Item.find_by_id(id).as_json(include: :object_type)
                               end
-        end
-      rescue StandardError
-        i['data'] = {}
+                            end
       end
+    rescue StandardError
+      i['data'] = {}
+
     end
 
     {

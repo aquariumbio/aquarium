@@ -127,15 +127,15 @@ class LauncherController < ApplicationController
     raise plan.errors.full_messages.join(', ') unless plan.errors.empty?
 
     params[:operations].each do |form_op|
-      begin
-        op = operation_from(form_op)
-        op.associate_plan plan
-        op.save
-        @id_map[op.id] = form_op[:rid]
-        raise op.errors.full_messages.join(', ') unless op.errors.empty?
-      rescue Exception => e
-        raise e.to_s
-      end
+
+      op = operation_from(form_op)
+      op.associate_plan plan
+      op.save
+      @id_map[op.id] = form_op[:rid]
+      raise op.errors.full_messages.join(', ') unless op.errors.empty?
+    rescue Exception => e
+      raise e.to_s
+
     end
 
     if params[:wires]

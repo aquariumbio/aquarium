@@ -68,12 +68,12 @@ Bioturk::Application.configure do
   ip_list = []
   service_names = ['db', 's3', 'krill', 'app']
   service_names.each do |name|
-    begin
-      ip = Resolv.getaddress(name)
-      ip_list.push(IPAddress(ip))
-    rescue Resolv::ResolvError
-      puts "service #{name} not resolved"
-    end
+
+    ip = Resolv.getaddress(name)
+    ip_list.push(IPAddress(ip))
+  rescue Resolv::ResolvError
+    puts "service #{name} not resolved"
+
   end
 
   service_ips = IPAddress::IPv4.summarize(*ip_list).map(&:to_string)

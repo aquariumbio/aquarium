@@ -53,46 +53,44 @@ module Krill
 
       @thread = Thread.new do
 
+        @job.start # what if this fails?
+        appended_complete = false
+
         begin
-          @job.start # what if this fails?
-          appended_complete = false
-
-          begin
-            rval = @protocol.main
-          rescue Exception => e
-            puts "#{@job.id}: EXCEPTION #{e}"
-            puts e.backtrace[0, 10]
-            @base_object.error(e)
-          else
-            @job.reload.append_step(operation: 'complete', rval: rval)
-            appended_complete = true
-          ensure
-            if appended_complete
-              @job.stop
-            else
-              @job.stop 'error'
-              @job.operations.each do |op|
-                puts "notifying #{op.id}"
-                op.associate :job_crash, "Operation canceled when job #{@job.id} crashed"
-              end
-              @job.reload
-              @job.append_step operation: 'next', time: Time.now, inputs: {}
-              @job.append_step operation: 'aborted', rval: {}
-            end
-
-            @job.save # what if this fails?
-
-            ActiveRecord::Base.connection.close
-
-            @mutex.synchronize { @thread_status.running = false }
-          end
+          rval = @protocol.main
         rescue Exception => e
-          puts "#{@job.id}: SERIOUS EXCEPTION #{e}: #{e.backtrace[0, 10]}"
-
-          if ActiveRecord::Base.connection && ActiveRecord::Base.connection.active?
-            ActiveRecord::Base.connection.close
-            puts "#{@job.id}: Closing ActiveRecord connection"
+          puts "#{@job.id}: EXCEPTION #{e}"
+          puts e.backtrace[0, 10]
+          @base_object.error(e)
+        else
+          @job.reload.append_step(operation: 'complete', rval: rval)
+          appended_complete = true
+        ensure
+          if appended_complete
+            @job.stop
+          else
+            @job.stop 'error'
+            @job.operations.each do |op|
+              puts "notifying #{op.id}"
+              op.associate :job_crash, "Operation canceled when job #{@job.id} crashed"
+            end
+            @job.reload
+            @job.append_step operation: 'next', time: Time.now, inputs: {}
+            @job.append_step operation: 'aborted', rval: {}
           end
+
+          @job.save # what if this fails?
+
+          ActiveRecord::Base.connection.close
+
+          @mutex.synchronize { @thread_status.running = false }
+        end
+      rescue Exception => e
+        puts "#{@job.id}: SERIOUS EXCEPTION #{e}: #{e.backtrace[0, 10]}"
+
+        if ActiveRecord::Base.connection && ActiveRecord::Base.connection.active?
+          ActiveRecord::Base.connection.close
+          puts "#{@job.id}: Closing ActiveRecord connection"
         end
 
       end
