@@ -687,9 +687,7 @@ class Collection < Item
       collection_id_string = SecureRandom.hex # random string used to identify saved parts
       (0...dr).each do |r|
         (0...dc).each do |c|
-          if sample_matrix_aux[r][c] != nil
-            parts << Item.new(quantity: 1, inuse: 0, sample_id: sample_matrix_aux[r][c], object_type_id: part_type.id, data: collection_id_string)
-          end
+          parts << Item.new(quantity: 1, inuse: 0, sample_id: sample_matrix_aux[r][c], object_type_id: part_type.id, data: collection_id_string) if sample_matrix_aux[r][c] != nil
         end
       end
       Item.import parts
