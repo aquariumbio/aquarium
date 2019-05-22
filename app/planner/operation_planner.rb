@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 module OperationPlanner
 
   def associate_plan(plan)
     pa = plan_associations.create plan_id: plan.id
     pa.save
-    unless plan.user_id
-      plan.user_id = user_id
-      plan.save
-    end
+    return if plan.user_id
+
+    plan.user_id = user_id
+    plan.save
   end
 
   def predecessors_aux(i, wires, pred_outputs, predecessors)
@@ -22,58 +24,49 @@ module OperationPlanner
     end
 
     preds
-
   end
 
   def ready?
 
     @@ready_errors ||= []
 
-    if on_the_fly
+    return false if on_the_fly
 
-      return false
+    inputs = FieldValue.includes(:field_type).where(parent_class: 'Operation', parent_id: id, role: 'input')
+    wires = Wire.where(to_id: inputs.collect(&:id))
+    pred_outputs = FieldValue.where(id: wires.collect(&:from_id))
+    predecessors = Operation.where(id: pred_outputs.collect(&:parent_id))
 
-    else
+    inputs.each do |i|
 
-      inputs = FieldValue.includes(:field_type).where(parent_class: 'Operation', parent_id: id, role: 'input')
-      wires = Wire.where(to_id: inputs.collect(&:id))
-      pred_outputs = FieldValue.where(id: wires.collect(&:from_id))
-      predecessors = Operation.where(id: pred_outputs.collect(&:parent_id))
+      next unless i.field_type.ftype == 'sample'
 
-      inputs.each do |i|
+      preds = predecessors_aux i, wires, pred_outputs, predecessors
 
-        next unless i.field_type.ftype == 'sample'
+      if !preds.empty?
 
-        preds = predecessors_aux i, wires, pred_outputs, predecessors
+        preds.each do |pred|
 
-        if !preds.empty?
+          next if pred.status == 'primed' ||
+                  pred.status == 'done' ||
+                  pred.status == 'unplanned' ||
+                  pred.status == 'planning'
 
-          preds.each do |pred|
-
-            next if pred.status == 'primed' ||
-                    pred.status == 'done' ||
-                    pred.status == 'unplanned' ||
-                    pred.status == 'planning'
-
-            @@ready_errors << "Operation #{id} is waiting for operation #{pred.id} which has status #{pred.status}"
-            return false
-
-          end
-
-        elsif !i.satisfied_by_environment
-
-          @@ready_errors << "No items in stock available for input '#{i.name}' of operation #{id}"
+          @@ready_errors << "Operation #{id} is waiting for operation #{pred.id} which has status #{pred.status}"
           return false
 
-        end # if
+        end
 
-        # if
+      elsif !i.satisfied_by_environment
 
-      end # each
+        @@ready_errors << "No items in stock available for input '#{i.name}' of operation #{id}"
+        return false
 
-      return true
+      end # if
 
-    end # if
+    end # each
+
+    true
 
   end
 

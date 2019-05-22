@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "minitest"
 
 class TestController < ApplicationController
@@ -56,8 +58,8 @@ class TestController < ApplicationController
     begin
       resp = nil
       eval(code)
-    rescue SyntaxError, StandardError => error
-      resp = handle_error(error: error, phase_name: 'test loading')
+    rescue SyntaxError, StandardError => e
+      resp = handle_error(error: e, phase_name: 'test loading')
     end
 
     resp
@@ -75,8 +77,8 @@ class TestController < ApplicationController
         resp = AqResponse.new
         resp.error("Test error: setup must add operations")
       end
-    rescue SystemStackError, SyntaxError, StandardError => error
-      resp = handle_error(error: error, logs: test.logs)
+    rescue SystemStackError, SyntaxError, StandardError => e
+      resp = handle_error(error: e, logs: test.logs)
     end
 
     resp
@@ -96,8 +98,8 @@ class TestController < ApplicationController
             .more(exception_backtrace: test.error_backtrace,
                   log: test.logs)
       end
-    rescue SystemStackError, SyntaxError, StandardError => error
-      resp = handle_error(error: error, logs: test.logs)
+    rescue SystemStackError, SyntaxError, StandardError => e
+      resp = handle_error(error: e, logs: test.logs)
     end
 
     resp
@@ -111,18 +113,18 @@ class TestController < ApplicationController
     begin
       resp = AqResponse.new
       test.analyze
-    rescue Minitest::Assertion => error
-      error_trace = filter_backtrace(backtrace: error.backtrace)
+    rescue Minitest::Assertion => e
+      error_trace = filter_backtrace(backtrace: e.backtrace)
                     .map { |message| translate_trace(message: message) }
-      resp.error("Assertion failed: #{error}")
+      resp.error("Assertion failed: #{e}")
           .more(
             error_type: 'assertion_failure',
             exception_backtrace: error_trace,
             backtrace: test ? test.backtrace : [],
             log: test ? test.logs : []
           )
-    rescue SystemStackError, SyntaxError, StandardError => error
-      resp = handle_error(error: error)
+    rescue SystemStackError, SyntaxError, StandardError => e
+      resp = handle_error(error: e)
     else
       resp.ok(message: "test complete",
               log: test.logs,

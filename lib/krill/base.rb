@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Krill
 
   # @api krill
@@ -38,10 +40,15 @@ module Krill
         input = ShowResponse.new(JSON.parse(@job.reload.state, symbolize_names: true).last[:inputs])
 
         # populate operations with table input data
-        input[:table_inputs].each do |ti|
-          op = operations.find { |op| op.id == ti[:opid] }
-          op.temporary[ti[:key].to_sym] = ti[:value].to_f if op && ti[:type] == 'number'
-          op.temporary[ti[:key].to_sym] = ti[:value]      if op && ti[:type] != 'number'
+        input[:table_inputs].each do |table_input|
+          operation = operations.find { |op| op.id == table_input[:opid] }
+          next unless operation
+
+          operation.temporary[ti[:key].to_sym] = if table_input[:type] == 'number'
+                                                   table_input[:value].to_f
+                                                 else
+                                                   table_input[:value]
+                                                 end
         end
 
         # return the technician input
@@ -101,8 +108,8 @@ module Krill
           j[:table].each do |row|
             row.each do |entry|
               if entry.class == Hash && entry[:type]
-                op = operations.find { |op| op.id == entry[:operation_id] }
-                op.temporary[entry[:key]] = entry[:default] if op
+                operation = operations.find { |op| op.id == entry[:operation_id] }
+                operation.temporary[entry[:key]] = entry[:default] if operation
               end
             end
           end

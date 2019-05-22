@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CollectionsController < ApplicationController
 
   before_filter :signed_in_user
@@ -8,17 +10,17 @@ class CollectionsController < ApplicationController
     raw = collection.as_json
     raw[:part_matrix] = collection.part_matrix_as_json
     part_ids = []
-    raw[:part_matrix].each { |row|
-      row.each { |part|
+    raw[:part_matrix].each do |row|
+      row.each do |part|
         part_ids << part["id"] if part
-      }
-    }
+      end
+    end
     das = DataAssociation.where(parent_class: "Item", parent_id: part_ids)
-    raw[:part_matrix].each { |row|
-      row.each { |part|
+    raw[:part_matrix].each do |row|
+      row.each do |part|
         part[:data_associations] = das.select { |da| da.parent_id == part["id"] } if part
-      }
-    }
+      end
+    end
     render json: raw
 
   end
@@ -51,11 +53,10 @@ class CollectionsController < ApplicationController
       if raw_da[:id]
         da = DataAssociation.find(raw_da[:id])
         da.object = raw_da[:object]
-        da.save
       else
         da = DataAssociation.new(raw_da)
-        da.save
       end
+      da.save
       j = da.as_json
       j[:rid] = raw_da[:rid]
       rval << j

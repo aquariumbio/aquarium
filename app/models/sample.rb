@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A named, biologically unique definition for an instance of a {SampleType}, such as a specific Primer, Fragment, Plasmid, or Yeast Strain
 # A Sample has many {Item}s in inventory
 # @api krill
@@ -38,10 +40,10 @@ class Sample < ActiveRecord::Base
   validates :user_id, presence: true
 
   def self.sample_from_identifier(str)
-    if str
-      parts = str.split(': ')
-      Sample.find_by_name(parts[1..-1].join(': ')) if parts.length > 1
-    end
+    return unless str
+
+    parts = str.split(': ')
+    Sample.find_by_name(parts[1..-1].join(': ')) if parts.length > 1
   end
 
   # @example Create a new primer
@@ -75,89 +77,78 @@ class Sample < ActiveRecord::Base
   end
 
   def updater(raw, user = nil)
-
     self.name = raw[:name]
     self.description = raw[:description]
     self.project = raw[:project]
 
     Sample.transaction do
-
       save
+      raise ActiveRecord::Rollback unless errors.empty?
 
-      if errors.empty?
+      sample_type = SampleType.find(raw[:sample_type_id])
+      if raw[:field_values]
 
-        sample_type = SampleType.find(raw[:sample_type_id])
+        raw[:field_values].each do |raw_fv|
 
-        if raw[:field_values]
+          ft = sample_type.type(raw_fv[:name])
 
-          raw[:field_values].each do |raw_fv|
+          if ft && raw_fv[:id] && raw_fv[:deleted]
 
-            ft = sample_type.type(raw_fv[:name])
+            fv = FieldValue.find_by_id(raw_fv[:id])
+            fv.destroy if fv
 
-            if ft && raw_fv[:id] && raw_fv[:deleted]
+          elsif ft && !raw_fv[:deleted] # fv might have been made and marked deleted without ever having been saved
 
-              fv = FieldValue.find_by_id(raw_fv[:id])
-              fv.destroy if fv
-
-            elsif ft && !raw_fv[:deleted] # fv might have been made and marked deleted without ever having been saved
-
-              if raw_fv[:id]
-                begin
-                  fv = FieldValue.find(raw_fv[:id])
-                rescue Exception => e
-                  errors.add :missing_field_value, "Field value #{raw_fv[:id]} not found in db."
-                  errors.add :missing_field_value, e.to_s
-                  raise ActiveRecord::Rollback
-                end
-              else
-                fv = field_values.create(name: raw_fv[:name])
-              end
-
-              if ft.ftype == 'sample'
-                child = if raw_fv[:new_child_sample]
-                          Sample.creator(raw_fv[:new_child_sample], user ? user : User.find(user_id))
-                        else
-                          Sample.sample_from_identifier raw_fv[:child_sample_name]
-                        end
-                fv.child_sample_id = child.id if child
-                fv.child_sample_id = nil if !child && raw_fv[:child_sample_name] == ''
-                if !child && ft.required && raw_fv[:child_sample_name] != ''
-                  errors.add :required, "Sample required for field '#{ft.name}' not found or not specified."
-                  raise ActiveRecord::Rollback
-                end
-                unless !child || child.errors.empty?
-                  errors.add :child_error, "#{ft.name}: " + stringify_errors(child.errors)
-                  raise ActiveRecord::Rollback
-                end
-              elsif ft.ftype == 'number'
-                fv.value = raw_fv[:value].to_f
-              else # string, url
-                fv.value = raw_fv[:value]
-              end
-
-              puts 'before fv saved: {fv.inspect}'
-              fv.save
-              puts "fv saved. now #{fv.inspect}"
-
-              unless fv.errors.empty?
-                errors.add :field_value, "Could not save field #{raw_fv[:name]}: #{stringify_errors(fv.errors)}"
+            if raw_fv[:id]
+              begin
+                fv = FieldValue.find(raw_fv[:id])
+              rescue Exception => e
+                errors.add :missing_field_value, "Field value #{raw_fv[:id]} not found in db."
+                errors.add :missing_field_value, e.to_s
                 raise ActiveRecord::Rollback
               end
+            else
+              fv = field_values.create(name: raw_fv[:name])
+            end
 
-            end # if
+            if ft.ftype == 'sample'
+              child = if raw_fv[:new_child_sample]
+                        Sample.creator(raw_fv[:new_child_sample], user ? user : User.find(user_id))
+                      else
+                        Sample.sample_from_identifier raw_fv[:child_sample_name]
+                      end
+              fv.child_sample_id = child.id if child
+              fv.child_sample_id = nil if !child && raw_fv[:child_sample_name] == ''
+              if !child && ft.required && raw_fv[:child_sample_name] != ''
+                errors.add :required, "Sample required for field '#{ft.name}' not found or not specified."
+                raise ActiveRecord::Rollback
+              end
+              unless !child || child.errors.empty?
+                errors.add :child_error, "#{ft.name}: " + stringify_errors(child.errors)
+                raise ActiveRecord::Rollback
+              end
+            elsif ft.ftype == 'number'
+              fv.value = raw_fv[:value].to_f
+            else # string, url
+              fv.value = raw_fv[:value]
+            end
 
-          end # each
+            puts 'before fv saved: {fv.inspect}'
+            fv.save
+            puts "fv saved. now #{fv.inspect}"
 
-        end # if
+            unless fv.errors.empty?
+              errors.add :field_value, "Could not save field #{raw_fv[:name]}: #{stringify_errors(fv.errors)}"
+              raise ActiveRecord::Rollback
+            end
 
-      else
+          end # if
 
-        raise ActiveRecord::Rollback
+        end # each
 
-      end
+      end # if
 
     end
-
   end
 
   # Return all items of this {Sample} in the provided {ObjectType}.

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Defines a batch of executable {Operation}s of the same type that can be run together.
 # Jobs are executed with the `protocol` of the {OperationType}. Protocols must handle being able to
 # run Jobs with varying amounts of Operations.
@@ -127,7 +129,7 @@ class Job < ActiveRecord::Base
 
   def arguments
 
-    if /\.rb$/ =~ path
+    if /\.rb$/.match?(path)
       JSON.parse(state).first['arguments']
     else
       JSON.parse(state)['stack'].first.reject { |k, _v| k == 'user_id' }
@@ -143,7 +145,7 @@ class Job < ActiveRecord::Base
 
     confirm = options[:confirm] ? "class='confirm'" : ''
 
-    if /\.rb$/ =~ path
+    if /\.rb$/.match?(path)
 
       if pc == Job.NOT_STARTED
         "<a #{confirm} target=_top href='/krill/start?job=#{id}'>#{el}</a>".html_safe
@@ -183,55 +185,43 @@ class Job < ActiveRecord::Base
   end
 
   def set_arguments(a)
+    raise 'Could not set arguments of non-krill protocol' unless /\.rb$/.match?(path)
 
-    if /\.rb$/ =~ path
-      self.state = [{ operation: 'initialize', arguments: (remove_types a), time: Time.now }].to_json
-    else
-      raise 'Could not set arguments of non-krill protocol'
-    end
-
+    self.state = [{ operation: 'initialize', arguments: (remove_types a), time: Time.now }].to_json
   end
 
   # Get the value returned by the last line of the main method in the protocol which ran this Job.
   #
   # @return [Hash]  JSON parsed object which was returned by the Job
   def return_value
-
-    if /\.rb$/ =~ path
-
+    if /\.rb$/.match?(path)
       begin
         @rval = JSON.parse(state, symbolize_names: true).last[:rval] || {}
       rescue StandardError
         @rval = { error: 'Could not find return value.' }
       end
-
     else
-
       entries = logs.select { |l| l.entry_type == 'return' }
-      if entries.empty?
-        return nil
-      else
-        JSON.parse(entries.first.data, symbolize_names: true)
-      end
+      return nil if entries.empty?
 
+      JSON.parse(entries.first.data, symbolize_names: true)
     end
-
   end
 
   def cancel(user)
-    if pc != Job.COMPLETED
-      self.pc = Job.COMPLETED
-      self.user_id = user.id
-      if /\.rb$/ =~ path
-        Krill::Client.new.abort id
-        abort_krill
-      end
-      save
+    return if pc == Job.COMPLETED
+
+    self.pc = Job.COMPLETED
+    self.user_id = user.id
+    if /\.rb$/.match?(path)
+      Krill::Client.new.abort id
+      abort_krill
     end
+    save
   end
 
   def krill?
-    if /\.rb$/ =~ path
+    if /\.rb$/.match?(path)
       true
     else
       false
@@ -239,7 +229,7 @@ class Job < ActiveRecord::Base
   end
 
   def plankton?
-    if /\.pl$/ =~ path
+    if /\.pl$/.match?(path)
       true
     else
       false
@@ -305,17 +295,15 @@ class Job < ActiveRecord::Base
   end
 
   def step_workflow
+    return unless workflow_process
 
-    if workflow_process
-      begin
-        wp = WorkflowProcess.find(workflow_process.id)
-        wp.record_result_of self
-        wp.step
-      rescue Exception => e
-        Rails.logger.info 'Error trying to step workflow process ' + e.to_s
-      end
+    begin
+      wp = WorkflowProcess.find(workflow_process.id)
+      wp.record_result_of self
+      wp.step
+    rescue Exception => e
+      Rails.logger.info 'Error trying to step workflow process ' + e.to_s
     end
-
   end
 
   def name

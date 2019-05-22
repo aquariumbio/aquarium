@@ -1,20 +1,14 @@
+# frozen_string_literal: true
+
 class JsonController < ApplicationController
 
   before_filter :signed_in_user
 
   def method_ok(m)
+    false unless m
+    raise "Illegal method #{m} requested from front end." unless %w[all where find find_by_name new].member? m
 
-    if m
-
-      if %w[all where find find_by_name new].member? m
-        true
-      else
-        raise "Illegal method #{m} requested from front end."
-      end
-    else
-      false
-    end
-
+    true
   end
 
   def index
@@ -80,8 +74,8 @@ class JsonController < ApplicationController
 
     begin
       record.save
-    rescue ActiveRecord::RecordNotUnique => err
-      render json: { error: err.to_s },
+    rescue ActiveRecord::RecordNotUnique => e
+      render json: { error: e.to_s },
              status: :unprocessable_entity
       return
     end

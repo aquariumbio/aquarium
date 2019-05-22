@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PlanCopier
 
   def initialize(plan_id)
@@ -94,12 +96,11 @@ class PlanCopier
       end
     end
 
-    if m[:children]
-      m[:children].each do |child|
-        port_module_wires child
-      end
-    end
+    return unless m[:children]
 
+    m[:children].each do |child|
+      port_module_wires child
+    end
   end
 
 end

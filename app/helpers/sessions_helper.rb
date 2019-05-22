@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SessionsHelper
 
   def remember_token_symbol
@@ -27,14 +29,14 @@ module SessionsHelper
   end
 
   def signed_in_user
-    unless signed_in?
-      store_location
-      if request.put?
-        response.headers["status"] = "Not-logged-in"
-        render json: { error: "Not-logged-in" }
-      else
-        redirect_to signin_url, notice: 'Please sign in.'
-      end
+    return if signed_in?
+
+    store_location
+    if request.put?
+      response.headers["status"] = "Not-logged-in"
+      render json: { error: "Not-logged-in" }
+    else
+      redirect_to signin_url, notice: 'Please sign in.'
     end
   end
 

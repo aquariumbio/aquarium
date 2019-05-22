@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # @api krill
 module FieldValuer
 
@@ -23,7 +25,7 @@ module FieldValuer
     case ft.ftype
 
     when 'string', 'url', 'json'
-      errors.add(:set_property, "#{val} is not a string") unless val.class == String
+      errors.add(:set_property, "#{val} is not a string") unless val.is_a?(String)
       fv.value = val
 
     when 'number'
@@ -32,14 +34,14 @@ module FieldValuer
 
     when 'sample'
       if val
-        errors.add(:set_property, "#{val} is not a sample") unless val.class == Sample
+        errors.add(:set_property, "#{val} is not a sample") unless val.is_a?(Sample)
         fv.child_sample_id = val.id
       else
         fv.child_sample_id = nil # this is used for empty samples in the planner
       end
 
     when 'item'
-      errors.add(:set_property, "#{val} is not a item") unless val.class == Item
+      errors.add(:set_property, "#{val} is not a item") unless val.is_a?(Item)
       fv.child_item_id = val.id
 
     end
@@ -63,8 +65,8 @@ module FieldValuer
 
     fvs = field_values.select { |fv| fv.name == name && fv.role == role }
 
-    if ft.array && val.class == Array
-      if (val.any? { |v| v.class == Array })
+    if ft.array && val.is_a?(Array)
+      if (val.any? { |v| v.is_a?(Array) })
         val = val.first
       end
       new_fvs = val.collect do |v|
@@ -77,21 +79,11 @@ module FieldValuer
         new_fvs.each(&:save)
         fvs.each(&:destroy)
       end
-
-      return self
-
-    elsif ft.array && val.class != Array && !override_array
-
+    elsif ft.array && !val.is_a?(Array) && !override_array
       errors.add(:set_property, "Tried to set property #{ft.name}, an array, to something that is not an array.")
-      return self
-
-    elsif !ft.array && val.class == Array
-
+    elsif !ft.array && val.is_a?(Array)
       errors.add(:set_property, "Tried to set property #{ft.name}, which is not an array, to something is an array.")
-      return self
-
     elsif !ft.array || override_array
-
       fvs = [field_values.create(name: name, field_type_id: ft.id, role: role)] if fvs.empty?
 
       if ft && fvs.length == 1
@@ -108,16 +100,12 @@ module FieldValuer
       else
         Rails.logger.info "Errors setting property of #{self.class} #{id}: #{errors.full_messages.join(', ')}"
       end
-      return self
-
     else
-
       Rails.logger.info "Could not set #{self.class} #{id} property #{name} to #{val}. No case matches conditions."
       errors.add(:set_property, "Could not set #{self.class} #{id} property #{name} to #{val}. No case matches conditions.")
-      return self
-
     end
 
+    self
   end
 
   def basic_value(ft, fv)
@@ -188,7 +176,7 @@ module FieldValuer
 
     parent_type.field_types.collect do |ft|
       v = value ft
-      if v.class == Array
+      if v.is_a?(Array)
         v.collect(&:to_s).join(', ')
       else
         v.to_s

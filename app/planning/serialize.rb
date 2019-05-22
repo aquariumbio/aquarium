@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Serialize
 
   def self.serialize_fv(fv)
@@ -57,16 +59,13 @@ module Serialize
 
   end
 
-  def self.get_aft_for fv, afts
+  # TODO: remove?  this is not used within Aquarium
+  def self.get_aft_for(fv, afts)
     aft_list = afts.select { |aft| aft.id == fv["allowable_field_type_id"] }
-    if aft_list.length > 0
-      aft_list[0]
-    else
-      nil
-    end
+    aft_list[0] if aft_list.length > 0
   end
 
-  def self.complete_field_values field_values, field_types
+  def self.complete_field_values(field_values, field_types)
 
     fvs = field_values
 
@@ -120,11 +119,11 @@ module Serialize
 
   def self.item_history(item)
 
-    if item.is_part
-      item_id = item.containing_collection.id
-    else
-      item_id = item.id
-    end
+    item_id = if item.is_part
+                item.containing_collection.id
+              else
+                item.id
+              end
 
     fvs = FieldValue.where(parent_class: 'Operation', child_item_id: item_id)
     op_ids = fvs.collect(&:parent_id)

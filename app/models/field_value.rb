@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Simply put: a representation of an input, output, or parameter of an Operation.
 #
 # In more detail: an Item, Sample, or parameter of the inputs/outputs of an {Operation} or of the properties of a {Sample}
@@ -73,13 +75,9 @@ class FieldValue < ActiveRecord::Base
   # @param row [Fixnum]
   # @param column [Fixnum]
   # @return [Item]
-  def collection_part row, column
+  def collection_part(row, column)
     pas = PartAssociation.where(collection_id: child_item_id, row: row, column: column)
-    if pas.length == 1
-      pas[0].part
-    else
-      nil
-    end
+    pas[0].part if pas.length == 1
   end
 
   # Return associated parameter value.
@@ -92,12 +90,10 @@ class FieldValue < ActiveRecord::Base
     if field_type
       ft = field_type
     elsif sample && sample_type
-      fts = sample.sample_type.field_types.select { |ft| ft.name == name }
-      if fts.length == 1
-        ft = fts[0]
-      else
-        return nil
-      end
+      fts = sample.sample_type.field_types.select { |type| type.name == name }
+      return nil unless fts.length == 1
+
+      ft = fts[0]
     else
       return nil
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Class that represents an operation in the lab
 # Some very important methods include {#input}, {#output}, {#error}, {#pass}
 # @api krill
@@ -437,21 +439,16 @@ class Operation < ActiveRecord::Base
   def leaf?
 
     inputs.each do |i|
-
       next unless i.predecessors.count > 0
 
       i.predecessors.each do |pred|
-        if pred.operation.on_the_fly
-          return pred.operation.leaf?
-        else
-          return false
-        end
-      end
+        return pred.operation.leaf? if pred.operation.on_the_fly
 
+        return false
+      end
     end
 
     true
-
   end
 
   def temporary

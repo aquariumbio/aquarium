@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Class that represents a physical object in the lab
 # Has an {ObjectType} that declares what kind of physical thing it is, and may have a {Sample} defining the specimen that resides within.
 # @api krill
@@ -196,20 +198,14 @@ class Item < ActiveRecord::Base
   end
 
   def non_wizard_location?
-
     wiz = Wizard.find_by_name(object_type.prefix)
 
-    if wiz && locator.nil?
-      return false
-    else
-      return true
-    end
-
+    !(wiz && locator.nil?)
   end
 
   # (see #move_to)
   #
-  # @note for backwards compatability
+  # @note for backwards compatibility
   def move(locstr)
     move_to locstr
   end
@@ -311,11 +307,7 @@ class Item < ActiveRecord::Base
   # @return [Collection]
   def containing_collection
     pas = PartAssociation.where(part_id: self.id)
-    if pas.length == 1
-      pas[0].collection
-    else
-      nil
-    end
+    pas[0].collection if pas.length == 1
   end
 
   # other methods ############################################################################
@@ -445,32 +437,18 @@ class Item < ActiveRecord::Base
   end
 
   def self.items_for(sid, oid)
-
     sample = Sample.find_by_id(sid)
     ot = ObjectType.find_by_id(oid)
 
-    if sample && ot
+    if sample
+      return [] unless ot
+      return Collection.parts(sample, ot) if ot.handler == 'collection'
 
-      if ot.handler == 'collection'
-        return Collection.parts(sample, ot)
-      else
-        return sample.items.reject { |i| i.deleted? || i.object_type_id != ot.id }
-      end
-
-    elsif sample && !ot
-
-      return []
-
-    elsif ot.handler != 'sample_container'
-
-      return ot.items.reject(&:deleted?)
-
-    else
-
-      return []
-
+      return sample.items.reject { |i| i.deleted? || i.object_type_id != ot.id }
     end
+    return ot.items.reject(&:deleted?) if ot.handler != 'sample_container'
 
+    []
   end
 
 end

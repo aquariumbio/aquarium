@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # @api krill
 class Locator < ActiveRecord::Base
 
@@ -34,16 +36,16 @@ class Locator < ActiveRecord::Base
   end
 
   def self.first_empty(wizard)
-    if wizard
-      locs = where(wizard_id: wizard.id, item_id: nil)
-      if !locs.empty?
-        locs.first
-      else
-        m = Locator.largest wizard
-        loc = Locator.new(wizard_id: wizard.id, number: m ? m.number + 1 : 0)
-        loc.save
-        loc
-      end
+    return unless wizard
+
+    locs = where(wizard_id: wizard.id, item_id: nil)
+    if !locs.empty?
+      locs.first
+    else
+      m = Locator.largest wizard
+      loc = Locator.new(wizard_id: wizard.id, number: m ? m.number + 1 : 0)
+      loc.save
+      loc
     end
   end
 

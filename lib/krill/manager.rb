@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Krill
 
   class ThreadStatus
@@ -20,12 +22,9 @@ module Krill
       @jid = jid
       @job = Job.find(jid)
 
-      if !@job.operations.empty?
-        @code = @job.operations.first.operation_type.code('protocol').content
-      else
-        raise "No path specified for job #{@job.id}. Cannot start."
-      end
+      raise "No path specified for job #{@job.id}. Cannot start." if @job.operations.empty?
 
+      @code = @job.operations.first.operation_type.code('protocol').content
       initial_state = JSON.parse @job.state, symbolize_names: true
       @args = initial_state[0][:arguments]
 
@@ -87,8 +86,8 @@ module Krill
 
             @mutex.synchronize { @thread_status.running = false }
           end
-        rescue Exception => main_error
-          puts "#{@job.id}: SERIOUS EXCEPTION #{main_error}: #{main_error.backtrace[0, 10]}"
+        rescue Exception => e
+          puts "#{@job.id}: SERIOUS EXCEPTION #{e}: #{e.backtrace[0, 10]}"
 
           if ActiveRecord::Base.connection && ActiveRecord::Base.connection.active?
             ActiveRecord::Base.connection.close
@@ -126,8 +125,8 @@ module Krill
 
         @job.save # what if this fails?
       end
-    rescue Exception => main_error
-      puts "#{@job.id}: SERIOUS EXCEPTION #{main_error}: #{main_error.backtrace[0, 10]}"
+    rescue Exception => e
+      puts "#{@job.id}: SERIOUS EXCEPTION #{e}: #{e.backtrace[0, 10]}"
 
       if ActiveRecord::Base.connection && ActiveRecord::Base.connection.active?
         ActiveRecord::Base.connection.close
@@ -164,12 +163,9 @@ module Krill
 
       @job.reload
 
-      if @job.pc == -2
-        return 'done'
-      else
-        return 'ready'
-      end
+      return 'done' if @job.pc == -2
 
+      'ready'
     end
 
     def check_again
