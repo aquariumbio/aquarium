@@ -121,7 +121,7 @@ get_table_response when parameterized with an op or row" do
     expect(bigresp.get_response(:tblrespnskey)).to eq([2, 1, 3, 4, 5, 6])
 
     expect(bigresp.get_response(:tblrespnskey2)).to(
-      eq(['one', 'two', 'three', 'four', 'five', 'six'])
+      eq(%w[one two three four five six])
     )
 
     expect(bigresp.get_response(:response2)).to eq(1412312312312312312312412312312312)

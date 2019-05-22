@@ -17,7 +17,7 @@ module DataAssociator
   # @return [Array<DataAssociation>] the array of associations with the key
   def data_associations(key = nil)
     klass = self.class.to_s
-    klass = ['Item', 'Collection'] if is_a?(Item) || is_a?(Collection)
+    klass = %w[Item Collection] if is_a?(Item) || is_a?(Collection)
 
     if key
       DataAssociation.includes(:upload).where(parent_id: id, parent_class: klass, key: key.to_s)

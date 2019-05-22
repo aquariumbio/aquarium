@@ -103,7 +103,7 @@ RSpec.describe Collection, type: :model do
 
       c = example_collection
       c.set_data_matrix 'x', [[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2]]
-      c.set_data_matrix 'y', [['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']]
+      c.set_data_matrix 'y', [%w[A B C D E F G H I J K L]]
 
       raise 'did not set matrix' unless c.get_part_data('x', 0, 11) == 1.2 && c.get_part_data('y', 0, 0) == 'A'
 
