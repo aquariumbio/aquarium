@@ -146,9 +146,7 @@ class Collection < Item
       (0...matrix[r].length).each do |c|
         x = r + offset[0]
         y = c + offset[1]
-        if x < dr && y < dc
-          yield r, c, x, y
-        end
+        yield r, c, x, y if x < dr && y < dc
       end
     end
 
@@ -608,9 +606,7 @@ class Collection < Item
     @matrix_cache = nil
     if x == EMPTY
       pas = PartAssociation.where(collection_id: id, row: r, column: c)
-      if pas.length == 1
-        pas[0].destroy
-      end
+      pas[0].destroy if pas.length == 1
     else
       s = Collection.to_sample(x)
       part = Item.make({ quantity: 1, inuse: 0 }, sample: s, object_type: part_type)

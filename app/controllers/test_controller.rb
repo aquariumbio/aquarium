@@ -23,9 +23,7 @@ class TestController < ApplicationController
           resp = pre_test(test: test)
           if resp.nil?
             resp = run_test(test: test)
-            if resp.nil?
-              resp = post_test(test: test)
-            end
+            resp = post_test(test: test) if resp.nil?
           end
         end
       rescue Exception => e
