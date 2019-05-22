@@ -44,7 +44,7 @@ module Krill
                     else
                       "#{r + 1},#{c + 1}"
                     end
-              tab.push([col.id, loc] + ingredients.collect { |ing| { content: (ing[i].is_a? Item) ? ing[i].id : ing[i], check: true } })
+              tab.push([col.id, loc] + ingredients.collect { |ing| { content: ing[i].is_a?(Item) ? ing[i].id : ing[i], check: true } })
             end
             i += 1
           end
