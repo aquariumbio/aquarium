@@ -127,7 +127,7 @@ RSpec.describe Collection, type: :model do
       d = example_collection "96 qPCR collection"
       d.new_data_matrix "x"
       m = d.data_matrix "x"
-      nz = m.collect { |row| row.collect { |da| da.value } }.flatten.select { |x| x != 0.0 }
+      nz = m.collect { |row| row.collect { |da| da.value } }.flatten.reject { |x| x == 0.0 }
       raise "did not make empty data matrix" unless nz.empty?
 
       d.drop_data_matrix "x"
