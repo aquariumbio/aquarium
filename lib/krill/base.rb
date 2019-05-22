@@ -57,7 +57,7 @@ module Krill
       else
 
         # figure out default technician response
-        i = ShowResponse.new(simulated_input_for page)
+        i = ShowResponse.new(simulated_input_for(page))
         @job.append_step operation: 'next', time: Time.now, inputs: i
 
         raise "Job #{jid} executed too many steps (50) in debug mode. Could be an infinite loop." if @job.pc > 500
