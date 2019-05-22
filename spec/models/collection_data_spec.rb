@@ -94,8 +94,8 @@ RSpec.describe Collection, type: :model do
       raise "did not find association y" unless m[0][3].key == "y" && m[0][3].value == "hello world"
 
       m = c.data_matrix "z"
-      raise "did not gracefully deal with lack of data association" if m[0][0] != nil
-      raise "did not gracefully deal with lack of part" if m[0][1] != nil
+      raise "did not gracefully deal with lack of data association" unless m[0][0].nil?
+      raise "did not gracefully deal with lack of part" unless m[0][1].nil?
 
     end
 

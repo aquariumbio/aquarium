@@ -685,7 +685,7 @@ class Collection < Item
       collection_id_string = SecureRandom.hex # random string used to identify saved parts
       (0...dr).each do |r|
         (0...dc).each do |c|
-          parts << Item.new(quantity: 1, inuse: 0, sample_id: sample_matrix_aux[r][c], object_type_id: part_type.id, data: collection_id_string) if sample_matrix_aux[r][c] != nil
+          parts << Item.new(quantity: 1, inuse: 0, sample_id: sample_matrix_aux[r][c], object_type_id: part_type.id, data: collection_id_string) unless sample_matrix_aux[r][c].nil?
         end
       end
       Item.import parts
@@ -700,7 +700,7 @@ class Collection < Item
       pas = []
       (0...dr).each do |r|
         (0...dc).each do |c|
-          if sample_matrix_aux[r][c] != nil
+          unless sample_matrix_aux[r][c].nil?
             pas << PartAssociation.new(collection_id: id, part_id: parts[index].id, row: r, column: c)
             index += 1
           end
@@ -778,8 +778,8 @@ class Collection < Item
   def dimensions
     # Should look up object type dims instead
     dims = [object_type.rows, object_type.columns]
-    dims[0] = 12 unless dims[0] != nil
-    dims[1] = 1 unless dims[1] != nil
+    dims[0] = 12 if dims[0].nil?
+    dims[1] = 1 if dims[1].nil?
     dims
   end
 
