@@ -54,7 +54,7 @@ module Krill
       end
       raise TableCellUndefined if target_input_cell.nil?
 
-      return (target_input_cell[:type] == 'number' ? target_input_cell[:value].to_f : target_input_cell[:value])
+      (target_input_cell[:type] == 'number' ? target_input_cell[:value].to_f : target_input_cell[:value])
     end
 
     # Returns a hash of user responses, each under the var name specified in the ShowBlock where
@@ -99,7 +99,7 @@ module Krill
     # @param var [Symbol/String]  the key that was specified to store data under in the `upload` call
     # @return [Boolean]  true if the key corresponds to a list of upload objects
     def is_upload?(var)
-      return self[var.to_sym].is_a?(Array) && self[var.to_sym].all? { |up_hash| up_hash.is_a?(Hash) && up_hash.key?(:name) && up_hash.key?(:name) }
+      self[var.to_sym].is_a?(Array) && self[var.to_sym].all? { |up_hash| up_hash.is_a?(Hash) && up_hash.key?(:name) && up_hash.key?(:name) }
     end
 
     # Returns a list of the Upload objects created from files uploaded in the ShowBlock
@@ -110,7 +110,7 @@ module Krill
     def get_upload_response(var)
       return nil unless is_upload?(var)
 
-      return Upload.find(self[var.to_sym].map { |up_hash| up_hash[:id] })
+      Upload.find(self[var.to_sym].map { |up_hash| up_hash[:id] })
     end
   end
 

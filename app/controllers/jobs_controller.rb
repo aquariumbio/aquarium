@@ -30,7 +30,7 @@ class JobsController < ApplicationController
       return
     end
 
-    return redirect_to krill_log_path(job: @job.id)
+    redirect_to krill_log_path(job: @job.id)
 
   end
 
