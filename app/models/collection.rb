@@ -187,7 +187,7 @@ class Collection < Item
     pas = part_association_list
     part_ids = pas.collect { |p| p.part_id }.uniq
 
-    das = DataAssociation.where(parent_class: "Item", parent_id: part_ids, key: key)
+    das = DataAssociation.where(parent_class: 'Item', parent_id: part_ids, key: key)
 
     r, c = dimensions
     m = Array.new(r) { Array.new(c) }
@@ -287,7 +287,7 @@ class Collection < Item
         duplicates: true
       )
 
-      puts "DONE!!!!!!!!!!!"
+      puts 'DONE!!!!!!!!!!!'
 
     end
 
@@ -308,13 +308,13 @@ class Collection < Item
   def self.containing(s, ot = nil)
     return [] unless s
 
-    cids = PartAssociation.joins(:part).where("sample_id = ?", to_sample_id(s)).map(&:collection_id)
+    cids = PartAssociation.joins(:part).where('sample_id = ?', to_sample_id(s)).map(&:collection_id)
     Collection.where(id: cids).select { |c| !ot || c.object_type_id == ot.id }
   end
 
   # @private
   def part_type
-    @part_type ||= ObjectType.find_by_name("__Part")
+    @part_type ||= ObjectType.find_by_name('__Part')
   end
 
   # Returns first Array element from #find
@@ -449,7 +449,7 @@ class Collection < Item
   def find(val)
     PartAssociation
       .joins(:part)
-      .where("sample_id = ? AND collection_id = ?", to_sample_id(val), id)
+      .where('sample_id = ? AND collection_id = ?', to_sample_id(val), id)
       .collect { |pa| [pa.row, pa.column] }
   end
 

@@ -7,7 +7,7 @@ class StaticPagesController < ApplicationController
 
   def leader_board(assoc, extra = nil, num = 3)
 
-    assocs = assoc + "s"
+    assocs = assoc + 's'
     assocs_sym = assocs.to_sym
 
     lb = User.joins(assocs_sym)
@@ -44,15 +44,15 @@ class StaticPagesController < ApplicationController
 
     @announcements = Announcement.last(5).reverse
 
-    @sample_board = leader_board "sample"
-    @job_board = leader_board "job"
-    @plan_board = leader_board "plan", "plans.budget_id IS NOT NULL"
+    @sample_board = leader_board 'sample'
+    @job_board = leader_board 'job'
+    @plan_board = leader_board 'plan', 'plans.budget_id IS NOT NULL'
 
     done = Plan.joins(:plan_associations) \
                .joins(plan_associations: :operation) \
                .includes(:user) \
                .where("plans.created_at > ? AND operations.status = 'done'", Date.today - 3.month) \
-               .select("plans.*, COUNT(plan_associations.id) op_count") \
+               .select('plans.*, COUNT(plan_associations.id) op_count') \
                .group('plans.id') \
                .collect { |p| { plan: p, ops: p.op_count, user: p.user } } \
                .sort { |a, b| a[:ops] <=> b[:ops] } \
@@ -62,8 +62,8 @@ class StaticPagesController < ApplicationController
     all = Plan.joins(:plan_associations) \
               .joins(plan_associations: :operation) \
               .includes(:user) \
-              .where("plans.created_at > ?", Date.today - 3.month) \
-              .select("plans.*, COUNT(plan_associations.id) op_count") \
+              .where('plans.created_at > ?', Date.today - 3.month) \
+              .select('plans.*, COUNT(plan_associations.id) op_count') \
               .group('plans.id') \
               .collect { |p| { plan: p, ops: p.op_count, user: p.user } } \
               .sort { |a, b| a[:ops] <=> b[:ops] } \
@@ -73,9 +73,9 @@ class StaticPagesController < ApplicationController
 
     compute_widths @biggest_plans, :ops
 
-    retired_group_id = Group.find_by_name("retired")
+    retired_group_id = Group.find_by_name('retired')
     retired_count = User.joins(:memberships)
-                        .where("users.id = memberships.user_id AND memberships.group_id = ?", retired_group_id)
+                        .where('users.id = memberships.user_id AND memberships.group_id = ?', retired_group_id)
                         .count
     @user_count = User.count - retired_count
 
@@ -83,7 +83,7 @@ class StaticPagesController < ApplicationController
     @item_count = Item.where("location != 'deleted'").count
     @last_item = Item.last
     @deployed_op_count = OperationType.where(deployed: true).count
-    @job_count = Job.where("created_at > ? AND pc = -2", Date.today - 30.days).count
+    @job_count = Job.where('created_at > ? AND pc = -2', Date.today - 30.days).count
     @wizard_count = Wizard.count
     @upload_count = Upload.count
 
@@ -128,7 +128,7 @@ class StaticPagesController < ApplicationController
 
     plan = Plan.new(name: 'Direct Purchase by ' + current_user.name, budget_id: budgets[0].id)
     plan.save
-    op = dp.operations.create status: "pending", user_id: current_user.id, x: 100, y: 100, parent_id: 0
+    op = dp.operations.create status: 'pending', user_id: current_user.id, x: 100, y: 100, parent_id: 0
     op.associate_plan plan
     job, _operations = dp.schedule([op], current_user, Group.find_by_name(current_user.login))
 

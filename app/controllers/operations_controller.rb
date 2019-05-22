@@ -124,7 +124,7 @@ class OperationsController < ApplicationController
       Operation.step
     end
 
-    render json: { result: "ok" }
+    render json: { result: 'ok' }
 
   end
 

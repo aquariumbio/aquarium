@@ -6,16 +6,16 @@ class UploadsController < ApplicationController
   before_filter :up_to_date_user
 
   def show
-    raise ActionController::RoutingError.new('Upload parent type not found') unless params[:type] == "operation" || params[:type] == 'item' || params[:type] == 'plan'
+    raise ActionController::RoutingError.new('Upload parent type not found') unless params[:type] == 'operation' || params[:type] == 'item' || params[:type] == 'plan'
 
     das = DataAssociation.where(parent_class: params[:type].capitalize, parent_id: params[:id], key: params[:key])
     raise ActionController::RoutingError.new('Upload Not Found') unless !das.empty? && das[0].upload_id
 
-    viewable_types = ["image/jpeg", "image/tiff", "image/png"]
+    viewable_types = ['image/jpeg', 'image/tiff', 'image/png']
     upload = das[0].upload
     raise ActionController::RoutingError.new("Upload file type #{upload.upload_content_type} not viewable") unless viewable_types.member?(upload.upload_content_type)
 
     file = open(upload.url)
-    send_file(file, filename: upload.upload_file_name, disposition: "inline")
+    send_file(file, filename: upload.upload_file_name, disposition: 'inline')
   end
 end

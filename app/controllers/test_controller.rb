@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "minitest"
+require 'minitest'
 
 class TestController < ApplicationController
 
@@ -73,7 +73,7 @@ class TestController < ApplicationController
       test.setup
       unless test.operations_present?
         resp = AqResponse.new
-        resp.error("Test error: setup must add operations")
+        resp.error('Test error: setup must add operations')
       end
     rescue SystemStackError, SyntaxError, StandardError => e
       resp = handle_error(error: e, logs: test.logs)
@@ -124,7 +124,7 @@ class TestController < ApplicationController
     rescue SystemStackError, SyntaxError, StandardError => e
       resp = handle_error(error: e)
     else
-      resp.ok(message: "test complete",
+      resp.ok(message: 'test complete',
               log: test.logs,
               backtrace: test.backtrace)
     end

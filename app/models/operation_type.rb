@@ -33,7 +33,7 @@ class OperationType < ActiveRecord::Base
   validates :name, uniqueness: {
     scope: :category,
     case_sensitive: false,
-    message: "OperationType names must be unique within a given category. When importing, consider first moving existing operation types to a different category"
+    message: 'OperationType names must be unique within a given category. When importing, consider first moving existing operation types to a different category'
   }
   validates :category, presence: true
 

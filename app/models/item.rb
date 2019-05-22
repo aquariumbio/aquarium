@@ -62,7 +62,7 @@ class Item < ActiveRecord::Base
 
   # @private
   def part_type
-    @@part_type ||= ObjectType.find_by_name("__Part")
+    @@part_type ||= ObjectType.find_by_name('__Part')
   end
 
   # Returns true if the item is a part of a collection

@@ -38,7 +38,7 @@ module Krill
     #               and the row associated with either `op` or `row`
     #               returns nil if the requested row/column pair doesn't exist
     def get_table_response(var, opts = {})
-      raise TableCellUndefined, "Invalid parameters for get_table_response - specify one of op or row, not both" if (opts[:op] && opts[:row]) || (!opts[:op] && !opts[:row])
+      raise TableCellUndefined, 'Invalid parameters for get_table_response - specify one of op or row, not both' if (opts[:op] && opts[:row]) || (!opts[:op] && !opts[:row])
       return nil if self[:table_inputs].nil?
 
       target_table = self[:table_inputs].select { |ti| (ti[:key].to_sym == var.to_sym) }
@@ -115,7 +115,7 @@ module Krill
   end
 
   class TableCellUndefined < StandardError
-    def initialize(msg = "A table cell was picked out that is out of bounds or cannot exist")
+    def initialize(msg = 'A table cell was picked out that is out of bounds or cannot exist')
       super
     end
   end

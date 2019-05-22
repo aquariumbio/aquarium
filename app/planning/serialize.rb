@@ -61,7 +61,7 @@ module Serialize
 
   # TODO: remove?  this is not used within Aquarium
   def self.get_aft_for(fv, afts)
-    aft_list = afts.select { |aft| aft.id == fv["allowable_field_type_id"] }
+    aft_list = afts.select { |aft| aft.id == fv['allowable_field_type_id'] }
     aft_list[0] unless aft_list.empty?
   end
 

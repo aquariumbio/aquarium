@@ -15,7 +15,7 @@ class PublishController < ApplicationController
     github_user = params[:organization] || params[:user]
 
     if params[:repo].blank?
-      resp.error("A Github repository name must contain at least one character.")
+      resp.error('A Github repository name must contain at least one character.')
     else
       begin
         client = Octokit::Client.new(access_token: params[:access_token])
@@ -24,11 +24,11 @@ class PublishController < ApplicationController
         logger.info(repos)
       rescue StandardError => e
         logger.info(e)
-        resp.error("Aquarium cannot access Github using the supplied access token.", e)
+        resp.error('Aquarium cannot access Github using the supplied access token.', e)
       else
         if repos.member?(params[:repo])
           begin
-            file = client.contents({ repo: params[:repo], user: github_user }, path: "/config.json")
+            file = client.contents({ repo: params[:repo], user: github_user }, path: '/config.json')
             config = JSON.parse Base64.decode64(file[:content])
             file = client.contents({ repo: params[:repo], user: github_user }, path: "/#{params[:repo]}.aq")
             aq_file = JSON.parse Base64.decode64(file[:content])
@@ -49,7 +49,7 @@ class PublishController < ApplicationController
   def categories
     params[:categories].collect do |category|
       category[:members].collect do |member|
-        if member[:model][:model] == "Library"
+        if member[:model][:model] == 'Library'
           Library.find(member[:id]).export
         else
           ex = OperationType.find(member[:id]).export
@@ -62,7 +62,7 @@ class PublishController < ApplicationController
   def publish
     resp = AqResponse.new
     if params[:categories]
-      worker = Anemone::Worker.new(name: "publisher")
+      worker = Anemone::Worker.new(name: 'publisher')
       worker.save
 
       worker.run do
@@ -72,7 +72,7 @@ class PublishController < ApplicationController
 
       resp.ok(worker_id: worker.id)
     else
-      resp.error("No operation types selected.")
+      resp.error('No operation types selected.')
     end
 
     render json: resp
@@ -84,7 +84,7 @@ class PublishController < ApplicationController
       ar = Aquadoc::Render.new(nil, params[:config], categories)
       resp.ok(aq_file: ar.aq_file)
     else
-      resp.error("No operation types selected.")
+      resp.error('No operation types selected.')
     end
 
     render json: resp

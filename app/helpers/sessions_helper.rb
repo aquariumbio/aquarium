@@ -33,8 +33,8 @@ module SessionsHelper
 
     store_location
     if request.put?
-      response.headers["status"] = "Not-logged-in"
-      render json: { error: "Not-logged-in" }
+      response.headers['status'] = 'Not-logged-in'
+      render json: { error: 'Not-logged-in' }
     else
       redirect_to signin_url, notice: 'Please sign in.'
     end

@@ -50,7 +50,7 @@ class JsonController < ApplicationController
 
     unless u.errors.empty?
       logger.info "ERRORS: #{u.errors.full_messages}"
-      render json: { error: "Got error" + u.errors.full_messages.to_s }
+      render json: { error: 'Got error' + u.errors.full_messages.to_s }
       return
     end
 

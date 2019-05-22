@@ -10,7 +10,7 @@ class Locator < ActiveRecord::Base
 
   # validate :no_collisions
   validate :has_wizard
-  validates :number, uniqueness: { scope: :wizard_id, message: "Should have max one locator per location" }
+  validates :number, uniqueness: { scope: :wizard_id, message: 'Should have max one locator per location' }
 
   def has_wizard
     errors.add(:no_wizard, 'no wizard') unless
@@ -55,7 +55,7 @@ class Locator < ActiveRecord::Base
 
   def self.largest(wizard)
     # find greatest locator for this wizard, should always be the most recent
-    wizard.locators.order("id desc").first
+    wizard.locators.order('id desc').first
   end
 
   def self.port(wizard)

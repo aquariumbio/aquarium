@@ -226,7 +226,7 @@ class Sample < ActiveRecord::Base
     )
 
     # rename field for compatibility with ng-control/sample.js
-    sample_hash["field_values"] = sample_hash.delete "full_field_values"
+    sample_hash['field_values'] = sample_hash.delete 'full_field_values'
 
     sample_hash
 

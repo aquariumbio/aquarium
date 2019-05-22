@@ -17,13 +17,13 @@ class AqResponse < Hash
   end
 
   def ok(extras = {})
-    self[:result] = "ok"
+    self[:result] = 'ok'
     merge! extras
     self
   end
 
   def error(msg, error = nil)
-    self[:result] = "error"
+    self[:result] = 'error'
     self[:message] = msg
     self[:error] = error.to_s
     self

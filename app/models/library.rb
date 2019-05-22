@@ -12,7 +12,7 @@ class Library < ActiveRecord::Base
   validates :name, uniqueness: {
     scope: :category,
     case_sensitive: false,
-    message: "Library names must be unique within a given category. When importing, consider first moving existing libraries to a different category"
+    message: 'Library names must be unique within a given category. When importing, consider first moving existing libraries to a different category'
   }
 
   def export

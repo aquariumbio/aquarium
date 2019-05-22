@@ -12,7 +12,7 @@ app_dir = '/aquarium'
 shared_dir = "#{app_dir}/shared"
 
 # Default to production
-rails_env = ENV['RAILS_ENV'] || "production"
+rails_env = ENV['RAILS_ENV'] || 'production'
 environment rails_env
 
 # Set up socket location
@@ -27,7 +27,7 @@ state_path "#{shared_dir}/pids/puma.state"
 activate_control_app
 
 on_worker_boot do
-  require "active_record"
+  require 'active_record'
   begin
     ActiveRecord::Base.connection.disconnect!
   rescue StandardError

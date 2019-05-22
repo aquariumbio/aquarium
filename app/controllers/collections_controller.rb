@@ -12,13 +12,13 @@ class CollectionsController < ApplicationController
     part_ids = []
     raw[:part_matrix].each do |row|
       row.each do |part|
-        part_ids << part["id"] if part
+        part_ids << part['id'] if part
       end
     end
-    das = DataAssociation.where(parent_class: "Item", parent_id: part_ids)
+    das = DataAssociation.where(parent_class: 'Item', parent_id: part_ids)
     raw[:part_matrix].each do |row|
       row.each do |part|
-        part[:data_associations] = das.select { |da| da.parent_id == part["id"] } if part
+        part[:data_associations] = das.select { |da| da.parent_id == part['id'] } if part
       end
     end
     render json: raw
@@ -36,13 +36,13 @@ class CollectionsController < ApplicationController
     @collection = Collection.find(params[:id])
     @sample = Sample.find(params[:sample_id])
     @collection.assign_sample_to_pairs(@sample, params[:pairs])
-    redirect_to action: "show", id: params[:id]
+    redirect_to action: 'show', id: params[:id]
   end
 
   def delete_selection
     @collection = Collection.find(params[:id])
     @collection.delete_selection(params[:pairs])
-    redirect_to action: "show", id: params[:id]
+    redirect_to action: 'show', id: params[:id]
   end
 
   def save_data_associations

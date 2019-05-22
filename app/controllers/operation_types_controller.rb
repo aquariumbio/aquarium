@@ -192,7 +192,7 @@ class OperationTypesController < ApplicationController
         if !error
           ops_json = ops.as_json(methods: %i[field_values precondition_value])
           ops_json.each do |op|
-            op["field_values"] = op["field_values"].collect(&:full_json)
+            op['field_values'] = op['field_values'].collect(&:full_json)
           end
           render json: ops_json, status: :ok
         else
@@ -393,10 +393,10 @@ class OperationTypesController < ApplicationController
               libs = Library.where(name: x[:library][:name], category: x[:library][:category])
               if libs.length == 1
                 libs[0].name = libs[0].name + " archived #{Time.now.to_i}"
-                libs[0].category = libs[0].category + " (old)"
+                libs[0].category = libs[0].category + ' (old)'
                 libs[0].save
                 notes << "Changed name of existing Library to '#{libs[0].name}'"
-                raise libs[0].errors.full_messages.join(", ") if libs[0].errors.any?
+                raise libs[0].errors.full_messages.join(', ') if libs[0].errors.any?
               elsif libs.length > 1
                 raise "Found multiple existing operation types named #{x[:library][:name]}"
               end
@@ -419,11 +419,11 @@ class OperationTypesController < ApplicationController
               ots = OperationType.where(name: x[:operation_type][:name], category: x[:operation_type][:category])
               if ots.length == 1
                 ots[0].name = ots[0].name + " archived #{Time.now.to_i}"
-                ots[0].category = ots[0].category + " (old)"
+                ots[0].category = ots[0].category + ' (old)'
                 ots[0].deployed = false
                 ots[0].save
                 notes << "Changed name of existing OperationType to '#{ots[0].name}'"
-                raise ots.errors.full_messages.join(", ") if ots[0].errors.any?
+                raise ots.errors.full_messages.join(', ') if ots[0].errors.any?
               elsif ots.length > 1
                 raise "Found multiple existing operation types named #{x[:operation_type][:name]}"
               end

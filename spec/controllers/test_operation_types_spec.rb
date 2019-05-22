@@ -4,11 +4,11 @@ require 'rails_helper'
 
 RSpec.describe OperationTypesController, type: :controller do
 
-  before { skip("needs to be rewritten b/c relies on samples existing for all operation types in the database") }
+  before { skip('needs to be rewritten b/c relies on samples existing for all operation types in the database') }
 
   token_name = "remember_token_#{Bioturk::Application.environment_name}".to_sym
 
-  describe "Tests operation types" do
+  describe 'Tests operation types' do
 
     OperationType.where(deployed: true).each do |ot|
 
@@ -24,7 +24,7 @@ RSpec.describe OperationTypesController, type: :controller do
 
         ops = JSON.parse @response.body, symbolize_names: true
         ops[:operations].each do |op|
-          assert_equal "done", op[:status]
+          assert_equal 'done', op[:status]
         end
 
       end

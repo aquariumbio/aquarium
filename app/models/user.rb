@@ -140,8 +140,8 @@ class User < ActiveRecord::Base
 
       data[op.operation_type.name] ||= { count: 0, done: 0, error: 0 }
       data[op.operation_type.name][:count] += 1
-      data[op.operation_type.name][:done] += 1 if op.status == "done"
-      data[op.operation_type.name][:error] += 1 if op.status == "error"
+      data[op.operation_type.name][:done] += 1 if op.status == 'done'
+      data[op.operation_type.name][:error] += 1 if op.status == 'error'
     end
 
     data.collect { |k, v| { name: k }.merge v }.sort_by { |stat| stat[:count] }.reverse
