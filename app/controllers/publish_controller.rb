@@ -18,7 +18,7 @@ class PublishController < ApplicationController
       resp.error("A Github repository name must contain at least one character.")
     else
       begin
-        client = Octokit::Client.new(:access_token => params[:access_token])
+        client = Octokit::Client.new(access_token: params[:access_token])
         logger.info "Rate Limit Info: #{client.rate_limit}"
         repos = client.repositories(github_user).collect { |r| r.name }
         logger.info(repos)
