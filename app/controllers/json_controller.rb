@@ -5,7 +5,7 @@ class JsonController < ApplicationController
   before_filter :signed_in_user
 
   def method_ok(m)
-    false unless m
+    return false unless m
     raise "Illegal method #{m} requested from front end." unless %w[all where find find_by_name new].member? m
 
     true
