@@ -163,7 +163,6 @@ module DataAssociator
     else
       associate :notes, text.to_s
     end
-    text
   end
 
   # Appends text to the associated notes for this object.
