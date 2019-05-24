@@ -12,7 +12,6 @@ class JsonController < ApplicationController
   end
 
   def index
-
     result = Object.const_get(params[:model])
     result = result.find(params[:id]) if params[:id]
     result = result.send(params[:method], *params[:arguments]) if method_ok(params[:method]) && params[:method] != 'where'
@@ -30,7 +29,7 @@ class JsonController < ApplicationController
     result = result.as_json(include: params[:include], methods: params[:methods]) if params[:methods] && params[:include]
 
     render json: result
-  rescue Exception => e
+  rescue StandardError => e
     logger.info e.inspect
     logger.info e.backtrace
     render json: { errors: e.to_s }, status: :unprocessable_entity
