@@ -17,15 +17,6 @@ Lint/HandleExceptions:
     - 'app/models/item.rb'
     - 'spec/models/collection_interface_spec.rb'
 
-# Offense count: 2
-Lint/NonLocalExitFromIterator:
-  Exclude:
-    - 'app/controllers/invoices_controller.rb'
-    - 'app/controllers/users_controller.rb'
-
-# Offense count: 50
-Lint/RescueException:
-  Enabled: false
 
 # Offense count: 6
 # Cop supports --auto-correct.
@@ -44,16 +35,10 @@ Lint/UnusedMethodArgument:
   Exclude:
     - 'lib/krill/manager.rb'
 
-# Offense count: 41
-Lint/UselessAssignment:
-  Enabled: false
-
 # Offense count: 3
 # Configuration parameters: CheckForMethodsWithNoSideEffects.
 Lint/Void:
   Exclude:
-    - 'app/accounting/cost_service.rb'
-    - 'app/helpers/data_associator.rb'
     - 'node_modules/@bower_components/ace-builds/demo/kitchen-sink/docs/ruby.rb'
 
 # Offense count: 45
