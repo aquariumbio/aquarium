@@ -145,7 +145,7 @@ class ObjectType < ActiveRecord::Base
   def data_object
     begin
       result = JSON.parse(data, symbolize_names: true)
-    rescue Exception => e
+    rescue StandardError
       result = {}
     end
     result
@@ -166,7 +166,6 @@ class ObjectType < ActiveRecord::Base
     raw_ots.each do |raw_ot|
 
       ot = ObjectType.find_by_name raw_ot[:name]
-      i = []
 
       if ot
         parts.each do |part|

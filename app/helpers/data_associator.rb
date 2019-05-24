@@ -123,15 +123,13 @@ module DataAssociator
   # @example Associate concentration with an operation's input
   #   da = op.input("Fragment").item.lazy_associate :concentration, 42
   def lazy_associate(key, value, upload = nil)
-
-    da = DataAssociation.new(
+    DataAssociation.new(
       parent_id: id,
       parent_class: self.class.to_s,
       key: key.to_s,
       object: { key => value }.to_json,
       upload_id: upload ? upload.id : nil
     )
-
   end
 
   # Modifies the existing association for the key.

@@ -196,8 +196,8 @@ class PlansController < ApplicationController
 
       ops = pending.select { |op| op.operation_type_id == ot_id }
 
-      job, newops = OperationType.find(ot_id)
-                                 .schedule(ops, current_user, Group.find_by_name('technicians'))
+      job, _newops = OperationType.find(ot_id)
+                                  .schedule(ops, current_user, Group.find_by_name('technicians'))
 
       error = nil
 

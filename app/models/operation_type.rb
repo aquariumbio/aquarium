@@ -159,7 +159,7 @@ class OperationType < ActiveRecord::Base
 
     end
 
-    deferred_job = schedule_aux ops_to_defer, user, group, opts.merge(defer: true)
+    schedule_aux ops_to_defer, user, group, opts.merge(defer: true)
     job = schedule_aux ops_to_schedule, user, group, opts
 
     [job, ops_to_schedule]

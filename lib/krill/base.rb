@@ -85,13 +85,11 @@ module Krill
           var = j[:input][:var].to_sym
           dft = j[:input][:default]
 
-          unless dft
-            if j[:input][:type] == 'text'
-              dft = 'user input string'
-            else
-              ddt = 0
-            end
-          end
+          dft ||= if j[:input][:type] == 'text'
+                    'user input string'
+                  else
+                    0
+                  end
           i[var] = dft
 
         elsif j[:select]

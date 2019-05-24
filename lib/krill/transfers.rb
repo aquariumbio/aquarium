@@ -73,13 +73,11 @@ module Krill
     #    transfer( stripwells, gels ) {
     #      note "Use a 100 µL pipetter to transfer 10 µL from the PCR results to the gel as indicated."
     #    }
-    def transfer(sources, destinations, options = {})
+    def transfer(sources, destinations, _options = {})
 
       # go through each well of the sources and transfer it to the next empty well of
       # destinations. Every time a source or destination is used up, advance to
       # another step.
-
-      opts = { skip_non_empty: true }.merge options
 
       user_shows = if block_given?
                      ShowBlock.new.run(&Proc.new)

@@ -13,7 +13,8 @@ module Krill
       temp_op = first
       default_values = map do |op|
         # d = op.temporary[key] # Prefer to default to last inputted value
-        d ||= yield(op)
+        # TODO: what is this supposed to be doing?
+        d || yield(op)
       end
       entries = zip(default_values).map do |op, d|
         # Save a list of temporary keys to be deleted later

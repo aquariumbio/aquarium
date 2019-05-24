@@ -34,7 +34,6 @@ class Collection < Item
 
     pm = part_matrix
     dm = data_matrix(key)
-    r, c = dimensions
     parts = []
     pas = []
     das = []
@@ -477,7 +476,6 @@ class Collection < Item
   # Changes Item, String, or Sample to a sample.id for storing into a collection matrix.
   #
   def self.to_sample_id(x)
-    r = EMPTY
     return x if x.is_a?(Integer)
 
     if x.is_a?(Item)

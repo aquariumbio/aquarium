@@ -130,9 +130,7 @@ class SamplesController < ApplicationController
     fields = %w[name project]
 
     (1..8).each do |i|
-      fn = "field#{i}name".to_sym
       ft = "field#{i}type".to_sym
-      f = "field#{i}".to_sym
 
       if sample_type[ft] != 'not used' && !sample_type[ft].nil?
         fields.push sample_type[ft]
@@ -215,7 +213,6 @@ class SamplesController < ApplicationController
       redirect_to spreadsheet_path, notice: 'No path specified'
     else
 
-      path = params[:spreadsheet].original_filename
       content = params[:spreadsheet].read
       @data = content.split(/[\n\r]+/).collect do |l|
         l.split(/,\s*/)

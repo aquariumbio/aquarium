@@ -85,7 +85,6 @@ class InvoicesController < ApplicationController
 
   def change_budget
 
-    operation = Operation.find(params[:operation_id])
     budget = Budget.find(params[:budget_id])
     rows = []
 

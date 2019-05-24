@@ -256,7 +256,6 @@ class Item < ActiveRecord::Base
     return nil unless loc && loc.item_id.nil?
 
     loc.item_id = id
-    item_id = loc.id
     transaction do
       loc.save
       save
@@ -386,8 +385,6 @@ class Item < ActiveRecord::Base
   ###########################################################################
 
   def self.new_object(name)
-
-    i = new
     olist = ObjectType.where('name = ?', name)
     raise "Could not find object type named '#{spec[:object_type]}'." if olist.empty?
 

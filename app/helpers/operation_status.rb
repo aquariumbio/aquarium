@@ -9,7 +9,6 @@ module OperationStatus
   # @param str [String] ("waiting", "pending", "primed", "deferred", "scheduled", "running", "done", "error")
   # @return [String] The {Operation} status
   def change_status(str)
-    temp = status
     self.status = str
     save
     raise 'Could not change status' unless errors.empty?

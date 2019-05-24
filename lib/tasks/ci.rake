@@ -15,7 +15,7 @@ namespace :ci do
   def patterns_for_changed_files
     # always include the ci.rake file, if the patterns is empty it runs everything
     patterns = ['lib/tasks/ci.rake']
-    patterns += changed_files
+    patterns + changed_files
   end
 
   desc 'Run RuboCop on the entire project'

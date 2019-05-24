@@ -189,7 +189,7 @@ class LauncherController < ApplicationController
       end
 
       begin
-        plan, messages = plan_from params
+        plan, _messages = plan_from params
       rescue Exception => e
         render json: { errors: e }
         raise ActiveRecord::Rollback

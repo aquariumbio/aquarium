@@ -181,8 +181,8 @@ class OperationTypesController < ApplicationController
 
         error = false
 
-        precondition_errors = ops.select do |op|
-
+        ops.select do |op|
+          # TODO: is this just evaluating preconditions to see if error occurs
           op.precondition_value
         rescue Exception
           error = true
@@ -286,7 +286,7 @@ class OperationTypesController < ApplicationController
 
       # run the protocol
       operation_type = ot[:op_type]
-      job, newops = operation_type.schedule(ops, current_user, Group.find_by_name('technicians'))
+      job, _newops = operation_type.schedule(ops, current_user, Group.find_by_name('technicians'))
       error = nil
 
       begin

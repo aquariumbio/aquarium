@@ -10,10 +10,10 @@ class SampleTree
   end
 
   def parents
-    parents = @sample
-              .properties
-              .select { |_k, v| v.class == Sample }
-              .each_with_object({}) { |(k, sample), h| h[k] = SampleTree.new sample }
+    @sample
+      .properties
+      .select { |_k, v| v.class == Sample }
+      .each_with_object({}) { |(k, sample), h| h[k] = SampleTree.new sample }
   end
 
   def expand

@@ -162,7 +162,6 @@ class BrowserController < ApplicationController
       samples = samples.where(user_id: user.id) if user
     end
 
-    project = params[:project]
     samples = samples.where(project: params[:project]) if params[:project_filter]
 
     sample_type = SampleType.find_by_name(params[:sample_type])

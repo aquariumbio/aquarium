@@ -75,8 +75,8 @@ class Wizard < ActiveRecord::Base
     raise "Could not convert location string '#{loc}' to int." unless loc.class == String
 
     c = caps
-    mx, my, mz = c
-    w, x, y, z = parts loc
+    _mx, my, mz = c
+    _w, x, y, z = parts loc
     return z + mz * y + my * mz * x if c.length == 3
     return y + my * x if c.length == 2
     return x if c.length == 1
@@ -86,7 +86,7 @@ class Wizard < ActiveRecord::Base
 
   def int_to_location(n)
     c = caps
-    mx, my, mz = c
+    _mx, my, mz = c
 
     if c.length == 3
       x = n / (my * mz)
@@ -172,8 +172,8 @@ class Wizard < ActiveRecord::Base
     return [] unless largest
 
     loc = largest.to_s
-    w, x, y, z = parts loc
-    mx, my, mz = caps
+    _w, x, y, _z = parts loc
+    _mx, my, _mz = caps
 
     box_list = (0..x).collect do |a|
       (0..(a == x ? y : my)).collect do |b|

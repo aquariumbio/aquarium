@@ -179,31 +179,6 @@ class FieldValue < ActiveRecord::Base
     end
   end
 
-  def self.create_item(sample, ft, values)
-    values.each do |v|
-      if v.class == Item
-        item = v
-      elsif v.class == Integer
-        item = Item.find(v)
-        unless item
-          sample.errors.add :item, "Could not find item with id #{v} for #{ft.name}"
-          raise ActiveRecord::Rollback
-        end
-      else
-        sample.errors.add :sample, "#{v} should be an item for #{ft.name}"
-        raise ActiveRecord::Rollback
-      end
-
-      unless ft.allowed? child
-        sample.errors.add :sample, "#{v} is not an allowable sample_type for #{ft.name}"
-        raise ActiveRecord::Rollback
-      end
-
-      fv = sample.field_values.create name: ft.name, child_item_id: sid
-      fv.save
-    end
-  end
-
   def self.creator(sample, field_type, raw) # sample, field_type, raw_field_data
 
     values = []
