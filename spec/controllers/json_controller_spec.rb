@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 # TODO: write tests for all of the following:
@@ -22,12 +24,12 @@ RSpec.describe JsonController, type: :controller do
       params = {
         model: 'DataAssociation',
         method: 'where',
-        arguments: { parent_id: 1, parent_class: 'Plan'},
+        arguments: { parent_id: 1, parent_class: 'Plan' },
         options: { offset: -1, limit: -1, reverse: false }
       }
       post :index, params, as: :json
 
-      expect(response.headers['Content-Type']).to eq("application/json; charset=utf-8")
+      expect(response.headers['Content-Type']).to eq('application/json; charset=utf-8')
       expect(response.body).to eq('[]')
     end
   end
@@ -39,7 +41,3 @@ RSpec.describe JsonController, type: :controller do
     end
   end
 end
-
-
-
-
