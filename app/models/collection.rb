@@ -505,7 +505,7 @@ class Collection < Item
     if x.is_a?(Item)
       raise 'When the third argument to Collection.set is an item, it should be associated with a sample.' unless x.sample
 
-      x.sample
+      return x.sample
     end
     return x if x.is_a?(Sample)
     return Sample.find(x.split(':')[0].to_i) if x.is_a?(String)
