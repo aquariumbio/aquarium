@@ -91,8 +91,10 @@ class JobsDatatable < Datatable
 
   end
 
+  # TODO: remove? doesn't appear to be used
   def sort_column
     columns = %w[id]
+    columns[params[:iSortCol_0].to_i]
   end
 
 end
