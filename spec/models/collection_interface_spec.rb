@@ -117,7 +117,7 @@ RSpec.describe Collection, type: :model do
     it 'finds collections containing a specific sample' do
       c = example_collection
       s = test_sample
-      c.set 0, 5, test_sample
+      c.set(0, 5, test_sample)
       Collection.containing(s).each do |item|
         collection = item.becomes Collection # TODO: Make it so that you don't have to do this
         raise 'Sample should be in collection' unless collection.position(s.id)
@@ -132,7 +132,7 @@ RSpec.describe Collection, type: :model do
     it 'finds parts and their containing collections with a specific sample' do
       c = example_collection
       s = test_sample
-      c.set 0, 5, s
+      c.set(0, 5, s)
       Collection.parts(s).each do |part|
         collection = part[:collection].becomes Collection # TODO: Make it so that you don't have to do this
         pos = collection.position_as_hash(s.id)
@@ -154,8 +154,8 @@ RSpec.describe Collection, type: :model do
     #       include?
     it 'can set slots to samples' do
       c = example_collection
-      c.set 0, 5, test_sample
-      c.set 0, 8, Sample.first
+      c.set(0, 5, test_sample)
+      c.set(0, 8, test_sample)
       raise 'Slots not adding up' unless c.get_empty.length + c.get_non_empty.length == c.capacity
       raise 'Non-empty not adding up' unless c.get_non_empty.length == c.num_samples
       raise 'include? not working' unless c.include?(test_sample) && c.include?(test_sample.id)
@@ -207,7 +207,7 @@ RSpec.describe Collection, type: :model do
     #      matrix
     it 'can add and subtract samples' do
       c = example_collection
-      c.set 0, 5, test_sample
+      c.set(0, 5, test_sample)
       s = test_sample
       c.add_one(s)
       c.add_one(s)
