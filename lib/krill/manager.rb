@@ -7,11 +7,9 @@ module Krill
   end
 
   class Manager
-
     attr_accessor :thread
 
     def initialize(jid, debug, directory = 'master', branch = 'master')
-
       # Start new thread
       @mutex = Mutex.new
       @thread_status = ThreadStatus.new

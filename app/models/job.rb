@@ -297,7 +297,8 @@ class Job < ActiveRecord::Base
       wp = WorkflowProcess.find(workflow_process.id)
       wp.record_result_of self
       wp.step
-    rescue Exception => e
+    rescue StandardError => e
+      # TODO: not clear if this should rescue ActiveRecord::RecordNotFound
       Rails.logger.info 'Error trying to step workflow process ' + e.to_s
     end
   end

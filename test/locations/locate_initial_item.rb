@@ -49,7 +49,7 @@ class Test
 
     cleanup
     pass
-  rescue Exception => e
+  rescue StandardError => e
     puts "\n"
     puts e.to_s
     puts e.backtrace.join("\n")

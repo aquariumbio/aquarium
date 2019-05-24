@@ -102,7 +102,7 @@ class Sample < ActiveRecord::Base
             if raw_fv[:id]
               begin
                 fv = FieldValue.find(raw_fv[:id])
-              rescue Exception => e
+              rescue ActiveRecord::RecordNotFound => e
                 errors.add :missing_field_value, "Field value #{raw_fv[:id]} not found in db."
                 errors.add :missing_field_value, e.to_s
                 raise ActiveRecord::Rollback

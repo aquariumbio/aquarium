@@ -108,7 +108,6 @@ module DataAssociator
     end
 
     self
-
   end
 
   # Create a {DataAssociation} to this object to a value and an `Upload`, and with the given key.

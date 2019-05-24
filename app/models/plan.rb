@@ -146,7 +146,6 @@ class Plan < ActiveRecord::Base
   end
 
   def costs
-
     labor_rate = Parameter.get_float('labor rate')
     markup_rate = Parameter.get_float('markup rate')
 
@@ -154,17 +153,14 @@ class Plan < ActiveRecord::Base
     ops = Operation.includes(:operation_type).find(op_ids)
 
     ops.collect do |op|
-
       begin
         c = op.nominal_cost.merge(labor_rate: labor_rate, markup_rate: markup_rate, id: op.id)
-      rescue Exception
+      rescue StandardError
         c = {}
       end
 
       c
-
     end
-
   end
 
 end

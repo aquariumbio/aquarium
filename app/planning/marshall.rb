@@ -30,7 +30,6 @@ module Marshall
   end
 
   def self.operations(p, ops)
-
     ids = []
 
     if ops
@@ -45,14 +44,12 @@ module Marshall
         end
         ids << operation.id
         map_id op[:rid], operation.id
-      rescue Exception => e
+      rescue StandardError => e
         raise "Marshalling error: #{e}: #{e.backtrace[0]}"
-
       end
     end
 
     ids
-
   end
 
   def self.operation(x)

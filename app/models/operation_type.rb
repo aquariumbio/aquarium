@@ -255,13 +255,9 @@ class OperationType < ActiveRecord::Base
       puts "PREF(#{oldft.name}): #{newft[:preferred_field_type_id]}"
 
       keepers = []
-
       if newft[:allowable_field_types]
-
         newft[:allowable_field_types].each do |newaft|
-
           matching_afts = oldft.allowable_field_types.select { |aft| aft.id == newaft[:id] }
-
           if matching_afts.length == 1
             oldaft = matching_afts[0]
             keepers << oldaft
@@ -273,7 +269,6 @@ class OperationType < ActiveRecord::Base
           end
         end
       end
-
     else
       oldft.ftype = newft[:ftype]
       oldft.choices = newft[:choices]
@@ -282,7 +277,6 @@ class OperationType < ActiveRecord::Base
     oldft.save
 
     oldft.allowable_field_types.reject { |aft| keepers.include? aft }.each(&:destroy)
-
   end
 
   def update_field_types(fts)

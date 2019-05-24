@@ -112,11 +112,13 @@ class JsonController < ApplicationController
   end
 
   def items # ( sid, oid ) # This can be replaced by a call to Item.items_for sid, oid
-
     sample = Sample.find_by_id(params[:sid])
     ot = ObjectType.find_by_id(params[:oid])
-
-    if sample && ot
+    if sample
+      unless ot
+        render json: []
+        return
+      end
 
       if ot.handler == 'collection'
         render json: Collection.parts(sample, ot).as_json(methods: :matrix)
@@ -125,27 +127,19 @@ class JsonController < ApplicationController
                            .reject { |i| i.deleted? || i.object_type_id != ot.id }
                            .as_json(include: :object_type)
       end
-
-    elsif sample && !ot
-
-      render json: []
-
     else
-
       items = Item.includes(locator: :wizard)
                   .where("object_type_id = ? AND location != 'deleted'", ot.id)
                   .limit(25)
 
       render json: items
-
     end
-  rescue Exception => e
+  rescue StandardError => e
+    # TODO: pretty sure this is dead code: find_by_id returns nil if not found
     render json: { errors: "Could not find sample: #{e}: #{e.backtrace}" }, status: :unprocessable_entity
-
   end
 
   def current
     render json: current_user.as_json(methods: :is_admin)
   end
-
 end

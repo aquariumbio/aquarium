@@ -111,7 +111,7 @@ class BrowserController < ApplicationController
           end
         end
       end
-    rescue Exception => e
+    rescue StandardError => e
       render json: { errors: [e.to_s, e.backtrace[0..5].join(', ')] }
     else
       if !@errors.empty?
