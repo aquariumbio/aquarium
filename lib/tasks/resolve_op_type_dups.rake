@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 desc 'Changes duplicate names in OperationTypes'
 task rename_optype_duplicates: [:environment] do

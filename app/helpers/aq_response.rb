@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 class AqResponse < Hash
 
-  def self.ok extras = {}
+  def self.ok(extras = {})
     AqResponse.new.ok extras
   end
 
-  def self.error msg, error = nil
+  def self.error(msg, error = nil)
     AqResponse.new.error(msg, error)
   end
 
@@ -14,21 +16,21 @@ class AqResponse < Hash
     self[:error] = nil
   end
 
-  def ok extras = {}
-    self[:result] = "ok"
-    self.merge! extras
+  def ok(extras = {})
+    self[:result] = 'ok'
+    merge! extras
     self
   end
 
-  def error msg, error = nil
-    self[:result] = "error"
+  def error(msg, error = nil)
+    self[:result] = 'error'
     self[:message] = msg
     self[:error] = error.to_s
     self
   end
 
-  def more stuff
-    self.merge! stuff
+  def more(stuff)
+    merge! stuff
     self
   end
 

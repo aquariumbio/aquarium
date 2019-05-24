@@ -26,6 +26,7 @@ services:
       - ./docker/aquarium/aquarium.rb:/aquarium/config/initializers/aquarium.rb
       - ./docker/aquarium/development.rb:/aquarium/config/environments/development.rb
       - ./Gemfile.lock:/aquarium/Gemfile.lock
+      - ./yarn.lock:/aquarium/yarn.lock
   db:
     environment:
       MYSQL_DATABASE: development

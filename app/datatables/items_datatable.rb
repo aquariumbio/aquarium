@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 class ItemsDatatable < Datatable
 
@@ -40,8 +40,10 @@ class ItemsDatatable < Datatable
 
   end
 
+  # TODO: remove? this does not appear to be used
   def sort_column
     columns = %w[id location data created_at updated_at]
+    columns[params[:iSortCol_0].to_i]
   end
 
 end

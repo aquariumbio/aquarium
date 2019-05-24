@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 # Meta-type of {Sample}. Many {Sample}s may exist of this Type.
 # @api krill

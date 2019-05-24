@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 # Installation specific stuff here
 #
@@ -39,4 +41,4 @@ Bioturk::Application.config.angular_rails_csrf_options = {
 #       Also, make sure to set the environment variable AWS_REGION.
 #       See config/initializers/production.rb under "email".
 
-#Bioturk::Application.config.email_from_address = "aquarium@yourlab.org"
+# Bioturk::Application.config.email_from_address = "aquarium@yourlab.org"

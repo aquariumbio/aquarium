@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BrowserController < ApplicationController
 
   before_filter :signed_in_user
@@ -109,7 +111,7 @@ class BrowserController < ApplicationController
           end
         end
       end
-    rescue Exception => e
+    rescue StandardError => e
       render json: { errors: [e.to_s, e.backtrace[0..5].join(', ')] }
     else
       if !@errors.empty?
@@ -125,7 +127,7 @@ class BrowserController < ApplicationController
     s = Sample.find(params[:id])
     begin
       data = JSON.parse(s.data)
-    rescue Exception => e
+    rescue JSON::ParseError
       data = {}
     end
     data[:note] = (params[:note] == '_EMPTY_' ? '' : params[:note])
@@ -138,7 +140,7 @@ class BrowserController < ApplicationController
 
     sample = Sample.find(params[:id])
     item_list = Item.includes(:locator).where(sample_id: params[:id])
-    containers = ObjectType.where(sample_type_id: sample.sample_type_id).where.not(name: "__Part")
+    containers = ObjectType.where(sample_type_id: sample.sample_type_id).where.not(name: '__Part')
     render json: { items: item_list.as_json(include: [:locator]),
                    containers: containers.as_json(only: %i[name id]) }
   end
@@ -160,7 +162,6 @@ class BrowserController < ApplicationController
       samples = samples.where(user_id: user.id) if user
     end
 
-    project = params[:project]
     samples = samples.where(project: params[:project]) if params[:project_filter]
 
     sample_type = SampleType.find_by_name(params[:sample_type])

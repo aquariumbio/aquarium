@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 class Library < ActiveRecord::Base
 
@@ -12,19 +12,15 @@ class Library < ActiveRecord::Base
   validates :name, uniqueness: {
     scope: :category,
     case_sensitive: false,
-    message: "Library names must be unique within a given category. When importing, consider first moving existing libraries to a different category"
+    message: 'Library names must be unique within a given category. When importing, consider first moving existing libraries to a different category'
   }
-
-  def source
-    code('source')
-  end
 
   def export
     {
       library: {
         name: name,
         category: category,
-        code_source: source ? source.content : ''
+        code_source: code('source') ? code('source').content : ''
       }
     }
   end

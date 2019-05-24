@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 class User < ActiveRecord::Base
 
@@ -88,12 +88,12 @@ class User < ActiveRecord::Base
 
     return false if parameters.empty?
 
-    email  = ! parameters.find { |p| p.key == 'email' && p.value && !p.value.empty? }.nil?
-    phone  = ! parameters.find { |p| p.key == 'phone' && p.value && !p.value.empty? }.nil?
-    biofab = ! parameters.find { |p| p.key == 'biofab' && p.value && p.value == 'true' }.nil?
-    aq     = ! parameters.find { |p| p.key == 'aquarium' && p.value && p.value == 'true' }.nil?
+    email  = parameters.find { |p| p.key == 'email' && p.value && !p.value.empty? }
+    phone  = parameters.find { |p| p.key == 'phone' && p.value && !p.value.empty? }
+    biofab = parameters.find { |p| p.key == 'biofab' && p.value && p.value == 'true' }
+    aq     = parameters.find { |p| p.key == 'aquarium' && p.value && p.value == 'true' }
 
-    email && phone && biofab && aq
+    !email.nil? && !phone.nil? && !biofab.nil? && !aq.nil?
 
   end
 
@@ -105,26 +105,23 @@ class User < ActiveRecord::Base
     email_parameters = Parameter.where(user_id: id, key: 'email')
     raise "Email address not defined for user {id}: #{name}" if email_parameters.empty?
 
-    from = 'aquarium@uwbiofab.org'
-    to = email_parameters[0].value
+    to_address = email_parameters[0].value
 
     sleep 0.1 # Throttle email sending rate in case this method is called from within a loop
 
     Thread.new do
 
-      begin
-        ses = AWS::SimpleEmailService.new
+      ses = AWS::SimpleEmailService.new
 
-        ses.send_email(
-          subject: subject,
-          from: Bioturk::Application.config.email_from_address,
-          to: to,
-          body_text: "This email is better viewed with an email handler capable of rendering HTML\n\n#{message}",
-          body_html: message
-        )
-      rescue Exception => e
-        Rails.logger.error "Emailer Error: #{e}"
-      end
+      ses.send_email(
+        subject: subject,
+        from: Bioturk::Application.config.email_from_address,
+        to: to_address,
+        body_text: "This email is better viewed with an email handler capable of rendering HTML\n\n#{message}",
+        body_html: message
+      )
+    rescue StandardError => e
+      Rails.logger.error "Emailer Error: #{e}"
 
     end
 
@@ -138,12 +135,12 @@ class User < ActiveRecord::Base
     data = {}
 
     ops.each do |op|
-      if op
-        data[op.operation_type.name] ||= { count: 0, done: 0, error: 0 }
-        data[op.operation_type.name][:count] += 1
-        data[op.operation_type.name][:done] += 1 if op.status == "done"
-        data[op.operation_type.name][:error] += 1 if op.status == "error"
-      end
+      next unless op
+
+      data[op.operation_type.name] ||= { count: 0, done: 0, error: 0 }
+      data[op.operation_type.name][:count] += 1
+      data[op.operation_type.name][:done] += 1 if op.status == 'done'
+      data[op.operation_type.name][:error] += 1 if op.status == 'error'
     end
 
     data.collect { |k, v| { name: k }.merge v }.sort_by { |stat| stat[:count] }.reverse

@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 class LogsDatatable < Datatable
 
@@ -7,10 +7,6 @@ class LogsDatatable < Datatable
   def data
 
     rows.map do |job|
-
-      args = job.arguments.to_json
-
-      args = args[0, 49] + '...' if args.length > 50
 
       mc = if job.metacol_id
              " (<a href='metacols/#{job.metacol_id}'>#{job.metacol_id}</a>)"

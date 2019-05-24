@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 namespace :technician do
 
@@ -39,7 +39,7 @@ namespace :technician do
     planner.start
 
     # schedule job
-    job, operations = ot.schedule(ops, User.find(1), Group.find_by_name('technicians'))
+    job, _operations = ot.schedule(ops, User.find(1), Group.find_by_name('technicians'))
 
     # launch brower window
     cmd = '/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome '

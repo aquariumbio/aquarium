@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 class PlanCopier
 
@@ -22,7 +22,7 @@ class PlanCopier
 
     begin
       @base_module = JSON.parse @plan.layout, symbolize_names: true
-    rescue Exception => e
+    rescue StandardError
       @base_module = { id: 0 }
     end
 
@@ -96,12 +96,11 @@ class PlanCopier
       end
     end
 
-    if m[:children]
-      m[:children].each do |child|
-        port_module_wires child
-      end
-    end
+    return unless m[:children]
 
+    m[:children].each do |child|
+      port_module_wires child
+    end
   end
 
 end

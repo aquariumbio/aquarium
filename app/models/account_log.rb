@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 class AccountLog < ActiveRecord::Base
   belongs_to :user

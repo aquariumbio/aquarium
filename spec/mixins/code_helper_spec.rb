@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe CodeHelper do
@@ -11,7 +13,7 @@ RSpec.describe CodeHelper do
     @owner = mock_owner_class.new
     @owner.save
   end
-  
+
   it 'has no code if not added' do
     expect(@owner.code).to be_nil
     expect(@owner.code('the_code')).to be_nil
@@ -24,7 +26,7 @@ RSpec.describe CodeHelper do
   end
 
   it 'cannot add code with same name' do
-    code_object = @owner.new_code('the_code', 'def noop; end', a_user)
+    @owner.new_code('the_code', 'def noop; end', a_user)
     expect { @owner.new_code('the_code', 'def noop; end', a_user) }.to raise_error
   end
 

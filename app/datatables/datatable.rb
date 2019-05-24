@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 class Datatable
 
@@ -31,8 +31,10 @@ class Datatable
     params[:iDisplayStart].to_i / per_page + 1
   end
 
+  # TODO: remove?  only used by subclasses that redefine it
+  # redefine in child class
   def sort_column
-    columns = Array.new(20, 'id') # redefine in child class
+    columns = Array.new(20, 'id')
     columns[params[:iSortCol_0].to_i]
   end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class JobsController < ApplicationController
 
   before_filter :signed_in_user
@@ -28,7 +30,7 @@ class JobsController < ApplicationController
       return
     end
 
-    return redirect_to krill_log_path(job: @job.id)
+    redirect_to krill_log_path(job: @job.id)
 
   end
 
@@ -46,9 +48,9 @@ class JobsController < ApplicationController
     start = DateTime.parse(params[:date]).beginning_of_day
     render json: Job.includes(:user, job_associations: { operation: :operation_type })
                     .where('? < updated_at AND updated_at < ?', start - 1.day, start + 1.day)
-                    .select { |job| job.pc == Job.COMPLETED && job.job_associations.length > 0 }
+                    .select { |job| job.pc == Job.COMPLETED && !job.job_associations.empty? }
                     .to_json(include: [:user, { job_associations: { include: { operation: { include: :operation_type } } } }])
-  rescue Exception => e
+  rescue StandardError => e
     render json: { error: e.to_s }
   end
 

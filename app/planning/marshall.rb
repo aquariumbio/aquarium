@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 module Marshall
 
@@ -30,29 +30,26 @@ module Marshall
   end
 
   def self.operations(p, ops)
-
     ids = []
 
     if ops
       ops.each do |op|
-        begin
-          if op[:id]
-            operation = operation_update op
-          else
-            operation = self.operation op
-            operation.associate_plan p
-            operation.save
-          end
-          ids << operation.id
-          map_id op[:rid], operation.id
-        rescue Exception => e
-          raise "Marshalling error: #{e}: #{e.backtrace[0]}"
+
+        if op[:id]
+          operation = operation_update op
+        else
+          operation = self.operation op
+          operation.associate_plan p
+          operation.save
         end
+        ids << operation.id
+        map_id op[:rid], operation.id
+      rescue StandardError => e
+        raise "Marshalling error: #{e}: #{e.backtrace[0]}"
       end
     end
 
     ids
-
   end
 
   def self.operation(x)
@@ -169,7 +166,7 @@ module Marshall
   def self.plan_update(x)
 
     p = Plan.find(x[:id])
-    p.name = x[:name] ? x[:name] : 'New Plan'
+    p.name = x[:name] || 'New Plan'
     p.cost_limit = x[:cost_limit]
     p.status = x[:status]
     # p.user_id = @@user.id

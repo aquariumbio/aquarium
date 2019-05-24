@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 module OperationTypeExport
 
@@ -25,8 +25,8 @@ module OperationTypeExport
     sample_types = sample_types.uniq.as_json(methods: [:export_field_types])
 
     sample_types.each do |st|
-      st["field_types"] = st["export_field_types"]
-      st.delete "export_field_types"
+      st['field_types'] = st['export_field_types']
+      st.delete 'export_field_types'
     end
 
     object_types = object_types.uniq.as_json(methods: [:sample_type_name])
@@ -102,7 +102,9 @@ module OperationTypeExport
 
   module ClassMethods
     def import(data, user)
+
       issues1 = SampleType.compare_and_upgrade(data[:sample_types] || [])
+
       issues2 = if issues1[:inconsistencies].any?
                   { notes: [], inconsistencies: [] }
                 else
@@ -141,7 +143,7 @@ module OperationTypeExport
       ot = OperationType.new(name: obj[:name], category: obj[:category], deployed: obj[:deployed], on_the_fly: obj[:on_the_fly])
       ot.save
 
-      raise "Could not save operation type '#{obj[:name]}': " + ot.errors.full_messages.join(', ') + "." unless ot.errors.empty?
+      raise "Could not save operation type '#{obj[:name]}': " + ot.errors.full_messages.join(', ') + '.' unless ot.errors.empty?
 
       if obj[:field_types]
         obj[:field_types].each do |ft|

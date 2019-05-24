@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 # Module that includes status-related methods for {Operation}
 
@@ -9,7 +9,6 @@ module OperationStatus
   # @param str [String] ("waiting", "pending", "primed", "deferred", "scheduled", "running", "done", "error")
   # @return [String] The {Operation} status
   def change_status(str)
-    temp = status
     self.status = str
     save
     raise 'Could not change status' unless errors.empty?
@@ -130,16 +129,18 @@ module OperationStatus
     inputs.each do |i|
 
       Wire.where(to_id: i.id).each do |wire|
-        self.associate(
-          :input_item_replaced,
-          "Input #{i.name} was #{i.child_item_id} but was replaced by #{wire.from.child_item_id} " +
-          "(likely when its predecessor recomputed an output)",
-          nil,
-          duplicates: true
-        ) if i.child_item_id && (
+        if i.child_item_id && (
             i.child_item_id != wire.from.child_item_id ||
             i.row != wire.from.row ||
             i.column != wire.from.column)
+          associate(
+            :input_item_replaced,
+            "Input #{i.name} was #{i.child_item_id} but was replaced by #{wire.from.child_item_id} " \
+            '(likely when its predecessor recomputed an output)',
+            nil,
+            duplicates: true
+          )
+        end
         i.child_item_id = wire.from.child_item_id
         i.row = wire.from.row
         i.column = wire.from.column

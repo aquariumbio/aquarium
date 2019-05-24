@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :sample do
     sequence(:name) { |n| "sample_#{n}" }
-    project { "the project" }
+    project { 'the project' }
     user_id { 1 }
     sample_type
   end
 
   factory :sample_type do
-    sequence(:name) { |n| "sample_#{n}" }
-    description { "a sample type" }
+    sequence(:name) { |n| "sample_type_#{n}" }
+    description { 'a sample type' }
     initialize_with { SampleType.where(name: name).first_or_create } # singleton
 
     factory :sample_type_with_samples do

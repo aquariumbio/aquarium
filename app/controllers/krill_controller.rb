@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class KrillController < ApplicationController
 
   before_filter :signed_in_user
@@ -19,9 +21,9 @@ class KrillController < ApplicationController
         return redirect_to krill_error_path(job: @job.id, message: e.to_s, backtrace: e.backtrace[0, 2])
       end
 
-      if !server_result
-        return redirect_to krill_error_path(job: @job.id, message: 'Krill server returned nil, which is a bad sign.', backtrace: [])
-      elsif server_result[:error]
+      return redirect_to krill_error_path(job: @job.id, message: 'Krill server returned nil, which is a bad sign.', backtrace: []) unless server_result
+
+      if server_result[:error]
         logger.info server_result[:error]
         return redirect_to krill_error_path(
           job: @job.id,

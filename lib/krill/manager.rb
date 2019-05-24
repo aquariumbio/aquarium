@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 module Krill
 
@@ -7,7 +7,6 @@ module Krill
   end
 
   class Manager
-
     attr_accessor :thread
 
     def initialize(jid, debug, directory = 'master', branch = 'master')
@@ -47,42 +46,33 @@ module Krill
       @thread_status.running = true
       @thread = Thread.new do
         begin
-          @job.start # what if this fails?
-          appended_complete = false
-
-          begin
-            rval = @protocol.main
-          rescue Exception => e
-            puts "#{@job.id}: EXCEPTION #{e}"
-            puts e.backtrace[0, 10]
-            @base_object.error(e)
+          rval = @protocol.main
+        rescue Exception => e
+          puts "#{@job.id}: EXCEPTION #{e}"
+          puts e.backtrace[0, 10]
+          @base_object.error(e)
+        else
+          @job.reload.append_step(operation: 'complete', rval: rval)
+          appended_complete = true
+        ensure
+          if appended_complete
+            @job.stop
           else
-            @job.reload.append_step(operation: 'complete', rval: rval)
-            appended_complete = true
-          ensure
-            if appended_complete
-              @job.stop
-            else
-              @job.stop 'error'
-              @job.operations.each do |op|
-                puts "notifying #{op.id}"
-                op.associate :job_crash, "Operation canceled when job #{@job.id} crashed"
-              end
-              @job.reload
-              @job.append_step operation: 'next', time: Time.now, inputs: {}
-              @job.append_step operation: 'aborted', rval: {}
+            @job.stop 'error'
+            @job.operations.each do |op|
+              puts "notifying #{op.id}"
+              op.associate :job_crash, "Operation canceled when job #{@job.id} crashed"
             end
             @job.save # what if this fails?
             ActiveRecord::Base.connection.close
             @mutex.synchronize { @thread_status.running = false }
           end
-        rescue Exception => main_error
-          puts "#{@job.id}: SERIOUS EXCEPTION #{main_error}: #{main_error.backtrace[0, 10]}"
+        rescue Exception => e
+          puts "#{@job.id}: SERIOUS EXCEPTION #{e}: #{e.backtrace[0, 10]}"
 
-          if ActiveRecord::Base.connection && ActiveRecord::Base.connection.active?
-            ActiveRecord::Base.connection.close
-            puts "#{@job.id}: Closing ActiveRecord connection"
-          end
+        if ActiveRecord::Base.connection && ActiveRecord::Base.connection.active?
+          ActiveRecord::Base.connection.close
+          puts "#{@job.id}: Closing ActiveRecord connection"
         end
       end
     end
@@ -112,8 +102,8 @@ module Krill
 
         @job.save # what if this fails?
       end
-    rescue Exception => main_error
-      puts "#{@job.id}: SERIOUS EXCEPTION #{main_error}: #{main_error.backtrace[0, 10]}"
+    rescue Exception => e
+      puts "#{@job.id}: SERIOUS EXCEPTION #{e}: #{e.backtrace[0, 10]}"
 
       if ActiveRecord::Base.connection && ActiveRecord::Base.connection.active?
         ActiveRecord::Base.connection.close
@@ -147,11 +137,9 @@ module Krill
 
       @job.reload
 
-      if @job.pc == -2
-        return 'done'
-      else
-        return 'ready'
-      end
+      return 'done' if @job.pc == -2
+
+      'ready'
     end
 
     def check_again

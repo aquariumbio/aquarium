@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 # Class that represents an operation in the lab
 # Some very important methods include {#input}, {#output}, {#error}, {#pass}
@@ -27,7 +27,7 @@ class Operation < ActiveRecord::Base
     msg = "Cannot destroy operation #{id} because it has jobs associated with it"
     raise msg unless JobAssociation.where(operation_id: id).empty?
 
-    fvs = FieldValue.where(parent_class: "Operation", parent_id: id)
+    fvs = FieldValue.where(parent_class: 'Operation', parent_id: id)
     fvs.each do |fv|
       Wire.where("from_id = #{fv.id} OR to_id = #{fv.id}").each do |wire|
         wire.destroy
@@ -69,9 +69,9 @@ class Operation < ActiveRecord::Base
     ft = operation_type.inputs.select { |i| i[:name] == name }.first
     aft = ft.choose_aft_for(sample)
     set_input(name, sample, aft)
-  
-    self       
-  end 
+
+    self
+  end
 
   # Assigns a Sample to an output, choosing an appropriate allowable_field_type.
   #
@@ -82,7 +82,7 @@ class Operation < ActiveRecord::Base
     aft = ft.choose_aft_for(sample)
     set_output(name, sample, aft)
 
-    self     
+    self
   end
 
   # Assigns a value to an input parameter
@@ -90,7 +90,7 @@ class Operation < ActiveRecord::Base
   # @param value
   def with_property(name, value)
     set_property(name, value, 'input', false, nil)
-  end  
+  end
 
   # end methods used for testing via vs code
 
@@ -163,7 +163,7 @@ class Operation < ActiveRecord::Base
       parent_id: id,
       field_type_id: field_type.id
     )
-  end  
+  end
 
   # @return [Array<FieldValue>]
   def inputs
@@ -438,21 +438,16 @@ class Operation < ActiveRecord::Base
   def leaf?
 
     inputs.each do |i|
-
       next unless i.predecessors.count > 0
 
-      i.predecessors.each do |predecessor|
-        if predecessor.operation.on_the_fly
-          return predecessor.operation.leaf?
-        else
-          return false
-        end
-      end
+      i.predecessors.each do |pred|
+        return pred.operation.leaf? if pred.operation.on_the_fly
 
+        return false
+      end
     end
 
     true
-
   end
 
   def temporary

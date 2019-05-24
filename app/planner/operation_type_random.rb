@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 module OperationTypeRandom
   def routes
@@ -26,21 +27,16 @@ module OperationTypeRandom
             field_sample, aft = field_type.random
             samples[field_type.routing] = random_sample
           end
+
+        elsif ft.choices != '' && !ft.choices.nil?
+          op.set_property ft.name, ft.choices.split(',').sample, ft.role, true, nil
+        elsif ft.type == 'number'
+          op.set_property ft.name, rand(100), ft.role, true, nil
+        elsif ft.ftype == 'json'
+          op.set_property ft.name, '{ "message": "random json parameters are hard to generate" }', ft.role, true, nil
         else
-          override_array = true
-          aft = nil
-          field_sample = if field_type.choices != '' && !field_type.choices.nil?
-                           field_type.choices.split(',').sample
-                         elsif field_type.type == 'number'
-                           rand(100)
-                         elsif field_type.ftype == 'json'
-                           '{ "message": "random json parameters are hard to generate" }'
-                         else
-                           %w[Lorem ipsum dolor sit amet consectetur adipiscing elit].sample
-                         end
+          op.set_property(ft.name, %w[Lorem ipsum dolor sit amet consectetur adipiscing elit].sample, ft.role, true, nil)
         end
-        op.set_property(field_type.name, field_sample, field_type.role, override_array, aft)
-        Rails.logger.info("Error adding property: #{op.errors.full_messages.join(', ')}") unless op.errors.empty?
       end
 
       op

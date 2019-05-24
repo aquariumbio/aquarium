@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 class OperationsController < ApplicationController
 
@@ -36,7 +36,7 @@ class OperationsController < ApplicationController
 
     unless ops.empty?
       ot = ops.first.operation_type
-      job, operations = ot.schedule(ops, current_user, Group.find_by_name('technicians'))
+      ot.schedule(ops, current_user, Group.find_by_name('technicians'))
     end
 
     render json: { operations: operations, jobs: active_and_pending_jobs }
@@ -124,7 +124,7 @@ class OperationsController < ApplicationController
       Operation.step
     end
 
-    render json: { result: "ok" }
+    render json: { result: 'ok' }
 
   end
 

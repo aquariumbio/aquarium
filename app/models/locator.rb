@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 # @api krill
 class Locator < ActiveRecord::Base
@@ -10,7 +10,7 @@ class Locator < ActiveRecord::Base
 
   # validate :no_collisions
   validate :has_wizard
-  validates :number, uniqueness: { scope: :wizard_id, message: "Should have max one locator per location" }
+  validates :number, uniqueness: { scope: :wizard_id, message: 'Should have max one locator per location' }
 
   def has_wizard
     errors.add(:no_wizard, 'no wizard') unless
@@ -36,16 +36,16 @@ class Locator < ActiveRecord::Base
   end
 
   def self.first_empty(wizard)
-    if wizard
-      locs = where(wizard_id: wizard.id, item_id: nil)
-      if !locs.empty?
-        locs.first
-      else
-        m = Locator.largest wizard
-        loc = Locator.new(wizard_id: wizard.id, number: m ? m.number + 1 : 0)
-        loc.save
-        loc
-      end
+    return unless wizard
+
+    locs = where(wizard_id: wizard.id, item_id: nil)
+    if !locs.empty?
+      locs.first
+    else
+      m = Locator.largest wizard
+      loc = Locator.new(wizard_id: wizard.id, number: m ? m.number + 1 : 0)
+      loc.save
+      loc
     end
   end
 
@@ -55,7 +55,7 @@ class Locator < ActiveRecord::Base
 
   def self.largest(wizard)
     # find greatest locator for this wizard, should always be the most recent
-    wizard.locators.order("id desc").first
+    wizard.locators.order('id desc').first
   end
 
   def self.port(wizard)

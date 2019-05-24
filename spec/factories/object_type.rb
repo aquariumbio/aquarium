@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :object_type do
     sequence(:name) { |n| "object_type_#{n}" }
-    unit { "object" }
+    unit { 'object' }
     min { 0 }
     max { 1 }
-    release_method { "return" }
-    description { "a container object type" }
+    release_method { 'return' }
+    description { 'a container object type' }
     cost { 0.01 }
     initialize_with { ObjectType.where(name: name).first_or_create } # singleton
 

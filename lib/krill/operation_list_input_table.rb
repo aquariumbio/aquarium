@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 module Krill
 
@@ -6,14 +6,15 @@ module Krill
 
     # Appends a column to an OperationsList table which accepts user input. Used in conjunction with show_with_input_table.
     # Consider using `get` instead, unless you have a specific reason to use this method
-    def custom_input(key, opts = { heading: "Custom Input", checkable: false, type: "string", style_block: nil }, &default_block)
-      self.each.with_index do |op, i|
+    def custom_input(key, opts = { heading: 'Custom Input', checkable: false, type: 'string', style_block: nil })
+      each.with_index do |op, i|
         op.temporary[:uid] = i
       end
       temp_op = first
       default_values = map do |op|
         # d = op.temporary[key] # Prefer to default to last inputted value
-        d ||= default_block.call(op)
+        # TODO: what is this supposed to be doing?
+        d || yield(op)
       end
       entries = zip(default_values).map do |op, d|
         # Save a list of temporary keys to be deleted later
@@ -44,7 +45,7 @@ module Krill
         vhash = op.temporary[:validation]
         op.temporary[:temporary_keys].each do |temp_key|
           # Parse key
-          uid, key = temp_key.to_s.split('__')
+          _uid, key = temp_key.to_s.split('__')
           key = key.to_sym
           val = temp_op.temporary[temp_key]
 
@@ -79,9 +80,9 @@ module Krill
     #     .custom_input(:some_key, heading: "Input", type: "number") { |op| 1 }
     #     .validate(:some_key) { |op, inputted_value| inputted_value.between?(1,10) }
     #     .end_Table
-    def validate key, &validation_block
-      self.each do |op|
-        validation = op.temporary[:validation] || Hash.new
+    def validate(key, &validation_block)
+      each do |op|
+        validation = op.temporary[:validation] || {}
         validation[key] = validation_block
         op.temporary[:validation] = validation
       end
@@ -99,9 +100,9 @@ module Krill
     #       "Value should be between 1 and 10."
     #       }
     #     .end_Table
-    def validation_message key, &message_block
-      self.each do |op|
-        message_hash = op.temporary[:validation_messages] || Hash.new
+    def validation_message(key, &message_block)
+      each do |op|
+        message_hash = op.temporary[:validation_messages] || {}
         message_hash[key] = message_block
         op.temporary[:validation_messages] = message_hash
       end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 # Meta type of {FieldValue}.
 # An Item type, or parameter type of the inputs/outputs of an {OperationType} or of the properties of a {SampleType}.
@@ -49,9 +50,9 @@ class FieldType < ActiveRecord::Base
   def allowed?(val)
     case ftype
     when 'string', 'url'
-      return val.class == String
+      val.is_a?(String)
     when 'number'
-      val.class == Integer || val.class == Float
+      val.is_a?(Integer) || val.is_a?(Float)
     when 'sample'
       allowable_field_types.collect { |aft| aft.sample_type.id }.member? val.sample_type_id
     when 'item'

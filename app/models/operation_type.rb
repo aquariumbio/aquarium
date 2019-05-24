@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 # Defines a type of lab procedure, with the input-types, output-types, and the instructions for converting inputs into outputs.
 # Executable unit {Operation}s can be instantiated from an OperationType, and specific inputs and outputs are then given.
@@ -32,7 +33,7 @@ class OperationType < ActiveRecord::Base
   validates :name, uniqueness: {
     scope: :category,
     case_sensitive: false,
-    message: "OperationType names must be unique within a given category. When importing, consider first moving existing operation types to a different category"
+    message: 'OperationType names must be unique within a given category. When importing, consider first moving existing operation types to a different category'
   }
   validates :category, presence: true
 
@@ -150,8 +151,8 @@ class OperationType < ActiveRecord::Base
       end
     end
 
-    deferred_job = schedule_aux(ops_to_defer, user, group, opts.merge(defer: true))
-    job = schedule_aux(ops_to_schedule, user, group, opts)
+    schedule_aux ops_to_defer, user, group, opts.merge(defer: true)
+    job = schedule_aux ops_to_schedule, user, group, opts
 
     [job, ops_to_schedule]
   end
@@ -234,9 +235,8 @@ class OperationType < ActiveRecord::Base
 
   def update_field_type(oldft, newft)
 
+    oldft.name = newft[:name]
     if oldft.ftype == 'sample'
-
-      oldft.name = newft[:name]
       oldft.routing = newft[:routing]
       oldft.array = newft[:array]
       oldft.part = newft[:part]
@@ -246,13 +246,9 @@ class OperationType < ActiveRecord::Base
       puts "PREF(#{oldft.name}): #{newft[:preferred_field_type_id]}"
 
       keepers = []
-
       if newft[:allowable_field_types]
-
         newft[:allowable_field_types].each do |newaft|
-
           matching_afts = oldft.allowable_field_types.select { |aft| aft.id == newaft[:id] }
-
           if matching_afts.length == 1
             oldaft = matching_afts[0]
             keepers << oldaft
@@ -262,23 +258,16 @@ class OperationType < ActiveRecord::Base
           else
             raise 'More than one allowable field type matched.'
           end
-
         end
-
       end
-
     else
-
-      oldft.name = newft[:name]
       oldft.ftype = newft[:ftype]
       oldft.choices = newft[:choices]
-
     end
 
     oldft.save
 
     oldft.allowable_field_types.reject { |aft| keepers.include? aft }.each(&:destroy)
-
   end
 
   def update_field_types(fts)
@@ -373,9 +362,7 @@ class OperationType < ActiveRecord::Base
     r.each do |status, ot_id, count|
       result[ot_id] ||= { planning: 0, waiting: 0, pending: 0, delayed: 0, deferred: 0, primed: 0, scheduled: 0, running: 0, error: 0, done: 0 }
       result[ot_id][status] = count
-      if status == 'primed'
-        result[ot_id][:waiting] = count
-      end
+      result[ot_id][:waiting] = count if status == 'primed'
     end
 
     result

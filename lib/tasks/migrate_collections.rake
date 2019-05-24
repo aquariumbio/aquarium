@@ -1,29 +1,31 @@
+# frozen_string_literal: true
+
 namespace :collections do
 
   desc 'Migrate Collections to 2.0'
 
   task migrate: :environment do
 
-    part_type = ObjectType.find_by_name "__Part"
-    orphan_type = ObjectType.find_by_name "Orphan"
+    part_type = ObjectType.find_by_name '__Part'
+    orphan_type = ObjectType.find_by_name 'Orphan'
 
     unless part_type
 
       part_type = ObjectType.new(
-        name: "__Part",
-        description: "Part of a collection",
+        name: '__Part',
+        description: 'Part of a collection',
         min: 0,
         max: 1,
-        handler: "sample_container",
-        safety: "No safety information",
-        cleanup: "No cleanup information",
-        data: "No data", vendor: "No vendor information",
-        unit: "part",
+        handler: 'sample_container',
+        safety: 'No safety information',
+        cleanup: 'No cleanup information',
+        data: 'No data', vendor: 'No vendor information',
+        unit: 'part',
         cost: 0.01,
-        release_method: "return",
-        release_description: "",
-        image: "",
-        prefix: ""
+        release_method: 'return',
+        release_description: '',
+        image: '',
+        prefix: ''
       )
 
       part_type.save
@@ -34,20 +36,20 @@ namespace :collections do
     unless orphan_type
 
       orphan_type = ObjectType.new(
-        name: "Orphan",
-        description: "Part of a collection",
+        name: 'Orphan',
+        description: 'Part of a collection',
         min: 0,
         max: 1,
-        handler: "part",
-        safety: "No safety information",
-        cleanup: "No cleanup information",
-        data: "No data", vendor: "No vendor information",
-        unit: "part",
+        handler: 'part',
+        safety: 'No safety information',
+        cleanup: 'No cleanup information',
+        data: 'No data', vendor: 'No vendor information',
+        unit: 'part',
         cost: 0.01,
-        release_method: "return",
-        release_description: "",
-        image: "",
-        prefix: ""
+        release_method: 'return',
+        release_description: '',
+        image: '',
+        prefix: ''
       )
 
       orphan_type.save
@@ -62,14 +64,14 @@ namespace :collections do
 
     n = 0
     orphans = 0
-    msg = "Starting migration"
-    items.each do |i|
-      c = (i.becomes Collection)
+    msg = 'Starting migration'
+    items.each do |item|
+      c = (item.becomes Collection)
       unless c.datum[:_migrated_]
         begin
           c.migrate
         rescue Exception => e
-          c.associate :migration_error, "Could not migrate this collecton. Setting object type to orphan"
+          c.associate :migration_error, 'Could not migrate this collecton. Setting object type to orphan'
           c.associate :migration_error_msg, "Error: #{e}"
           c.object_type_id = orphan_type.id
           c.save
@@ -77,16 +79,16 @@ namespace :collections do
         end
       end
       n += 1
-      print (0...msg.length).collect { |i| "\b" }.join('')
-      p = sprintf("%.2f", 100.0 * n / items.length)
+      print((0...msg.length).collect { |i| "\b" }.join(''))
+      p = format('%.2f', 100.0 * n / items.length)
       msg = "#{p}\% complete. #{orphans} errors."
       print "\e[32m" + msg + "\e[0m"
     end
 
     orphan_ids = Item.where(object_type_id: orphan_type.id).map(&:id)
-    if !orphan_ids.empty?
+    unless orphan_ids.empty?
       puts "\nThe following collections were not migrated due to errors"
-      puts orphan_ids.join(", ")
+      puts orphan_ids.join(', ')
     end
 
   end

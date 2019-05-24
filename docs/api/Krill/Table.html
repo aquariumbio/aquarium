@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html  lang="en">
+<html>
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -858,7 +858,7 @@ Note: data hash may not get properly populated in the protocol tester</p>
       <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 151</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_add_response_column'>add_response_column</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_defaults'>defaults</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_default_opts'>default_opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='label'>key:</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>number</span><span class='tstring_end'>&#39;</span></span><span class='rbrace'>}</span>
+  <span class='id identifier rubyid_default_opts'>default_opts</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='label'>key:</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>number</span><span class='tstring_end'>&#39;</span></span> <span class='rbrace'>}</span>
   <span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span> <span class='id identifier rubyid_default_opts'>default_opts</span>
   <span class='comment'># Although we are creating an input table that is not associated to an operationslist
 </span>  <span class='comment'># we rely on the operationslist table input machinery (in operations_list_input_table)
@@ -867,7 +867,7 @@ Note: data hash may not get properly populated in the protocol tester</p>
 </span>  <span class='comment'># Putting unique negative numbers here will allow that the ShowResponse still will be populated with values
 </span>  <span class='comment'># even though there are no op.temporary hashes to fill (since no operations have negative ids)
 </span>  <span class='id identifier rubyid_values'>values</span> <span class='op'>=</span> <span class='id identifier rubyid_defaults'>defaults</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_default'>default</span><span class='comma'>,</span> <span class='id identifier rubyid_idx'>idx</span><span class='op'>|</span>
-    <span class='lbrace'>{</span> <span class='label'>type:</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:type</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>operation_id:</span> <span class='lparen'>(</span><span class='op'>-</span><span class='int'>1</span> <span class='op'>*</span> <span class='id identifier rubyid_idx'>idx</span> <span class='op'>-</span> <span class='int'>1</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='label'>key:</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:key</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>default:</span> <span class='id identifier rubyid_default'>default</span> <span class='op'>||</span> <span class='int'>0</span><span class='rbrace'>}</span>
+    <span class='lbrace'>{</span> <span class='label'>type:</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:type</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>operation_id:</span> <span class='lparen'>(</span><span class='op'>-</span><span class='int'>1</span> <span class='op'>*</span> <span class='id identifier rubyid_idx'>idx</span> <span class='op'>-</span> <span class='int'>1</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='label'>key:</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:key</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>default:</span> <span class='id identifier rubyid_default'>default</span> <span class='op'>||</span> <span class='int'>0</span> <span class='rbrace'>}</span>
   <span class='kw'>end</span>
   <span class='id identifier rubyid_add_column'>add_column</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_values'>values</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
@@ -1295,13 +1295,15 @@ Note: data hash may not get properly populated in the protocol tester</p>
 100
 101
 102
-103</pre>
+103
+104</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 99</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_from'>from</span><span class='lparen'>(</span><span class='id identifier rubyid_i'>i</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Table: from(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_i'>i</span><span class='embexpr_end'>}</span><span class='tstring_content'>) is out of range</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_i'>i</span> <span class='op'>&lt;</span> <span class='ivar'>@rows</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
+
   <span class='ivar'>@from</span> <span class='op'>=</span> <span class='id identifier rubyid_i'>i</span>
   <span class='kw'>self</span>
 <span class='kw'>end</span></pre>
@@ -1456,7 +1458,6 @@ Note: data hash may not get properly populated in the protocol tester</p>
       <pre class="lines">
 
 
-115
 116
 117
 118
@@ -1466,10 +1467,11 @@ Note: data hash may not get properly populated in the protocol tester</p>
 122
 123
 124
-125</pre>
+125
+126</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 115</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 116</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_render'>render</span>
 
@@ -1624,13 +1626,13 @@ Note: data hash may not get properly populated in the protocol tester</p>
       <pre class="lines">
 
 
-108
 109
 110
-111</pre>
+111
+112</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 108</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 109</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to'>to</span><span class='lparen'>(</span><span class='id identifier rubyid_i'>i</span><span class='rparen'>)</span>
   <span class='ivar'>@to</span> <span class='op'>=</span> <span class='id identifier rubyid_i'>i</span>
@@ -1646,7 +1648,7 @@ Note: data hash may not get properly populated in the protocol tester</p>
 </div>
 
       <div id="footer">
-  Generated on Wed Dec 19 11:12:03 2018 by
+  Generated on Fri May 17 14:38:47 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.7).
 </div>

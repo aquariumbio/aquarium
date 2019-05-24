@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 module Krill
 
@@ -94,8 +94,6 @@ module Krill
     def boxes_for(items)
 
       boxes = {}
-      loc_matched_items = []
-      extras = []
 
       r = Regexp.new '(M20|M80|SF[0-9]*)\.[0-9]+\.[0-9]+\.[0-9]+'
 
@@ -137,10 +135,11 @@ module Krill
       end
 
       unless boxes.empty?
+        contents = boxes.keys.collect { |b| { content: b, check: true } }
         show do
           title 'Boxes Required'
           note 'You will need the following boxes from the freezer(s)'
-          table (boxes.keys.collect { |b| { content: b, check: true } }).each_slice(6).to_a
+          table contents.each_slice(6).to_a
         end
       end
 
@@ -153,17 +152,16 @@ module Krill
         end
       end
 
-      unless extras.empty?
-        takes = extras.collect(&:features)
-        show do
-          title extra_title
-          takes.each do |t|
-            item t
-          end
-          raw user_shows
-        end
-      end
+      return if extras.empty?
 
+      takes = extras.collect(&:features)
+      show do
+        title extra_title
+        takes.each do |t|
+          item t
+        end
+        raw user_shows
+      end
     end
 
     # Associate the item with the job running the protocol, until it is released (see {release}).

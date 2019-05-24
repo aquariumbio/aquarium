@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 # @api krill
 module FieldValueKrill
@@ -44,13 +44,13 @@ module FieldValueKrill
 
   def make
 
-    if object_type && !self.child_item_id
+    if object_type && !child_item_id
       @item = Item.make({ quantity: 1, inuse: 0 }, sample: child_sample, object_type: object_type)
       @item.store if @item.location == 'Unknown'
       self.child_item_id = @item.id
       save
-    elsif object_type && self.child_item_id
-      Rails.logger.info "Item #{self.child_item_id} already assigned to field value"
+    elsif object_type && child_item_id
+      Rails.logger.info "Item #{child_item_id} already assigned to field value"
     end
 
     @item
@@ -77,15 +77,13 @@ module FieldValueKrill
   end
 
   def make_part(collection, r, c)
+    return unless collection
 
-    if collection
-      collection.set r, c, child_sample
-      self.child_item_id = collection.id
-      self.row = r
-      self.column = c
-      save
-    end
-
+    collection.set r, c, child_sample
+    self.child_item_id = collection.id
+    self.row = r
+    self.column = c
+    save
   end
 
   def info

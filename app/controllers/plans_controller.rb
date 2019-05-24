@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PlansController < ApplicationController
 
   before_filter :signed_in_user
@@ -79,7 +81,7 @@ class PlansController < ApplicationController
           render json: ps
           logger.info "Completed show in #{Time.now - s}s"
         else
-          render json: { errors: "Could not find plan with id #{params[:id]}" }, status: 404
+          render json: { errors: "Could not find plan with id #{params[:id]}" }, status: :not_found
         end
       end
     end
@@ -140,7 +142,7 @@ class PlansController < ApplicationController
   end
 
   def route_name(r)
-    r ? r : 'null'
+    r || 'null'
   end
 
   def destroy
@@ -194,8 +196,8 @@ class PlansController < ApplicationController
 
       ops = pending.select { |op| op.operation_type_id == ot_id }
 
-      job, newops = OperationType.find(ot_id)
-                                 .schedule(ops, current_user, Group.find_by_name('technicians'))
+      job, _newops = OperationType.find(ot_id)
+                                  .schedule(ops, current_user, Group.find_by_name('technicians'))
 
       error = nil
 

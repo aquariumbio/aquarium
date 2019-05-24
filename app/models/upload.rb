@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 # @api krill
 class Upload < ActiveRecord::Base

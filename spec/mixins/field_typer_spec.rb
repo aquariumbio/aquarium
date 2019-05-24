@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe FieldTyper do 
+RSpec.describe FieldTyper do
   let(:mock_owner_class) { build_mock_typer_class }
   let!(:ex_object_type) { create(:object_type) }
   let!(:ex2_object_type) { create(:object_type) }
@@ -47,8 +49,8 @@ RSpec.describe FieldTyper do
   end
 
   it 'can add fields using array or string' do
-    @owner.add_field('type_1', ex_sample_type.name, ex_object_type.name, 'input', {}) 
-    @owner.add_field('type_2', [ex_sample_type.name], ex_object_type.name, 'input', {}) 
+    @owner.add_field('type_1', ex_sample_type.name, ex_object_type.name, 'input', {})
+    @owner.add_field('type_2', [ex_sample_type.name], ex_object_type.name, 'input', {})
     @owner.add_field('type_3', [ex_sample_type.name], [ex_object_type.name], 'input', {})
     expect(@owner.field_types.length).to eq(3)
     aft_type1 = @owner.type('type_1').allowable_field_types.first

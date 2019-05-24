@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 # Simply put: a representation of an input, output, or parameter of an Operation.
 #
@@ -21,7 +22,6 @@ class FieldValue < ActiveRecord::Base
   #
   # @return [FieldType]  the parent {FieldType}
   belongs_to :field_type
-
 
   # Gets name of FieldValue. Will be the same as the name of the Parent {FieldType}.
   #
@@ -75,13 +75,9 @@ class FieldValue < ActiveRecord::Base
   # @param row [Fixnum]
   # @param column [Fixnum]
   # @return [Item]
-  def collection_part row, column
+  def collection_part(row, column)
     pas = PartAssociation.where(collection_id: child_item_id, row: row, column: column)
-    if pas.length == 1
-      pas[0].part
-    else
-      nil
-    end
+    pas[0].part if pas.length == 1
   end
 
   # Return associated parameter value.
@@ -94,12 +90,10 @@ class FieldValue < ActiveRecord::Base
     if field_type
       ft = field_type
     elsif sample && sample_type
-      fts = sample.sample_type.field_types.select { |ft| ft.name == name }
-      if fts.length == 1
-        ft = fts[0]
-      else
-        return nil
-      end
+      fts = sample.sample_type.field_types.select { |type| type.name == name }
+      return nil unless fts.length == 1
+
+      ft = fts[0]
     else
       return nil
     end
@@ -110,7 +104,7 @@ class FieldValue < ActiveRecord::Base
     when 'json'
       begin
         return JSON.parse value, symbolize_names: true
-      rescue Exception => e
+      rescue JSON::ParseError => e
         return { error: e, original_value: value }
       end
     when 'number'
@@ -181,31 +175,6 @@ class FieldValue < ActiveRecord::Base
       end
 
       fv = sample.field_values.create name: ft.name, child_sample_id: child.id
-      fv.save
-    end
-  end
-
-  def self.create_item(sample, ft, values)
-    values.each do |v|
-      if v.class == Item
-        item = v
-      elsif v.class == Integer
-        item = Item.find(v)
-        unless item
-          sample.errors.add :item, "Could not find item with id #{v} for #{ft.name}"
-          raise ActiveRecord::Rollback
-        end
-      else
-        sample.errors.add :sample, "#{v} should be an item for #{ft.name}"
-        raise ActiveRecord::Rollback
-      end
-
-      unless ft.allowed? child
-        sample.errors.add :sample, "#{v} is not an allowable sample_type for #{ft.name}"
-        raise ActiveRecord::Rollback
-      end
-
-      fv = sample.field_values.create name: ft.name, child_item_id: sid
       fv.save
     end
   end
