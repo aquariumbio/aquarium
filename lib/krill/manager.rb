@@ -45,6 +45,10 @@ module Krill
     def start_thread
       @thread_status.running = true
       @thread = Thread.new do
+
+        @job.start # what if this fails?
+        appended_complete = false
+
         begin
           rval = @protocol.main
         rescue Exception => e
@@ -63,18 +67,22 @@ module Krill
               puts "notifying #{op.id}"
               op.associate :job_crash, "Operation canceled when job #{@job.id} crashed"
             end
-            @job.save # what if this fails?
-            ActiveRecord::Base.connection.close
-            @mutex.synchronize { @thread_status.running = false }
+            @job.reload
+            @job.append_step operation: 'next', time: Time.now, inputs: {}
+            @job.append_step operation: 'aborted', rval: {}
           end
-        rescue Exception => e
-          puts "#{@job.id}: SERIOUS EXCEPTION #{e}: #{e.backtrace[0, 10]}"
-
-        if ActiveRecord::Base.connection && ActiveRecord::Base.connection.active?
+          @job.save # what if this fails?
           ActiveRecord::Base.connection.close
-          puts "#{@job.id}: Closing ActiveRecord connection"
+          @mutex.synchronize { @thread_status.running = false }
         end
+      rescue Exception => e
+        puts "#{@job.id}: SERIOUS EXCEPTION #{e}: #{e.backtrace[0, 10]}"
+
+      if ActiveRecord::Base.connection && ActiveRecord::Base.connection.active?
+        ActiveRecord::Base.connection.close
+        puts "#{@job.id}: Closing ActiveRecord connection"
       end
+
     end
 
     def debugger
