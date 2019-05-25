@@ -82,7 +82,7 @@ module Krill
           ActiveRecord::Base.connection.close
           puts "#{@job.id}: Closing ActiveRecord connection"
         end
-
+      end
     end
 
     def debugger
