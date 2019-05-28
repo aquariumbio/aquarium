@@ -82,7 +82,7 @@ class OperationType < ActiveRecord::Base
   end
 
   def cost_model
-    code 'cost_model'
+    code('cost_model')
   end
 
   def precondition
