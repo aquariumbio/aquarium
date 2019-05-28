@@ -32,11 +32,11 @@ class OperationsController < ApplicationController
 
   def batch
 
-    ops = params[:operation_ids].collect { |oid| Operation.find(oid) }
+    operations = params[:operation_ids].collect { |oid| Operation.find(oid) }
 
-    unless ops.empty?
-      ot = ops.first.operation_type
-      ot.schedule(ops, current_user, Group.find_by_name('technicians'))
+    unless operations.empty?
+      ot = operations.first.operation_type
+      ot.schedule(operations, current_user, Group.find_by_name('technicians'))
     end
 
     render json: { operations: operations, jobs: active_and_pending_jobs }
