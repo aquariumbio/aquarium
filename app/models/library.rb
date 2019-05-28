@@ -15,6 +15,18 @@ class Library < ActiveRecord::Base
     message: 'Library names must be unique within a given category. When importing, consider first moving existing libraries to a different category'
   }
 
+  def source
+    code('source')
+  end
+
+  def add_source(content:, user:)
+    if source
+      source.commit(content, user)
+    else
+      new_code('source', content, user)
+    end
+  end
+
   def export
     {
       library: {
