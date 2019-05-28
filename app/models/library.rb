@@ -42,7 +42,7 @@ class Library < ActiveRecord::Base
 
     lib = Library.new name: obj[:name], category: obj[:category]
     lib.save
-    lib.new_code('source', obj[:code_source], user)
+    lib.add_source(content: obj[:code_source], user: user)
 
     issues = { notes: ["Created new library #{obj[:name]} in category #{obj[:category]}"], inconsistencies: [] }
     issues
