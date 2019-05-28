@@ -281,7 +281,7 @@ class OperationTypesController < ApplicationController
       error = nil
       begin
         manager = Krill::Manager.new(job.id, true)
-      rescue SyntaxError, SystemStackError, StandardError => e
+      rescue ScriptError, SystemStackError, StandardError => e
         error = e
       end
 

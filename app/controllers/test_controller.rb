@@ -56,7 +56,7 @@ class TestController < ApplicationController
     begin
       resp = nil
       code.load(binding: empty_binding, source_name: '(eval)')
-    rescue SyntaxError, StandardError => e
+    rescue ScriptError, StandardError => e
       resp = handle_error(error: e, phase_name: 'test loading')
     end
 
@@ -75,7 +75,7 @@ class TestController < ApplicationController
         resp = AqResponse.new
         resp.error('Test error: setup must add operations')
       end
-    rescue SystemStackError, SyntaxError, StandardError => e
+    rescue SystemStackError, ScriptError, StandardError => e
       resp = handle_error(error: e, logs: test.logs)
     end
 
@@ -96,7 +96,7 @@ class TestController < ApplicationController
             .more(exception_backtrace: test.error_backtrace,
                   log: test.logs)
       end
-    rescue SystemStackError, SyntaxError, StandardError => e
+    rescue SystemStackError, ScriptError, StandardError => e
       resp = handle_error(error: e, logs: test.logs)
     end
 
@@ -121,7 +121,7 @@ class TestController < ApplicationController
             backtrace: test ? test.backtrace : [],
             log: test ? test.logs : []
           )
-    rescue SystemStackError, SyntaxError, StandardError => e
+    rescue SystemStackError, ScriptError, StandardError => e
       resp = handle_error(error: e)
     else
       resp.ok(message: 'test complete',
@@ -135,7 +135,7 @@ class TestController < ApplicationController
   # Creates an `AqResponse` object for an error that occur in a test.
   # Filters backtrace to include errors that occur within an `(eval)`.
   #
-  # @param error [StandardError, SyntaxError, SystemStackError] the exception object
+  # @param error [StandardError, ScriptError, SystemStackError] the exception object
   # @return [AqResponse] object with error message, and backtrace.
   def handle_error(error:, phase_name: nil, logs: [])
     resp = AqResponse.new
@@ -143,7 +143,7 @@ class TestController < ApplicationController
                   .map { |message| translate_trace(message: message) }
     error_message = if error_trace[-1].present?
                       "Error in #{error_trace[-1]}: #{error}"
-                    elsif (error.is_a? SyntaxError) && error.message.match(/^\(eval\):\d+: .+$/)
+                    elsif error.is_a?(ScriptError) && error.message.match(/^\(eval\):\d+: .+$/)
                       line_number, message = error.message.match(
                         /^\(eval\):(\d+): (.+)$/
                       ).captures
