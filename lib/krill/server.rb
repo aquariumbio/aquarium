@@ -24,14 +24,11 @@ module Krill
           command = JSON.parse client.gets, symbolize_names: true
           jid = command[:jid].to_i if command[:jid]
           debug = command[:debug]
-          directory = command[:directory]
-          branch = command[:branch]
 
           case command[:operation]
-
           when 'start'
 
-            @managers[jid] = Manager.new jid, debug, directory, branch
+            @managers[jid] = Manager.new(jid, debug)
 
             begin
               status = @managers[jid].run

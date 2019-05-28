@@ -51,7 +51,7 @@ class KrillController < ApplicationController
       @job.save
 
       begin
-        manager = Krill::Manager.new @job.id, true, 'master', 'master'
+        manager = Krill::Manager.new(@job.id, true)
       rescue Exception => e
         error = e
       end
