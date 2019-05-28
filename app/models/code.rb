@@ -48,7 +48,10 @@ class Code < ActiveRecord::Base
   end
 
   # Loads the code content
-  def load(binding: nil, source_name: '(eval)')
+  #
+  # @param binding [Binding] the variable binding for loading the code (default: an empty binding)
+  # @param source_name [String] the name of the source (default: '(eval)')
+  def load(binding:, source_name: '(eval)')
     # TODO: check content type is krill before evaluating
     eval(content, binding, source_name)
   end
