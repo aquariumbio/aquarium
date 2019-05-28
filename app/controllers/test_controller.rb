@@ -55,7 +55,7 @@ class TestController < ApplicationController
   def load_test(code:)
     begin
       resp = nil
-      eval(code)
+      code.load(binding: empty_binding, source_name: '(eval)')
     rescue SyntaxError, StandardError => e
       resp = handle_error(error: e, phase_name: 'test loading')
     end
@@ -183,4 +183,10 @@ class TestController < ApplicationController
     "`#{method}` (line #{line_number})"
   end
 
+  private
+
+  # Create an empty binding
+  def empty_binding
+    binding
+  end
 end
