@@ -341,9 +341,9 @@ class Operation < ActiveRecord::Base
 
   def nominal_cost
     begin
-      operation_type.cost_model.load
+      operation_type.cost_model.load(binding: empty_binding)
     rescue SyntaxError, StandardError => e
-      raise 'Could not evaluate cost function definition: ' + e.to_s
+      raise "Error loading cost function for #{operation_type.name}: " + e.to_s
     end
 
     temp = status
@@ -353,7 +353,7 @@ class Operation < ActiveRecord::Base
       c = cost(self)
     rescue SystemStackError, SyntaxError, StandardError => e
       self.status = temp
-      raise 'Could not evaluate cost function on the given operation: ' + e.to_s
+      raise "Error evaluating cost function for #{operation_type.name}: " + e.to_s
     end
 
     self.status = temp
@@ -392,10 +392,17 @@ class Operation < ActiveRecord::Base
     result = true
 
     begin
-      operation_type.precondition.load
+      operation_type.precondition.load(binding: empty_binding)
+    rescue SyntaxError, StandardError => e
+      # Raise "Error loading precondition for #{operation_type.name}: " + e.to_s
+      Rails.logger.info "Error loading precondition for #{operation_type.name} (id: #{id})"
+      plan.associate 'Precondition load error', e.message.to_s + ': ' + e.backtrace[0].to_s.sub('(eval)', 'line')
+    end
+
+    begin
       result = precondition(self)
-    rescue Exception => e
-      Rails.logger.info "PRECONDITION FOR OPERATION #{id} crashed"
+    rescue SystemStackError, SyntaxError, StandardError => e
+      Rails.logger.info "PRECONDITION FOR OPERATION #{id} CRASHED"
       plan.associate 'Precondition Evaluation Error', e.message.to_s + ': ' + e.backtrace[0].to_s.sub('(eval)', 'line')
       result = false # default if there is no precondition or it crashes
     end
@@ -455,4 +462,10 @@ class Operation < ActiveRecord::Base
     @temporary
   end
 
+  private
+
+  # Create an empty binding
+  def empty_binding
+    binding
+  end
 end
