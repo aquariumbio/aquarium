@@ -119,7 +119,7 @@ class OperationTypesController < ApplicationController
 
         begin
           ot.update_field_types data[:field_types]
-        rescue Exception => e
+        rescue StandardError => e
           update_errors << e.to_s << e.backtrace.to_s
           logger.error("Error updating operation type field types: #{e.backtrace}")
           raise ActiveRecord::Rollback
@@ -153,6 +153,7 @@ class OperationTypesController < ApplicationController
            status: :ok
   end
 
+  # TODO: combine with other randoms
   def random
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
