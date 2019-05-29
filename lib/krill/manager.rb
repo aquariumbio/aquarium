@@ -9,7 +9,7 @@ module Krill
   class Manager
     attr_accessor :thread
 
-    def initialize(jid, debug, directory = 'master', branch = 'master')
+    def initialize(jid, debug)
       @jid = jid
       @debug = debug
 
@@ -18,9 +18,11 @@ module Krill
       @thread_status = ThreadStatus.new
       @thread_status.running = false
 
+      # TODO: could raise ActiveRecord::RecordNotFound
       @job = Job.find(jid)
       raise "No path specified for job #{@job.id}. Cannot start." if @job.operations.empty?
 
+      # TODO: could raise JSON::ParseError
       initial_state = JSON.parse(@job.state, symbolize_names: true)
       @args = initial_state[0][:arguments]
 
@@ -42,6 +44,15 @@ module Krill
     # TRICKY THREAD STUFF
     #
 
+    # TODO: standardize handling of Exceptions in execution
+    # Possibilities:
+    # NoMemoryError
+    # ScriptError - load errors including SyntaxError and NotImplementedError
+    # SecurityError
+    # StandardError
+    # SystemExit - explicit call to Kernel.exit
+    # SystemStackError
+
     def start_thread
       @thread_status.running = true
       @thread = Thread.new do
@@ -50,26 +61,23 @@ module Krill
         appended_complete = false
 
         begin
-          rval = @protocol.main
+          return_value = @protocol.main
         rescue Exception => e
           puts "#{@job.id}: EXCEPTION #{e}"
           puts e.backtrace[0, 10]
           @base_object.error(e)
         else
-          @job.reload.append_step(operation: 'complete', rval: rval)
+          @job.reload.append_step(operation: 'complete', rval: return_value)
           appended_complete = true
         ensure
           if appended_complete
             @job.stop
           else
             @job.stop 'error'
-            @job.operations.each do |op|
-              puts "notifying #{op.id}"
-              op.associate :job_crash, "Operation canceled when job #{@job.id} crashed"
-            end
+            notify(@job)
             @job.reload
-            @job.append_step operation: 'next', time: Time.now, inputs: {}
-            @job.append_step operation: 'aborted', rval: {}
+            @job.append_step(operation: 'next', time: Time.zone.now, inputs: {})
+            @job.append_step(operation: 'aborted', rval: {})
           end
           @job.save # what if this fails?
           ActiveRecord::Base.connection.close
@@ -90,13 +98,13 @@ module Krill
       appended_complete = false
 
       begin
-        rval = @protocol.main
+        return_value = @protocol.main
       rescue Exception => e
         puts "#{@job.id}: EXCEPTION #{e}"
         puts e.backtrace[0, 10]
         @base_object.error e
       else
-        @job.reload.append_step operation: 'complete', rval: rval
+        @job.reload.append_step(operation: 'complete', rval: return_value)
         appended_complete = true
       ensure
         if appended_complete
@@ -104,7 +112,7 @@ module Krill
         else
           @job.reload
           @job.stop 'error'
-          @job.append_step operation: 'next', time: Time.now, inputs: {}
+          @job.append_step operation: 'next', time: Time.zone.now, inputs: {}
           @job.append_step operation: 'aborted', rval: {}
         end
 
@@ -117,7 +125,6 @@ module Krill
         ActiveRecord::Base.connection.close
         puts "#{@job.id}: Closing ActiveRecord connection"
       end
-
     end
 
     def run
@@ -186,9 +193,9 @@ module Krill
     def make_base
       b = Module.new
       b.send(:include, Base)
-      b.module_eval("def jid; #{@jid}; end")
-      b.module_eval("def input; #{@args}; end")
-      b.module_eval('def debug; true; end') if @debug
+      b.module_eval("def jid; #{@jid}; end", 'generated_base')
+      b.module_eval("def input; #{@args}; end", 'generated_base')
+      b.module_eval('def debug; true; end', 'generated_base') if @debug
 
       manager_mutex = @mutex
       b.send :define_method, :mutex do
@@ -206,13 +213,13 @@ module Krill
     def insert_base_class(obj, mod)
       obj.constants.each do |c|
         k = obj.const_get(c)
-        if k.class == Module
+        if k.is_a?(Module)
           eigenclass = class << self
                          self
           end
           eigenclass.send(:include, mod) unless eigenclass.include? mod
           insert_base_class k, mod
-        elsif k.class == Class
+        elsif k.is_a?(Class)
           k.send(:include, mod) unless k.include? mod
           insert_base_class k, mod
         end
@@ -220,4 +227,13 @@ module Krill
     end
   end
 
+  def notify(job)
+    job.operations.each do |operation|
+      puts("notifying #{operation.id}")
+      operation.associate(
+        :job_crash,
+        "Operation canceled when job #{job.id} crashed"
+      )
+    end
+  end
 end
