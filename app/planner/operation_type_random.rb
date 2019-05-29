@@ -5,6 +5,7 @@ module OperationTypeRandom
     field_types.collect(&:routing).uniq
   end
 
+  # TODO: this should act on operations and not operation type
   def random(n = 1)
     users = User.all.sample(n)
 
@@ -23,17 +24,18 @@ module OperationTypeRandom
                            else
                              [samples[field_type.routing]] * 3
                            end
+            # TODO: make this do something
           else
             field_sample, aft = field_type.random
             samples[field_type.routing] = random_sample
           end
-
+          # TODO: what is supposed to happen here?
         elsif ft.choices != '' && !ft.choices.nil?
-          op.set_property ft.name, ft.choices.split(',').sample, ft.role, true, nil
+          op.set_property(ft.name, ft.choices.split(',').sample, ft.role, true, nil)
         elsif ft.type == 'number'
-          op.set_property ft.name, rand(100), ft.role, true, nil
+          op.set_property(ft.name, rand(100), ft.role, true, nil)
         elsif ft.ftype == 'json'
-          op.set_property ft.name, '{ "message": "random json parameters are hard to generate" }', ft.role, true, nil
+          op.set_property(ft.name, '{ "message": "random json parameters are hard to generate" }', ft.role, true, nil)
         else
           op.set_property(ft.name, %w[Lorem ipsum dolor sit amet consectetur adipiscing elit].sample, ft.role, true, nil)
         end
