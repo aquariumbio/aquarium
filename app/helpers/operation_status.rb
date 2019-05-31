@@ -17,7 +17,6 @@ module OperationStatus
   end
 
   def start
-
     raise "Cannot start operation #{id} from state #{status}" unless status == 'planning'
 
     if on_the_fly
@@ -32,16 +31,13 @@ module OperationStatus
     else
       change_status 'waiting'
     end
-
   end
 
   def retry
-
     raise "Cannot restart operation #{id} because it is not in an error state" unless status == 'error' || status == 'done'
 
     change_status 'waiting'
     step
-
   end
 
   def schedule
@@ -90,7 +86,6 @@ module OperationStatus
     Rails.logger.info "COULD NOT STEP OPERATION #{id}: #{e}"
 
     # TODO: Change deferred op to scheduled
-
   end
 
   def finish
@@ -125,7 +120,6 @@ module OperationStatus
   end
 
   def get_items_from_predecessor
-
     inputs.each do |i|
 
       Wire.where(to_id: i.id).each do |wire|
@@ -146,9 +140,7 @@ module OperationStatus
         i.column = wire.from.column
         i.save
       end
-
     end
-
   end
 
 end

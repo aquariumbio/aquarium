@@ -5,7 +5,6 @@
 # run Jobs with varying amounts of Operations.
 # @api krill
 class Job < ActiveRecord::Base
-
   include JobOperations
 
   attr_accessible :arguments, :state, :user_id, :pc, :submitted_by, :group_id,
@@ -41,14 +40,12 @@ class Job < ActiveRecord::Base
   has_many :predecessors, class_name: 'Job', foreign_key: :successor_id
 
   def self.params_to_time(p)
-
     DateTime.civil_from_format(:local,
                                p['dt(1i)'].to_i,
                                p['dt(2i)'].to_i,
                                p['dt(3i)'].to_i,
                                p['dt(4i)'].to_i,
                                p['dt(5i)'].to_i).to_time
-
   end
 
   def done?
@@ -86,7 +83,7 @@ class Job < ActiveRecord::Base
   end
 
   def backtrace
-    JSON.parse state, symbolize_names: true
+    JSON.parse(state, symbolize_names: true)
   end
 
   def append_steps(steps)
@@ -128,7 +125,6 @@ class Job < ActiveRecord::Base
   end
 
   def arguments
-
     if /\.rb$/.match?(path)
       JSON.parse(state).first['arguments']
     else
@@ -136,33 +132,26 @@ class Job < ActiveRecord::Base
     end
   rescue JSON::ParseError
     { error: 'unable to parse arguments' }
-
   end
 
   def start_link(el, opts = {})
-
     options = { confirm: false }.merge opts
-
     confirm = options[:confirm] ? "class='confirm'" : ''
 
     if /\.rb$/.match?(path)
-
       if pc == Job.NOT_STARTED
         "<a #{confirm} target=_top href='/krill/start?job=#{id}'>#{el}</a>".html_safe
       else
         "<a #{confirm} target=_top href='/krill/ui?job=#{id}'>#{el}</a>".html_safe
       end
-
     elsif pc == Job.NOT_STARTED
       "<a #{confirm} target=_top href='/interpreter/advance?job=#{id}'>#{el}</a>".html_safe
     elsif pc != Job.COMPLETED
       "<a #{confirm} target=_top href='/interpreter/current?job=#{id}'>#{el}</a>".html_safe
     end
-
   end
 
   def remove_types(p)
-
     case p
     when String, Integer, Float, TrueClass, FalseClass
       p
@@ -177,7 +166,6 @@ class Job < ActiveRecord::Base
         remove_types a
       end
     end
-
   end
 
   def set_arguments(a)
@@ -193,7 +181,7 @@ class Job < ActiveRecord::Base
     if /\.rb$/.match?(path)
       begin
         @rval = JSON.parse(state, symbolize_names: true).last[:rval] || {}
-      rescue StandardError
+      rescue JSON::ParseError
         @rval = { error: 'Could not find return value.' }
       end
     else
@@ -233,7 +221,6 @@ class Job < ActiveRecord::Base
   end
 
   def error?
-
     if krill?
       begin
         return done? && backtrace.last[:operation] != 'complete'
@@ -246,7 +233,6 @@ class Job < ActiveRecord::Base
     else
       false
     end
-
   end
 
   def error_message
@@ -258,7 +244,6 @@ class Job < ActiveRecord::Base
   end
 
   def abort_krill
-
     self.pc = Job.COMPLETED
 
     state = JSON.parse self.state, symbolize_names: true
@@ -272,7 +257,6 @@ class Job < ActiveRecord::Base
     # add next and final
     append_step operation: 'next', time: Time.now, inputs: {}
     append_step operation: 'aborted', rval: {}
-
   end
 
   def num_posts
@@ -312,14 +296,12 @@ class Job < ActiveRecord::Base
   end
 
   def reset
-
     puts Krill::Client.new.abort id
     self.state = [{ 'operation' => 'initialize', 'arguments' => {}, 'time' => '2017-06-02T11:40:20-07:00' }].to_json
     self.pc = 0
     save
     puts Krill::Client.new.start id
     reload
-
   end
 
 end
