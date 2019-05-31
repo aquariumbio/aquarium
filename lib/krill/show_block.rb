@@ -296,10 +296,10 @@ module Krill
 
     # @api private
     def method_missing(m, *args, &block)
-
       raise "Cannot call 'show' within a show block." if m == :show
 
       @base.send(m, *args, &block)
+      super
     end
 
   end
