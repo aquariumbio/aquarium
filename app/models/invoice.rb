@@ -4,7 +4,7 @@ class Invoice < ActiveRecord::Base
 
   attr_accessible :budget_id, :month, :user_id, :year, :status, :notes
 
-  validates_inclusion_of :status, in: %w[ready approval_requested reconciled]
+  validates :status, inclusion: { in: %w[ready approval_requested reconciled] }
 
   belongs_to :user
   belongs_to :budget

@@ -36,7 +36,7 @@ class ObjectType < ActiveRecord::Base
   validates :cost, presence: true
   validate :pos
   validate :proper_release_method
-  validates_uniqueness_of :name
+  validates :name, uniqueness: true
 
   def rows
     return unless handler == 'collection'
