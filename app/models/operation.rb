@@ -45,14 +45,10 @@ class Operation < ActiveRecord::Base
   end
 
   # @return [String] OperationType name
-  def name
-    operation_type.name
-  end
+  delegate :name, to: :operation_type
 
   # @return [Bool] Whether OperationType is on-the-fly
-  def on_the_fly
-    operation_type.on_the_fly
-  end
+  delegate :on_the_fly, to: :operation_type
 
   # @return [Plan] The plan that contains this Operation
   def plan
@@ -144,6 +140,7 @@ class Operation < ActiveRecord::Base
     field_value.save
   end
 
+  # TODO: this belongs elsewhere
   def create_field_type(name)
     FieldType.new(
       name: name,
@@ -360,32 +357,24 @@ class Operation < ActiveRecord::Base
     c
   end
 
-  def child_data(child_name, child_role, data_name)
-    fv = get_input(child_name) if child_role == 'input'
-    fv = get_output(child_name) if child_role == 'output'
-    fv ? fv.child_data(data_name) : nil
-  end
-
   def input_data(input_name, data_name)
-    child_data(input_name, 'input', data_name)
+    fv = input(input_name)
+    fv.child_data(data_name) if fv
   end
 
-  def output_data(input_name, data_name)
-    child_data(input_name, 'output', data_name)
-  end
-
-  def set_child_data(child_name, child_role, data_name, value)
-    fv = get_input(child_name) if child_role == 'input'
-    fv = get_output(child_name) if child_role == 'output'
-    fv ? fv.set_child_data(data_name, value) : nil
+  def output_data(output_name, data_name)
+    fv = output(output_name)
+    fv.child_data(data_name) if fv
   end
 
   def set_input_data(input_name, data_name, value)
-    set_child_data(input_name, 'input', data_name, value)
+    fv = input(input_name)
+    fv.set_child_data(data_name, value) if fv
   end
 
-  def set_output_data(input_name, data_name, value)
-    set_child_data(input_name, 'output', data_name, value)
+  def set_output_data(output_name, data_name, value)
+    fv = output(output_name)
+    fv.set_child_data(data_name, value) if fv
   end
 
   def precondition_value
@@ -418,7 +407,7 @@ class Operation < ActiveRecord::Base
       user_id: user_id
     )
 
-    plan.plan_associations.create operation_id: op.id
+    plan.plan_associations.create(operation_id: op.id)
 
     opts[:routing].each do |r|
       ot.field_types.select { |ft| ft.routing == r[:symbol] }.each do |ft|
