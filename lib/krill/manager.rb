@@ -10,6 +10,8 @@ module Krill
     attr_accessor :thread
 
     def initialize(jid, debug)
+      # TODO: make this take a Job object as the parameter instead of the ID
+
       @jid = jid
       @debug = debug
 
@@ -18,12 +20,18 @@ module Krill
       @thread_status = ThreadStatus.new
       @thread_status.running = false
 
-      # TODO: could raise ActiveRecord::RecordNotFound
-      @job = Job.find(jid)
-      raise "No path specified for job #{@job.id}. Cannot start." if @job.operations.empty?
+      begin
+        @job = Job.find(jid)
+      rescue ActiveRecord::RecordNotFound
+        raise "Error: Job #{jid} not found"
+      end 
+      raise "Error: job #{@job.id} has no operations" if @job.operations.empty?
 
-      # TODO: could raise JSON::ParseError
-      initial_state = JSON.parse(@job.state, symbolize_names: true)
+      begin
+        initial_state = JSON.parse(@job.state, symbolize_names: true)
+      rescue JSON::ParseError
+        raise "Error: parse error reading state of job #{@job.id}"
+      end
       @args = initial_state[0][:arguments]
 
       @code = @job.operations.first.operation_type.protocol
@@ -33,11 +41,11 @@ module Krill
       @base_class = make_base
       insert_base_class(@namespace, @base_class)
 
-      # Make a base object
       @base_object = Class.new.extend(@base_class)
-
-      # Make protocol
       @protocol = @namespace::Protocol.new
+      raise "Error: failed to add debug method to protocol" unless @protocol.respond_to?(:debug)
+      raise "Error: failed to add input method to protocol" unless @protocol.respond_to?(:input)
+      raise "Error: failed to add jid method to protocol" unless @protocol.respond_to?(:jid)
     end
 
     ##################################################################################
@@ -213,13 +221,13 @@ module Krill
     def insert_base_class(obj, mod)
       obj.constants.each do |c|
         k = obj.const_get(c)
-        if k.is_a?(Module)
+        if k.class == Module
           eigenclass = class << self
                          self
           end
           eigenclass.send(:include, mod) unless eigenclass.include? mod
           insert_base_class k, mod
-        elsif k.is_a?(Class)
+        elsif k.class == Class
           k.send(:include, mod) unless k.include? mod
           insert_base_class k, mod
         end
