@@ -164,11 +164,10 @@ class OperationTypesController < ApplicationController
         error = false
 
         ops.select do |op|
-          # TODO: is this just evaluating preconditions to see if error occurs
+          # TODO: called method just eats exceptions so this will never result in error
           op.precondition_value
         rescue Exception
           error = true
-
         end
 
         if !error
@@ -236,14 +235,18 @@ class OperationTypesController < ApplicationController
       pa = PlanAssociation.new(operation_id: op.id, plan_id: plan.id)
       pa.save
     end
+
+    plans
   end
 
   def make_job(operation_type:, operations:, user:)
-    job, newops = operation_type.schedule(
+    job, _newops = operation_type.schedule(
       operations,
       user,
       Group.find_by_name('technicians')
     )
+
+    job
   end
 
   def test
@@ -261,7 +264,7 @@ class OperationTypesController < ApplicationController
 
       # (re)build the operations
       begin
-        ops = if params[:test_operations]
+        operations = if params[:test_operations]
                 make_test_ops(OperationType.find(params[:id]), params[:test_operations])
               else
                 []
@@ -271,13 +274,13 @@ class OperationTypesController < ApplicationController
         raise ActiveRecord::Rollback
       end
 
-      build_plan(operations)
+      plans = build_plan(operations)
 
       operations = operations.select(&:precondition_value) if params[:use_precondition]
 
       # run the protocol
       operation_type = ot[:op_type]
-      make_job(operation_type: ot[:op_type], operations: operations, user: current_user)
+      job = make_job(operation_type: ot[:op_type], operations: operations, user: current_user)
 
       error = nil
       begin
@@ -287,12 +290,12 @@ class OperationTypesController < ApplicationController
       end
 
       if error
-        render json: {
+        response = {
           error: error.message,
           backtrace: error.backtrace
-        },
+        }
+        render json: response,
                status: :unprocessable_entity
-
       else
         begin
           # TODO: see ProtocolTestBase.execute
@@ -303,12 +306,12 @@ class OperationTypesController < ApplicationController
           operations.each(&:reload)
 
           # render the resulting data including the job and the operations
-          render json: {
-            operations: ops.as_json(methods: %i[field_values associations]),
+          response = {
+            operations: operations.as_json(methods: %i[field_values associations]),
             plans: plans.collect { |p| p.as_json(include: :operations, methods: %i[associations costs]) },
             job: job.reload
-          },
-                 status: :ok
+          }
+          render json: response, status: :ok
         rescue Exception => e
           logger.error 'Bug encountered while testing: ' + e.message + ' -- ' + e.backtrace.to_s
 
@@ -316,11 +319,11 @@ class OperationTypesController < ApplicationController
             logger.error b
           end
 
-          render json: {
+          response = {
             error: 'Bug encountered while testing: ' + e.message + ' at ' + e.backtrace.join("\n") + '. ',
             backtrace: e.backtrace
-          },
-                 status: :unprocessable_entity
+          }
+          render json: response, status: :unprocessable_entity
         end
 
       end
