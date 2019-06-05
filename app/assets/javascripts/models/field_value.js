@@ -59,23 +59,21 @@ AQ.FieldValue.record_getters.wired = function() {
   return this.num_wires > 0;
 }
 
-AQ.FieldValue.record_getters.predecessors = function() {
+AQ.FieldValue.record_getters.predecessors = function () {
+  var fv = this
+  var preds = []
 
-  var fv = this;
-  var preds = [];
-
-  aq.each(AQ.operation_types,function(ot) {
-    aq.each(ot.field_types,function(ft) {
-      if ( ft.role == 'output' && ft.can_produce(fv) ) {
-        preds.push({operation_type: ot, output: ft});
+  aq.each(AQ.operation_types, function (ot) {
+    aq.each(ot.field_types, function (ft) {
+      if (ft.role === 'output' && ft.can_produce(fv)) {
+        preds.push({ operation_type: ot, output: ft })
       }
-    });
-  });
+    })
+  })
 
-  delete fv.predecessors;
-  fv.predecessors = preds;
-  return preds;
-
+  delete fv.predecessors
+  fv.predecessors = preds
+  return preds
 }
 
 AQ.FieldValue.record_getters.successors = function() {
@@ -163,15 +161,15 @@ AQ.FieldValue.record_methods.choose_item = function(items) {
 
 AQ.FieldValue.record_methods.find_items = function(sid) {
 
-  var fv = this,
-      promise = Promise.resolve(),
-      sample_id = typeof sid == 'string' ? AQ.id_from(sid) : sid;
+  var fv = this
+  var promise = Promise.resolve()
+  var sample_id = typeof sid === 'string' ? AQ.id_from(sid) : sid
 
   if ( !sample_id ) {
     sample_id = fv.child_sample_id;
   }
 
-  if ( fv.field_type.ftype == 'sample' && sample_id ) {
+  if ( fv.field_type.ftype === 'sample' && sample_id ) {
     promise = promise
       .then( () => AQ.items_for(sample_id,fv.aft.object_type_id) )
       .then( items => fv.items = items )
@@ -261,16 +259,15 @@ AQ.FieldValue.record_methods.samp_id = function(operation) {
 }
 
 AQ.FieldValue.record_methods.valid = function() {
+  var fv = this
+  var v = false
 
-  var fv = this,
-      v = false;
+  fv.message = null
 
-  fv.message = null;
-
-  if ( fv.field_type.ftype != 'sample' ) {
+  if ( fv.field_type.ftype !== 'sample' ) {
     // This fv is a paramter
     // Return false unless it has a value
-    v = !! fv.value;
+    v = !!fv.value
     if ( !v ) {
       fv.message = `${fv.name} parameter not defined`;
     }
@@ -278,14 +275,14 @@ AQ.FieldValue.record_methods.valid = function() {
     // This fv specifies a sample type
     // Make sure it has an associated sample
     // Also make sure it is not a leaf, is not an input, or has an item associated with it
-    v = !!fv.child_sample_id && ( fv.num_wires > 0 || fv.role == 'output' || !!fv.child_item_id );
+    v = !!fv.child_sample_id && ( fv.num_wires > 0 || fv.role === 'output' || !!fv.child_item_id );
     if ( !v ) {
       fv.message = `${fv.name} invalid. sample: ${fv.child_sample_id}, wires: ${fv.num_wires}, role: ${fv.role}, item :${fv.child_item_id}`
     }
   } else {
     // This fv does not specify a sample type (i.e. it is a container with a handler != sample_container)
     // In this case, make sure it is not a leaf, not an input, or has an item associated with it
-    v = fv.num_wires > 0 || fv.role == 'output' || !!fv.child_item_id;
+    v = fv.num_wires > 0 || fv.role === 'output' || !!fv.child_item_id
     if ( !v ) {
       fv.message = `${fv.name} invalid. wires: ${fv.num_wires}, role: ${fv.role}, item :${fv.child_item_id}`
     }

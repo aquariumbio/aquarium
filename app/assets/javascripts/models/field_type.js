@@ -30,11 +30,10 @@ AQ.FieldType.record_methods.matches = function(field_value) {
 
 AQ.FieldType.record_methods.can_produce = function(fv) {
 
-  var ft = this,
-      rval = false;
+  var ft = this
+  var rval = false
 
-  if ( ft.ftype == "sample" && fv.field_type.ftype == "sample" ) { 
-
+  if (ft.ftype === 'sample' && fv.field_type.ftype === 'sample') {
     aq.each(ft.allowable_field_types, (aft) => {
       if ( !fv.aft ) {
         if (!fv.corrupt ) {
