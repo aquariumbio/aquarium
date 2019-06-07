@@ -34,13 +34,11 @@ module FieldValuePlanner
   end
 
   def object_type
-
     if child_item
       child_item.object_type
     elsif allowable_field_type
       allowable_field_type.object_type
     end
-
   end
 
   def operation

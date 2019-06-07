@@ -656,7 +656,7 @@ AQ.Plan.record_methods.find_by_id = function(id) {
 AQ.Plan.record_methods.add_wire = function(from, from_op, to, to_op) {
 
   if ( from.role == 'output' && from.field_type.can_produce(to) ) {
-    if ( ! this.reachable(to, from ) ) {
+    if ( ! this.reachable(to, from) ) {
       this.wires.push(AQ.Wire.make({
         from_op: from_op,
         from: from,
@@ -668,6 +668,7 @@ AQ.Plan.record_methods.add_wire = function(from, from_op, to, to_op) {
       alert("Cycle detected. Cannot create wire.")
     }
   } else if ( to.role == 'output' && to.field_type.can_produce(from) ) {
+    // #TODO: determine whether this is legit. Seems wrong.
     if ( ! this.reachable(from,to) ) {
       this.wires.push(AQ.Wire.make({
         to_op: from_op,

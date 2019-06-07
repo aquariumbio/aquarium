@@ -27,14 +27,14 @@ AQ.FieldType.record_methods.chosen_sample_type_name = function() {
 };
 
 AQ.FieldType.record_methods.matches = function(field_value) {
-  return field_value.role == this.role && field_value.name == this.name;
+  return field_value.role === this.role && field_value.name === this.name
 };
 
-AQ.FieldType.record_methods.can_produce = function(fv) {
-  var ft = this,
-    rval = false;
+AQ.FieldType.record_methods.can_produce = function (fv) {
+  var ft = this
+  var rval = false
 
-  if (ft.ftype == "sample" && fv.field_type.ftype == "sample") {
+  if (ft.ftype === 'sample' && fv.field_type.ftype === 'sample') {
     aq.each(ft.allowable_field_types, aft => {
       if (!fv.aft) {
         if (!fv.corrupt) {
@@ -42,25 +42,25 @@ AQ.FieldType.record_methods.can_produce = function(fv) {
             `Warning. field value '${
               fv.name
             }' has no allowable types. This plan may have been corrupted due to altered i/o definitions.`
-          );
-          fv.corrupt = true;
+          )
+          fv.corrupt = true
         }
       } else if (
-        fv.aft.sample_type_id == aft.sample_type_id &&
-        fv.aft.object_type_id == aft.object_type_id &&
-        Number(fv.field_type.part) == Number(ft.part)
+        fv.aft.sample_type_id === aft.sample_type_id &&
+        fv.aft.object_type_id === aft.object_type_id &&
+        Number(fv.field_type.part) === Number(ft.part)
       ) {
         // Note, Number is used to compare null and false.
         // Could also use !!
-        rval = true;
+        rval = true
       }
-    });
+    })
   } else {
-    rval = false;
+    rval = false
   }
 
-  return rval;
-};
+  return rval
+}
 
 AQ.FieldType.record_methods.can_consume =
   AQ.FieldType.record_methods.can_produce;
