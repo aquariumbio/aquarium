@@ -7,18 +7,14 @@ module Krill
   class Client
 
     def initialize
-
       @hostname = Bioturk::Application.config.krill_hostname
       @port = Bioturk::Application.config.krill_port
-
     end
 
     def open
-
       @socket = TCPSocket.open(@hostname, @port)
     rescue StandardError
-      raise 'Could not connect to Krill server. It is probably not running.'
-
+      raise "Could not connect to Krill server #{@hostname}:#{@port}. It is probably not running."
     end
 
     def close
