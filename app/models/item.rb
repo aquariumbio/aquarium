@@ -272,9 +272,8 @@ class Item < ActiveRecord::Base
 
   # Delete the Item (sets item's location to "deleted").
   #
-  # @return [Bool] Item deleted?
+  # @return [Bool] true if the location is set to 'deleted', false otherwise
   def mark_as_deleted
-
     write_attribute(:location, 'deleted')
     self.quantity = -1
     self.inuse = -1
@@ -290,7 +289,6 @@ class Item < ActiveRecord::Base
     end
 
     r1 && r2
-
   end
 
   # Indicates whether this Item is deleted.
