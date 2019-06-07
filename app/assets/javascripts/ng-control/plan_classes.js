@@ -70,8 +70,8 @@ function PlanClasses($scope,$http,$attrs,$cookies,$sce,$window) {
 
     var c = wire == $scope.current_wire ? 'wire-selected' : 'wire';
 
-    if ( !wire.consistent() ) {
-      c += " wire-inconsistent";
+    if (!wire.consistent()) {
+      c += ' wire-inconsistent'
     }
 
     return c;
