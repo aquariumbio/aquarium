@@ -309,9 +309,9 @@ AQ.FieldValue.record_methods.valid = function() {
 };
 
 AQ.FieldValue.record_methods.empty = function() {
-  var fv = this;
-  return fv.child_sample_id;
-};
+  var fv = this
+  return fv.child_sample_id
+}
 
 AQ.FieldValue.record_methods.assign = function(sample) {
   let field_value = this;
