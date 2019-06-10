@@ -153,41 +153,36 @@ class OperationTypesController < ApplicationController
            status: :ok
   end
 
-  # TODO: combine with other randoms
+  # TODO: combine with other randoms (?)
   def random
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
     ops_json = []
     begin
       ActiveRecord::Base.transaction do
-        ops = OperationType.find(params[:id]).random(params[:num].to_i)
+        operation_type = OperationType.find(params[:id])
+        ops = operation_type.random(params[:num].to_i)
         error = false
 
-        ops.select do |op|
+        ops.select do |operation|
           # TODO: called method just eats exceptions so this will never result in error
-          op.precondition_value
+          operation.precondition_value
         rescue Exception
-          error = true
-        end
-
-        if !error
+          render json: { error: "The precondition for #{operation.name} raised an exception." },
+                 status: :unprocessable_entity
+        else
           ops_json = ops.as_json(methods: %i[field_values precondition_value])
           ops_json.each do |op|
             op['field_values'] = op['field_values'].collect(&:full_json)
           end
           render json: ops_json, status: :ok
-        else
-          render json: { error: 'One or more preconditions could not be evaluated.' },
-                 status: :unprocessable_entity
         end
         raise ActiveRecord::Rollback
-
       end
     rescue Exception => e
       render json: { error: e.to_s, backtrace: e.backtrace },
              status: :unprocessable_entity
     end
-
   end
 
   def make_test_ops(ot, tops)
@@ -227,6 +222,7 @@ class OperationTypesController < ApplicationController
   end
 
   def build_plan(operations)
+    # TODO: see ProtocolTestBase.build_plan
     plans = []
     operations.each do |op|
       plan = Plan.new(user_id: current_user.id, budget_id: Budget.all.first.id)
@@ -240,6 +236,7 @@ class OperationTypesController < ApplicationController
   end
 
   def make_job(operation_type:, operations:, user:)
+    # TODO: see ProtocolTestBase.make_job
     job, _newops = operation_type.schedule(
       operations,
       user,
@@ -247,6 +244,15 @@ class OperationTypesController < ApplicationController
     )
 
     job
+  end
+
+  def execute(operations:, manager:)
+    # TODO: see ProtocolTestBase.execute
+    operations.extend(Krill::OperationList)
+    operations.make(role: 'input')
+    operations.each(&:run)
+    manager.start
+    operations.each(&:reload)
   end
 
   def test
@@ -280,7 +286,11 @@ class OperationTypesController < ApplicationController
 
       # run the protocol
       operation_type = ot[:op_type]
-      job = make_job(operation_type: ot[:op_type], operations: operations, user: current_user)
+      job = make_job(
+        operation_type: ot[:op_type],
+        operations: operations,
+        user: current_user
+      )
 
       error = nil
       begin
@@ -298,12 +308,7 @@ class OperationTypesController < ApplicationController
                status: :unprocessable_entity
       else
         begin
-          # TODO: see ProtocolTestBase.execute
-          operations.extend(Krill::OperationList)
-          operations.make(role: 'input')
-          operations.each(&:run)
-          manager.start
-          operations.each(&:reload)
+          execute(operations: operations, manager: manager)
 
           # render the resulting data including the job and the operations
           response = {
@@ -325,18 +330,13 @@ class OperationTypesController < ApplicationController
           }
           render json: response, status: :unprocessable_entity
         end
-
       end
-
       # rollback the transaction so test data is not added to the inventory
       raise ActiveRecord::Rollback
-
     end
-
   end
 
   def export
-
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
     begin
@@ -348,7 +348,6 @@ class OperationTypesController < ApplicationController
   end
 
   def export_category
-
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
     begin
@@ -360,21 +359,17 @@ class OperationTypesController < ApplicationController
       render json: { error: 'Could not export: ' + e.to_s + ', ' + e.backtrace[0] },
              status: :internal_server_error
     end
-
   end
 
   def import
-
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
     ots = []
     error = false
 
     ActiveRecord::Base.transaction do
-
       begin
         issues_list = params[:operation_types].collect do |x|
-
           issues = { notes: [], inconsistencies: [] }
           notes = []
 

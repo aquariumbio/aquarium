@@ -181,7 +181,6 @@ class PlansController < ApplicationController
   end
 
   def debug
-
     plan = Plan.find(params[:id])
     errors = []
 
@@ -193,11 +192,13 @@ class PlansController < ApplicationController
 
     # batch each group and run a job
     type_ids.each do |ot_id|
-
       ops = pending.select { |op| op.operation_type_id == ot_id }
-
-      job, _newops = OperationType.find(ot_id)
-                                  .schedule(ops, current_user, Group.find_by_name('technicians'))
+      operation_type = OperationType.find(ot_id)
+      job, _newops = operation_type.schedule(
+        ops,
+        current_user,
+        Group.find_by_name('technicians')
+      )
 
       error = nil
 
@@ -211,33 +212,26 @@ class PlansController < ApplicationController
       end
 
       if error
-
         errors << error
 
         ops.each do |op|
-          op.plan.error "Could not start job: #{error}", :job_start
+          op.plan.error("Could not start job: #{error}", :job_start)
         end
-
       else
-
         begin
           ops.extend(Krill::OperationList)
-
           ops.each(&:run)
 
           manager.start
         rescue Exception => e
           errors << 'Bug encountered while testing: ' + e.message + ' at ' + e.backtrace.join("\n") + '. '
         end # begin
-
       end # if
-
     end # type_ids.each
 
     Operation.step(plan.operations.select { |op| op.status == 'waiting' || op.status == 'deferred' })
 
     render json: { errors: errors }
-
   end # def debug
 
   def move
