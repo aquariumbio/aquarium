@@ -40,13 +40,11 @@ class KrillController < ApplicationController
   end
 
   def debug
-
     errors = []
     @job = Job.find(params[:id])
 
     # if not running, then start
     if @job.pc == Job.NOT_STARTED
-
       @job.user_id = current_user.id
       @job.save
 
@@ -59,21 +57,17 @@ class KrillController < ApplicationController
       if error
         errors << error
       else
-
         begin
           manager.start
         rescue Exception => e
           errors << e.message
         end
-
       end
-
     end
 
     Operation.step @job.operations.collect { |op| op.plan.operations }.flatten
 
     render json: { errors: errors, operations: @job.reload.operations, job: @job }
-
   end
 
   def error
