@@ -265,10 +265,10 @@ class OperationTypesController < ApplicationController
       # (re)build the operations
       begin
         operations = if params[:test_operations]
-                make_test_ops(OperationType.find(params[:id]), params[:test_operations])
-              else
-                []
-              end
+                       make_test_ops(OperationType.find(params[:id]), params[:test_operations])
+                     else
+                       []
+                     end
       rescue StandardError => e
         render json: { errors: [e.to_s] }, status: :unprocessable_entity
         raise ActiveRecord::Rollback
