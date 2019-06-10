@@ -225,7 +225,7 @@ class PlansController < ApplicationController
 
           ops.each(&:run)
 
-          manager.run
+          manager.start
         rescue Exception => e
           errors << 'Bug encountered while testing: ' + e.message + ' at ' + e.backtrace.join("\n") + '. '
         end # begin

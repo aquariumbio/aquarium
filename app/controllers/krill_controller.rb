@@ -61,7 +61,7 @@ class KrillController < ApplicationController
       else
 
         begin
-          manager.run
+          manager.start
         rescue Exception => e
           errors << e.message
         end

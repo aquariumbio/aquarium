@@ -22,7 +22,6 @@ module Krill
     end
 
     def send(x)
-
       open
 
       msg = x.to_json
@@ -35,8 +34,7 @@ module Krill
 
       close
 
-      JSON.parse answer, symbolize_names: true
-
+      JSON.parse(answer, symbolize_names: true)
     end
 
     def start(jid, debug = false, directory = 'master', branch = 'master')

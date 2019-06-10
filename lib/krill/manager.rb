@@ -135,6 +135,8 @@ module Krill
       end
     end
 
+
+
     def run
       if @protocol.debug
         debugger
@@ -165,6 +167,12 @@ module Krill
       'ready'
     end
 
+    # command called by client
+    def start
+      run
+    end
+
+    # client command
     def check_again
       if @thread.alive?
         wait 20
@@ -173,6 +181,7 @@ module Krill
       end
     end
 
+    # client command
     def continue
       if @thread.alive?
         @mutex.synchronize do
@@ -187,6 +196,7 @@ module Krill
       end
     end
 
+    # called by client abort command
     def stop
       puts "Stopping job #{@job.id}"
 

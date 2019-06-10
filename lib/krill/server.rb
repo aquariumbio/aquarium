@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'socket'
 
 module Krill
@@ -9,84 +11,15 @@ module Krill
     end
 
     def run(port)
-
       puts "Starting Krill Server on port #{port} at #{Time.now}"
 
       server = TCPServer.open(port)
-
       loop do
-
         client = server.accept
 
         begin
           command = JSON.parse client.gets, symbolize_names: true
-          jid = command[:jid].to_i if command[:jid]
-          debug = command[:debug]
-          directory = command[:directory]
-          branch = command[:branch]
-
-          case command[:operation]
-
-          when 'start' #######################################################################################################
-
-            @managers[jid] = Manager.new jid, debug, directory, branch
-
-            begin
-              status = @managers[jid].run
-            rescue Exception => e
-              puts "Exception sent to client: #{e}"
-              puts e.backtrace
-              client.puts({ response: 'error', error: "Krill Server: #{command[:operation]} resulted in: #{e}: #{e.backtrace[0, 5]}" }.to_json)
-              @managers.delete(jid)
-            else
-              @managers.delete(jid) if status == 'done'
-              client.puts({ response: status }.to_json)
-            end
-
-          when 'continue', 'check_again' #####################################################################################
-
-            if @managers[jid]
-
-              begin
-                status = @managers[jid].send(command[:operation])
-              rescue Exception => e
-                str = "Krill Server: #{command[:operation]} on job #{jid} resulted in: #{e}: #{e.backtrace[0, 5]}."
-                client.puts({ response: 'error', error: str }.to_json)
-                @managers.delete(jid)
-              else
-                @managers.delete(jid) if status == 'done'
-                client.puts({ response: status }.to_json)
-              end
-
-            else
-
-              client.puts({ response: 'error', error: "Krill Server: Process not found for job #{jid}." }.to_json)
-
-            end
-
-          when 'abort' #######################################################################################################
-
-            if @managers[jid]
-
-              @managers[jid].stop
-              @managers.delete(jid)
-              client.puts({ response: 'aborted' }.to_json)
-
-            else
-
-              client.puts({ response: 'error', error: "Could not find job #{jid}" }.to_json)
-
-            end
-
-          when 'jobs' ########################################################################################################
-
-            client.puts({ response: 'ok', jobs: @managers.keys }.to_json)
-
-          else # Uknown command ##############################################################################################
-
-            client.puts({ response: 'error', error: 'Unknown command' }.to_json)
-
-          end
+          run_command(command: command, client: client)
         rescue Exception => e
           puts "Exception #{e}"
           puts e.backtrace
@@ -94,17 +27,65 @@ module Krill
         end
 
         client.close
+      end
+    end
 
+    def run_command(command:, client:)
+      if command[:operation] == 'jobs'
+        client.puts(response: 'ok', jobs: @managers.keys)
+        return
       end
 
+      unless command[:jid]
+        client.puts(response: 'error', error: 'Expecting job id')
+        return
+      end
+
+      jid = command[:jid].to_i if command[:jid]
+      debug = command[:debug]
+      @managers[jid] = Manager.new(jid, debug) if command[:operation] == 'start'
+
+      unless @managers[jid]
+        message = "Krill Server: Process not found for job #{jid}."
+        client.puts(response: 'error', error: message)
+        return
+      end
+
+      if command[:operation] == 'abort'
+        @managers[jid].stop
+        delete_job(job_id: jid)
+        client.puts({ response: 'aborted' }.to_json)
+        return
+      end
+
+      unless %w[start continue check_again].member?(command[:operation])
+        client.puts({ response: 'error', error: 'Unknown command' }.to_json)
+        return
+      end
+
+      begin
+        status = @managers[jid].send(command[:operation])
+        delete_job(job_id: jid) if status == 'done'
+        client.puts({ response: status }.to_json)
+      rescue Exception => e
+        # TODO: change to catch manager method exceptions
+        message = "Krill Server: #{command[:operation]} on job #{jid} " \
+                  "resulted in: #{e}: #{e.backtrace[0, 5]}."
+        client.puts(response: 'error', error: message)
+        delete_job(jid)
+      end
     end
 
+    # Deletes the manager for the given job ID from the manager array.
+    #
+    # @param job_id [Integer] the job ID
+    def delete_job(job_id:)
+      @managers.delete(job_id)
+    end
+
+    # TODO: verify this is dead code
     def delete_old_jobs
-
       @managers = @managers.select { |_k, v| v.thread.alive? }
-
     end
-
   end
-
 end

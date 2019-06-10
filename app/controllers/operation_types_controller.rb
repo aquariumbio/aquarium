@@ -302,7 +302,7 @@ class OperationTypesController < ApplicationController
           operations.extend(Krill::OperationList)
           operations.make(role: 'input')
           operations.each(&:run)
-          manager.run
+          manager.start
           operations.each(&:reload)
 
           # render the resulting data including the job and the operations
