@@ -24,7 +24,7 @@ module Krill
         @job = Job.find(jid)
       rescue ActiveRecord::RecordNotFound
         raise "Error: Job #{jid} not found"
-      end 
+      end
       raise "Error: job #{@job.id} has no operations" if @job.operations.empty?
 
       begin
@@ -43,9 +43,9 @@ module Krill
 
       @base_object = Class.new.extend(@base_class)
       @protocol = @namespace::Protocol.new
-      raise "Error: failed to add debug method to protocol" unless @protocol.respond_to?(:debug)
-      raise "Error: failed to add input method to protocol" unless @protocol.respond_to?(:input)
-      raise "Error: failed to add jid method to protocol" unless @protocol.respond_to?(:jid)
+      raise 'Error: failed to add debug method to protocol' unless @protocol.respond_to?(:debug)
+      raise 'Error: failed to add input method to protocol' unless @protocol.respond_to?(:input)
+      raise 'Error: failed to add jid method to protocol' unless @protocol.respond_to?(:jid)
     end
 
     ##################################################################################
@@ -134,8 +134,6 @@ module Krill
         puts "#{@job.id}: Closing ActiveRecord connection"
       end
     end
-
-
 
     def run
       if @protocol.debug
