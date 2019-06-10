@@ -16,7 +16,7 @@ class KrillController < ApplicationController
 
       # Tell Krill server to start protocol
       begin
-        server_result = (Krill::Client.new.start params[:job])
+        server_result = (Krill::Client.new.start(params[:job]))
       rescue Exception => e
         return redirect_to krill_error_path(job: @job.id, message: e.to_s, backtrace: e.backtrace[0, 2])
       end
@@ -98,7 +98,7 @@ class KrillController < ApplicationController
   def abort
 
     begin
-      result = Krill::Client.new.abort params[:job]
+      result = Krill::Client.new.abort(params[:job])
     rescue Exception => e
       result = { response: 'error', message: e.to_s }
     else
@@ -161,7 +161,7 @@ class KrillController < ApplicationController
 
       # Tell Krill server to continue in the protocol
       begin
-        result = (Krill::Client.new.continue params[:job])
+        result = (Krill::Client.new.continue(params[:job]))
       rescue Exception => e
         result = { response: 'error', error: "Call to server raised #{e}" }
       end

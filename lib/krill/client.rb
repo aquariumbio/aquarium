@@ -37,24 +37,24 @@ module Krill
       JSON.parse(answer, symbolize_names: true)
     end
 
-    def start(jid, debug = false, directory = 'master', branch = 'master')
-      send operation: 'start', jid: jid, debug: debug, directory: directory, branch: branch
+    def start(jid, debug = false)
+      send(operation: 'start', jid: jid, debug: debug)
     end
 
     def jobs
-      send operation: 'jobs'
+      send(operation: 'jobs')
     end
 
     def abort(jid)
-      send operation: 'abort', jid: jid
+      send(operation: 'abort', jid: jid)
     end
 
     def continue(jid)
-      send operation: 'continue', jid: jid
+      send(operation: 'continue', jid: jid)
     end
 
     def kill_zombies
-      send operation: 'kill zombies'
+      send(operation: 'kill zombies')
     end
 
   end
