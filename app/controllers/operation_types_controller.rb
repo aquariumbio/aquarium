@@ -162,20 +162,17 @@ class OperationTypesController < ApplicationController
       ActiveRecord::Base.transaction do
         operation_type = OperationType.find(params[:id])
         ops = operation_type.random(params[:num].to_i)
-        error = false
-
-        ops.select do |operation|
-          # TODO: called method just eats exceptions so this will never result in error
-          operation.precondition_value
-        rescue Exception
-          render json: { error: "The precondition for #{operation.name} raised an exception." },
-                 status: :unprocessable_entity
-        else
+        begin
+          selected = ops.select(&:precondition_value)
           ops_json = ops.as_json(methods: %i[field_values precondition_value])
           ops_json.each do |op|
             op['field_values'] = op['field_values'].collect(&:full_json)
           end
           render json: ops_json, status: :ok
+          # TODO: called method just eats exceptions so this will never result in error
+        rescue Exception => e
+          render json: { error: "The precondition for #{operation.name} raised an exception." },
+                 status: :unprocessable_entity
         end
         raise ActiveRecord::Rollback
       end
