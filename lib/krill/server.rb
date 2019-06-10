@@ -18,9 +18,15 @@ module Krill
         client = server.accept
 
         begin
-          command = JSON.parse client.gets, symbolize_names: true
+          command = JSON.parse(client.gets, symbolize_names: true)
           run_command(command: command, client: client)
-        rescue Exception => e
+        rescue JSON::ParseError => e
+          puts "Error parsing Krill client command: #{e}"
+          puts e.backtrace
+          client.puts({ response: 'error', error: e.to_s + ': ' + e.backtrace[0, 10].to_s }.to_json)
+        rescue StandardError => e
+          # TODO: consider how to refine the error handling
+          # e.g., SystemCallError would handle all system socket errors
           puts "Exception #{e}"
           puts e.backtrace
           client.puts({ response: 'error', error: e.to_s + ': ' + e.backtrace[0, 10].to_s }.to_json)
@@ -67,7 +73,7 @@ module Krill
         status = @managers[jid].send(command[:operation])
         delete_job(job_id: jid) if status == 'done'
         client.puts({ response: status }.to_json)
-      rescue Exception => e
+      rescue StandardError => e
         # TODO: change to catch manager method exceptions
         message = "Krill Server: #{command[:operation]} on job #{jid} " \
                   "resulted in: #{e}: #{e.backtrace[0, 5]}."
