@@ -91,7 +91,7 @@ module Krill
 
     # TODO: verify this is dead code
     def delete_old_jobs
-      @managers = @managers.select { |_k, v| v.thread.alive? }
+      @managers = @managers.select { |_k, manager| manager.alive? }
     end
   end
 end

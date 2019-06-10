@@ -7,7 +7,7 @@ module Krill
   end
 
   class Manager
-    attr_accessor :thread
+    attr_reader :thread
 
     def initialize(jid, debug)
       # TODO: make this take a Job object as the parameter instead of the ID
