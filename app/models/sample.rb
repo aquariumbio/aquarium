@@ -133,7 +133,7 @@ class Sample < ActiveRecord::Base
               fv.value = raw_fv[:value]
             end
 
-            puts 'before fv saved: {fv.inspect}'
+            puts "before fv saved: #{fv.inspect}"
             fv.save
             puts "fv saved. now #{fv.inspect}"
 
