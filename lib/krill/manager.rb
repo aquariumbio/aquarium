@@ -7,7 +7,8 @@ module Krill
   end
 
   class Manager
-    attr_reader :thread
+    # accessible for testing
+    attr_reader :thread, :protocol
 
     def initialize(jid, debug)
       # TODO: make this take a Job object as the parameter instead of the ID
@@ -35,7 +36,8 @@ module Krill
       @args = initial_state[0][:arguments]
 
       @code = @job.operations.first.operation_type.protocol
-      @namespace = Krill.make_namespace(@code) # Create Namespace
+      @namespace = Krill.make_namespace
+      @namespace.add(code: @code)
 
       # Add base_class ancestor to user's code
       @base_class = make_base
@@ -103,27 +105,21 @@ module Krill
 
     def debugger
       @job.start # what if this fails?
-      appended_complete = false
 
       begin
         return_value = @protocol.main
+        @job.reload.append_step(operation: 'complete', rval: return_value)
+        @job.stop('done')
       rescue Exception => e
         puts "#{@job.id}: EXCEPTION #{e}"
         puts e.backtrace[0, 10]
         @base_object.error e
-      else
-        @job.reload.append_step(operation: 'complete', rval: return_value)
-        appended_complete = true
+        @job.reload
+        @job.stop 'error'
+        @job.append_step operation: 'next', time: Time.zone.now, inputs: {}
+        @job.append_step operation: 'aborted', rval: {}
+        raise e
       ensure
-        if appended_complete
-          @job.stop # what if this fails?
-        else
-          @job.reload
-          @job.stop 'error'
-          @job.append_step operation: 'next', time: Time.zone.now, inputs: {}
-          @job.append_step operation: 'aborted', rval: {}
-        end
-
         @job.save # what if this fails?
       end
     rescue Exception => e
@@ -133,6 +129,8 @@ module Krill
         ActiveRecord::Base.connection.close
         puts "#{@job.id}: Closing ActiveRecord connection"
       end
+
+      raise e
     end
 
     def run
