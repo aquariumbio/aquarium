@@ -21,7 +21,6 @@ class OperationTypesController < ApplicationController
       end
       format.html { render layout: 'aq2', status: :ok }
     end
-
   end
 
   def create
@@ -66,32 +65,33 @@ class OperationTypesController < ApplicationController
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
     ot = OperationType.find(params[:id])
-    resp = { ok: true }
-    status = :ok
     if ot.operations.count != 0
-      resp = { error: "Operation Type #{ot.name} has associated operations." }
-      status = :unprocessable_entity
+      resp = { error: "Operation Type #{ot.name} has associated operations." },
+             status = :unprocessable_entity
     elsif ot.deployed
       resp = { error: "Operation Type #{ot.name} has been deployed." }
       status = :unprocessable_entity
     else
       ot.destroy
+      resp = { ok: true }
+      status = :ok
     end
     render json: resp, status: status
   end
 
   def code
-    render json: {}, status: :ok if params[:no_edit]
+    if params[:no_edit]
+      render json: {}, status: :ok
+      return
+    end
 
     ot = OperationType.find(params[:id])
     code_object = ot.code(params[:name])
-
     code_object = if code_object
                     code_object.commit(params[:content], current_user)
                   else
                     ot.new_code(params[:name], params[:content], current_user)
                   end
-
     render json: code_object, status: :ok
   end
 
@@ -102,7 +102,6 @@ class OperationTypesController < ApplicationController
     update_errors = []
 
     ActiveRecord::Base.transaction do
-
       ot.name = data[:name]
       ot.category = data[:category]
       ot.deployed = data[:deployed]
@@ -116,7 +115,6 @@ class OperationTypesController < ApplicationController
       end
 
       if update_fields
-
         begin
           ot.update_field_types data[:field_types]
         rescue StandardError => e
@@ -124,13 +122,10 @@ class OperationTypesController < ApplicationController
           logger.error("Error updating operation type field types: #{e.backtrace}")
           raise ActiveRecord::Rollback
         end
-
       end
-
     end
 
     { op_type: ot, update_errors: update_errors }
-
   end
 
   def update
@@ -218,11 +213,11 @@ class OperationTypesController < ApplicationController
     end
   end
 
-  def build_plan(operations)
+  def build_plan(operations:, user_id:)
     # TODO: see ProtocolTestBase.build_plan
     plans = []
     operations.each do |op|
-      plan = Plan.new(user_id: current_user.id, budget_id: Budget.all.first.id)
+      plan = Plan.new(user_id: user_id, budget_id: Budget.all.first.id)
       plan.save
       plans << plan
       pa = PlanAssociation.new(operation_id: op.id, plan_id: plan.id)
@@ -255,8 +250,8 @@ class OperationTypesController < ApplicationController
   def test
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
-    # save the operation
-    ot = update_from_ui(params, false)
+    # save the operaton
+    ot = update_from_ui params, false
     unless ot[:update_errors].empty?
       render json: { errors: ot[:update_errors] }, status: :unprocessable_entity
       return
@@ -268,23 +263,22 @@ class OperationTypesController < ApplicationController
       # (re)build the operations
       begin
         operations = if params[:test_operations]
-                       make_test_ops(OperationType.find(params[:id]), params[:test_operations])
-                     else
-                       []
-                     end
+                make_test_ops(OperationType.find(params[:id]), params[:test_operations])
+              else
+                []
+              end
       rescue StandardError => e
         render json: { errors: [e.to_s] }, status: :unprocessable_entity
         raise ActiveRecord::Rollback
       end
 
-      plans = build_plan(operations)
-
+      plans = build_plan(operations: operations, user_id: current_user.id)
       operations = operations.select(&:precondition_value) if params[:use_precondition]
 
       # run the protocol
       operation_type = ot[:op_type]
       job = make_job(
-        operation_type: ot[:op_type],
+        operation_type: operation_type,
         operations: operations,
         user: current_user
       )
@@ -365,8 +359,10 @@ class OperationTypesController < ApplicationController
     error = false
 
     ActiveRecord::Base.transaction do
+
       begin
         issues_list = params[:operation_types].collect do |x|
+
           issues = { notes: [], inconsistencies: [] }
           notes = []
 
