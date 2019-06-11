@@ -9,13 +9,18 @@ module Krill
       libs = Library.where(name: parts[1], category: parts[0])
       raise "could not find library '#{path}'" if libs.empty?
 
-      class_eval(libs[0].source.content, path)
+      add(code:libs[0].source, source_name: path)
+    end
+
+    def add(code:, source_name: '(eval)')
+      class_eval(code.content, source_name)
     end
   end
 
-  def self.make_namespace(code, source_name: '(eval)')
-    namespace = Class.new.extend(Namespace)
-    namespace.class_eval(code.content, source_name)
+  def self.make_namespace(code: nil, name: 'ExecutionNamespace', source_name: '(eval)')
+    namespace = Object.const_set(name, Module.new)
+    namespace.extend(Namespace)
+    namespace.add(code: code, source_name: source_name) unless code.nil?
 
     namespace
   end
@@ -24,7 +29,7 @@ module Krill
     namespace = make_namespace(code)
     p = namespace::Protocol.new
 
-    if p.respond_to? 'arguments'
+    if p.respond_to?(:arguments)
       p.arguments
     else
       {}
