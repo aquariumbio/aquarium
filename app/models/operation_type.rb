@@ -81,12 +81,36 @@ class OperationType < ActiveRecord::Base
     code('protocol')
   end
 
+  def add_protocol(content:, user:)
+    if protocol
+      protocol.commit(content, user)
+    else
+      new_code('protocol', content, user)
+    end
+  end
+
   def cost_model
     code('cost_model')
   end
 
+  def add_cost_model(content:, user:)
+    if cost_model
+      cost_model.commit(content, user)
+    else
+      new_code('cost_model', content, user)
+    end
+  end
+
   def precondition
     code('precondition')
+  end
+
+  def add_precondition(content:, user:)
+    if precondition
+      precondition.commit(content, user)
+    else
+      new_code('precondition', content, user)
+    end
   end
 
   def documentation
