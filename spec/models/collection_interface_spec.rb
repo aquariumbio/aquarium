@@ -17,26 +17,26 @@ RSpec.describe Collection, type: :model do
 
   def make_24_well_tube_rack
     ot = ObjectType.find_by_name "24-Slot Tube Rack"
-    unless ot
-      ObjectType.new(
-        name: "24-Slot Tube Rack",
-        description: "96 qPCR collection",
-        min: 0,
-        max: 1,
-        handler: "collection",
-        safety: "No safety information",
-        cleanup: "No cleanup information",
-        data: "No data", vendor: "No vendor information",
-        unit: "part",
-        cost: 0.01,
-        release_method: "return",
-        release_description: "",
-        image: "",
-        prefix: "",
-        rows: 4,
-        columns: 6
-      ).save
-    end
+    return ot if ot
+
+    ObjectType.new(
+      name: "24-Slot Tube Rack",
+      description: "96 qPCR collection",
+      min: 0,
+      max: 1,
+      handler: "collection",
+      safety: "No safety information",
+      cleanup: "No cleanup information",
+      data: "No data", vendor: "No vendor information",
+      unit: "part",
+      cost: 0.01,
+      release_method: "return",
+      release_description: "",
+      image: "",
+      prefix: "",
+      rows: 4,
+      columns: 6
+    ).save
   end
 
   context 'associations' do
@@ -153,9 +153,9 @@ RSpec.describe Collection, type: :model do
     it 'can set slots to samples' do
       c = example_collection
       c.set 0, 5, test_sample
-      c.set 0, 8, Sample.first
-      raise "Slots not adding up" unless c.get_empty.length + c.get_non_empty.length == c.capacity
-      raise "Non-empty not adding up" unless c.get_non_empty.length == c.num_samples
+      c.set 0, 8, test_sample
+      expect(c.capacity).to eq(c.get_empty.length + c.get_non_empty.length)
+      expect(c.get_non_empty.length).to eq(c.num_samples)
       raise "include? not working" unless c.include?(test_sample) && c.include?(test_sample.id)
 
       expect(c.select { |x| x == test_sample.id }.length).to eq(2)
