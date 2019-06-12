@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV['RAILS_ENV'] ||= 'development'
 require File.expand_path('../config/environment', __dir__)
@@ -7,6 +9,9 @@ require 'spec_helper'
 require 'rspec/rails'
 require 'factory_bot'
 # Add additional requires below this line. Rails is not loaded until this point!
+
+# needed for controller specs with ruby 2.6 and rails 4.2
+require 'ruby2_6_rails4_2_patch.rb'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
