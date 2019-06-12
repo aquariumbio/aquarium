@@ -156,9 +156,9 @@ RSpec.describe Collection, type: :model do
       c = example_collection
       c.set(0, 5, test_sample)
       c.set(0, 8, test_sample)
-      raise 'Slots not adding up' unless c.get_empty.length + c.get_non_empty.length == c.capacity
-      raise 'Non-empty not adding up' unless c.get_non_empty.length == c.num_samples
-      raise 'include? not working' unless c.include?(test_sample) && c.include?(test_sample.id)
+      expect(c.capacity).to eq(c.get_empty.length + c.get_non_empty.length)
+      expect(c.get_non_empty.length).to eq(c.num_samples)
+      raise "include? not working" unless c.include?(test_sample) && c.include?(test_sample.id)
 
       expect(c.select { |x| x == test_sample.id }.length).to eq(2)
     end

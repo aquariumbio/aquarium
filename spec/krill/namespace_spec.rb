@@ -18,7 +18,7 @@ RSpec.describe Krill::Namespace do
       :code,
       name: 'empty protocol',
       content: 'class Protocol; def main; end end'
-      )
+    )
   end
   let(:show_code) do
     create(
