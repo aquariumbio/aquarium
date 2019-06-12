@@ -6,7 +6,8 @@ module Krill
 
   class Manager
 
-    attr_accessor :thread
+    # accessible for testing
+    attr_accessor :thread, :protocol
 
     def initialize(jid, debug, directory = 'master', branch = 'master')
 
