@@ -113,6 +113,6 @@ def execute(operations:, manager:)
   operations.extend(Krill::OperationList)
   operations.make(role: 'input')
   operations.each(&:run)
-  manager.start
+  manager.run
   operations.each(&:reload)
 end
