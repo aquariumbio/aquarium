@@ -9,8 +9,8 @@ RSpec.describe Krill::ShowBlock do
     expect(block.is_proper_array(1)).to be false
   end
 
-  it 'an empty array is not proper' do
-    expect(block.is_proper_array([])).to be false
+  it 'an empty array is proper' do
+    expect(block.is_proper_array([])).to be true
   end
 
   it 'an array with a unexpected element is not proper' do
