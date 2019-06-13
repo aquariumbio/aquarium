@@ -225,7 +225,9 @@ module Krill
     end
 
     def insert_base_class(obj, mod)
+      puts "inserting #{obj.name} into #{mod.name}"
       obj.constants.each do |c|
+        puts "inserting constant #{c}"
         k = obj.const_get(c)
         if k.class == Module
           eigenclass = class << self
