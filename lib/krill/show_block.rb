@@ -250,7 +250,7 @@ module Krill
     # @api private
     def is_proper_array(c)
       return false unless c.is_a?(Array)
-      return false if c.empty?
+      return true if c.empty?
       return false unless c[0].is_a?(Integer) || c[0].is_a?(Float) || c[0].is_a?(String)
 
       type = c[0].class
