@@ -41,7 +41,8 @@ module Krill
 
       # Add base_class ancestor to user's code
       @base_class = make_base
-      insert_base_class(@namespace, @base_class)
+      #insert_base_class(@namespace, @base_class)
+      @namespace::Protocol.include(@base_class)
 
       @base_object = Class.new.extend(@base_class)
       @protocol = @namespace::Protocol.new
@@ -205,7 +206,8 @@ module Krill
     ###########################################################################
 
     def make_base
-      b = Module.new
+      #b = Module.new
+      b = Object.const_set('KrillProtocolBase', Module.new)
       b.send(:include, Base)
       b.module_eval("def jid; #{@jid}; end", 'generated_base')
       b.module_eval("def input; #{@args}; end", 'generated_base')
@@ -225,7 +227,7 @@ module Krill
     end
 
     def insert_base_class(obj, mod)
-      puts "inserting #{obj.name} into #{mod.name}"
+      puts "inserting #{mod.name} into #{obj.name}"
       obj.constants.each do |c|
         puts "inserting constant #{c}"
         k = obj.const_get(c)
