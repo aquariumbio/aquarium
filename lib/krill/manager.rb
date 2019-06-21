@@ -8,7 +8,7 @@ module Krill
 
   class Manager
     # accessible for testing
-    attr_reader :thread, :protocol
+    attr_reader :thread, :sandbox
 
     def initialize(jid, debug)
       # TODO: make this take a Job object as the parameter instead of the ID
@@ -22,120 +22,58 @@ module Krill
       @thread_status.running = false
 
       begin
-        @job = Job.find(jid)
+        job = Job.find(jid)
       rescue ActiveRecord::RecordNotFound
         raise "Error: Job #{jid} not found"
       end
-      raise "Error: job #{@job.id} has no operations" if @job.operations.empty?
+      raise "Error: job #{job.id} has no operations" if job.operations.empty?
 
-      begin
-        initial_state = JSON.parse(@job.state, symbolize_names: true)
-      rescue JSON::ParseError
-        raise "Error: parse error reading state of job #{@job.id}"
-      end
-      @args = initial_state[0][:arguments]
-
-      @code = @job.operations.first.operation_type.protocol
-      @namespace = Krill.make_namespace
-      @namespace.add(code: @code)
-
-      # Add base_class ancestor to user's code
-      @base_class = make_base
-      #insert_base_class(@namespace, @base_class)
-      @namespace::Protocol.include(@base_class)
-
-      @base_object = Class.new.extend(@base_class)
-      @protocol = @namespace::Protocol.new
-      raise 'Error: failed to add debug method to protocol' unless @protocol.respond_to?(:debug)
-      raise 'Error: failed to add input method to protocol' unless @protocol.respond_to?(:input)
-      raise 'Error: failed to add jid method to protocol' unless @protocol.respond_to?(:jid)
+      @sandbox = ExecutionSandbox.new(job: job, debug: debug)
     end
 
     ##################################################################################
     # TRICKY THREAD STUFF
     #
 
-    # TODO: standardize handling of Exceptions in execution
-    # Possibilities:
-    # NoMemoryError
-    # ScriptError - load errors including SyntaxError and NotImplementedError
-    # SecurityError
-    # StandardError
-    # SystemExit - explicit call to Kernel.exit
-    # SystemStackError
-
     def start_thread
       @thread_status.running = true
       @thread = Thread.new do
-
-        @job.start # what if this fails?
-        appended_complete = false
-
-        begin
-          return_value = @protocol.main
-        rescue Exception => e
-          puts "#{@job.id}: EXCEPTION #{e}"
-          puts e.backtrace[0, 10]
-          @base_object.error(e)
-        else
-          @job.reload.append_step(operation: 'complete', rval: return_value)
-          appended_complete = true
-        ensure
-          if appended_complete
-            @job.stop
-          else
-            @job.stop 'error'
-            notify(@job)
-            @job.reload
-            @job.append_step(operation: 'next', time: Time.zone.now, inputs: {})
-            @job.append_step(operation: 'aborted', rval: {})
-          end
-          @job.save # what if this fails?
-          ActiveRecord::Base.connection.close
-          @mutex.synchronize { @thread_status.running = false }
-        end
+        @sandbox.execute
+      rescue KrillError, ProtocolError => e
+        notify(@sandbox.job)
+        raise e
       rescue Exception => e
-        puts "#{@job.id}: SERIOUS EXCEPTION #{e}: #{e.backtrace[0, 10]}"
+        # TODO: determine what other exceptions might happen here and be more specific
+        puts "#{@sandbox.job.id}: SERIOUS EXCEPTION #{e}: #{e.backtrace[0, 10]}"
+        raise e
+      ensure
+        @mutex.synchronize { @thread_status.running = false }
 
         if ActiveRecord::Base.connection && ActiveRecord::Base.connection.active?
           ActiveRecord::Base.connection.close
-          puts "#{@job.id}: Closing ActiveRecord connection"
+          puts "#{@sandbox.job.id}: Closing ActiveRecord connection"
         end
       end
     end
 
     def debugger
-      @job.start # what if this fails?
-
-      begin
-        return_value = @protocol.main
-        @job.reload.append_step(operation: 'complete', rval: return_value)
-        @job.stop('done')
-      rescue Exception => e
-        puts "#{@job.id}: EXCEPTION #{e}"
-        puts e.backtrace[0, 10]
-        @base_object.error e
-        @job.reload
-        @job.stop 'error'
-        @job.append_step operation: 'next', time: Time.zone.now, inputs: {}
-        @job.append_step operation: 'aborted', rval: {}
-        raise e
-      ensure
-        @job.save # what if this fails?
-      end
+      @sandbox.execute
+    rescue KrillError, ProtocolError => e
+      raise e
     rescue Exception => e
-      puts "#{@job.id}: SERIOUS EXCEPTION #{e}: #{e.backtrace[0, 10]}"
+      # TODO: determine what other exceptions might happen here and be more specific
+      puts "#{@sandbox.job.id}: SERIOUS EXCEPTION #{e}: #{e.backtrace[0, 10]}"
 
       if ActiveRecord::Base.connection && ActiveRecord::Base.connection.active?
         ActiveRecord::Base.connection.close
-        puts "#{@job.id}: Closing ActiveRecord connection"
+        puts "#{@sandbox.job.id}: Closing ActiveRecord connection"
       end
 
       raise e
     end
 
     def run
-      if @protocol.debug
+      if @sandbox.debug
         debugger
       else
         start_thread
@@ -157,9 +95,8 @@ module Krill
         @mutex.synchronize { running = @thread_status.running }
       end
 
-      @job.reload
-
-      return 'done' if @job.pc == -2
+      @sandbox.reload
+      return 'done' if @sandbox.done?
 
       'ready'
     end
@@ -195,7 +132,8 @@ module Krill
 
     # called by client abort command
     def stop
-      puts "Stopping job #{@job.id}"
+      # TODO: can this be elsewhere?
+      puts "Stopping job #{@sandbox.job.id}"
 
       @thread.kill
       @mutex.synchronize { @thread_status.running = false }
@@ -205,53 +143,17 @@ module Krill
     # END TRICKY THREAD STUFF
     ###########################################################################
 
-    def make_base
-      #b = Module.new
-      b = Object.const_set('KrillProtocolBase', Module.new)
-      b.send(:include, Base)
-      b.module_eval("def jid; #{@jid}; end", 'generated_base')
-      b.module_eval("def input; #{@args}; end", 'generated_base')
-      b.module_eval('def debug; true; end', 'generated_base') if @debug
-
-      manager_mutex = @mutex
-      b.send :define_method, :mutex do
-        manager_mutex
+    # Associate a crash message to each operation of the given job.
+    #
+    # @param job [Job] the job
+    def notify(job)
+      job.operations.each do |operation|
+        puts("notifying #{operation.id}")
+        operation.associate(
+          :job_crash,
+          "Operation canceled when job #{job.id} crashed"
+        )
       end
-
-      manager_thread_status = @thread_status
-      b.send :define_method, :thread_status do
-        manager_thread_status
-      end
-
-      b
-    end
-
-    def insert_base_class(obj, mod)
-      puts "inserting #{mod.name} into #{obj.name}"
-      obj.constants.each do |c|
-        puts "inserting constant #{c}"
-        k = obj.const_get(c)
-        if k.class == Module
-          eigenclass = class << self
-                         self
-          end
-          eigenclass.send(:include, mod) unless eigenclass.include? mod
-          insert_base_class k, mod
-        elsif k.class == Class
-          k.send(:include, mod) unless k.include? mod
-          insert_base_class k, mod
-        end
-      end
-    end
-  end
-
-  def notify(job)
-    job.operations.each do |operation|
-      puts("notifying #{operation.id}")
-      operation.associate(
-        :job_crash,
-        "Operation canceled when job #{job.id} crashed"
-      )
     end
   end
 end
