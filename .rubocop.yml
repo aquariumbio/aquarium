@@ -35,3 +35,6 @@ Metrics/PerceivedComplexity:
 
 Style/AsciiComments:
   Enabled: false
+
+Style/RaiseArgs:
+  EnforcedStyle: compact
