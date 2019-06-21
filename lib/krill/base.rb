@@ -35,7 +35,9 @@ module Krill
         Thread.stop
 
         # get technician input
-        input = ShowResponse.new(JSON.parse(@job.reload.state, symbolize_names: true).last[:inputs])
+        @job.reload
+        job_state = JSON.parse(@job.state, symbolize_names: true)
+        input = ShowResponse.new(job_state.last[:inputs])
 
         # populate operations with table input data
         input[:table_inputs].each do |table_input|
