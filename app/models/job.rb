@@ -312,4 +312,10 @@ class Job < ActiveRecord::Base
     raise "Error: parse error reading state of job #{id}"
   end
 
+  # get the operation type for the operations of this job
+  # TODO: seems like this should be a delegate, but not clear if can do it
+  def operation_type
+    operations.first.operation_type
+  end
+
 end
