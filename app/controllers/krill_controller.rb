@@ -85,7 +85,7 @@ class KrillController < ApplicationController
   def state
 
     @job = Job.find(params[:job])
-    render json: { state: (JSON.parse @job.state), result: { response: 'n/a' } }
+    render json: { state: (@job.job_state), result: { response: 'n/a' } }
 
   end
 
@@ -102,7 +102,7 @@ class KrillController < ApplicationController
         op.associate :aborted, "Operation was canceled when job #{@job.id} was aborted"
       end
 
-      state = JSON.parse @job.state, symbolize_names: true
+      state = @job.job_state
       if state.length.odd? # backtrace ends with a 'next'
         @job.append_step operation: 'display', content: [
           { title: 'Interrupted' },
@@ -138,9 +138,7 @@ class KrillController < ApplicationController
     @job = Job.find(params[:job])
 
     if @job.pc >= 0
-
-      state = JSON.parse @job.state, symbolize_names: true
-
+      state = @job.job_state
       unless state.last[:operation] == 'next' || params[:command] == 'check_again'
         inputs = params[:inputs]
         inputs[:table_inputs] = [] unless inputs[:table_inputs]
@@ -180,7 +178,7 @@ class KrillController < ApplicationController
 
     end
 
-    render json: { state: (JSON.parse @job.state), result: result }
+    render json: { state: (@job.job_state), result: result }
 
   end
 

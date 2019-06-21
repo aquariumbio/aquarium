@@ -83,7 +83,7 @@ class Job < ActiveRecord::Base
   end
 
   def backtrace
-    JSON.parse(state, symbolize_names: true)
+    job_state
   end
 
   def append_steps(steps)
@@ -180,8 +180,8 @@ class Job < ActiveRecord::Base
   def return_value
     if /\.rb$/.match?(path)
       begin
-        @rval = JSON.parse(state, symbolize_names: true).last[:rval] || {}
-      rescue JSON::ParseError
+        @rval = job_state.last[:rval] || {}
+      rescue StandardError
         @rval = { error: 'Could not find return value.' }
       end
     else
@@ -246,7 +246,7 @@ class Job < ActiveRecord::Base
   def abort_krill
     self.pc = Job.COMPLETED
 
-    state = JSON.parse self.state, symbolize_names: true
+    state = job_state
     if state.length.odd? # backtrace ends with a 'next'
       append_step operation: 'display', content: [
         { title: 'Interrupted' },
@@ -302,6 +302,14 @@ class Job < ActiveRecord::Base
     save
     puts Krill::Client.new.start(id)
     reload
+  end
+
+  # hides the fact that state is stored as JSON
+  def job_state
+    JSON.parse(state, symbolize_names: true)
+  rescue JSON::ParseError
+    # TODO: make this an exception object
+    raise "Error: parse error reading state of job #{id}"
   end
 
 end

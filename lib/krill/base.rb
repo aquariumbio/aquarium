@@ -36,7 +36,7 @@ module Krill
 
         # get technician input
         @job.reload
-        job_state = JSON.parse(@job.state, symbolize_names: true)
+        job_state = @job.job_state
         input = ShowResponse.new(job_state.last[:inputs])
 
         # populate operations with table input data
