@@ -9,7 +9,7 @@ module Krill
       libs = Library.where(name: parts[1], category: parts[0])
       raise "could not find library '#{path}'" if libs.empty?
 
-      add(code:libs[0].source, source_name: path)
+      add(code: libs[0].source, source_name: path)
     end
 
     def add(code:, source_name: '(eval)')
