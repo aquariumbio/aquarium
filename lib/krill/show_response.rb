@@ -38,14 +38,14 @@ module Krill
     #               and the row associated with either `op` or `row`
     #               returns nil if the requested row/column pair doesn't exist
     def get_table_response(var, opts = {})
-      raise TableCellUndefined, 'Invalid parameters for get_table_response - specify one of op or row, not both' if (opts[:op] && opts[:row]) || (!opts[:op] && !opts[:row])
+      raise TableCellUndefined.new('Invalid parameters for get_table_response - specify one of op or row, not both') if (opts[:op] && opts[:row]) || (!opts[:op] && !opts[:row])
       return nil if self[:table_inputs].nil?
 
       target_table = self[:table_inputs].select { |ti| (ti[:key].to_sym == var.to_sym) }
       return nil if target_table.empty?
 
       if opts[:op]
-        raise TableCellUndefined, "Invalid parameters for get_table_response - an :op option cannot be specified for a table that doesn't have operations corresponding to its rows" if target_table.first[:opid] < 0
+        raise TableCellUndefined.new("Invalid parameters for get_table_response - an :op option cannot be specified for a table that doesn't have operations corresponding to its rows") if target_table.first[:opid] < 0
 
         opid = Operation.find(opts[:op]).id # return op.id if passed an operation or the id itself
         target_input_cell = target_table.find { |ti| ti[:opid] == opid }

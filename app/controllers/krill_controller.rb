@@ -85,7 +85,7 @@ class KrillController < ApplicationController
   def state
 
     @job = Job.find(params[:job])
-    render json: { state: (@job.job_state), result: { response: 'n/a' } }
+    render json: { state: @job.job_state, result: { response: 'n/a' } }
 
   end
 
@@ -178,7 +178,7 @@ class KrillController < ApplicationController
 
     end
 
-    render json: { state: (@job.job_state), result: result }
+    render json: { state: @job.job_state, result: result }
 
   end
 
