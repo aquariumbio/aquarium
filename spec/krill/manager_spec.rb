@@ -22,6 +22,15 @@ RSpec.describe Krill::Manager do
       user: test_user
     )
   end
+  let(:raise_protocol) do
+    create(
+      :operation_type,
+      name: 'raise_exception',
+      category: 'testing',
+      protocol: 'class Protocol; def main; raise \'the_exception\' end end',
+      user: test_user
+    )
+  end
 
   def run_protocol(protocol:, user:, debug: true)
     operations = make_operations_list(
@@ -36,10 +45,9 @@ RSpec.describe Krill::Manager do
     )
     expect(job).to be_pending
     manager = Krill::Manager.new(job.id, debug)
-    expect(manager.protocol).to respond_to(:debug, :input, :jid, :show, :operations)
-    expect(manager.protocol.debug).to eq(true)
-
-    execute(operations: operations, manager: manager)
+    job.reload
+    expect(job).to be_pending
+    manager.start
 
     job.reload
   end
@@ -73,45 +81,40 @@ RSpec.describe Krill::Manager do
     expect(job).to be_done
     expect(job.backtrace[1][:content]).to eq([{title: 'blah'}, {note: op_show_protocol.name}])
   end
-end
 
-def build_plan(operations:, user_id:)
-  plans = []
-  operations.each do |op|
-    plan = Plan.new(user_id: user_id, budget_id: Budget.all.first.id)
-    plan.save
-    plans << plan
-    pa = PlanAssociation.new(operation_id: op.id, plan_id: plan.id)
-    pa.save
+  it 'expect protocol with exception to have error' do
+    expect { run_protocol(protocol: raise_protocol, user: test_user) }.to raise_error(Krill::KrillError)
   end
 
-  plans
-end
+  def build_plan(operations:, user_id:)
+    plans = []
+    operations.each do |op|
+      plan = Plan.new(user_id: user_id, budget_id: Budget.all.first.id)
+      plan.save
+      plans << plan
+      pa = PlanAssociation.new(operation_id: op.id, plan_id: plan.id)
+      pa.save
+    end
 
-def make_operations_list(operation_type:, user_id:)
-  operation = operation_type.operations.create(
-    status: 'pending',
-    user_id: user_id
-  )
+    plans
+  end
 
-  [operation]
-end
+  def make_operations_list(operation_type:, user_id:)
+    operation = operation_type.operations.create(
+      status: 'pending',
+      user_id: user_id
+    )
 
-def make_job(operation_type:, operations:, user:)
-  job, _newops = operation_type.schedule(
-    operations,
-    user,
-    Group.find_by_name('technicians')
-  )
+    [operation]
+  end
 
-  job
-end
+  def make_job(operation_type:, operations:, user:)
+    job, _newops = operation_type.schedule(
+      operations,
+      user,
+      Group.find_by_name('technicians')
+    )
 
-def execute(operations:, manager:)
-  # TODO: see ProtocolTestBase.execute
-  operations.extend(Krill::OperationList)
-  operations.make(role: 'input')
-  operations.each(&:run)
-  manager.start
-  operations.each(&:reload)
+    job
+  end
 end
