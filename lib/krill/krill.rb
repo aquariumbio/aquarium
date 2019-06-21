@@ -2,6 +2,7 @@
 
 require_relative 'client'
 require_relative 'server'
+require_relative 'execution_sandbox'
 require_relative 'manager'
 require_relative 'namespace'
 require_relative 'base'
