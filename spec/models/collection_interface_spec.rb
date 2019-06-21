@@ -158,7 +158,7 @@ RSpec.describe Collection, type: :model do
       c.set(0, 8, test_sample)
       expect(c.capacity).to eq(c.get_empty.length + c.get_non_empty.length)
       expect(c.get_non_empty.length).to eq(c.num_samples)
-      raise "include? not working" unless c.include?(test_sample) && c.include?(test_sample.id)
+      raise 'include? not working' unless c.include?(test_sample) && c.include?(test_sample.id)
 
       expect(c.select { |x| x == test_sample.id }.length).to eq(2)
     end
