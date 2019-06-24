@@ -145,6 +145,8 @@ RSpec.describe Krill::ExecutionSandbox do
     job.operations.each { |operation| expect(operation.status).to eq('error') }
   end
 
+  it 'expect protocol with correct i/o to run'
+
   def create_job(protocol:, user:)
     operation = make_operation(
       operation_type: protocol,
