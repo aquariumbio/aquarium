@@ -5,73 +5,6 @@ require 'rails_helper'
 RSpec.describe Krill::ExecutionSandbox do
   let!(:test_user) { create(:user) }
 
-  # A protocol with a simple show
-  let(:simple_protocol) do
-    create(
-      :operation_type,
-      name: 'simple',
-      category: 'testing',
-      protocol: 'class Protocol; def main; show { title \'blah\' }; end end',
-      user: test_user
-    )
-  end
-
-  # A protocol with a show including a reference to operations.
-  # Will cause an error if show_block.missing_method not setup correctly
-  let(:op_show_protocol) do
-    create(
-      :operation_type,
-      name: 'op_show',
-      category: 'testing',
-      protocol: 'class Protocol; def main; show { title \'blah\'; note operations.first.name } end end',
-      user: test_user
-    )
-  end
-
-  # A protocol that raises a StandardError
-  let(:raise_protocol) do
-    create(
-      :operation_type,
-      name: 'raise_exception',
-      category: 'testing',
-      protocol: 'class Protocol; def main; raise \'the_exception\' end end',
-      user: test_user
-    )
-  end
-
-  # A protocol that calls Kernel.exit
-  let(:exit_protocol) do
-    create(
-      :operation_type,
-      name: 'system_exit',
-      category: 'testing',
-      protocol: 'class Protocol; def main; exit; end; end',
-      user: test_user
-    )
-  end
-
-  # A protocol with some funky syntax
-  let(:bad_syntax_protocol) do
-    create(
-      :operation_type,
-      name: 'bad_syntax',
-      category: 'testing',
-      protocol: 'class Protocol; def main; 1=2; end; end',
-      user: test_user
-    )
-  end
-
-  # A protocol that calls a recursive method with a stack overflow
-  let(:stack_protocol) do
-    create(
-      :operation_type,
-      name: 'stack overflow',
-      category: 'testing',
-      protocol: 'class Protocol; def main; again; end; def again; again; end; end;',
-      user: test_user
-    )
-  end
-
   # A protocol that will cause a NoMemoryError.
   # Intentionally not testing for NoMemoryError, b/c it is awfully slow.
   #
@@ -84,6 +17,17 @@ RSpec.describe Krill::ExecutionSandbox do
   #     user: test_user
   #   )
   # end
+
+  # A protocol with a simple show
+  let(:simple_protocol) do
+    create(
+      :operation_type,
+      name: 'simple',
+      category: 'testing',
+      protocol: 'class Protocol; def main; show { title \'blah\' }; end end',
+      user: test_user
+    )
+  end
 
   it 'expect simple protocol to have attributes created with' do
     job = create_job(protocol: simple_protocol, user: test_user)
@@ -106,6 +50,18 @@ RSpec.describe Krill::ExecutionSandbox do
     expect(job.backtrace[1][:content]).to eq([{ title: 'blah' }])
   end
 
+  # A protocol with a show including a reference to operations.
+  # Will cause an error if show_block.missing_method not setup correctly
+  let(:op_show_protocol) do
+    create(
+      :operation_type,
+      name: 'op_show',
+      category: 'testing',
+      protocol: 'class Protocol; def main; show { title \'blah\'; note operations.first.name } end end',
+      user: test_user
+    )
+  end
+
   it 'expect protocol with reference to operations in show to run without error' do
     job = create_job(protocol: op_show_protocol, user: test_user)
     sandbox = Krill::ExecutionSandbox.new(job: job, debug: true)
@@ -116,12 +72,34 @@ RSpec.describe Krill::ExecutionSandbox do
     expect(job.backtrace[1][:content]).to eq([{ title: 'blah' }, { note: op_show_protocol.name }])
   end
 
+  # A protocol that raises a StandardError
+  let(:raise_protocol) do
+    create(
+      :operation_type,
+      name: 'raise_exception',
+      category: 'testing',
+      protocol: 'class Protocol; def main; raise \'the_exception\' end end',
+      user: test_user
+    )
+  end
+
   it 'expect protocol that raises exceptions to have error' do
     job = create_job(protocol: raise_protocol, user: test_user)
     sandbox = Krill::ExecutionSandbox.new(job: job, debug: true)
     expect { sandbox.execute }.to raise_error(Krill::KrillError)
     expect(job).to be_error
     job.operations.each { |operation| expect(operation.status).to eq('error') }
+  end
+
+  # A protocol that calls Kernel.exit
+  let(:exit_protocol) do
+    create(
+      :operation_type,
+      name: 'system_exit',
+      category: 'testing',
+      protocol: 'class Protocol; def main; exit; end; end',
+      user: test_user
+    )
   end
 
   it 'expect protocol that calls exit to have error' do
@@ -132,9 +110,31 @@ RSpec.describe Krill::ExecutionSandbox do
     job.operations.each { |operation| expect(operation.status).to eq('error') }
   end
 
+  # A protocol with some funky syntax
+  let(:bad_syntax_protocol) do
+    create(
+      :operation_type,
+      name: 'bad_syntax',
+      category: 'testing',
+      protocol: 'class Protocol; def main; 1=2; end; end',
+      user: test_user
+    )
+  end
+
   it 'expect protocol with bad syntax to have error when sandbox is created' do
     job = create_job(protocol: bad_syntax_protocol, user: test_user)
     expect { Krill::ExecutionSandbox.new(job: job, debug: true) }.to raise_error(Krill::KrillSyntaxError)
+  end
+
+  # A protocol that calls a recursive method with a stack overflow
+  let(:stack_protocol) do
+    create(
+      :operation_type,
+      name: 'stack overflow',
+      category: 'testing',
+      protocol: 'class Protocol; def main; again; end; def again; again; end; end;',
+      user: test_user
+    )
   end
 
   it 'expect protocol with stack overflow to have error' do
@@ -145,7 +145,38 @@ RSpec.describe Krill::ExecutionSandbox do
     job.operations.each { |operation| expect(operation.status).to eq('error') }
   end
 
-  it 'expect protocol with correct i/o to run'
+  # A protocol with i/o
+  let(:dummy_sample_type) { create(:sample_type_with_samples, name: 'DummySampleType', sample_count: 1) }
+  let(:dummy_object_type) { create(:object_type, name: 'DummyObjectType') }
+  let(:io_protocol) do
+    create(
+      :operation_type,
+      name: 'io protocol',
+      category: 'testing',
+      protocol: 'class Protocol; def main; show { title \'blah\'; note operations.first.input(\'blah\').id }; end; end',
+      inputs: [{ name: 'blah', sample_type: 'DummySampleType', object_type: 'DummyObjectType' }],
+      user: test_user
+    )
+  end
+
+  it 'expect protocol with correct i/o to run' do
+    operation = make_operation(operation_type: io_protocol, user_id: test_user.id)
+    expect(operation.input('blah')).not_to be_nil
+    plan = build_plan(operation: operation, user_id: test_user.id)
+    job = make_job(
+      operation_type: io_protocol,
+      operations: plan.operations,
+      user: test_user
+    )
+
+    sandbox = Krill::ExecutionSandbox.new(job: job, debug: true)
+    sandbox.execute
+    #expect { sandbox.execute }.not_to raise_error
+    #expect(job).not_to be_error
+    #job.operations.each { |operation| expect(operation.status).to eq('done') }
+    #expect(job).to be_done
+    #expect(job.backtrace[1][:content]).to eq([{ title: 'blah' }])
+  end
 
   def create_job(protocol:, user:)
     operation = make_operation(
