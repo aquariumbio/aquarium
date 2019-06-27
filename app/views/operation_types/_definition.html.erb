@@ -29,7 +29,8 @@
 
       <div class="span3">
 
-        <button class="btn btn-primary pull-right btn-mini" 
+        <button class="md-raised md-button md-ink-ripple pull-right" 
+                id="developer_def"
                 ng-click="save_operation_type(current_operation_type)"
                 ng-disabled="!current_operation_type.changed"
                 style="margin-left: 5px">
@@ -38,10 +39,12 @@
         </button>
 
         <button ng-if="!current_operation_type.deployed"
-                class="btn btn-mini pull-right"  style="margin-left: 5px"
+                class="md-raised md-button md-ink-ripple pull-right"
+                id="developer_def"               
+                style="margin-left: 5px"
                 ng-click="delete_operation_type(current_operation_type)"><span>Delete</span></button>
 
-       <button class='btn btn-mini pull-right' ng-if="current_operation_type.id" ng-click="copy(current_operation_type)">Copy</button>
+       <button class="md-raised md-button md-ink-ripple pull-right" id="developer_def" ng-if="current_operation_type.id" ng-click="copy(current_operation_type)">Copy</button>
 
       </div>
 

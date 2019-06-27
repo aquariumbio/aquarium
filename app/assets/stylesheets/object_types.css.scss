@@ -168,11 +168,22 @@
 
 .object-types {
   .selected {
-    background: #80d8ff;
+    background: #B5D7EA;
   }
   .flash {
     padding: 10px;
     width: 100%;
-    background: lightyellow;
+    background:#d2f8d2;
   }  
 }
+
+
+// Updating 'Upload Data' button
+label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 0
+}
+
+
+// 

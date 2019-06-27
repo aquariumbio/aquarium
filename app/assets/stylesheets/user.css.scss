@@ -19,7 +19,7 @@
   }
 
   .not-up-to-date {
-    background: lightyellow;
+    background: #d2f8d2;
     padding: 10px;
   }
 
@@ -60,4 +60,69 @@
   .number {
     display: inline-block;  
   }
+}
+
+
+// Updating button's color 
+.md-raised.md-button {
+  color: #065683
+}
+
+.md-button.md-primary.md-raised {
+  background-color: #065683
+}
+
+.md-button.md-raised[disabled] {
+  background-color: lightgray
+}
+
+.md-button.md-raised.md-primary:not([disabled]):hover {
+  background-color: #065683
+}
+
+.md-button.md-raised.md-primary:not([disabled]):active {
+  background-color: #097bbc
+}
+
+// Fixing the "Copy" button of Developer>Def
+#developer_def {
+  font-size: 12px;
+  min-width: 50px
+}
+
+
+// Updating color for the sub-nav-bar in the developer tab 
+md-nav-bar md-nav-ink-bar {
+  background-color: #097bbc;
+  height: 3px
+}
+
+.md-button.md-accent {
+  color: #097bbc
+}
+
+
+// Updating color of swith on/off buttons
+md-switch.md-checked:not([disabled]) .md-bar,
+md-switch.md-checked:not([disabled]).md-primary .md-bar {
+  background-color: #B5D7EA
+}
+
+md-switch.md-checked:not([disabled]) .md-thumb,
+md-switch.md-checked:not([disabled]).md-primary .md-thumb {
+  background-color: #065683
+}
+
+
+// Updating the main nav-bar title style
+.aq2 .main-toolbar .underlined {
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: bold
+}
+
+
+// Updating color for Import Workflows tab
+md-radio-button:not([disabled]).md-primary .md-on {
+  background-color: #065683
 }
