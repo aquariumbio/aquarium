@@ -18,12 +18,17 @@ module FieldValuer
               .collect(&:full_json)
   end
 
-  def set_property_aux(ft, fv, val)
-
+  # Sets the value of the field value.
+  # Adds an error if the field type is inconsistent with the type of the value.
+  #
+  # @param ft [FieldType] the field type
+  # @param fv [FieldValue] the field value to set
+  # @param val [String, Number, Sample, Item] the value 
+  # @return [FieldValue] the field value with the value set
+  def set_value(ft, fv, val)
     # puts "SETTING #{fv.name}(#{fv.role}) to #{val.inspect}"
 
     case ft.ftype
-
     when 'string', 'url', 'json'
       errors.add(:set_property, "#{val} is not a string") unless val.is_a?(String)
       fv.value = val
@@ -43,20 +48,17 @@ module FieldValuer
     when 'item'
       errors.add(:set_property, "#{val} is not a item") unless val.is_a?(Item)
       fv.child_item_id = val.id
-
     end
 
     fv
-
   end
 
   # Changes a property in the property hash for this object.
   #
   # @param name [String]  the name of property to overwrite
-  # @param val [Object]  the new value of the property
+  # @param val [Array, Number, Sample, String, Item]  the new value of the property
   def set_property(name, val, role = nil, override_array = false, aft = nil)
-
-    ft = field_type name, role
+    ft = field_type(name, role)
 
     unless ft
       errors.add(:no_such_property, "#{self.class} #{id} does not have a property named #{name} with role #{role}.")
@@ -68,7 +70,7 @@ module FieldValuer
     if ft.array && val.is_a?(Array)
       val = val.first if val.any? { |v| v.is_a?(Array) }
       new_fvs = val.collect do |v|
-        fv = set_property_aux(ft, field_values.create(name: name, field_type_id: ft.id, role: role), v)
+        fv = set_value(ft, field_values.create(name: name, field_type_id: ft.id, role: role), v)
         fv.allowable_field_type_id = aft.id if aft
         fv
       end
@@ -85,7 +87,7 @@ module FieldValuer
       fvs = [field_values.create(name: name, field_type_id: ft.id, role: role)] if fvs.empty?
 
       if ft && fvs.length == 1
-        fv = set_property_aux(ft, fvs[0], val)
+        fv = set_value(ft, fvs[0], val)
         fv.allowable_field_type_id = aft.id if aft
       else
         errors.add(:set_property, "Could not set #{self.class} #{id} property #{name} to #{val}")
@@ -106,28 +108,20 @@ module FieldValuer
     self
   end
 
+  # TODO: this should be a FieldValue method
   def basic_value(ft, fv)
-
     if fv.value
-
       ft = field_type fv.name
-
       if ft.ftype == 'number'
         fv.value.to_f
       else
         fv.value
       end
-
     elsif fv.child_sample_id
-
       fv.child_sample
-
     elsif fv.child_item_id
-
       fv.child_item
-
     end
-
   end
 
   # Property hash which keeps track of important information.
@@ -152,16 +146,14 @@ module FieldValuer
   def value(field_type)
     result = field_values.select { |fv| fv.name == field_type.name }
 
-    if field_type.array
-      result
-    elsif result.length >= 1
-      result[0]
-    end
+    return result if field_type.array
+    return result.first if result.length >= 1
   end
 
   def field_type(name, role = nil)
     fts = parent_type.field_types.select { |ft| ft.name == name && ft.role == role }
-    fts[0] unless fts.empty?
+
+    fts.first
   end
 
   def displayable_properties
