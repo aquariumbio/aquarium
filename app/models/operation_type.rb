@@ -57,12 +57,27 @@ class OperationType < ActiveRecord::Base
     field_types.select { |ft| ft.role == 'input' }
   end
 
+  # Returns the input of this OperationType with the given name.
+  #
+  # @param name [String] the name of the input
+  def input(name)
+    inputs.select { |field_type| field_type[:name] == name }.first
+  end
+
   # The output types of this OperationType.
   #
   # @return [Array<FieldType>]  meta definitions of the outputs
   #           that could be produced by a successful operation of this type
   def outputs
     field_types.select { |ft| ft.role == 'output' }
+  end
+
+  # Returns the output of this OperationType with the given name.
+  #
+  # @param name [String] the name of the input
+  # @return [FieldType] the named output
+  def output(name)
+    outputs.select { |field_type| field_type[:name] == name }.name
   end
 
   def waiting
