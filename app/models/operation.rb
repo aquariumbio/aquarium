@@ -61,8 +61,9 @@ class Operation < ActiveRecord::Base
   #
   # @param name [String]
   # @param sample [Sample]
+  # @return [Operation] this operation
   def with_input(name, sample)
-    ft = operation_type.inputs.select { |i| i[:name] == name }.first
+    ft = operation_type.input(name)
     aft = ft.choose_aft_for(sample)
     set_input(name, sample, aft)
 
@@ -74,7 +75,7 @@ class Operation < ActiveRecord::Base
   # @param name [String]
   # @param sample [Sample]
   def with_output(name, sample)
-    ft = operation_type.outputs.select { |i| i[:name] == name }.first
+    ft = operation_type.output(name)
     aft = ft.choose_aft_for(sample)
     set_output(name, sample, aft)
 
@@ -92,7 +93,7 @@ class Operation < ActiveRecord::Base
 
   # Assigns a Sample to an input
   # @param name [String]
-  # @param val [Sample]
+  # @param val [Sample, Item, Number]
   # @param aft [AllowableFieldType]
   def set_input(name, val, aft = nil)
     set_property(name, val, 'input', false, aft)
