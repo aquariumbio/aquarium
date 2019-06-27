@@ -66,7 +66,6 @@ module FieldTyper
 
   # NOTE: this assumes parallel arrays for AFT
   def add_field(name, sample_name, container_name, role, opts)
-
     raise "Can't add field to #{self.class} before it has been saved." unless id
 
     snames = sample_name.nil? || sample_name.is_a?(String) ? [sample_name] : sample_name
@@ -88,7 +87,6 @@ module FieldTyper
     end
 
     self
-
   end
 
 end

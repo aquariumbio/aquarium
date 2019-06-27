@@ -18,15 +18,13 @@ module FieldTypePlanner
   end
 
   def choose_aft_for(sample)
-    afts = allowable_field_types.select do |aft|
-
-      aft.sample_type_id == sample.sample_type.id
+    types = allowable_field_types.select do |type|
+      type.sample_type_id == sample.sample_type.id
     rescue StandardError
       true
-
     end
 
-    afts.sample unless afts.empty?
+    types.sample unless types.empty?
   end
 
 end
