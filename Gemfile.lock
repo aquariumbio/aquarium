@@ -125,7 +125,7 @@ GEM
     multi_json (1.13.1)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
-    mysql2 (0.4.10)
+    mysql2 (0.5.2)
     nokogiri (1.10.3)
       mini_portile2 (~> 2.4.0)
     octokit (4.13.0)
@@ -258,7 +258,7 @@ DEPENDENCIES
   factory_bot_rails
   github-markup
   ipaddress
-  mysql2 (~> 0.4.10)
+  mysql2 (~> 0.5.2)
   oj
   paperclip
   protected_attributes_continued

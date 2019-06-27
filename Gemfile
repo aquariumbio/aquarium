@@ -6,7 +6,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.11.1'
 
 # SQL adapter
-gem 'mysql2', '~> 0.4.10'
+gem 'mysql2', '~> 0.5.2'
 
 # Needed for rails 3.2 => 4.0 upgrade
 gem 'protected_attributes_continued'
