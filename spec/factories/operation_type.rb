@@ -7,8 +7,8 @@ FactoryBot.define do
       cost_model { 'def cost(_op); { labor: 0, materials: 0 } end' }
       precondition { 'def precondition(_op); true end' }
       user {}
-      inputs {[]}
-      outputs {[]}
+      inputs { [] }
+      outputs { [] }
     end
 
     sequence(:name) { |n| "operation_type_#{n}" }

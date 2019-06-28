@@ -247,11 +247,9 @@ class Item < ActiveRecord::Base
     logger.info "Made new item #{item.id} with location #{item.location} and primitive location #{item.primitive_location}"
 
     item
-
   end
 
   def put_at(locstr)
-
     loc = Wizard.find_locator locstr
     return nil unless loc && loc.item_id.nil?
 
@@ -260,7 +258,6 @@ class Item < ActiveRecord::Base
       loc.save
       save
     end
-
   end
 
   # Delete the Item (sets item's location to "deleted").
@@ -318,11 +315,9 @@ class Item < ActiveRecord::Base
 
   # @deprecated Use {DataAssociator} methods instead of datum
   def datum
-
-    JSON.parse data, symbolize_names: true
+    JSON.parse(data, symbolize_names: true)
   rescue StandardError
     {}
-
   end
 
   # (see #datum)
@@ -341,15 +336,11 @@ class Item < ActiveRecord::Base
   end
 
   def all_attributes
-
     temp = attributes.symbolize_keys
-
     temp[:object_type] = object_type.attributes.symbolize_keys
-
     temp[:sample] = sample.attributes.symbolize_keys if sample_id
 
     temp
-
   end
 
   def to_s
@@ -357,9 +348,7 @@ class Item < ActiveRecord::Base
   end
 
   def upgrade(force = false) # upgrades data field to data association (if no data associations exist)
-
     if force || associations.empty?
-
       begin
         obj = JSON.parse data
 
@@ -369,13 +358,9 @@ class Item < ActiveRecord::Base
       rescue StandardError
         self.notes = data if data
       end
-
     else
-
       append_notes "\n#{Date.today}: Attempt to upgrade failed. Item already had associations."
-
     end
-
   end
 
   ###########################################################################

@@ -30,7 +30,7 @@ module FieldValueKrill
         save
       end
     end
-  
+
     @item
   end
 
@@ -50,6 +50,7 @@ module FieldValueKrill
   def make_collection
     ot = object_type
     raise "Could not find object type: #{object_type}" unless ot
+
     message = "Cannot make a new collection from object type '#{ot.name}' with handler '#{ot.handler}'"
     raise message if ot.handler != 'collection'
 
@@ -57,7 +58,7 @@ module FieldValueKrill
     c.store if c.location == 'Unknown'
     self.child_item_id = c.id
     save
-  
+
     c
   end
 
