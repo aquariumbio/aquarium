@@ -146,22 +146,31 @@ RSpec.describe Krill::ExecutionSandbox do
   end
 
   # A protocol with i/o
-  let(:dummy_sample_type) { create(:sample_type_with_samples, name: 'DummySampleType', sample_count: 1) }
+  let(:dummy_sample_type) { create(:sample_type, name: 'DummySampleType') }
+  let(:dummy_sample) { create(:sample, name: 'DummySample', sample_type: dummy_sample_type) }
   let(:dummy_object_type) { create(:object_type, name: 'DummyObjectType') }
   let(:io_protocol) do
     create(
       :operation_type,
       name: 'io protocol',
       category: 'testing',
-      protocol: 'class Protocol; def main; show { title \'blah\'; note operations.first.input(\'blah\').id }; end; end',
+      protocol: 'class Protocol; def main; show { title \'blah\'; note operations.first.input(\'blah\').item.id }; end; end',
       inputs: [{ name: 'blah', sample_type: 'DummySampleType', object_type: 'DummyObjectType' }],
       user: test_user
     )
   end
+  let(:dummy_item) do
+    create(:item, sample_id: dummy_sample.id, object_type_id: dummy_object_type.id)
+  end
 
   it 'expect protocol with correct i/o to run' do
     operation = make_operation(operation_type: io_protocol, user_id: test_user.id)
+    operation.set_input('blah', dummy_item)
+    expect(operation.field_values.length).to eq(1)
+
     expect(operation.input('blah')).not_to be_nil
+    expect(operation.input('blah').item).not_to be_nil
+    expect(operation.input('blah').item).to eq(dummy_item)
     plan = build_plan(operation: operation, user_id: test_user.id)
     job = make_job(
       operation_type: io_protocol,
@@ -171,11 +180,11 @@ RSpec.describe Krill::ExecutionSandbox do
 
     sandbox = Krill::ExecutionSandbox.new(job: job, debug: true)
     sandbox.execute
-    #expect { sandbox.execute }.not_to raise_error
-    #expect(job).not_to be_error
-    #job.operations.each { |operation| expect(operation.status).to eq('done') }
-    #expect(job).to be_done
-    #expect(job.backtrace[1][:content]).to eq([{ title: 'blah' }])
+    expect { sandbox.execute }.not_to raise_error
+    expect(job).not_to be_error
+    job.operations.each { |op| expect(op.status).to eq('done') }
+    expect(job).to be_done
+    expect(job.backtrace[1][:content]).to eq([{ title: 'blah' }, { note: dummy_item.id }])
   end
 
   def create_job(protocol:, user:)
