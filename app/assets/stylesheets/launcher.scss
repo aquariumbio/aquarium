@@ -1,3 +1,4 @@
+@import "variables";
 
 .launcher {
 
@@ -7,7 +8,7 @@
 
   .selected-folder {
     font-weight: bold !important;
-    background: #d2f8d2;
+    background: $selection-highlight-color;
   }
 
   /* STYLES INTERACTING WITH ANGULAR MATERIAL ********************************************************* */

@@ -1,3 +1,5 @@
+@import "variables";
+
 $row-height: 18px;
 $selected-sample-color: #f6ffff;
 $selected-sample-outline-color: #e0ffff;
@@ -207,7 +209,7 @@ $selected-sample-outline-color: #e0ffff;
     }
 
     .collection-highlight {
-      background: #d2f8d2;
+      background: $selection-highlight-color;
     }
 
   }

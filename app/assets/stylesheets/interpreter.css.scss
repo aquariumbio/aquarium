@@ -2,6 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 @import "variables";
+
 $outlineStyle: #f00 dotted 0px;
 
 #interpreter {
@@ -228,7 +229,7 @@ input::-webkit-inner-spin-button {
     background-color: white;
   }
   td:hover {
-    background-color: #d2f8d2;
+    background-color: $selection-highlight-color;
   }
   margin: 10px 0px 10px 50px;
   width: 80% !important;

@@ -1,3 +1,5 @@
+@import "variables";
+
 .collection-editor {
 
   position: relative;
@@ -155,7 +157,7 @@
 
   .selected {
      color: #000;
-     background: #d2f8d2;
+     background: $selection-highlight-color;
   }
 
 }

@@ -1,3 +1,5 @@
+@import "variables";
+
 .plans {
 
   .opeditbar {
@@ -15,7 +17,7 @@
 
   .message {
     padding: 10px;
-    background: #d2f8d2;
+    background: $selection-highlight-color;
     position: relative;
     border: 1pt solid #eee;
     padding-right: 20px;  
@@ -409,10 +411,10 @@
   }
 
   .sidebar-button-selected {
-    background: #136390;
+    background: $table-header-color;
     color: white;
     &:hover {
-      background: #136390;
+      background: $table-header-color;
     }    
   } 
 

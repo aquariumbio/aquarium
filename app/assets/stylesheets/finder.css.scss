@@ -1,3 +1,5 @@
+@import "variables";
+
 body .finder {
   width: 1000px;
   height: 500px;
@@ -29,6 +31,7 @@ body .finder {
     background: #eee;
     color: black;
     font-weight: bold;
+
     letter-spacing: 0px;
   }
 }
@@ -55,7 +58,7 @@ body .finder {
 }
 
 .finder-li-highlighted {
-  background: #d2f8d2;
+  background: $selection-highlight-color;
 }
 
 .finder-selected {

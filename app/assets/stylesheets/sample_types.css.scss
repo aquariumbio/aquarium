@@ -1,6 +1,7 @@
 // Place all the styles related to the SampleTypes controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import "variables";
 
 .sample_type_link_select {
   :hover {
@@ -124,11 +125,11 @@
 
 .sample-types {
   .selected {
-    background: #B5D7EA;
+    background: $view-selection-color;
   }
   .flash {
     padding: 10px;
     width: 100%;
-    background: #d2f8d2;
+    background: $selection-highlight-color;
   }  
 }

@@ -1,3 +1,5 @@
+@import "variables";
+
 .aq2 {
 
   /*  ::-webkit-scrollbar {
@@ -33,7 +35,7 @@
 
     background-color: #106CC8;
     background: -webkit-linear-gradient(#185694, #106cc8);
-    background: linear-gradient(#043D5E, #097bbc);
+    background: linear-gradient($main-navbar-color, $sub-navbar-color);
 
     max-height: 44px !important;
     min-height: 44px !important;

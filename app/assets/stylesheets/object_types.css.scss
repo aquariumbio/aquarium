@@ -168,17 +168,17 @@
 
 .object-types {
   .selected {
-    background: #B5D7EA;
+    background: $view-selection-color;
   }
   .flash {
     padding: 10px;
     width: 100%;
-    background:#d2f8d2;
+    background: $selection-highlight-color;
   }  
 }
 
 
-// Updating 'Upload Data' button
+// Style for 'Upload Data' button
 label {
   font-size: 14px;
   font-weight: 500;
@@ -186,4 +186,3 @@ label {
 }
 
 
-// 

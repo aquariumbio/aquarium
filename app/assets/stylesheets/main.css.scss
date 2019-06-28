@@ -1,3 +1,5 @@
+@import "variables";
+
 .leaderboard {
 
   table {
@@ -10,7 +12,7 @@
     th {
       text-align: left;
       padding: 5px;   
-      background: #136390;
+      background: $table-header-color;
       color: white;
     }
     caption {

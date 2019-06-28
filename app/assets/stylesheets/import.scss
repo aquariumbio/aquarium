@@ -1,3 +1,5 @@
+@import "variables";
+
 .matches {
   color: orange;
 }
@@ -8,7 +10,7 @@
 
 .issue {
   font-size: 14pt;
-  background: #d2f8d2;
+  background: $selection-highlight-color;
   border: 1pt solid black;
   border-radius: 5px;
   padding: 16px;
