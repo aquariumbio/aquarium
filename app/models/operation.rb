@@ -168,7 +168,7 @@ class Operation < ActiveRecord::Base
     field_values.select { |ft| ft.role == 'input' }
   end
 
-  # (see #inputs)
+  # @return [Array<FieldValue>]
   def outputs
     field_values.select { |ft| ft.role == 'output' }
   end
@@ -179,17 +179,20 @@ class Operation < ActiveRecord::Base
     inputs.find { |i| i.name == name }
   end
 
-  # (see #get_input)
+  # @param name [String]
+  # @return [FieldValue]
   def get_output(name)
     outputs.find { |o| o.name == name }
   end
 
-  # (see #get_input)
+  # @param name [String]
+  # @return [FieldValue]
   def input(name)
-    get_input name
+    get_input(name)
   end
 
-  # (see #get_input)
+  # @param name [String]
+  # @return [FieldValue]
   def output(name)
     get_output name
   end
