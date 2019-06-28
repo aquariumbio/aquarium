@@ -23,7 +23,7 @@ module FieldValuer
   #
   # @param ft [FieldType] the field type
   # @param fv [FieldValue] the field value to set
-  # @param val [String, Number, Sample, Item] the value 
+  # @param val [String, Number, Sample, Item] the value
   # @return [FieldValue] the field value with the value set
   def set_value(ft, fv, val)
     # puts "SETTING #{fv.name}(#{fv.role}) to #{val.inspect}"
@@ -38,14 +38,21 @@ module FieldValuer
       fv.value = val.to_s
 
     when 'sample'
-      if val
-        errors.add(:set_property, "#{val} is not a sample") unless val.is_a?(Sample)
+      if val&.is_a?(Sample)
         fv.child_sample_id = val.id
+      elsif val&.is_a?(Item)
+        fv.child_sample_id = val.sample_id
+        fv.child_item_id = val.id
       else
-        fv.child_sample_id = nil # this is used for empty samples in the planner
+        # TODO: should probably raise exception
+        errors.add(:set_property, "#{val} is not a sample or item") if val
+        # this is used for empty samples in the planner
+        fv.child_sample_id = nil
       end
 
     when 'item'
+      # NOTE: this is dead code. It never happens that ftype is 'item'
+      #       but leaving it here just in case I'm wrong
       errors.add(:set_property, "#{val} is not a item") unless val.is_a?(Item)
       fv.child_item_id = val.id
     end
