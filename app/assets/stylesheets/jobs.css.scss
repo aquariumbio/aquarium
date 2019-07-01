@@ -27,27 +27,27 @@
 }
 
 .timing-block {
-  float: left; 
-  display:'block';
+  float: left;
+  display: "block";
   margin: 2px;
   padding: 3px;
-  border-radius: 3px; 
+  border-radius: 3px;
   background: #ded;
-    .pc {
-       margin: 0;
-       line-height: 14pt;
-       font-size: 14pt;
-     }
-    .time {
-      font-size: 12pt;
-      margin: 0;
-      line-height: 12pt;
-    }
+  .pc {
+    margin: 0;
+    line-height: 14pt;
+    font-size: 14pt;
+  }
+  .time {
+    font-size: 12pt;
+    margin: 0;
+    line-height: 12pt;
+  }
 }
 
 .clear {
-  clear: both; 
-  display: block; 
+  clear: both;
+  display: block;
   position: relative;
 }
 

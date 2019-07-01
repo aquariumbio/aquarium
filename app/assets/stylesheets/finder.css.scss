@@ -9,8 +9,8 @@ body .finder {
 .finder-body {
   //height: 400px;
   //outline: 2pt dashed red;
-  overflow:hidden !important;;
-} 
+  overflow: hidden !important;
+}
 
 .finder-btn {
   margin-left: 10px;
@@ -44,17 +44,16 @@ body .finder {
 
 .finder-list {
   list-style: none;
-  padding-left:0;
+  padding-left: 0;
   margin-left: 0;
   li {
-    padding-left:0;
+    padding-left: 0;
     margin-left: 5px;
     padding-bottom: 3px 0 3px 0;
     line-height: 1.2;
     width: 200%;
     /* outline: 1pt dashed green; */
   }
-
 }
 
 .finder-li-highlighted {

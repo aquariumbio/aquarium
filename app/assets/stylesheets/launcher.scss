@@ -1,7 +1,6 @@
 @import "variables";
 
 .launcher {
-
   .folder {
     width: 100%;
   }
@@ -26,7 +25,7 @@
   .operation-type-choice-selected {
     border: 1pt solid #bbb;
     margin: 16px 0 16px 0;
-  }  
+  }
 
   .highlight {
     background: #acf;
@@ -58,7 +57,7 @@
   .title {
     text-align: center;
     margin: 10px 0 10px 0 !important;
-  }  
+  }
 
   .no-inputs {
     color: #060;
@@ -68,19 +67,19 @@
     color: darkred;
     line-height: 18px;
     border-top: 1pt solid #bbb;
-    border-bottom: 1pt solid #bbb;    
+    border-bottom: 1pt solid #bbb;
     margin-top: 10px;
     margin-bottom: 10px;
     padding-top: 4px;
     padding-bottom: 4px;
   }
 
-  .launch-error {    
+  .launch-error {
     .title {
       color: darkred;
       margin-bottom: 0px !important;
     }
-    p { 
+    p {
       color: #a25900;
       line-height: 18px;
     }
@@ -130,7 +129,7 @@
 
   .bottom-pad {
     padding-bottom: 10px;
-  }  
+  }
 
   .status {
     font-size: 10pt;
@@ -139,15 +138,15 @@
 
   .status-running {
     color: green;
-  }  
+  }
 
   .status-scheduled {
     color: orange;
-  }  
+  }
 
   .status-pending {
     color: blue;
-  }  
+  }
 
   .status-done {
     color: black;
@@ -155,7 +154,7 @@
 
   .status-waiting {
     color: purple;
-  }  
+  }
 
   /* PLANS ***************************************/
 
@@ -172,7 +171,7 @@
   .plan-header {
     &:hover {
       background: $plan-header-color;
-    }   
+    }
   }
 
   .plan-row-open {
@@ -185,8 +184,8 @@
   .plan-details {
     border-left: 1pt solid $plan-border-color;
     border-right: 1pt solid $plan-border-color;
-    border-bottom: 1pt solid $plan-border-color;    
-    background: $plan-details-color;    
+    border-bottom: 1pt solid $plan-border-color;
+    background: $plan-details-color;
     margin-bottom: 16px;
   }
 
@@ -205,53 +204,53 @@
 
   /***************************************************/
 
-
   .spanner-cell {
     padding: 0 !important;
   }
 
   .select-container {
-
     border-radius: 0;
     overflow: hidden;
     height: 20px;
     padding: 0px;
     position: relative;
 
-    margin: 1px 0px 0 -2px; 
-    border: 1px solid #eee; 
+    margin: 1px 0px 0 -2px;
+    border: 1px solid #eee;
     width: calc(100% - 1px);
 
     select {
-        padding: 0 0 0 2px;
-        width: 100%;
-        height: 20px !important;
-        line-height: 18px !important;
-        margin: 0;
-        border: none;
-        box-shadow: none;
-        background: transparent;
-        background-image: none;
-        -webkit-appearance: none;
-        color: #000;
+      padding: 0 0 0 2px;
+      width: 100%;
+      height: 20px !important;
+      line-height: 18px !important;
+      margin: 0;
+      border: none;
+      box-shadow: none;
+      background: transparent;
+      background-image: none;
+      -webkit-appearance: none;
+      color: #000;
     }
-
   }
 
   .select-container:after {
-      content:"\25BC";
-      color: #888;
-      padding: 2px 5px 2px 2px;
-      position: absolute; right: 0; top: 0;
-      z-index: 1;
-      text-align: center;
-      width: 20px;
-      height: 20px;      
-      pointer-events: none;
-      box-sizing: border-box;   
-  }  
+    content: "\25BC";
+    color: #888;
+    padding: 2px 5px 2px 2px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+    box-sizing: border-box;
+  }
 
-  .documentation, .stats {
+  .documentation,
+  .stats {
     padding: 0 16px 0 16px;
     p {
       line-height: 20px;
@@ -259,7 +258,8 @@
     table {
       border: 1pt solid #bbb;
       padding: 5px;
-      td, th {
+      td,
+      th {
         padding: 5px;
         border: 1pt solid #bbb;
       }
@@ -278,24 +278,25 @@
     margin: 0px;
     padding: 2px 5px 2px 5px;
     height: 20px !important;
-    border: 1pt solid rgb(187,187,187);
+    border: 1pt solid rgb(187, 187, 187);
     border-radius: 0px !important;
     background: white;
     text-align: left;
-  }   
+  }
 
   .category {
-    display: inline-block; 
-    vertical-align: top; 
-    margin: 0 8px 5px 5px; 
-    border: 1pt solid #bbb; 
+    display: inline-block;
+    vertical-align: top;
+    margin: 0 8px 5px 5px;
+    border: 1pt solid #bbb;
     padding: 10px 20px 10px 10px;
   }
 
   .selected-input {
     border-color: rgba(0, 51, 255, 0.8) !important;
-    box-shadow: 0 1px 1px rgba(0, 51, 255, 0.075) inset, 0 0 8px rgba(0, 51, 255, 0.6) !important;
-    outline: 0 none !important; 
+    box-shadow: 0 1px 1px rgba(0, 51, 255, 0.075) inset,
+      0 0 8px rgba(0, 51, 255, 0.6) !important;
+    outline: 0 none !important;
   }
 
   .small {
@@ -314,7 +315,7 @@
     clear: both;
     content: "";
     display: block;
-    overflow: hidden;     
+    overflow: hidden;
   }
 
   .plan-controls {
@@ -336,7 +337,6 @@
   }
 
   .operation {
-
     margin-bottom: 5px;
 
     .cost {
@@ -355,13 +355,13 @@
     .node-selected {
       background: #eee;
     }
-    
+
     .name {
       position: relative;
       font-weight: bold;
       margin: 5px 5px 5px 40px !important;
       padding: 2px 0 2px 10px;
-      border: 1pt solid #aaa;  
+      border: 1pt solid #aaa;
       /*border-radius: 10px !important;*/
       background: #eee;
       width: calc(100% - 60px);
@@ -395,8 +395,8 @@
       font-weight: bold;
       a {
         color: #0b0;
-      }      
-      width: 14px;            
+      }
+      width: 14px;
     }
 
     .arrow {
@@ -404,20 +404,21 @@
       font-size: 12pt;
       position: absolute;
       top: -3px;
-      left: -20px; 
-      -webkit-transform: rotate(90deg);    
+      left: -20px;
+      -webkit-transform: rotate(90deg);
     }
 
-    .container-note, .container-note-wide  {
-      position: absolute; 
-      right: 10px; 
+    .container-note,
+    .container-note-wide {
+      position: absolute;
+      right: 10px;
       color: royalblue;
       font-weight: normal;
     }
 
     .container-note-wide {
-      right: 24px; 
-    }    
+      right: 24px;
+    }
 
     .array-item-input {
       width: 170px !important;
@@ -426,26 +427,26 @@
 
     .array-remove {
       width: 10px;
-      margin: 2px;   
-      position: absolute;   
+      margin: 2px;
+      position: absolute;
       top: -2px;
       right: 6px;
     }
 
     .sample-with-item {
       width: calc(100% - 210px) !important;
-      display: inline-block;      
+      display: inline-block;
     }
 
     .items-in-stock {
       background: #eeffee;
       color: #060;
     }
- 
+
     .sample-only {
       width: 100% !important;
-      display: inline-block;      
-    }   
+      display: inline-block;
+    }
 
     .parameter-json {
       width: 100% !important;
@@ -454,30 +455,32 @@
 
     .input-satisfied {
       background: #eef;
-    } 
+    }
 
     .sample-array-element {
       width: calc(100% - 20px) !important;
-      display: inline-block;   
-      margin-bottom: 5px;   
-    }      
+      display: inline-block;
+      margin-bottom: 5px;
+    }
 
     .no-items {
       color: #bbb;
       width: 204px !important;
       display: inline-block !important;
-      border: 1px solid rgb(187,187,187) !important;
+      border: 1px solid rgb(187, 187, 187) !important;
       margin: 0 !important;
       padding: 2px !important;
       height: 26px !important;
     }
 
     .radio-buttons {
-
       margin: 0;
       display: inline-block;
 
-      .radio, .radio:hover, .radio:active, .radio:checked {
+      .radio,
+      .radio:hover,
+      .radio:active,
+      .radio:checked {
         display: inline;
         margin: -1px;
         padding: 0;
@@ -487,12 +490,10 @@
       .radio-label {
         padding: 0;
         margin: 0 10px 0 0;
-        display: inline; 
+        display: inline;
         font-size: 9pt;
       }
-         
     }
-
   } /* end operation class */
 
   .btn-small {
@@ -500,17 +501,19 @@
   }
 
   .capitalize {
-     text-transform: capitalize;
-  }  
+    text-transform: capitalize;
+  }
 
   .no-line {
     border-top: none;
-  }  
+  }
 
   .btn.disabled {
     pointer-events: none;
   }
-  .btn.disabled, .btn[disabled], fieldset[disabled] .btn {
+  .btn.disabled,
+  .btn[disabled],
+  fieldset[disabled] .btn {
     cursor: not-allowed;
   }
 
@@ -527,7 +530,7 @@
     border: 1pt solid #eee;
     padding: 1pt;
     margin: 5px;
-    tr { 
+    tr {
       margin: 0;
       padding: 0;
       border: none;
@@ -537,19 +540,18 @@
       padding: 0;
       border: 1pt solid #eee;
       width: 10px;
-      height: 10px;      
+      height: 10px;
     }
     .filled {
-      background: #aaf; 
+      background: #aaf;
       cursor: pointer;
     }
     .blank {
-    }  
+    }
     .selected {
-      background: #00f; 
-      cursor: pointer;      
-    }               
-
+      background: #00f;
+      cursor: pointer;
+    }
   }
 
   .budget-checkbox {
@@ -564,5 +566,4 @@
     color: black;
     background: yellow;
   }
-
 }
