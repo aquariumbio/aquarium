@@ -18,7 +18,12 @@ module Krill
         debug: debug
       )
     rescue SyntaxError => e
-      raise KrillSyntaxError.new(operation_type: operation_type, error: e)
+      line_number, message = e.message.match(
+        /^\(eval\):(\d+): (.+)$/
+      ).captures
+      message = "#{operation_type.category}/#{operation_type.name}: line #{line_number}: #{message}"
+      # TODO: fix this so captures code; currently getting lost
+      raise KrillSyntaxError.new(operation_type: operation_type, error: e, message: message)
     end
 
     # Executes `protocol.main` for the job.

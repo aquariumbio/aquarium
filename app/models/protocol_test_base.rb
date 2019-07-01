@@ -9,6 +9,7 @@ class ProtocolTestBase
   def initialize(operation_type, current_user)
     @assertions = 0
     @operation_type = operation_type
+    # TODO: could this be initialized as a Krill::OperationsList ??
     @operations = []
     @current_user = current_user
     @job = nil
@@ -53,6 +54,7 @@ class ProtocolTestBase
 
   def execute
     manager = Krill::Manager.new(@job.id, true)
+    # TODO: could this be initialize?
     @operations.extend(Krill::OperationList)
     @operations.make(role: 'input')
     @operations.each(&:run)

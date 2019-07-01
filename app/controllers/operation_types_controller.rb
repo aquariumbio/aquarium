@@ -242,7 +242,7 @@ class OperationTypesController < ApplicationController
     # TODO: see ProtocolTestBase.execute
     operations.extend(Krill::OperationList)
     operations.make(role: 'input')
-    operations.each(&:run)
+    # operations.each(&:run)
     manager.start
     operations.each(&:reload)
   end
@@ -286,6 +286,20 @@ class OperationTypesController < ApplicationController
       error = nil
       begin
         manager = Krill::Manager.new(job.id, true)
+      rescue Krill::KrillSyntaxError => e
+        message = e.message
+        logger.error(message)
+        e.error.backtrace.each do |b|
+          logger.error(b)
+        end
+
+        response = {
+          error: message,
+          backtrace: e.error.backtrace
+        }
+        render json: response, status: :unprocessable_entity
+        # TODO: rework this code so that don't have return here
+        return
       rescue ScriptError, SystemStackError, StandardError => e
         error = e
       end
@@ -308,6 +322,31 @@ class OperationTypesController < ApplicationController
             job: job.reload
           }
           render json: response, status: :ok
+        rescue Krill::KrillError => e
+          message = 'Error while executing test: ' + e.error.message
+          logger.error(message)
+          e.error.backtrace.each do |b|
+            logger.error(b)
+          end
+
+          response = {
+            error: message,
+            backtrace: e.error.backtrace
+          }
+          render json: response, status: :unprocessable_entity
+        rescue Krill::KrillSyntaxError => e
+          message = "Syntax error in #{e.operation_type.name}: #{e.error.message}"
+          puts "HEY: " + message
+          logger.error(message)
+          e.error.backtrace.each do |b|
+            logger.error(b)
+          end
+
+          response = {
+            error: message,
+            backtrace: e.error.backtrace
+          }
+          render json: response, status: :unprocessable_entity
         rescue Exception => e
           logger.error 'Bug encountered while testing: ' + e.message + ' -- ' + e.backtrace.to_s
 
