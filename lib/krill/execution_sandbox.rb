@@ -70,7 +70,7 @@ module Krill
     # @param debug [Boolean] whether to run protocol in debug mode
     def make_protocol(code:, debug:)
       job.reload
-      suffix = generate_suffix(length: 32)
+      suffix = generate_suffix(length: 32, prefix: 'KrillProtocolBase')
       namespace = Krill.make_namespace(name: "ExecutionNamespace#{suffix}")
       namespace.add(code: code)
       base_class = make_base(name: "KrillProtocolBase#{suffix}", debug: debug)
@@ -102,7 +102,7 @@ module Krill
     # @param length [Integer] the max length of the string to generate
     # @param prefix [String] the prefix to use to check for existing constants
     # @returns the unique random string
-    def generate_suffix(length:, prefix: 'KrillProtocolBase')
+    def generate_suffix(length:, prefix:)
       loop do
         suffix = SecureRandom.urlsafe_base64(length, false).gsub('-', '')
         return suffix unless Object.const_defined?("#{prefix}#{suffix}")
