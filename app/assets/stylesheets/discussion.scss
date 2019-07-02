@@ -3,13 +3,12 @@
   width: 60% !important;
   margin-left: -30% !important;
   .modal-body {
-    overflow-y:auto;
-    max-height:82%;
-    margin-top:0px;
+    overflow-y: auto;
+    max-height: 82%;
+    margin-top: 0px;
   }
 }
 .discussion {
-
   padding: 5px;
   textarea {
     width: 100%;
@@ -41,7 +40,7 @@
   .post {
     margin: 5px 0 5px 0;
   }
-  .post-content { 
+  .post-content {
   }
   .reply-area {
     margin: 10px 0 20px 25px;

@@ -1,7 +1,6 @@
 $row-height: 22px;
 
 .field_value_form {
-
   width: 100% !important;
 
   display: inline-block;
@@ -12,15 +11,21 @@ $row-height: 22px;
     display: inline-block;
   }
 
-  input,input:focus,input:active,input:hover {
+  input,
+  input:focus,
+  input:active,
+  input:hover {
     color: #0000cc;
-    display: inline-block;    
+    display: inline-block;
     padding: 2px;
     margin: 0px;
     width: 100% !important;
   }
 
-  .radio, .radio:hover, .radio:active, .radio:checked {
+  .radio,
+  .radio:hover,
+  .radio:active,
+  .radio:checked {
     display: inline;
     width: 10% !important;
     margin: 0;
@@ -32,5 +37,4 @@ $row-height: 22px;
     display: inline;
     width: 80% !important;
   }
-
 }
