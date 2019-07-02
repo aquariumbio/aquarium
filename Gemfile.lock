@@ -276,7 +276,7 @@ DEPENDENCIES
   tzinfo-data
   web-console (~> 3.0)
   will_paginate
-  yard
+  yard (>= 0.9.20)
   yard-activerecord
 
 BUNDLED WITH
