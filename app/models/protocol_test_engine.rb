@@ -40,7 +40,7 @@ class ProtocolTestEngine
   end
 
   def load
-    manager = Krill::Manager.new(@environment.job, true)
+    manager = Krill::Manager.new(@environment.job.id, true)
     @environment.operations.make(role: 'input')
   end
 
@@ -57,7 +57,7 @@ class ProtocolTestEngine
   #### code based on TestController
 
   def load_job(job:)
-    manager = Krill::Manager.new(job, true)
+    manager = Krill::Manager.new(job.id, true)
     job.operations.make(role: 'input')
 
     manager
