@@ -47,7 +47,6 @@ group :test do
 end
 
 group :development do
-  gem 'bundler-stats'
   gem 'rspec-rails'
   gem 'web-console', '~> 3.0'
 
@@ -55,9 +54,8 @@ group :development do
   gem 'ipaddress'
 end
 
-group :production do
-  gem 'puma'
-end
+# constrain puma to older than 4.0 b/c doesn't run on Alpine linux even with openssl
+gem 'puma', '< 4.0'
 
 # Gems used only for assets and not required
 # in production environments by default.
