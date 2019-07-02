@@ -24,7 +24,7 @@ gem 'rack-cors', require: 'rack/cors'
 gem 'rubocop'
 
 # For documentation
-gem 'yard'
+gem 'yard', '>= 0.9.20'
 gem 'yard-activerecord'
 
 # Various style related gems
@@ -49,6 +49,7 @@ group :test do
 end
 
 group :development do
+  gem 'bundler-stats'
   gem 'rspec-rails'
   gem 'web-console', '~> 3.0'
 

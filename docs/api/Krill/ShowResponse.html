@@ -107,7 +107,7 @@
 a simplified interface, additional convenience methods,
 and abstraction of implementation details. This is a decorator class to be instantiated
 with a Hash.
-Initialized with a Hash, which has a :timepoint value as a float, and 
+Initialized with a Hash, which has a :timepoint value as a float, and
 a :table_inputs value as an array of hashes in the format expected from <code>show</code> return</p>
 
 
@@ -194,7 +194,7 @@ a :table_inputs value as an array of hashes in the format expected from <code>sh
   
 
   
-    <span class="summary_desc"><div class='inline'><p>Returns a hash of user responses, each under the var name specified in the ShowBlock where  the response was collected.</p>
+    <span class="summary_desc"><div class='inline'><p>Returns a hash of user responses, each under the var name specified in the ShowBlock where the response was collected.</p>
 </div></span>
   
 </li>
@@ -244,7 +244,7 @@ a :table_inputs value as an array of hashes in the format expected from <code>sh
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p>Return the response that was stored under <code>var</code>. When used with </p>
+    <p>Return the response that was stored under <code>var</code>. When used with</p>
 
 <p>a key associated with a table response-set, returns a list of table responses
 in order of the rows of the table.</p>
@@ -399,8 +399,8 @@ in the <code>get</code>.</p>
       
         &mdash;
         <div class='inline'><p>the data inputted in the particular input cell specified
-by the column associated with <code>var</code>, 
-and the row associated with either <code>op</code> or <code>row</code><br>
+by the column associated with <code>var</code>,
+and the row associated with either <code>op</code> or <code>row</code>
 returns nil if the requested row/column pair doesn&#39;t exist</p>
 </div>
       
@@ -485,7 +485,7 @@ returns nil if the requested row/column pair doesn&#39;t exist</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p>Returns a hash of user responses, each under the var name specified in the ShowBlock where 
+    <p>Returns a hash of user responses, each under the var name specified in the ShowBlock where
 the response was collected. Table responses are stored in this hash as a list in order of
 the rows of the table.</p>
 
@@ -541,7 +541,7 @@ the rows of the table.</p>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_responses'>responses</span>
   <span class='id identifier rubyid_inline_responses'>inline_responses</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='id identifier rubyid_key'>key</span> <span class='op'>!=</span> <span class='symbol'>:table_inputs</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_key'>key</span> <span class='op'>!=</span> <span class='symbol'>:timestamp</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_is_upload?'>is_upload?</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
-  
+
   <span class='id identifier rubyid_upload_response_keys'>upload_response_keys</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='id identifier rubyid_is_upload?'>is_upload?</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span>
   <span class='id identifier rubyid_upload_responses'>upload_responses</span> <span class='op'>=</span> <span class='const'>Hash</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
   <span class='id identifier rubyid_upload_response_keys'>upload_response_keys</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span>
@@ -624,9 +624,9 @@ was seen and interacted with by the technician</p>
 </div>
 
       <div id="footer">
-  Generated on Fri May 17 14:38:47 2019 by
+  Generated on Tue Jul  2 18:20:17 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.16 (ruby-2.3.7).
+  0.9.20 (ruby-2.6.3).
 </div>
 
     </div>
