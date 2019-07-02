@@ -49,7 +49,6 @@ group :test do
 end
 
 group :development do
-  gem 'bundler-stats'
   gem 'rspec-rails'
   gem 'web-console', '~> 3.0'
 
