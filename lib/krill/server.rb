@@ -48,7 +48,7 @@ module Krill
       end
 
       jid = command[:jid].to_i if command[:jid]
-      debug = command[:debug]
+      debug = command[:debug] || false
       @managers[jid] = Manager.new(jid, debug) if command[:operation] == 'start'
 
       unless @managers[jid]
