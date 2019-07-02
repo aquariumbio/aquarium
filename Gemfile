@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.11.1'
 
 # SQL adapter
-gem 'mysql2', '~> 0.4.10'
+gem 'mysql2', '~> 0.5.2'
 
 # Needed for rails 3.2 => 4.0 upgrade
 gem 'protected_attributes_continued'
@@ -22,7 +22,7 @@ gem 'rack-cors', require: 'rack/cors'
 gem 'rubocop'
 
 # For documentation
-gem 'yard'
+gem 'yard', '>= 0.9.20'
 gem 'yard-activerecord'
 
 # Various style related gems
@@ -47,6 +47,7 @@ group :test do
 end
 
 group :development do
+  gem 'bundler-stats'
   gem 'rspec-rails'
   gem 'web-console', '~> 3.0'
 
