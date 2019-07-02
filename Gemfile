@@ -54,6 +54,7 @@ group :development do
   gem 'ipaddress'
 end
 
+# constrain puma to older than 4.0 b/c doesn't run on Alpine linux even with openssl
 gem 'puma', '< 4.0'
 
 # Gems used only for assets and not required
