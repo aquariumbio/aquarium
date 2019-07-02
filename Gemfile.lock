@@ -129,7 +129,6 @@ GEM
     multi_xml (0.6.0)
     multipart-post (2.1.1)
     mysql2 (0.5.2)
-    nio4r (2.3.1)
     nokogiri (1.10.3)
       mini_portile2 (~> 2.4.0)
     octokit (4.13.0)
@@ -147,8 +146,7 @@ GEM
     protected_attributes_continued (1.2.4)
       activemodel (>= 4.0.1, < 6.0)
     public_suffix (3.1.1)
-    puma (4.0.0)
-      nio4r (~> 2.0)
+    puma (3.12.1)
     rack (1.6.11)
     rack-cors (1.0.3)
     rack-test (0.6.3)
@@ -268,7 +266,7 @@ DEPENDENCIES
   oj
   paperclip
   protected_attributes_continued
-  puma
+  puma (< 4.0)
   rack-cors
   rails (= 4.2.11.1)
   rails-patch-json-encode

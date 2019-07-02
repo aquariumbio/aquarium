@@ -8,13 +8,16 @@ RUN apk update && apk add \
     git \
     imagemagick \
     iptables \
+    libgcrypt-dev \
     libxml2 \
     libxslt \
     mariadb-dev \
+    musl \
     mysql-client \
     nodejs \
     nodejs-npm \
     openjdk8-jre \
+    openssl \
     sqlite-dev \
     yarn
 
