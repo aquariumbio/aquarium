@@ -74,6 +74,18 @@
 
   <div  class='scrollable'>
 
+  <script> 
+    angular.module('inputErrors', ['ngMaterial', 'ngMessages'])
+
+    .controller('inputController', function($scope) {  
+      $scope.user = {
+        name: "",
+        email: "",
+        phone: "N/A"
+      };
+    });
+  </script>
+
   <md-content flex layout-fill layout-padding layout="row" ng-if="status.view == 'Information'" class='md-white'>
 
     <div flex="33">
@@ -89,17 +101,30 @@
 
         <md-input-container>
           <label>Full Name</label>
-          <input ng-model="user.name" ng-change="user.changed = true">
+          <input name="fullname" required ng-model="user.name" md-maxlength="15" ng-change="user.changed = true">
+          <div ng-messages="fullname.$error">
+            <div ng-message="required">This is required.</div>
+            <div ng-message="md-maxlength">The user name must be less than 35 characters long.</div>
+          </div>
         </md-input-container>
 
         <md-input-container>
           <label>Email Address</label>
-          <input ng-model="user.params.email.value" ng-change="user.changed = true">
+          <input name='email' ng-model="user.params.email.value" ng-change="user.changed = true" minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/">
+          <div ng-messages="email.$error">
+            <div ng-message-exp="['minlength', 'maxlength']"> Your email must be between 10 and 100 characters long. </div>
+            <div ng-message='pattern'> Your email must look like a valid e-mail address. </div>
+            </div>
         </md-input-container>
+        
 
         <md-input-container>
           <label>Phone Number</label>
-          <input ng-model="user.params.phone.value" ng-change="user.changed = true">        
+          <input name='phone' ng-model="user.params.phone.value" ng-change="user.changed = true" ng-pattern="/^[(][0-9]{3}[)] [0-9]{3}-[0-9]{4}$/">
+          <div ng-messages="phone.$error">
+            <div ng-message="pattern">(###) ###-#### - Please enter a valid phone number.</div>
+          </div>
+        </md-input-container>        
         </md-input-container>    
 
       <% else %>
@@ -111,7 +136,7 @@
       <% end %>
 
     </div>
-
+    
   </md-content>
 
   <% if current_user.id == @user.id || current_user.is_admin %>
