@@ -54,9 +54,7 @@ group :development do
   gem 'ipaddress'
 end
 
-group :production do
-  gem 'puma'
-end
+gem 'puma', '< 4.0'
 
 # Gems used only for assets and not required
 # in production environments by default.
