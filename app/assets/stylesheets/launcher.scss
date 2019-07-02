@@ -10,12 +10,13 @@
     background: $selection-highlight-color;
   }
 
-  /* STYLES INTERACTING WITH ANGULAR MATERIAL ********************************************************* */
+  // STYLES INTERACTING WITH ANGULAR MATERIAL *********************************************************
 
   .operation-type-choice {
     border: 1pt solid #bbb;
     color: black;
     background: #eee;
+
     &:hover {
       cursor: pointer;
       background: #bcf;
@@ -32,7 +33,7 @@
   }
 
   .compact {
-    padding: 0px !important;
+    padding: 0 !important;
   }
 
   .field-value-editor {
@@ -77,7 +78,7 @@
   .launch-error {
     .title {
       color: darkred;
-      margin-bottom: 0px !important;
+      margin-bottom: 0 !important;
     }
     p {
       color: #a25900;
@@ -85,18 +86,20 @@
     }
     border-bottom: 1pt solid #bbb;
     position: relative;
+
     .dismiss {
       position: absolute;
       top: 7px;
       right: 14px;
       color: #aaa;
+
       &:hover {
         cursor: pointer;
       }
     }
   }
 
-  /* OTHER STYLES *************************************************************************************** */
+  // OTHER STYLES ***************************************************************************************
 
   .clickable {
     cursor: pointer;
@@ -164,7 +167,7 @@
 
   .plan-row {
     padding: 5px;
-    margin: 0 25px 0 0px;
+    margin: 0 25px 0 0;
     width: 100%;
   }
 
@@ -212,10 +215,10 @@
     border-radius: 0;
     overflow: hidden;
     height: 20px;
-    padding: 0px;
+    padding: 0;
     position: relative;
 
-    margin: 1px 0px 0 -2px;
+    margin: 1px 0 0 -2px;
     border: 1px solid #eee;
     width: calc(100% - 1px);
 
@@ -252,17 +255,21 @@
   .documentation,
   .stats {
     padding: 0 16px 0 16px;
+
     p {
       line-height: 20px;
     }
+
     table {
       border: 1pt solid #bbb;
       padding: 5px;
+
       td,
       th {
-        padding: 5px;
         border: 1pt solid #bbb;
+        padding: 5px;
       }
+
       th {
         background: #eee;
       }
@@ -274,14 +281,14 @@
   }
 
   .dropdown {
-    width: 190px;
-    margin: 0px;
-    padding: 2px 5px 2px 5px;
-    height: 20px !important;
-    border: 1pt solid rgb(187, 187, 187);
-    border-radius: 0px !important;
     background: white;
+    border: 1pt solid rgb(187, 187, 187);
+    border-radius: 0 !important;
+    height: 20px !important;
+    margin: 0;
+    padding: 2px 5px 2px 5px;
     text-align: left;
+    width: 190px;
   }
 
   .category {
@@ -369,7 +376,7 @@
 
     .io-name {
       /*line-height: 24px !important;*/
-      padding: 0px;
+      padding: 0;
       font-size: 9pt;
     }
 
@@ -494,7 +501,7 @@
         font-size: 9pt;
       }
     }
-  } /* end operation class */
+  } // end operation class
 
   .btn-small {
     margin: 5px;
@@ -511,6 +518,7 @@
   .btn.disabled {
     pointer-events: none;
   }
+
   .btn.disabled,
   .btn[disabled],
   fieldset[disabled] .btn {
@@ -530,11 +538,13 @@
     border: 1pt solid #eee;
     padding: 1pt;
     margin: 5px;
+
     tr {
       margin: 0;
       padding: 0;
       border: none;
     }
+
     td {
       margin: 0;
       padding: 0;
@@ -542,12 +552,15 @@
       width: 10px;
       height: 10px;
     }
+
     .filled {
       background: #aaf;
       cursor: pointer;
     }
+
     .blank {
     }
+
     .selected {
       background: #00f;
       cursor: pointer;

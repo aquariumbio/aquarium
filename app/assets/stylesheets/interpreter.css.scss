@@ -1,9 +1,9 @@
 // Place all the styles related to the interpreter controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-@import "variables";
+@import  'variables ';
 
-$outlineStyle: #f00 dotted 0px;
+$outlineStyle: #f00 dotted 0;
 
 #interpreter {
   outline: $outlineStyle;
@@ -122,7 +122,7 @@ input::-webkit-inner-spin-button {
 }
 
 .take_item_select {
-  margin: 0px 10px 0px 0px;
+  margin: 0 10px 0 0;
 
   .item_select {
     margin: 5px 0 20px 0 !important;
@@ -231,7 +231,7 @@ input::-webkit-inner-spin-button {
   td:hover {
     background-color: $selection-highlight-color;
   }
-  margin: 10px 0px 10px 50px;
+  margin: 10px 0 10px 50px;
   width: 80% !important;
 }
 

@@ -2,7 +2,7 @@ $row-height: 20px;
 $editable-height: 20px;
 $row-margin: 3px;
 
-$thick: 0pt;
+$thick: 0;
 $oo: $thick dashed orange;
 $go: $thick dashed green;
 $bo: $thick dashed blue;
@@ -167,7 +167,7 @@ $po: $thick dashed pink;
     overflow: hidden;
     margin: 0;
     background: transparent;
-    border-radius: 0px;
+    border-radius: 0;
   }
 
   .multiselect {
@@ -255,17 +255,17 @@ $po: $thick dashed pink;
 .folder-ul {
   list-style: none;
   margin-left: 22px;
-  li {
-    overflow: scroll;
-    margin-left: 0px;
-    position: relative;
-    overflow: scroll;
-  }
   overflow: scroll;
+
+  li {
+    margin-left: 0;
+    overflow: scroll;
+    position: relative;
+  }
 }
 
 .folder-ul-top {
-  margin-left: 0px;
+  margin-left: 0;
   overflow: scroll;
 }
 
@@ -313,57 +313,54 @@ $po: $thick dashed pink;
   position: fixed;
 }
 
-/*
- * Folder Contents
- */
+//
+// Folder Contents
+//
 
 #folder-content-container {
   overflow: scroll;
 }
 
 #folder-current {
-  position: relative;
   height: 100%;
   overflow: hidden;
-  padding-right: 0px;
+  padding-right: 0;
+  position: relative;
 }
 
 .folder-contents-heading {
-  /* outline: 1pt dashed red; */
-  margin-bottom: -1px;
-  padding: 0px;
-  width: 100%;
-  font-weight: bold;
-  border-bottom: 1pt solid #ddd;
   background: #eee;
+  border-bottom: 1pt solid #ddd;
+  font-weight: bold;
+  margin-bottom: -1px;
+  padding: 0;
+  width: 100%;
 }
 
 .folder-contents {
-  /*outline: 1pt dashed green; */
-  margin: 0px;
-  padding: 0px;
-  width: 100%;
   height: 100%;
+  margin: 0;
   overflow: scroll;
+  padding: 0;
+  width: 100%;
 }
 
 .folder-contents-row {
-  /*outline: 1pt dashed orange;*/
   border-right: 1pt solid #ddd;
-  margin: 0px;
-  padding: 0px;
   display: table;
+  margin: 0;
+  padding: 0;
   table-layout: fixed;
   width: 100%;
 }
 
 .folder-contents-cell {
-  border-top: 1pt solid #ddd;
   border-left: 1pt solid #ddd;
-  margin: 0px;
-  padding: 5px;
+  border-top: 1pt solid #ddd;
   display: table-cell;
+  margin: 0;
   overflow: scroll;
+  padding: 5px;
   white-space: nowrap;
 }
 
@@ -380,7 +377,7 @@ $po: $thick dashed pink;
 .folder-contents-field-cell {
   border-top: 1pt solid #ddd;
   border-left: 1pt solid #ddd;
-  margin: 0px;
+  margin: 0;
   padding: 0 0 0 5px;
   display: table-cell;
   overflow: scroll;
