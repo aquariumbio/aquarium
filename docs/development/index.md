@@ -6,9 +6,9 @@ These guidelines are intended for those working directly on Aquarium.
 
 ## Getting Started
 
-Follow the Aquarium
-<a href="#" onclick="select('Getting Started','Installation')">installation</a>
-instructions to get a local copy of the Aquarium git repository.
+Follow the Aquarium installation instructions at
+<a href="aquarium.bio">aquarium.bio</a>
+to get a local copy of the Aquarium git repository.
 
 ## Running Aquarium
 
@@ -16,13 +16,11 @@ To run Aquarium in development mode using the Docker configuration in a Unix&tra
 
 ### Initial steps
 
-1. If you have run Aquarium in production, [switch databases](#switchingfromproductiontodevelopment)
+Make the `develop-compose.sh` script executable
 
-2. Make the `develop-compose.sh` script executable
-
-   ```bash
-   chmod u+x develop-compose.sh
-   ```
+```bash
+chmod u+x develop-compose.sh
+```
 
 ### Commands
 
@@ -48,7 +46,7 @@ To run Aquarium in development mode using the Docker configuration in a Unix&tra
    To stop the services, type `ctrl-c` followed by
 
    ```bash
-   ./develop-compose down
+   ./develop-compose down -v
    ```
 
 3. To run commands inside the Aquarium Ruby environment, precede each with
@@ -79,19 +77,17 @@ instead of the script name.
 The configuration for Docker uses the MySQL Docker image, which is capable of automatically importing a database dump the first time it is started.
 This is convenient for standard usage, but it makes it harder to switch to another database.
 
-### Switching from Production to Development
+Switching databases will destroy any changes you have made to the current database.
+If you want to save these, you will have to create a database dump.
 
-Switching from production to development will destroy any changes you have made to the production database.
-If you want to save these, you will have to create the database dump.
-
-Using the values of `MYSQL_USER` and `MYSQL_PASSWORD` from `docker-compose.override.yml` do the following
+To make database dump, using the values of `MYSQL_USER` and `MYSQL_PASSWORD` from `docker-compose.yml` run the following
 
 ```bash
 MYSQL_USER=<username>
 MYSQL_PASSWORD=<password>
 docker-compose up -d
 docker-compose exec db mysqldump -u $MYSQL_USER -p$MYSQL_PASSWORD production > production_dump.sql
-docker-compose down
+docker-compose down -v
 ```
 
 You can then safely remove the MySQL files to allow the switch by running
@@ -100,46 +96,16 @@ You can then safely remove the MySQL files to allow the switch by running
 rm -rf docker/db/*
 ```
 
-If you had previously made a dump of the development database that you want to use, copy this file to the default location:
+Then copy the dump of the database that you want to use to the default location:
 
 ```bash
-cp development_dump.sql docker/mysql_init/dump.sql
+cp desired_dump.sql docker/mysql_init/dump.sql
 ```
 
-It may be necessary to run migrations on any prior database dump.
-See the <a href="#" onclick="select('Getting Started','Docker Installation')">Docker installation</a> instructions for details.
+It may be necessary to run migrations on database dump from a prior version of Aquarium.
+See the Docker installation instructions at <a href="aquarium.bio">aquarium.bio</a> for details.
 
-### Switching from Development to Production
-
-Switching from development to production will destroy any changes you have made to the development database.
-If you want to save these, you will have to create the database dump.
-
-Using the values of `MYSQL_USER` and `MYSQL_PASSWORD` from `docker-compose.dev.yml` do the following
-
-```bash
-MYSQL_USER=<username>
-MYSQL_PASSWORD=<password>
-./develop-compose.sh up -d
-./develop-compose.sh exec db mysqldump -u $MYSQL_USER -p$MYSQL_PASSWORD development > development_dump.sql
-./develop-compose.sh down
-```
-
-You can then safely remove the MySQL files to allow the switch by running
-
-```bash
-rm -rf docker/db/*
-```
-
-If you had previously made a dump of the production database that you want to use, copy this file to the default location:
-
-```bash
-cp production_dump.sql docker/mysql_init/dump.sql
-```
-
-It may be necessary to run migrations on any prior database dump.
-See the <a href="#" onclick="select('Getting Started','Docker Installation')">Docker installation</a> instructions for details.
-
-### Restoring the default database dump
+## Restoring the default database dump
 
 If you want to restart from an empty database, you can run
 
@@ -159,7 +125,7 @@ rm -rf docker/db/*
 ./develop-compose.sh up -d
 ./develop-compose.sh exec app /bin/sh
 rspec
-./develop-compose.sh down
+./develop-compose.sh down -v
 ```
 
 ## Editing Aquarium
@@ -252,10 +218,12 @@ This file also limits the API to code used in Krill the protocol development lan
 6.  Update API documentation by running `yard`
 7.  (Update change log)
 8.  Create a tag for the new version:
+
     ```bash
     git tag -a v$NEWVERSION -m "Aquarium version $NEWVERSION"
     git push --tags
     ```
+
 9.  [Create a release on github](https://help.github.com/articles/creating-releases/).
     Visit the [Aquarium releases page](https://github.com/klavinslab/aquarium/releases).
     Click "Tags".
