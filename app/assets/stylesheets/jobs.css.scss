@@ -1,6 +1,7 @@
 // Place all the styles related to the jobs controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import "variables";
 
 .jobs-nav {
   border: 1pt solid #efefef;
@@ -80,11 +81,11 @@
 }
 
 .jobs-canceled {
-  color: orange;
+  color: $selection-highlight-color;
 }
 
 .jobs-aborted {
-  color: orange;
+  color: $selection-highlight-color;
 }
 
 .jobs-pending {

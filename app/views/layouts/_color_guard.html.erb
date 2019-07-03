@@ -1,8 +1,10 @@
+@import "variables";
+
 <script>
 
   if ( '<%= Rails.env %>' == 'rehearse' ) {
 
-    document.getElementById('logo').style.color = 'orange';
+    document.getElementById('logo').style.color = '$selection-highlight-color';
     document.getElementById('header-bar').style.background = '#720';
 
   } else if ( '<%= Rails.env %>' == 'production'  ) {

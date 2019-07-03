@@ -1,7 +1,7 @@
-@import  'variables ';
+@import  'variables';
 
 .matches {
-  color: orange;
+  color: $selection-highlight-color;
 }
 
 .new {

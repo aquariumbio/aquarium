@@ -1,7 +1,7 @@
 // Place all the styles related to the interpreter controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-@import  'variables ';
+@import  'variables';
 
 $outlineStyle: #f00 dotted 0;
 
@@ -159,7 +159,7 @@ input::-webkit-inner-spin-button {
 .warning {
   color: red !important;
   font-size: 18pt;
-  background: yellow !important;
+  background: $selection-highlight-color !important;
   font-weight: bold;
 }
 
@@ -210,7 +210,7 @@ input::-webkit-inner-spin-button {
 
 #timer {
   border: 1pt solid #eee;
-  background: yellow;
+  background: $selection-highlight-color;
   color: black;
   padding: 30px;
   margin: 20px;

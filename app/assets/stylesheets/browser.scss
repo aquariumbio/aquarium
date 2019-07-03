@@ -185,7 +185,7 @@ $selected-sample-outline-color: #e0ffff;
   }
 
   .date {
-    color: orange;
+    color: $selection-highlight-color;
   }
 
   .collection-table {
@@ -392,12 +392,11 @@ $selected-sample-outline-color: #e0ffff;
     background: white;
     @include sample-tree-list(white);
   }
-
   .sample-container:hover {
-    background: $selected-sample-color;
+    background: $selection-highlight-color;
     outline: 1pt solid $selected-sample-outline-color;
     border-radius: 2px;
-    @include sample-tree-list($selected-sample-color);
+    @include sample-tree-list($selection-highlight-color);
   }
 
   /********************************************************************************************/

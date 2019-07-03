@@ -144,7 +144,7 @@
   }
 
   .status-scheduled {
-    color: orange;
+    color: $selection-highlight-color;
   }
 
   .status-pending {
@@ -162,7 +162,7 @@
   /* PLANS ***************************************/
 
   $plan-border-color: #aaa;
-  $plan-header-color: #80d8ff;
+  $plan-header-color: $selection-highlight-color;
   $plan-details-color: white;
 
   .plan-row {
@@ -198,7 +198,7 @@
   }
 
   .outlined {
-    outline: 1pt dashed orange;
+    outline: 1pt dashed $selection-highlight-color;
   }
 
   .optimization-switch-container {
@@ -577,6 +577,6 @@
 
   .other-user-alert {
     color: black;
-    background: yellow;
+    background: $selection-highlight-color;
   }
 }

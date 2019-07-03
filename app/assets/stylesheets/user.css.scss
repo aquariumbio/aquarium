@@ -6,7 +6,7 @@
   }
 
   .warning {
-    background: yellow;
+    background: #d2f8d2;
     color: black !important;
   }
 
@@ -54,7 +54,7 @@
   }
   .error {
     display: inline-block;
-    background: orange;
+    background: $selection-highlight-color;
     margin: 0;
   }
   .number {

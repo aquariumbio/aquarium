@@ -1,3 +1,6 @@
+@import 'variables';
+
+
 <div style="position: relative; margin: 20px; width: 150%"
      ng-if="current.activity_report.data.status == 'ready' && current.activity_report.data.jobs.length == 0">
   <p>No jobs performed on {{current.activity_report.date|date}}.</p>
@@ -46,7 +49,7 @@
         <span ng-click="current.activity_report.data.selection = job"
               class="no-highlight"
               style="cursor: pointer;
-                     outline: {{job == current.activity_report.data.selection ? '2pt solid orange' : 'none'}}">
+                     outline: {{job == current.activity_report.data.selection ? '2pt solid $selection-highlight-color' : 'none'}}">
           &nbsp;{{job.id}}:{{job.operations[0].operation_type.name}}
         </span>
         <span ng-if="!job.started_same_day">*</span>
