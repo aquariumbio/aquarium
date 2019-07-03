@@ -17,7 +17,6 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    PriorityQueue (0.1.2)
     actionmailer (4.2.11.1)
       actionpack (= 4.2.11.1)
       actionview (= 4.2.11.1)
@@ -61,13 +60,13 @@ GEM
     arel (6.0.4)
     ast (2.4.0)
     aws-eventstream (1.0.3)
-    aws-partitions (1.183.0)
+    aws-partitions (1.184.0)
     aws-sdk (1.7.1)
       httparty (~> 0.7)
       json (~> 1.4)
       nokogiri (>= 1.4.4)
       uuidtools (~> 2.1)
-    aws-sdk-core (3.58.0)
+    aws-sdk-core (3.59.0)
       aws-eventstream (~> 1.0, >= 1.0.2)
       aws-partitions (~> 1.0)
       aws-sigv4 (~> 1.1)
@@ -75,7 +74,7 @@ GEM
     aws-sdk-kms (1.23.0)
       aws-sdk-core (~> 3, >= 3.58.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.44.0)
+    aws-sdk-s3 (1.45.0)
       aws-sdk-core (~> 3, >= 3.58.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.1)
@@ -129,6 +128,7 @@ GEM
     multi_xml (0.6.0)
     multipart-post (2.1.1)
     mysql2 (0.5.2)
+    nio4r (2.3.1)
     nokogiri (1.10.3)
       mini_portile2 (~> 2.4.0)
     octokit (4.13.0)
@@ -146,7 +146,8 @@ GEM
     protected_attributes_continued (1.2.4)
       activemodel (>= 4.0.1, < 6.0)
     public_suffix (3.1.1)
-    puma (3.12.1)
+    puma (4.0.0)
+      nio4r (~> 2.0)
     rack (1.6.11)
     rack-cors (1.0.3)
     rack-test (0.6.3)
@@ -232,7 +233,7 @@ GEM
     tilt (2.0.9)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
-    tzinfo-data (1.2019.1)
+    tzinfo-data (1.2019.2)
       tzinfo (>= 1.0.0)
     unicode-display_width (1.6.0)
     uuidtools (2.1.5)
@@ -249,7 +250,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  PriorityQueue
   activerecord-import
   anemone!
   angular_rails_csrf (= 2.1.1)
@@ -266,7 +266,7 @@ DEPENDENCIES
   oj
   paperclip
   protected_attributes_continued
-  puma (< 4.0)
+  puma
   rack-cors
   rails (= 4.2.11.1)
   rails-patch-json-encode
