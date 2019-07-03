@@ -38,6 +38,7 @@ services:
     image: aquarium
     command: ["development"]
     volumes:
+      - ./lib:/aquarium/lib
       - ./docker/aquarium/database.yml:/aquarium/config/database.yml
       - ./docker/aquarium/aquarium.rb:/aquarium/config/initializers/aquarium.rb
       - ./docker/aquarium/development.rb:/aquarium/config/environments/development.rb
