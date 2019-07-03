@@ -53,7 +53,7 @@ class ProtocolTestBase
   end
 
   def execute
-    manager = Krill::Manager.new(@job.id, true)
+    manager = Krill::Manager.new(@job, true)
     # TODO: could this be initialize?
     @operations.extend(Krill::OperationList)
     @operations.make(role: 'input')

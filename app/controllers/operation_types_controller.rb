@@ -285,7 +285,7 @@ class OperationTypesController < ApplicationController
 
       error = nil
       begin
-        manager = Krill::Manager.new(job.id, true)
+        manager = Krill::Manager.new(job, true)
       rescue Krill::KrillSyntaxError => e
         message = e.message
         logger.error(message)

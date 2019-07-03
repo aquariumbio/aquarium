@@ -10,10 +10,9 @@ module Krill
     # accessible for testing
     attr_reader :thread, :sandbox
 
-    def initialize(jid, debug)
+    def initialize(job, debug)
       # TODO: make this take a Job object as the parameter instead of the ID
 
-      @jid = jid
       @debug = debug
 
       # Start new thread
@@ -21,14 +20,9 @@ module Krill
       @thread_status = ThreadStatus.new
       @thread_status.running = false
 
-      begin
-        job = Job.find(jid)
-      rescue ActiveRecord::RecordNotFound
-        raise "Error: Job #{jid} not found"
-      end
       raise "Error: job #{job.id} has no operations" if job.operations.empty?
 
-      @sandbox = ExecutionSandbox.new(job: job, debug: debug)
+      @sandbox = ExecutionSandbox.new(job: job, debug: debug, mutex: @mutex, thread_status: @thread_status)
     end
 
     ##################################################################################

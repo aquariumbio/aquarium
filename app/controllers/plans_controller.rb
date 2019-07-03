@@ -188,12 +188,16 @@ class PlansController < ApplicationController
     pending = plan.operations.select { |o| o.status == 'pending' && o.precondition_value }
 
     # group them by operation type
-    type_ids = pending.collect(&:operation_type_id).uniq
+    # type_ids = pending.collect(&:operation_type_id).uniq
+    type_ids = pending.group_by { |operation| operation.operation_type }
 
     # batch each group and run a job
-    type_ids.each do |ot_id|
-      ops = pending.select { |op| op.operation_type_id == ot_id }
-      operation_type = OperationType.find(ot_id)
+    #type_ids.each do |ot_id|
+    type_ids.each do |operation_type, ops|
+      # ops = pending.select { |op| op.operation_type_id == ot_id }
+      #operation_type = OperationType.find(ot_id)
+
+      # TODO: protocol test engine
       job, _newops = operation_type.schedule(
         ops,
         current_user,
@@ -202,11 +206,13 @@ class PlansController < ApplicationController
 
       error = nil
 
+      # ????
       job.user_id = current_user.id
       job.save
+      # ????
 
       begin
-        manager = Krill::Manager.new(job.id, true)
+        manager = Krill::Manager.new(job, true)
       rescue Exception => e
         error = e.to_s
       end

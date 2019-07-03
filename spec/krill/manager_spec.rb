@@ -44,7 +44,7 @@ RSpec.describe Krill::Manager do
       user: user
     )
     expect(job).to be_pending
-    manager = Krill::Manager.new(job.id, debug)
+    manager = Krill::Manager.new(job, debug)
     job.reload
     expect(job).to be_pending
     manager.start

@@ -20,10 +20,12 @@ module Krill
         begin
           command = JSON.parse(client.gets, symbolize_names: true)
           run_command(command: command, client: client)
-        rescue JSON::ParseError => e
+        rescue JSON::ParserError => e
           puts "Error parsing Krill client command: #{e}"
           puts e.backtrace
           client.puts({ response: 'error', error: e.to_s + ': ' + e.backtrace[0, 10].to_s }.to_json)
+        rescue Krill::KrillSyntaxError => e
+          client.puts({ response: 'error', error: e.error.to_s }.to_json)
         rescue StandardError => e
           # TODO: consider how to refine the error handling
           # e.g., SystemCallError would handle all system socket errors
@@ -48,8 +50,15 @@ module Krill
       end
 
       jid = command[:jid].to_i if command[:jid]
+      begin
+        job = Job.find(jid)
+      rescue ActiveRecord::RecordNotFound
+        client.puts(response: 'error', error: "Job #{jid} not found")
+        return
+      end
+
       debug = command[:debug] || false
-      @managers[jid] = Manager.new(jid, debug) if command[:operation] == 'start'
+      @managers[jid] = Manager.new(job, debug) if command[:operation] == 'start'
 
       unless @managers[jid]
         message = "Krill Server: Process not found for job #{jid}."

@@ -41,7 +41,14 @@ class KrillController < ApplicationController
 
   def debug
     errors = []
-    @job = Job.find(params[:id])
+    begin
+      @job = Job.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      # raise "Error: Job #{jid} not found"
+      # TODO: change to AqResponse ??
+      render json: { errors: [e] }
+      return
+    end
 
     # if not running, then start
     if @job.pc == Job.NOT_STARTED
@@ -49,7 +56,7 @@ class KrillController < ApplicationController
       @job.save
 
       begin
-        manager = Krill::Manager.new(@job.id, true)
+        manager = Krill::Manager.new(@job, true)
       rescue Exception => e
         error = e
       end
