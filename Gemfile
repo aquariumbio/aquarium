@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.11.1'
 
 # SQL adapter
-gem 'mysql2', '~> 0.4.10'
+gem 'mysql2', '~> 0.5.2'
 
 # Needed for rails 3.2 => 4.0 upgrade
 gem 'protected_attributes_continued'
@@ -22,7 +22,7 @@ gem 'rack-cors', require: 'rack/cors'
 gem 'rubocop'
 
 # For documentation
-gem 'yard'
+gem 'yard', '>= 0.9.20'
 gem 'yard-activerecord'
 
 # Various style related gems
@@ -54,9 +54,8 @@ group :development do
   gem 'ipaddress'
 end
 
-group :production do
-  gem 'puma'
-end
+# constrain puma to older than 4.0 b/c doesn't run on Alpine linux even with openssl
+gem 'puma', '< 4.0'
 
 # Gems used only for assets and not required
 # in production environments by default.

@@ -67,12 +67,11 @@ RSpec.describe Krill::Manager do
   end
 
   it 'expect protocol with operations ref in show to run without error' do
-    skip('not finding operations')
     job = run_protocol(protocol: op_show_protocol, user: test_user)
     expect(job).not_to be_error
     job.operations.each {|operation| expect(operation.status).to eq('done')}
     expect(job).to be_done
-    expect(job.backtrace[1][:content]).to eq([{title: 'blah'}])
+    expect(job.backtrace[1][:content]).to eq([{title: 'blah'}, {note: op_show_protocol.name}])
   end
 end
 
