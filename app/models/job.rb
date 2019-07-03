@@ -130,7 +130,7 @@ class Job < ActiveRecord::Base
     else
       JSON.parse(state)['stack'].first.reject { |k, _v| k == 'user_id' }
     end
-  rescue JSON::ParseError
+  rescue JSON::ParserError
     { error: 'unable to parse arguments' }
   end
 
@@ -307,7 +307,7 @@ class Job < ActiveRecord::Base
   # hides the fact that state is stored as JSON
   def job_state
     JSON.parse(state, symbolize_names: true)
-  rescue JSON::ParseError
+  rescue JSON::ParserError
     # TODO: make this an exception object
     raise "Error: parse error reading state of job #{id}"
   end

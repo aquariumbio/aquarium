@@ -127,7 +127,7 @@ class BrowserController < ApplicationController
     s = Sample.find(params[:id])
     begin
       data = JSON.parse(s.data)
-    rescue JSON::ParseError
+    rescue JSON::ParserError
       data = {}
     end
     data[:note] = (params[:note] == '_EMPTY_' ? '' : params[:note])

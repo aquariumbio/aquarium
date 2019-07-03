@@ -126,7 +126,7 @@ class ObjectType < ActiveRecord::Base
 
     begin
       h = JSON.parse(data, symbolize_names: true)
-    rescue JSON::ParseError
+    rescue JSON::ParserError
       raise "Could not parse data field '#{data}' of object type #{id}. Please go to " \
             "<a href='/object_types/#{id}/edit'>Object Type #{id}</a> and edit the data " \
             'field so that it reads something like { "rows": 10, "columns": 10 }'
