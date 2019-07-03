@@ -1,5 +1,5 @@
-ARG RUBY_VERSION=2.6
-ARG ALPINE_VERSION=3.8
+ARG RUBY_VERSION=2.6.3
+ARG ALPINE_VERSION=3.10
 FROM ruby:${RUBY_VERSION}-alpine${ALPINE_VERSION} AS aquarium
 RUN apk update && apk add \
     bind-tools \
