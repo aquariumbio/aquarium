@@ -10,13 +10,20 @@ module Krill
     delegate :reload, to: :job
 
     # Initializes a new {ExecutionSandbox} object
-    def initialize(job:, debug: false)
+    def initialize(job:, debug: false, mutex: nil, thread_status: nil)
       @job = job
       operation_type = @job.operation_type
-      @protocol = make_protocol(
-        code: operation_type.protocol,
-        debug: debug
-      )
+      base_class_prefix = 'KrillProtocolBase'
+      namespace_prefix = 'ExecutionNamespace'
+      suffix = generate_suffix(length: 32, prefix: base_class_prefix)
+      base_class_name = "#{base_class_prefix}#{suffix}"
+      base_class = make_base(name: base_class_name, debug: debug, mutex: mutex, thread_status: thread_status)
+
+      namespace = Krill.make_namespace(name: "#{namespace_prefix}#{suffix}")
+      namespace.add(code: operation_type.protocol)
+      namespace::Protocol.include(base_class)
+      @protocol = namespace::Protocol.new
+
     rescue SyntaxError => e
       line_number, message = e.message.match(
         /^\(eval\):(\d+): (.+)$/
@@ -64,27 +71,13 @@ module Krill
 
     private
 
-    # Creates an instance of the protocol object in a unique namespace.
-    #
-    # @param code [Code] the
-    # @param debug [Boolean] whether to run protocol in debug mode
-    def make_protocol(code:, debug:)
-      job.reload
-      suffix = generate_suffix(length: 32, prefix: 'KrillProtocolBase')
-      namespace = Krill.make_namespace(name: "ExecutionNamespace#{suffix}")
-      namespace.add(code: code)
-      base_class = make_base(name: "KrillProtocolBase#{suffix}", debug: debug)
-      namespace::Protocol.include(base_class)
-      @protocol = namespace::Protocol.new
-    end
-
     # Creates a new module derived from {Krill::Base} and adds
     # methods `jid`, `input`, and `debug`.
     #
     # @param name [String] the name for the new module
     # @param debug [Boolean] whether to run in debug mode
     # @returns the constructed base module
-    def make_base(name:, debug:)
+    def make_base(name:, debug:, mutex:, thread_status:)
       b = Object.const_set(name, Module.new)
       b.send(:include, Base)
       b.module_eval("def jid; #{@job.id}; end", 'generated_base')
@@ -92,6 +85,16 @@ module Krill
       args = initial_state[0][:arguments]
       b.module_eval("def input; #{args}; end", 'generated_base')
       b.module_eval("def debug; #{debug}; end", 'generated_base') if debug
+
+      manager_mutex = mutex
+      b.send :define_method, :mutex do
+        manager_mutex
+      end
+
+      manager_thread_status = thread_status
+      b.send :define_method, :thread_status do
+        manager_thread_status
+      end
 
       b
     end
