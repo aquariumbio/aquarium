@@ -192,10 +192,10 @@ class PlansController < ApplicationController
     type_ids = pending.group_by { |operation| operation.operation_type }
 
     # batch each group and run a job
-    #type_ids.each do |ot_id|
+    # type_ids.each do |ot_id|
     type_ids.each do |operation_type, ops|
       # ops = pending.select { |op| op.operation_type_id == ot_id }
-      #operation_type = OperationType.find(ot_id)
+      # operation_type = OperationType.find(ot_id)
 
       # TODO: protocol test engine
       job, _newops = operation_type.schedule(

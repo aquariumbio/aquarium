@@ -23,7 +23,6 @@ module Krill
       namespace.add(code: operation_type.protocol)
       namespace::Protocol.include(base_class)
       @protocol = namespace::Protocol.new
-
     rescue SyntaxError => e
       line_number, message = e.message.match(
         /^\(eval\):(\d+): (.+)$/
