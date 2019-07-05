@@ -54,8 +54,9 @@ group :development do
   gem 'ipaddress'
 end
 
-# constrain puma to older than 4.0 b/c doesn't run on Alpine linux even with openssl
-gem 'puma', '< 4.0'
+group :production do
+  gem 'puma'
+end
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -63,8 +64,6 @@ group :assets do
   gem 'bcrypt', '~> 3.1'
   gem 'closure-compiler'
 end
-
-gem 'PriorityQueue'
 
 # Klavins lab gems
 gem 'anemone', :git => 'https://github.com/klavinslab/anemone', tag: 'v1.0.1'

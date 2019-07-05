@@ -20,13 +20,6 @@ services:
       - ./docker/aquarium/production.rb:/aquarium/config/environments/production.rb
       - ./docker/aquarium/production_puma.rb:/aquarium/config/production_puma.rb
 
-  db:
-    environment:
-      MYSQL_DATABASE: production
-      MYSQL_USER: aquarium
-      MYSQL_PASSWORD: aSecretAquarium
-      MYSQL_ROOT_PASSWORD: aSecretAquarium
-
   krill:
     image: aquarium
     command: ["production"]
