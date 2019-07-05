@@ -40,41 +40,13 @@ class KrillController < ApplicationController
   end
 
   def debug
-    errors = []
-    begin
-      @job = Job.find(params[:id])
-    rescue ActiveRecord::RecordNotFound => e
-      # raise "Error: Job #{jid} not found"
-      # TODO: change to AqResponse ??
-      render json: { errors: [e] }
-      return
-    end
-
-    # if not running, then start
-    if @job.pc == Job.NOT_STARTED
-      @job.user_id = current_user.id
-      @job.save
-
-      begin
-        manager = Krill::Manager.new(@job, true)
-      rescue Exception => e
-        error = e
-      end
-
-      if error
-        errors << error
-      else
-        begin
-          manager.start
-        rescue Exception => e
-          errors << e.message
-        end
-      end
-    end
-
-    Operation.step @job.operations.collect { |op| op.plan.operations }.flatten
-
+    @job = Job.find(params[:id])
+    errors = DebugEngine.debug_job(@job)
     render json: { errors: errors, operations: @job.reload.operations, job: @job }
+  rescue ActiveRecord::RecordNotFound => e
+    # raise "Error: Job #{jid} not found"
+    # TODO: change to AqResponse ??
+    render json: { errors: [e] }
   end
 
   def error
