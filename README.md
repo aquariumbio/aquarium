@@ -17,4 +17,5 @@ Aquarium is the operating system of the [UW BIOFAB](http://www.uwbiofab.org), a 
 
 ## Documentation
 
-Documentation, including installation instructions, can be found at [aquarium.bio](http://www.aquarium.bio).
+- User documentation, including installation instructions, can be found at [aquarium.bio](http://www.aquarium.bio).
+- Developer documentation can be found <a href="http://klavinslab.org/aquarium/development/">here</a>.
