@@ -12,40 +12,79 @@ class TestController < ApplicationController
   # Renders an `AqResponse` object indicating the results of the test,
   # distinguishing between protocol and test errors.
   def run
-    operation_type = OperationType.find(params[:id])
-    resp = nil
-
-    ActiveRecord::Base.transaction do
-      begin
-        resp = load_test(code: operation_type.test)
-        if resp.nil?
-          test = ProtocolTest.new(operation_type, current_user)
-          resp = pre_test(test: test)
-          if resp.nil?
-            resp = run_test(test: test)
-            resp = post_test(test: test) if resp.nil?
-          end
-        end
-      rescue Exception => e
-        resp = AqResponse.new
-        resp.error(e.to_s)
-            .more(
-              error_type: 'error',
-              exception_backtrace: e ? e.backtrace : [],
-              backtrace: test ? test.backtrace : [],
-              log: test ? test.logs : []
-            )
-      end
-      raise ActiveRecord::Rollback
+    response = AqResponse.new
+    begin
+      operation_type = OperationType.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      response.error('Operation type not found')
+              .more(
+                error_type: 'error',
+                exception_backtrace: e ? e.backtrace : [],
+                backtrace: test ? test.backtrace : [],
+                log: test ? test.logs : []
+              )
+      render json: response
+      return
     end
 
-    if resp.nil?
-      resp = AqResponse.new.error(
+    begin
+      test = ProtocolTestEngine.run(operation_type: operation_type)
+      if test
+        response.ok(message: 'test complete',
+                    log: test.logs,
+                    backtrace: test.backtrace)
+      end
+    rescue Minitest::Assertion => e
+      response.error("Assertion failed: #{e}")
+              .more(
+                error_type: 'assertion_failure',
+                exception_backtrace: error_trace,
+                backtrace: test ? test.backtrace : [],
+                log: test ? test.logs : []
+              )
+      render json: response
+      return
+    rescue Krill::KrillSyntaxError => e
+      response.error(e.message)
+              .more(
+                error_type: 'test_error',
+                exception_backtrace: e.backtrace,
+                backtrace: [], log: []
+              )
+      render json: response
+      return
+    rescue Krill::KrillError => e
+      response.error(e.message)
+              .more(
+                error_type: 'test_error',
+                exception_backtrace: e.backtrace,
+                backtrace: test ? test.backtrace : [],
+                log: test ? test.logs : []
+              )
+      render json: response
+      return
+    rescue KrillTestError => e
+      response.error(e.message)
+              .more(
+                error_type: 'test_error',
+                exception_backtrace: e.backtrace,
+                backtrace: test.backtrace, log: test.logs
+              )
+      render json: response
+      return
+    end
+
+    if test
+      response.ok(message: 'test complete',
+                  log: test.logs,
+                  backtrace: test.backtrace)
+    elsif response.nil?
+      response = AqResponse.new.error(
         'Internal error: test completed with no response'
       )
     end
 
-    render json: resp
+    render json: response
   end
 
   # Loads the test code.
