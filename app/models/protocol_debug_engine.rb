@@ -1,4 +1,4 @@
-class DebugEngine
+class ProtocolDebugEngine
 
   # from krill_controller
   def self.debug_job(job)
@@ -8,26 +8,40 @@ class DebugEngine
       job.user_id = current_user.id
       job.save
 
-      begin
-        manager = Krill::Manager.new(job, true)
-      rescue Krill::KrillSyntaxError => e
-        error = e
-      end
-
-      if error
-        errors << error
-      else
-        begin
-          manager.start
-        rescue Krill::KrillError => e
-          errors << e.message
-        end
-      end
+      errors = run_job(job: job)
     end
 
     Operation.step @job.operations.collect { |op| op.plan.operations }.flatten
 
     errors
+  end
+
+  # TODO: how does this overlap with test engine?
+  def run_job(job:)
+    errors = []
+    begin
+      manager = Krill::Manager.new(job, true)
+      manager.start
+    rescue Krill::KrillSyntaxError, Krill::KrillError => e
+      errors << e.message
+      ops.each do |op|
+        op.plan.error("Could not start job: #{e}", :job_start)
+      end
+    end
+
+    errors
+  end
+
+  # TODO: consolidate with code in protocol test engine
+  def make_job(operation_type:, operations:, user:)
+    operations.extend(Krill::OperationList)
+    job, _newops = operation_type.schedule(
+      operations,
+      user,
+      Group.find_by_name('technicians')
+    )
+
+    job
   end
 
   # from plan_controller
@@ -47,42 +61,13 @@ class DebugEngine
       # ops = pending.select { |op| op.operation_type_id == ot_id }
       # operation_type = OperationType.find(ot_id)
 
-      # TODO: protocol test engine
-      job, _newops = operation_type.schedule(
-        ops,
-        current_user,
-        Group.find_by_name('technicians')
-      )
+      job = make_job(
+        operation_type: operation_type,
+        operations: ops,
+        user: current_user
+        )
 
-      error = nil
-
-      # ????
-      job.user_id = current_user.id
-      job.save
-      # ????
-
-      begin
-        manager = Krill::Manager.new(job, true)
-      rescue Exception => e
-        error = e.to_s
-      end
-
-      if error
-        errors << error
-
-        ops.each do |op|
-          op.plan.error("Could not start job: #{error}", :job_start)
-        end
-      else
-        begin
-          ops.extend(Krill::OperationList)
-          ops.each(&:run)
-
-          manager.start
-        rescue Exception => e
-          errors << 'Bug encountered while testing: ' + e.message + ' at ' + e.backtrace.join("\n") + '. '
-        end # begin
-      end # if
+      errors = run_job(job: job)
     end # type_ids.each
 
     Operation.step(plan.operations.select { |op| op.status == 'waiting' || op.status == 'deferred' })
