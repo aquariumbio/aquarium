@@ -182,7 +182,7 @@ class PlansController < ApplicationController
 
   def debug
     plan = Plan.find(params[:id])
-    errors = DebugEngine.debug_plan(plan)
+    errors = ProtocolDebugEngine.debug_plan(plan)
     render json: { errors: errors }
   rescue ActiveRecord::RecordNotFound => e
     # raise "Error: plan #{params[:id]} not found"
