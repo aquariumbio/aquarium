@@ -256,14 +256,15 @@ class OperationTypesController < ApplicationController
       render json: { errors: ot[:update_errors] }, status: :unprocessable_entity
       return
     end
-
+    operation_type = ot[:op_type]
+    
     # start a transaction
     ActiveRecord::Base.transaction do
 
       # (re)build the operations
       begin
         operations = if params[:test_operations]
-                       make_test_ops(OperationType.find(params[:id]), params[:test_operations])
+                       make_test_ops(operation_type, params[:test_operations])
                      else
                        []
                      end
@@ -276,7 +277,7 @@ class OperationTypesController < ApplicationController
       operations = operations.select(&:precondition_value) if params[:use_precondition]
 
       # run the protocol
-      operation_type = ot[:op_type]
+
       job = make_job(
         operation_type: operation_type,
         operations: operations,
@@ -329,14 +330,14 @@ class OperationTypesController < ApplicationController
             logger.error(b)
           end
 
-          response = {
+          response = { 
             error: message,
             backtrace: e.error.backtrace
           }
           render json: response, status: :unprocessable_entity
         rescue Krill::KrillSyntaxError => e
           message = "Syntax error in #{e.operation_type.name}: #{e.error.message}"
-          puts "HEY: " + message
+          puts message
           logger.error(message)
           e.error.backtrace.each do |b|
             logger.error(b)
