@@ -24,8 +24,6 @@ module Krill
           puts "Error parsing Krill client command: #{e}"
           puts e.backtrace
           client.puts({ response: 'error', error: e.to_s + ': ' + e.backtrace[0, 10].to_s }.to_json)
-        rescue Krill::KrillSyntaxError => e
-          client.puts({ response: 'error', error: e.error.to_s }.to_json)
         rescue StandardError => e
           # TODO: consider how to refine the error handling
           # e.g., SystemCallError would handle all system socket errors
@@ -57,8 +55,15 @@ module Krill
         return
       end
 
-      debug = command[:debug] || false
-      @managers[jid] = Manager.new(job, debug) if command[:operation] == 'start'
+      begin
+        @managers[jid] = ThreadedManager.new(job) if command[:operation] == 'start'
+      rescue Krill::KrillSyntaxError => e
+        client.puts({ response: 'error', error: e.error.to_s }.to_json)
+        return
+      rescue StandardError => e
+        client.puts(response: 'error', error: e.message)
+        return
+      end
 
       unless @managers[jid]
         message = "Krill Server: Process not found for job #{jid}."
@@ -87,7 +92,7 @@ module Krill
         message = "Krill Server: #{command[:operation]} on job #{jid} " \
                   "resulted in: #{e}: #{e.backtrace[0, 5]}."
         client.puts(response: 'error', error: message)
-        delete_job(jid)
+        delete_job(job_id: jid)
       end
     end
 
