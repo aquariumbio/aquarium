@@ -145,6 +145,37 @@ RSpec.describe Krill::ProtocolSandbox do
     job.operations.each { |operation| expect(operation.status).to eq('error') }
   end
 
+  let(:bad_load_protocol) do
+    create(
+      :operation_type,
+      name: 'bad load',
+      category: 'testing',
+      protocol: 'def again; again; end; again; class Protocol; def main; end; end;',
+      user: test_user
+    )
+  end
+
+  it 'expect protocol with stack overflow in load to have error' do
+    job = create_job(protocol: bad_load_protocol, user: test_user)
+    # TODO: check message
+    expect { Krill::ProtocolSandbox.new(job: job, debug: true) }.to raise_error(Krill::KrillError)
+  end
+
+  let(:bad_load_protocol2) do
+    create(
+      :operation_type,
+      name: 'bad load 2',
+      category: 'testing',
+      protocol: 'exit; class Protocol; def main; end; end;',
+      user: test_user
+    )
+  end
+  it 'expect protocol with exit in load to have error' do
+    job = create_job(protocol: bad_load_protocol2, user: test_user)
+    # TODO: check message
+    expect { Krill::ProtocolSandbox.new(job: job, debug: true) }.to raise_error(Krill::KrillError)
+  end
+
   # A protocol with i/o
   let(:dummy_sample_type) { create(:sample_type, name: 'DummySampleType') }
   let(:dummy_sample) { create(:sample, name: 'DummySample', sample_type: dummy_sample_type) }
