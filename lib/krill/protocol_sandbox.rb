@@ -17,17 +17,21 @@ module Krill
       namespace_prefix = 'ExecutionNamespace'
       suffix = generate_suffix(length: 32, prefix: base_class_prefix)
       base_class_name = "#{base_class_prefix}#{suffix}"
-      base_class = make_base(name: base_class_name, debug: debug, mutex: mutex, thread_status: thread_status)
+      base_class = make_base(
+        name: base_class_name,
+        debug: debug,
+        mutex: mutex,
+        thread_status: thread_status
+      )
 
       namespace = Krill.make_namespace(name: "#{namespace_prefix}#{suffix}")
       namespace.add(code: operation_type.protocol)
       namespace::Protocol.include(base_class)
       @protocol = namespace::Protocol.new
     rescue SyntaxError => e
-      line_number, message = e.message.match(
-        /^\(eval\):(\d+): (.+)$/
-      ).captures
-      message = "#{operation_type.category}/#{operation_type.name}: line #{line_number}: #{message}"
+
+      line_number, message = e.message.match(/^\(eval\):(\d+): (.+)$/m).captures
+      message = "#{operation_type.category}/#{operation_type.name}: line #{line_number}: #{message}".strip
       # TODO: fix this so captures code; currently getting lost
       raise KrillSyntaxError.new(operation_type: operation_type, error: e, message: message)
     end
@@ -83,7 +87,7 @@ module Krill
       initial_state = @job.job_state
       args = initial_state[0][:arguments]
       b.module_eval("def input; #{args}; end", 'generated_base')
-      b.module_eval("def debug; #{debug}; end", 'generated_base') if debug
+      b.module_eval("def debug; #{debug}; end", 'generated_base')
 
       manager_mutex = mutex
       b.send :define_method, :mutex do
