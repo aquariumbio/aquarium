@@ -1,7 +1,14 @@
 # frozen_string_literal: true
 
 module Krill
-  # Look at using https://github.com/ukutaht/safe_ruby here
+  # TODO: Look at using https://github.com/ukutaht/safe_ruby here
+
+  # Defines an execution environment for the protocol of a job.
+  # Loads the protocol into a unique namespace module, and extends the class
+  # with protocol base methods.
+  #
+  # Despite the name, this is not yet a sandbox, so protocols may still
+  # do bad, bad things to the server environment.
   class ProtocolSandbox
     # these are here for observability in tests
     attr_reader :job, :protocol
@@ -9,7 +16,14 @@ module Krill
     delegate :debug, to: :protocol
     delegate :reload, to: :job
 
-    # Initializes a new {ProtocolSandbox} object
+    # Initializes a new {ProtocolSandbox} object.
+    #
+    # @param job [Job] the job
+    # @param debug [TrueClass, FalseClass] whether protocol runs in debug mode
+    # @param mutex [Mutex] lock object for synchronization (nil)
+    # @param thread_status [ThreadStatus] status for manager thread (nil)
+    # @raise [KrillSyntaxError] if the protocol has a syntax error
+    # @raise [KrillError] if loading the protocol has an execution error
     def initialize(job:, debug: false, mutex: nil, thread_status: nil)
       @job = job
       operation_type = @job.operation_type
@@ -23,17 +37,16 @@ module Krill
         mutex: mutex,
         thread_status: thread_status
       )
-
       namespace = Krill.make_namespace(name: "#{namespace_prefix}#{suffix}")
       namespace.add(code: operation_type.protocol)
       namespace::Protocol.include(base_class)
       @protocol = namespace::Protocol.new
     rescue SyntaxError => e
-
       line_number, message = e.message.match(/^\(eval\):(\d+): (.+)$/m).captures
       message = "#{operation_type.category}/#{operation_type.name}: line #{line_number}: #{message}".strip
-      # TODO: fix this so captures code; currently getting lost
       raise KrillSyntaxError.new(operation_type: operation_type, error: e, message: message)
+    rescue StandardError, NoMemoryError, ScriptError, SecurityError, SystemExit, SystemStackError => e
+      raise KrillError.new(job: job, error: e, message: e.message)
     end
 
     # Executes `protocol.main` for the job.
@@ -62,12 +75,16 @@ module Krill
         @job.append_step(operation: 'error', message: e.to_s, backtrace: e.backtrace[0, 10])
         @job.append_step(operation: 'next', time: Time.zone.now, inputs: {})
         @job.append_step(operation: 'aborted', rval: {})
+        raise e if e.is_a?(ProtocolError)
         raise KrillError.new(job: @job, error: e)
       ensure
         @job.save
       end
     end
 
+    # Indicates whether the job has completed.
+    #
+    # @return [TrueClass, FalseClass] true if the job is complete, otherwise false
     def done?
       @job.pc == Job.COMPLETED
     end
@@ -116,12 +133,14 @@ module Krill
     end
   end
 
+  # Exception class for protocol errors
   class ProtocolError < StandardError
     def initialize(message)
       super(message)
     end
   end
 
+  # Exception class for errors during execution of protocols
   class KrillError < StandardError
     attr_reader :job, :error
 
@@ -138,6 +157,7 @@ module Krill
     end
   end
 
+  # Exception class for protocol syntax errors
   class KrillSyntaxError < StandardError
     attr_reader :operation_type, :error
 
