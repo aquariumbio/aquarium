@@ -20,7 +20,7 @@ class ProtocolDebugEngine
   def run_job(job:)
     errors = []
     begin
-      manager = Krill::Manager.new(job, true)
+      manager = Krill::DebugManager(job, true)
       manager.start
     rescue Krill::KrillSyntaxError, Krill::KrillError => e
       errors << e.message
