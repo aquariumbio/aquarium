@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Krill::ExecutionSandbox do
+RSpec.describe Krill::ProtocolSandbox do
   let!(:test_user) { create(:user) }
 
   # A protocol that will cause a NoMemoryError.
@@ -31,7 +31,7 @@ RSpec.describe Krill::ExecutionSandbox do
 
   it 'expect simple protocol to have attributes created with' do
     job = create_job(protocol: simple_protocol, user: test_user)
-    sandbox = Krill::ExecutionSandbox.new(job: job, debug: true)
+    sandbox = Krill::ProtocolSandbox.new(job: job, debug: true)
     expect(sandbox.protocol).to respond_to(:debug)
     expect(sandbox.protocol.debug).to eq(true)
     expect(sandbox.protocol).to respond_to(:input)
@@ -42,7 +42,7 @@ RSpec.describe Krill::ExecutionSandbox do
 
   it 'expect simple protocol to run without error' do
     job = create_job(protocol: simple_protocol, user: test_user)
-    sandbox = Krill::ExecutionSandbox.new(job: job, debug: true)
+    sandbox = Krill::ProtocolSandbox.new(job: job, debug: true)
     expect { sandbox.execute }.not_to raise_error
     expect(job).not_to be_error
     job.operations.each { |operation| expect(operation.status).to eq('done') }
@@ -64,7 +64,7 @@ RSpec.describe Krill::ExecutionSandbox do
 
   it 'expect protocol with reference to operations in show to run without error' do
     job = create_job(protocol: op_show_protocol, user: test_user)
-    sandbox = Krill::ExecutionSandbox.new(job: job, debug: true)
+    sandbox = Krill::ProtocolSandbox.new(job: job, debug: true)
     expect { sandbox.execute }.not_to raise_error
     expect(job).not_to be_error
     job.operations.each { |operation| expect(operation.status).to eq('done') }
@@ -85,7 +85,7 @@ RSpec.describe Krill::ExecutionSandbox do
 
   it 'expect protocol that raises exceptions to have error' do
     job = create_job(protocol: raise_protocol, user: test_user)
-    sandbox = Krill::ExecutionSandbox.new(job: job, debug: true)
+    sandbox = Krill::ProtocolSandbox.new(job: job, debug: true)
     expect { sandbox.execute }.to raise_error(Krill::KrillError)
     expect(job).to be_error
     job.operations.each { |operation| expect(operation.status).to eq('error') }
@@ -104,7 +104,7 @@ RSpec.describe Krill::ExecutionSandbox do
 
   it 'expect protocol that calls exit to have error' do
     job = create_job(protocol: exit_protocol, user: test_user)
-    sandbox = Krill::ExecutionSandbox.new(job: job, debug: true)
+    sandbox = Krill::ProtocolSandbox.new(job: job, debug: true)
     expect { sandbox.execute }.to raise_error(Krill::KrillError)
     expect(job).to be_error
     job.operations.each { |operation| expect(operation.status).to eq('error') }
@@ -123,7 +123,7 @@ RSpec.describe Krill::ExecutionSandbox do
 
   it 'expect protocol with bad syntax to have error when sandbox is created' do
     job = create_job(protocol: bad_syntax_protocol, user: test_user)
-    expect { Krill::ExecutionSandbox.new(job: job, debug: true) }.to raise_error(Krill::KrillSyntaxError)
+    expect { Krill::ProtocolSandbox.new(job: job, debug: true) }.to raise_error(Krill::KrillSyntaxError)
   end
 
   # A protocol that calls a recursive method with a stack overflow
@@ -139,7 +139,7 @@ RSpec.describe Krill::ExecutionSandbox do
 
   it 'expect protocol with stack overflow to have error' do
     job = create_job(protocol: stack_protocol, user: test_user)
-    sandbox = Krill::ExecutionSandbox.new(job: job, debug: true)
+    sandbox = Krill::ProtocolSandbox.new(job: job, debug: true)
     expect { sandbox.execute }.to raise_error(Krill::KrillError)
     expect(job).to be_error
     job.operations.each { |operation| expect(operation.status).to eq('error') }
@@ -178,7 +178,7 @@ RSpec.describe Krill::ExecutionSandbox do
       user: test_user
     )
 
-    sandbox = Krill::ExecutionSandbox.new(job: job, debug: true)
+    sandbox = Krill::ProtocolSandbox.new(job: job, debug: true)
     sandbox.execute
     expect { sandbox.execute }.not_to raise_error
     expect(job).not_to be_error

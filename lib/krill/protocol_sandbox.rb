@@ -2,14 +2,14 @@
 
 module Krill
   # Look at using https://github.com/ukutaht/safe_ruby here
-  class ExecutionSandbox
+  class ProtocolSandbox
     # these are here for observability in tests
     attr_reader :job, :protocol
 
     delegate :debug, to: :protocol
     delegate :reload, to: :job
 
-    # Initializes a new {ExecutionSandbox} object
+    # Initializes a new {ProtocolSandbox} object
     def initialize(job:, debug: false, mutex: nil, thread_status: nil)
       @job = job
       operation_type = @job.operation_type
