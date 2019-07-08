@@ -37,8 +37,8 @@ module Krill
       JSON.parse(answer, symbolize_names: true)
     end
 
-    def start(jid, debug = false)
-      send(operation: 'start', jid: jid, debug: debug)
+    def start(jid)
+      send(operation: 'start', jid: jid)
     end
 
     def jobs
