@@ -86,8 +86,6 @@ RSpec.describe Krill::DebugManager do
     expect { run_protocol(protocol: raise_protocol, user: test_user) }.to raise_error(Krill::KrillError)
   end
 
-  it 'expect protocol with correct i/o to run'
-
   def build_plan(operations:, user_id:)
     plans = []
     operations.each do |op|
