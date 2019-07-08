@@ -69,12 +69,8 @@ RSpec.describe OperationTypesController, type: :controller do
 
       response_hash = JSON.parse(@response.body, symbolize_names: true)
 
-      expect(response_hash[:error]).to be_nil
-      puts response_hash[:error]
-      expect(response_hash[:operations]).not_to be_nil
-      response_hash[:operations].each do |op|
-        assert_equal 'done', op[:status]
-      end
+      expect(response_hash[:error]).to eq("testing/bad_syntax: line 1: syntax error, unexpected '=', expecting end\nclass Protocol; def main; 1=2; end; end\n                           ^")
+      expect(response_hash[:operations]).to be_nil
     end
 
   end
