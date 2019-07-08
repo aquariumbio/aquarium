@@ -63,7 +63,7 @@ module Krill
     # Waits for the number of seconds while the thread is still running.
     #
     # @param secs [Integer] the number of seconds to wait
-    # @return [String] 'done' if execution is complete, 
+    # @return [String] 'done' if execution is complete,
     def wait(secs)
       n = 0
       running = true
@@ -82,7 +82,6 @@ module Krill
 
       'ready'
     end
-
 
     # Checks status of the job.
     #

@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 class ProtocolDebugEngine
 
   # from krill_controller
   def self.debug_job(job)
     errors = []
-     # if not running, then start
-     if job.pc == Job.NOT_STARTED
+    # if not running, then start
+    if job.pc == Job.NOT_STARTED
       job.user_id = current_user.id
       job.save
 
@@ -53,7 +55,7 @@ class ProtocolDebugEngine
 
     # group them by operation type
     # type_ids = pending.collect(&:operation_type_id).uniq
-    type_ids = pending.group_by { |operation| operation.operation_type }
+    type_ids = pending.group_by(&:operation_type)
 
     # batch each group and run a job
     # type_ids.each do |ot_id|
@@ -65,7 +67,7 @@ class ProtocolDebugEngine
         operation_type: operation_type,
         operations: ops,
         user: current_user
-        )
+      )
 
       errors = run_job(job: job)
     end # type_ids.each

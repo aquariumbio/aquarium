@@ -76,6 +76,7 @@ module Krill
         @job.append_step(operation: 'next', time: Time.zone.now, inputs: {})
         @job.append_step(operation: 'aborted', rval: {})
         raise e if e.is_a?(ProtocolError)
+
         raise KrillError.new(job: @job, error: e)
       ensure
         @job.save

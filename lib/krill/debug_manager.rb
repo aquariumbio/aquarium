@@ -3,7 +3,7 @@
 module Krill
 
   # Manages execution of a job in debug mode.
-  # 
+  #
   # For threaded execution used in technician interface, see {ThreadedManager}.
   class DebugManager
     # accessible for testing
