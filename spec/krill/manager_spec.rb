@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Krill::Manager do
+RSpec.describe Krill::DebugManager do
   let!(:test_user) { create(:user) }
   let(:simple_protocol) do
     create(
@@ -32,7 +32,7 @@ RSpec.describe Krill::Manager do
     )
   end
 
-  def run_protocol(protocol:, user:, debug: true)
+  def run_protocol(protocol:, user:)
     operations = make_operations_list(
       operation_type: protocol,
       user_id: user.id
@@ -44,7 +44,7 @@ RSpec.describe Krill::Manager do
       user: user
     )
     expect(job).to be_pending
-    manager = Krill::Manager.new(job, debug)
+    manager = Krill::DebugManager.new(job)
     job.reload
     expect(job).to be_pending
     manager.start
