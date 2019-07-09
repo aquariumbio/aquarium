@@ -99,10 +99,10 @@
 
         <md-input-container>
           <label>Email Address</label>
-          <input name='email' ng-model="user.params.email.value" ng-change="user.changed = true" minlength="6" maxlength="10" ng-pattern="/^.+@.+\..+$/">
+          <input name='email' ng-model="user.params.email.value" ng-change="user.changed = true" minlength="6" maxlength="255" ng-pattern="/^.+@.+\..+$/">
           <div ng-messages="email.$error"></div>
           <div ng-messages="!email.$error">
-            <div ng-message-exp="['minlength', 'maxlength']">Your email must be between 6 and 10 characters long.</div>
+            <div ng-message-exp="['minlength', 'maxlength']">Your email must be 6 to 255 characters long.</div>
             <div ng-message='pattern'>Your email must look like a valid e-mail address.</div>
             </div>
         </md-input-container>
