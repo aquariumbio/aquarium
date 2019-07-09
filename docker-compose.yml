@@ -36,6 +36,11 @@ services:
   db:
     image: mysql:5.7
     restart: always
+    environment:
+      MYSQL_DATABASE: production
+      MYSQL_USER: aquarium
+      MYSQL_PASSWORD: aSecretAquarium
+      MYSQL_ROOT_PASSWORD: aSecretAquarium
     volumes:
       - ./docker/db:/var/lib/mysql
       - ./docker/mysql_init/dump.sql:/docker-entrypoint-initdb.d/dump.sql
@@ -48,11 +53,7 @@ services:
       - aquarium_net
     expose:
       - "3500"
-    environment:
-      MYSQL_DATABASE: production
-      MYSQL_USER: aquarium
-      MYSQL_PASSWORD: aSecretAquarium
-      MYSQL_ROOT_PASSWORD: aSecretAquarium
+
     depends_on:
       - db
       - app
