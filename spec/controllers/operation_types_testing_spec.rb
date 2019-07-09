@@ -18,7 +18,7 @@ RSpec.describe OperationTypesController, type: :controller do
       user: test_user
     )
   end
-  let(:dummy_item) do
+  let!(:dummy_item) do
     create(:item, sample_id: dummy_sample.id, object_type_id: dummy_object_type.id)
   end
 
@@ -28,9 +28,6 @@ RSpec.describe OperationTypesController, type: :controller do
 
     it "test for correct protocol completes without error" do
       cookies[token_name] = User.find(1).remember_token
-
-      # this shouldn't be necessary, but item isn't saved if not touched.
-      dummy_item.save
 
       get :random, id: io_protocol.id, num: 3
 
