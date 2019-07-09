@@ -137,7 +137,7 @@ class OperationTypesController < ApplicationController
       render json: operation_type.as_json(methods: %i[field_types protocol precondition cost_model documentation]),
              status: :ok
     else
-      render json: { errors: ot[:update_errors] },
+      render json: { error: ot[:update_errors] },
              status: :unprocessable_entity
     end
   end
@@ -253,11 +253,11 @@ class OperationTypesController < ApplicationController
     # save the operaton
     ot = update_from_ui params, false
     unless ot[:update_errors].empty?
-      render json: { errors: ot[:update_errors] }, status: :unprocessable_entity
+      render json: { error: ot[:update_errors] }, status: :unprocessable_entity
       return
     end
     operation_type = ot[:op_type]
-    
+
     # start a transaction
     ActiveRecord::Base.transaction do
 
@@ -269,7 +269,11 @@ class OperationTypesController < ApplicationController
                        []
                      end
       rescue StandardError => e
-        render json: { errors: [e.to_s] }, status: :unprocessable_entity
+        response = {
+          error: e.message,
+          backtrace: e.backtrace
+        }
+        render json: response, status: :unprocessable_entity
         raise ActiveRecord::Rollback
       end
 
@@ -284,9 +288,8 @@ class OperationTypesController < ApplicationController
         user: current_user
       )
 
-      error = nil
       begin
-        manager = Krill::Manager.new(job, true)
+        manager = Krill::DebugManager.new(job)
       rescue Krill::KrillSyntaxError => e
         message = e.message
         logger.error(message)
@@ -299,68 +302,64 @@ class OperationTypesController < ApplicationController
           backtrace: e.error.backtrace
         }
         render json: response, status: :unprocessable_entity
-        # TODO: rework this code so that don't have return here
-        return
+        raise ActiveRecord::Rollback
       rescue ScriptError, SystemStackError, StandardError => e
-        error = e
-      end
-
-      if error
         response = {
           error: error.message,
           backtrace: error.backtrace
         }
         render json: response,
                status: :unprocessable_entity
-      else
-        begin
-          execute(operations: operations, manager: manager)
+        raise ActiveRecord::Rollback
+      end
 
-          # render the resulting data including the job and the operations
-          response = {
-            operations: operations.as_json(methods: %i[field_values associations]),
-            plans: plans.collect { |p| p.as_json(include: :operations, methods: %i[associations costs]) },
-            job: job.reload
-          }
-          render json: response, status: :ok
-        rescue Krill::KrillError => e
-          message = 'Error while executing test: ' + e.error.message
-          logger.error(message)
-          e.error.backtrace.each do |b|
-            logger.error(b)
-          end
+      begin
+        execute(operations: operations, manager: manager)
 
-          response = { 
-            error: message,
-            backtrace: e.error.backtrace
-          }
-          render json: response, status: :unprocessable_entity
-        rescue Krill::KrillSyntaxError => e
-          message = "Syntax error in #{e.operation_type.name}: #{e.error.message}"
-          puts message
-          logger.error(message)
-          e.error.backtrace.each do |b|
-            logger.error(b)
-          end
-
-          response = {
-            error: message,
-            backtrace: e.error.backtrace
-          }
-          render json: response, status: :unprocessable_entity
-        rescue Exception => e
-          logger.error 'Bug encountered while testing: ' + e.message + ' -- ' + e.backtrace.to_s
-
-          e.backtrace.each do |b|
-            logger.error b
-          end
-
-          response = {
-            error: 'Bug encountered while testing: ' + e.message + ' at ' + e.backtrace.join("\n") + '. ',
-            backtrace: e.backtrace
-          }
-          render json: response, status: :unprocessable_entity
+        # render the resulting data including the job and the operations
+        response = {
+          operations: operations.as_json(methods: %i[field_values associations]),
+          plans: plans.collect { |p| p.as_json(include: :operations, methods: %i[associations costs]) },
+          job: job.reload
+        }
+        render json: response, status: :ok
+      rescue Krill::KrillError => e
+        message = 'Error while executing test: ' + e.error.message
+        logger.error(message)
+        e.error.backtrace.each do |b|
+          logger.error(b)
         end
+
+        response = {
+          error: message,
+          backtrace: e.error.backtrace
+        }
+        render json: response, status: :unprocessable_entity
+      rescue Krill::KrillSyntaxError => e
+        message = "Syntax error in #{e.operation_type.name}: #{e.error.message}"
+        puts message
+        logger.error(message)
+        e.error.backtrace.each do |b|
+          logger.error(b)
+        end
+
+        response = {
+          error: message,
+          backtrace: e.error.backtrace
+        }
+        render json: response, status: :unprocessable_entity
+      rescue Exception => e
+        logger.error 'Bug encountered while testing: ' + e.message + ' -- ' + e.backtrace.to_s
+
+        e.backtrace.each do |b|
+          logger.error b
+        end
+
+        response = {
+          error: 'Bug encountered while testing: ' + e.message + ' at ' + e.backtrace.join("\n") + '. ',
+          backtrace: e.backtrace
+        }
+        render json: response, status: :unprocessable_entity
       end
       # rollback the transaction so test data is not added to the inventory
       raise ActiveRecord::Rollback
