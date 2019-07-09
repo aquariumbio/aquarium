@@ -1,3 +1,5 @@
+
+
 <script type="text/ng-template" id="operation-list-report">
 
   <div class='oplist' style="padding: none; margin: none">
@@ -14,7 +16,7 @@
 
       <tr ng-repeat="op in operations">
 
-        <td style="color: {{op.status == 'done' ? 'black' : 'orange'}}">{{op.id}}</td>
+        <td style="color: {{op.status == 'done' ? 'black' : '$selection-highlight-color'}}">{{op.id}}</td>
 
         <td>
           <a ng-repeat="plan in op.plans" 

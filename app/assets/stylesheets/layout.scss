@@ -1,5 +1,6 @@
-.aq2 {
+@import "variables";
 
+.aq2 {
   /*  ::-webkit-scrollbar {
       width: 0px; 
   }*/
@@ -12,12 +13,12 @@
   .aq2-navigation {
     position: relative;
     min-height: calc(100vh - 44px);
-    max-height: calc(100vh - 44px);  
-    transform: none !important; 
+    max-height: calc(100vh - 44px);
+    transform: none !important;
   }
 
   .site-sidenav {
-    background: #106CC8 !important;
+    background: #106cc8 !important;
     color: white;
     border-right: 1pt solid #aaa;
     transform: none !important;
@@ -28,12 +29,11 @@
   }
 
   .main-toolbar {
-
     transform: none !important;
 
-    background-color: #106CC8;
+    background-color: #106cc8;
     background: -webkit-linear-gradient(#185694, #106cc8);
-    background: linear-gradient(#185694, #106cc8);
+    background: linear-gradient($main-navbar-color, $sub-navbar-color);
 
     max-height: 44px !important;
     min-height: 44px !important;
@@ -47,9 +47,8 @@
     }
 
     .aq2-logo {
-
       .aquarium {
-        color: rgb(0,255,34);
+        color: rgb(0, 255, 34);
         font-size: 22pt;
         font-weight: bold;
         padding: 0;
@@ -58,14 +57,14 @@
         height: 20pt;
         &:hover {
           text-decoration: none;
-        };
+        }
       }
 
       .version {
-        color: #308CE8;
+        color: #308ce8;
         margin: 0;
         padding: 0;
-        font-size: 12pt;  
+        font-size: 12pt;
         line-height: 10pt;
         height: 10pt;
       }
@@ -73,7 +72,7 @@
       .instance {
         color: #eee;
         margin: 0;
-        font-size: 11pt;  
+        font-size: 11pt;
         padding: 0;
         margin: 0;
         line-height: 10pt;
@@ -83,7 +82,7 @@
       .mode {
         color: #eee;
         margin: 0;
-        font-size: 11pt; 
+        font-size: 11pt;
         padding: 0;
         margin: 0;
         line-height: 10pt;
@@ -91,22 +90,20 @@
       }
 
       .top {
-
       }
 
       .bottom {
         margin-top: -5px;
       }
-
     }
 
     .login {
-      color: rgb(0,255,34);
-    }    
+      color: rgb(0, 255, 34);
+    }
 
     .detail-menu {
       margin-right: 16px;
-      fill: #50ACFF;
+      fill: rgba(255, 255, 255, 0.87);
     }
 
     .md-button {
@@ -114,10 +111,9 @@
         &:hover {
           color: #eee;
           text-decoration: none;
-        };
+        }
       }
     }
-
   }
 
   .page-specific-nav {
@@ -130,18 +126,18 @@
   }
 
   .main {
-    padding: 0px; 
-    background: white; 
+    padding: 0px;
+    background: white;
     width: calc(100vw - 320px);
-    height: 100%;   
+    height: 100%;
   }
 
   .main-plain {
-    padding: 0px; 
-    background: white; 
+    padding: 0px;
+    background: white;
     width: 100vw;
     height: 100%;
-  }  
+  }
 
   .specific-toolbar {
     border-bottom: 1px solid #ddd;
@@ -150,11 +146,11 @@
     max-width: 100%;
     min-width: 100%;
     padding-right: 10px;
-    transform: none !important;   
-    z-index: 0; 
+    transform: none !important;
+    z-index: 0;
   }
 
-  .content-container {   
+  .content-container {
   }
 
   .left-margin {
@@ -164,5 +160,4 @@
   .clickable {
     cursor: pointer;
   }
-
 }

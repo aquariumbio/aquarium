@@ -28,7 +28,7 @@ AQ.init = function(http) {
             elapsed = new Date() - start_time;
         AQ.check_signed_in(result);
         console.log(`%cGET %c${url} completed in %c${elapsed} ms`, 
-                    "font-weight: bold", "font-weight: normal", "color: orange");
+                    "font-weight: bold", "font-weight: normal", "color: $selection-highlight-color");
         return result;
       })
 
@@ -45,7 +45,7 @@ AQ.init = function(http) {
             elapsed = new Date() - start_time;
         AQ.check_signed_in(result);
         console.log(`%cPOST %c${url}, ${data} ... completed in %c${elapsed} ms`, 
-                    "font-weight: bold", "font-weight: normal","color: orange");
+                    "font-weight: bold", "font-weight: normal","color: $selection-highlight-color");
         return result;
       })
 
@@ -61,7 +61,7 @@ AQ.init = function(http) {
             elapsed = new Date() - start_time;
         AQ.check_signed_in(result);
         console.log(`%cPUT %c${url}, completed in %c${elapsed} ms`, 
-                    "font-weight: bold", "font-weight: normal","color: orange");
+                    "font-weight: bold", "font-weight: normal","color: $selection-highlight-color");
         return result;
       })
 

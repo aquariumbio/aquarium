@@ -1,11 +1,12 @@
-.user {
+@import 'variables';
 
+.user {
   .selected-view {
-    background: #80d8ff;
+    background: $view-selection-color;
   }
 
   .warning {
-    background: yellow;
+    background: #d2f8d2;
     color: black !important;
   }
 
@@ -19,15 +20,14 @@
   }
 
   .not-up-to-date {
-    background: lightyellow;
+    background: $selection-highlight-color;
     padding: 10px;
   }
-
 }
 
 .user-op-stats {
   margin-top: 10px;
-  .user-op-stat {  
+  .user-op-stat {
     margin: 2pt;
   }
   .name {
@@ -40,13 +40,13 @@
   }
   .name-subdued {
     width: 25%;
-    height: 20px;    
+    height: 20px;
     font-weight: normal;
     text-align: right;
     display: inline-block;
     color: #aaa;
     overflow: hidden;
-  }  
+  }
   .done {
     display: inline-block;
     background: lightgreen;
@@ -54,10 +54,69 @@
   }
   .error {
     display: inline-block;
-    background: orange;
-    margin: 0;    
-  }  
-  .number {
-    display: inline-block;  
+    background: $selection-highlight-color;
+    margin: 0;
   }
+  .number {
+    display: inline-block;
+  }
+}
+
+.md-raised.md-button {
+  color: $button-color;
+}
+
+.md-button.md-primary.md-raised {
+  background-color: $button-color;
+}
+
+.md-button.md-raised[disabled] {
+  background-color: lightgray;
+}
+
+.md-button.md-raised.md-primary:not([disabled]):hover {
+  background-color: $button-color;
+}
+
+.md-button.md-raised.md-primary:not([disabled]):active {
+  background-color: $sub-navbar-color;
+}
+
+// Style for the 'Copy' Button
+#developer_def {
+  font-size: 12px;
+  min-width: 50px;
+}
+
+// Style for the sub-navbar-color in Developer Tab
+md-nav-bar md-nav-ink-bar {
+  background-color: $sub-navbar-color;
+  height: 3px;
+}
+
+.md-button.md-accent {
+  color: $sub-navbar-color;
+}
+
+// Style for switch on/off buttons
+md-switch.md-checked:not([disabled]) .md-bar,
+md-switch.md-checked:not([disabled]).md-primary .md-bar {
+  background-color: $view-selection-color;
+}
+
+md-switch.md-checked:not([disabled]) .md-thumb,
+md-switch.md-checked:not([disabled]).md-primary .md-thumb {
+  background-color: $button-color;
+}
+
+// Style for the main navbar
+.aq2 .main-toolbar .underlined {
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+// Style for 'Import Workflows' tab's buttons
+md-radio-button:not([disabled]).md-primary .md-on {
+  background-color: $button-color;
 }
