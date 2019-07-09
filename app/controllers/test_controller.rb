@@ -45,7 +45,7 @@ class TestController < ApplicationController
     rescue Krill::KrillSyntaxError => e
       response.error(e.message)
               .more(
-                error_type: 'syntax_error',
+                error_type: 'protocol_syntax_error',
                 exception_backtrace: e.backtrace,
                 backtrace: [], log: []
               )
@@ -53,6 +53,14 @@ class TestController < ApplicationController
       response.error(e.message)
               .more(
                 error_type: 'protocol_error',
+                exception_backtrace: e.backtrace,
+                backtrace: test ? test.backtrace : [],
+                log: test ? test.logs : []
+              )
+    rescue KrillTestSyntaxError => e
+      response.error(e.message)
+              .more(
+                error_type: 'test_syntax_error',
                 exception_backtrace: e.backtrace,
                 backtrace: test ? test.backtrace : [],
                 log: test ? test.logs : []
