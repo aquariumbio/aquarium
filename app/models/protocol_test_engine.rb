@@ -71,8 +71,11 @@ class ProtocolTestEngine
     # TODO: this should be sandboxed
     operation_type.test.load(binding: empty_binding, source_name: '(eval)')
     ProtocolTest.new(operation_type, user)
-  rescue ScriptError, StandardError => e
-    # TODO: revisit
+  rescue SyntaxError => e
+    line_number, message = e.message.match(/^\(eval\):(\d+): (.+)$/m).captures
+      message = "#{operation_type.category}/#{operation_type.name}: line #{line_number}: #{message}".strip
+    raise KrillTestSyntaxError.new(message: message, error: e)
+  rescue StandardError, NoMemoryError, ScriptError, SecurityError, SystemExit, SystemStackError => e
     raise KrillTestError.new(message: "Error while loading test: #{e.message}", error: e)
   end
 
@@ -80,26 +83,7 @@ class ProtocolTestEngine
   #
   # @param test [ProtocolTest] the test object
   def self.pre_test(test:)
-    begin
       test.setup
-    rescue ScriptError => e
-      message = if e.message.match(/^\(eval\):\d+: .+$/)
-                  line_number, message = e.message.match(
-                    /^\(eval\):(\d+): (.+)$/
-                  ).captures
-                  "Test line #{line_number}: #{message}"
-                else
-                  "Error during setup: #{e.class} #{e.message}"
-                end
-      raise KrillTestError.new(
-        message: message,
-        error_type: 'test_error',
-        error: e
-      )
-    rescue SystemStackError, StandardError => e
-      raise KrillTestError.new(message: 'Error in setup', error: e)
-    end
-    raise KrillTestError.new(message: 'No operations after test setup') unless test.operations_present?
   end
 
   # Runs the protocol under test.
@@ -107,24 +91,6 @@ class ProtocolTestEngine
   # @param test [ProtocolTest] the test object
   def self.run_test(test:)
     test.run
-  rescue ScriptError => e
-    message = if e.message.match(/^\(eval\):\d+: .+$/)
-                line_number, message = e.message.match(
-                  /^\(eval\):(\d+): (.+)$/
-                ).captures
-                "Test line #{line_number}: #{message}"
-              else
-                "Error while running protocol: #{e.class} #{e.message}"
-              end
-    raise KrillTestError.new(
-      message: message,
-      error_type: 'test_error',
-      error: e
-    )
-  rescue Krill::KrillError => e
-    raise e
-  rescue SystemStackError, StandardError => e
-    raise KrillTestError.new(message: 'Error running protocol', error: e)
   end
 
   # Runs the test `analyze` method.
@@ -132,24 +98,6 @@ class ProtocolTestEngine
   # @param test [ProtocolTest] the test object
   def self.post_test(test:)
     test.analyze
-  rescue Minitest::Analyze => e
-    raise e
-  rescue ScriptError => e
-    message = if e.message.match(/^\(eval\):\d+: .+$/)
-                line_number, message = e.message.match(
-                  /^\(eval\):(\d+): (.+)$/
-                ).captures
-                "Test line #{line_number}: #{message}"
-              else
-                "Error during analysis: #{e.class} #{e.message}"
-              end
-    raise KrillTestError.new(
-      message: message,
-      error_type: 'test_error',
-      error: e
-    )
-  rescue SystemStackError, StandardError => e
-    raise KrillTestError(e)
   end
 
   # Run the test for the given operation type.
@@ -160,9 +108,9 @@ class ProtocolTestEngine
     test = nil
     ActiveRecord::Base.transaction do
       test = load_test(operation_type: operation_type, user: user)
-      pre_test(test: test)
-      run_test(test: test)
-      post_test(test: test)
+      test.setup
+      test.run
+      test.analyze
       raise ActiveRecord::Rollback
     end
 
@@ -231,6 +179,15 @@ class ProtocolTestEngine
 end
 
 class KrillTestError < StandardError
+  attr_reader :error
+
+  def initialize(message:, error:)
+    @error = error
+    super(message)
+  end
+end
+
+class KrillTestSyntaxError < StandardError
   attr_reader :error
 
   def initialize(message:, error:)
