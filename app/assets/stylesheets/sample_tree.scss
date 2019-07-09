@@ -1,3 +1,5 @@
+@import "variables";
+
 $sampleTypeCellHeight: 14px;
 
 .st {
@@ -74,7 +76,7 @@ $sampleTypeCellHeight: 14px;
   }
 
   .selected {
-    background: yellow;
+    background: $selection-highlight-color;
   }
 
   .app {

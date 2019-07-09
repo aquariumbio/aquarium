@@ -1,14 +1,14 @@
-.collection-editor {
+@import "variables";
 
+.collection-editor {
   position: relative;
 
   table {
-
     table-layout: fixed;
     width: calc(100% - 1px);
     margin-bottom: 3px;
     td {
-      border: 5px solid black; 
+      border: 5px solid black;
     }
     tr:first-child td {
       border-top: 0;
@@ -50,7 +50,6 @@
       width: 50%;
       outline: 2pt dashed red;
     }
-
   }
 
   .selection-box {
@@ -74,7 +73,6 @@
       }
     }
   }
-
 }
 
 .collection {
@@ -85,7 +83,7 @@
 .part {
   width: 20px;
   height: 20px;
-  margin: 3px; 
+  margin: 3px;
   display: inline;
   float: left;
   line-height: 1;
@@ -115,15 +113,12 @@
 
 .plain {
   list-style-type: none;
-  padding:0;
+  padding: 0;
   margin: 10px 0 0 0;
 }
 
-
 .select-root {
-
   .select-column {
-
     ul {
       border-left: 1pt solid #aaa;
       height: 100%;
@@ -133,7 +128,7 @@
     }
 
     .btn {
-      margin-left: 3px;;
+      margin-left: 3px;
     }
 
     h1 {
@@ -141,11 +136,10 @@
       text-align: left;
       letter-spacing: 0em;
     }
-
   }
 
   .select-link {
-    cursor: pointer; 
+    cursor: pointer;
     cursor: hand;
     color: #999;
     padding: 1pt 5pt 1pt 5pt;
@@ -154,10 +148,9 @@
   }
 
   .selected {
-     color: #000;
-     background: yellow;
+    color: #000;
+    background: $selection-highlight-color;
   }
-
 }
 
 .infobox {

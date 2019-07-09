@@ -88,7 +88,7 @@
     <div layout="row">
       <md-button class="md-raised" 
                  ng-click="check_repo()"
-                 ng-disabled="state.working">Use Repo</md-button>
+                 ng-disabled="num_objects() == 0 || state.working">Use Repo</md-button>
     </div>
 
     <br>
