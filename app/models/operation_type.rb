@@ -136,6 +136,14 @@ class OperationType < ActiveRecord::Base
     code('test')
   end
 
+  def add_test(content:, user:)
+    if test
+      test.commit(content, user)
+    else
+      new_code('test', content, user)
+    end
+  end
+
   # TODO: this should be a Job factory method
   def schedule_aux(ops, user, group, opts = {})
     job = Job.new
