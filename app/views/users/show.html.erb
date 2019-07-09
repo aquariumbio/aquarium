@@ -89,30 +89,30 @@
 
         <md-input-container>
           <label>Full Name</label>
-          <input name="fullname" required ng-model="user.name" md-maxlength="15" ng-change="user.changed = true">
+          <input name="fullname" required ng-model="user.name" md-maxlength="255" ng-change="user.changed = true">
           <div ng-messages="fullname.$error"></div>
           <div ng-messages="!fullname.$error">
             <div ng-message="required">This is required.</div>
-            <div ng-message="md-maxlength">The user name must be less than 35 characters long.</div>
+            <div ng-message="md-maxlength">The user name must be less than 255 characters long.</div>
         </div>
         </md-input-container>
 
         <md-input-container>
           <label>Email Address</label>
-          <input name='email' ng-model="user.params.email.value" ng-change="user.changed = true" minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/">
+          <input name='email' ng-model="user.params.email.value" ng-change="user.changed = true" minlength="6" maxlength="10" ng-pattern="/^.+@.+\..+$/">
           <div ng-messages="email.$error"></div>
           <div ng-messages="!email.$error">
-            <div ng-message-exp="['minlength', 'maxlength']">Your email must be between 10 and 100 characters long.</div>
+            <div ng-message-exp="['minlength', 'maxlength']">Your email must be between 6 and 10 characters long.</div>
             <div ng-message='pattern'>Your email must look like a valid e-mail address.</div>
             </div>
         </md-input-container>
         
         <md-input-container>
           <label>Phone Number</label>
-          <input name='phone' ng-model="user.params.phone.value" ng-change="user.changed = true" ng-pattern="/^[0-9]{3}[-][0-9]{3}-[0-9]{4}$/">
+          <input name='phone' ng-model="user.params.phone.value" ng-change="user.changed = true" ng-pattern="number">
           <div ng-messages="phone.$error"></div>
           <div ng-messages="!phone.$error">
-            <div ng-message="pattern">###-###-#### - Please enter a valid phone number.</div>
+            <div ng-message="pattern">Please enter a valid phone number.</div>
           </div>
         </md-input-container>        
         </md-input-container>    
