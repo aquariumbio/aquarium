@@ -16,7 +16,7 @@ FactoryBot.define do
 
     after(:create) do |operation_type, evaluator|
       if evaluator.protocol && evaluator.user
-        operation_type.add_protocol(content: evaluator.protocol, user: evaluator.user) 
+        operation_type.add_protocol(content: evaluator.protocol, user: evaluator.user)
         operation_type.add_cost_model(content: evaluator.cost_model, user: evaluator.user)
         operation_type.add_precondition(content: evaluator.precondition, user: evaluator.user)
       end

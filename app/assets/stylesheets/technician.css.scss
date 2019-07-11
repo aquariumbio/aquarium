@@ -1,3 +1,5 @@
+@import 'variables';
+
 $title-bottom-margin: 24px;
 $bottom-margin: 12px;
 
@@ -53,7 +55,7 @@ $bottom-margin: 12px;
   }
 
   .not-found {
-    color: orange;
+    color: $selection-highlight-color;
     font-weight: bold;
   }
 
@@ -67,7 +69,7 @@ $bottom-margin: 12px;
     left: 0;
     color: white;
     font-weight: bold;
-    background: orange;
+    background: $selection-highlight-color;
     width: 90px;
     height: 64px;
     margin-right: 10px;
@@ -96,7 +98,7 @@ $bottom-margin: 12px;
 
     .technician-warning {
       color: black;
-      background: yellow;
+      background: #d2f8d2;
       font-weight: bold;
       display: inline-block;
       border: 1pt solid #aaa;
@@ -105,7 +107,7 @@ $bottom-margin: 12px;
     }
 
     .technician-error {
-      color: orange;
+      color: $selection-highlight-color;
       font-weight: bold;
       // background: orange;
       display: inline-block;
@@ -188,7 +190,7 @@ $bottom-margin: 12px;
       }
 
       .selected {
-        background: yellow;
+        background: $selection-highlight-color;
       }
 
     }
@@ -243,7 +245,7 @@ $bottom-margin: 12px;
     }
 
     .td-null-cell {
-      background: yellow;
+      background: $selection-highlight-color;
     }
 
     .td-filled-slot {

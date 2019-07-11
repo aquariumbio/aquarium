@@ -14,9 +14,10 @@ production:
   database: production
   pool: 100
 
+# use the same name to avoid issues with switching env in docker
 development:
   <<: *default
-  database: development # the name of the MySQL database to use
+  database: production 
   pool: 5
 
 test:

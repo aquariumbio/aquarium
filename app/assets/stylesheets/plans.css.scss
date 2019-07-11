@@ -1,3 +1,5 @@
+@import "variables";
+
 .plans {
 
   .opeditbar {
@@ -15,7 +17,7 @@
 
   .message {
     padding: 10px;
-    background: lightyellow;
+    background: $selection-highlight-color;
     position: relative;
     border: 1pt solid #eee;
     padding-right: 20px;  
@@ -130,7 +132,7 @@
   .op-selected {
     fill: azure;  
     stroke-width: 2; 
-    box-shadow: 10px 10px 5px yellow;
+    box-shadow: 10px 10px 5px $selection-highlight-color;
   }
 
   .op-active {
@@ -259,7 +261,7 @@
 
 
   .field-value-invalid {
-    fill: orange;
+    fill: $selection-highlight-color;
   }  
 
   .parameter {
@@ -274,7 +276,7 @@
   }  
 
   .parameter-has-no-value {
-    fill: orange;
+    fill: $selection-highlight-color;
   }    
 
   .wire, .wire-selected {
@@ -291,7 +293,7 @@
 
   .wire-inconsistent {
     /*stroke-width: 2.0;*/
-    stroke: orange;
+    stroke: $selection-highlight-color;
   }
 
   .wire-arrowhead, .wire-arrowhead-selected {
@@ -307,7 +309,7 @@
   }
 
   .wire-arrowhead-inconsistent {
-    fill: orange;
+    fill: $selection-highlight-color;
     /*stroke: black;*/
     /*stroke-width: 2.5;    */
   }
@@ -379,21 +381,25 @@
     li {
       padding: 0 0 0 5px;
       a {
+        color: black;
         &:active, &:hover, &:visited, &:link {
           text-decoration: none;
         };
       }
       border: 1px solid white;
       /*border-left: 5px solid white;*/
+      &:active, &:hover {
+        background-color: $selection-highlight-color
+      }
     }
     .active-plan {
-      background: orange;
+      background: $selection-highlight-color;
       /*border-color: #999;*/
     }
   }
 
   .no-inventory {
-    color: orange;
+    color: $selection-highlight-color;
   }
 
   .sidebar-button {
@@ -409,10 +415,10 @@
   }
 
   .sidebar-button-selected {
-    background: blue;
+    background: $table-header-color;
     color: white;
     &:hover {
-      background: blue;
+      background: $table-header-color;
     }    
   } 
 
@@ -522,5 +528,5 @@
     font-family: Courier New,Courier,Lucida Sans Typewriter,Lucida Typewriter,monospace; 
     font-size: 9pt;
   }
-
+  
 }

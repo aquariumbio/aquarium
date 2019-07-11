@@ -1242,15 +1242,15 @@ Some very important methods include <span class='object_link'><a href="#input-in
       <pre class="lines">
 
 
+333
+334
 335
 336
 337
-338
-339
-340</pre>
+338</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 335</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 333</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_step'>step</span><span class='lparen'>(</span><span class='id identifier rubyid_ops'>ops</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_ops'>ops</span> <span class='op'>||=</span> <span class='const'><span class='object_link'><a href="" title="Operation (class)">Operation</a></span></span><span class='period'>.</span><span class='id identifier rubyid_includes'>includes</span><span class='lparen'>(</span><span class='symbol'>:operation_type</span><span class='rparen'>)</span>
@@ -1293,18 +1293,18 @@ Some very important methods include <span class='object_link'><a href="#input-in
       <pre class="lines">
 
 
+313
+314
 315
 316
 317
 318
 319
 320
-321
-322
-323</pre>
+321</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 315</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 313</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_activate'>activate</span>
   <span class='id identifier rubyid_set_status'>set_status</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>planning</span><span class='tstring_end'>&#39;</span></span>
@@ -1403,18 +1403,18 @@ will use once launched.</p>
       <pre class="lines">
 
 
+127
+128
 129
 130
 131
 132
 133
 134
-135
-136
-137</pre>
+135</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 129</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 127</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_add_input'>add_input</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_sample'>sample</span><span class='comma'>,</span> <span class='id identifier rubyid_container'>container</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_items'>items</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Item.html" title="Item (class)">Item</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>sample_id:</span> <span class='id identifier rubyid_sample'>sample</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='label'>object_type_id:</span> <span class='id identifier rubyid_container'>container</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_reject'>reject</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:deleted?</span><span class='rparen'>)</span>
@@ -1454,6 +1454,8 @@ will use once launched.</p>
       <pre class="lines">
 
 
+405
+406
 407
 408
 409
@@ -1479,12 +1481,10 @@ will use once launched.</p>
 429
 430
 431
-432
-433
-434</pre>
+432</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 407</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 405</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_add_successor'>add_successor</span><span class='lparen'>(</span><span class='id identifier rubyid_opts'>opts</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_ot'>ot</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="OperationType.html" title="OperationType (class)">OperationType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_name'>find_by_name</span><span class='lparen'>(</span><span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:type</span><span class='rbracket'>]</span><span class='rparen'>)</span>
@@ -1543,14 +1543,14 @@ will use once launched.</p>
       <pre class="lines">
 
 
+362
+363
 364
 365
-366
-367
-368</pre>
+366</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 364</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 362</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_child_data'>child_data</span><span class='lparen'>(</span><span class='id identifier rubyid_child_name'>child_name</span><span class='comma'>,</span> <span class='id identifier rubyid_child_role'>child_role</span><span class='comma'>,</span> <span class='id identifier rubyid_data_name'>data_name</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_fv'>fv</span> <span class='op'>=</span> <span class='id identifier rubyid_get_input'>get_input</span><span class='lparen'>(</span><span class='id identifier rubyid_child_name'>child_name</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_child_role'>child_role</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>input</span><span class='tstring_end'>&#39;</span></span>
@@ -1586,17 +1586,17 @@ will use once launched.</p>
       <pre class="lines">
 
 
+145
+146
 147
 148
 149
 150
 151
-152
-153
-154</pre>
+152</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 147</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 145</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_create_field_type'>create_field_type</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="FieldType.html" title="FieldType (class)">FieldType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span>
@@ -1635,6 +1635,8 @@ will use once launched.</p>
       <pre class="lines">
 
 
+154
+155
 156
 157
 158
@@ -1643,12 +1645,10 @@ will use once launched.</p>
 161
 162
 163
-164
-165
-166</pre>
+164</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 156</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 154</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_create_field_value'>create_field_value</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_item'>item</span><span class='comma'>,</span> <span class='id identifier rubyid_sample'>sample</span><span class='comma'>,</span> <span class='id identifier rubyid_field_type'>field_type</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="FieldValue.html" title="FieldValue (class)">FieldValue</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span>
@@ -1690,16 +1690,16 @@ will use once launched.</p>
       <pre class="lines">
 
 
+137
+138
 139
 140
 141
 142
-143
-144
-145</pre>
+143</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 139</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 137</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_create_input'>create_input</span><span class='lparen'>(</span><span class='label'>name:</span><span class='comma'>,</span> <span class='label'>item:</span><span class='comma'>,</span> <span class='label'>sample:</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_field_type'>field_type</span> <span class='op'>=</span> <span class='id identifier rubyid_create_field_type'>create_field_type</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
@@ -1737,18 +1737,18 @@ will use once launched.</p>
       <pre class="lines">
 
 
+323
+324
 325
 326
 327
 328
 329
 330
-331
-332
-333</pre>
+331</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 325</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 323</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_deactivate'>deactivate</span>
   <span class='id identifier rubyid_set_status'>set_status</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>unplanned</span><span class='tstring_end'>&#39;</span></span>
@@ -1788,6 +1788,8 @@ will use once launched.</p>
       <pre class="lines">
 
 
+24
+25
 26
 27
 28
@@ -1797,12 +1799,10 @@ will use once launched.</p>
 32
 33
 34
-35
-36
-37</pre>
+35</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 26</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 24</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_destroy_field_values'>destroy_field_values</span>
   <span class='id identifier rubyid_msg'>msg</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Cannot destroy operation </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'> because it has jobs associated with it</span><span class='tstring_end'>&quot;</span></span>
@@ -1845,16 +1845,16 @@ will use once launched.</p>
       <pre class="lines">
 
 
+249
+250
 251
 252
 253
 254
-255
-256
-257</pre>
+255</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 251</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 249</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_ops'>ops</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
@@ -1933,12 +1933,12 @@ will use once launched.</p>
       <pre class="lines">
 
 
-216
-217
-218</pre>
+214
+215
+216</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 216</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 214</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_field_value'>get_field_value</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_role'>role</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>input</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
   <span class='id identifier rubyid_field_values'>field_values</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_fv'>fv</span><span class='op'>|</span> <span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='op'>==</span> <span class='id identifier rubyid_name'>name</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_role'>role</span> <span class='op'>==</span> <span class='id identifier rubyid_role'>role</span> <span class='rbrace'>}</span>
@@ -2000,12 +2000,12 @@ will use once launched.</p>
       <pre class="lines">
 
 
-180
-181
-182</pre>
+178
+179
+180</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 180</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 178</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_input'>get_input</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_inputs'>inputs</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_i'>i</span><span class='op'>|</span> <span class='id identifier rubyid_i'>i</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='op'>==</span> <span class='id identifier rubyid_name'>name</span> <span class='rbrace'>}</span>
@@ -2067,12 +2067,12 @@ will use once launched.</p>
       <pre class="lines">
 
 
-185
-186
-187</pre>
+183
+184
+185</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 185</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 183</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_output'>get_output</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_outputs'>outputs</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_o'>o</span><span class='op'>|</span> <span class='id identifier rubyid_o'>o</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='op'>==</span> <span class='id identifier rubyid_name'>name</span> <span class='rbrace'>}</span>
@@ -2134,12 +2134,12 @@ will use once launched.</p>
       <pre class="lines">
 
 
-190
-191
-192</pre>
+188
+189
+190</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 190</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 188</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_input'>input</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_get_input'>get_input</span> <span class='id identifier rubyid_name'>name</span>
@@ -2202,12 +2202,12 @@ will use once launched.</p>
       <pre class="lines">
 
 
-202
-203
-204</pre>
+200
+201
+202</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 202</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 200</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_input_array'>input_array</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_inputs'>inputs</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_i'>i</span><span class='op'>|</span> <span class='id identifier rubyid_i'>i</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='op'>==</span> <span class='id identifier rubyid_name'>name</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_extend'>extend</span><span class='lparen'>(</span><span class='const'>IOList</span><span class='rparen'>)</span>
@@ -2241,12 +2241,12 @@ will use once launched.</p>
       <pre class="lines">
 
 
-370
-371
-372</pre>
+368
+369
+370</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 370</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 368</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_input_data'>input_data</span><span class='lparen'>(</span><span class='id identifier rubyid_input_name'>input_name</span><span class='comma'>,</span> <span class='id identifier rubyid_data_name'>data_name</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_child_data'>child_data</span><span class='lparen'>(</span><span class='id identifier rubyid_input_name'>input_name</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>input</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_data_name'>data_name</span><span class='rparen'>)</span>
@@ -2293,12 +2293,12 @@ will use once launched.</p>
       <pre class="lines">
 
 
-169
-170
-171</pre>
+167
+168
+169</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 169</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 167</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_inputs'>inputs</span>
   <span class='id identifier rubyid_field_values'>field_values</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_ft'>ft</span><span class='op'>|</span> <span class='id identifier rubyid_ft'>ft</span><span class='period'>.</span><span class='id identifier rubyid_role'>role</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>input</span><span class='tstring_end'>&#39;</span></span> <span class='rbrace'>}</span>
@@ -2346,6 +2346,8 @@ will use once launched.</p>
       <pre class="lines">
 
 
+437
+438
 439
 440
 441
@@ -2362,12 +2364,10 @@ will use once launched.</p>
 452
 453
 454
-455
-456
-457</pre>
+455</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 439</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 437</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_leaf?'>leaf?</span>
 
@@ -2435,12 +2435,12 @@ will use once launched.</p>
       <pre class="lines">
 
 
-48
-49
-50</pre>
+46
+47
+48</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 48</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 46</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_name'>name</span>
   <span class='id identifier rubyid_operation_type'>operation_type</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span>
@@ -2474,6 +2474,8 @@ will use once launched.</p>
       <pre class="lines">
 
 
+340
+341
 342
 343
 344
@@ -2492,12 +2494,10 @@ will use once launched.</p>
 357
 358
 359
-360
-361
-362</pre>
+360</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 342</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 340</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_nominal_cost'>nominal_cost</span>
   <span class='kw'>begin</span>
@@ -2567,12 +2567,12 @@ will use once launched.</p>
       <pre class="lines">
 
 
-53
-54
-55</pre>
+51
+52
+53</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 53</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 51</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_on_the_fly'>on_the_fly</span>
   <span class='id identifier rubyid_operation_type'>operation_type</span><span class='period'>.</span><span class='id identifier rubyid_on_the_fly'>on_the_fly</span>
@@ -2634,12 +2634,12 @@ will use once launched.</p>
       <pre class="lines">
 
 
-195
-196
-197</pre>
+193
+194
+195</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 195</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 193</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_output'>output</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_get_output'>get_output</span> <span class='id identifier rubyid_name'>name</span>
@@ -2702,12 +2702,12 @@ will use once launched.</p>
       <pre class="lines">
 
 
-209
-210
-211</pre>
+207
+208
+209</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 209</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 207</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_output_array'>output_array</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_outputs'>outputs</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_o'>o</span><span class='op'>|</span> <span class='id identifier rubyid_o'>o</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='op'>==</span> <span class='id identifier rubyid_name'>name</span> <span class='rbrace'>}</span> <span class='period'>.</span><span class='id identifier rubyid_extend'>extend</span><span class='lparen'>(</span><span class='const'>IOList</span><span class='rparen'>)</span>
@@ -2741,12 +2741,12 @@ will use once launched.</p>
       <pre class="lines">
 
 
-374
-375
-376</pre>
+372
+373
+374</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 374</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 372</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_output_data'>output_data</span><span class='lparen'>(</span><span class='id identifier rubyid_input_name'>input_name</span><span class='comma'>,</span> <span class='id identifier rubyid_data_name'>data_name</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_child_data'>child_data</span><span class='lparen'>(</span><span class='id identifier rubyid_input_name'>input_name</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>output</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_data_name'>data_name</span><span class='rparen'>)</span>
@@ -2793,12 +2793,12 @@ will use once launched.</p>
       <pre class="lines">
 
 
-174
-175
-176</pre>
+172
+173
+174</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 174</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 172</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_outputs'>outputs</span>
   <span class='id identifier rubyid_field_values'>field_values</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_ft'>ft</span><span class='op'>|</span> <span class='id identifier rubyid_ft'>ft</span><span class='period'>.</span><span class='id identifier rubyid_role'>role</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>output</span><span class='tstring_end'>&#39;</span></span> <span class='rbrace'>}</span>
@@ -2833,12 +2833,12 @@ will use once launched.</p>
       <pre class="lines">
 
 
-39
-40
-41</pre>
+37
+38
+39</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 39</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 37</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_parent_type'>parent_type</span> <span class='comment'># interface with FieldValuer
 </span>  <span class='id identifier rubyid_operation_type'>operation_type</span>
@@ -2914,6 +2914,8 @@ will use once launched.</p>
       <pre class="lines">
 
 
+222
+223
 224
 225
 226
@@ -2928,12 +2930,10 @@ will use once launched.</p>
 235
 236
 237
-238
-239
-240</pre>
+238</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 224</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 222</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_pass'>pass</span><span class='lparen'>(</span><span class='id identifier rubyid_input_name'>input_name</span><span class='comma'>,</span> <span class='id identifier rubyid_output_name'>output_name</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
 
@@ -2999,12 +2999,12 @@ will use once launched.</p>
       <pre class="lines">
 
 
-58
-59
-60</pre>
+56
+57
+58</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 58</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 56</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_plan'>plan</span>
   <span class='id identifier rubyid_plans'>plans</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span> <span class='kw'>unless</span> <span class='id identifier rubyid_plans'>plans</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
@@ -3038,6 +3038,8 @@ will use once launched.</p>
       <pre class="lines">
 
 
+390
+391
 392
 393
 394
@@ -3049,12 +3051,10 @@ will use once launched.</p>
 400
 401
 402
-403
-404
-405</pre>
+403</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 392</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 390</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_precondition_value'>precondition_value</span>
   <span class='id identifier rubyid_rval'>rval</span> <span class='op'>=</span> <span class='kw'>true</span>
@@ -3099,6 +3099,8 @@ will use once launched.</p>
       <pre class="lines">
 
 
+281
+282
 283
 284
 285
@@ -3106,12 +3108,10 @@ will use once launched.</p>
 287
 288
 289
-290
-291
-292</pre>
+290</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 283</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 281</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_predecessors'>predecessors</span>
   <span class='id identifier rubyid_predecessor_list'>predecessor_list</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
@@ -3152,6 +3152,8 @@ will use once launched.</p>
       <pre class="lines">
 
 
+292
+293
 294
 295
 296
@@ -3159,12 +3161,10 @@ will use once launched.</p>
 298
 299
 300
-301
-302
-303</pre>
+301</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 294</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 292</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_primed_predecessors'>primed_predecessors</span>
   <span class='id identifier rubyid_ops'>ops</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
@@ -3205,17 +3205,17 @@ will use once launched.</p>
       <pre class="lines">
 
 
+240
+241
 242
 243
 244
 245
 246
-247
-248
-249</pre>
+247</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 242</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 240</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_recurse'>recurse</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_block'>block</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='kw'>self</span><span class='rparen'>)</span>
@@ -3254,14 +3254,14 @@ will use once launched.</p>
       <pre class="lines">
 
 
+376
+377
 378
 379
-380
-381
-382</pre>
+380</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 378</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 376</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_child_data'>set_child_data</span><span class='lparen'>(</span><span class='id identifier rubyid_child_name'>child_name</span><span class='comma'>,</span> <span class='id identifier rubyid_child_role'>child_role</span><span class='comma'>,</span> <span class='id identifier rubyid_data_name'>data_name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_fv'>fv</span> <span class='op'>=</span> <span class='id identifier rubyid_get_input'>get_input</span><span class='lparen'>(</span><span class='id identifier rubyid_child_name'>child_name</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_child_role'>child_role</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>input</span><span class='tstring_end'>&#39;</span></span>
@@ -3337,12 +3337,12 @@ will use once launched.</p>
       <pre class="lines">
 
 
-101
-102
-103</pre>
+99
+100
+101</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 101</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 99</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_input'>set_input</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_val'>val</span><span class='comma'>,</span> <span class='id identifier rubyid_aft'>aft</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_set_property'>set_property</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_val'>val</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>input</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='id identifier rubyid_aft'>aft</span><span class='rparen'>)</span>
@@ -3376,12 +3376,12 @@ will use once launched.</p>
       <pre class="lines">
 
 
-384
-385
-386</pre>
+382
+383
+384</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 384</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 382</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_input_data'>set_input_data</span><span class='lparen'>(</span><span class='id identifier rubyid_input_name'>input_name</span><span class='comma'>,</span> <span class='id identifier rubyid_data_name'>data_name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_set_child_data'>set_child_data</span><span class='lparen'>(</span><span class='id identifier rubyid_input_name'>input_name</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>input</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_data_name'>data_name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
@@ -3455,12 +3455,12 @@ will use once launched.</p>
       <pre class="lines">
 
 
-109
-110
-111</pre>
+107
+108
+109</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 109</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 107</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_output'>set_output</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_val'>val</span><span class='comma'>,</span> <span class='id identifier rubyid_aft'>aft</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_set_property'>set_property</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_val'>val</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>output</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='id identifier rubyid_aft'>aft</span><span class='rparen'>)</span>
@@ -3494,12 +3494,12 @@ will use once launched.</p>
       <pre class="lines">
 
 
-388
-389
-390</pre>
+386
+387
+388</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 388</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 386</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_output_data'>set_output_data</span><span class='lparen'>(</span><span class='id identifier rubyid_input_name'>input_name</span><span class='comma'>,</span> <span class='id identifier rubyid_data_name'>data_name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_set_child_data'>set_child_data</span><span class='lparen'>(</span><span class='id identifier rubyid_input_name'>input_name</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>output</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_data_name'>data_name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
@@ -3533,15 +3533,15 @@ will use once launched.</p>
       <pre class="lines">
 
 
+257
+258
 259
 260
 261
-262
-263
-264</pre>
+262</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 259</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 257</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_status_recursively'>set_status_recursively</span><span class='lparen'>(</span><span class='id identifier rubyid_str'>str</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_recurse'>recurse</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_op'>op</span><span class='op'>|</span>
@@ -3578,18 +3578,18 @@ will use once launched.</p>
       <pre class="lines">
 
 
+303
+304
 305
 306
 307
 308
 309
 310
-311
-312
-313</pre>
+311</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 305</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 303</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_siblings'>siblings</span>
   <span class='id identifier rubyid_ops'>ops</span> <span class='op'>=</span> <span class='id identifier rubyid_outputs'>outputs</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_output'>output</span><span class='op'>|</span>
@@ -3629,6 +3629,8 @@ will use once launched.</p>
       <pre class="lines">
 
 
+270
+271
 272
 273
 274
@@ -3636,12 +3638,10 @@ will use once launched.</p>
 276
 277
 278
-279
-280
-281</pre>
+279</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 272</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 270</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_successors'>successors</span>
   <span class='id identifier rubyid_successor_list'>successor_list</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
@@ -3682,13 +3682,13 @@ will use once launched.</p>
       <pre class="lines">
 
 
+457
+458
 459
-460
-461
-462</pre>
+460</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 459</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 457</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_temporary'>temporary</span>
   <span class='ivar'>@temporary</span> <span class='op'>||=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
@@ -3723,14 +3723,14 @@ will use once launched.</p>
       <pre class="lines">
 
 
+264
+265
 266
 267
-268
-269
-270</pre>
+268</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 266</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 264</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_s'>to_s</span>
   <span class='id identifier rubyid_ins'>ins</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_inputs'>inputs</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_fv'>fv</span><span class='op'>|</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_child_sample'>child_sample</span> <span class='op'>?</span> <span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_child_sample'>child_sample</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='op'>:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>NO SAMPLE</span><span class='tstring_end'>&#39;</span></span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>, </span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
@@ -3779,12 +3779,12 @@ will use once launched.</p>
       <pre class="lines">
 
 
-43
-44
-45</pre>
+41
+42
+43</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 43</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 41</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_virtual?'>virtual?</span>
   <span class='kw'>false</span>
@@ -3845,23 +3845,23 @@ will use once launched.</p>
       <pre class="lines">
 
 
+66
+67
 68
 69
 70
 71
-72
-73
-74</pre>
+72</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 68</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 66</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_with_input'>with_input</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_sample'>sample</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_ft'>ft</span> <span class='op'>=</span> <span class='id identifier rubyid_operation_type'>operation_type</span><span class='period'>.</span><span class='id identifier rubyid_inputs'>inputs</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_i'>i</span><span class='op'>|</span> <span class='id identifier rubyid_i'>i</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='id identifier rubyid_name'>name</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
   <span class='id identifier rubyid_aft'>aft</span> <span class='op'>=</span> <span class='id identifier rubyid_ft'>ft</span><span class='period'>.</span><span class='id identifier rubyid_choose_aft_for'>choose_aft_for</span><span class='lparen'>(</span><span class='id identifier rubyid_sample'>sample</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_set_input'>set_input</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_sample'>sample</span><span class='comma'>,</span> <span class='id identifier rubyid_aft'>aft</span><span class='rparen'>)</span>
 
-  <span class='kw'>self</span>       
+  <span class='kw'>self</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -3919,23 +3919,23 @@ will use once launched.</p>
       <pre class="lines">
 
 
+78
+79
 80
 81
 82
 83
-84
-85
-86</pre>
+84</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 80</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 78</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_with_output'>with_output</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_sample'>sample</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_ft'>ft</span> <span class='op'>=</span> <span class='id identifier rubyid_operation_type'>operation_type</span><span class='period'>.</span><span class='id identifier rubyid_outputs'>outputs</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_i'>i</span><span class='op'>|</span> <span class='id identifier rubyid_i'>i</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='id identifier rubyid_name'>name</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
   <span class='id identifier rubyid_aft'>aft</span> <span class='op'>=</span> <span class='id identifier rubyid_ft'>ft</span><span class='period'>.</span><span class='id identifier rubyid_choose_aft_for'>choose_aft_for</span><span class='lparen'>(</span><span class='id identifier rubyid_sample'>sample</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_set_output'>set_output</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_sample'>sample</span><span class='comma'>,</span> <span class='id identifier rubyid_aft'>aft</span><span class='rparen'>)</span>
 
-  <span class='kw'>self</span>     
+  <span class='kw'>self</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -3993,12 +3993,12 @@ will use once launched.</p>
       <pre class="lines">
 
 
-91
-92
-93</pre>
+89
+90
+91</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 91</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 89</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_with_property'>with_property</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_set_property'>set_property</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>input</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rparen'>)</span>
@@ -4013,9 +4013,9 @@ will use once launched.</p>
 </div>
 
       <div id="footer">
-  Generated on Fri May 17 14:38:45 2019 by
+  Generated on Tue Jul  2 18:20:15 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.16 (ruby-2.3.7).
+  0.9.20 (ruby-2.6.3).
 </div>
 
     </div>

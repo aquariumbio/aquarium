@@ -1,3 +1,4 @@
+@import "variables";
 
 .operations {
 
@@ -40,7 +41,7 @@
   .alt-category {
     font-weight: bold;
     color: black;
-    background: #efe;
+    background: $selection-highlight-color;
   }  
 
   .op-type-none {
@@ -81,7 +82,7 @@
   }
 
   .number-selected {
-    background: yellow;
+    background: $selection-highlight-color;
     outline: 1pt solid black;
     cursor: pointer;
   }
@@ -118,7 +119,7 @@
     }
     .zombie {
       font-size: 7pt;
-      color: orange;
+      color: $selection-highlight-color;
     }
   }
 
@@ -176,7 +177,7 @@
   }
 
   .timing-bullet-future {
-    color: orange;
+    color: $selection-highlight-color;
   }
 
   .timing-bullet-none {

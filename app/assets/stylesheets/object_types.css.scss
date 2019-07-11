@@ -14,7 +14,6 @@
 }
 
 .object-description {
-
   border: 0pt solid #bbb;
   padding: 10px;
   border-radius: 10px;
@@ -59,7 +58,7 @@
   #release_method {
     width: 150px;
     display: inline-block;
-    margin-right: 10px; 
+    margin-right: 10px;
   }
   .label {
     padding-bottom: 0px;
@@ -70,10 +69,10 @@
   }
   textarea {
     height: 100px;
-    width:100%;
-    border-top: none; 
+    width: 100%;
+    border-top: none;
     margin-top: 0;
-  }  
+  }
   #image {
     input {
       border-radius: 5px;
@@ -107,18 +106,15 @@
   table {
     margin-bottom: 0px;
     width: 100%;
-  
   }
 
   td {
     padding: 5px 10px 0px 10px;
     vertical-align: 50%;
   }
-
 }
 
 .add-to-inventory {
-
   border: 1pt solid #bbb;
   padding: 10px;
   border-radius: 10px;
@@ -132,14 +128,11 @@
     text-align: center;
   }
   .field {
-
     margin-right: 10px;
     float: left;
   }
   .actions {
     width: 60px;
-
-
   }
   .input {
     width: 60px;
@@ -152,7 +145,6 @@
       }
     }
   }
-
 }
 
 .itemtable {
@@ -168,11 +160,18 @@
 
 .object-types {
   .selected {
-    background: #80d8ff;
+    background: $view-selection-color;
   }
   .flash {
     padding: 10px;
     width: 100%;
-    background: lightyellow;
-  }  
+    background: $selection-highlight-color;
+  }
+}
+
+// Style for 'Upload Data' button
+label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 0;
 }

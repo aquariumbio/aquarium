@@ -18,7 +18,7 @@
       <% @sample_type.object_types.each do |ot| %>
         <li><b> <%= link_to ot.name, ot %></b>: <%= ot.description %></li>
       <% end %>
-      <li><%= link_to 'Add', new_object_type_path(sample_type_id: @sample_type.id), class: 'btn btn-mini' %></li>
+      <li><%= link_to 'Add', new_object_type_path(sample_type_id: @sample_type.id), class: 'md-button md-raised md-primary md-medium' %></li>
     </ul>
 
     <% if @sample_type.object_types.length == 0 %>

@@ -11,7 +11,7 @@
          ng-attr-data-load-plan="{{p.id}}"
          ng-attr-data-plan-folder="{{folder}}">
       <b>{{p.id}}</b>: {{p.name ? p.name : "[Untitled]"}}
-      <span ng-if="state.deleting_plan.id == p.id" style="color: orange"> ... deleting </span>
+      <span ng-if="state.deleting_plan.id == p.id" style="color: $selection-highlight-color"> ... deleting </span>
     </div>
     <div>
       <span ng-if="p.status == 'planning'" class="pull-right no-highlight">

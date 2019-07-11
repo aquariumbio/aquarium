@@ -2,7 +2,7 @@ function StepTimer(t0) {
 
     this.t = t0;
     this.past = false;
-    this.color = 'yellow';
+    this.color = '$selection-highlight-color';
 
     this.target = new Date();
     this.target.setHours(this.target.getHours() + t0.hours);
@@ -20,10 +20,10 @@ StepTimer.prototype.render = function() {
     var neg = $("<span>&nbsp;</span>");
     if ( this.past ) {
 	neg = $("<span>-</span>");
-        if ( this.color == 'yellow' ) {
+        if ( this.color == '$selection-highlight-color' ) {
             this.color = 'red';
 	} else {
-            this.color = 'yellow';
+            this.color = '$selection-highlight-color';
 	}
         $('#timer').css('background', this.color);
         this.beep.play();
