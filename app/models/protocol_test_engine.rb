@@ -3,29 +3,7 @@
 # Controls execution of protocol tests
 
 class ProtocolTestEngine
-  attr_reader :environment
 
-  def initialize(environment)
-    @environment = environment
-  end
-
-  def build_plans
-    plans = []
-    @environment.operations do |operation|
-      plans << build_plan(operation: operation, user_id: @environment.current_user)
-    end
-
-    plans
-  end
-
-  def build_plan(operation:, user_id:)
-    plan = Plan.new(user_id: user_id, budget_id: Budget.all.first.id)
-    plan.save
-    pa = PlanAssociation.new(operation_id: operation.id, plan_id: plan.id)
-    pa.save
-
-    plan
-  end
 
   def execute
     plans = build_plans
