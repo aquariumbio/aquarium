@@ -4,7 +4,7 @@ class ProtocolTestBase
 
   include MiniTest::Assertions
 
-  attr_accessor :assertions, :logs, :backtrace, :job
+  attr_accessor :assertions, :logs, :backtrace, :job, :plans
 
   def initialize(operation_type, current_user)
     @assertions = 0
@@ -13,6 +13,7 @@ class ProtocolTestBase
     @operations = []
     @current_user = current_user
     @job = nil
+    @plans = []
   end
 
   def log(msg)
@@ -33,27 +34,41 @@ class ProtocolTestBase
     op
   end
 
-  def build_plan
-    plans = []
-    @operations.each do |op|
-      plan = Plan.new(user_id: @current_user.id, budget_id: Budget.all.first.id)
-      plan.save
-      plans << plan
-      pa = PlanAssociation.new(operation_id: op.id, plan_id: plan.id)
-      pa.save
-    end
+  def add_operations(operations)
+    operations.each(&:save)
+    @operations.concat(operations)
   end
 
-  def make_job
-    @job, _newops = @operation_type.schedule( # newops is not used here
-      @operations,
-      @current_user,
+  def build_plans(operations:, user:)
+    plans = []
+    operations.each do |operation|
+      plans << build_plan(operation: operation, user: user)
+    end
+
+    plans
+  end
+
+  def build_plan(operation:, user:)
+    plan = Plan.new(user_id: user.id, budget_id: Budget.all.first.id)
+    plan.save
+    pa = PlanAssociation.new(operation_id: operation.id, plan_id: plan.id)
+    pa.save
+
+    plan
+  end
+
+  def make_job(operations:, user:)
+    job, _newops = @operation_type.schedule( # newops is not used here
+      operations,
+      user,
       Group.find_by_name('technicians')
     )
+
+    job
   end
 
-  def execute
-    manager = Krill::DebugManager.new(@job)
+  def execute(job:)
+    manager = Krill::DebugManager.new(job)
     # TODO: could this be initialize?
     @operations.extend(Krill::OperationList)
     @operations.make(role: 'input')
@@ -63,9 +78,9 @@ class ProtocolTestBase
   end
 
   def run
-    build_plan
-    make_job
-    execute
+    @plan = build_plans(operations: @operations, user: @current_user)
+    @job = make_job(operations: @operations, user: @current_user)
+    execute(job: @job)
     @backtrace = @job.reload.backtrace
   end
 
