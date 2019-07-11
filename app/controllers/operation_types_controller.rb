@@ -280,7 +280,7 @@ class OperationTypesController < ApplicationController
       end
 
       operations = operations.select(&:precondition_value) if params[:use_precondition]
-
+      # TODO: stop here if no operations
       test = ProtocolTestBase.new(operation_type, current_user)
       test.add_operations(operations)
 
