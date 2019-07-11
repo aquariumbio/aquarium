@@ -399,4 +399,36 @@ ActiveRecord::Schema.define(version: 20181221174622) do
     t.datetime "updated_at"
   end
 
+  create_table "workflow_associations", :force => true do |t|
+    t.integer  "thread_id"
+    t.integer  "process_id"
+    t.integer  "sample_id"
+    t.integer  "item_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "workflow_processes", :force => true do |t|
+    t.integer  "workflow_id"
+    t.text     "state"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "workflow_threads", :force => true do |t|
+    t.integer  "process_id"
+    t.text     "specification"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.integer  "workflow_id"
+    t.integer  "user_id"
+  end
+
+  create_table "workflows", :force => true do |t|
+    t.string   "name"
+    t.text     "specification"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
 end

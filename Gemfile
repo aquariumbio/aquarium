@@ -42,9 +42,9 @@ gem 'activerecord-import'
 # Factories for testing of aquarium and protocols
 gem 'factory_bot_rails'
 
-group :test do
-  gem 'sqlite3'
-end
+#group :test do
+#    gem 'sqlite3'
+#end
 
 group :development do
   gem 'rspec-rails'
@@ -65,6 +65,13 @@ group :assets do
   gem 'closure-compiler'
 end
 
-# Klavins lab gems
+# Klavins lab authored gems
 gem 'anemone', :git => 'https://github.com/klavinslab/anemone', tag: 'v1.0.1'
 gem 'aquadoc', :git => 'https://github.com/klavinslab/aquadoc'
+
+###############
+# DAMP lab-specific gems:
+#
+# These gems are not used in Aquarium but may be needed for protocols within
+# the DAMP lab.  Confirm that a gem is not used in a protocol before deleting it.
+gem 'google_drive'

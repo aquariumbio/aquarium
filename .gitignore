@@ -26,6 +26,7 @@
 
 # Ignore all logfiles and tempfiles.
 /log/*.log
+/log/*.log.0
 /tmp
 /public/assets
 /public/assets_dev
@@ -75,3 +76,5 @@ ui/node_modules
 .vscode
 
 # please do not ignore Gemfile.lock !!!
+# ignore config file for google sheets (contains authentication secret)
+google_sheets_config.json
