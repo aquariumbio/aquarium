@@ -75,6 +75,7 @@ ui/node_modules
 # ignore vscode settings
 .vscode
 
-# please do not ignore Gemfile.lock !!!
 # ignore config file for google sheets (contains authentication secret)
 google_sheets_config.json
+
+# please do not ignore Gemfile.lock !!!
