@@ -59,13 +59,17 @@
   <span ng-if="views.create.selected">Unsaved Samples</span>
 
   <span ng-if="views.search.selected">
-    <span ng-show="views.search.sample_type && views.search.sample_type">{{views.search.sample_type}} &rang;</span>
+
+    <span ng-if="views.search.count == 1" ng-show="views.search.sample_type && views.search.sample_type">
+      {{views.search.sample_type}} (1 sample) &rang;</span>
+
+    <span ng-if="views.search.count > 1" ng-show="views.search.sample_type && views.search.sample_type">
+      {{views.search.sample_type}} ({{views.search.count}} samples) &rang;</span>
+
     <span ng-show="views.search.project_filter && views.search.project_filter != '' &&
                    views.search.project && views.search.project != ''">{{views.search.project}} &rang;</span>
     <span ng-show="views.search.user_filter && views.search.user_filter != '' && 
-                   views.search.user && views.search.user != ''">{{views.search.user}} &rang;</span>    
-    <span ng-if="views.search.count == 1">1 Sample</span>
-    <span ng-if="views.search.count > 1">{{views.search.count}} Samples</span>
+                   views.search.user && views.search.user != ''">{{views.search.user}} &rang;</span> 
   </span>
 
 <% end %>
