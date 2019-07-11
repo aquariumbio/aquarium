@@ -25,8 +25,7 @@
 /db/*.sqlite3
 
 # Ignore all logfiles and tempfiles.
-/log/*.log
-/log/*.log.0
+/log
 /tmp
 /public/assets
 /public/assets_dev
