@@ -42,9 +42,9 @@ gem 'activerecord-import'
 # Factories for testing of aquarium and protocols
 gem 'factory_bot_rails'
 
-#group :test do
+# group :test do
 #    gem 'sqlite3'
-#end
+# end
 
 group :development do
   gem 'rspec-rails'
