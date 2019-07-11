@@ -506,3 +506,13 @@ $selected-sample-outline-color: #e0ffff;
     }
   }
 }
+
+
+// Style for item's pop-up dialog
+md-toolbar:not(.md-menu-toolbar) {
+  background-color: $button-color;
+}
+
+.item-label {
+  color: white
+}
