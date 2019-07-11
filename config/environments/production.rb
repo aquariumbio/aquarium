@@ -78,27 +78,28 @@ Bioturk::Application.configure do
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
   # Paperclip => S3
-  # config.paperclip_defaults = {
-  #  storage: :s3,
-  #  s3_host_name: "s3-#{ENV['AWS_REGION']}.amazonaws.com",
-  #  s3_permissions: :private,
-  #  s3_credentials: {
-  #    bucket: ENV.fetch('S3_BUCKET_NAME'),
-  #    access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
-  #    secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY'),
-  #    s3_region: ENV.fetch('AWS_REGION')
-  #  }
-  # }
+
+  config.paperclip_defaults = {
+    storage: :s3,
+    s3_host_name: "s3-#{ENV['AWS_REGION']}.amazonaws.com",
+    s3_permissions: :private,
+    s3_credentials: {
+      bucket: ENV.fetch('S3_BUCKET_NAME'),
+      access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
+      secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY'),
+      s3_region: ENV.fetch('AWS_REGION')
+    }
+  }
 
   # AWS Simple Email Service Config
 
-  #  AWS.config(
-  #    :region => ENV.fetch('AWS_REGION'),
-  #    :simple_email_service_endpoint => "email.#{ENV.fetch('AWS_REGION')}.amazonaws.com",
-  #    :simple_email_service_region => ENV.fetch('AWS_REGION'),
-  #    :ses => { :region => ENV.fetch('AWS_REGION') },
-  #    :access_key_id => ENV.fetch('AWS_ACCESS_KEY_ID'),
-  #    :secret_access_key => ENV.fetch('AWS_SECRET_ACCESS_KEY')
-  #  )
+  AWS.config(
+    region: ENV.fetch('AWS_REGION'),
+    simple_email_service_endpoint: "email.#{ENV.fetch('AWS_REGION')}.amazonaws.com",
+    simple_email_service_region: ENV.fetch('AWS_REGION'),
+    ses: { region: ENV.fetch('AWS_REGION') },
+    access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
+    secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY')
+  )
 
 end
