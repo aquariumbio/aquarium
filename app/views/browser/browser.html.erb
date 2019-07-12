@@ -59,7 +59,7 @@
   <span ng-if="views.create.selected">Unsaved Samples</span>
 
   <span ng-if="views.search.selected">
-  
+
     <span ng-show="views.search.project_filter && views.search.project_filter != '' &&
       views.search.project && views.search.project != ''">{{views.search.project}} &rang;</span>
 
@@ -100,6 +100,28 @@
 
 <% content_for :action4 do %>
   <%= render partial: "create_control" %> 
+<% end %>
+
+<% content_for :action5 do %>
+  <div layout="row"
+         layout-align="start center"
+         class="new-collection">    
+      <md-menu>
+        <md-button class="md-raised md-button"
+          ng-click="openCollectionMenu($mdMenu, $event)"
+          id="new-collection-button"
+          data-search-button="new-collection">
+          New Collection
+        </md-button>
+        <md-menu-content>
+          <md-menu-item ng-repeat="ctype in collection_types">
+            <md-button ng-click="new_collection(ctype)"
+                       ng-attr-data-new-collection-type="{{ctype.name}}"
+                       data-search-menu="collection-types">{{ctype.name}}</md-button>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+    </div>
 <% end %>
 
 <%= content_for :main do %>
