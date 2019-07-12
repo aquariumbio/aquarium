@@ -208,7 +208,7 @@ $selected-sample-outline-color: #e0ffff;
   }
 
   .input-no-style {
-    color: #0000cc;
+    color: $main-navbar-color;
     display: inline-block;
     padding: 0;
     margin: 0;
@@ -227,7 +227,7 @@ $selected-sample-outline-color: #e0ffff;
   }
 
   .select-no-style {
-    color: #0000cc;
+    color: $main-navbar-color;
     display: inline-block;
     padding: 0;
     margin: 0;

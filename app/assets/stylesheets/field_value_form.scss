@@ -1,3 +1,5 @@
+@import "variables";
+
 $row-height: 22px;
 
 .field_value_form {
@@ -15,7 +17,7 @@ $row-height: 22px;
   input:focus,
   input:active,
   input:hover {
-    color: #0000cc;
+    color: $main-navbar-color;
     display: inline-block;
     padding: 2px;
     margin: 0px;
