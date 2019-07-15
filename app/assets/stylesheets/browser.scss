@@ -25,7 +25,7 @@ $selected-sample-outline-color: #e0ffff;
   }
 
   .page-selected {
-    background: #d2f8d2;
+    background: $selection-highlight-color;
   }
 
   @mixin sample-tree-list($color) {
@@ -516,3 +516,10 @@ md-toolbar:not(.md-menu-toolbar) {
 .item-label {
   color: white
 }
+
+
+// Style for "Switch Plan" dialog
+.md-button.md-default-theme.md-primary, .md-button.md-primary {
+  color: $button-color
+}
+
