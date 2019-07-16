@@ -354,16 +354,32 @@
           
     }
 
+    // item_search function allows users to search for sample by Item ID
     $scope.item_search = function() {
       AQ.Item.find($scope.views.search.item_id).then( item => {
-        $scope.views.search.item = item;
-        $scope.views.search.item.modal = true;
-        $scope.views.search.item.new_location = $scope.views.search.item.location;
-        cookie();
-        AQ.update();
-      }).catch(() => alert("Could not find item with id " + $scope.views.search.item_id));
+        $scope.views.search.status = "preparing";
+        AQ.Sample.find(item.sample_id).then( sample => {
+          $scope.views.search.samples = aq.collect([sample],function(s) {
+            var sample = new Sample($http).from(s);
+            if ( aq.url_params().sid && sample.id === parseInt(aq.url_params().sid) ) {
+              sample.open = true;
+              sample.inventory = true;
+              sample.loading_inventory = true;
+              sample.get_inventory(function() {
+                sample.loading_inventory = false;            
+                sample.inventory = true;
+              });              
+            }
+            return sample;
+          });
+          $scope.views.search.count = 1;
+          $scope.views.search.pages = aq.range(1 / 30);
+          $scope.views.search.status = "done";
+        })
+        .catch(() => alert("Could not find sample with item id" + $scope.views.search.item_id));
+      } )
     }
- 
+    
 
     $scope.page_class = function(page) {
       var c = "page";
@@ -417,7 +433,7 @@
         return "button-heading-closed";
       }
 
-    }  
+    }   
 
     $scope.upload_change = function(files) {
       $scope.spreadsheet_name = files[0].name;

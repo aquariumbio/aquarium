@@ -25,6 +25,14 @@
            data-search-input="sample-type"> 
   </div>
 
+  <div class="search-part">
+  <label>Item ID</label>
+  <input  type="text" 
+          style="width: 100%"
+          ng-model="views.search.item_id"
+          data-search-input="find-item">      
+  </div>
+
   <div class="search-part" layout="row">
     <div>
       <label>Project</label>
@@ -56,32 +64,9 @@
 
   <div layout="row" layout-align="center center">
     <md-button ng-class="views.search.selected ? 'md-raised md-primary' : 'md-raised'" 
-               ng-click="search(0); select_view('search')"
+               ng-click="search(0); select_view('search'); item_search()"
                data-search-button="search">Search</md-button> 
   </div>
-
-  <hr>
-
-  <div layout="column" class="extras">
-
-    <div layout="row"
-         layout-align="start center"
-         class="find-item">
-      <md-button style="width: 30%; margin-bottom: 0px" 
-                 class="md-raised" 
-                 ng-click="item_search()"
-                 data-search-button="find-item">
-        Find Item
-      </md-button>    
-      <input type="text" 
-             style="width: 50%"
-             ng-model="views.search.item_id"
-             data-search-input="find-item">
-    </div>
-    
-  </div>
-
-  <hr>
   
   <p style="line-height: 14pt">
   <b>To upload a spreadsheet</b>: Click "Upload" on the left and choose a file, which will add your
