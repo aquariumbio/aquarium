@@ -222,10 +222,6 @@ $selected-sample-outline-color: #e0ffff;
     background: transparent;
   }
 
-  .input-no-style:hover {
-    /*outline: 1pt solid #eee;*/
-  }
-
   .select-no-style {
     color: $main-navbar-color;
     display: inline-block;
@@ -254,16 +250,10 @@ $selected-sample-outline-color: #e0ffff;
     margin-right: 5px;
   }
 
-  .controls {
-  }
-
   .field-table {
     width: 100%;
     /*outline: 1pt solid #bfb;*/
     margin: 0;
-    tr {
-      /*height: $row-height;*/
-    }
     td {
       padding: 0 0 0 5px;
       height: $row-height;
@@ -319,9 +309,6 @@ $selected-sample-outline-color: #e0ffff;
 
   .sample-type-name {
     font-weight: bold;
-  }
-
-  .sample-type-id {
   }
 
   .sample-id {
@@ -441,8 +428,7 @@ $selected-sample-outline-color: #e0ffff;
       font-weight: normal;
       overflow: hidden;
     }
-    .data-field {
-    }
+
     .deleted-item {
       color: #a00;
     }
@@ -465,7 +451,6 @@ $selected-sample-outline-color: #e0ffff;
 
   .st-offset-disabled {
     cursor: pointer;
-    disabled: true;
     color: #ccc;
   }
 

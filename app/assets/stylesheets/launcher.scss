@@ -412,7 +412,7 @@
       position: absolute;
       top: -3px;
       left: -20px;
-      -webkit-transform: rotate(90deg);
+      // -webkit-transform: rotate(90deg);
     }
 
     .container-note,
@@ -491,7 +491,6 @@
         display: inline;
         margin: -1px;
         padding: 0;
-        width: 20px !important;
       }
 
       .radio-label {
@@ -556,9 +555,6 @@
     .filled {
       background: #aaf;
       cursor: pointer;
-    }
-
-    .blank {
     }
 
     .selected {
