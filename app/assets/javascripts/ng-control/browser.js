@@ -357,27 +357,42 @@
     // item_search function allows users to search for sample by Item ID
     $scope.item_search = function() {
       AQ.Item.find($scope.views.search.item_id).then( item => {
-        $scope.views.search.status = "preparing";
-        AQ.Sample.find(item.sample_id).then( sample => {
-          $scope.views.search.samples = aq.collect([sample],function(s) {
-            var sample = new Sample($http).from(s);
-            if ( aq.url_params().sid && sample.id === parseInt(aq.url_params().sid) ) {
-              sample.open = true;
-              sample.inventory = true;
-              sample.loading_inventory = true;
-              sample.get_inventory(function() {
-                sample.loading_inventory = false;            
-                sample.inventory = true;
-              });              
-            }
-            return sample;
-          });
-          $scope.views.search.count = 1;
-          $scope.views.search.pages = aq.range(1 / 30);
-          $scope.views.search.status = "done";
+        AQ.ObjectType.find(item.object_type_id).then( object_type => {
+          if (object_type.handler === 'collection') {
+            console.log("do collection stuff")
+            AQ.Collection.find_fast(item.id).then(collection => {
+              console.log(collection.part_matrix[0][0].sample_id)
+            })
+            
+          } else {
+            console.log("do regular item")
+            $scope.views.search.status = "preparing";
+            AQ.Sample.find(item.sample_id).then( sample => {
+              $scope.views.search.samples = aq.collect([sample],function(s) {
+                var sample = new Sample($http).from(s);
+                if ( aq.url_params().sid && sample.id === parseInt(aq.url_params().sid) ) {
+                  sample.open = true;
+                  sample.inventory = true;
+                  sample.loading_inventory = true;
+                  sample.get_inventory(function() {
+                    sample.loading_inventory = false;            
+                    sample.inventory = true;
+                  });              
+                }
+                return sample;
+              });
+              $scope.views.search.count = 1;
+              $scope.views.search.pages = aq.range(1 / 30);
+              $scope.views.search.status = "done";
+            })
+            .catch(() => { 
+              alert("Could not find sample with item id " + $scope.views.search.item_id);
+              $scope.views.search.status = "done";
+            });
+          }
         })
-        .catch(() => alert("Could not find sample with item id" + $scope.views.search.item_id));
-      } )
+ 
+      } ).catch(() => alert("could not find object type"))
     }
     
 
