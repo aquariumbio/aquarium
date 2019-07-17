@@ -323,8 +323,24 @@
       $scope.select_view('create');
     }
 
-    // Search
+    function sample_inventory(samples) {
+      return aq.collect(samples,function(s) {
+        var sample = new Sample($http).from(s);
+        if ( aq.url_params().sid && sample.id === parseInt(aq.url_params().sid) ) {
+          sample.open = true;
+          sample.inventory = true;
+          sample.loading_inventory = true;
+          sample.get_inventory(function() {
+            sample.loading_inventory = false;            
+            sample.inventory = true;
+          });              
+        }
+        return sample;
+      });
 
+    }
+
+    // Search
     $scope.search = function(p) {
 
       $scope.views.search.samples = [];
@@ -332,21 +348,9 @@
       $scope.views.search.page = p;
 
       $http.post("/browser/search",$scope.views.search).
-        then(function(response) { 
+        then( function(response) { 
           $scope.views.search.status = "preparing";         
-          $scope.views.search.samples = aq.collect(response.data.samples,function(s) {
-            var sample = new Sample($http).from(s);
-            if ( aq.url_params().sid && sample.id === parseInt(aq.url_params().sid) ) {
-              sample.open = true;
-              sample.inventory = true;
-              sample.loading_inventory = true;
-              sample.get_inventory(function() {
-                sample.loading_inventory = false;            
-                sample.inventory = true;
-              });              
-            }
-            return sample;
-          });
+          $scope.views.search.samples = sample_inventory(response.data.samples);
           $scope.views.search.count = response.data.count;
           $scope.views.search.pages = aq.range(response.data.count / 30);
           $scope.views.search.status = "done";
@@ -358,41 +362,34 @@
     $scope.item_search = function() {
       AQ.Item.find($scope.views.search.item_id).then( item => {
         AQ.ObjectType.find(item.object_type_id).then( object_type => {
+          // Collection check
           if (object_type.handler === 'collection') {
-            console.log("do collection stuff")
-            AQ.Collection.find_fast(item.id).then(collection => {
-              console.log(collection.part_matrix[0][0].sample_id)
+            AQ.Collection.find_fast(item.id).then( collection => {
+              var item_list = collection.part_matrix.reduce(function (a, b) {
+                return a.concat(b);
+              });
+              $scope.views.search.status = "preparing";
+              $scope.views.search.samples = sample_inventory([item_list[0].sample]);
+              $scope.views.search.count = 1;
+              $scope.views.search.pages = aq.range(1 / 30);
+              $scope.views.search.status = "done";             
             })
             
           } else {
-            console.log("do regular item")
             $scope.views.search.status = "preparing";
             AQ.Sample.find(item.sample_id).then( sample => {
-              $scope.views.search.samples = aq.collect([sample],function(s) {
-                var sample = new Sample($http).from(s);
-                if ( aq.url_params().sid && sample.id === parseInt(aq.url_params().sid) ) {
-                  sample.open = true;
-                  sample.inventory = true;
-                  sample.loading_inventory = true;
-                  sample.get_inventory(function() {
-                    sample.loading_inventory = false;            
-                    sample.inventory = true;
-                  });              
-                }
-                return sample;
-              });
+              $scope.views.search.samples = sample_inventory([sample]);
               $scope.views.search.count = 1;
               $scope.views.search.pages = aq.range(1 / 30);
               $scope.views.search.status = "done";
-            })
+          })
             .catch(() => { 
               alert("Could not find sample with item id " + $scope.views.search.item_id);
               $scope.views.search.status = "done";
             });
           }
         })
- 
-      } ).catch(() => alert("could not find object type"))
+      })
     }
     
 
