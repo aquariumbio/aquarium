@@ -29,7 +29,6 @@ $row-height: 22px;
   .radio:active,
   .radio:checked {
     display: inline;
-    width: 10% !important;
     margin: 0;
     padding: 0;
   }
@@ -37,6 +36,5 @@ $row-height: 22px;
   .radio-label {
     padding-top: 2px !important;
     display: inline;
-    width: 80% !important;
   }
 }

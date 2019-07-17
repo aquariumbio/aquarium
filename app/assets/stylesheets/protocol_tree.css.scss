@@ -185,9 +185,6 @@ assign {
   &:before {
     content: "Assign: ";
   }
-  var {
-
-  }
   value {
     &:before {
       content: " = ";
@@ -293,3 +290,4 @@ log {
   }
   @include small-box;
 }
+

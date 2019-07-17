@@ -22,9 +22,6 @@
     }
   }  
 
-  .op-type {
-  }
-
   .library {
     font-style: italic;
   }
@@ -111,10 +108,6 @@
 
   .input-fit {
     width: 100%;
-  }
-
-  .ot-part-container {
-    /*position: relative;*/
   }
 
   .ace_editor {
@@ -204,9 +197,6 @@
       background: lightyellow;
     }
 
-    .content {
-    }
-
     .content-title {
       font-weight: bold;
     }
@@ -233,10 +223,8 @@
       bottom: -2px;
       display: inline-block;
       margin: 4px;
-      baseline-shift: 40px;
     }
   }
-
 
 }
 
