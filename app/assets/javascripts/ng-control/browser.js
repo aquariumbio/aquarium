@@ -340,7 +340,7 @@
 
     }
 
-    // Search
+    // Search function handles all of the cases that depend on the state of the input fields
     $scope.search = function(p) {
 
       $scope.views.search.samples = [];
@@ -358,6 +358,13 @@
           
     }
 
+    // Removing dupilcate in the list 
+    function removeDuplicate(list, prop) {
+      return list.filter((obj, pos, arr) => {
+      return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
+      });
+    }
+
     // item_search function allows users to search for sample by Item ID
     $scope.item_search = function() {
       AQ.Item.find($scope.views.search.item_id).then( item => {
@@ -368,8 +375,17 @@
               var item_list = collection.part_matrix.reduce(function (a, b) {
                 return a.concat(b);
               });
+              var sample;
+              var sample_list = [];
+              for (let i = 0; i < item_list.length; i++) {
+                sample = item_list[i].sample;
+                if (sample) {
+                  sample_list.push(sample);
+                }
+              }
+              console.log(sample_list[0])
               $scope.views.search.status = "preparing";
-              $scope.views.search.samples = sample_inventory([item_list[0].sample]);
+              $scope.views.search.samples = sample_inventory(removeDuplicate(sample_list, 'id'));
               $scope.views.search.count = 1;
               $scope.views.search.pages = aq.range(1 / 30);
               $scope.views.search.status = "done";             
