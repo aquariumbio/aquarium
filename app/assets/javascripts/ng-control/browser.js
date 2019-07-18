@@ -347,7 +347,11 @@
       $scope.views.search.status = "searching";
       $scope.views.search.page = p;
 
-      $http.post("/browser/search",$scope.views.search).
+      if ($scope.views.search.item_id) {
+        $scope.item_search()
+      }
+      else {
+        $http.post("/browser/search",$scope.views.search).
         then( function(response) { 
           $scope.views.search.status = "preparing";         
           $scope.views.search.samples = sample_inventory(response.data.samples);
@@ -355,6 +359,7 @@
           $scope.views.search.pages = aq.range(response.data.count / 30);
           $scope.views.search.status = "done";
         });
+      }
           
     }
 
@@ -383,7 +388,6 @@
                   sample_list.push(sample);
                 }
               }
-              console.log(sample_list[0])
               $scope.views.search.status = "preparing";
               $scope.views.search.samples = sample_inventory(removeDuplicate(sample_list, 'id'));
               $scope.views.search.count = 1;
@@ -398,6 +402,8 @@
               $scope.views.search.count = 1;
               $scope.views.search.pages = aq.range(1 / 30);
               $scope.views.search.status = "done";
+              cookie();
+              AQ.update();
           })
             .catch(() => { 
               alert("Could not find sample with item id " + $scope.views.search.item_id);
