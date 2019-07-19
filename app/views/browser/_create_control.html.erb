@@ -1,11 +1,11 @@
 <div layout="row"  layout-align="center center" layout-padding ng-if="projects && sample_names && sample_type_names">
 
-    <label class="md-button md-raised upload-button">
-      Upload <input type=file
-                    id="spreadsheet"
-                    file="spreadsheet"
-                    style="display: none;"
-                    custom-on-change="upload_change">
+    <label class="md-button md-raised upload-button" ng-click="">
+      Upload Sample <input type=file
+                      id="spreadsheet"
+                      file="spreadsheet"
+                      style="display: none;"
+                      custom-on-change="upload_change">
     </label>
 
     <div ng-if="spreadsheet_name" style="margin-top: 10px">
