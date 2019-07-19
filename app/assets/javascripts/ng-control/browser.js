@@ -406,7 +406,7 @@
               AQ.update();
           })
             .catch(() => { 
-              alert("Could not find sample with item id " + $scope.views.search.item_id);
+              alert("Could not find sample with Item ID " + $scope.views.search.item_id);
               $scope.views.search.status = "done";
             });
           }
