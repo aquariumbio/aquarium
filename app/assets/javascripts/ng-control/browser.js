@@ -493,6 +493,22 @@
         }
       };
 
+
+      $scope.upload_dialog = function() {
+
+        let dialog = $mdDialog.confirm()
+            .clickOutsideToClose(true)
+            .title('Upload Sample From Local Computer')
+            .textContent('')
+            .ariaLabel(title)
+            .ok('Ok');
+  
+        console.log(details);
+  
+        $mdDialog.show(alert).then()        
+  
+      };
+
       $scope.upload_change = function(files) {
         $scope.spreadsheet_name = files[0].name;
         $scope.upload();
