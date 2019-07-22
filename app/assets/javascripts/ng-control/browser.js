@@ -493,20 +493,18 @@
         }
       };
 
-
       $scope.upload_dialog = function() {
+        let dialog = $mdDialog
+          .confirm()
+          .clickOutsideToClose(true)
+          .title("Upload Sample From Local Computer")
+          .textContent("")
+          .ariaLabel(title)
+          .ok("Ok");
 
-        let dialog = $mdDialog.confirm()
-            .clickOutsideToClose(true)
-            .title('Upload Sample From Local Computer')
-            .textContent('')
-            .ariaLabel(title)
-            .ok('Ok');
-  
         console.log(details);
-  
-        $mdDialog.show(alert).then()        
-  
+
+        $mdDialog.show(alert).then();
       };
 
       $scope.upload_change = function(files) {
