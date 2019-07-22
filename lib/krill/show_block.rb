@@ -277,6 +277,7 @@ module Krill
     #
     #   choice = data[:choice]
     def select(choices, opts = {})
+      choices = choices.uniq
       raise 'First argument to select should be an array of numbers or strings' unless is_proper_array choices
 
       options = {
