@@ -29,14 +29,15 @@
   <div class="search-part">
     <label style="color: rgb(0,0,0,0.87); font-size: 14px; font-weight: 500; margin-left: 5.5px; margin-bottom: 0; transform: none">Item ID</label>
     <input  name="item_id"
-            type="number" min='1' step="any"
+            type="text" min='1' 
             style="width: 100%; margin-bottom: 0"
             ng-change="user.changed = true"
             ng-model="views.search.item_id"
+            ng-pattern="/^[0-9]/"
             data-search-input="find-item">
     <div ng-messages="item_id.$error"></div>
     <div ng-messages="!item_id.$error">
-      <div ng-message='type'>Your Item ID must be a number.</div>
+      <div ng-message='pattern'>Your Item ID must be a number.</div>
       <div ng-message="min">Your Item ID must be higher than 0.</div>
     </div>  
   </div>
