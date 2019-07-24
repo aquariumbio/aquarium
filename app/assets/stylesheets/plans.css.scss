@@ -1,9 +1,9 @@
 @import "variables";
 
 .plans {
-
   .opeditbar {
     width: calc(100vw - 400px);
+    
     inner {
       display: block;
     }
@@ -11,61 +11,57 @@
 
   .dismiss {
     position: absolute;
-    top: 5px;
     right: 5px;
+    top: 5px;
   }
 
   .message {
-    padding: 10px;
     background: $selection-highlight-color;
-    position: relative;
     border: 1pt solid #eee;
-    padding-right: 20px;  
-  }  
+    padding: 10px;
+    padding-right: 20px;
+    position: relative;
+  }
 
   .message-list {
     list-style-type: circle;
   }
 
   .editor-main {
-
     height: 100%;
     width: calc(100vw - 400px);
     position: relative;
 
-    .operation-editor::-webkit-scrollbar { 
+    .operation-editor::-webkit-scrollbar {
       display: none;
-    }        
+    }
 
     .operation-editor {
-
       outline: none;
       border-top: 1pt solid #ccc;
       overflow: scroll;
       margin-top: 5px;
       margin-right: 5px;
       padding: 16px 0 26px 0;
-      transition: height ease .2s;
+      transition: height ease 0.2s;
 
       .io-container {
-
         margin: 2px;
 
         input {
-          height: 30px !important;
-          width: 100%;
-          outline: none;
           border: 1pt solid #eee;
-          padding: 2px;
-          margin: 0px;
           border-radius: 2px;
+          height: 30px !important;
+          margin: 0;
+          outline: none;
+          padding: 2px;
+          width: 100%;
 
           &:focus {
             outline: none;
             border-color: #9ecaed;
             box-shadow: 0 0 10px #9ecaed;
           }
-          
         }
         .io-type {
           text-align: right;
@@ -84,13 +80,10 @@
           padding: 3px;
           height: 30px !important;
         }
-
       }
-
     }
 
     .plan-editor-container {
-
       position: relative;
       overflow: scroll;
       outline: none;
@@ -100,7 +93,7 @@
         border-top: none;
         border-left: none;
         border-right: 3px solid #eee;
-        border-bottom: 3px solid #eee;        
+        border-bottom: 3px solid #eee;
         width: 16000px; /*calc(100vw - 400px);*/
         height: 16000px;
         cursor: arrow;
@@ -109,29 +102,28 @@
         &:active {
           cursor: arrow;
         }
-
-      }     
-
-    }  
-
+      }
+    }
   }
 
   .field-name-help {
-    text-anchor: 'start';
+    text-anchor: "start";
     background: white;
     font-size: 9pt;
   }
 
-  .op, .op-selected, .module {
+  .op,
+  .op-selected,
+  .module {
     fill: white;
     stroke: black;
-    stroke-width: 1px;  
-    cursor: pointer;  
+    stroke-width: 1px;
+    cursor: pointer;
   }
 
   .op-selected {
-    fill: azure;  
-    stroke-width: 2; 
+    fill: azure;
+    stroke-width: 2;
     box-shadow: 10px 10px 5px $selection-highlight-color;
   }
 
@@ -139,7 +131,9 @@
     fill: #eee;
   }
 
-  .op-name, .module-name, .module-io-index {
+  .op-name,
+  .module-name,
+  .module-io-index {
     font-size: 9pt;
     text-anchor: middle;
     cursor: pointer;
@@ -147,7 +141,7 @@
     user-select: none;
     color: #555;
     -webkit-user-select: none;
-    -moz-user-select: none;    
+    -moz-user-select: none;
   }
 
   .op-status {
@@ -156,7 +150,7 @@
     cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
-    -moz-user-select: none;     
+    -moz-user-select: none;
   }
 
   .op-edit-status {
@@ -166,7 +160,7 @@
     cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
-    -moz-user-select: none; 
+    -moz-user-select: none;
     &:hover {
       fill: black;
       opacity: 1;
@@ -176,10 +170,10 @@
   .op-edit-rect {
     fill: white;
     stroke: black;
-    stroke-width: 1px;    
+    stroke-width: 1px;
     user-select: none;
     -webkit-user-select: none;
-    -moz-user-select: none;      
+    -moz-user-select: none;
   }
 
   .op-retry {
@@ -190,7 +184,7 @@
     cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
-    -moz-user-select: none;   
+    -moz-user-select: none;
   }
 
   .op-status-error {
@@ -218,13 +212,13 @@
     stroke-width: 1px;
     stroke: black;
     fill: white;
-    cursor: pointer;      
+    cursor: pointer;
   }
 
   .module-io-number {
     font-size: 8pt;
     text-anchor: middle;
-  }  
+  }
 
   .op-cost {
     font-size: 8pt;
@@ -234,19 +228,21 @@
     pointer-events: none;
     user-select: none;
     -webkit-user-select: none;
-    -moz-user-select: none;    
-  } 
+    -moz-user-select: none;
+  }
 
   .field-value {
+    cursor: pointer;
     fill: white;
+    r: 5;
     stroke: black;
     stroke-width: 1px;
-    cursor: pointer;
   }
 
   .field-value-selection {
-    stroke: cyan;
     fill: none;
+    r: 9;
+    stroke: cyan;
   }
 
   .field-value-compatible {
@@ -257,44 +253,45 @@
     fill: lightgreen;
   }
 
-
   .field-value-invalid {
-    fill: $selection-highlight-color;
-  }  
+    fill: $error-highlight-color;
+  }
 
   .parameter {
     fill: white;
     stroke: black;
-    stroke-width: 1px; 
+    stroke-width: 1px;
     cursor: pointer;
   }
 
   .parameter-has-value {
     fill: lightgreen;
-  }  
+  }
 
   .parameter-has-no-value {
-    fill: $selection-highlight-color;
-  }    
+    fill: $error-highlight-color;
+  }
 
-  .wire, .wire-selected {
+  .wire,
+  .wire-selected {
     fill: none;
     stroke: #555;
     stroke-width: 1.5;
-    cursor: pointer;       
+    cursor: pointer;
   }
 
   .wire-selected {
     stroke: black;
-    stroke-width: 2.5;    
+    stroke-width: 2.5;
   }
 
   .wire-inconsistent {
     /*stroke-width: 2.0;*/
-    stroke: $selection-highlight-color;
+    stroke: $error-highlight-color;
   }
 
-  .wire-arrowhead, .wire-arrowhead-selected {
+  .wire-arrowhead,
+  .wire-arrowhead-selected {
     fill: #555;
     /*stroke: #555;*/
     /*stroke-width: 1.5;*/
@@ -307,7 +304,7 @@
   }
 
   .wire-arrowhead-inconsistent {
-    fill: $selection-highlight-color;
+    fill: $error-highlight-color;
     /*stroke: black;*/
     /*stroke-width: 2.5;    */
   }
@@ -315,8 +312,8 @@
   .wire-hitline {
     fill: none;
     stroke: white;
-    stroke-width: 6; 
-    cursor: pointer;   
+    stroke-width: 6;
+    cursor: pointer;
   }
 
   .multiselect {
@@ -334,7 +331,7 @@
   .items-in-stock {
     background: #eeffee;
     color: #060;
-  }  
+  }
 
   .plan-name-input {
     margin-top: 9px;
@@ -353,7 +350,7 @@
       cursor: not-allowed;
       .action-name {
         color: #aaa;
-      }      
+      }
     }
     &:enabled:active {
       background: #bbb;
@@ -370,7 +367,6 @@
       fill: #bbb;
       stroke: #bbb;
     }
-
   }
 
   .compact-list {
@@ -380,14 +376,18 @@
       padding: 0 0 0 5px;
       a {
         color: black;
-        &:active, &:hover, &:visited, &:link {
+        &:active,
+        &:hover,
+        &:visited,
+        &:link {
           text-decoration: none;
-        };
+        }
       }
       border: 1px solid white;
       /*border-left: 5px solid white;*/
-      &:active, &:hover {
-        background-color: $selection-highlight-color
+      &:active,
+      &:hover {
+        background-color: $selection-highlight-color;
       }
     }
     .active-plan {
@@ -397,7 +397,7 @@
   }
 
   .no-inventory {
-    color: $selection-highlight-color;
+    color: $error-highlight-color;
   }
 
   .sidebar-button {
@@ -417,8 +417,8 @@
     color: white;
     &:hover {
       background: $table-header-color;
-    }    
-  } 
+    }
+  }
 
   .fv-pad {
     padding: 2px;
@@ -431,11 +431,11 @@
   .plan-list-element {
     margin-right: 5px;
     width: 100%;
-    -webkit-user-select: none; /* Safari */        
+    -webkit-user-select: none; /* Safari */
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE10+/Edge */
-    user-select: none; /* Standard */       
-  } 
+    user-select: none; /* Standard */
+  }
 
   .folder-delete-icon {
     color: #333;
@@ -453,9 +453,9 @@
 
   .text-box {
     fill: white;
-    fill-opacity: 0.0;
+    fill-opacity: 0;
     stroke: none;
-    stroke-width: 1px; 
+    stroke-width: 1px;
   }
 
   .text-box-selected {
@@ -467,19 +467,19 @@
     height: 7px;
     width: 7px;
     fill: white;
-    fill-opacity: 0.0;
+    fill-opacity: 0;
     &:hover {
       fill: #555;
     }
-  }    
+  }
 
   .text-box-anchor-selected {
-    fill: #555;   
-    fill-opacity: 1.0;
+    fill: #555;
+    fill-opacity: 1;
   }
 
   .text-box-content {
-    margin: 1px; 
+    margin: 1px;
     height: calc(100% - 2px);
     overflow: hidden;
     -webkit-user-select: none; /* Safari */
@@ -491,8 +491,9 @@
     }
     table {
       width: 100%;
-      td, th {
-        border: 1px solid #AAA;
+      td,
+      th {
+        border: 1px solid #aaa;
         padding: 4px;
       }
     }
@@ -519,12 +520,12 @@
     width: 100%;
     height: 100%;
     z-index: 10;
-    background-color: rgba(0,0,0,0.15);     
+    background-color: rgba(0, 0, 0, 0.15);
   }
 
   .small-link {
-    font-family: Courier New,Courier,Lucida Sans Typewriter,Lucida Typewriter,monospace; 
+    font-family: Courier New, Courier, Lucida Sans Typewriter, Lucida Typewriter,
+      monospace;
     font-size: 9pt;
   }
-  
-} 
+}
