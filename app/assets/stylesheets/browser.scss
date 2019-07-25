@@ -1,8 +1,6 @@
 @import "variables";
 
 $row-height: 18px;
-$selected-sample-color: #f6ffff;
-$selected-sample-outline-color: #e0ffff;
 
 .browser {
   .search-part {
@@ -52,6 +50,10 @@ $selected-sample-outline-color: #e0ffff;
         line-height: 1.75em; /* default list item's `line-height` */
         font-weight: bold;
         position: relative;
+      }
+
+      #searched_item {
+        background-color: $sample-highlight-color
       }
 
       li:before {
@@ -252,13 +254,11 @@ $selected-sample-outline-color: #e0ffff;
 
   .field-table {
     width: 100%;
-    /*outline: 1pt solid #bfb;*/
     margin: 0;
     td {
       padding: 0 0 0 5px;
       height: $row-height;
       overflow: visible;
-      /*outline: 1pt solid #def; */
     }
     .name {
       width: 210px;
@@ -286,7 +286,6 @@ $selected-sample-outline-color: #e0ffff;
     }
     .modifer {
       width: 16px;
-      /*border: 1pt solid green;*/
     }
   }
 
@@ -379,11 +378,11 @@ $selected-sample-outline-color: #e0ffff;
     background: white;
     @include sample-tree-list(white);
   }
-  .sample-container:hover {
-    background: $selection-highlight-color;
-    outline: 1pt solid $selected-sample-outline-color;
+  .sample-heading-name:hover {
+    background: $sample-highlight-color;
+    outline: 1pt solid $sample-highlight-border;
     border-radius: 2px;
-    @include sample-tree-list($selection-highlight-color);
+    @include sample-tree-list($sample-highlight-color);
   }
 
   /********************************************************************************************/

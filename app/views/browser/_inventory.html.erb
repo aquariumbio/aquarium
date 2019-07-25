@@ -17,7 +17,42 @@
 
 <script type="text/ng-template" id="inventory-item">
 
-  <table ng-repeat="item in items | filter: item_filter(sample,container)" class='inventory-table'>
+  <table ng-repeat="item in items | filter: item_filter(sample,container)" ng-if="!(item.id == views.search.item_id)" class='inventory-table'>
+
+    <tr>
+      
+      <td style="width: 20%">
+        <b ng-if="$first">{{container.name}}</b>
+      </td>
+
+      <td style="width: 55px">
+        <div item="item" container="item.object_type" sample="sample"></div>
+      </td>
+
+      <td style="width: 80px">
+        <span ng-if="item.location == 'deleted'" class='deleted-item'>{{item.location}}</span>
+        <span ng-if="item.location != 'deleted'">{{item.location}}</span>
+      </td>
+
+      <td ng-if="item_list" 
+          style="width: 40%"
+          ng-include="'dataList'" 
+          ng-init="parent = item; type='Item'">
+      </td>
+
+      <td ng-if="col_list"
+          style="width: 40%"
+          ng-include="'collectionDisplay'"
+          ng-init='parent = item; matrix = item.matrix'>
+      </td>
+
+      <td style="width: 105px">{{item.created_at|date}}</td>
+
+    </tr>
+
+  </table>
+
+  <table ng-repeat="item in items | filter: item_filter(sample,container)" ng-if="(item.id == views.search.item_id)" class='inventory-table' id='searched_item'>
 
     <tr>
       
@@ -80,7 +115,7 @@
 
     <ul ng-if="!sample.loading_inventory && visible_inventory(sample) == 0" 
         class='sample-tree-list'>
-      <li>No items in inventory (<a href='#' ng-click='show_description(sample)'>Show Description</a>)</li>
+      <li>No items in inventory (<a href='#' ng-click='toggle_inventory(sample)'>Show Description</a>)</li>
     </ul>    
 
   </div>
