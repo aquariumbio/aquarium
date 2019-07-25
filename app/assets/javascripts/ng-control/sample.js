@@ -106,49 +106,55 @@
       };
 
       $scope.toggle = function(sample) {
-        if (sample.edit) return;
-
-        if (sample.open) {
-          sample.open = false;
-        } else {
-          sample.find(sample.id, function(sample) {
-            sample.open = true;
-          });
+        if ( !sample.edit ) {
+          if ($scope.views.search.sample_type || $scope.views.search.query) {
+            if ( sample.open ) {
+              sample.open = false;
+            } else {
+              sample.find(sample.id,function(sample) {
+                sample.open = true;
+              });
+            }
+          } 
+          else if ($scope.views.search.item_id) {
+            if ( sample.open ) {
+              sample.open = false;
+            } else {
+              sample.find(sample.id,function(sample) {
+                sample.open = true;
+                $scope.toggle_inventory(sample,true)
+              });
+            }
+          }
+          else {
+            if ( sample.open ) {
+              sample.open = false;
+            } else {
+              sample.find(sample.id,function(sample) {
+                sample.open = true;
+                $scope.toggle_inventory(sample,true);            
+              });
+            }           
+          }
         }
-      };
+      }
 
-      $scope.show_inventory = function(sample) {
-        if (sample.edit) return;
+      $scope.toggle_inventory = function(sample,val) {
 
-        sample.inventory = true;
+        if ( val ) sample.inventory = val;
         sample.loading_inventory = true;
-        sample.get_inventory(function() {
-          sample.loading_inventory = false;
-          sample.inventory = true;
-        });
-      };
-
-      $scope.show_description = function(sample) {
-        if (sample.edit) return;
-
-        sample.inventory = false;
-      };
-
-      $scope.toggle_inventory = function(sample, val) {
-        if (sample.edit) return;
-
-        if (val) sample.inventory = val;
-        sample.loading_inventory = true;
-
-        if (!val && sample.inventory) {
+  
+        if ( !val && !sample.edit && sample.inventory ) {
           sample.inventory = false;
-        } else if (val) {
+        } else if ( val || !sample.edit ) {
           sample.get_inventory(function() {
-            sample.loading_inventory = false;
+            sample.loading_inventory = false;            
             sample.inventory = true;
           });
         }
-      };
+  
+      } 
+  
 
       $scope.new_item = function(sample, container) {
         $http
