@@ -3,31 +3,28 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .boxlist {
-
   .name {
     background: #eee;
-    margin: 2px;
-    padding: 4px;
-    line-height: 1.2;
+    border-radius: 4px;
     display: inline;
     font-size: 10pt;
-    border-radius: 4px;
+    line-height: 1.2;
+    margin: 2px;
+    padding: 4px;
     text-align: center;
   }
 
   .selected {
     background: #0ee;
   }
-
 }
 
 .ot {
   background: #fff;
-  margin: 2px;
-  padding: 2px;
-  line-height: 1;
+  border-radius: 4px;
   display: inline;
   font-size: 10pt;
-  border-radius: 4px;
+  line-height: 1;
+  margin: 2px;
+  padding: 2px;
 }
-
