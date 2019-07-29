@@ -9,6 +9,14 @@
 
   <div class="search-part">
     <label>Sample Name or ID</label>
+    <md-tooltip md-direction="right" 
+        style=" background-color: #555;
+                color: white;
+                text-align: center;
+                border-radius: 3px;
+                padding: 5px">
+        Input Sample Name or ID
+    </md-tooltip> 
     <input type="text"
            ng-model="views.search.query"
            style="width: 100%" 
@@ -17,7 +25,15 @@
   </div>
 
   <div class="search-part">
-    <label>Sample Type</label>
+    <label style="width: 40%">Sample Type</label>
+    <md-tooltip md-direction="right" 
+        style=" background-color: #555;
+                color: white;
+                text-align: center;
+                border-radius: 3px;
+                padding: 5px">
+        Input Sample Type
+    </md-tooltip> 
     <input type="text"
            ng-model="views.search.sample_type"
            style="width: 100%"
@@ -27,7 +43,15 @@
 
   <md-input-container style="padding-top: 0">
   <div class="search-part">
-    <label style="color: rgb(0,0,0,0.87); font-size: 14px; font-weight: 500; margin-left: 5.5px; margin-bottom: 0; transform: none">Item ID</label>
+    <label style="cursor: pointer; color: rgb(0,0,0,0.87); font-size: 14px; font-weight: 500; margin-left: 5.5px; margin-bottom: 0; transform: none">Item ID</label>
+    <md-tooltip md-direction="right" 
+      style=" background-color: #555;
+              color: white;
+              text-align: center;
+              border-radius: 3px;
+              padding: 5px">
+      Input Item ID
+    </md-tooltip>  
     <input  name="item_id"
             type="text" min='1' 
             style="width: 100%; margin-bottom: 0"
@@ -47,6 +71,14 @@
   <div class="search-part" layout="row">
     <div>
       <label>Project</label>
+      <md-tooltip md-direction="right" 
+        style=" background-color: #555;
+                color: white;
+                text-align: center;
+                border-radius: 3px;
+                padding: 5px">
+        Input Project
+      </md-tooltip> 
       <input type="text"
              ng-model="views.search.project"
              style="width: 70%"
@@ -62,6 +94,14 @@
   <div class="search-part" layout="row">  
     <div>
       <label>User</label>
+      <md-tooltip md-direction="right" 
+        style=" background-color: #555;
+                color: white;
+                text-align: center;
+                border-radius: 3px;
+                padding: 5px">
+        Input User name
+    </md-tooltip> 
       <input type="text"
              ng-model="views.search.user" 
              style="width: 70%" 
