@@ -19,7 +19,8 @@
     "aqCookieManager",
     "$sce",
     "$window",
-    function($scope, $http, $attrs, aqCookieManager, $sce, $window) {
+    "$mdDialog",
+    function($scope, $http, $attrs, aqCookieManager, $sce, $window, $mdDialog) {
       AQ.init($http);
       AQ.update = () => {
         $scope.$apply();
@@ -493,18 +494,22 @@
         }
       };
 
+
+      // When users click on the "Upload Samples" button,
+      // upload_dialog function shows up a confirm dialog which is used to give users a note about the file format before uploading.
       $scope.upload_dialog = function() {
-        let dialog = $mdDialog
-          .confirm()
+        let dialog = $mdDialog.confirm()
           .clickOutsideToClose(true)
-          .title("Upload Sample From Local Computer")
-          .textContent("")
-          .ariaLabel(title)
-          .ok("Ok");
+          .title("Upload Samples From Local Computer")
+          .textContent("Spreadsheets should be in .csv format. The first entry of the first row should specify the sample type name. Remaining entries in the first row should be names of fields, the word 'Project', or the word 'Description'. Fields that correspond to arrays may show up multiple times, and can be empty (in which case the entry is ignored). The remaining rows specify the samples. In the first column should be the name of the sample. All other columns correspond to their headings. Subsamples can be referred to by name or id. ")
+          .ariaLabel("Upload Samples")
+          .ok("Upload")
+          .cancel("Cancel")
 
-        console.log(details);
-
-        $mdDialog.show(alert).then();
+        $mdDialog.show(dialog).then(
+          () => $('.input_sample').click(),
+          () => null   
+        );
       };
 
       $scope.upload_change = function(files) {
