@@ -72,7 +72,7 @@ namespace :collections do
           c.migrate
           # TODO: this is probably JSON::ParserError
         rescue Exception => e
-          c.associate :migration_error, 'Could not migrate this collecton. Setting object type to orphan'
+          c.associate :migration_error, 'Could not migrate this collection. Setting object type to orphan'
           c.associate :migration_error_msg, "Error: #{e}"
           c.object_type_id = orphan_type.id
           c.save
