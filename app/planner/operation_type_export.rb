@@ -47,9 +47,7 @@ module OperationTypeExport
         on_the_fly: on_the_fly ? true : false,
 
         field_types: field_types.select(&:role).collect do |ft|
-
           {
-
             ftype: ft.ftype,
             role: ft.role,
             name: ft.name,
@@ -61,9 +59,7 @@ module OperationTypeExport
             preferred_operation_type_id: ft.preferred_operation_type_id,
             preferred_field_type_id: ft.preferred_field_type_id,
             choices: ft.choices
-
           }
-
         end,
 
         protocol: protocol ? protocol.content : '',

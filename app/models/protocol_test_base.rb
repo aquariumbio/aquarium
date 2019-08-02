@@ -58,7 +58,7 @@ class ProtocolTestBase
   end
 
   def make_job(operations:, user:)
-    job, _newops = @operation_type.schedule( # newops is not used here
+    job = Job.schedule(
       operations,
       user,
       Group.find_by_name('technicians')

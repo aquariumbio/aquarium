@@ -35,9 +35,9 @@ class ProtocolDebugEngine
   end
 
   # TODO: consolidate with code in protocol test engine
-  def make_job(operation_type:, operations:, user:)
+  def make_job(operations:, user:)
     operations.extend(Krill::OperationList)
-    job, _newops = operation_type.schedule(
+    job = Job.schedule(
       operations,
       user,
       Group.find_by_name('technicians')
@@ -64,7 +64,6 @@ class ProtocolDebugEngine
       # operation_type = OperationType.find(ot_id)
 
       job = make_job(
-        operation_type: operation_type,
         operations: ops,
         user: current_user
       )

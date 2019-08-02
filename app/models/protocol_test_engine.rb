@@ -8,7 +8,6 @@ class ProtocolTestEngine
   def execute
     plans = build_plans
     @environment.job = make_job(
-      operation_type: @environment.operation_type,
       operations: @environment.operations,
       user: @environment.current_user
     )
@@ -22,9 +21,9 @@ class ProtocolTestEngine
     @environment.operations.make(role: 'input')
   end
 
-  def make_job(operation_type:, operations:, user:)
+  def make_job(operations:, user:)
     operations.extend(Krill::OperationList)
-    job, _newops = operation_type.schedule(
+    job = Job.schedule(
       operations,
       user,
       Group.find_by_name('technicians')

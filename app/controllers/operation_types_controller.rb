@@ -229,9 +229,9 @@ class OperationTypesController < ApplicationController
     plans
   end
 
-  def make_job(operation_type:, operations:, user:)
+  def make_job(operations:, user:)
     # TODO: see ProtocolTestBase.make_job
-    job, _newops = operation_type.schedule(
+    job = Job.schedule(
       operations,
       user,
       Group.find_by_name('technicians')

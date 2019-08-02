@@ -39,6 +39,64 @@ class Job < ActiveRecord::Base
   belongs_to :successor, class_name: 'Job'
   has_many :predecessors, class_name: 'Job', foreign_key: :successor_id
 
+  # Creates a {Job} with the list of operations for the user and group.
+  #
+  # @param operations [OperationsList] the list of operations
+  # @param user [User] the user scheduling the job
+  # @param group [Group] the group for the user
+  def self.create_from(operations:, user:, group:, successor: nil)
+    job = Job.new
+    job.path = 'operation.rb'
+    job.pc = Job.NOT_STARTED
+    operation_type_id = operations.first.operation_type.id
+    job.set_arguments(operation_type_id: operation_type_id)
+    job.group_id = group.id
+    job.submitted_by = user.id
+    job.desired_start_time = Time.now
+    job.latest_start_time = Time.now + 1.hour
+    job.successor_id = successor.id unless successor.nil?
+    job.save
+
+    operations.each do |operation|
+      JobAssociation.create(job_id: job.id, operation_id: operation.id)
+      operation.save
+    end
+
+    job
+  end
+
+  # Creates a {Job} from the list of operations.
+  # Defers an operation if it has a primed predecessor.
+  #
+  # @param operations [OperationsList] the operations
+  # @param user [User] the user scheduling the {Job}
+  # @param group [Group] the group of the user
+  # @return [Job] the job of scheduled operations
+  def self.schedule(operations, user, group, _opts = {})
+    ops_to_schedule = []
+    ops_to_defer = []
+
+    operations.each do |op|
+      pps = op.primed_predecessors
+      if pps.empty?
+        ops_to_schedule << op
+      else
+        ops_to_schedule += pps
+        ops_to_defer << op
+      end
+    end
+
+    unless ops_to_defer.empty?
+      Job.create_from(operations: ops_to_defer, user: user, group: group, successor: opts[:successor])
+      ops_to_defer.each(&:defer)
+    end
+
+    job = Job.create_from(operations: ops_to_schedule, user: user, group: group, successor: opts[:successor])
+    ops_to_schedule.each(&:schedule)
+
+    job
+  end
+
   def self.params_to_time(p)
     DateTime.civil_from_format(:local,
                                p['dt(1i)'].to_i,

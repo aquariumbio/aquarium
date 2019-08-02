@@ -144,54 +144,6 @@ class OperationType < ActiveRecord::Base
     end
   end
 
-  # TODO: this should be a Job factory method
-  def schedule_aux(ops, user, group, opts = {})
-    job = Job.new
-
-    job.path = 'operation.rb'
-    job.pc = Job.NOT_STARTED
-    job.set_arguments(operation_type_id: id)
-    job.group_id = group.id
-    job.submitted_by = user.id
-    job.desired_start_time = Time.now
-    job.latest_start_time = Time.now + 1.hour
-    job.successor_id = opts[:successor].id if opts[:successor]
-    job.save
-
-    ops.each do |op|
-      if opts[:defer]
-        op.defer
-      else
-        op.schedule
-      end
-      JobAssociation.create(job_id: job.id, operation_id: op.id)
-      op.save
-    end
-
-    job
-  end
-
-  # TODO: also a Job factory method, returned ops are not used
-  def schedule(operations, user, group, opts = {})
-    ops_to_schedule = []
-    ops_to_defer = []
-
-    operations.each do |op|
-      pps = op.primed_predecessors
-      if !pps.empty?
-        ops_to_schedule += pps
-        ops_to_defer << op
-      else
-        ops_to_schedule << op
-      end
-    end
-
-    schedule_aux(ops_to_defer, user, group, opts.merge(defer: true))
-    job = schedule_aux(ops_to_schedule, user, group, opts)
-
-    [job, ops_to_schedule]
-  end
-
   #
   # Update Methods for Field Types from Front End Start Here
   #
