@@ -372,7 +372,7 @@
         $scope.views.search.page = p;
 
         if ($scope.views.search.item_id) {
-          $scope.item_search();
+            $scope.item_search();
         } else {
           $http
             .post("/browser/search", $scope.views.search)
@@ -388,11 +388,25 @@
         }
       };
 
-      // Removing dupilcate in the list
-      function removeDuplicate(list, prop) {
+      // remove_duplicate function removes dupilcates in the list
+      function remove_duplicate(list, prop) {
         return list.filter((obj, pos, arr) => {
           return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
         });
+      }
+
+      // search_update() function updates searched samples, count, page, and status
+      function search_update (sample) {
+        $scope.views.search.samples = sample_inventory(sample);
+        $scope.views.search.count = 1;
+        $scope.views.search.pages = aq.range(1 / 30);
+        $scope.views.search.status = "done";
+      }
+
+      // alert_message() function show the message alert box whenever the search fail
+      function alert_message (messages) {
+        alert(messages);
+        $scope.views.search.status = "done";
       }
 
       // item_search function allows users to search for sample by Item ID
@@ -414,32 +428,79 @@
                   }
                 }
                 $scope.views.search.status = "preparing";
-                $scope.views.search.samples = sample_inventory(
-                  removeDuplicate(sample_list, "id")
-                );
-                $scope.views.search.count = 1;
-                $scope.views.search.pages = aq.range(1 / 30);
-                $scope.views.search.status = "done";
+                search_update(remove_duplicate(sample_list, "id"))
               });
+              
             } else {
               $scope.views.search.status = "preparing";
               AQ.Sample.find(item.sample_id)
                 .then(sample => {
-                  $scope.views.search.samples = sample_inventory([sample]);
-                  $scope.views.search.count = 1;
-                  $scope.views.search.pages = aq.range(1 / 30);
-                  $scope.views.search.status = "done";
-                  cookie();
-                  AQ.update();
-                })
+                  // Current search inputs: Sample Name or ID, Item ID
+                  if ($scope.views.search.query) {
+                    if ($scope.views.search.query.includes(sample.id)) {
+                      // Current search inputs: Sample Name or ID, Sample Type, Item ID
+                      if ($scope.views.search.sample_type) {
+                        AQ.SampleType.find(sample.sample_type_id)
+                        .then(s => {
+                          if ($scope.views.search.sample_type == s.name) {
+                            search_update([sample]);
+                            cookie();
+                            AQ.update()
+                          }
+                          else {
+                            alert_message(
+                              "Could not find sample with Sample Name/ID (" +
+                                $scope.views.search.query + ") Sample Type (" +
+                                $scope.views.search.sample_type + ") and Item ID (" + $scope.views.search.item_id + ")"
+                            );
+                          }
+                        })
+                      } 
+                      search_update([sample]);
+                      cookie();
+                      AQ.update()
+                    }
+                    else {
+                      alert_message(
+                        "Could not find sample with Sample Name/ID (" +
+                          $scope.views.search.query + ") and Item ID (" + $scope.views.search.item_id + ")"
+                      );
+                    }
+                  }
+                  
+                  // Current search inputs: Sample Type, Item ID
+                  else if ($scope.views.search.sample_type) {
+                    AQ.SampleType.find(sample.sample_type_id)
+                    .then(s => {
+                      if ($scope.views.search.sample_type == s.name) {
+                        search_update([sample]);
+                        cookie();
+                        AQ.update()
+                      }
+                      else {
+                        alert_message(
+                          "Could not find sample with Sample Type (" +
+                            $scope.views.search.sample_type + ") and Item ID (" + $scope.views.search.item_id + ")"
+                        );
+                      }
+                    })
+                    
+                  }
+
+                  // Current search input: Item ID (only)
+                  else {
+                    search_update([sample]);
+                    cookie();
+                    AQ.update()
+                  }
+                })     
                 .catch(() => {
-                  alert(
-                    "Could not find sample with item id " +
-                      $scope.views.search.item_id
+                  alert_message(
+                    "Could not find sample with Item ID (" +
+                      $scope.views.search.item_id + ")"
                   );
-                  $scope.views.search.status = "done";
                 });
-            }
+              }
           });
         });
       };
