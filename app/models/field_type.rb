@@ -61,7 +61,7 @@ class FieldType < ActiveRecord::Base
   end
 
   def allowable_sample_types
-    if ftype == 'sample'
+    if sample?
       allowable_field_types.collect(&:sample_type)
     else
       []
@@ -74,7 +74,7 @@ class FieldType < ActiveRecord::Base
   end
 
   def allowable_object_types
-    if ftype == 'item'
+    if item?
       allowable_field_types.collect(&:object_type)
     else
       []
@@ -137,7 +137,7 @@ class FieldType < ActiveRecord::Base
     results << "#{parent_name} field '#{name}' has role is #{!!role} but imported field of the same name has role = #{!!raw_field_type[:role]}" unless raw_field_type[:role] == role
     results << "#{parent_name} field '#{name}' has routing symbol is #{!!routing} but imported field of the same name has routing symbol = #{!!raw_field_type[:routing]}." unless raw_field_type[:role] == role
 
-    if ftype == 'sample'
+    if sample?
 
       l1 = allowable_field_types.collect do |aft|
         [

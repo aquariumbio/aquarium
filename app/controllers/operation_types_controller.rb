@@ -166,7 +166,7 @@ class OperationTypesController < ApplicationController
             op['field_values'] = op['field_values'].collect(&:full_json)
           end
           render json: ops_json, status: :ok
-          # TODO: called method just eats exceptions so this will never result in error
+          # TODO:  method precondition_value just eats exceptions so this will never result in error
         rescue Exception => e
           render json: { error: "The precondition for #{operation.name} raised an exception." },
                  status: :unprocessable_entity
@@ -199,12 +199,12 @@ class OperationTypesController < ApplicationController
           raise "Test Operation Error: This operation type may have illegal routing, or zero/multiple io with the same name: #{io.name} (#{io.role}#{io.array ? ', array' : ''}) of type #{io.ftype}" unless io.ftype != 'sample' || test_fvs.one?
 
           test_fv = test_fvs.first
-          if io.ftype == 'sample'
+          if io.sample?
             aft = AllowableFieldType.find_by_id(test_fv[:allowable_field_type_id])
             actual_fv = op.set_property(test_fv[:name], Sample.find_by_id(test_fv[:child_sample_id]), test_fv[:role], true, aft)
             raise "Nil value Error: Could not set #{test_fv}" unless actual_fv
             raise "Active Record Error: Could not set #{test_fv}: #{actual_fv.errors.full_messages.join(', ')}" unless actual_fv.errors.empty?
-          elsif io.ftype == 'number'
+          elsif io.number?
             op.set_property(io.name, test_fv[:value].to_f, io.role, true, nil)
           else # string or json io
             op.set_property(io.name, test_fv[:value], io.role, true, nil)

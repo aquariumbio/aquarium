@@ -119,7 +119,7 @@ module FieldValuer
   def basic_value(ft, fv)
     if fv.value
       ft = field_type fv.name
-      if ft.ftype == 'number'
+      if ft.number?
         fv.value.to_f
       else
         fv.value

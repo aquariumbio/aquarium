@@ -39,7 +39,7 @@ module OperationPlanner
 
     inputs.each do |i|
 
-      next unless i.field_type.ftype == 'sample'
+      next unless i.field_type.sample?
 
       preds = predecessors_aux i, wires, pred_outputs, predecessors
 
@@ -82,7 +82,7 @@ module OperationPlanner
   end
 
   def has_no_stock_or_method
-    inputs.select { |i| i.field_type.ftype == 'sample' }.each do |i|
+    inputs.select { |i| i.field_type.sample? }.each do |i|
       return true if i.predecessors.empty? && !i.satisfied_by_environment
     end
     false

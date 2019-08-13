@@ -111,7 +111,7 @@ class Sample < ActiveRecord::Base
               fv = field_values.create(name: raw_fv[:name])
             end
 
-            if ft.ftype == 'sample'
+            if ft.sample?
               child = if raw_fv[:new_child_sample]
                         Sample.creator(raw_fv[:new_child_sample], user || User.find(user_id))
                       else
@@ -127,7 +127,7 @@ class Sample < ActiveRecord::Base
                 errors.add :child_error, "#{ft.name}: " + stringify_errors(child.errors)
                 raise ActiveRecord::Rollback
               end
-            elsif ft.ftype == 'number'
+            elsif ft.number?
               fv.value = raw_fv[:value].to_f
             else # string, url
               fv.value = raw_fv[:value]

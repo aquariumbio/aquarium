@@ -212,7 +212,7 @@ class OperationType < ActiveRecord::Base
 
   def update_field_type(oldft, newft)
     oldft.name = newft[:name]
-    if oldft.ftype == 'sample'
+    if oldft.sample?
       oldft.routing = newft[:routing]
       oldft.array = newft[:array]
       oldft.part = newft[:part]
