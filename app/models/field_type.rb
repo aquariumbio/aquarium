@@ -85,6 +85,30 @@ class FieldType < ActiveRecord::Base
     ftype
   end
 
+  def has_type(typename)
+    ftype == typename
+  end
+
+  def string?
+    has_type('string')
+  end
+
+  def sample?
+    has_type('sample')
+  end
+
+  def number?
+    has_type('number')
+  end
+
+  def json?
+    has_type('json')
+  end
+
+  def item?
+    has_type('item')
+  end
+
   def empty?
     allowable_sample_types.select { |ast| ast }.empty?
   end
