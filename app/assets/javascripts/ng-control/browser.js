@@ -292,6 +292,17 @@
 
       // Sample creation
 
+      $scope.create_sample_dialog = function() {
+        $mdDialog.show({
+          templateUrl: 'dialog.html',
+          clickOutsideToClose: true
+        })
+        // .then(
+        //   () => save_new_samples(),
+        //   () => null   
+        // )
+      }
+
       $scope.new_sample = function(st) {
         $scope.views.create.samples.push(
           new Sample($http).new(st.id, function() {

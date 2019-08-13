@@ -79,7 +79,7 @@
 <% content_for :action2 do %>
   <md-menu>
 
-    <md-button class='md-raised' ng-click="openMenu($mdMenu, $event)">Create Sample</md-button>
+    <md-button class='md-raised' ng-click="create_sample_dialog()">Create Sample</md-button>
 
     <md-menu-content>
       <md-menu-item ng-repeat="st in sample_types">
@@ -87,7 +87,68 @@
       </md-menu-item>
     </md-menu-content>
 
-  </md-menu>  
+  </md-menu> 
+
+  <md-select-header>Test Sample Type</md-select-header>
+  <select ng-model="views.sample_type.selection" ng-options="st.name for st in sample_types" aria-label="Select sample type"></select> 
+
+  <script type="text/ng-template" id="dialog.html">
+    <md-dialog style="width: 40%; height: 60%">
+        <md-toolbar class="item-toolbar _md _md-toolbar-transitions">
+          <div class="md-toolbar-tools">
+            <h2 class="item-label md-truncate flex">Create New Sample</h2>
+          </div>
+        </md-toolbar>
+
+        <md-dialog-content class="md-dialog-content">
+          <div flex="60" layout="column">
+            <md-input-container>
+              <md-select-header>Sample Type</md-select-header>
+              <select ng-model="views.sample_type.selection" aria-label="Select sample type">
+                <option ng-repeat="st in sample_types" ng-disabled="$index === 1" ng-click="new_sample(st)" ng-value="st.name">
+                  {{st.name}}
+                </option>
+              </select> 
+            </md-input-container>
+
+            <md-input-container>
+              <div>Sample Name</div>
+              <input class="input-no-style full" type="text" name="sample_name" required ng-model="sample.name" md-maxlength="255" aria-label="Input sample name">
+              <div ng-messages="sample_name.$error"></div>
+              <div ng-messages="!sample_name.$error">
+                <div ng-message="required">This is required.</div>
+                <div ng-message="md-maxlength">The sample name must be less than 255 characters long.</div>
+              </div>
+            </md-input-container>     
+       
+            <md-input-container>
+              <div>Sample Description</div>
+              <input class="input-no-style full" type="text" name="sample_description" required ng-model="sample.description" md-maxlength="255" aria-label="Input sample description">
+              <div ng-messages="sample_description.$error"></div>
+              <div ng-messages="!sample_description.$error">
+                <div ng-message="required">This is required.</div>
+                <div ng-message="md-maxlength">The sample name must be less than 255 characters long.</div>
+              </div>
+            </md-input-container> 
+            
+            <md-input-container>
+              <div>Project</div>
+              <input class="input-no-style full" type="text" name="sample_project" required ng-model="sample.project" md-maxlength="255" aria-label="Input sample project">
+              <div ng-messages="sample_project.$error"></div>
+              <div ng-messages="!sample_project.$error">
+                <div ng-message="required">This is required.</div>
+                <div ng-message="md-maxlength">The sample name must be less than 255 characters long.</div>
+              </div>
+            </md-input-container> 
+          </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+          <md-button class="md-primary md-cancel-button md-button ng-scope md-default-theme md-ink-ripple" ng-click="dialog.cancel()">Cancel</md-button>
+          <md-button class="md-primary md-confirm-button md-button md-ink-ripple md-default-theme" ng-disabled="dialogForm.$invalid" class="md-primary">Save</md-button>
+        </md-dialog-actions>
+    </md-dialog>
+  </script>
 <% end %>
 
 <% content_for :action3 do %>
