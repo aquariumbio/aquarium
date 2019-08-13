@@ -215,40 +215,6 @@ class OperationTypesController < ApplicationController
     end
   end
 
-  def build_plan(operations:, user_id:)
-    # TODO: see ProtocolTestBase.build_plan
-    plans = []
-    operations.each do |op|
-      plan = Plan.new(user_id: user_id, budget_id: Budget.all.first.id)
-      plan.save
-      plans << plan
-      pa = PlanAssociation.new(operation_id: op.id, plan_id: plan.id)
-      pa.save
-    end
-
-    plans
-  end
-
-  def make_job(operations:, user:)
-    # TODO: see ProtocolTestBase.make_job
-    job = Job.schedule(
-      operations,
-      user,
-      Group.find_by_name('technicians')
-    )
-
-    job
-  end
-
-  def execute(operations:, manager:)
-    # TODO: see ProtocolTestBase.execute
-    operations.extend(Krill::OperationList)
-    operations.make(role: 'input')
-    # operations.each(&:run)
-    manager.start
-    operations.each(&:reload)
-  end
-
   def test
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
