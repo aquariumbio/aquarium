@@ -72,7 +72,7 @@ class Job < ActiveRecord::Base
   # @param user [User] the user scheduling the {Job}
   # @param group [Group] the group of the user
   # @return [Job] the job of scheduled operations
-  def self.schedule(operations, user, group, _opts = {})
+  def self.schedule(operations, user, group, opts = {})
     ops_to_schedule = []
     ops_to_defer = []
 
