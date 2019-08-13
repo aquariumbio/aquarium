@@ -379,6 +379,8 @@
 
     };
 
+    /* save_first function creates a pop-up dialog which is used to confirm with users
+    that their current plans will be saved before switching to another plan */
     function save_first(msg) {
 
       return new Promise( function(resolve,reject) {
@@ -386,16 +388,17 @@
         if ( $scope.plan.operations.length > 0 ) {
 
           var dialog = $mdDialog.confirm()
-              .title('Save First?')
-              .textContent(msg ? msg : "Save the current plan before loading \"" + $scope.plan.name + "\"?")
+              .title('Switch Plan?')
+              .textContent(msg ? msg : "The current plan will be saved")
               .ariaLabel('Save First?')
-              .ok('Yes')
-              .cancel('No');
-
-          $mdDialog.show(dialog).then( 
+              .ok('Switch')
+              .cancel('Cancel')
+              .clickOutsideToClose(true); 
+          
+          $mdDialog.show(dialog).then(
             () => $scope.plan.save().then(resolve),
-            resolve
-          )        
+            () => null       
+          )   
 
         } else {
 
@@ -791,4 +794,4 @@ function add_designer_message(msg) {
   if (el) {
     el.scope().state.messages.push(msg);
   }
-}           
+} 

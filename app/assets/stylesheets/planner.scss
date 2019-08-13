@@ -10,9 +10,6 @@
     margin: 5px;
   }
 
-  .item-plain {
-  }
-
   .item-selected {
     font-weight: bold;
   }
@@ -80,10 +77,6 @@
       &:hover {
         color: blue;
       };
-    }
-    .op-name {
-    }
-    .op-goal {
     }
   }
 
@@ -238,3 +231,4 @@
    }
 
 }
+

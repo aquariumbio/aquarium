@@ -38,18 +38,8 @@
   padding: 0;
 }
 
-#krill-steps-ui {
-  // outline: 1pt solid red;
-}
-
-.outline {
-  //   outline: 2pt dashed orange;
-}
-
 .krill-carousel-btn {
   display: inline;
-  float: left;
-  width: 50px;
   background: #efefef;
   opacity: 0.4;
   position: relative;
@@ -103,9 +93,6 @@
 
 .krill-step-disabled {
   opacity: 0.5;
-  .krill-step {
-    //border: 1pt solid #999;
-  }
   .krill-input-box {
     color: #999;
   }
@@ -135,27 +122,13 @@
   margin: 0 !important;
   padding: 0;
   border: none;
-  //outline: 4pt solid green;
-}
-
-.krill-step-container {
-  //outline: 4pt solid green;
 }
 
 .krill-step {
-  //border: 1pt solid #000;
-  //border-radius: 15px;
   margin: 0;
   padding: 0;
   position: relative;
   overflow: none;
-  //outline: 4pt solid green;
-  ul {
-  }
-
-  li {
-    // list-style-type: none;
-  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -163,8 +136,6 @@
 //
 
 .krill-step-titlebar {
-  //outline: 1pt dashed red;
-  //  background: #eee;
   border-width: 0 0 1pt 0;
   border-color: #ddd;
   border-style: solid;
@@ -180,8 +151,6 @@
   border-color: lightorange;
   padding: 5px;
   padding-left: 5px;
-  //border-width: 0 1pt 1pt 0;
-  //border-style: solid;
 }
 
 .krill-title {
@@ -401,9 +370,6 @@ $noteBottomMargin: 20px;
   background: lightblue;
 }
 
-.krill-td-input {
-}
-
 .krill-table-input {
   display: inline-block;
   padding: 6px;
@@ -581,7 +547,6 @@ $noteBottomMargin: 20px;
 // Transfer
 
 .krill-from-container {
-  float: left;
   display: inline;
 
   h3 {
@@ -592,9 +557,7 @@ $noteBottomMargin: 20px;
 }
 
 .krill-transfer-arrow {
-  float: left;
   display: inline;
-  width: 100px;
   text-align: center;
   padding-top: 10px;
 }

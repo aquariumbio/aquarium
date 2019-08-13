@@ -1,3 +1,5 @@
+@import "variables";
+
 $row-height: 22px;
 
 .field_value_form {
@@ -15,7 +17,7 @@ $row-height: 22px;
   input:focus,
   input:active,
   input:hover {
-    color: #0000cc;
+    color: $main-navbar-color;
     display: inline-block;
     padding: 2px;
     margin: 0px;
@@ -27,7 +29,6 @@ $row-height: 22px;
   .radio:active,
   .radio:checked {
     display: inline;
-    width: 10% !important;
     margin: 0;
     padding: 0;
   }
@@ -35,6 +36,5 @@ $row-height: 22px;
   .radio-label {
     padding-top: 2px !important;
     display: inline;
-    width: 80% !important;
   }
 }

@@ -62,12 +62,16 @@
   }
 }
 
-.md-raised.md-button {
+// Style for buttons
+.md-raised.md-button,
+.md-button.md-default-theme.md-primary.md-cancel-button {
   color: $button-color;
 }
 
-.md-button.md-primary.md-raised {
+.md-button.md-primary.md-raised, 
+.md-confirm-button.md-button.md-ink-ripple.md-default-theme {
   background-color: $button-color;
+  color: white
 }
 
 .md-button.md-raised[disabled] {

@@ -1,11 +1,9 @@
 .spanner-row {
 
   display: block;
-  vertical-align: top;
   width: calc(100% - 0px);
   margin: 0px;
   position: relative;
-  /*outline: 2pt dashed #f99;*/
   padding: 0;
 
   .spanner-cell {
@@ -16,7 +14,6 @@
     padding: 2px;
     margin: 0;
     z-index: 100;
-    /*outline: 1pt solid red;*/
 
     input[type=text] {
       appearance: none;
