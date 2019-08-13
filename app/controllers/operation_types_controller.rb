@@ -246,7 +246,15 @@ class OperationTypesController < ApplicationController
       end
 
       operations = operations.select(&:precondition_value) if params[:use_precondition]
-      # TODO: stop here if no operations
+      if operations.empty?
+        response = {
+          error: 'Unable to run test: no preconditions passed',
+          backtrace: []
+        }
+        render json: response, status: :unprocessable_entity
+        raise ActiveRecord::Rollback
+      end
+
       test = ProtocolTestBase.new(operation_type, current_user)
       test.add_operations(operations)
 
