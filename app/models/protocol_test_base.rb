@@ -57,16 +57,6 @@ class ProtocolTestBase
     plan
   end
 
-  def make_job(operations:, user:)
-    job = Job.schedule(
-      operations,
-      user,
-      Group.find_by_name('technicians')
-    )
-
-    job
-  end
-
   def execute(job:)
     manager = Krill::DebugManager.new(job)
     # TODO: could this be initialize?
@@ -79,7 +69,11 @@ class ProtocolTestBase
 
   def run
     @plan = build_plans(operations: @operations, user: @current_user)
-    @job = make_job(operations: @operations, user: @current_user)
+    @job = Job.schedule(
+      operations: @operations,
+      user: @current_user,
+      group: Group.find_by(name: 'technicians')
+    )
     execute(job: @job)
     @backtrace = @job.reload.backtrace
   end

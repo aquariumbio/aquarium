@@ -33,7 +33,11 @@ class OperationsController < ApplicationController
   def batch
     operations = params[:operation_ids].collect { |oid| Operation.find(oid) }
     unless operations.empty?
-      Job.schedule(operations, current_user, Group.find_by_name('technicians'))
+      Job.schedule(
+        operations: operations,
+        user: current_user,
+        group: Group.find_by(name: 'technicians')
+      )
     end
 
     render json: { operations: operations, jobs: active_and_pending_jobs }

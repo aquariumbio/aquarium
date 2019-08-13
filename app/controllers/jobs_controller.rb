@@ -7,7 +7,7 @@ class JobsController < ApplicationController
   def index
 
     @users = User.all - User.includes(memberships: :group)
-                            .where(memberships: { group_id: Group.find_by_name('retired') })
+                            .where(memberships: { group_id: Group.find_by(name: 'retired') })
     @groups = Group.includes(:memberships).all.reject { |g| g.memberships.length == 1 }
 
     respond_to do |format|

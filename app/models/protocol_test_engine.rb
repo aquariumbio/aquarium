@@ -7,9 +7,10 @@ class ProtocolTestEngine
 
   def execute
     plans = build_plans
-    @environment.job = make_job(
+    @environment.job = Job.schedule(
       operations: @environment.operations,
-      user: @environment.current_user
+      user: @environment.current_user,
+      group: Group.find_by(name: 'technicians')
     )
     manager = load
     manager.start
@@ -19,17 +20,6 @@ class ProtocolTestEngine
   def load
     manager = Krill::DebugManager.new(@environment.job)
     @environment.operations.make(role: 'input')
-  end
-
-  def make_job(operations:, user:)
-    operations.extend(Krill::OperationList)
-    job = Job.schedule(
-      operations,
-      user,
-      Group.find_by_name('technicians')
-    )
-
-    job
   end
 
   #### code based on TestController

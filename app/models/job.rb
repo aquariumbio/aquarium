@@ -44,7 +44,7 @@ class Job < ActiveRecord::Base
   # @param operations [OperationsList] the list of operations
   # @param user [User] the user scheduling the job
   # @param group [Group] the group for the user
-  def self.create_from(operations:, user:, group:, successor: nil)
+  def self.create_from(operations:, user:, group:)
     job = Job.new
     job.path = 'operation.rb'
     job.pc = Job.NOT_STARTED
@@ -54,7 +54,6 @@ class Job < ActiveRecord::Base
     job.submitted_by = user.id
     job.desired_start_time = Time.now
     job.latest_start_time = Time.now + 1.hour
-    job.successor_id = successor.id unless successor.nil?
     job.save
 
     operations.each do |operation|
@@ -72,7 +71,7 @@ class Job < ActiveRecord::Base
   # @param user [User] the user scheduling the {Job}
   # @param group [Group] the group of the user
   # @return [Job] the job of scheduled operations
-  def self.schedule(operations, user, group, opts = {})
+  def self.schedule(operations:, user:, group:)
     ops_to_schedule = []
     ops_to_defer = []
 
@@ -87,11 +86,11 @@ class Job < ActiveRecord::Base
     end
 
     unless ops_to_defer.empty?
-      Job.create_from(operations: ops_to_defer, user: user, group: group, successor: opts[:successor])
+      Job.create_from(operations: ops_to_defer, user: user, group: group)
       ops_to_defer.each(&:defer)
     end
 
-    job = Job.create_from(operations: ops_to_schedule, user: user, group: group, successor: opts[:successor])
+    job = Job.create_from(operations: ops_to_schedule, user: user, group: group)
     ops_to_schedule.each(&:schedule)
 
     job

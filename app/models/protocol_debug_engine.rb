@@ -34,18 +34,6 @@ class ProtocolDebugEngine
     errors
   end
 
-  # TODO: consolidate with code in protocol test engine
-  def make_job(operations:, user:)
-    operations.extend(Krill::OperationList)
-    job = Job.schedule(
-      operations,
-      user,
-      Group.find_by_name('technicians')
-    )
-
-    job
-  end
-
   # from plan_controller
   def debug_plan(plan)
     errors = []
@@ -59,13 +47,14 @@ class ProtocolDebugEngine
 
     # batch each group and run a job
     # type_ids.each do |ot_id|
-    type_ids.each do |operation_type, ops|
+    type_ids.each do |_operation_type, ops|
       # ops = pending.select { |op| op.operation_type_id == ot_id }
       # operation_type = OperationType.find(ot_id)
 
-      job = make_job(
+      job = Job.schedule(
         operations: ops,
-        user: current_user
+        user: current_user,
+        group: Group.find_by(name: 'technicians')
       )
 
       errors = run_job(job: job)

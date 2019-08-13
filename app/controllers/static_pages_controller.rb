@@ -73,7 +73,7 @@ class StaticPagesController < ApplicationController
 
     compute_widths @biggest_plans, :ops
 
-    retired_group_id = Group.find_by_name('retired')
+    retired_group_id = Group.find_by(name: 'retired')
     retired_count = User.joins(:memberships)
                         .where('users.id = memberships.user_id AND memberships.group_id = ?', retired_group_id)
                         .count
@@ -130,7 +130,11 @@ class StaticPagesController < ApplicationController
     plan.save
     op = dp.operations.create status: 'pending', user_id: current_user.id, x: 100, y: 100, parent_id: 0
     op.associate_plan plan
-    job = Job.schedule([op], current_user, Group.find_by_name(current_user.login))
+    job = Job.schedule(
+      operations: [op],
+      user: current_user,
+      group: Group.find_by(name: current_user.login)
+    )
 
     redirect_to("/krill/start?job=#{job.id}")
 

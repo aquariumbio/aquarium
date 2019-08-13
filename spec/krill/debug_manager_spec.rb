@@ -38,9 +38,10 @@ RSpec.describe Krill::DebugManager do
       user_id: user.id
     )
     plans = build_plan(operations: operations, user_id: user.id)
-    job = make_job(
+    job = Job.schedule(
       operations: operations,
-      user: user
+      user: user,
+      group: Group.find_by(name: 'technicians')
     )
     expect(job).to be_pending
     manager = Krill::DebugManager.new(job)
@@ -107,13 +108,4 @@ RSpec.describe Krill::DebugManager do
     [operation]
   end
 
-  def make_job(operations:, user:)
-    job = Job.schedule(
-      operations,
-      user,
-      Group.find_by_name('technicians')
-    )
-
-    job
-  end
 end

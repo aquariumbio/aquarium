@@ -36,7 +36,7 @@ names.each do |name|
 
   m = Membership.new
   u = User.find_by_login(login)
-  g = Group.find_by_name(login)
+  g = Group.find_by(name: login)
   m.user_id = u.id
   m.group_id = g.id
   m.save

@@ -203,9 +203,10 @@ RSpec.describe Krill::ProtocolSandbox do
     expect(operation.input('blah').item).not_to be_nil
     expect(operation.input('blah').item).to eq(dummy_item)
     plan = build_plan(operation: operation, user_id: test_user.id)
-    job = make_job(
+    job = Job.schedule(
       operations: plan.operations,
-      user: test_user
+      user: test_user,
+      group: Group.find_by(name: 'technicians')
     )
 
     sandbox = Krill::ProtocolSandbox.new(job: job, debug: true)
@@ -223,9 +224,10 @@ RSpec.describe Krill::ProtocolSandbox do
       user_id: user.id
     )
     plan = build_plan(operation: operation, user_id: user.id)
-    make_job(
+    Job.schedule(
       operations: plan.operations,
-      user: user
+      user: user,
+      group: Group.find_by(name: 'technicians')
     )
   end
 
@@ -247,13 +249,4 @@ RSpec.describe Krill::ProtocolSandbox do
     operation
   end
 
-  def make_job(operations:, user:)
-    job = Job.schedule(
-      operations,
-      user,
-      Group.find_by_name('technicians')
-    )
-
-    job
-  end
 end

@@ -139,7 +139,7 @@ class UsersController < ApplicationController
 
       format.html do
 
-        retired = Group.find_by_name('retired')
+        retired = Group.find_by(name: 'retired')
         rid = retired ? retired.id : -1
 
         @users = User.includes(memberships: :group)
@@ -175,7 +175,7 @@ class UsersController < ApplicationController
   def destroy
 
     u = User.find(params[:id])
-    ret = Group.find_by_name('retired')
+    ret = Group.find_by(name: 'retired')
 
     if ret
       m = Membership.new
