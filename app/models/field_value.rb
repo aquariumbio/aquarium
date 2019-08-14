@@ -98,7 +98,7 @@ class FieldValue < ActiveRecord::Base
       return nil
     end
 
-    case ft.ftype
+    case ft.type
     when 'string', 'url'
       return value
     when 'json'
@@ -192,7 +192,7 @@ class FieldValue < ActiveRecord::Base
       values = [raw]
     end
 
-    method('create_' + field_type.ftype).call(sample, field_type, values)
+    method('create_' + field_type.type).call(sample, field_type, values)
 
   end
 

@@ -28,7 +28,7 @@ module FieldValuer
   def set_value(ft, fv, val)
     # puts "SETTING #{fv.name}(#{fv.role}) to #{val.inspect}"
 
-    case ft.ftype
+    case ft.type
     when 'string', 'url', 'json'
       errors.add(:set_property, "#{val} is not a string") unless val.is_a?(String)
       fv.value = val
