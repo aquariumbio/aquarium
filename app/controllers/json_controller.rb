@@ -115,6 +115,7 @@ class JsonController < ApplicationController
     sample = Sample.find_by_id(params[:sid])
     ot = ObjectType.find_by_id(params[:oid])
     if sample
+      # TODO: this should return an error
       unless ot
         render json: []
         return
@@ -135,7 +136,7 @@ class JsonController < ApplicationController
       render json: items
     end
   rescue StandardError => e
-    # TODO: pretty sure this is dead code: find_by_id returns nil if not found
+    # TODO: verify this is dead code: find_by_id returns nil if not found
     render json: { errors: "Could not find sample: #{e}: #{e.backtrace}" }, status: :unprocessable_entity
   end
 

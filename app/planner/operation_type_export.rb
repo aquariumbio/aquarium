@@ -2,6 +2,7 @@
 
 module OperationTypeExport
 
+  # TODO: confirm this is dead code and remove
   def nl
     '\n'
   end
