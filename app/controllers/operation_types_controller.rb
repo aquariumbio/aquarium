@@ -187,26 +187,6 @@ class OperationTypesController < ApplicationController
     tops.collect do |test_op|
       op = ot.operations.create(status: 'pending', user_id: test_op[:user_id])
 
-      # TODO: iterate over serialized object
-      #test_op[:field_values].each do |fv|
-      #  field_type = ot.type(fv[:name], fv[:role])
-      #  allowable_type = AllowableFieldType.find_by(id: fv[:allowable_field_type])
-      #  if field_type.array
-          # TODO: what to do here?
-      #  else
-      #    if field_type.sample?
-      #      sample = Sample.find_by(id: fv[:child_sample_id])
-      #      actual_fv = op.set_property(fv[:name], sample, fv[:role], true, allowable_type)
-      #      raise "Nil value Error: Could not set #{fv}" unless actual_fv
-      #      raise "Active Record Error: Could not set #{fv}: #{actual_fv.errors.full_messages.join(', ')}" unless actual_fv.errors.empty?
-      #    elsif field_type.number?
-      #      op.set_property(fv[:name], fv[:value].to_f, fv[:role], true, nil)
-      #    else
-      #      op.set_property(fv[:name], fv[:value], fv[:role], true, nil)
-      #    end
-      #  end
-      #end
-
       (ot.inputs + ot.outputs).each do |io|
         values = test_op[:field_values].select do |fv| 
           fv[:name] == io.name && fv[:role] == io.role 
