@@ -221,7 +221,7 @@ class OperationTypesController < ApplicationController
           actual_fvs = op.set_property(io.name, samples, io.role, true, aft)
           raise "Nil value Error: Could not set #{values}" unless actual_fvs
         else # io is not an array
-          raise "Test Operation Error: This operation type may have illegal routing, or zero/multiple io with the same name: #{io.name} (#{io.role}#{io.array ? ', array' : ''}) of type #{io.ftype}" unless io.ftype != 'sample' || values.one?
+          raise "Test Operation Error: This operation type may have illegal routing, or zero/multiple io with the same name: #{io.name} (#{io.role}#{io.array ? ', array' : ''}) of type #{io.type}" unless io.type != 'sample' || values.one?
 
           test_fv = values.first
           if io.sample?
@@ -243,7 +243,7 @@ class OperationTypesController < ApplicationController
   def test
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
-    # save the operaton
+    # save the operation
     ot = update_from_ui params, false
     unless ot[:update_errors].empty?
       render json: { error: ot[:update_errors] }, status: :unprocessable_entity

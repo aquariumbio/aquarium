@@ -148,9 +148,9 @@ class OperationType < ActiveRecord::Base
   # Update Methods for Field Types from Front End Start Here
   #
 
-  def add_new_allowable_field_type(ft, newaft)
-    st = (SampleType.find_by_name(newaft[:sample_type][:name]) if newaft[:sample_type])
-    ot = (ObjectType.find_by_name(newaft[:object_type][:name]) if newaft[:object_type] && newaft[:object_type][:name] != '')
+  def add_new_allowable_field_type(ft, new_type)
+    st = (SampleType.find_by_name(new_type[:sample_type][:name]) if new_type[:sample_type])
+    ot = (ObjectType.find_by_name(new_type[:object_type][:name]) if new_type[:object_type] && new_type[:object_type][:name] != '')
 
     ft.allowable_field_types.create(
       sample_type_id: st ? st.id : nil,
@@ -176,14 +176,14 @@ class OperationType < ActiveRecord::Base
     old_aft.save
   end
 
-  def add_new_field_type(newft)
-    if newft[:allowable_field_types]
+  def add_new_field_type(new_type)
+    if new_type[:allowable_field_types]
 
-      sample_type_names = newft[:allowable_field_types].collect do |aft|
+      sample_type_names = new_type[:allowable_field_types].collect do |aft|
         aft[:sample_type] ? aft[:sample_type][:name] : nil
       end
 
-      container_names = newft[:allowable_field_types]
+      container_names = new_type[:allowable_field_types]
                         .select { |aft| aft[:object_type] && aft[:object_type][:name] && aft[:object_type][:name] != '' }
                         .collect do |aft|
         raise "Object type '#{aft[:object_type][:name]}' not defined by browser for #{ft[:name]}." unless ObjectType.find_by_name(aft[:object_type][:name])
@@ -196,18 +196,18 @@ class OperationType < ActiveRecord::Base
     end
 
     add_io(
-      newft[:name],
+      new_type[:name],
       sample_type_names,
       container_names,
-      newft[:role],
-      array: newft[:array],
-      part: newft[:part],
-      routing: newft[:routing],
-      ftype: newft[:ftype],
-      choices: newft[:choices]
+      new_type[:role],
+      array: new_type[:array],
+      part: new_type[:part],
+      routing: new_type[:routing],
+      ftype: new_type[:ftype],
+      choices: new_type[:choices]
     )
 
-    field_types.where(name: newft[:name], role: newft[:role])[0]
+    field_types.where(name: new_type[:name], role: new_type[:role])[0]
   end
 
   def update_field_type(oldft, newft)

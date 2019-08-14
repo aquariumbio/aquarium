@@ -68,16 +68,16 @@ module FieldTyper
   def add_field(name, sample_name, container_name, role, opts)
     raise "Can't add field to #{self.class} before it has been saved." unless id
 
-    snames = sample_name.nil? || sample_name.is_a?(String) ? [sample_name] : sample_name
-    cnames = container_name.nil? || container_name.is_a?(String) ? [container_name] : container_name
+    sample_names = sample_name.nil? || sample_name.is_a?(String) ? [sample_name] : sample_name
+    container_names = container_name.nil? || container_name.is_a?(String) ? [container_name] : container_name
 
     ft = field_types.create({ parent_id: id, name: name, ftype: 'sample', role: role }.merge(opts))
     ft.save
 
-    if snames
-      (0..snames.length - 1).each do |i|
-        sample = SampleType.find_by_name(snames[i]) if snames[i].present?
-        container = ObjectType.find_by_name(cnames[i]) if cnames[i].present?
+    if sample_names
+      (0..sample_names.length - 1).each do |i|
+        sample = SampleType.find_by_name(sample_names[i]) if sample_names[i].present?
+        container = ObjectType.find_by_name(container_names[i]) if container_names[i].present?
 
         ft.allowable_field_types.create(
           sample_type_id: sample ? sample.id : nil,
