@@ -179,6 +179,7 @@ class OperationTypesController < ApplicationController
     end
   end
 
+  # TODO: this should be deserializing output from random
   def make_test_ops(ot, tops)
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
     return [] if tops.blank?
@@ -186,19 +187,43 @@ class OperationTypesController < ApplicationController
     tops.collect do |test_op|
       op = ot.operations.create(status: 'pending', user_id: test_op[:user_id])
 
+      # TODO: iterate over serialized object
+      #test_op[:field_values].each do |fv|
+      #  field_type = ot.type(fv[:name], fv[:role])
+      #  allowable_type = AllowableFieldType.find_by(id: fv[:allowable_field_type])
+      #  if field_type.array
+          # TODO: what to do here?
+      #  else
+      #    if field_type.sample?
+      #      sample = Sample.find_by(id: fv[:child_sample_id])
+      #      actual_fv = op.set_property(fv[:name], sample, fv[:role], true, allowable_type)
+      #      raise "Nil value Error: Could not set #{fv}" unless actual_fv
+      #      raise "Active Record Error: Could not set #{fv}: #{actual_fv.errors.full_messages.join(', ')}" unless actual_fv.errors.empty?
+      #    elsif field_type.number?
+      #      op.set_property(fv[:name], fv[:value].to_f, fv[:role], true, nil)
+      #    else
+      #      op.set_property(fv[:name], fv[:value], fv[:role], true, nil)
+      #    end
+      #  end
+      #end
+
       (ot.inputs + ot.outputs).each do |io|
-        test_fvs = test_op[:field_values].select { |fv| fv[:name] == io.name && fv[:role] == io.role }
-        if io.array && !test_fvs.empty?
-          aft = AllowableFieldType.find_by_id(test_fvs[0][:allowable_field_type_id])
-          samples = test_fvs.collect do |fv|
+        values = test_op[:field_values].select do |fv| 
+          fv[:name] == io.name && fv[:role] == io.role 
+        end
+        next if values.empty?
+
+        if io.array
+          aft = AllowableFieldType.find_by_id(values[0][:allowable_field_type_id])
+          samples = values.collect do |fv|
             Sample.find_by_id(fv[:child_sample_id])
           end
           actual_fvs = op.set_property(io.name, samples, io.role, true, aft)
-          raise "Nil value Error: Could not set #{test_fvs}" unless actual_fvs
+          raise "Nil value Error: Could not set #{values}" unless actual_fvs
         else # io is not an array
-          raise "Test Operation Error: This operation type may have illegal routing, or zero/multiple io with the same name: #{io.name} (#{io.role}#{io.array ? ', array' : ''}) of type #{io.ftype}" unless io.ftype != 'sample' || test_fvs.one?
+          raise "Test Operation Error: This operation type may have illegal routing, or zero/multiple io with the same name: #{io.name} (#{io.role}#{io.array ? ', array' : ''}) of type #{io.ftype}" unless io.ftype != 'sample' || values.one?
 
-          test_fv = test_fvs.first
+          test_fv = values.first
           if io.sample?
             aft = AllowableFieldType.find_by_id(test_fv[:allowable_field_type_id])
             actual_fv = op.set_property(test_fv[:name], Sample.find_by_id(test_fv[:child_sample_id]), test_fv[:role], true, aft)
