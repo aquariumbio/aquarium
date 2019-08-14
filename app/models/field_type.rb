@@ -158,4 +158,21 @@ class FieldType < ActiveRecord::Base
 
   end
 
+  # Creates a hash for this field_type.
+  def export
+    {
+      ftype: type,
+      role: role,
+      name: name,
+      sample_types: allowable_field_types.collect { |aft| aft.sample_type ? aft.sample_type.name : nil },
+      object_types: allowable_field_types.collect { |aft| aft.object_type ? aft.object_type.name : nil },
+      part: part ? true : false,
+      array: array ? true : false,
+      routing: routing,
+      preferred_operation_type_id: preferred_operation_type_id,
+      preferred_field_type_id: preferred_field_type_id,
+      choices: choices
+    }
+  end
+
 end
