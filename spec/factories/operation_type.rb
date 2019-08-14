@@ -25,10 +25,22 @@ FactoryBot.define do
         operation_type.add_test(content: evaluator.test, user: evaluator.user)
 
         evaluator.inputs.each do |input|
-          operation_type.add_input(input[:name], input[:sample_type], input[:object_type])
+          operation_type.add_input(
+            input[:name], 
+            input[:sample_type], 
+            input[:object_type], 
+            array: input[:array] || false, 
+            part: input[:part] || false
+          )
         end
         evaluator.outputs.each do |output|
-          operation_type.add_output(output[:name], output[:sample_type], output[:object_type])
+          operation_type.add_output(
+            output[:name], 
+            output[:sample_type], 
+            output[:object_type],
+            array: output[:array] || false, 
+            part: output[:part] || false
+          )
         end
       end
     end
