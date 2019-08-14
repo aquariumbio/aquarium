@@ -150,7 +150,7 @@ class OperationTypesController < ApplicationController
            status: :ok
   end
 
-  # TODO: combine with other randoms (?)
+  # returns serialized output from operation_type.random
   def random
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
@@ -179,7 +179,7 @@ class OperationTypesController < ApplicationController
     end
   end
 
-  # TODO: this should be deserializing output from random
+  # TODO: rewrite so this deserializes output from random
   def make_test_ops(ot, tops)
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
     return [] if tops.blank?
@@ -206,9 +206,8 @@ class OperationTypesController < ApplicationController
           test_fv = values.first
           if io.sample?
             aft = AllowableFieldType.find_by_id(test_fv[:allowable_field_type_id])
-            actual_fv = op.set_property(test_fv[:name], Sample.find_by_id(test_fv[:child_sample_id]), test_fv[:role], true, aft)
-            raise "Nil value Error: Could not set #{test_fv}" unless actual_fv
-            raise "Active Record Error: Could not set #{test_fv}: #{actual_fv.errors.full_messages.join(', ')}" unless actual_fv.errors.empty?
+            op.set_property(test_fv[:name], Sample.find_by_id(test_fv[:child_sample_id]), test_fv[:role], true, aft)
+            raise "Active Record Error: Could not set #{test_fv}: #{op.errors.full_messages.join(', ')}" unless op.errors.empty?
           elsif io.number?
             op.set_property(io.name, test_fv[:value].to_f, io.role, true, nil)
           else # string or json io
