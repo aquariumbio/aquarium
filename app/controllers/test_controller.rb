@@ -38,7 +38,7 @@ class TestController < ApplicationController
       response.error("Assertion failed: #{e}")
               .more(
                 error_type: 'assertion_failure',
-                exception_backtrace: error_trace,
+                exception_backtrace: e.backtrace,
                 backtrace: test ? test.backtrace : [],
                 log: test ? test.logs : []
               )
