@@ -27,7 +27,7 @@ class SampleType < ActiveRecord::Base
 
   def required_sample_types(st_list = [])
 
-    field_types.select { |ft| ft.sample? }.each do |ft|
+    field_types.select(&:sample?).each do |ft|
 
       ft.allowable_field_types.each do |aft|
 

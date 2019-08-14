@@ -21,7 +21,7 @@ module OperationTypeRandom
             field_sample = if !field_type.array
                              [samples[field_type.routing]].flatten.first
                            else
-                             [samples[field_type.routing]] * ((rand() * 10).floor + 1)
+                             [samples[field_type.routing]] * ((rand * 10).floor + 1)
                            end
           else
             field_sample, aft = field_type.random

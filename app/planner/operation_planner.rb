@@ -81,7 +81,7 @@ module OperationPlanner
 
   end
 
-  def has_no_stock_or_method
+  def no_possible_input?
     inputs.select { |i| i.field_type.sample? }.each do |i|
       return true if i.predecessors.empty? && !i.satisfied_by_environment
     end
@@ -102,7 +102,7 @@ module OperationPlanner
                   "(on_the_fly = #{op.on_the_fly}, ready = #{ready}, leaf=#{op.leaf?}, status=#{op.status})."
       elsif op.status == 'planning' && op.undetermined_inputs?
         issues << "Operation '#{op.operation_type.name}' has unspecified inputs."
-      elsif op.has_no_stock_or_method
+      elsif op.no_possible_input?
         issues << "No way to make at least one input of operation '#{op.operation_type.name}'."
       end
     end
