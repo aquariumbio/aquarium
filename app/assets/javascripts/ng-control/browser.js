@@ -293,14 +293,21 @@
       // Sample creation
 
       $scope.create_sample_dialog = function() {
+        console.log($scope.sample_types)
         $mdDialog.show({
-          templateUrl: 'dialog.html',
-          clickOutsideToClose: true
+          templateUrl: 'create_sample_dialog.html',
+          clickOutsideToClose: true,
+          locals: { sample_types: $scope.sample_types },
+          controller: ['$scope', 'sample_types', SampleDialogController]
         })
         // .then(
         //   () => save_new_samples(),
         //   () => null   
         // )
+      }
+
+      function SampleDialogController($scope, sample_types) {
+        $scope.sample_types = sample_types
       }
 
       $scope.new_sample = function(st) {
