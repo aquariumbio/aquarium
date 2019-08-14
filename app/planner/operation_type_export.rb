@@ -34,34 +34,14 @@ module OperationTypeExport
     # ISSUE: This code misses object types referred to by sub-samples of samples mentioned in the io.
     # TODO: serialize AFTs instead of using parallel array for sample types and object types
     {
-
       sample_types: sample_types,
-
       object_types: object_types,
-
       operation_type: {
-
         name: name,
         category: category,
         deployed: false,
         on_the_fly: on_the_fly ? true : false,
-
-        field_types: field_types.select(&:role).collect do |ft|
-          {
-            ftype: ft.ftype,
-            role: ft.role,
-            name: ft.name,
-            sample_types: ft.allowable_field_types.collect { |aft| aft.sample_type ? aft.sample_type.name : nil },
-            object_types: ft.allowable_field_types.collect { |aft| aft.object_type ? aft.object_type.name : nil },
-            part: ft.part ? true : false,
-            array: ft.array ? true : false,
-            routing: ft.routing,
-            preferred_operation_type_id: ft.preferred_operation_type_id,
-            preferred_field_type_id: ft.preferred_field_type_id,
-            choices: ft.choices
-          }
-        end,
-
+        field_types: field_types.select(&:role).collect(&:export),
         protocol: protocol ? protocol.content : '',
         precondition: precondition ? precondition.content : '',
         cost_model: cost_model ? cost_model.content : '',
