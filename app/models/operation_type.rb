@@ -210,40 +210,40 @@ class OperationType < ActiveRecord::Base
     field_types.where(name: new_type[:name], role: new_type[:role])[0]
   end
 
-  def update_field_type(oldft, newft)
-    oldft.name = newft[:name]
-    if oldft.sample?
-      oldft.routing = newft[:routing]
-      oldft.array = newft[:array]
-      oldft.part = newft[:part]
-      oldft.preferred_operation_type_id = newft[:preferred_operation_type_id]
-      oldft.preferred_field_type_id = newft[:preferred_field_type_id]
+  def update_field_type(old_type, new_type)
+    old_type.name = new_type[:name]
+    if old_type.sample?
+      old_type.routing = new_type[:routing]
+      old_type.array = new_type[:array]
+      old_type.part = new_type[:part]
+      old_type.preferred_operation_type_id = new_type[:preferred_operation_type_id]
+      old_type.preferred_field_type_id = new_type[:preferred_field_type_id]
 
-      puts "PREF(#{oldft.name}): #{newft[:preferred_field_type_id]}"
+      puts "PREF(#{old_type.name}): #{new_type[:preferred_field_type_id]}"
 
       keepers = []
-      if newft[:allowable_field_types]
-        newft[:allowable_field_types].each do |newaft|
-          matching_afts = oldft.allowable_field_types.select { |aft| aft.id == newaft[:id] }
-          if matching_afts.length == 1
-            oldaft = matching_afts[0]
+      if new_type[:allowable_field_types]
+        new_type[:allowable_field_types].each do |newaft|
+          matching_types = old_type.allowable_field_types.select { |aft| aft.id == newaft[:id] }
+          if matching_types.length == 1
+            oldaft = matching_types[0]
             keepers << oldaft
             update_allowable_field_type oldaft, newaft
-          elsif matching_afts.empty?
-            keepers << add_new_allowable_field_type(oldft, newaft)
+          elsif matching_types.empty?
+            keepers << add_new_allowable_field_type(old_type, newaft)
           else
             raise 'More than one allowable field type matched.'
           end
         end
       end
     else
-      oldft.ftype = newft[:ftype]
-      oldft.choices = newft[:choices]
+      old_type.ftype = new_type[:ftype]
+      old_type.choices = new_type[:choices]
     end
 
-    oldft.save
+    old_type.save
 
-    oldft.allowable_field_types.reject { |aft| keepers.include? aft }.each(&:destroy)
+    old_type.allowable_field_types.reject { |aft| keepers.include? aft }.each(&:destroy)
   end
 
   def update_field_types(fts)
