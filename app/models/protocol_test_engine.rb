@@ -4,32 +4,6 @@
 
 class ProtocolTestEngine
 
-  def execute
-    plans = build_plans
-    @environment.job = Job.schedule(
-      operations: @environment.operations,
-      user: @environment.current_user,
-      group: Group.find_by(name: 'technicians')
-    )
-    manager = load
-    manager.start
-    # reload backtrace???
-  end
-
-  def load
-    manager = Krill::DebugManager.new(@environment.job)
-    @environment.operations.make(role: 'input')
-  end
-
-  #### code based on TestController
-
-  def load_job(job:)
-    manager = Krill::DebugManager.new(job)
-    job.operations.make(role: 'input')
-
-    manager
-  end
-
   # Loads the test code.
   #
   # @param code [Code] the test code object
@@ -43,27 +17,6 @@ class ProtocolTestEngine
     raise KrillTestSyntaxError.new(message: message, error: e)
   rescue StandardError, NoMemoryError, ScriptError, SecurityError, SystemExit, SystemStackError => e
     raise KrillTestError.new(message: "Error while loading test: #{e.message}", error: e)
-  end
-
-  # Runs the test `setup` method.
-  #
-  # @param test [ProtocolTest] the test object
-  def self.pre_test(test:)
-    test.setup
-  end
-
-  # Runs the protocol under test.
-  #
-  # @param test [ProtocolTest] the test object
-  def self.run_test(test:)
-    test.run
-  end
-
-  # Runs the test `analyze` method.
-  #
-  # @param test [ProtocolTest] the test object
-  def self.post_test(test:)
-    test.analyze
   end
 
   # Run the test for the given operation type.
@@ -81,61 +34,6 @@ class ProtocolTestEngine
     end
 
     test
-  end
-
-  private
-
-  # TODO: decide what to do with rest
-
-  # Creates an `AqResponse` object for an error that occur in a test.
-  # Filters backtrace to include errors that occur within an `(eval)`.
-  #
-  # @param error [StandardError, ScriptError, SystemStackError] the exception object
-  # @return [AqResponse] object with error message, and backtrace.
-  def handle_error(error:, phase_name: nil, logs: [])
-    resp = AqResponse.new
-    error_trace = filter_backtrace(backtrace: error.backtrace)
-                  .map { |message| translate_trace(message: message) }
-    error_message = if error_trace[-1].present?
-                      "Error in #{error_trace[-1]}: #{error}"
-                    elsif error.is_a?(ScriptError) && error.message.match(/^\(eval\):\d+: .+$/)
-                      line_number, message = error.message.match(
-                        /^\(eval\):(\d+): (.+)$/
-                      ).captures
-                      "Test line #{line_number}: #{message}"
-                    elsif phase_name.present?
-                      "Error during #{phase_name}: #{error.message}"
-                    else
-                      "Error #{error.class} #{error.message}"
-                    end
-    resp.error(error_message)
-        .more(
-          error_type: 'test_error',
-          exception_backtrace: error_trace,
-          backtrace: [], log: logs
-        )
-
-    resp
-  end
-
-  # Filters the given backtrace for error messages that occur within an `(eval)`.
-  #
-  # @param backtrace [Array<String>] the backtrace to filter
-  # @return [Array<String>] the filtered backtrace
-  def filter_backtrace(backtrace:)
-    backtrace.reject { |msg| msg.match(/^\(eval\):\d+:in `.+'$/).nil? }.uniq
-  end
-
-  # Translates an error message of the form
-  #   (eval):10:in `method'
-  # to a message with just the method name and line number.
-  #
-  # @param message [String] the error message matching `eval` error pattern
-  # @return [String] object containing the method name and line number
-  def translate_trace(message:)
-    line_number, method = message.match(/^\(eval\):(\d+):in `(.+)'$/).captures
-
-    "`#{method}` (line #{line_number})"
   end
 
   # Create an empty binding
