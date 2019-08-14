@@ -155,27 +155,22 @@ class OperationTypesController < ApplicationController
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
     ops_json = []
-    begin
-      ActiveRecord::Base.transaction do
-        operation_type = OperationType.find(params[:id])
-        ops = operation_type.random(params[:num].to_i)
-        begin
-          selected = ops.select(&:precondition_value)
-          ops_json = ops.as_json(methods: %i[field_values precondition_value])
-          ops_json.each do |op|
-            op['field_values'] = op['field_values'].collect(&:full_json)
-          end
-          render json: ops_json, status: :ok
-          # TODO:  method precondition_value just eats exceptions so this will never result in error
-        rescue Exception => e
-          render json: { error: "The precondition for #{operation.name} raised an exception." },
-                 status: :unprocessable_entity
+    ActiveRecord::Base.transaction do
+      operation_type = OperationType.find(params[:id])
+      ops = operation_type.random(params[:num].to_i)
+      begin
+        ops.select(&:precondition_value)
+        ops_json = ops.as_json(methods: %i[field_values precondition_value])
+        ops_json.each do |op|
+          op['field_values'] = op['field_values'].collect(&:full_json)
         end
-        raise ActiveRecord::Rollback
+        render json: ops_json, status: :ok
+        # TODO:  method precondition_value just eats exceptions so this will never result in error
+      rescue StandardError => e
+        render json: { error: "The precondition for #{operation.name} raised an exception.", backtrace: e.backtrace },
+               status: :unprocessable_entity
       end
-    rescue Exception => e
-      render json: { error: e.to_s, backtrace: e.backtrace },
-             status: :unprocessable_entity
+      raise ActiveRecord::Rollback
     end
   end
 
@@ -316,7 +311,8 @@ class OperationTypesController < ApplicationController
 
     begin
       render json: [OperationType.find(params[:id]).export], status: :ok
-    rescue Exception => e
+      # TODO: determine what exception might be raised here
+    rescue StandardError => e
       render json: { error: 'Could not export: ' + e.to_s + ', ' + e.backtrace[0] },
              status: :internal_server_error
     end
@@ -330,7 +326,8 @@ class OperationTypesController < ApplicationController
       libs = Library.where(category: params[:category]).collect(&:export)
 
       render json: ots.concat(libs), status: :ok
-    rescue Exception => e
+      # TODO: determine what exceptions might be raised here
+    rescue StandardError => e
       render json: { error: 'Could not export: ' + e.to_s + ', ' + e.backtrace[0] },
              status: :internal_server_error
     end
@@ -434,7 +431,8 @@ class OperationTypesController < ApplicationController
           }, status: :ok
 
         end
-      rescue Exception => e
+        # TODO: determine what exceptions might the raised here
+      rescue StandardError => e
         error = true
         logger.info e.to_s
         logger.info e.backtrace.to_s
@@ -457,7 +455,8 @@ class OperationTypesController < ApplicationController
       ot = OperationType.find(params[:id]).copy current_user
       render json: { operation_type: ot.as_json(methods: %i[field_types protocol precondition cost_model documentation]) },
              status: :ok
-    rescue Exception => e
+      # TODO: determine what exceptions might be raised here
+    rescue StandardError => e
       render json: { error: 'Could not copy operation type: ' + e.to_s },
              status: :internal_server_error
     end
