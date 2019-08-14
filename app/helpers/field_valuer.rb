@@ -25,39 +25,39 @@ module FieldValuer
   # @param fv [FieldValue] the field value to set
   # @param val [String, Number, Sample, Item] the value
   # @return [FieldValue] the field value with the value set
-  def set_value(ft, fv, val)
+  def set_value(field_type, field_value, value)
     # puts "SETTING #{fv.name}(#{fv.role}) to #{val.inspect}"
 
-    case ft.type
+    case field_type.type
     when 'string', 'url', 'json'
-      errors.add(:set_property, "#{val} is not a string") unless val.is_a?(String)
-      fv.value = val
+      errors.add(:set_property, "#{value} is not a string") unless value.is_a?(String)
+      field_value.value = value
 
     when 'number'
-      errors.add(:set_property, "#{val} is not a number") unless val.respond_to? :to_f
-      fv.value = val.to_s
+      errors.add(:set_property, "#{value} is not a number") unless value.respond_to? :to_f
+      field_value.value = value.to_s
 
     when 'sample'
-      if val&.is_a?(Sample)
-        fv.child_sample_id = val.id
-      elsif val&.is_a?(Item)
-        fv.child_sample_id = val.sample_id
-        fv.child_item_id = val.id
+      if value&.is_a?(Sample)
+        field_value.child_sample_id = value.id
+      elsif value&.is_a?(Item)
+        field_value.child_sample_id = value.sample_id
+        field_value.child_item_id = value.id
       else
         # TODO: should probably raise exception
-        errors.add(:set_property, "#{val} is not a sample or item") if val
+        errors.add(:set_property, "#{value} is not a sample or item") if value
         # this is used for empty samples in the planner
-        fv.child_sample_id = nil
+        field_value.child_sample_id = nil
       end
 
     when 'item'
       # NOTE: this is dead code. It never happens that ftype is 'item'
       #       but leaving it here just in case I'm wrong
-      errors.add(:set_property, "#{val} is not a item") unless val.is_a?(Item)
-      fv.child_item_id = val.id
+      errors.add(:set_property, "#{value} is not a item") unless value.is_a?(Item)
+      field_value.child_item_id = value.id
     end
 
-    fv
+    field_value
   end
 
   # Changes a property in the property hash for this object.
