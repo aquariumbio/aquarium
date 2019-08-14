@@ -57,7 +57,7 @@ RSpec.describe ProtocolTestEngine do
 
   it 'protocol with bad syntax should raise KrillSyntaxError' do
     # TODO: confirm message is syntax error
-    expect { ProtocolTestEngine.run(operation_type: bad_protocol_syntax, user: test_user)}.to raise_error(Krill::KrillSyntaxError)
+    expect { ProtocolTestEngine.run(operation_type: bad_protocol_syntax, user: test_user) }.to raise_error(Krill::KrillSyntaxError)
   end
 
   let(:bad_test_syntax) do
@@ -90,8 +90,5 @@ RSpec.describe ProtocolTestEngine do
     skip('not implemented correctly')
     expect { ProtocolTestEngine.run(operation_type: raise_protocol, user: test_user) }.to raise_error(Krill::KrillError)
   end
-
-
-
 
 end

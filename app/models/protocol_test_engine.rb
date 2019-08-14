@@ -4,7 +4,6 @@
 
 class ProtocolTestEngine
 
-
   def execute
     plans = build_plans
     @environment.job = Job.schedule(
@@ -40,7 +39,7 @@ class ProtocolTestEngine
     ProtocolTest.new(operation_type, user)
   rescue SyntaxError => e
     line_number, message = e.message.match(/^\(eval\):(\d+): (.+)$/m).captures
-      message = "#{operation_type.category}/#{operation_type.name}: line #{line_number}: #{message}".strip
+    message = "#{operation_type.category}/#{operation_type.name}: line #{line_number}: #{message}".strip
     raise KrillTestSyntaxError.new(message: message, error: e)
   rescue StandardError, NoMemoryError, ScriptError, SecurityError, SystemExit, SystemStackError => e
     raise KrillTestError.new(message: "Error while loading test: #{e.message}", error: e)
@@ -50,7 +49,7 @@ class ProtocolTestEngine
   #
   # @param test [ProtocolTest] the test object
   def self.pre_test(test:)
-      test.setup
+    test.setup
   end
 
   # Runs the protocol under test.

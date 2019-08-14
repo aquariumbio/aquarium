@@ -188,8 +188,8 @@ class OperationTypesController < ApplicationController
       op = ot.operations.create(status: 'pending', user_id: test_op[:user_id])
 
       (ot.inputs + ot.outputs).each do |io|
-        values = test_op[:field_values].select do |fv| 
-          fv[:name] == io.name && fv[:role] == io.role 
+        values = test_op[:field_values].select do |fv|
+          fv[:name] == io.name && fv[:role] == io.role
         end
         next if values.empty?
 

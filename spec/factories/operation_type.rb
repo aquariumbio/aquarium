@@ -26,19 +26,19 @@ FactoryBot.define do
 
         evaluator.inputs.each do |input|
           operation_type.add_input(
-            input[:name], 
-            input[:sample_type], 
-            input[:object_type], 
-            array: input[:array] || false, 
+            input[:name],
+            input[:sample_type],
+            input[:object_type],
+            array: input[:array] || false,
             part: input[:part] || false
           )
         end
         evaluator.outputs.each do |output|
           operation_type.add_output(
-            output[:name], 
-            output[:sample_type], 
+            output[:name],
+            output[:sample_type],
             output[:object_type],
-            array: output[:array] || false, 
+            array: output[:array] || false,
             part: output[:part] || false
           )
         end
