@@ -403,12 +403,6 @@
         $scope.views.search.status = "done";
       }
 
-      // alert_message() function show the message alert box whenever the search fail
-      function alert_message(messages) {
-        $scope.views.search.status = "done";
-        alert(messages);
-      }
-
       function find_collection(item) {
         AQ.Collection.find_fast(item.id).then(
           collection => {
@@ -427,7 +421,7 @@
             search_update(remove_duplicate(sample_list, "id"));
           },
           error => {
-            alert_message("Could not find Collection " + item.id);
+            $scope.views.search.status = "done";
             console.log("Error: " + error["errors"]);
           }
         );
@@ -441,20 +435,12 @@
               cookie();
               AQ.update();
             } else {
-              alert_message(
-                "Could not find sample with Sample Name/ID (" +
-                  $scope.views.search.query +
-                  ") Sample Type (" +
-                  $scope.views.search.sample_type +
-                  ") and Item ID (" +
-                  $scope.views.search.item_id +
-                  ")"
-              );
+              $scope.views.search.status = "done";
             }
           },
           error => {
             console.log("Error: " + error["errors"]);
-            alert_message("Could not find sample type with id " + sample_type_id);
+            $scope.views.search.status = "done";
           }
         );
       }
@@ -473,13 +459,7 @@
                 cookie();
                 AQ.update();
               } else {
-                alert_message(
-                  "Could not find sample with Sample Name/ID (" +
-                    $scope.views.search.query +
-                    ") and Item ID (" +
-                    $scope.views.search.item_id +
-                    ")"
-                );
+                $scope.views.search.status = "done";
               }
             }
 
@@ -497,10 +477,7 @@
           },
           error => {
             console.log("Error: " + error["errors"]);
-            alert_message(
-              "Could not find sample for Item ID " +
-                $scope.views.search.item_id 
-            );
+            $scope.views.search.status = "done";
           }
         );
       }
@@ -519,9 +496,7 @@
             });
           },
           error => {
-            alert_message(
-              "Could not find item with ID " + $scope.views.search.item_id
-            );
+            $scope.views.search.status = "done";
             console.log("Error: " + error["errors"]);
           }
         );
