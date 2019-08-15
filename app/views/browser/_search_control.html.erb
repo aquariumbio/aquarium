@@ -15,7 +15,7 @@
                 text-align: center;
                 border-radius: 3px;
                 padding: 5px">
-        Search by Sample name or numeric ID
+        Search for sample by sample name or numeric ID
     </md-tooltip> 
     <input type="text"
            ng-model="views.search.query"
@@ -32,7 +32,7 @@
                 text-align: center;
                 border-radius: 3px;
                 padding: 5px">
-        Search by Sample Type
+        Search for samples with sample type name
     </md-tooltip> 
     <input type="text"
            ng-model="views.search.sample_type"
@@ -50,7 +50,7 @@
               text-align: center;
               border-radius: 3px;
               padding: 5px">
-      Search by numeric item ID
+      Search for sample of item by numeric item ID
     </md-tooltip>  
     <input  name="item_id"
             type="text" min='1' 
@@ -58,12 +58,7 @@
             ng-change="user.changed = true"
             ng-model="views.search.item_id"
             ng-pattern="/^[0-9]/"
-            data-search-input="find-item">
-    <div ng-messages="item_id.$error"></div>
-    <div ng-messages="!item_id.$error">
-      <div ng-message='pattern'>Your Item ID must be a number.</div>
-      <div ng-message="min">Your Item ID must be higher than 0.</div>
-    </div>  
+            data-search-input="find-item"> 
   </div>
   </md-input-container>
 
