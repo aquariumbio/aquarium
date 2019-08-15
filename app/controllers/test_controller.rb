@@ -28,7 +28,9 @@ class TestController < ApplicationController
     end
 
     begin
-      test = ProtocolTestEngine.run(operation_type: operation_type)
+      test = ProtocolTestEngine.run(
+        operation_type: operation_type,
+        user: current_user)
       if test
         response.ok(message: 'test complete',
                     log: test.logs,
