@@ -86,7 +86,12 @@ RSpec.describe Krill::ProtocolSandbox do
   it 'expect protocol that raises exceptions to have error' do
     job = create_job(protocol: raise_protocol, user: test_user)
     sandbox = Krill::ProtocolSandbox.new(job: job, debug: true)
-    expect { sandbox.execute }.to raise_error(Krill::KrillError)
+    expect { sandbox.execute }.to raise_error do |error|
+      expect(error).to be_a(Krill::KrillError)
+      expect(error.message).to eq('Error executing protocol')
+      expect(error.job).to eq(job)
+      expect(error.error).to be_a(StandardError)
+    end
     expect(job).to be_error
     job.operations.each { |operation| expect(operation.status).to eq('error') }
   end
@@ -105,7 +110,14 @@ RSpec.describe Krill::ProtocolSandbox do
   it 'expect protocol that calls exit to have error' do
     job = create_job(protocol: exit_protocol, user: test_user)
     sandbox = Krill::ProtocolSandbox.new(job: job, debug: true)
-    expect { sandbox.execute }.to raise_error(Krill::KrillError)
+    expect { sandbox.execute }.to raise_error do |error|
+      expect(error).to be_a(Krill::KrillError)
+      expect(error.message).to eq('Error executing protocol')
+      expect(error.job).to eq(job)
+      expect(error.error).to be_a(SystemExit)
+      expect(error.error.message).to eq('exit')
+      pending 'make sure error.error.backtrace is filtered'
+    end
     expect(job).to be_error
     job.operations.each { |operation| expect(operation.status).to eq('error') }
   end
@@ -123,7 +135,10 @@ RSpec.describe Krill::ProtocolSandbox do
 
   it 'expect protocol with bad syntax to have error when sandbox is created' do
     job = create_job(protocol: bad_syntax_protocol, user: test_user)
-    expect { Krill::ProtocolSandbox.new(job: job, debug: true) }.to raise_error(Krill::KrillSyntaxError)
+    expect { Krill::ProtocolSandbox.new(job: job, debug: true) }.to raise_error do |error|
+      expect(error).to be_a(Krill::KrillSyntaxError)
+      pending "check attributes of error"
+    end
   end
 
   # A protocol that calls a recursive method with a stack overflow
@@ -140,7 +155,10 @@ RSpec.describe Krill::ProtocolSandbox do
   it 'expect protocol with stack overflow to have error' do
     job = create_job(protocol: stack_protocol, user: test_user)
     sandbox = Krill::ProtocolSandbox.new(job: job, debug: true)
-    expect { sandbox.execute }.to raise_error(Krill::KrillError)
+    expect { sandbox.execute }.to raise_error do |error|
+      expect(error).to be_a(Krill::KrillError)
+      pending "check attributes of error"
+    end
     expect(job).to be_error
     job.operations.each { |operation| expect(operation.status).to eq('error') }
   end
@@ -158,7 +176,10 @@ RSpec.describe Krill::ProtocolSandbox do
   it 'expect protocol with stack overflow in load to have error' do
     job = create_job(protocol: bad_load_protocol, user: test_user)
     # TODO: check message
-    expect { Krill::ProtocolSandbox.new(job: job, debug: true) }.to raise_error(Krill::KrillError)
+    expect { Krill::ProtocolSandbox.new(job: job, debug: true) }.to raise_error do |error|
+      expect(error).to be_a(Krill::KrillError)
+      pending "check attributes of error"
+    end
   end
 
   let(:bad_load_protocol2) do
@@ -173,7 +194,10 @@ RSpec.describe Krill::ProtocolSandbox do
   it 'expect protocol with exit in load to have error' do
     job = create_job(protocol: bad_load_protocol2, user: test_user)
     # TODO: check message
-    expect { Krill::ProtocolSandbox.new(job: job, debug: true) }.to raise_error(Krill::KrillError)
+    expect { Krill::ProtocolSandbox.new(job: job, debug: true) }.to raise_error do |error|
+      expect(error).to be_a(Krill::KrillError)
+      pending "check attributes of error"
+    end
   end
 
   # A protocol with i/o
