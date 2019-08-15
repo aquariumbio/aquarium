@@ -372,7 +372,7 @@
         $scope.views.search.page = p;
 
         if ($scope.views.search.item_id) {
-            $scope.item_search();
+          $scope.item_search();
         } else {
           $http
             .post("/browser/search", $scope.views.search)
@@ -388,7 +388,7 @@
         }
       };
 
-      // remove_duplicate function removes dupilcates in the list
+      // remove_duplicate function removes duplicates in the list
       function remove_duplicate(list, prop) {
         return list.filter((obj, pos, arr) => {
           return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
@@ -396,7 +396,7 @@
       }
 
       // search_update() function updates searched samples, count, page, and status
-      function search_update (sample) {
+      function search_update(sample) {
         $scope.views.search.samples = sample_inventory(sample);
         $scope.views.search.count = 1;
         $scope.views.search.pages = aq.range(1 / 30);
@@ -404,105 +404,127 @@
       }
 
       // alert_message() function show the message alert box whenever the search fail
-      function alert_message (messages) {
-        alert(messages);
+      function alert_message(messages) {
         $scope.views.search.status = "done";
+        alert(messages);
+      }
+
+      function find_collection(item) {
+        AQ.Collection.find_fast(item.id).then(
+          collection => {
+            var item_list = collection.part_matrix.reduce(function(a, b) {
+              return a.concat(b);
+            });
+            var sample;
+            var sample_list = [];
+            for (let i = 0; i < item_list.length; i++) {
+              sample = item_list[i].sample;
+              if (sample) {
+                sample_list.push(sample);
+              }
+            }
+
+            search_update(remove_duplicate(sample_list, "id"));
+          },
+          error => {
+            alert_message("Could not find Collection " + item.id);
+            console.log("Error: " + error["errors"]);
+          }
+        );
+      }
+
+      function find_sample_type(sample_type_id) {
+        AQ.SampleType.find(sample_type_id).then(
+          sample_type => {
+            if ($scope.views.search.sample_type == sample_type.name) {
+              search_update([sample]);
+              cookie();
+              AQ.update();
+            } else {
+              alert_message(
+                "Could not find sample with Sample Name/ID (" +
+                  $scope.views.search.query +
+                  ") Sample Type (" +
+                  $scope.views.search.sample_type +
+                  ") and Item ID (" +
+                  $scope.views.search.item_id +
+                  ")"
+              );
+            }
+          },
+          error => {
+            console.log("Error: " + error["errors"]);
+            alert_message("Could not find sample type with id " + sample_type_id);
+          }
+        );
+      }
+
+      function find_item_sample(item) {
+        AQ.Sample.find(item.sample_id).then(
+          sample => {
+            // Current search inputs: Sample Name or ID, Item ID
+            if ($scope.views.search.query) {
+              if ($scope.views.search.query.includes(sample.id)) {
+                // Current search inputs: Sample Name or ID, Sample Type, Item ID
+                if ($scope.views.search.sample_type) {
+                  find_sample_type(sample.sample_type_id)
+                }
+                search_update([sample]);
+                cookie();
+                AQ.update();
+              } else {
+                alert_message(
+                  "Could not find sample with Sample Name/ID (" +
+                    $scope.views.search.query +
+                    ") and Item ID (" +
+                    $scope.views.search.item_id +
+                    ")"
+                );
+              }
+            }
+
+            // Current search inputs: Sample Type, Item ID
+            else if ($scope.views.search.sample_type) {
+              find_sample_type(sample.sample_type_id) 
+            }
+
+            // Current search input: Item ID (only)
+            else {
+              search_update([sample]);
+              cookie();
+              AQ.update();
+            }
+          },
+          error => {
+            console.log("Error: " + error["errors"]);
+            alert_message(
+              "Could not find sample for Item ID " +
+                $scope.views.search.item_id 
+            );
+          }
+        );
       }
 
       // item_search function allows users to search for sample by Item ID
       $scope.item_search = function() {
-        AQ.Item.find($scope.views.search.item_id).then(item => {
-          AQ.ObjectType.find(item.object_type_id).then(object_type => {
-            // Collection check
-            if (object_type.handler === "collection") {
-              AQ.Collection.find_fast(item.id).then(collection => {
-                var item_list = collection.part_matrix.reduce(function(a, b) {
-                  return a.concat(b);
-                });
-                var sample;
-                var sample_list = [];
-                for (let i = 0; i < item_list.length; i++) {
-                  sample = item_list[i].sample;
-                  if (sample) {
-                    sample_list.push(sample);
-                  }
-                }
-                $scope.views.search.status = "preparing";
-                search_update(remove_duplicate(sample_list, "id"))
-              });
-              
-            } else {
+        AQ.Item.find($scope.views.search.item_id).then(
+          item => {
+            AQ.ObjectType.find(item.object_type_id).then(object_type => {
               $scope.views.search.status = "preparing";
-              AQ.Sample.find(item.sample_id)
-                .then(sample => {
-                  // Current search inputs: Sample Name or ID, Item ID
-                  if ($scope.views.search.query) {
-                    if ($scope.views.search.query.includes(sample.id)) {
-                      // Current search inputs: Sample Name or ID, Sample Type, Item ID
-                      if ($scope.views.search.sample_type) {
-                        AQ.SampleType.find(sample.sample_type_id)
-                        .then(s => {
-                          if ($scope.views.search.sample_type == s.name) {
-                            search_update([sample]);
-                            cookie();
-                            AQ.update()
-                          }
-                          else {
-                            alert_message(
-                              "Could not find sample with Sample Name/ID (" +
-                                $scope.views.search.query + ") Sample Type (" +
-                                $scope.views.search.sample_type + ") and Item ID (" + $scope.views.search.item_id + ")"
-                            );
-                          }
-                        })
-                      } 
-                      search_update([sample]);
-                      cookie();
-                      AQ.update()
-                    }
-                    else {
-                      alert_message(
-                        "Could not find sample with Sample Name/ID (" +
-                          $scope.views.search.query + ") and Item ID (" + $scope.views.search.item_id + ")"
-                      );
-                    }
-                  }
-                  
-                  // Current search inputs: Sample Type, Item ID
-                  else if ($scope.views.search.sample_type) {
-                    AQ.SampleType.find(sample.sample_type_id)
-                    .then(s => {
-                      if ($scope.views.search.sample_type == s.name) {
-                        search_update([sample]);
-                        cookie();
-                        AQ.update()
-                      }
-                      else {
-                        alert_message(
-                          "Could not find sample with Sample Type (" +
-                            $scope.views.search.sample_type + ") and Item ID (" + $scope.views.search.item_id + ")"
-                        );
-                      }
-                    })
-                    
-                  }
-
-                  // Current search input: Item ID (only)
-                  else {
-                    search_update([sample]);
-                    cookie();
-                    AQ.update()
-                  }
-                })     
-                .catch(() => {
-                  alert_message(
-                    "Could not find sample with Item ID (" +
-                      $scope.views.search.item_id + ")"
-                  );
-                });
+              if (object_type.handler === "collection") {
+                find_collection(item);
+              } else {
+                find_item_sample(item);
               }
-          });
-        });
+            });
+          },
+          error => {
+            alert_message(
+              "Could not find item with ID " + $scope.views.search.item_id
+            );
+            console.log("Error: " + error["errors"]);
+          }
+        );
       };
 
       $scope.page_class = function(page) {
@@ -555,22 +577,23 @@
         }
       };
 
-
       // When users click on the "Upload Samples" button,
       // upload_dialog function shows up a confirm dialog which is used to give users a note about the file format before uploading.
       $scope.upload_dialog = function() {
-        let dialog = $mdDialog.confirm()
+        let dialog = $mdDialog
+          .confirm()
           .clickOutsideToClose(true)
           .title("Upload Samples From Local Computer")
-          .textContent("Spreadsheets should be in .csv format. The first entry of the first row should specify the sample type name. Remaining entries in the first row should be names of fields, the word 'Project', or the word 'Description'. Fields that correspond to arrays may show up multiple times, and can be empty (in which case the entry is ignored). The remaining rows specify the samples. In the first column should be the name of the sample. All other columns correspond to their headings. Subsamples can be referred to by name or id. ")
+          .textContent(
+            "Spreadsheets should be in .csv format. The first entry of the first row should specify the sample type name. Remaining entries in the first row should be names of fields, the word 'Project', or the word 'Description'. Fields that correspond to arrays may show up multiple times, and can be empty (in which case the entry is ignored). The remaining rows specify the samples. In the first column should be the name of the sample. All other columns correspond to their headings. Subsamples can be referred to by name or id. "
+          )
           .ariaLabel("Upload Samples")
           .ok("Upload")
-          .cancel("Cancel")
+          .cancel("Cancel");
 
-        $mdDialog.show(dialog).then(
-          () => $('.input_sample').click(),
-          () => null   
-        );
+        $mdDialog
+          .show(dialog)
+          .then(() => $(".input_sample").click(), () => null);
       };
 
       $scope.upload_change = function(files) {
