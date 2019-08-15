@@ -27,6 +27,8 @@ class ProtocolTestEngine
     test = nil
     ActiveRecord::Base.transaction do
       test = load_test(operation_type: operation_type, user: user)
+      # TODO: handle runtime errors
+      # TODO: allow for user test methods
       test.setup
       test.run
       test.analyze
