@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'minitest'
-
 class TestController < ApplicationController
 
   before_filter :signed_in_user
@@ -23,55 +21,58 @@ class TestController < ApplicationController
                 backtrace: test ? test.backtrace : [],
                 log: test ? test.logs : []
               )
-      render json: response
+      render json: response, status: :ok
       return
     end
 
+    status = :unprocessable_entity
     begin
       test = ProtocolTestEngine.run(
         operation_type: operation_type,
-        user: current_user)
+        user: current_user
+      )
       if test
         response.ok(message: 'test complete',
                     log: test.logs,
                     backtrace: test.backtrace)
+        status = :ok
       end
-    rescue Minitest::Assertion => e
-      response.error("Assertion failed: #{e}")
+    rescue KrillAssertionError => e
+      response.error("Assertion failed: #{e.error_message}")
               .more(
                 error_type: 'assertion_failure',
-                exception_backtrace: e.backtrace,
+                exception_backtrace: e.error_backtrace,
                 backtrace: test ? test.backtrace : [],
                 log: test ? test.logs : []
               )
     rescue Krill::KrillSyntaxError => e
-      response.error(e.message)
+      response.error(e.error_message)
               .more(
                 error_type: 'protocol_syntax_error',
-                exception_backtrace: e.backtrace,
+                exception_backtrace: e.error_backtrace,
                 backtrace: [], log: []
               )
     rescue Krill::KrillError => e
-      response.error(e.message)
+      response.error(e.error_message)
               .more(
                 error_type: 'protocol_error',
-                exception_backtrace: e.backtrace,
+                exception_backtrace: e.error_backtrace,
                 backtrace: test ? test.backtrace : [],
                 log: test ? test.logs : []
               )
     rescue KrillTestSyntaxError => e
-      response.error(e.message)
+      response.error(e.error_message)
               .more(
                 error_type: 'test_syntax_error',
-                exception_backtrace: e.backtrace,
+                exception_backtrace: e.error_backtrace,
                 backtrace: test ? test.backtrace : [],
                 log: test ? test.logs : []
               )
     rescue KrillTestError => e
-      response.error(e.message)
+      response.error(e.error_message)
               .more(
                 error_type: 'test_error',
-                exception_backtrace: e.backtrace,
+                exception_backtrace: e.error_backtrace,
                 backtrace: test ? test.backtrace : [],
                 log: test ? test.logs : []
               )
@@ -83,7 +84,7 @@ class TestController < ApplicationController
       )
     end
 
-    render json: response
+    render json: response, status: status
   end
 
 end

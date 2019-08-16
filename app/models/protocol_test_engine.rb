@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-# Controls execution of protocol tests
+require 'minitest'
 
+# Controls execution of protocol tests
 class ProtocolTestEngine
 
   # Loads the test code.
@@ -12,11 +13,9 @@ class ProtocolTestEngine
     operation_type.test.load(binding: empty_binding, source_name: '(eval)')
     ProtocolTest.new(operation_type, user)
   rescue SyntaxError => e
-    line_number, message = e.message.match(/^\(eval\):(\d+): (.+)$/m).captures
-    message = "#{operation_type.category}/#{operation_type.name}: line #{line_number}: #{message}".strip
-    raise KrillTestSyntaxError.new(message: message, error: e)
+    raise KrillTestSyntaxError.new(error: e, operation_type: operation_type)
   rescue StandardError, NoMemoryError, ScriptError, SecurityError, SystemExit, SystemStackError => e
-    raise KrillTestError.new(message: "Error while loading test: #{e.message}", error: e)
+    raise KrillTestError.new(message: "Error while loading test: #{e.message}", error: e, operation_type: operation_type)
   end
 
   # Run the test for the given operation type.
@@ -29,9 +28,19 @@ class ProtocolTestEngine
       test = load_test(operation_type: operation_type, user: user)
       # TODO: handle runtime errors
       # TODO: allow for user test methods
-      test.setup
-      test.run
-      test.analyze
+      begin
+        test.setup
+        test.run
+        test.analyze
+      rescue Krill::KrillBaseError => e
+        raise e
+      rescue SyntaxError => e
+        raise KrillTestSyntaxError.new(error: e, operation_type: operation_type)
+      rescue StandardError, NoMemoryError, ScriptError, SecurityError, SystemExit, SystemStackError => e
+        raise KrillTestError.new(error: e, operation_type: operation_type)
+      rescue Minitest::Assertion => e
+        raise KrillAssertionError.new(error: e, operation_type: operation_type)
+      end
       raise ActiveRecord::Rollback
     end
 
@@ -44,20 +53,20 @@ class ProtocolTestEngine
   end
 end
 
-class KrillTestError < StandardError
-  attr_reader :error
-
-  def initialize(message:, error:)
-    @error = error
-    super(message)
+class KrillTestError < Krill::KrillBaseError
+  def initialize(message: 'Error during test', error:, operation_type:)
+    super(message: message, error: error, operation_type: operation_type)
   end
 end
 
-class KrillTestSyntaxError < StandardError
-  attr_reader :error
+class KrillTestSyntaxError < Krill::KrillBaseError
+  def initialize(message: 'Syntax error in test', error:, operation_type:)
+    super(message: message, error: error, operation_type: operation_type)
+  end
+end
 
-  def initialize(message:, error:)
-    @error = error
-    super(message)
+class KrillAssertionError < Krill::KrillBaseError
+  def initialize(message: 'Assertion failure', error:, operation_type:)
+    super(message: message, error: error, operation_type: operation_type)
   end
 end
