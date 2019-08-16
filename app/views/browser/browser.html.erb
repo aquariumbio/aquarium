@@ -77,22 +77,10 @@
 <% end %>
 
 <% content_for :action2 do %>
-  <md-menu>
-
-    <md-button class='md-raised' ng-click="create_sample_dialog()">Create Sample</md-button>
-
-    <md-menu-content>
-      <md-menu-item ng-repeat="st in sample_types">
-        <md-button ng-click="new_sample(st)">{{st.name}}</md-button>
-      </md-menu-item>
-    </md-menu-content>
-
-  </md-menu> 
-
-
+  <md-button class='md-raised' ng-click="create_sample_dialog()">Create Sample</md-button>
 
   <script type="text/ng-template" id="create_sample_dialog.html">
-    <md-dialog style="width: 40%; height: 60%">
+    <md-dialog style="width: 40%; height: auto">
         <md-toolbar class="item-toolbar _md _md-toolbar-transitions">
           <div class="md-toolbar-tools">
             <h2 class="item-label md-truncate flex">Create New Sample</h2>
@@ -100,62 +88,27 @@
         </md-toolbar>
 
         <md-dialog-content class="md-dialog-content">
-          <div flex="60" layout="column">
-            <md-input-container>
-              <md-select-header>Sample Type</md-select-header>
-              <select ng-model="views.sample_type.selection" aria-label="Select sample type">
-                <option ng-repeat="st in sample_types" ng-click="new_sample(st)" ng-value="st.name">
-                  {{st.name}}
-                </option>
-              </select> 
-            </md-input-container>
+          <div flex>
+            <md-menu>
+              <md-button class='md-raised' ng-click="$mdMenu.open(ev)">Choose Sample Type</md-button>
+          
+              <md-menu-content>
+                  <md-menu-item ng-repeat="st in sample_types">
+                    <md-button ng-click="new_sample(st)">{{st.name}}</md-button>
+                  </md-menu-item>
+              </md-menu-content>
+            </md-menu>
 
-            <md-input-container>
-              <div>Sample Name</div>
-              <input class="input-no-style full" type="text" name="sample_name" required ng-model="sample.name" md-maxlength="255" aria-label="Input sample name">
-              <div ng-messages="sample_name.$error"></div>
-              <div ng-messages="!sample_name.$error">
-                <div ng-message="required">This is required.</div>
-                <div ng-message="md-maxlength">The sample name must be less than 255 characters long.</div>
-              </div>
-            </md-input-container>     
-       
-            <md-input-container>
-              <div>Sample Description</div>
-              <input class="input-no-style full" type="text" name="sample_description" required ng-model="sample.description" md-maxlength="255" aria-label="Input sample description">
-              <div ng-messages="sample_description.$error"></div>
-              <div ng-messages="!sample_description.$error">
-                <div ng-message="required">This is required.</div>
-                <div ng-message="md-maxlength">The sample name must be less than 255 characters long.</div>
-              </div>
-            </md-input-container> 
-            
-            <md-input-container>
-              <div>Project</div>
-              <input class="input-no-style full" type="text" name="sample_project" required ng-model="sample.project" md-maxlength="255" aria-label="Input sample project">
-              <div ng-messages="sample_project.$error"></div>
-              <div ng-messages="!sample_project.$error">
-                <div ng-message="required">This is required.</div>
-                <div ng-message="md-maxlength">The sample name must be less than 255 characters long.</div>
-              </div>
-            </md-input-container> 
+            <div ng-include="'create_sample_form'"></div>
           </div>
         </md-dialog-content>
 
         <md-dialog-actions layout="row">
-          <md-button class="md-primary md-cancel-button md-button ng-scope md-default-theme md-ink-ripple" ng-click="dialog.cancel()">Cancel</md-button>
-          <md-button class="md-primary md-confirm-button md-button md-ink-ripple md-default-theme" ng-disabled="dialogForm.$invalid" class="md-primary">Save</md-button>
+          <md-button class="md-primary md-cancel-button md-button ng-scope md-default-theme md-ink-ripple" ng-click="cancel()">Cancel</md-button>
+          <md-button class="md-primary md-confirm-button md-button md-ink-ripple md-default-theme" ng-click="save()">Save</md-button>
         </md-dialog-actions>
     </md-dialog>
   </script>
-<% end %>
-
-<% content_for :action3 do %>
-  <md-button class='md-raised md-primary'
-     ng-click="save_new_samples()"
-     ng-disabled="views.create.samples.length == 0">
-    Save
-  </md-button>
 <% end %>
 
 <% content_for :action4 do %>

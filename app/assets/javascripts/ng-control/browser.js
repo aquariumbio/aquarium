@@ -292,24 +292,41 @@
 
       // Sample creation
 
+      // The function shows the dialog for creating new sample
       $scope.create_sample_dialog = function() {
-        console.log($scope.sample_types)
         $mdDialog.show({
           templateUrl: 'create_sample_dialog.html',
           clickOutsideToClose: true,
-          locals: { sample_types: $scope.sample_types },
-          controller: ['$scope', 'sample_types', SampleDialogController]
+          locals: { 
+            sample_types: $scope.sample_types,
+            selected: $scope.views.create.selected,
+            samples: $scope.views.create.samples,
+            new_sample: $scope.new_sample,
+            remove_sample: $scope.remove_sample,
+            save: $scope.save_new_samples
+          },
+          controller: ['$scope', 'sample_types', 'selected', 'samples', 'new_sample', 
+                      'remove_sample', 'save', sample_dialog_controller]
         })
-        // .then(
-        //   () => save_new_samples(),
-        //   () => null   
-        // )
       }
 
-      function SampleDialogController($scope, sample_types) {
-        $scope.sample_types = sample_types
+      // Controller function for create sample dialog
+      function sample_dialog_controller($scope, sample_types, selected, samples, 
+                                        new_sample, remove_sample, save) {
+        $scope.sample_types = sample_types;
+        $scope.selected = selected;
+        $scope.samples = samples;
+
+        // Dialog actions
+        $scope.new_sample = new_sample;
+        $scope.remove_sample = remove_sample
+        $scope.save = save;
+        $scope.cancel = function() {
+          $mdDialog.cancel();
+        };
       }
 
+      // The function creates new sample based on selected sample types
       $scope.new_sample = function(st) {
         $scope.views.create.samples.push(
           new Sample($http).new(st.id, function() {
@@ -318,6 +335,7 @@
         );
       };
 
+      // The function removes the sample in the create-sample form
       $scope.remove_sample = function(sample) {
         var i = $scope.views.create.samples.indexOf(sample);
         $scope.views.create.samples.splice(i, 1);
