@@ -42,11 +42,9 @@ module Krill
       namespace::Protocol.include(base_class)
       @protocol = namespace::Protocol.new
     rescue SyntaxError => e
-      line_number, message = e.message.match(/^\(eval\):(\d+): (.+)$/m).captures
-      message = "#{operation_type.category}/#{operation_type.name}: line #{line_number}: #{message}".strip
-      raise KrillSyntaxError.new(operation_type: operation_type, error: e, message: message)
+      raise KrillSyntaxError.new(operation_type: operation_type, error: e)
     rescue StandardError, NoMemoryError, ScriptError, SecurityError, SystemExit, SystemStackError => e
-      raise KrillError.new(job: job, error: e, message: e.message)
+      raise KrillError.new(job: job, error: e)
     end
 
     # Executes `protocol.main` for the job.
@@ -141,9 +139,63 @@ module Krill
     end
   end
 
+  class KrillBaseError < StandardError
+    attr_reader :operation_type, :error
+
+    # Create a KrillBaseError object for the given operation type, error and message.
+    #
+    # @param operation_type [OperationType] the operation type
+    # @param error [Exception] the error object
+    # @param message [string] the message for this error
+    def initialize(operation_type:, error:, message:)
+      @operation_type = operation_type
+      @error = error
+      super(message)
+    end
+
+    # Returns the path of the operation type for this error.
+    def operation_path
+      "#{@operation_type.category}/#{@operation_type.name}"
+    end
+
+    # Returns a transformed version of the message for the error of this object.
+    # Replaces occurrences of "(eval)" with the operation type path, and
+    # removes suffix referencing ExecutionNamespace enclosing the protocol
+    # during execution.
+    def error_message
+      match = @error.message.match(/^\(eval\):(\d+):(.+)$/m)
+      if match
+        line_number, message = match.captures
+        return "#{operation_path}: line #{line_number}: #{message}".strip
+      end
+
+      match = @error.message.match(/ for ExecutionNamespace\w+:Module$/)
+      if match
+        loc = match.begin(0) - 1
+        return @error.message[0..loc]
+      end
+
+      @error.message
+    end
+
+    # Returns the backtrace of the associated error filtered to exclude
+    # Aquarium context.
+    # Replaces occurrences of '(eval)' path with operation type path.
+    def error_backtrace
+      split = error.backtrace.collect { |msg| msg.match(/^([^:]+):(\d+):(.+)$/m).captures }
+      filtered = split.reject { |c| c.first.match(%r{^(/[^/]+)+$}m) }
+      filtered.collect do |captures|
+        path, line_number, message = captures
+        path = operation_path if path == '(eval)'
+
+        "#{path}: line #{line_number}: #{message}".strip
+      end
+    end
+  end
+
   # Exception class for errors during execution of protocols
-  class KrillError < StandardError
-    attr_reader :job, :error
+  class KrillError < KrillBaseError
+    attr_reader :job
 
     # Create a KrillError object for the given job and exception with an
     # optional message.
@@ -153,24 +205,22 @@ module Krill
     # @param message [String] the error message
     def initialize(job:, error:, message: 'Error executing protocol')
       @job = job
-      @error = error
-      super(message)
+      super(operation_type: @job.operation_type, error: error, message: message)
     end
+
   end
 
   # Exception class for protocol syntax errors
-  class KrillSyntaxError < StandardError
-    attr_reader :operation_type, :error
+  class KrillSyntaxError < KrillBaseError
 
     # Create a KrillSyntaxError object indicating an error in the given
     # operation type.
     #
     # @param operation_type [OperationType] the operation type
-    # @pram
+    # @param error [Exception] the error object
+    # @param message [String] the error message
     def initialize(operation_type:, error:, message: 'Syntax error in operation type')
-      @operation_type = operation_type
-      @error = error
-      super(message)
+      super(operation_type: operation_type, error: error, message: message)
     end
   end
 
