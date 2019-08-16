@@ -89,6 +89,7 @@ RSpec.describe Krill::ProtocolSandbox do
     expect { sandbox.execute }.to raise_error do |error|
       expect(error).to be_a(Krill::KrillError)
       expect(error.message).to eq('Error executing protocol')
+      expect(error.error_message).to eq('the_exception')
       expect(error.job).to eq(job)
       expect(error.error).to be_a(StandardError)
     end
@@ -115,8 +116,11 @@ RSpec.describe Krill::ProtocolSandbox do
       expect(error.message).to eq('Error executing protocol')
       expect(error.job).to eq(job)
       expect(error.error).to be_a(SystemExit)
-      expect(error.error.message).to eq('exit')
-      pending 'make sure error.error.backtrace is filtered'
+      expect(error.error_message).to eq('exit')
+      error.error_backtrace.each do |msg|
+        expect(msg).not_to include('(eval)')
+        expect(msg).to include('testing/system_exit')
+      end
     end
     expect(job).to be_error
     job.operations.each { |operation| expect(operation.status).to eq('error') }
@@ -137,7 +141,13 @@ RSpec.describe Krill::ProtocolSandbox do
     job = create_job(protocol: bad_syntax_protocol, user: test_user)
     expect { Krill::ProtocolSandbox.new(job: job, debug: true) }.to raise_error do |error|
       expect(error).to be_a(Krill::KrillSyntaxError)
-      pending "check attributes of error"
+      expect(error.error).to be_a(SyntaxError)
+      expect(error.message).to eq('Syntax error in operation type')
+      expect(error.error_message).to eq("testing/bad_syntax: line 1:  syntax error, unexpected '=', expecting end\nclass Protocol; def main; 1=2; end; end\n                           ^")
+      error.error_backtrace.each do |msg|
+        expect(msg).not_to include('(eval)')
+        expect(msg).to include('testing/bad_syntax')
+      end
     end
   end
 
@@ -157,7 +167,14 @@ RSpec.describe Krill::ProtocolSandbox do
     sandbox = Krill::ProtocolSandbox.new(job: job, debug: true)
     expect { sandbox.execute }.to raise_error do |error|
       expect(error).to be_a(Krill::KrillError)
-      pending "check attributes of error"
+      expect(error.message).to eq('Error executing protocol')
+      expect(error.job).to eq(job)
+      expect(error.error).to be_a(SystemStackError)
+      expect(error.error_message).to eq('stack level too deep')
+      error.error_backtrace.each do |msg|
+        expect(msg).not_to include('(eval)')
+        expect(msg).to include('testing/stack overflow')
+      end
     end
     expect(job).to be_error
     job.operations.each { |operation| expect(operation.status).to eq('error') }
@@ -178,7 +195,14 @@ RSpec.describe Krill::ProtocolSandbox do
     # TODO: check message
     expect { Krill::ProtocolSandbox.new(job: job, debug: true) }.to raise_error do |error|
       expect(error).to be_a(Krill::KrillError)
-      pending "check attributes of error"
+      expect(error.message).to eq('Error executing protocol')
+      expect(error.job).to eq(job)
+      expect(error.error).to be_a(NameError)
+      expect(error.error_message).to eq("undefined local variable or method `again'")
+      error.error_backtrace.each do |msg|
+        expect(msg).not_to include('(eval)')
+        expect(msg).to include('testing/bad load')
+      end
     end
   end
 
@@ -196,7 +220,14 @@ RSpec.describe Krill::ProtocolSandbox do
     # TODO: check message
     expect { Krill::ProtocolSandbox.new(job: job, debug: true) }.to raise_error do |error|
       expect(error).to be_a(Krill::KrillError)
-      pending "check attributes of error"
+      expect(error.message).to eq('Error executing protocol')
+      expect(error.job).to eq(job)
+      expect(error.error).to be_a(SystemExit)
+      expect(error.error_message).to eq('exit')
+      error.error_backtrace.each do |msg|
+        expect(msg).not_to include('(eval)')
+        expect(msg).to include('testing/bad load 2')
+      end
     end
   end
 
