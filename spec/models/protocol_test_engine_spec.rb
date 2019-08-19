@@ -39,9 +39,8 @@ RSpec.describe ProtocolTestEngine do
     )
   end
 
-  it 'failing assertion should result in Minitest exception' do
-    # TODO: want filtered backtrace (?)
-    expect { ProtocolTestEngine.run(operation_type: failing_test, user: test_user) }.to raise_error(Minitest::Assertion)
+  it 'failing assertion should result in assertion error' do
+    expect { ProtocolTestEngine.run(operation_type: failing_test, user: test_user) }.to raise_error(KrillAssertionError)
   end
 
   let(:bad_protocol_syntax) do
