@@ -38,7 +38,6 @@ module Krill
         thread_status: thread_status
       )
       @namespace_name = "#{namespace_prefix}#{suffix}"
-      puts @namespace_name
       namespace = Krill.make_namespace(name: @namespace_name)
       namespace.add(code: operation_type.protocol)
       namespace::Protocol.include(base_class)
