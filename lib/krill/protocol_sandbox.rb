@@ -37,14 +37,16 @@ module Krill
         mutex: mutex,
         thread_status: thread_status
       )
-      namespace = Krill.make_namespace(name: "#{namespace_prefix}#{suffix}")
+      @namespace_name = "#{namespace_prefix}#{suffix}"
+      puts @namespace_name
+      namespace = Krill.make_namespace(name: @namespace_name)
       namespace.add(code: operation_type.protocol)
       namespace::Protocol.include(base_class)
       @protocol = namespace::Protocol.new
     rescue SyntaxError => e
       raise KrillSyntaxError.new(operation_type: operation_type, error: e)
     rescue StandardError, NoMemoryError, ScriptError, SecurityError, SystemExit, SystemStackError => e
-      raise KrillError.new(job: job, error: e)
+      raise KrillError.new(job: job, error: e, namespace: @namespace_name)
     end
 
     # Executes `protocol.main` for the job.
@@ -75,7 +77,7 @@ module Krill
         @job.append_step(operation: 'aborted', rval: {})
         raise e if e.is_a?(ProtocolError)
 
-        raise KrillError.new(job: @job, error: e)
+        raise KrillError.new(job: @job, error: e, namespace: @namespace_name)
       ensure
         @job.save
       end
@@ -140,16 +142,17 @@ module Krill
   end
 
   class KrillBaseError < StandardError
-    attr_reader :operation_type, :error
+    attr_reader :operation_type, :error, :namespace
 
     # Create a KrillBaseError object for the given operation type, error and message.
     #
     # @param operation_type [OperationType] the operation type
     # @param error [Exception] the error object
     # @param message [string] the message for this error
-    def initialize(operation_type:, error:, message:)
+    def initialize(operation_type:, error:, message:, namespace: '')
       @operation_type = operation_type
       @error = error
+      @namespace = namespace
       super(message)
     end
 
@@ -166,10 +169,11 @@ module Krill
       match = @error.message.match(/^\(eval\):(\d+):(.+)$/m)
       if match
         line_number, message = match.captures
-        return "#{operation_path}: line #{line_number}: #{message}".strip
+        return "#{operation_path}: line #{line_number}: #{message.strip}".strip
       end
 
-      match = @error.message.match(/ for ExecutionNamespace\w+:Module$/)
+      namespace_pattern = Regexp.new(" for #{@namespace}:Module$")
+      match = @error.message.match(namespace_pattern)
       if match
         loc = match.begin(0) - 1
         return @error.message[0..loc]
@@ -188,7 +192,7 @@ module Krill
         path, line_number, message = captures
         path = operation_path if path == '(eval)'
 
-        "#{path}: line #{line_number}: #{message}".strip
+        "#{path}: line #{line_number}: #{message.strip}".strip
       end
     end
   end
@@ -203,9 +207,14 @@ module Krill
     # @param job [Job] the job where error occurred
     # @param error [Exception] the error
     # @param message [String] the error message
-    def initialize(job:, error:, message: 'Error executing protocol')
+    def initialize(job:, error:, message: 'Error executing protocol', namespace: '')
       @job = job
-      super(operation_type: @job.operation_type, error: error, message: message)
+      super(
+        operation_type: @job.operation_type,
+        error: error,
+        message: message,
+        namespace: namespace
+      )
     end
 
   end
