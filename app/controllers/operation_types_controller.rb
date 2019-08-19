@@ -267,25 +267,23 @@ class OperationTypesController < ApplicationController
         }
         render json: response, status: :ok
       rescue Krill::KrillSyntaxError => e
-        message = e.message
-        logger.error(message)
+        logger.error(e.error.message)
         e.error.backtrace.each do |b|
           logger.error(b)
         end
         response = {
-          error: message,
-          backtrace: e.error.backtrace
+          error: e.error_message,
+          backtrace: e.error_backtrace
         }
         render json: response, status: :unprocessable_entity
       rescue Krill::KrillError => e
-        message = e.message
-        logger.error(message)
+        logger(e.error.message)
         e.error.backtrace.each do |b|
           logger.error(b)
         end
         response = {
-          error: message,
-          backtrace: e.error.backtrace
+          error: e.error_message,
+          backtrace: e.error_backtrace
         }
         render json: response,
                status: :unprocessable_entity
