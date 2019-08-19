@@ -143,7 +143,7 @@ RSpec.describe Krill::ProtocolSandbox do
       expect(error).to be_a(Krill::KrillSyntaxError)
       expect(error.error).to be_a(SyntaxError)
       expect(error.message).to eq('Syntax error in operation type')
-      expect(error.error_message).to eq("testing/bad_syntax: line 1:  syntax error, unexpected '=', expecting end\nclass Protocol; def main; 1=2; end; end\n                           ^")
+      expect(error.error_message).to eq("testing/bad_syntax: line 1: syntax error, unexpected '=', expecting end\nclass Protocol; def main; 1=2; end; end\n                           ^")
       error.error_backtrace.each do |msg|
         expect(msg).not_to include('(eval)')
         expect(msg).to include('testing/bad_syntax')

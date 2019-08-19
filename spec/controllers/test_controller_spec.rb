@@ -58,7 +58,7 @@ RSpec.describe TestController, type: :controller do
     expect(response_hash[:backtrace]).to be_empty
     expect(response_hash[:exception_backtrace]).to be_empty
     expect(response_hash[:log]).to be_empty
-    expect(response_hash[:message]).to eq("testing/bad_syntax: line 1:  syntax error, unexpected '=', expecting end\nclass Protocol; def main; 1=2; end; end\n                           ^")
+    expect(response_hash[:message]).to eq("testing/bad_syntax: line 1: syntax error, unexpected '=', expecting end\nclass Protocol; def main; 1=2; end; end\n                           ^")
   end
 
   let(:exit_protocol) do
@@ -163,6 +163,6 @@ RSpec.describe TestController, type: :controller do
     expect(response_hash[:backtrace]).to be_empty
     expect(response_hash[:exception_backtrace]).to be_empty
     expect(response_hash[:log]).to be_empty
-    expect(response_hash[:message]).to eq("testing/bad syntax test protocol: line 1:  syntax error, unexpected '=', expecting end\n...ProtocolTestBase; def setup; 1=2; add_random_operations(1); ...\n...                              ^")
+    expect(response_hash[:message]).to eq("testing/bad syntax test protocol: line 1: syntax error, unexpected '=', expecting end\n...ProtocolTestBase; def setup; 1=2; add_random_operations(1); ...\n...                              ^")
   end
 end
