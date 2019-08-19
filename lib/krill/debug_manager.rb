@@ -26,11 +26,6 @@ module Krill
     # @raise [KrillError, ProtocolError]
     def start
       @sandbox.execute
-    ensure
-      if ActiveRecord::Base.connection && ActiveRecord::Base.connection.active?
-        ActiveRecord::Base.connection.close
-        puts "#{@sandbox.job.id}: Closing ActiveRecord connection"
-      end
     end
 
   end
