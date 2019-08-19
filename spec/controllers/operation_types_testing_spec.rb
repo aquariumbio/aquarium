@@ -70,5 +70,51 @@ RSpec.describe OperationTypesController, type: :controller do
       expect(response_hash[:operations]).to be_nil
     end
 
+    let(:exit_protocol) do
+      create(
+        :operation_type,
+        name: 'system_exit',
+        category: 'testing',
+        protocol: 'class Protocol; def main; exit; end; end',
+        user: test_user
+      )
+    end
+
+    it 'test for system_exit protocol should have error' do
+      cookies[token_name] = User.find(1).remember_token
+      get :random, id: exit_protocol.id, num: 3
+
+      post_data = exit_protocol.as_json
+      post_data[:test_operations] = JSON.parse(@response.body)
+      post :test, post_data
+
+      response_hash = JSON.parse(@response.body, symbolize_names: true)
+      expect(response_hash[:backtrace]).to eq(["testing/system_exit: line 1: in `exit'", "testing/system_exit: line 1: in `main'"])
+      expect(response_hash[:error]).to eq('exit')
+    end
+
+    let(:nil_id_protocol) do
+      create(
+        :operation_type,
+        name: 'nil_id_protocol',
+        category: 'testing',
+        protocol: 'class Protocol; def main; a=nil; b=a.id; end; end',
+        user: test_user
+      )
+    end
+
+    it 'test for nil_id_protocol should have error' do
+      cookies[token_name] = User.find(1).remember_token
+      get :random, id: nil_id_protocol.id, num: 3
+
+      post_data = nil_id_protocol.as_json
+      post_data[:test_operations] = JSON.parse(@response.body)
+      post :test, post_data
+
+      response_hash = JSON.parse(@response.body, symbolize_names: true)
+
+      expect(response_hash[:error]).to eq("undefined method `id' for nil:NilClass")
+      expect(response_hash[:backtrace]).to eq(["testing/nil_id_protocol: line 1: in `main'"])
+    end
   end
 end
