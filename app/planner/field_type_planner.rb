@@ -12,6 +12,7 @@ module FieldTypePlanner
       return [aft.sample_type.samples.sample(3), aft]
     end
     return [nil, aft] unless aft.sample_type
+    # TODO: this should raise named exception class
     raise "There are no samples of type #{aft.sample_type.name}" if aft.sample_type.samples.empty?
 
     [aft.sample_type.samples.sample, aft]
