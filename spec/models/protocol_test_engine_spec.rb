@@ -74,6 +74,21 @@ RSpec.describe ProtocolTestEngine do
     expect { ProtocolTestEngine.run(operation_type: bad_test_syntax, user: test_user) }.to raise_error(KrillTestSyntaxError)
   end
 
+  let(:exit_test) do
+    create(
+      :operation_type,
+      name: 'exit test',
+      category: 'testing',
+      protocol: 'class Protocol; def main; show { title \'blah\' }; end end',
+      test: 'class ProtocolTest < ProtocolTestBase; def setup; exit; add_random_operations(1); end; def analyze; assert_equal(@backtrace.last[:operation], \'complete\'); end; end',
+      user: test_user
+    )
+  end
+
+  it 'test with exit should raise krill test error' do
+    expect {ProtocolTestEngine.run(operation_type: exit_test, user: test_user)}.to raise_error(KrillTestError)
+  end
+
   let(:raise_protocol) do
     create(
       :operation_type,
