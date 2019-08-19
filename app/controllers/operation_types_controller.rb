@@ -154,20 +154,24 @@ class OperationTypesController < ApplicationController
   def random
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
-    ops_json = []
     ActiveRecord::Base.transaction do
-      operation_type = OperationType.find(params[:id])
-      ops = operation_type.random(params[:num].to_i)
       begin
+        operation_type = OperationType.find(params[:id])
+        ops = operation_type.random(params[:num].to_i)
         ops.select(&:precondition_value)
         ops_json = ops.as_json(methods: %i[field_values precondition_value])
         ops_json.each do |op|
           op['field_values'] = op['field_values'].collect(&:full_json)
         end
         render json: ops_json, status: :ok
-        # TODO:  method precondition_value just eats exceptions so this will never result in error
       rescue StandardError => e
-        render json: { error: "The precondition for #{operation.name} raised an exception.", backtrace: e.backtrace },
+        logger.error(e.message)
+        e.backtrace.each do |b|
+          logger.error(b)
+        end
+        # TODO: some errors may need backtrace 
+        backtrace = [] # e.backtrace || []
+        render json: { error: e.message, backtrace: backtrace },
                status: :unprocessable_entity
       end
       raise ActiveRecord::Rollback
@@ -236,6 +240,10 @@ class OperationTypesController < ApplicationController
                        []
                      end
       rescue StandardError => e
+        logger.error(e.message)
+        e.message.backtrace.each do |b|
+          logger.error(b)
+        end
         response = {
           error: e.message,
           backtrace: e.backtrace
@@ -277,7 +285,7 @@ class OperationTypesController < ApplicationController
         }
         render json: response, status: :unprocessable_entity
       rescue Krill::KrillError => e
-        logger(e.error.message)
+        logger.error(e.error.message)
         e.error.backtrace.each do |b|
           logger.error(b)
         end
