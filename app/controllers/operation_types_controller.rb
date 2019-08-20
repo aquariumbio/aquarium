@@ -166,7 +166,7 @@ class OperationTypesController < ApplicationController
 
         if ops_json.empty?
           render json: { error: 'No operations generated', backtrace: [] },
-               status: :unprocessable_entity
+                 status: :unprocessable_entity
         else
           render json: ops_json, status: :ok
         end
