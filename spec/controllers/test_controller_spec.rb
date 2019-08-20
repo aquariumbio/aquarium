@@ -111,7 +111,6 @@ RSpec.describe TestController, type: :controller do
     expect(response_hash[:message]).to eq('Assertion failed: should fail')
   end
 
-
   let(:bad_test_protocol) do
     create(
       :operation_type,

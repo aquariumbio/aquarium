@@ -26,7 +26,7 @@ RSpec.describe OperationTypesController, type: :controller do
 
   describe 'Tests operation types' do
 
-    it "test for correct protocol completes without error" do
+    it 'test for correct protocol completes without error' do
       cookies[token_name] = User.find(1).remember_token
 
       get :random, id: io_protocol.id, num: 3
@@ -56,7 +56,7 @@ RSpec.describe OperationTypesController, type: :controller do
       )
     end
 
-    it "test for protocol with syntax error has error" do
+    it 'test for protocol with syntax error has error' do
       cookies[token_name] = User.find(1).remember_token
       get :random, id: bad_syntax_protocol.id, num: 3
 

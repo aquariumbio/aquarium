@@ -37,7 +37,7 @@ RSpec.describe Krill::DebugManager do
       operation_type: protocol,
       user_id: user.id
     )
-    plans = build_plan(operations: operations, user_id: user.id)
+    build_plan(operations: operations, user_id: user.id)
     job = Job.schedule(
       operations: operations,
       user: user,

@@ -86,7 +86,7 @@ RSpec.describe ProtocolTestEngine do
   end
 
   it 'test with exit should raise krill test error' do
-    expect {ProtocolTestEngine.run(operation_type: exit_test, user: test_user)}.to raise_error(KrillTestError)
+    expect { ProtocolTestEngine.run(operation_type: exit_test, user: test_user) }.to raise_error(KrillTestError)
   end
 
   let(:raise_protocol) do

@@ -64,24 +64,13 @@ RSpec.describe Collection, type: :model do
       pa = PartAssociation.new collection_id: c.id, part_id: 1, row: 1, column: 2
       pa.save
       pa = PartAssociation.new collection_id: c.id, part_id: 2, row: 1, column: 2
-
-      begin
-        pa.save
-        raise 'Collision allowed'
-      rescue StandardError
-      end
+      expect { pa.save }.to raise_error(ActiveRecord::RecordNotUnique)
 
       pa = PartAssociation.new collection_id: c.id, part_id: 1, row: 2, column: 2
       pa.save
       pa = PartAssociation.new collection_id: d.id, part_id: 2, row: 2, column: 3
-
-      begin
-        pa.save
-        raise 'Collision allowed'
-      rescue StandardError
-        raise 'Non collision detected' unless pa.errors.empty?
-      end
-
+      expect { pa.save }.not_to raise_error(ActiveRecord::RecordNotUnique)
+      expect(pa.errors).to be_empty
     end
 
   end
