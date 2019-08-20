@@ -163,10 +163,13 @@ class OperationTypesController < ApplicationController
         ops_json.each do |op|
           op['field_values'] = op['field_values'].collect(&:full_json)
         end
-        render json: ops_json, status: :ok unless ops_json.empty?
 
-        render json: { error: 'No operations generated', backtrace: [] },
+        if ops_json.empty?
+          render json: { error: 'No operations generated', backtrace: [] },
                status: :unprocessable_entity
+        else
+          render json: ops_json, status: :ok
+        end
       rescue StandardError => e
         logger.error(e.message)
         e.backtrace.each do |b|
