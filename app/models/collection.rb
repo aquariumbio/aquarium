@@ -268,16 +268,12 @@ class Collection < Item
   # @param pairs [Array] of the form [ [r1,c1], [r2, c2] ... ]
   # @return [Collection] can be chained
   def delete_selection(pairs)
-
     pairs.each do |r, c|
-
       pas = PartAssociation.includes(:part).where(collection_id: id, row: r, column: c)
-
       next if pas.empty?
 
       pas[0].part.mark_as_deleted
       pas[0].destroy
-
       associate(
         :"Part Deleted",
         "The sample at #{r}, #{c} was deleted. " \
@@ -285,14 +281,11 @@ class Collection < Item
         nil,
         duplicates: true
       )
-
-      puts 'DONE!!!!!!!!!!!'
-
     end
 
   end
 
-  EMPTY = -1 # definition of empty
+  EMPTY = -1
 
   # @private
   def self.every
