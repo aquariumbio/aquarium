@@ -77,7 +77,7 @@ class FieldValue < ActiveRecord::Base
   # @return [Item]
   def collection_part(row, column)
     pas = PartAssociation.where(collection_id: child_item_id, row: row, column: column)
-    pas[0].part if pas.length == 1
+    pas.first.part if pas.length == 1
   end
 
   # Return associated parameter value.
@@ -93,7 +93,7 @@ class FieldValue < ActiveRecord::Base
       fts = sample.sample_type.field_types.select { |type| type.name == name }
       return nil unless fts.length == 1
 
-      ft = fts[0]
+      ft = ft.first
     else
       return nil
     end
