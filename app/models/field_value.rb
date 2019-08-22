@@ -86,7 +86,6 @@ class FieldValue < ActiveRecord::Base
   #   {FieldValue} of the type specified in the operation type
   #   definition
   def val
-
     if field_type
       ft = field_type
     elsif sample && sample_type
@@ -114,9 +113,9 @@ class FieldValue < ActiveRecord::Base
     when 'item'
       return child_item
     end
-
   end
 
+  # TODO: dead code
   def self.create_string(sample, ft, values)
     values.each do |v|
       if ft.choices && ft.choices != ''
@@ -131,6 +130,7 @@ class FieldValue < ActiveRecord::Base
     end
   end
 
+  # TODO: dead code
   def self.create_number(sample, ft, values)
     values.each do |v|
       if ft.choices && ft.choices != ''
@@ -145,6 +145,7 @@ class FieldValue < ActiveRecord::Base
     end
   end
 
+  # TODO: dead code
   def self.create_url(sample, ft, values)
     values.each do |v|
       fv = sample.field_values.create name: ft.name, value: v
@@ -152,10 +153,9 @@ class FieldValue < ActiveRecord::Base
     end
   end
 
+  # TODO: dead code
   def self.create_sample(sample, ft, values)
-
     values.each do |v|
-
       if v.class == Sample
         child = v
       elsif v.class == Integer
@@ -179,6 +179,7 @@ class FieldValue < ActiveRecord::Base
     end
   end
 
+  # TODO: dead code
   def self.creator(sample, field_type, raw) # sample, field_type, raw_field_data
 
     values = []
@@ -193,9 +194,9 @@ class FieldValue < ActiveRecord::Base
     end
 
     method('create_' + field_type.type).call(sample, field_type, values)
-
   end
 
+  # TODO: URLs belong elsewhere
   def to_s
     if child_sample_id
       c = Sample.find_by_id(child_sample_id)
@@ -214,7 +215,6 @@ class FieldValue < ActiveRecord::Base
     else
       value
     end
-
   end
 
   def export
