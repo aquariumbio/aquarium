@@ -167,6 +167,7 @@ module Krill
     def error_message
       messages = []
       @error.message.each_line do |line|
+        # replaces occurrence of "(eval)" as file path
         match = line.match(/^\(eval\):(\d+):(.+)$/m)
         if match
           line_number, message = match.captures
@@ -174,6 +175,7 @@ module Krill
           next
         end
 
+        # strips uninformative context from NameError message
         namespace_pattern = Regexp.new(" for (\#<)?#{@namespace}:(Module|0x[0-9a-f]+>)$")
         match = line.match(namespace_pattern)
         if match
