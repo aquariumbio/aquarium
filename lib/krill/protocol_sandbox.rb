@@ -165,20 +165,27 @@ module Krill
     # removes suffix referencing ExecutionNamespace enclosing the protocol
     # during execution.
     def error_message
-      match = @error.message.match(/^\(eval\):(\d+):(.+)$/m)
-      if match
-        line_number, message = match.captures
-        return "#{operation_path}: line #{line_number}: #{message.strip}".strip
+      messages = []
+      @error.message.each_line do |line|
+        match = line.match(/^\(eval\):(\d+):(.+)$/m)
+        if match
+          line_number, message = match.captures
+          messages.append("#{operation_path}: line #{line_number}:#{message}")
+          next
+        end
+
+        namespace_pattern = Regexp.new(" for (\#<)?#{@namespace}:(Module|0x[0-9a-f]+>)$")
+        match = line.match(namespace_pattern)
+        if match
+          loc = match.begin(0) - 1
+          messages.append(line[0..loc])
+          next
+        end
+
+        messages.append(line)
       end
 
-      namespace_pattern = Regexp.new(" for #{@namespace}:Module$")
-      match = @error.message.match(namespace_pattern)
-      if match
-        loc = match.begin(0) - 1
-        return @error.message[0..loc]
-      end
-
-      @error.message
+      messages.join('')
     end
 
     # Returns the backtrace of the associated error filtered to exclude
