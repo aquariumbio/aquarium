@@ -164,4 +164,32 @@ RSpec.describe TestController, type: :controller do
     expect(response_hash[:log]).to be_empty
     expect(response_hash[:message]).to eq("testing/bad syntax test protocol: line 1: syntax error, unexpected '=', expecting end\n...ProtocolTestBase; def setup; 1=2; add_random_operations(1); ...\n...                              ^")
   end
+
+  let(:bad_name_protocol_test) do
+    create(
+      :operation_type,
+      name: 'bad name protocol test',
+      category: 'testing',
+      protocol: 'class Protocol;     def main;        show do;          title \'blah\';          note operations.first.input(\'blah\').item.id;        end;      end;    end',
+      inputs: [{ name: 'blah', sample_type: 'DummySampleType', object_type: 'DummyObjectType' }],
+      user: test_user,
+      test: 'class ProtocolTest < ProtocolTestBase;      def setup;          adffd;          add_random_operations(3);      end;      def analyze;          log(\'Hello from Nemo\');          assert_equal(@backtrace.last[:operation], \'complete\');      end;        end'
+    )
+  end
+
+  it 'test with bad variable name should have a test error' do
+    cookies[token_name] = User.find(1).remember_token
+
+    get :run, id: bad_name_protocol_test.id
+
+    response_hash = JSON.parse(@response.body, symbolize_names: true)
+
+    expect(response_hash[:result]).to eq('error')
+    expect(response_hash[:error_type]).to eq('test_error')
+    expect(response_hash[:backtrace]).to be_empty
+    expect(response_hash[:exception_backtrace]).to eq(["testing/bad name protocol test: line 1: in `setup'"])
+    expect(response_hash[:log]).to be_empty
+    expect(response_hash[:message]).to eq("undefined local variable or method `adffd'")
+  end
+
 end

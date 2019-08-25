@@ -105,4 +105,19 @@ RSpec.describe ProtocolTestEngine do
     expect { ProtocolTestEngine.run(operation_type: raise_protocol, user: test_user) }.to raise_error(Krill::KrillError)
   end
 
+  let(:bad_name_protocol_test) do
+    create(
+      :operation_type,
+      name: 'bad name protocol test',
+      category: 'testing',
+      protocol: 'class Protocol;     def main;        show do;          title \'blah\';          note operations.first.input(\'blah\').item.id;        end;      end;    end',
+      inputs: [{ name: 'blah', sample_type: 'DummySampleType', object_type: 'DummyObjectType' }],
+      user: test_user,
+      test: 'class ProtocolTest < ProtocolTestBase;      def setup;          adffd;          add_random_operations(3);      end;      def analyze;          log(\'Hello from Nemo\');          assert_equal(@backtrace.last[:operation], \'complete\');      end;        end'
+    )
+  end
+
+  it 'test with bad variable name should return a syntax error' do
+    expect { ProtocolTestEngine.run(operation_type: bad_name_protocol_test, user: test_user) }.to raise_error(KrillTestError)
+  end
 end
