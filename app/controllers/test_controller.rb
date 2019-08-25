@@ -25,7 +25,6 @@ class TestController < ApplicationController
       return
     end
 
-    status = :unprocessable_entity
     begin
       test = ProtocolTestEngine.run(
         operation_type: operation_type,
@@ -35,7 +34,6 @@ class TestController < ApplicationController
         response.ok(message: 'test complete',
                     log: test.logs,
                     backtrace: test.backtrace)
-        status = :ok
       end
     rescue KrillAssertionError => e
       response.error("Assertion failed: #{e.error_message}")
@@ -79,12 +77,13 @@ class TestController < ApplicationController
     end
 
     if response.nil?
+      # TODO: this should be error status
       response = AqResponse.new.error(
         'Internal error: test completed with no response'
       )
     end
 
-    render json: response, status: status
+    render json: response, status: :ok
   end
 
 end
