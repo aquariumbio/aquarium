@@ -42,7 +42,7 @@ class ProtocolTestEngine
       rescue SyntaxError => e
         raise KrillTestSyntaxError.new(error: e, operation_type: operation_type)
       rescue StandardError, NoMemoryError, ScriptError, SecurityError, SystemExit, SystemStackError => e
-        raise KrillTestError.new(error: e, operation_type: operation_type)
+        raise KrillTestError.new(error: e, operation_type: operation_type, namespace: 'ProtocolTestEngine::ProtocolTest')
       rescue Minitest::Assertion => e
         raise KrillAssertionError.new(error: e, operation_type: operation_type)
       end
@@ -66,8 +66,13 @@ class KrillTestError < Krill::KrillBaseError
   # @param message [String] the error message
   # @param error [Exception] the error object
   # @param operation_type [OperationType] the protocol being tested
-  def initialize(message: 'Error during test', error:, operation_type:)
-    super(message: message, error: error, operation_type: operation_type)
+  def initialize(message: 'Error during test', error:, operation_type:, namespace: '')
+    super(
+      message: message,
+      error: error,
+      operation_type: operation_type,
+      namespace: namespace
+    )
   end
 end
 
@@ -93,6 +98,10 @@ class KrillAssertionError < Krill::KrillBaseError
   # @param error [Exception] the error object
   # @param operation_type [OperationType] the protocol being tested
   def initialize(message: 'Assertion failure', error:, operation_type:)
-    super(message: message, error: error, operation_type: operation_type)
+    super(
+      message: message,
+      error: error,
+      operation_type: operation_type
+    )
   end
 end
