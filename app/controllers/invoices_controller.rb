@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class InvoicesController < ApplicationController
 
   before_filter :signed_in_user
@@ -83,7 +85,6 @@ class InvoicesController < ApplicationController
 
   def change_budget
 
-    operation = Operation.find(params[:operation_id])
     budget = Budget.find(params[:budget_id])
     rows = []
 
@@ -117,34 +118,19 @@ class InvoicesController < ApplicationController
   end
 
   def credit
-
     if current_user.is_admin
-
       notes = []
       rows = []
 
+      errors = nil
       params[:rows].each do |_k, row|
-
-        transaction = Account.find(row[:id])
-
-        credit = Account.new(
-          user_id: transaction.user_id,
-          budget_id: transaction.budget_id,
-          labor_rate: 0.0,
-          markup_rate: 0.0,
-          transaction_type: 'credit',
-          amount: (0.01 * params[:percent].to_f) * transaction.amount * (1.0 + transaction.markup_rate),
-          operation_id: transaction.operation_id,
-          category: 'credit',
-          description: 'Credit due to a BIOFAB error or similar issue: credit'
-        )
-
+        credit = create_credit(transaction: Account.find(row[:id]),
+                               percentage: params[:percent].to_f)
         credit.save
         logger.info credit.errors.full_messages
-
         unless credit.errors.empty?
-          render json: { error: credit.errors.full_messages.join(', ') }
-          return
+          errors = credit.errors
+          break
         end
 
         al = AccountLog.new(
@@ -153,21 +139,36 @@ class InvoicesController < ApplicationController
           user_id: current_user.id,
           note: "#{params[:percent]}% credit. " + params[:note]
         )
-
         al.save
         notes << al
         rows << credit
-
       end
 
-      render json: { notes: notes, rows: rows }
-
+      response = if errors.present?
+                   { error: errors.full_messages.join(', ') }
+                 else
+                   { notes: notes, rows: rows }
+                 end
     else
-
-      render json: { error: 'Only users in the admin group can make notes to transactions.' }
-
+      response = { error: 'Only users in the admin group can make notes to transactions.' }
     end
 
+    render json: response
   end
 
+  private
+
+  def create_credit(transaction:, percentage:)
+    Account.new(
+      user_id: transaction.user_id,
+      budget_id: transaction.budget_id,
+      labor_rate: 0.0,
+      markup_rate: 0.0,
+      transaction_type: 'credit',
+      amount: (0.01 * percentage) * transaction.amount * (1.0 + transaction.markup_rate),
+      operation_id: transaction.operation_id,
+      category: 'credit',
+      description: 'Credit due to a lab error or similar issue: credit'
+    )
+  end
 end

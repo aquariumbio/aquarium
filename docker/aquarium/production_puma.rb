@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'bundler/setup'
 
 # https://gist.github.com/andrius/7c26a8deef10f3105a136f958b0d582d
@@ -10,7 +12,7 @@ app_dir = '/aquarium'
 shared_dir = "#{app_dir}/shared"
 
 # Default to production
-rails_env = ENV['RAILS_ENV'] || "production"
+rails_env = ENV['RAILS_ENV'] || 'production'
 environment rails_env
 
 # Set up socket location
@@ -25,7 +27,11 @@ state_path "#{shared_dir}/pids/puma.state"
 activate_control_app
 
 on_worker_boot do
-  require "active_record"
-  ActiveRecord::Base.connection.disconnect! rescue ActiveRecord::ConnectionNotEstablished
+  require 'active_record'
+  begin
+    ActiveRecord::Base.connection.disconnect!
+  rescue StandardError
+    ActiveRecord::ConnectionNotEstablished
+  end
   ActiveRecord::Base.establish_connection(YAML.load_file("#{app_dir}/config/database.yml")[rails_env])
 end

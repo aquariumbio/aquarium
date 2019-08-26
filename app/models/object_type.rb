@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Defines the type of physical object that would be represented in an {Item}
 # @api krill
 class ObjectType < ActiveRecord::Base
@@ -34,18 +36,18 @@ class ObjectType < ActiveRecord::Base
   validates :cost, presence: true
   validate :pos
   validate :proper_release_method
-  validates_uniqueness_of :name
+  validates :name, uniqueness: true
 
   def rows
-    if handler == 'collection'
-      read_attribute(:rows) ? read_attribute(:rows) : 1
-    end
+    return unless handler == 'collection'
+
+    read_attribute(:rows) || 1
   end
 
   def columns
-    if handler == 'collection'
-      read_attribute(:columns) ? read_attribute(:columns) : 12
-    end
+    return unless handler == 'collection'
+
+    read_attribute(:columns) || 12
   end
 
   def rows=(value)
@@ -120,24 +122,20 @@ class ObjectType < ActiveRecord::Base
   end
 
   def default_dimensions # for collections
+    raise 'Tried to get dimensions of a container that is not a collection' unless handler == 'collection'
 
-    if handler == 'collection'
-      begin
-        h = JSON.parse(data, symbolize_names: true)
-      rescue JSON::ParseError
-        raise "Could not parse data field '#{data}' of object type #{id}. Please go to " \
-              "<a href='/object_types/#{id}/edit'>Object Type #{id}</a> and edit the data " \
-              'field so that it reads something like { "rows": 10, "columns": 10 }'
-      end
-      if h[:rows] && h[:columns]
-        [h[:rows], h[:columns]]
-      else
-        [1, 1]
-      end
-    else
-      raise 'Tried to get dimensions of a container that is not a collection'
+    begin
+      h = JSON.parse(data, symbolize_names: true)
+    rescue JSON::ParserError
+      raise "Could not parse data field '#{data}' of object type #{id}. Please go to " \
+            "<a href='/object_types/#{id}/edit'>Object Type #{id}</a> and edit the data " \
+            'field so that it reads something like { "rows": 10, "columns": 10 }'
     end
-
+    if h[:rows] && h[:columns]
+      [h[:rows], h[:columns]]
+    else
+      [1, 1]
+    end
   end
 
   def to_s
@@ -147,7 +145,7 @@ class ObjectType < ActiveRecord::Base
   def data_object
     begin
       result = JSON.parse(data, symbolize_names: true)
-    rescue Exception => e
+    rescue StandardError
       result = {}
     end
     result
@@ -168,7 +166,6 @@ class ObjectType < ActiveRecord::Base
     raw_ots.each do |raw_ot|
 
       ot = ObjectType.find_by_name raw_ot[:name]
-      i = []
 
       if ot
         parts.each do |part|

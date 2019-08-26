@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :docs do
 
   desc 'Generate publicly accessible documentation'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :data do
 
   desc 'Upgrade data json fields to DataAssociations'

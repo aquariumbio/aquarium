@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :data do
 
   require 'json'
@@ -12,7 +14,7 @@ namespace :data do
 
   def convert_plan(plan)
     plan_object = plan.as_json(
-      except: %i[budget_id cost_limit folder layout],
+      except: %i[budget_id cost_limit folder layout]
     )
     plan_object[:operations] = plan.operations.collect do |op|
       convert_operation(op)
@@ -39,11 +41,9 @@ namespace :data do
 
   def convert_field_value(field_value)
     value_object = field_value.as_json(
-      only: [:id, :created_at, :updated_at, :name]
+      only: %i[id created_at updated_at name]
     )
-    if field_value.value
-      value_object[:value] = field_value.value.as_json
-    end
+    value_object[:value] = field_value.value.as_json if field_value.value
     if field_value.child_item
       value_object[:item] = field_value.child_item.as_json(
         only: [:id]

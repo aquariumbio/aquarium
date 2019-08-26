@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe SampleType, type: :model do
-  let!(:fragment_type) { create(:sample_type_with_samples, name: "Primer") }
+  let!(:fragment_type) { create(:sample_type_with_samples, name: 'Primer') }
 
   context 'initialization' do
 
-    it "cannot have two sample types of the same name" do
+    it 'cannot have two sample types of the same name' do
 
-      name = "Wingbat"
+      name = 'Wingbat'
 
       st = SampleType.new name: name, description: 'A test sample type'
       st.save

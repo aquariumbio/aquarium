@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module OperationTypePlanner
 
   def instantiate(output, desired_value)

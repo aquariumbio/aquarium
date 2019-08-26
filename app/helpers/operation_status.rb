@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Module that includes status-related methods for {Operation}
 
 module OperationStatus
@@ -7,7 +9,6 @@ module OperationStatus
   # @param str [String] ("waiting", "pending", "primed", "deferred", "scheduled", "running", "done", "error")
   # @return [String] The {Operation} status
   def change_status(str)
-    temp = status
     self.status = str
     save
     raise 'Could not change status' unless errors.empty?
@@ -16,7 +17,6 @@ module OperationStatus
   end
 
   def start
-
     raise "Cannot start operation #{id} from state #{status}" unless status == 'planning'
 
     if on_the_fly
@@ -31,16 +31,13 @@ module OperationStatus
     else
       change_status 'waiting'
     end
-
   end
 
   def retry
-
     raise "Cannot restart operation #{id} because it is not in an error state" unless status == 'error' || status == 'done'
 
     change_status 'waiting'
     step
-
   end
 
   def schedule
@@ -89,7 +86,6 @@ module OperationStatus
     Rails.logger.info "COULD NOT STEP OPERATION #{id}: #{e}"
 
     # TODO: Change deferred op to scheduled
-
   end
 
   def finish
@@ -124,28 +120,27 @@ module OperationStatus
   end
 
   def get_items_from_predecessor
-
     inputs.each do |i|
 
       Wire.where(to_id: i.id).each do |wire|
-        self.associate(
-          :input_item_replaced,
-          "Input #{i.name} was #{i.child_item_id} but was replaced by #{wire.from.child_item_id} " +
-          "(likely when its predecessor recomputed an output)",
-          nil,
-          duplicates: true
-        ) if i.child_item_id && (
+        if i.child_item_id && (
             i.child_item_id != wire.from.child_item_id ||
             i.row != wire.from.row ||
             i.column != wire.from.column)
+          associate(
+            :input_item_replaced,
+            "Input #{i.name} was #{i.child_item_id} but was replaced by #{wire.from.child_item_id} " \
+            '(likely when its predecessor recomputed an output)',
+            nil,
+            duplicates: true
+          )
+        end
         i.child_item_id = wire.from.child_item_id
         i.row = wire.from.row
         i.column = wire.from.column
         i.save
       end
-
     end
-
   end
 
 end

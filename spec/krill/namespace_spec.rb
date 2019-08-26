@@ -34,10 +34,27 @@ RSpec.describe Krill::Namespace do
   end
 
   it 'expect namespace to have protocol' do
-    namespace = Krill.make_namespace(simple_code.content)
+    namespace = Krill.make_namespace(code: simple_code)
     expect(namespace).not_to be_nil
     expect(namespace::Protocol).not_to be_nil
     expect(namespace).to respond_to(:needs)
+  end
+
+  it 'expect unspecified namespace to not have protocol' do
+    namespace = Krill.make_namespace
+    expect(namespace).not_to be_nil
+    expect(namespace).to respond_to(:needs)
+    expect { namespace::Protocol }.to raise_error(NameError)
+    namespace.add(code: simple_code)
+    expect(namespace::Protocol).not_to be_nil
+    expect(namespace::Protocol.instance_methods).to include(:main)
+  end
+
+  it 'expect code with calls to undefined methods not to behave badly' do
+    namespace = Krill.make_namespace
+    namespace.add(code: show_code)
+    expect(namespace::Protocol).not_to be_nil
+    expect(namespace::Protocol.instance_methods).to include(:main)
   end
 
 end

@@ -6,7 +6,10 @@ FactoryBot.define do
       protocol {}
       cost_model { 'def cost(_op); { labor: 0, materials: 0 } end' }
       precondition { 'def precondition(_op); true end' }
+      test { 'class ProtocolTest < ProtocolTestBase; def setup; add_random_operations(1); end; def analyze; assert_equal(@backtrace.last[:operation], \'complete\'); end; end;' }
       user {}
+      inputs { [] }
+      outputs { [] }
     end
 
     sequence(:name) { |n| "operation_type_#{n}" }
@@ -19,6 +22,26 @@ FactoryBot.define do
         operation_type.add_protocol(content: evaluator.protocol, user: evaluator.user)
         operation_type.add_cost_model(content: evaluator.cost_model, user: evaluator.user)
         operation_type.add_precondition(content: evaluator.precondition, user: evaluator.user)
+        operation_type.add_test(content: evaluator.test, user: evaluator.user)
+
+        evaluator.inputs.each do |input|
+          operation_type.add_input(
+            input[:name],
+            input[:sample_type],
+            input[:object_type],
+            array: input[:array] || false,
+            part: input[:part] || false
+          )
+        end
+        evaluator.outputs.each do |output|
+          operation_type.add_output(
+            output[:name],
+            output[:sample_type],
+            output[:object_type],
+            array: output[:array] || false,
+            part: output[:part] || false
+          )
+        end
       end
     end
   end

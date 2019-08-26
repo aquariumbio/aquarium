@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Class that represents a physical object in the lab
 # Has an {ObjectType} that declares what kind of physical thing it is, and may have a {Sample} defining the specimen that resides within.
 # @api krill
@@ -60,7 +62,7 @@ class Item < ActiveRecord::Base
 
   # @private
   def part_type
-    @@part_type ||= ObjectType.find_by_name("__Part")
+    @@part_type ||= ObjectType.find_by_name('__Part')
   end
 
   # Returns true if the item is a part of a collection
@@ -75,14 +77,12 @@ class Item < ActiveRecord::Base
   def location
     if is_part
       'Part of Collection'
+    elsif locator
+      locator.to_s
+    elsif primitive_location
+      primitive_location
     else
-      if locator
-        locator.to_s
-      elsif primitive_location
-        primitive_location
-      else
-        'Unknown'
-      end
+      'Unknown'
     end
   end
 
@@ -196,20 +196,14 @@ class Item < ActiveRecord::Base
   end
 
   def non_wizard_location?
-
     wiz = Wizard.find_by_name(object_type.prefix)
 
-    if wiz && locator.nil?
-      return false
-    else
-      return true
-    end
-
+    !(wiz && locator.nil?)
   end
 
   # (see #move_to)
   #
-  # @note for backwards compatability
+  # @note for backwards compatibility
   def move(locstr)
     move_to locstr
   end
@@ -253,21 +247,17 @@ class Item < ActiveRecord::Base
     logger.info "Made new item #{item.id} with location #{item.location} and primitive location #{item.primitive_location}"
 
     item
-
   end
 
   def put_at(locstr)
-
     loc = Wizard.find_locator locstr
     return nil unless loc && loc.item_id.nil?
 
     loc.item_id = id
-    item_id = loc.id
     transaction do
       loc.save
       save
     end
-
   end
 
   # Delete the Item (sets item's location to "deleted").
@@ -308,12 +298,8 @@ class Item < ActiveRecord::Base
   # Returns the parent Collection of this item, if it is a part. Otherwise, returns nil
   # @return [Collection]
   def containing_collection
-    pas = PartAssociation.where(part_id: self.id)
-    if pas.length == 1
-      pas[0].collection
-    else
-      nil
-    end
+    pas = PartAssociation.where(part_id: id)
+    pas[0].collection if pas.length == 1
   end
 
   # other methods ############################################################################
@@ -329,11 +315,9 @@ class Item < ActiveRecord::Base
 
   # @deprecated Use {DataAssociator} methods instead of datum
   def datum
-
-    JSON.parse data, symbolize_names: true
+    JSON.parse(data, symbolize_names: true)
   rescue StandardError
     {}
-
   end
 
   # (see #datum)
@@ -352,15 +336,11 @@ class Item < ActiveRecord::Base
   end
 
   def all_attributes
-
     temp = attributes.symbolize_keys
-
     temp[:object_type] = object_type.attributes.symbolize_keys
-
     temp[:sample] = sample.attributes.symbolize_keys if sample_id
 
     temp
-
   end
 
   def to_s
@@ -368,9 +348,7 @@ class Item < ActiveRecord::Base
   end
 
   def upgrade(force = false) # upgrades data field to data association (if no data associations exist)
-
     if force || associations.empty?
-
       begin
         obj = JSON.parse data
 
@@ -380,13 +358,9 @@ class Item < ActiveRecord::Base
       rescue StandardError
         self.notes = data if data
       end
-
     else
-
       append_notes "\n#{Date.today}: Attempt to upgrade failed. Item already had associations."
-
     end
-
   end
 
   ###########################################################################
@@ -394,8 +368,6 @@ class Item < ActiveRecord::Base
   ###########################################################################
 
   def self.new_object(name)
-
-    i = new
     olist = ObjectType.where('name = ?', name)
     raise "Could not find object type named '#{spec[:object_type]}'." if olist.empty?
 
@@ -443,32 +415,18 @@ class Item < ActiveRecord::Base
   end
 
   def self.items_for(sid, oid)
-
     sample = Sample.find_by_id(sid)
     ot = ObjectType.find_by_id(oid)
 
-    if sample && ot
+    if sample
+      return [] unless ot
+      return Collection.parts(sample, ot) if ot.handler == 'collection'
 
-      if ot.handler == 'collection'
-        return Collection.parts(sample, ot)
-      else
-        return sample.items.reject { |i| i.deleted? || i.object_type_id != ot.id }
-      end
-
-    elsif sample && !ot
-
-      return []
-
-    elsif ot.handler != 'sample_container'
-
-      return ot.items.reject(&:deleted?)
-
-    else
-
-      return []
-
+      return sample.items.reject { |i| i.deleted? || i.object_type_id != ot.id }
     end
+    return ot.items.reject(&:deleted?) if ot.handler != 'sample_container'
 
+    []
   end
 
 end

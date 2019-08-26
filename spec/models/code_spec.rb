@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe CodeHelper do
+RSpec.describe Code do
   let(:code) { create(:code) }
+  let(:markdown) { create(:code, content: '# A document\n\nNot ruby code.') }
   let(:a_user) { create(:user) }
 
   it 'example object has values from factory' do
