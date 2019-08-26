@@ -55,7 +55,7 @@ $bottom-margin: 12px;
   }
 
   .not-found {
-    color: $selection-highlight-color;
+    color: $error-highlight-color;
     font-weight: bold;
   }
 
@@ -69,7 +69,7 @@ $bottom-margin: 12px;
     left: 0;
     color: white;
     font-weight: bold;
-    background: $selection-highlight-color;
+    background: $technician-step-color;
     width: 90px;
     height: 64px;
     margin-right: 10px;
@@ -103,7 +103,7 @@ $bottom-margin: 12px;
     }
 
     .technician-error {
-      color: $selection-highlight-color;
+      color: $error-highlight-color;
       font-weight: bold;
       // background: orange;
       display: inline-block;
