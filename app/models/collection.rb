@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A subclass of {Item} that has associated parts via the {PartAssociation} model. Stripwells,
 # 96 well plates, and gels are examples. Note that you may in some cases be working with an item
 # that is also a {Collection}, which you can tell by checking that item.collection? In this case you
@@ -32,7 +34,6 @@ class Collection < Item
 
     pm = part_matrix
     dm = data_matrix(key)
-    r, c = dimensions
     parts = []
     pas = []
     das = []
@@ -69,11 +70,11 @@ class Collection < Item
     index = 0
 
     each_row_col(matrix, offset: offset) do |x, y, ox, oy|
-      if !pm[ox][oy]
-        pas << PartAssociation.new(collection_id: id, part_id: parts[index].id, row: ox, column: oy)
-        das << parts[index].lazy_associate(key, matrix[x][y])
-        index += 1
-      end
+      next if pm[ox][oy]
+
+      pas << PartAssociation.new(collection_id: id, part_id: parts[index].id, row: ox, column: oy)
+      das << parts[index].lazy_associate(key, matrix[x][y])
+      index += 1
     end
 
     PartAssociation.import pas unless pas.empty?
@@ -96,7 +97,7 @@ class Collection < Item
     dm = data_matrix(key)
     dm.each do |row|
       vals = row.collect { |e| e ? e.value : '-' }
-      puts "#{vals.join(', ')}"
+      puts vals.join(', ').to_s
     end
   end
 
@@ -128,14 +129,8 @@ class Collection < Item
   # @return [Array] the part matrix, with new data associations inserted if required
   # @return [String|Float] The resulting data
   def get_part_data(key, r, c)
-
     pa = part_association(r, c)
-    if pa && pa.part
-      pa.part.get(key)
-    else
-      nil
-    end
-
+    pa.part.get(key) if pa && pa.part
   end
 
   # Iterate over all rows and columns of the given matrix, adding the offset
@@ -150,9 +145,7 @@ class Collection < Item
       (0...matrix[r].length).each do |c|
         x = r + offset[0]
         y = c + offset[1]
-        if x < dr && y < dc
-          yield r, c, x, y
-        end
+        yield r, c, x, y if x < dr && y < dc
       end
     end
 
@@ -164,7 +157,7 @@ class Collection < Item
     pa = part_association(r, c)
 
     if pa
-      if !pa.part_id
+      unless pa.part_id
         part = Item.make({ quantity: 1, inuse: 0 }, sample: sample, object_type: part_type)
         pa.part_id = part.id
         pa.save
@@ -182,11 +175,7 @@ class Collection < Item
   # @private
   def part_association(r, c)
     pas = PartAssociation.where(collection_id: id, row: r, column: c)
-    if pas.length == 1
-      pas[0]
-    else
-      nil
-    end
+    pas[0] if pas.length == 1
   end
 
   # Return the matrix of data associations associated with the given key
@@ -197,9 +186,9 @@ class Collection < Item
     pas = part_association_list
     part_ids = pas.collect { |p| p.part_id }.uniq
 
-    das = DataAssociation.where(parent_class: "Item", parent_id: part_ids, key: key)
+    das = DataAssociation.where(parent_class: 'Item', parent_id: part_ids, key: key)
 
-    r, c = self.dimensions
+    r, c = dimensions
     m = Array.new(r) { Array.new(c) }
 
     pas.each do |pa|
@@ -223,18 +212,13 @@ class Collection < Item
   # @return [Item]
   def part(r, c)
     pas = PartAssociation.includes(:part).where(collection_id: id, row: r, column: c)
-    if pas.length == 1
-      pas[0].part
-    else
-      nil
-    end
+    pas[0].part if pas.length == 1
   end
 
   # Retrive a matrix of all parts. If no part is present for a given row and column, that entry will be nil
   # @return [Array] an array of arrays of {Item}s -- dimensions match collection's dimensions
   def part_matrix
-
-    r, c = self.dimensions
+    r, c = dimensions
     m = Array.new(r) { Array.new(c) }
 
     PartAssociation
@@ -245,7 +229,6 @@ class Collection < Item
       end
 
     m
-
   end
 
   # @private
@@ -285,33 +268,24 @@ class Collection < Item
   # @param pairs [Array] of the form [ [r1,c1], [r2, c2] ... ]
   # @return [Collection] can be chained
   def delete_selection(pairs)
-
     pairs.each do |r, c|
-
       pas = PartAssociation.includes(:part).where(collection_id: id, row: r, column: c)
+      next if pas.empty?
 
-      unless pas.empty?
-
-        pas[0].part.mark_as_deleted
-        pas[0].destroy
-
-        associate(
-          :"Part Deleted",
-          "The sample at #{r}, #{c} was deleted. " +
-          "It used to be sample #{pas[0].part.sample_id} via deleted part #{pas[0].part.id}.",
-          nil,
-          duplicates: true
-        )
-
-        puts "DONE!!!!!!!!!!!"
-
-      end
-
+      pas[0].part.mark_as_deleted
+      pas[0].destroy
+      associate(
+        :"Part Deleted",
+        "The sample at #{r}, #{c} was deleted. " \
+        "It used to be sample #{pas[0].part.sample_id} via deleted part #{pas[0].part.id}.",
+        nil,
+        duplicates: true
+      )
     end
 
   end
 
-  EMPTY = -1 # definition of empty
+  EMPTY = -1
 
   # @private
   def self.every
@@ -326,13 +300,13 @@ class Collection < Item
   def self.containing(s, ot = nil)
     return [] unless s
 
-    cids = PartAssociation.joins(:part).where("sample_id = ?", to_sample_id(s)).map(&:collection_id)
+    cids = PartAssociation.joins(:part).where('sample_id = ?', to_sample_id(s)).map(&:collection_id)
     Collection.where(id: cids).select { |c| !ot || c.object_type_id == ot.id }
   end
 
   # @private
   def part_type
-    @part_type ||= ObjectType.find_by_name("__Part")
+    @part_type ||= ObjectType.find_by_name('__Part')
   end
 
   # Returns first Array element from #find
@@ -392,7 +366,7 @@ class Collection < Item
   # @return [Collection]  new empty collection of type `name`
   def self.new_collection(ctype)
 
-    if ctype.class == String
+    if ctype.is_a?(String)
       name = ctype
       o = ObjectType.find_by_name(name)
     else
@@ -467,7 +441,7 @@ class Collection < Item
   def find(val)
     PartAssociation
       .joins(:part)
-      .where("sample_id = ? AND collection_id = ?", to_sample_id(val), id)
+      .where('sample_id = ? AND collection_id = ?', to_sample_id(val), id)
       .collect { |pa| [pa.row, pa.column] }
   end
 
@@ -495,25 +469,18 @@ class Collection < Item
   # Changes Item, String, or Sample to a sample.id for storing into a collection matrix.
   #
   def self.to_sample_id(x)
-    r = EMPTY
-    if x.class == Integer || x.class == Fixnum # Not sure where "Integer" came from here ---ek
-      r = x
-    elsif x.class == Item
-      if x.sample
-        r = x.sample.id
-      else
-        raise 'When the third argument to Collection.set is an item, it should be associated with a sample.'
-      end
-    elsif x.class == Sample
-      r = x.id
-    elsif x.class == String
-      r = x.split(':')[0].to_i
-    elsif !x
-      r = EMPTY
-    else
-      raise "The third argument to Collection.set should be an item, a sample, or a sample id, but it was '#{x}' which is a #{x.class}"
+    return x if x.is_a?(Integer)
+
+    if x.is_a?(Item)
+      raise 'When the third argument to Collection.set is an item, it should be associated with a sample.' unless x.sample
+
+      return x.sample.id
     end
-    r
+    return x.id if x.is_a?(Sample)
+    return x.split(':')[0].to_i if x.is_a?(String)
+    return EMPTY unless x
+
+    raise "The third argument to Collection.set should be an item, a sample, or a sample id, but it was '#{x}' which is a #{x.class}"
   end
 
   def to_sample_id(x)
@@ -524,24 +491,18 @@ class Collection < Item
   #
   # class method?
   def self.to_sample(x)
-    if x.class == Integer || (x.class == Fixnum && x >= 0) # Not sure where "Integer" came from here ---ek
-      r = Sample.find(x)
-    elsif x.class == Item
-      if x.sample
-        r = x.sample
-      else
-        raise 'When the third argument to Collection.set is an item, it should be associated with a sample.'
-      end
-    elsif x.class == Sample
-      r = x
-    elsif x.class == String
-      r = Sample.find(x.split(':')[0].to_i)
-    elsif !x || x == -1
-      r = nil
-    else
-      raise "Expecting item, a sample, or a sample id, but got '#{x}' which is a #{x.class}"
+    return Sample.find(x) if x.is_a?(Integer) && x >= 0
+
+    if x.is_a?(Item)
+      raise 'When the third argument to Collection.set is an item, it should be associated with a sample.' unless x.sample
+
+      return x.sample
     end
-    r
+    return x if x.is_a?(Sample)
+    return Sample.find(x.split(':')[0].to_i) if x.is_a?(String)
+    return nil if !x || x == -1
+
+    raise "Expecting item, a sample, or a sample id, but got '#{x}' which is a #{x.class}"
   end
 
   # Adds sample, item, or number to collection
@@ -634,9 +595,7 @@ class Collection < Item
     @matrix_cache = nil
     if x == EMPTY
       pas = PartAssociation.where(collection_id: id, row: r, column: c)
-      if pas.length == 1
-        pas[0].destroy
-      end
+      pas[0].destroy if pas.length == 1
     else
       s = Collection.to_sample(x)
       part = Item.make({ quantity: 1, inuse: 0 }, sample: s, object_type: part_type)
@@ -682,16 +641,13 @@ class Collection < Item
     # convert sample matrix into ids
     (0...dr).each do |r|
       (0...dc).each do |c|
-        klass = sample_matrix[r][c].class
-        if klass == Sample
-          sample_matrix_aux[r][c] = sample_matrix[r][c].id
-        elsif klass == Item
-          sample_matrix_aux[r][c] = Item.sample_id
-        elsif klass == Fixnum && sample_matrix[r][c] > 0
-          sample_matrix_aux[r][c] = sample_matrix[r][c]
-        else
-          sample_matrix_aux[r][c] = nil
-        end
+        sample_matrix_aux[r][c] = if sample_matrix[r][c].is_a?(Sample)
+                                    sample_matrix[r][c].id
+                                  elsif sample_matrix[r][c].is_a?(Item)
+                                    Item.sample_id
+                                  elsif sample_matrix[r][c].is_a?(Integer) && sample_matrix[r][c] > 0
+                                    sample_matrix[r][c]
+                                  end
       end
     end
 
@@ -720,9 +676,7 @@ class Collection < Item
       collection_id_string = SecureRandom.hex # random string used to identify saved parts
       (0...dr).each do |r|
         (0...dc).each do |c|
-          if sample_matrix_aux[r][c] != nil
-            parts << Item.new(quantity: 1, inuse: 0, sample_id: sample_matrix_aux[r][c], object_type_id: part_type.id, data: collection_id_string)
-          end
+          parts << Item.new(quantity: 1, inuse: 0, sample_id: sample_matrix_aux[r][c], object_type_id: part_type.id, data: collection_id_string) unless sample_matrix_aux[r][c].nil?
         end
       end
       Item.import parts
@@ -737,7 +691,7 @@ class Collection < Item
       pas = []
       (0...dr).each do |r|
         (0...dc).each do |c|
-          if sample_matrix_aux[r][c] != nil
+          unless sample_matrix_aux[r][c].nil?
             pas << PartAssociation.new(collection_id: id, part_id: parts[index].id, row: r, column: c)
             index += 1
           end
@@ -769,7 +723,7 @@ class Collection < Item
     if @matrix_cache
       @matrix_cache
     else
-      r, c = self.dimensions
+      r, c = dimensions
       m = Array.new(r) { Array.new(c, EMPTY) }
       PartAssociation.includes(:part).where(collection_id: id).each do |pa|
         m[pa.row][pa.column] = pa.part.sample_id if pa.row < r && pa.column < c && pa.part.sample_id
@@ -815,8 +769,8 @@ class Collection < Item
   def dimensions
     # Should look up object type dims instead
     dims = [object_type.rows, object_type.columns]
-    dims[0] = 12 unless dims[0] != nil
-    dims[1] = 1 unless dims[1] != nil
+    dims[0] = 12 if dims[0].nil?
+    dims[1] = 1 if dims[1].nil?
     dims
   end
 
@@ -846,17 +800,16 @@ class Collection < Item
 
   # @private
   def migrate
-    unless datum[:_migrated_]
-      if self.data
-        tempdata = JSON.parse(self.data, symbolize_names: true)
-        if tempdata[:matrix]
-          self.matrix = tempdata[:matrix]
-          tempdata.delete :matrix
-          tempdata[:_migrated_] = Date.today
-          self.set_data tempdata
-        end
-      end
-    end
+    return if datum[:_migrated_]
+    return unless data
+
+    tempdata = JSON.parse(data, symbolize_names: true)
+    return unless tempdata[:matrix]
+
+    self.matrix = tempdata[:matrix]
+    tempdata.delete :matrix
+    tempdata[:_migrated_] = Date.today
+    set_data tempdata
   end
 
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 # SV := {
 #   field_name: CONSTRAINTS | SV

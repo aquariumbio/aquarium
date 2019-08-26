@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Group < ActiveRecord::Base
 
   attr_accessible :description, :name

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :mine do
 
   desc 'Mine data for learning'

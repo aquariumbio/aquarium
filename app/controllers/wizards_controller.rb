@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WizardsController < ApplicationController
 
   before_filter :signed_in_user
@@ -24,11 +26,7 @@ class WizardsController < ApplicationController
     @object_types = ObjectType.where(prefix: @wizard.name)
     @conflicts = @wizard.conflicts
 
-    @selected_box = if params[:box]
-                      params[:box]
-                    else
-                      @boxes.first
-                    end
+    @selected_box = params[:box] || @boxes.first
 
     respond_to do |format|
       format.html { render layout: 'aq2' }

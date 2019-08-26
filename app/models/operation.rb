@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Class that represents an operation in the lab
 # Some very important methods include {#input}, {#output}, {#error}, {#pass}
 # @api krill
@@ -25,7 +27,7 @@ class Operation < ActiveRecord::Base
     msg = "Cannot destroy operation #{id} because it has jobs associated with it"
     raise msg unless JobAssociation.where(operation_id: id).empty?
 
-    fvs = FieldValue.where(parent_class: "Operation", parent_id: id)
+    fvs = FieldValue.where(parent_class: 'Operation', parent_id: id)
     fvs.each do |fv|
       Wire.where("from_id = #{fv.id} OR to_id = #{fv.id}").each do |wire|
         wire.destroy
@@ -43,14 +45,10 @@ class Operation < ActiveRecord::Base
   end
 
   # @return [String] OperationType name
-  def name
-    operation_type.name
-  end
+  delegate :name, to: :operation_type
 
   # @return [Bool] Whether OperationType is on-the-fly
-  def on_the_fly
-    operation_type.on_the_fly
-  end
+  delegate :on_the_fly, to: :operation_type
 
   # @return [Plan] The plan that contains this Operation
   def plan
@@ -63,8 +61,9 @@ class Operation < ActiveRecord::Base
   #
   # @param name [String]
   # @param sample [Sample]
+  # @return [Operation] this operation
   def with_input(name, sample)
-    ft = operation_type.inputs.select { |i| i[:name] == name }.first
+    ft = operation_type.input(name)
     aft = ft.choose_aft_for(sample)
     set_input(name, sample, aft)
 
@@ -76,7 +75,7 @@ class Operation < ActiveRecord::Base
   # @param name [String]
   # @param sample [Sample]
   def with_output(name, sample)
-    ft = operation_type.outputs.select { |i| i[:name] == name }.first
+    ft = operation_type.output(name)
     aft = ft.choose_aft_for(sample)
     set_output(name, sample, aft)
 
@@ -94,7 +93,7 @@ class Operation < ActiveRecord::Base
 
   # Assigns a Sample to an input
   # @param name [String]
-  # @param val [Sample]
+  # @param val [Sample, Item, Number]
   # @param aft [AllowableFieldType]
   def set_input(name, val, aft = nil)
     set_property(name, val, 'input', false, aft)
@@ -142,6 +141,7 @@ class Operation < ActiveRecord::Base
     field_value.save
   end
 
+  # TODO: this belongs elsewhere
   def create_field_type(name)
     FieldType.new(
       name: name,
@@ -168,7 +168,7 @@ class Operation < ActiveRecord::Base
     field_values.select { |ft| ft.role == 'input' }
   end
 
-  # (see #inputs)
+  # @return [Array<FieldValue>]
   def outputs
     field_values.select { |ft| ft.role == 'output' }
   end
@@ -179,17 +179,20 @@ class Operation < ActiveRecord::Base
     inputs.find { |i| i.name == name }
   end
 
-  # (see #get_input)
+  # @param name [String]
+  # @return [FieldValue]
   def get_output(name)
     outputs.find { |o| o.name == name }
   end
 
-  # (see #get_input)
+  # @param name [String]
+  # @return [FieldValue]
   def input(name)
-    get_input name
+    get_input(name)
   end
 
-  # (see #get_input)
+  # @param name [String]
+  # @return [FieldValue]
   def output(name)
     get_output name
   end
@@ -240,8 +243,8 @@ class Operation < ActiveRecord::Base
   def recurse(&block)
     block.call(self)
     inputs.each do |input|
-      input.predecessors.each do |pred|
-        pred.operation.recurse(&block)
+      input.predecessors.each do |predecessor|
+        predecessor.operation.recurse(&block)
       end
     end
   end
@@ -281,8 +284,8 @@ class Operation < ActiveRecord::Base
   def predecessors
     predecessor_list = []
     inputs.each do |input|
-      input.predecessors.each do |pred|
-        predecessor_list << pred.operation
+      input.predecessors.each do |predecessor|
+        predecessor_list << predecessor.operation
       end
     end
 
@@ -292,8 +295,8 @@ class Operation < ActiveRecord::Base
   def primed_predecessors
     ops = []
     inputs.each do |input|
-      input.predecessors.each do |pred|
-        ops << pred.operation if pred.operation && pred.operation.status == 'primed'
+      input.predecessors.each do |predecessor|
+        ops << predecessor.operation if predecessor.operation && predecessor.operation.status == 'primed'
       end
     end
 
@@ -339,9 +342,9 @@ class Operation < ActiveRecord::Base
 
   def nominal_cost
     begin
-      eval(operation_type.cost_model.content)
-    rescue SyntaxError, StandardError => e
-      raise 'Could not evaluate cost function definition: ' + e.to_s
+      operation_type.cost_model.load(binding: empty_binding)
+    rescue ScriptError, StandardError => e
+      raise "Error loading cost function for #{operation_type.name}: " + e.to_s
     end
 
     temp = status
@@ -349,57 +352,55 @@ class Operation < ActiveRecord::Base
 
     begin
       c = cost(self)
-    rescue SystemStackError, SyntaxError, StandardError => e
+    rescue SystemStackError, ScriptError, StandardError => e
       self.status = temp
-      raise 'Could not evaluate cost function on the given operation: ' + e.to_s
+      raise "Error evaluating cost function for #{operation_type.name}: " + e.to_s
     end
 
     self.status = temp
     c
-
-  end
-
-  def child_data(child_name, child_role, data_name)
-    fv = get_input(child_name) if child_role == 'input'
-    fv = get_output(child_name) if child_role == 'output'
-    fv ? fv.child_data(data_name) : nil
   end
 
   def input_data(input_name, data_name)
-    child_data(input_name, 'input', data_name)
+    fv = input(input_name)
+    fv.child_data(data_name) if fv
   end
 
-  def output_data(input_name, data_name)
-    child_data(input_name, 'output', data_name)
-  end
-
-  def set_child_data(child_name, child_role, data_name, value)
-    fv = get_input(child_name) if child_role == 'input'
-    fv = get_output(child_name) if child_role == 'output'
-    fv ? fv.set_child_data(data_name, value) : nil
+  def output_data(output_name, data_name)
+    fv = output(output_name)
+    fv.child_data(data_name) if fv
   end
 
   def set_input_data(input_name, data_name, value)
-    set_child_data(input_name, 'input', data_name, value)
+    fv = input(input_name)
+    fv.set_child_data(data_name, value) if fv
   end
 
-  def set_output_data(input_name, data_name, value)
-    set_child_data(input_name, 'output', data_name, value)
+  def set_output_data(output_name, data_name, value)
+    fv = output(output_name)
+    fv.set_child_data(data_name, value) if fv
   end
 
   def precondition_value
-    rval = true
+    result = true
 
     begin
-      eval(operation_type.precondition.content)
-      rval = precondition(self)
-    rescue Exception => e
-      Rails.logger.info "PRECONDITION FOR OPERATION #{id} crashed"
-      plan.associate 'Precondition Evaluation Error', e.message.to_s + ': ' + e.backtrace[0].to_s.sub('(eval)', 'line')
-      rval = false # default if there is no precondition or it crashes
+      operation_type.precondition.load(binding: empty_binding)
+    rescue ScriptError, StandardError => e
+      # Raise "Error loading precondition for #{operation_type.name}: " + e.to_s
+      Rails.logger.info "Error loading precondition for #{operation_type.name} (id: #{id})"
+      plan.associate 'Precondition load error', e.message.to_s + ': ' + e.backtrace[0].to_s.sub('(eval)', 'line')
     end
 
-    rval
+    begin
+      result = precondition(self)
+    rescue SystemStackError, ScriptError, StandardError => e
+      Rails.logger.info "PRECONDITION FOR OPERATION #{id} CRASHED"
+      plan.associate 'Precondition Evaluation Error', e.message.to_s + ': ' + e.backtrace[0].to_s.sub('(eval)', 'line')
+      result = false # default if there is no precondition or it crashes
+    end
+
+    result
   end
 
   def add_successor(opts)
@@ -410,7 +411,7 @@ class Operation < ActiveRecord::Base
       user_id: user_id
     )
 
-    plan.plan_associations.create operation_id: op.id
+    plan.plan_associations.create(operation_id: op.id)
 
     opts[:routing].each do |r|
       ot.field_types.select { |ft| ft.routing == r[:symbol] }.each do |ft|
@@ -437,21 +438,16 @@ class Operation < ActiveRecord::Base
   def leaf?
 
     inputs.each do |i|
-
       next unless i.predecessors.count > 0
 
       i.predecessors.each do |pred|
-        if pred.operation.on_the_fly
-          return pred.operation.leaf?
-        else
-          return false
-        end
-      end
+        return pred.operation.leaf? if pred.operation.on_the_fly
 
+        return false
+      end
     end
 
     true
-
   end
 
   def temporary
@@ -459,4 +455,10 @@ class Operation < ActiveRecord::Base
     @temporary
   end
 
+  private
+
+  # Create an empty binding
+  def empty_binding
+    binding
+  end
 end

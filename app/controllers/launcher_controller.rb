@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LauncherController < ApplicationController
 
   before_filter :signed_in_user
@@ -86,7 +88,7 @@ class LauncherController < ApplicationController
 
       begin
         plan = Plan.find(params[:id])
-      rescue Exception => e
+      rescue ActiveRecord::RecordNotFound => e
         error = e.to_s
         raise ActiveRecord::Rollback
       end
@@ -97,7 +99,7 @@ class LauncherController < ApplicationController
 
         begin
           c = op.nominal_cost.merge(labor_rate: labor_rate, markup_rate: markup, id: op.id)
-        rescue Exception => e
+        rescue StandardError => e
           c = { error: e.to_s + e.backtrace[0] }
         end
 
@@ -118,22 +120,18 @@ class LauncherController < ApplicationController
   end
 
   def plan_from(params)
-
     plan = @user.plans.create
     @id_map = {}
 
     raise plan.errors.full_messages.join(', ') unless plan.errors.empty?
 
     params[:operations].each do |form_op|
-      begin
-        op = operation_from(form_op)
-        op.associate_plan plan
-        op.save
-        @id_map[op.id] = form_op[:rid]
-        raise op.errors.full_messages.join(', ') unless op.errors.empty?
-      rescue Exception => e
-        raise e.to_s
-      end
+      op = operation_from(form_op)
+      op.associate_plan plan
+      op.save
+      @id_map[op.id] = form_op[:rid]
+
+      raise op.errors.full_messages.join(', ') unless op.errors.empty?
     end
 
     if params[:wires]
@@ -187,8 +185,8 @@ class LauncherController < ApplicationController
       end
 
       begin
-        plan, messages = plan_from params
-      rescue Exception => e
+        plan, _messages = plan_from params
+      rescue StandardError => e
         render json: { errors: e }
         raise ActiveRecord::Rollback
       end

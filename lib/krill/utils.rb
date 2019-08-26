@@ -1,4 +1,8 @@
+# frozen_string_literal: true
+
 module Krill
+
+  # TODO: verify this is dead code
 
   class ProtocolHandler
 

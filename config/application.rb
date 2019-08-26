@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.expand_path('boot', __dir__)
 
 require 'rails/all'
@@ -9,9 +11,6 @@ if defined?(Bundler)
   # If you want your assets lazily compiled in production, use this line
   # Bundler.require(:default, :assets, Rails.env)
 end
-
-# This variable holds the current job id, or is negative if there is no current job
-$CURRENT_JOB_ID = -1
 
 module Bioturk
 

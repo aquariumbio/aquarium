@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Represents a code object for an operation type.
 #
 #
@@ -18,7 +20,6 @@ class Code < ActiveRecord::Base
       user_id: user.id
     )
     c.save
-
     c
   end
 
@@ -44,6 +45,15 @@ class Code < ActiveRecord::Base
   # @return [Code] all objects with the same name and owner (parent)
   def versions
     Code.where(parent_id: parent_id, parent_class: parent_class, name: name)
+  end
+
+  # Loads the code content
+  #
+  # @param binding [Binding] the variable binding for loading the code (default: an empty binding)
+  # @param source_name [String] the name of the source (default: '(eval)')
+  def load(binding:, source_name: '(eval)')
+    # TODO: check content type is krill before evaluating
+    eval(content, binding, source_name)
   end
 
 end

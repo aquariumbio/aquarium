@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # @api krill
 class DataAssociation < ActiveRecord::Base
 
@@ -28,18 +30,11 @@ class DataAssociation < ActiveRecord::Base
   def may_delete(user)
     parent = DataAssociation.find_parent(parent_class, parent_id)
     puts "Class = #{parent_class}"
-    if parent_class == 'Item'
-      return parent.sample && parent.sample.user_id = user.id
-    elsif parent_class == 'Collection'
-      return user.is_admin # since collections are managed by admins?
-    elsif parent_class == 'Operation'
-      return true # since operations don't yet have owners (actually they do now, so this should be fixed)
-    elsif parent_class == 'Plan'
-      return true # plans don't have owners yet either
-    elsif parent_class == 'OperationType'
-      return true # operation types don't have owners yet either
-    end
-
+    return parent.sample && parent.sample.user_id = user.id if parent_class == 'Item'
+    return user.is_admin if parent_class == 'Collection' # since collections are managed by admins?
+    return true if parent_class == 'Operation' # since operations don't yet have owners (actually they do now, so this should be fixed)
+    return true if parent_class == 'Plan' # plans don't have owners yet either
+    return true if parent_class == 'OperationType' # operation types don't have owners yet either
   end
 
 end
