@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 # Installation specific stuff here
 #

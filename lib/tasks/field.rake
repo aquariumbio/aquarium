@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :field do
 
   desc 'Making fields agnostic about their parents'

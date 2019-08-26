@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Krill
 
   class Box
@@ -150,17 +152,16 @@ module Krill
         end
       end
 
-      unless extras.empty?
-        takes = extras.collect(&:features)
-        show do
-          title extra_title
-          takes.each do |t|
-            item t
-          end
-          raw user_shows
-        end
-      end
+      return if extras.empty?
 
+      takes = extras.collect(&:features)
+      show do
+        title extra_title
+        takes.each do |t|
+          item t
+        end
+        raw user_shows
+      end
     end
 
     # Associate the item with the job running the protocol, until it is released (see {release}).

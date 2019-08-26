@@ -1,25 +1,28 @@
+# frozen_string_literal: true
+
 class Wizard < ActiveRecord::Base
 
   attr_accessible :name, :specification, :description
 
   validates :name, presence: true
   validates :description, presence: true
-  validates_uniqueness_of :name
+  validates :name, uniqueness: true
 
   has_many :locators
 
   def self.conflicts
 
-    Wizard.all.collect { |wizard|
-      nums = Locator.where(wizard_id: wizard.id).pluck(:number)
+    wizards = Wizard.all.collect do |wizard|
+      numbers = Locator.where(wizard_id: wizard.id).pluck(:number)
       {
         wizard: wizard,
-        conflicts: nums.group_by { |e| e }
-                       .select { |k, v| v.size > 1 }
-                       .map(&:first)
-                       .map { |i| wizard.int_to_location i }
+        conflicts: numbers.group_by { |e| e }
+                          .select { |k, v| v.size > 1 }
+                          .map(&:first)
+                          .map { |i| wizard.int_to_location i }
       }
-    }.reject { |x| x[:conflicts].empty? }
+    end
+    wizards.reject { |x| x[:conflicts].empty? }
 
   end
 
@@ -32,26 +35,18 @@ class Wizard < ActiveRecord::Base
   end
 
   def spec # converts the specification into a reasonable ruby object
+    return {} if !specification || specification == 'null'
 
-    if !specification || specification == 'null'
+    s = JSON.parse(specification, symbolize_names: true)
+    t = []
 
-      {}
-
-    elsif specification
-
-      s = JSON.parse(specification, symbolize_names: true)
-      t = []
-
-      s[:fields].each do |k, v|
-        vnew = { name: v[:name], capacity: v[:capacity].to_i }
-        t[k.to_s.to_i] = vnew
-      end
-
-      s[:fields] = t
-      s
-
+    s[:fields].each do |k, v|
+      vnew = { name: v[:name], capacity: v[:capacity].to_i }
+      t[k.to_s.to_i] = vnew
     end
+    s[:fields] = t
 
+    s
   end
 
   def limit # returns the number of elements in the main component of the location
@@ -67,11 +62,9 @@ class Wizard < ActiveRecord::Base
   end
 
   def caps
-    if spec[:fields]
-      spec[:fields].collect { |f| f[:capacity] }
-    else
-      {}
-    end
+    return {} unless spec[:fields]
+
+    spec[:fields].collect { |f| f[:capacity] }
   end
 
   def parts(loc)
@@ -79,29 +72,21 @@ class Wizard < ActiveRecord::Base
   end
 
   def location_to_int(loc)
-
     raise "Could not convert location string '#{loc}' to int." unless loc.class == String
 
     c = caps
-    mx, my, mz = c
-    w, x, y, z = parts loc
+    _mx, my, mz = c
+    _w, x, y, z = parts loc
+    return z + mz * y + my * mz * x if c.length == 3
+    return y + my * x if c.length == 2
+    return x if c.length == 1
 
-    if c.length == 3
-      return z + mz * y + my * mz * x
-    elsif c.length == 2
-      return y + my * x
-    elsif c.length == 1
-      return x
-    else
-      return 0
-    end
-
+    0
   end
 
   def int_to_location(n)
-
     c = caps
-    mx, my, mz = c
+    _mx, my, mz = c
 
     if c.length == 3
       x = n / (my * mz)
@@ -109,16 +94,17 @@ class Wizard < ActiveRecord::Base
       y = q / mz
       z = q % mz
       return "#{name}.#{x}.#{y}.#{z}"
-    elsif c.length == 2
+    end
+
+    if c.length == 2
       x = n / my
       y = n % my
       return "#{name}.#{x}.#{y}"
-    elsif c.length == 1
-      return "#{name}.#{n}"
-    else
-      return name.to_s
     end
 
+    return "#{name}.#{n}" if c.length == 1
+
+    name.to_s
   end
 
   def has_correct_form(loc)
@@ -183,26 +169,19 @@ class Wizard < ActiveRecord::Base
   end
 
   def boxes # for wizards of the form name.a.b.c, returns all locations of the form name.a.b
+    return [] unless largest
 
-    l = largest
+    loc = largest.to_s
+    _w, x, y, _z = parts loc
+    _mx, my, _mz = caps
 
-    if l
-      loc = l.to_s
-    else
-      return []
-    end
-
-    w, x, y, z = parts loc
-    mx, my, mz = caps
-
-    b = (0..x).collect do |a|
+    box_list = (0..x).collect do |a|
       (0..(a == x ? y : my)).collect do |b|
         "#{name}.#{a}.#{b}"
       end
     end
 
-    b.flatten
-
+    box_list.flatten
   end
 
   def box(b)

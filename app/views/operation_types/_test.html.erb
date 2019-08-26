@@ -112,7 +112,10 @@
   <div ng-show="current_operation_type.test_error" class='alert alert-error'>
     <h4>Error</h4>
     <div>
-      <b style='white-space: pre-wrap; font-family: "courier", monospace'>{{current_operation_type.test_error}}</b>
+      <b style='white-space: pre-wrap; font-family: "courier", monospace'>{{current_operation_type.test_error.message}}</b>
+      <ul class="backtrace">
+        <li ng-repeat="message in current_operation_type.test_error.backtrace track by $index">{{message}}</li>
+      </ul>
     </div>
   </div>
 

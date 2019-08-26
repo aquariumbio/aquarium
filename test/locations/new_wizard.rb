@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'testlib'
 
 begin
@@ -14,7 +16,7 @@ begin
   puts '  Destroying Wizard'
   wiz.destroy
   pass
-rescue Exception => e
+rescue StandardError => e
   puts e.to_s
   raise
 end

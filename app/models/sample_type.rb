@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Meta-type of {Sample}. Many {Sample}s may exist of this Type.
 # @api krill
 class SampleType < ActiveRecord::Base
@@ -25,7 +27,7 @@ class SampleType < ActiveRecord::Base
 
   def required_sample_types(st_list = [])
 
-    field_types.select { |ft| ft.ftype == 'sample' }.each do |ft|
+    field_types.select(&:sample?).each do |ft|
 
       ft.allowable_field_types.each do |aft|
 
@@ -188,7 +190,7 @@ class SampleType < ActiveRecord::Base
 
       st.field_types.each do |ft|
         rst[:field_types].each do |rft|
-          next unless ft.name == rft[:name] && ft.role == rft[:role] && ft.ftype == 'sample'
+          next unless ft.name == rft[:name] && ft.role == rft[:role] && ft.sample?
 
           names = rft[:sample_types]
           ft.allowable_field_types.each do |aft|

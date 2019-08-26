@@ -150,7 +150,7 @@
         $scope.default_protocol = response.data.content;
       });
 
-      //TODO need to manage tabs separately from library/operation-type, currently mode means tab (mostly)
+      // TODO: need to manage tabs separately from library/operation-type, currently mode means tab (mostly)
       $scope.set_mode = function(mode) {
         aqCookieManager.put_object("DeveloperMode", mode);
         $scope.mode = mode;

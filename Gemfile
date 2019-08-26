@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 # Rails version
@@ -66,5 +68,5 @@ group :assets do
 end
 
 # Klavins lab gems
-gem 'anemone', :git => 'https://github.com/klavinslab/anemone', tag: 'v1.0.1'
-gem 'aquadoc', :git => 'https://github.com/klavinslab/aquadoc'
+gem 'anemone', git: 'https://github.com/klavinslab/anemone', tag: 'v1.0.1'
+gem 'aquadoc', git: 'https://github.com/klavinslab/aquadoc'

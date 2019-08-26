@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Krill
 
   module Base
@@ -25,12 +27,9 @@ module Krill
         # Do the search
         rows = tables[name].where(pluralize_table_names(spec))
 
-        if name == :item
-          return rows.reject(&:deleted?)
-        else
-          return rows
-        end
+        return rows.reject(&:deleted?) if name == :item
 
+        rows
       end
 
     end

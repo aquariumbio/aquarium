@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'resolv'
 require 'ipaddress'
 
@@ -51,7 +53,7 @@ Bioturk::Application.configure do
     },
     s3_host_name: 'localhost:9000',
     s3_options: {
-      endpoint: "http://localhost:9000", # for aws-sdk
+      endpoint: 'http://localhost:9000', # for aws-sdk
       force_path_style: true # for aws-sdk (required for minio)
     }
   }
@@ -64,14 +66,14 @@ Bioturk::Application.configure do
   # then creates an array of address summaries that is used for whitelisting.
   # It then turns off whining about IP addresses.
   ip_list = []
-  service_names = ['db', 's3', 'krill', 'app']
+  service_names = %w[db s3 krill app]
   service_names.each do |name|
-    begin
-      ip = Resolv.getaddress(name)
-      ip_list.push(IPAddress(ip))
-    rescue Resolv::ResolvError
-      puts "service #{name} not resolved"
-    end
+
+    ip = Resolv.getaddress(name)
+    ip_list.push(IPAddress(ip))
+  rescue Resolv::ResolvError
+    puts "service #{name} not resolved"
+
   end
 
   service_ips = IPAddress::IPv4.summarize(*ip_list).map(&:to_string)

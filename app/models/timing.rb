@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 class Timing < ActiveRecord::Base
 
   attr_accessible :parent_class, :parent_id, :start, :stop, :days, :active
 
   def days_of_week
     JSON.parse(days)
-  rescue JSON::ParseError
+  rescue JSON::ParserError
     []
   end
 

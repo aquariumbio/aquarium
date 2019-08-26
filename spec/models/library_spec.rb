@@ -45,7 +45,3 @@ RSpec.describe Library do
   it 'expect importing exported library to fail because of duplication'
 
 end
-
-def empty_binding
-  binding
-end

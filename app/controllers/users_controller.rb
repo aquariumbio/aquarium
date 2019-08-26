@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UsersController < ApplicationController
 
   before_filter :signed_in_user, only: %i[edit update]
@@ -68,7 +70,6 @@ class UsersController < ApplicationController
   def edit; end
 
   def update
-
     user = User.find(params[:id])
 
     unless user.id == current_user.id || current_user.is_admin
@@ -85,6 +86,7 @@ class UsersController < ApplicationController
       end
     end
 
+    errors = nil
     params[:parameters].each do |p|
       plist = Parameter.where(user_id: user.id, id: p[:id])
       if plist.empty?
@@ -93,14 +95,19 @@ class UsersController < ApplicationController
         plist[0].value = p[:value]
         plist[0].save
         unless plist[0].errors.empty?
-          render json: { error: plist[0].errors.full_messages.join('') }
-          return
+          errors = plist[0].errors
+          break
         end
       end
     end
 
-    render json: user
+    response = if errors.present?
+                 { error: errors.full_messages.join('') }
+               else
+                 user
+               end
 
+    render json: response
   end
 
   def update_password
@@ -132,7 +139,7 @@ class UsersController < ApplicationController
 
       format.html do
 
-        retired = Group.find_by_name('retired')
+        retired = Group.find_by(name: 'retired')
         rid = retired ? retired.id : -1
 
         @users = User.includes(memberships: :group)
@@ -168,7 +175,7 @@ class UsersController < ApplicationController
   def destroy
 
     u = User.find(params[:id])
-    ret = Group.find_by_name('retired')
+    ret = Group.find_by(name: 'retired')
 
     if ret
       m = Membership.new

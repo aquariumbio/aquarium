@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PlanOptimizer
 
   def initialize(plan)
@@ -125,7 +127,7 @@ class PlanOptimizer
 
     @orphans.each do |o|
       @messages << "#{o.operation_type.name} #{o.id} is redundant and was removed from plan."
-      PlanAssociation.where(plan_id: @plan ? @plan.id : @plan.id,
+      PlanAssociation.where(plan_id: @plan.id,
                             operation_id: o ? o.id : nil)
                      .each(&:destroy)
       o.destroy
