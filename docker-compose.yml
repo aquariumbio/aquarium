@@ -88,7 +88,7 @@ services:
       done;
       /usr/bin/mc config host add aqminio http://s3:9000 aquarium_minio KUNAzqrNifmM6GwNVZ8IP7dxZAkYjhnwc0bfdz0W;
       /usr/bin/mc mb --region us-west-1 -p aqminio/images;
-      /usr/bin/mc policy download aqminio/images;
+      /usr/bin/mc policy set download aqminio/images;
       exit 0;
       "
     networks:
