@@ -33,6 +33,7 @@ WORKDIR /aquarium
 # install js components
 COPY package.json ./package.json
 COPY yarn.lock ./yarn.lock
+
 RUN yarn install --modules-folder public/node_modules && yarn cache clean
 
 # Change where bundler puts gems
