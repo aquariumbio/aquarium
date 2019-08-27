@@ -72,7 +72,7 @@
 
       $scope.views = aqCookieManager.get_object("browserViews");
 
-      if (!$scope.views || $scope.views.version != 2) {
+      if (!$scope.views || $scope.views.version !== 2) {
         $scope.views = {
           version: 2,
           project: {
@@ -345,8 +345,26 @@
         $scope.select_view("create");
       };
 
-      // Search
+      function sample_inventory(samples) {
+        return aq.collect(samples, function(s) {
+          var sample = new Sample($http).from(s);
+          if (
+            aq.url_params().sid &&
+            sample.id === parseInt(aq.url_params().sid)
+          ) {
+            sample.open = true;
+            sample.inventory = true;
+            sample.loading_inventory = true;
+            sample.get_inventory(function() {
+              sample.loading_inventory = false;
+              sample.inventory = true;
+            });
+          }
+          return sample;
+        });
+      }
 
+      // Search
       $scope.search = function(p) {
         $scope.views.search.samples = [];
         $scope.views.search.status = "searching";
@@ -356,24 +374,8 @@
           .post("/browser/search", $scope.views.search)
           .then(function(response) {
             $scope.views.search.status = "preparing";
-            $scope.views.search.samples = aq.collect(
-              response.data.samples,
-              function(s) {
-                var sample = new Sample($http).from(s);
-                if (
-                  aq.url_params().sid &&
-                  sample.id === parseInt(aq.url_params().sid)
-                ) {
-                  sample.open = true;
-                  sample.inventory = true;
-                  sample.loading_inventory = true;
-                  sample.get_inventory(function() {
-                    sample.loading_inventory = false;
-                    sample.inventory = true;
-                  });
-                }
-                return sample;
-              }
+            $scope.views.search.samples = sample_inventory(
+              response.data.samples
             );
             $scope.views.search.count = response.data.count;
             $scope.views.search.pages = aq.range(response.data.count / 30);
