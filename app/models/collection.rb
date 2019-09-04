@@ -178,6 +178,15 @@ class Collection < Item
     pas[0] if pas.length == 1
   end
 
+  # Return all parts for this collection
+  #
+  # @return [Array]
+  def parts
+    PartAssociation.where(collection_id: id).collect do |association|
+      association.part
+    end
+  end
+
   # Return the matrix of data associations associated with the given key
   # @param key [String]
   # @return [Array] an array of array of {DataAssociation}s
