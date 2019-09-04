@@ -346,23 +346,31 @@
         $scope.select_view("create");
       };
 
-      function sample_inventory(samples) {
+      function sample_inventory(samples, set_sample_state) {
         return aq.collect(samples, function(s) {
+          console.log(s);
           var sample = new Sample($http).from(s);
-          if (
-            aq.url_params().sid &&
-            sample.id === parseInt(aq.url_params().sid)
-          ) {
-            sample.open = true;
-            sample.inventory = true;
-            sample.loading_inventory = true;
-            sample.get_inventory(function() {
-              sample.loading_inventory = false;
-              sample.inventory = true;
-            });
+          if (sample && s.id === sample.id) {
+            set_sample_state(sample);
           }
+          console.log(sample);
           return sample;
         });
+      }
+
+      function show_inventory(sample) {
+        sample.open = true;
+        sample.inventory = true;
+        sample.loading_inventory = true;
+        sample.get_inventory(function() {
+          sample.loading_inventory = false;
+          sample.inventory = true;
+        });
+      }
+
+      function show_description(sample) {
+        sample.open = false;
+        sample.inventory = false;
       }
 
       // Search function handles all of the cases that depend on the state of the input fields
@@ -371,21 +379,31 @@
         $scope.views.search.status = "searching";
         $scope.views.search.page = p;
 
-        if ($scope.views.search.item_id) {
-          $scope.item_search();
-        } else {
-          $http
-            .post("/browser/search", $scope.views.search)
-            .then(function(response) {
-              $scope.views.search.status = "preparing";
+        $http.post("/browser/search", $scope.views.search).then(
+          response => {
+            $scope.views.search.status = "preparing";
+            if ($scope.views.search.item_id) {
+              // TODO: this should only include the item searched for or the collection containing it
+              console.log("item")
               $scope.views.search.samples = sample_inventory(
-                response.data.samples
+                response.data.samples,
+                show_inventory
               );
-              $scope.views.search.count = response.data.count;
-              $scope.views.search.pages = aq.range(response.data.count / 30);
-              $scope.views.search.status = "done";
-            });
-        }
+            } else {
+              console.log("not item")
+              $scope.views.search.samples = sample_inventory(
+                response.data.samples,
+                show_description
+              );
+            }
+            $scope.views.search.count = response.data.count;
+            $scope.views.search.pages = aq.range(response.data.count / 30);
+            $scope.views.search.status = "done";
+          },
+          error => {
+            console.log(error);
+          }
+        );
       };
 
       // remove_duplicate function removes duplicates in the list
@@ -453,7 +471,7 @@
               if ($scope.views.search.query.includes(sample.id)) {
                 // Current search inputs: Sample Name or ID, Sample Type, Item ID
                 if ($scope.views.search.sample_type) {
-                  find_sample_type(sample.sample_type_id)
+                  find_sample_type(sample.sample_type_id);
                 }
                 search_update([sample]);
                 cookie();
@@ -465,7 +483,7 @@
 
             // Current search inputs: Sample Type, Item ID
             else if ($scope.views.search.sample_type) {
-              find_sample_type(sample.sample_type_id) 
+              find_sample_type(sample.sample_type_id);
             }
 
             // Current search input: Item ID (only)
