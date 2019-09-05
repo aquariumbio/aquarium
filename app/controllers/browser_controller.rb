@@ -153,6 +153,7 @@ class BrowserController < ApplicationController
   end
 
   def search
+    # TODO: move search code to Sample and Item/Collection
     samples = Sample.where('name like ? or id = ?', "%#{params[:query]}%", params[:query].to_i)
 
     puts 'SAMPLE COUNT: ' + samples.length.to_s
@@ -176,15 +177,17 @@ class BrowserController < ApplicationController
     puts 'SAMPLE COUNT: ' + samples.length.to_s
     if params[:user_filter]
       user = User.find_by_login(params[:user])
-      samples = samples.where(user_id: user.id) if user
+      samples = samples.owned_by(user: user) if user
     end
     puts 'SAMPLE COUNT: ' + samples.length.to_s
-    samples = samples.where(project: params[:project]) if params[:project_filter]
+    if params[:project_filter]
+      samples = samples.for_project(project: params[:project]) if params[:project].present?
+    end
     puts 'SAMPLE COUNT: ' + samples.length.to_s
     if params[:sample_type].present?
       sample_type = SampleType.find_by_name(params[:sample_type])
       samples = if sample_type
-                  samples.where(sample_type_id: sample_type.id)
+                  samples.with_sample_type(sample_type: sample_type)
                 else
                   []
                 end
