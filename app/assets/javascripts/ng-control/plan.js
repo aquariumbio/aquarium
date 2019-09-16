@@ -400,21 +400,19 @@
           if ($scope.plan.operations.length > 0) {
             var dialog = $mdDialog
               .confirm()
-              .title("Save First?")
+              .title("Switch plans?")
               .textContent(
                 msg
                   ? msg
-                  : 'Save the current plan before loading "' +
+                  : 'Changes to plan "' +
                       $scope.plan.name +
-                      '"?'
+                      '" will not be saved'
               )
-              .ariaLabel("Save First?")
+              .ariaLabel("Switch plans?")
               .ok("Yes")
               .cancel("No");
 
-            $mdDialog
-              .show(dialog)
-              .then(() => $scope.plan.save().then(resolve), resolve);
+            $mdDialog.show(dialog).then(() => resolve(), () => null);
           } else {
             resolve();
           }
