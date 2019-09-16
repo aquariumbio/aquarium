@@ -1,10 +1,9 @@
-@import 'variables';
+@import "variables";
 
 $title-bottom-margin: 24px;
 $bottom-margin: 12px;
 
 .technician {
-
   .mode-button {
     margin-top: 10px;
     margin-bottom: 20px;
@@ -24,7 +23,7 @@ $bottom-margin: 12px;
   }
 
   .animate-show-hide.ng-hide-add {
-    transition: all linear 0.0s;
+    transition: all linear 0s;
   }
   .animate-show-hide.ng-hide-remove {
     transition: all linear 0.5s;
@@ -63,19 +62,29 @@ $bottom-margin: 12px;
     animation: blinker 1s ease infinite;
   }
 
-  .step-number {
-    position: absolute;
-    top: 0;
-    left: 0;
-    color: white;
-    font-weight: bold;
-    background: $technician-step-color;
-    width: 90px;
-    height: 64px;
-    margin-right: 10px;
+  @mixin step-number-format {
     font-size: 28pt;
-    text-align: center;
+    font-weight: bold;
+    height: 64px;
+    left: 0;
+    margin-right: 10px;
     padding-top: 10px;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 90px;
+  }
+
+  .step-number {
+    @include step-number-format;
+    background: $step-number-background-color;
+    color: $step-number-color;
+  }
+
+  .error-step-number {
+    @include step-number-format;
+    background: $error-highlight-color;
+    color: $error-step-number-color;
   }
 
   .step-title {
@@ -83,22 +92,20 @@ $bottom-margin: 12px;
   }
 
   .step-container {
-
-    opacity: 1;
     margin: 10px 30px 0px 30px;
 
     .title {
+      margin-left: -4px;      
       margin-top: 0;
-      margin-left: -4px;
     }
 
     .technician-warning {
-      color: black;
-      background: #d2f8d2;
-      font-weight: bold;
-      display: inline-block;
-      border: 1pt solid #aaa;
+      background: $error-highlight-color;
+      border: 1pt solid $technician-cell-border;
       border-radius: 5px;
+      color: $plain-text-color;
+      display: inline-block;
+      font-weight: bold;
       padding: 5px 10px 5px 10px;
     }
 
@@ -106,34 +113,33 @@ $bottom-margin: 12px;
       color: $error-highlight-color;
       font-weight: bold;
       // background: orange;
-      display: inline-block;
-    }    
+    }
 
     .input-box {
-      padding: 10px 10px 0px 10px;
-      margin: 5px 0 5px 0;
+      border: 1pt solid $technician-cell-border;
       border-radius: 5px;
-      border: 1pt solid  #999;
+      margin: 5px 0 5px 0;
+      padding: 10px 10px 0px 10px;
       width: 50%;
     }
 
-      .input-icon {
-        display: inline-block;
-        svg {
-          margin-top: 22px !important;
-        }
-      }    
+    .input-icon {
+      display: inline-block;
+      svg {
+        margin-top: 22px !important;
+      }
+    }
 
     .input-container {
-       width: 100%;
-       margin-left: 5px;
-       .md-errors-spacer {
-         min-height: 0px !important;
-       }
-       label {
+      width: 100%;
+      margin-left: 5px;
+      .md-errors-spacer {
+        min-height: 0px !important;
+      }
+      label {
         color: black;
         font-size: 16pt !important;
-       }
+      }
     }
 
     .select-container {
@@ -143,11 +149,11 @@ $bottom-margin: 12px;
 
     .checkbox-container {
       display: inline-block;
-      margin-top: 2px;   
+      margin-top: 2px;
       .md-container {
         top: 14px;
-      }   
-    }   
+      }
+    }
 
     .bullet {
       display: inline-block;
@@ -163,7 +169,6 @@ $bottom-margin: 12px;
     }
 
     table {
-
       border: 1pt solid #aaa;
       font-size: 12pt;
       line-height: 12pt;
@@ -188,10 +193,10 @@ $bottom-margin: 12px;
       .selected {
         background: $selection-highlight-color;
       }
-
     }
 
-    .td-checked, .td-notchecked {
+    .td-checked,
+    .td-notchecked {
       cursor: pointer;
     }
 
@@ -203,23 +208,23 @@ $bottom-margin: 12px;
 
     .td-checked {
       background: lightblue;
-    }    
+    }
 
     .td-input {
       position: relative;
     }
 
     .table-input {
-        display: inline-block;
-        padding: 0;
-        margin: 0 !important;
-        border: none !important;
-        height: 100% !important;
-        line-height: 100%;
-        -webkit-appearance:none;
-        -webkit-box-shadow: none !important;
-        -moz-box-shadow: none !important;
-        box-shadow: none !important;
+      display: inline-block;
+      padding: 0;
+      margin: 0 !important;
+      border: none !important;
+      height: 100% !important;
+      line-height: 100%;
+      -webkit-appearance: none;
+      -webkit-box-shadow: none !important;
+      -moz-box-shadow: none !important;
+      box-shadow: none !important;
     }
 
     .table-input-large {
@@ -231,8 +236,8 @@ $bottom-margin: 12px;
     }
 
     .td-check:hover {
-        outline: 2pt solid lightblue;
-        cursor: pointer;
+      outline: 2pt solid lightblue;
+      cursor: pointer;
     }
 
     .td-selected {
@@ -260,7 +265,6 @@ $bottom-margin: 12px;
       color: #ddd;
       font-size: 18pt;
     }
-
   }
 
   .step-index,
@@ -277,9 +281,8 @@ $bottom-margin: 12px;
   }
 
   .ok {
-
     .md-button {
-      color : white;
+      color: white;
       background: green;
     }
 
@@ -288,15 +291,13 @@ $bottom-margin: 12px;
     }
 
     .md-button[disabled] {
-      color : white;
+      color: white;
       background-color: lightgrey;
     }
-
   }
 
   .image {
     max-width: 500px;
     margin: 10px 0 10px 0;
   }
-
 }
