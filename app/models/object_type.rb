@@ -41,21 +41,21 @@ class ObjectType < ActiveRecord::Base
   def rows
     return unless handler == 'collection'
 
-    read_attribute(:rows) || 1
+    self[:rows] || 1
   end
 
   def columns
     return unless handler == 'collection'
 
-    read_attribute(:columns) || 12
+    self[:columns] || 12
   end
 
   def rows=(value)
-    write_attribute :rows, value
+    self[:rows] = value
   end
 
   def columns=(value)
-    write_attribute :columns, value
+    self[:columns] = value
   end
 
   def min_and_max
