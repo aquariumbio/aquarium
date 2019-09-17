@@ -112,7 +112,7 @@ class StaticPagesController < ApplicationController
 
   def direct_purchase
 
-    dp = OperationType.find_by_name('Direct Purchase')
+    dp = OperationType.find_by(name: 'Direct Purchase')
 
     unless dp
       flash[:error] = 'No direct purchase protocol found. Contact the lab manager.'

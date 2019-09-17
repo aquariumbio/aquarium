@@ -78,7 +78,7 @@ class SampleType < ActiveRecord::Base
 
     raw_sample_types.each do |rst|
 
-      st = find_by_name(rst[:name])
+      st = find_by(name: rst[:name])
 
       if st
         note = "Found sample type '#{rst[:name]}'"
@@ -112,7 +112,7 @@ class SampleType < ActiveRecord::Base
 
       # make allowable field types (assumes sample types have been made)
       make.each do |rst|
-        st = SampleType.find_by_name rst[:name]
+        st = SampleType.find_by name: rst[:name]
         next unless st
 
         st.create_afts_from_raw rst
@@ -168,8 +168,8 @@ class SampleType < ActiveRecord::Base
 
         l = rft[:sample_types] ? rft[:sample_types].length : 0
         (0..l - 1).each do |i|
-          st = SampleType.find_by_name(rft[:sample_types][i])
-          ot = ObjectType.find_by_name(rft[:sample_types][i])
+          st = SampleType.find_by(name: rft[:sample_types][i])
+          ot = ObjectType.find_by(name: rft[:sample_types][i])
           aft = AllowableFieldType.new(
             field_type_id: ft.id,
             sample_type_id: st ? st.id : nil,
@@ -186,7 +186,7 @@ class SampleType < ActiveRecord::Base
 
     raw_sample_types.each do |rst|
 
-      st = SampleType.find_by_name rst[:name]
+      st = SampleType.find_by name: rst[:name]
 
       st.field_types.each do |ft|
         rst[:field_types].each do |rft|
@@ -199,7 +199,7 @@ class SampleType < ActiveRecord::Base
           names.each do |name|
             empty_afts = ft.allowable_field_types.select { |aft| aft.sample_type_id.nil? }
             if empty_afts.any?
-              st = SampleType.find_by_name(name)
+              st = SampleType.find_by(name: name)
               empty_afts[0].sample_type_id = st ? st.name : nil
             end
           end

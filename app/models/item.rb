@@ -62,7 +62,7 @@ class Item < ActiveRecord::Base
 
   # @private
   def part_type
-    @@part_type ||= ObjectType.find_by_name('__Part')
+    @@part_type ||= ObjectType.find_by(name: '__Part')
   end
 
   # Returns true if the item is a part of a collection
@@ -102,7 +102,7 @@ class Item < ActiveRecord::Base
   #
   # @return [Item] self
   def store
-    wiz = Wizard.find_by_name(object_type.prefix)
+    wiz = Wizard.find_by(name: object_type.prefix)
     if wiz
       locator = wiz.next
       move_to(wiz.int_to_location(locator.number))
@@ -117,7 +117,7 @@ class Item < ActiveRecord::Base
   # @return [Item] self
   def move_to(locstr)
 
-    wiz = Wizard.find_by_name(object_type.prefix) if object_type
+    wiz = Wizard.find_by(name: object_type.prefix) if object_type
 
     if object_type && wiz && wiz.has_correct_form(locstr) # item and location managed by a wizard
 
@@ -145,7 +145,7 @@ class Item < ActiveRecord::Base
 
       if newloc.item_id.nil?
 
-        oldloc = Locator.find_by_id(locator_id)
+        oldloc = Locator.find_by(id: locator_id)
         oldloc.item_id = nil if oldloc
         self.locator_id = newloc.id
         write_attribute(:location, locstr)
@@ -174,7 +174,7 @@ class Item < ActiveRecord::Base
 
     else # location is not in the form managed by a wizard
 
-      loc = Locator.find_by_id(locator_id)
+      loc = Locator.find_by(id: locator_id)
       loc.item_id = nil if loc
 
       write_attribute(:location, locstr)
@@ -196,7 +196,7 @@ class Item < ActiveRecord::Base
   end
 
   def non_wizard_location?
-    wiz = Wizard.find_by_name(object_type.prefix)
+    wiz = Wizard.find_by(name: object_type.prefix)
 
     !(wiz && locator.nil?)
   end
@@ -225,7 +225,7 @@ class Item < ActiveRecord::Base
 
     if o[:object_type]
       item.object_type_id = o[:object_type].id
-      wiz = Wizard.find_by_name(o[:object_type].prefix)
+      wiz = Wizard.find_by(name: o[:object_type].prefix)
       locator = wiz.next if wiz
       item.set_primitive_location locator.to_s if wiz
     end
@@ -383,7 +383,7 @@ class Item < ActiveRecord::Base
     olist = ObjectType.where('name = ?', spec[:as])
     raise "Could not find container named '#{spec[:as]}'." if olist.empty?
 
-    sample_type_id = SampleType.find_by_name(spec[:of])
+    sample_type_id = SampleType.find_by(name: spec[:of])
     raise "Could not find sample type named '#{spec[:of]}'." unless sample_type_id
 
     slist = Sample.where('name = ? AND sample_type_id = ?', name, sample_type_id)
@@ -415,8 +415,8 @@ class Item < ActiveRecord::Base
   end
 
   def self.items_for(sid, oid)
-    sample = Sample.find_by_id(sid)
-    ot = ObjectType.find_by_id(oid)
+    sample = Sample.find_by(id: sid)
+    ot = ObjectType.find_by(id: oid)
 
     if sample
       return [] unless ot

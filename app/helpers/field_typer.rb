@@ -33,7 +33,7 @@ module FieldTyper
     raw_field_types.each do |raw_ft|
       if raw_ft[:id]
         if raw_ft[:deleted]
-          temp = FieldType.find_by_id(raw_ft[:id])
+          temp = FieldType.find_by(id: raw_ft[:id])
           temp.destroy if temp
         else
           ft = FieldType.find(raw_ft[:id])
@@ -76,8 +76,8 @@ module FieldTyper
 
     if sample_names
       (0..sample_names.length - 1).each do |i|
-        sample = SampleType.find_by_name(sample_names[i]) if sample_names[i].present?
-        container = ObjectType.find_by_name(container_names[i]) if container_names[i].present?
+        sample = SampleType.find_by(name: sample_names[i]) if sample_names[i].present?
+        container = ObjectType.find_by(name: container_names[i]) if container_names[i].present?
 
         ft.allowable_field_types.create(
           sample_type_id: sample ? sample.id : nil,

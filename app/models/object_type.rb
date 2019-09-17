@@ -165,7 +165,7 @@ class ObjectType < ActiveRecord::Base
 
     raw_ots.each do |raw_ot|
 
-      ot = ObjectType.find_by_name raw_ot[:name]
+      ot = ObjectType.find_by name: raw_ot[:name]
 
       if ot
         parts.each do |part|
@@ -201,8 +201,8 @@ class ObjectType < ActiveRecord::Base
 
   def self.clean_up_sample_type_links(raw_object_types)
     raw_object_types.each do |rot|
-      ot = ObjectType.find_by_name rot[:name]
-      st = SampleType.find_by_name rot[:sample_type_name]
+      ot = ObjectType.find_by name: rot[:name]
+      st = SampleType.find_by name: rot[:sample_type_name]
       if st && ot
         ot.sample_type_id = st.id
         ot.save

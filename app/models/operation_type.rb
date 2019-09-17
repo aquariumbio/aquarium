@@ -149,8 +149,8 @@ class OperationType < ActiveRecord::Base
   #
 
   def add_new_allowable_field_type(ft, new_type)
-    st = (SampleType.find_by_name(new_type[:sample_type][:name]) if new_type[:sample_type])
-    ot = (ObjectType.find_by_name(new_type[:object_type][:name]) if new_type[:object_type] && new_type[:object_type][:name] != '')
+    st = (SampleType.find_by(name: new_type[:sample_type][:name]) if new_type[:sample_type])
+    ot = (ObjectType.find_by(name: new_type[:object_type][:name]) if new_type[:object_type] && new_type[:object_type][:name] != '')
 
     ft.allowable_field_types.create(
       sample_type_id: st ? st.id : nil,
@@ -160,14 +160,14 @@ class OperationType < ActiveRecord::Base
 
   def update_allowable_field_type(old_aft, new_aft)
     if new_aft[:sample_type]
-      st = SampleType.find_by_name(new_aft[:sample_type][:name])
+      st = SampleType.find_by(name: new_aft[:sample_type][:name])
       old_aft.sample_type_id = st.id if st
     else
       old_aft.sample_type_id = nil
     end
 
     if new_aft[:object_type] && new_aft[:object_type][:name] != ''
-      ot = ObjectType.find_by_name(new_aft[:object_type][:name])
+      ot = ObjectType.find_by(name: new_aft[:object_type][:name])
       old_aft.object_type_id = ot.id if ot
     else
       old_aft.sample_type_id = nil
@@ -186,7 +186,7 @@ class OperationType < ActiveRecord::Base
       container_names = new_type[:allowable_field_types]
                         .select { |aft| aft[:object_type] && aft[:object_type][:name] && aft[:object_type][:name] != '' }
                         .collect do |aft|
-        raise "Object type '#{aft[:object_type][:name]}' not defined by browser for #{ft[:name]}." unless ObjectType.find_by_name(aft[:object_type][:name])
+        raise "Object type '#{aft[:object_type][:name]}' not defined by browser for #{ft[:name]}." unless ObjectType.find_by(name: aft[:object_type][:name])
 
         aft[:object_type][:name]
       end

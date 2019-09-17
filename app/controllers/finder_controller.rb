@@ -15,7 +15,7 @@ class FinderController < ApplicationController
     if params[:filter] != ''
 
       # Determine if filter an object type
-      ot = ObjectType.find_by_name(params[:filter])
+      ot = ObjectType.find_by(name: params[:filter])
       samp = if ot && ot.sample_type
                ot.sample_type.name
              else
@@ -45,7 +45,7 @@ class FinderController < ApplicationController
   def containers
     spec = JSON.parse(params[:spec], symbolize_names: true)
     logger.info 'spec = ' + spec.to_json
-    filter = ObjectType.find_by_name(params[:filter])
+    filter = ObjectType.find_by(name: params[:filter])
 
     con = if filter
             (ObjectType
@@ -73,7 +73,7 @@ class FinderController < ApplicationController
 
     if ot.handler == 'collection'
 
-      sample = Sample.find_by_name(spec[:sample])
+      sample = Sample.find_by(name: spec[:sample])
 
       render json: (Collection.joins(:object_type)
         .where(object_types: { id: ot.id })
@@ -107,9 +107,9 @@ class FinderController < ApplicationController
   def type
     t = params[:type].split '|'
 
-    if SampleType.find_by_name(t.first)
+    if SampleType.find_by(name: t.first)
       render json: { type: 'Samples' }
-    elsif ObjectType.find_by_name(t.first)
+    elsif ObjectType.find_by(name: t.first)
       render json: { type: 'Items' }
     else
       render json: { type: 'Unknown' }
