@@ -51,7 +51,7 @@ class StaticPagesController < ApplicationController
     done = Plan.joins(:plan_associations) \
                .joins(plan_associations: :operation) \
                .includes(:user) \
-               .where("plans.created_at > ? AND operations.status = 'done'", Date.today - 3.month) \
+               .where("plans.created_at > ? AND operations.status = 'done'", Date.today - 3.months) \
                .select('plans.*, COUNT(plan_associations.id) op_count') \
                .group('plans.id') \
                .collect { |p| { plan: p, ops: p.op_count, user: p.user } } \
@@ -62,7 +62,7 @@ class StaticPagesController < ApplicationController
     all = Plan.joins(:plan_associations) \
               .joins(plan_associations: :operation) \
               .includes(:user) \
-              .where('plans.created_at > ?', Date.today - 3.month) \
+              .where('plans.created_at > ?', Date.today - 3.months) \
               .select('plans.*, COUNT(plan_associations.id) op_count') \
               .group('plans.id') \
               .collect { |p| { plan: p, ops: p.op_count, user: p.user } } \
