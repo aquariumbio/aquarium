@@ -62,14 +62,12 @@ class Sample < ActiveRecord::Base
   #
   #     s.errors.any?
   def self.creator(raw, user)
-
     sample = Sample.new
     sample.user_id = user.id
     sample.sample_type_id = raw[:sample_type_id]
     sample.updater raw
 
     sample
-
   end
 
   def stringify_errors(elist)
