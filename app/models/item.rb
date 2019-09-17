@@ -311,6 +311,8 @@ class Item < ActiveRecord::Base
 
   def get_data
     JSON.parse data, symbolize_names: true
+  rescue JSON::ParserError
+    nil
   end
 
   # @deprecated Use {DataAssociator} methods instead of datum
@@ -401,10 +403,8 @@ class Item < ActiveRecord::Base
     a = attributes
     a.delete 'inuse'
     a.delete 'locator_id'
-    begin
-      a['data'] = get_data
-    rescue StandardError
-    end
+    data = get_data
+    a['data'] = data if data
     a[:sample] = sample.export if association(:sample).loaded?
     a[:object_type] = object_type.export if association(:object_type).loaded?
     a
