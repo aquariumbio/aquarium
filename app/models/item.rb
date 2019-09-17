@@ -91,11 +91,11 @@ class Item < ActiveRecord::Base
   # @param x [String] the location string
   def location=(x)
     move_to x
-    write_attribute(:location, x) # just for consistency
+    self[:location] = x # just for consistency
   end
 
   def set_primitive_location(locstr)
-    write_attribute(:location, locstr)
+    self[:location] = locstr
   end
 
   # Sets item location to empty slot based on location {Wizard}. By default sets to "Bench".
@@ -148,7 +148,7 @@ class Item < ActiveRecord::Base
         oldloc = Locator.find_by(id: locator_id)
         oldloc.item_id = nil if oldloc
         self.locator_id = newloc.id
-        write_attribute(:location, locstr)
+        self[:location] = locstr
         self.quantity = 1
         self.inuse = 0
         newloc.item_id = id
@@ -177,7 +177,7 @@ class Item < ActiveRecord::Base
       loc = Locator.find_by(id: locator_id)
       loc.item_id = nil if loc
 
-      write_attribute(:location, locstr)
+      self[:location] = locstr
       self.locator_id = nil
 
       transaction do
@@ -264,7 +264,7 @@ class Item < ActiveRecord::Base
   #
   # @return [Bool] true if the location is set to 'deleted', false otherwise
   def mark_as_deleted
-    write_attribute(:location, 'deleted')
+    self[:location] = 'deleted'
     self.quantity = -1
     self.inuse = -1
     self.locator_id = nil
