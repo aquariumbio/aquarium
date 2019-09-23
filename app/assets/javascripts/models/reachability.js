@@ -61,7 +61,7 @@ AQ.Operation.record_methods.is_output = function(fv) {
 };
 
 AQ.Plan.record_methods.reachable_aux = function(op, a, b) {
-  // excpects that a is an input of op and b is an output of some possibly different op
+  // expects that a is an input of op and b is an output of some possibly different op
 
   var plan = this;
 
@@ -69,14 +69,12 @@ AQ.Plan.record_methods.reachable_aux = function(op, a, b) {
     return false;
   } else if (op.is_output(b)) {
     // b is an output of the op containing a
-
     return true;
   } else {
     var wires = plan.wires_out(op);
 
     if (wires.length == 0) {
       // there are no output wires from the op containing fv
-
       return false;
     } else {
       var result = false;
