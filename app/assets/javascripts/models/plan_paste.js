@@ -1,12 +1,11 @@
-AQ.Plan.record_methods.paste_plan = function (p,offset) {
-
+AQ.Plan.record_methods.paste_plan = function(p, offset) {
   var plan = this;
 
-  plan.paste_module(p,offset);  
+  plan.paste_module(p, offset);
 
-  aq.each(plan.operations, op => op.multiselect = false);
-  aq.each(p.operations, op => { 
-    plan.paste_operation(op, offset)
+  aq.each(plan.operations, op => (op.multiselect = false));
+  aq.each(p.operations, op => {
+    plan.paste_operation(op, offset);
   });
 
   aq.each(p.wires, w => {
@@ -18,13 +17,11 @@ AQ.Plan.record_methods.paste_plan = function (p,offset) {
   });
 
   return plan;
+};
 
-}
-
-AQ.Plan.record_methods.paste_module = function(p,offset) {
-
-  var plan = this, 
-      module_id_map;
+AQ.Plan.record_methods.paste_module = function(p, offset) {
+  var plan = this,
+    module_id_map;
 
   Module.id_map = [];
 
@@ -33,34 +30,32 @@ AQ.Plan.record_methods.paste_module = function(p,offset) {
     c.x += offset;
     c.y += offset;
   });
-  aq.each(p.base_module.children, c => c.multiselect = true);
+  aq.each(p.base_module.children, c => (c.multiselect = true));
   plan.current_module.merge(p.base_module);
 
-  Module.id_map[0] = plan.current_module.id;  
+  Module.id_map[0] = plan.current_module.id;
 
   aq.each(p.operations, op => {
     op.parent_id = Module.id_map[op.parent_id];
   });
-
-}
+};
 
 AQ.Plan.record_methods.paste_operation = function(op, offset) {
-
   var plan = this,
-      new_op = op;
+    new_op = op;
 
   delete new_op.id;
   new_op.multiselect = true;
 
-  if ( new_op.parent_id == 0 ) {
+  if (new_op.parent_id == 0) {
     new_op.x += offset;
-    new_op.y += offset;  
+    new_op.y += offset;
   }
 
   aq.each(new_op.field_values, fv => {
     delete fv.child_item_id;
     delete fv.row;
-    delete fv.column
+    delete fv.column;
     delete fv.id;
     delete fv.parent_id;
     fv.recompute_getter("items");
@@ -73,5 +68,4 @@ AQ.Plan.record_methods.paste_operation = function(op, offset) {
   plan.add_operation(new_op);
 
   return plan;
-
-}
+};

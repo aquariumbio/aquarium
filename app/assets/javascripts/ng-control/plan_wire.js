@@ -56,7 +56,7 @@ AQ.Plan.record_methods.connect = function(io1, object1, io2, object2) {
   var role1 = object1.role(io1),
     role2 = object2.role(io2);
 
-  if (io1.record_type == "FieldValue" && io2.record_type == "FieldValue") {
+  if (io1.record_type === "FieldValue" && io2.record_type === "FieldValue") {
     // 33
 
     // TODO: Makes sure that object2 is not already in a wire
@@ -69,53 +69,56 @@ AQ.Plan.record_methods.connect = function(io1, object1, io2, object2) {
     if (object1.parent_id != object2.parent_id) {
       // 12, 13, 21, or 31
 
-      if (object1.record_type == "Module" && object2.record_type == "Module") {
+      if (
+        object1.record_type === "Module" &&
+        object2.record_type === "Module"
+      ) {
         // 12 or 21
 
-        if (object2.parent_id == object1.id) {
+        if (object2.parent_id === object1.id) {
           // 12
-          if (role1 == "input" && role2 == "input")
+          if (role1 === "input" && role2 === "input")
             plan.connect_aux(io1, object1, io2, object2);
-          if (role1 == "output" && role2 == "output")
+          if (role1 === "output" && role2 === "output")
             plan.connect_aux(io2, object2, io1, object1);
         } else if (object1.parent_id == object2.id) {
           // 21
-          if (role1 == "input" && role2 == "input")
+          if (role1 === "input" && role2 === "input")
             plan.connect_aux(io2, object2, io1, object1);
-          if (role1 == "output" && role2 == "output")
+          if (role1 === "output" && role2 === "output")
             plan.connect_aux(io1, object1, io2, object2);
         }
       } else {
         // 13 or 31
 
         if (
-          object1.record_type == "Module" &&
-          object2.record_type == "Operation"
+          object1.record_type === "Module" &&
+          object2.record_type === "Operation"
         ) {
           // 13
-          if (role1 == "input" && role2 == "input")
+          if (role1 === "input" && role2 === "input")
             plan.connect_aux(io1, object1, io2, object2);
-          if (role1 == "output" && role2 == "output")
+          if (role1 === "output" && role2 === "output")
             plan.connect_aux(io2, object2, io1, object1);
         } else {
           // 31
-          if (role2 == "input" && role1 == "input")
+          if (role2 === "input" && role1 === "input")
             plan.connect_aux(io2, object2, io1, object1);
-          if (role2 == "output" && role1 == "output")
+          if (role2 === "output" && role1 === "output")
             plan.connect_aux(io1, object1, io2, object2);
         }
       }
     } else {
       // 11, 22, 23, 32
 
-      if (object1 == object2) {
+      if (object1 === object2) {
         // 11
         alert("Cannot connect io ports within the same module.");
       } else {
         // 22, 23, 32
-        if (role1 == "output" && role2 == "input")
+        if (role1 === "output" && role2 === "input")
           plan.connect_aux(io1, object1, io2, object2);
-        else if (role1 == "input" && role2 == "output")
+        else if (role1 === "input" && role2 === "output")
           plan.connect_aux(io2, object2, io1, object1);
       }
     }
@@ -123,7 +126,7 @@ AQ.Plan.record_methods.connect = function(io1, object1, io2, object2) {
 };
 
 AQ.Plan.record_methods.wire_equiv = function(wire1, wire2) {
-  var r = wire1.from.rid == wire2.from.rid && wire1.to.rid == wire2.to.rid;
+  var r = wire1.from.rid === wire2.from.rid && wire1.to.rid === wire2.to.rid;
   return r;
 };
 
@@ -217,6 +220,6 @@ AQ.Plan.record_methods.associated_wires = function(io) {
 
   return aq.where(
     plan.wires,
-    w => io.origin && w.from == io.origin.io && dests.includes(w.to)
+    w => io.origin && w.from === io.origin.io && dests.includes(w.to)
   );
 };
