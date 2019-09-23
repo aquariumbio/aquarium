@@ -395,22 +395,18 @@
         }
       };
 
-      function save_first(msg) {
+      function switch_plan() {
         return new Promise(function(resolve, reject) {
           if ($scope.plan.operations.length > 0) {
             var dialog = $mdDialog
               .confirm()
               .title("Switch plans?")
               .textContent(
-                msg
-                  ? msg
-                  : 'Changes to plan "' +
-                      $scope.plan.name +
-                      '" will not be saved'
+                'Changes to plan "' + $scope.plan.name + '" will not be saved'
               )
               .ariaLabel("Switch plans?")
               .ok("Yes")
-              .cancel("No");
+              .cancel("Cancel");
 
             $mdDialog.show(dialog).then(() => resolve(), () => null);
           } else {
@@ -465,7 +461,7 @@
       };
 
       $scope.load = function(plan) {
-        save_first().then(() => load_aux(plan));
+        switch_plan().then(() => load_aux(plan));
       };
 
       $scope.paste_plan = function(plan) {
@@ -485,7 +481,7 @@
       };
 
       $scope.new = function() {
-        save_first("Save current plan before creating new plan?").then(() => {
+        switch_plan().then(() => {
           AQ.User.current()
             .then(user => {
               $scope.current_user = user;
@@ -640,7 +636,7 @@
       $scope.delete_folder = function(name) {
         if (
           window.confirm(
-            "Are you sure you want to deleted this folder? Plans in it will be moved to 'Unsorted'."
+            "Are you sure you want to delete this folder? Plans in it will be moved to 'Unsorted'."
           )
         ) {
           var plans = aq.where($scope.plans, plan => plan.folder == name);
