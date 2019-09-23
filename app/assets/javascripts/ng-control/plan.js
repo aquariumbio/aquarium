@@ -397,6 +397,7 @@
 
       function switch_plan() {
         return new Promise(function(resolve, reject) {
+          // TODO: change to depend on whether plan is changed
           if ($scope.plan.operations.length > 0) {
             var dialog = $mdDialog
               .confirm()

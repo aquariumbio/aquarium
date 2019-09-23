@@ -214,6 +214,7 @@ AQ.Plan.record_methods.delete_obsolete_wires = function(old_wires) {
   console.log("Deleted " + wires_to_delete.length + " wires");
 };
 
+// TODO: verify dead code
 AQ.Plan.record_methods.associated_wires = function(io) {
   var plan = this,
     dests = aq.collect(io.destinations, d => d.io);
