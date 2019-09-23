@@ -557,7 +557,7 @@
             "Are you sure you want to cancel all not-completed operations?"
           )
         ) {
-          $scope.plan.cancel("Canceled via user inteface").then(() => {
+          $scope.plan.cancel("Canceled via user interface").then(() => {
             $scope.reload();
           });
         }
