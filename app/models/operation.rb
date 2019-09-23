@@ -404,7 +404,7 @@ class Operation < ActiveRecord::Base
   end
 
   def add_successor(opts)
-    ot = OperationType.find_by_name(opts[:type])
+    ot = OperationType.find_by(name: opts[:type])
 
     op = ot.operations.create(
       status: 'waiting',

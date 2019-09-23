@@ -125,8 +125,8 @@ module Marshall
 
     ft = op.operation_type.type(fv[:name], fv[:role])
 
-    aft = AllowableFieldType.find_by_id(fv[:allowable_field_type_id])
-    sample = Sample.find_by_id(sid)
+    aft = AllowableFieldType.find_by(id: fv[:allowable_field_type_id])
+    sample = Sample.find_by(id: sid)
 
     sid = nil if aft && (!sample || aft.sample_type_id != sample.sample_type_id)
 

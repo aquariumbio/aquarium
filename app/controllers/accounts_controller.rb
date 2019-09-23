@@ -6,7 +6,7 @@ class AccountsController < ApplicationController
 
   def index
 
-    @user = User.find_by_id(params[:uid]) || current_user
+    @user = User.find_by(id: params[:uid]) || current_user
 
     @month = params[:month] || Date.today.month
     @year = params[:year] || Date.today.year

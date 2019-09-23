@@ -81,7 +81,7 @@ class Locator < ActiveRecord::Base
     items.each do |i|
 
       n = wizard.location_to_int(i.primitive_location)
-      l = Locator.where(wizard_id: wizard.id, number: n).first
+      l = Locator.find_by(wizard_id: wizard.id, number: n)
 
       if l.item_id
         collisions.push([l.item_id, i.id])
@@ -100,10 +100,10 @@ class Locator < ActiveRecord::Base
 
   def self.port_all
 
-    port Wizard.find_by_name('M20')
-    port Wizard.find_by_name('M80')
-    port Wizard.find_by_name('SF2')
-    port Wizard.find_by_name('DFP')
+    port Wizard.find_by(name: 'M20')
+    port Wizard.find_by(name: 'M80')
+    port Wizard.find_by(name: 'SF2')
+    port Wizard.find_by(name: 'DFP')
 
   end
 

@@ -20,7 +20,7 @@ class Test
     @wiz = generic_wizard 16, 81
     puts '    created ' + @wiz.name
 
-    st = SampleType.find_by_name('Primer')
+    st = SampleType.find_by(name: 'Primer')
     @samp = generic_sample st
     puts '    created ' + @samp.name
 
