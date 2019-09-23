@@ -296,7 +296,6 @@
       $scope.create_sample_dialog = function() {
         $mdDialog.show({
           templateUrl: 'create_sample_dialog.html',
-          clickOutsideToClose: true,
           locals: { 
             sample_types: $scope.sample_types,
             selected: $scope.views.create.selected,
@@ -322,6 +321,7 @@
         $scope.remove_sample = remove_sample
         $scope.save = save;
         $scope.cancel = function() {
+          samples.length = 0;
           $mdDialog.cancel();
         };
       }
