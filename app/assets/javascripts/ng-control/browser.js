@@ -302,22 +302,24 @@
             selected: $scope.views.create.selected,
             samples: $scope.views.create.samples,
             new_sample: $scope.new_sample,
+            remove_sample: $scope.remove_sample,
             save: $scope.save_new_samples
           },
           controller: ['$scope', 'sample_types', 'selected', 'samples', 'new_sample', 
-                      'save', sample_dialog_controller]
+                      'remove_sample', 'save', sample_dialog_controller]
         })
       }
 
       // Controller function for create sample dialog
       function sample_dialog_controller($scope, sample_types, selected, samples, 
-                                        new_sample, save) {
+                                        new_sample, remove_sample, save) {
         $scope.sample_types = sample_types;
         $scope.selected = selected;
         $scope.samples = samples;
 
         // Dialog actions
         $scope.new_sample = new_sample;
+        $scope.remove_sample = remove_sample
         $scope.save = save;
         $scope.cancel = function() {
           $mdDialog.cancel();

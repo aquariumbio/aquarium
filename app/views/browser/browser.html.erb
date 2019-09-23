@@ -89,7 +89,7 @@
 
         <md-dialog-content class="md-dialog-content">
           <div flex>
-            <md-menu>
+            <md-menu ng-if="samples.length == 0">
               <md-button class='md-raised' ng-click="$mdMenu.open(ev)">Choose Sample Type</md-button>
           
               <md-menu-content>
