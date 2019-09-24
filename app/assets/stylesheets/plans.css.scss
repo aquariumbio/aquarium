@@ -3,7 +3,7 @@
 .plans {
   .opeditbar {
     width: calc(100vw - 400px);
-    
+
     inner {
       display: block;
     }
@@ -29,19 +29,19 @@
 
   .editor-main {
     height: 100%;
-    width: calc(100vw - 400px);
     position: relative;
+    width: calc(100vw - 400px);
 
     .operation-editor::-webkit-scrollbar {
       display: none;
     }
 
     .operation-editor {
-      outline: none;
       border-top: 1pt solid #ccc;
-      overflow: scroll;
-      margin-top: 5px;
       margin-right: 5px;
+      margin-top: 5px;
+      outline: none;
+      overflow: scroll;
       padding: 16px 0 26px 0;
       transition: height ease 0.2s;
 
@@ -84,20 +84,20 @@
     }
 
     .plan-editor-container {
-      position: relative;
-      overflow: scroll;
       outline: none;
+      overflow: scroll;
+      position: relative;
 
       .plan-editor {
-        margin: 50px;
-        border-top: none;
-        border-left: none;
-        border-right: 3px solid #eee;
         border-bottom: 3px solid #eee;
-        width: 16000px; /*calc(100vw - 400px);*/
-        height: 16000px;
+        border-left: 0;
+        border-right: 3px solid #eee;
+        border-top: 0;
         cursor: arrow;
+        height: 16000px;
+        margin: 50px;
         margin: 0px;
+        width: 16000px; /*calc(100vw - 400px);*/
 
         &:active {
           cursor: arrow;
@@ -107,9 +107,9 @@
   }
 
   .field-name-help {
-    text-anchor: "start";
     background: white;
     font-size: 9pt;
+    text-anchor: "start";
   }
 
   .op,
@@ -221,22 +221,22 @@
   }
 
   .op-cost {
-    font-size: 8pt;
-    fill: blue;
-    text-anchor: start;
-    cursor: pointer;
-    pointer-events: none;
-    user-select: none;
-    -webkit-user-select: none;
     -moz-user-select: none;
+    -webkit-user-select: none;
+    cursor: pointer;
+    fill: blue;
+    font-size: 8pt;
+    pointer-events: none;
+    text-anchor: start;
+    user-select: none;
   }
 
   .field-value {
     cursor: pointer;
     fill: white;
-    r: 5;
-    stroke: black;
+    stroke: $plan-io-stroke-color;
     stroke-width: 1px;
+    r: 5;
   }
 
   .field-value-selection {
@@ -250,26 +250,30 @@
   }
 
   .field-value-valid {
-    fill: lightgreen;
+    fill: $plan-io-valid-color;
+    stroke-width: 0.5px;
   }
 
   .field-value-invalid {
-    fill: $error-highlight-color;
+    stroke: $plan-io-stroke-color;
+    stroke-width: 2px;
   }
 
   .parameter {
-    fill: white;
-    stroke: black;
-    stroke-width: 1px;
     cursor: pointer;
+    fill: $plan-io-invalid-color;
+    stroke: $plan-io-stroke-color;
+    stroke-width: 1px;
   }
 
   .parameter-has-value {
-    fill: lightgreen;
+    fill: $plan-io-valid-color;
+    stroke-width: 0.5px;
   }
 
   .parameter-has-no-value {
-    fill: $error-highlight-color;
+    stroke: $plan-io-stroke-color;
+    stroke-width: 2px;
   }
 
   .wire,
