@@ -395,21 +395,22 @@
         }
       };
 
-      function save_first(msg) {
+      function switch_plan() {
         return new Promise(function(resolve, reject) {
+          // TODO: change to depend on whether plan is changed
           if ($scope.plan.operations.length > 0) {
             var dialog = $mdDialog
               .confirm()
-              .title("Switch Plan?")
-              .textContent(msg ? msg : "The current plan will be saved")
-              .ariaLabel("Save First?")
-              .ok("Switch")
+              .title("Switch plans?")
+              .textContent(
+                'Changes to plan "' + $scope.plan.name + '" will not be saved'
+              )
+              .ariaLabel("Switch plans?")
+              .ok("Yes")
               .cancel("Cancel")
               .clickOutsideToClose(true);
 
-            $mdDialog
-              .show(dialog)
-              .then(() => $scope.plan.save().then(resolve), () => null);
+            $mdDialog.show(dialog).then(() => resolve(), () => null);
           } else {
             resolve();
           }
@@ -462,7 +463,7 @@
       };
 
       $scope.load = function(plan) {
-        save_first().then(() => load_aux(plan));
+        switch_plan().then(() => load_aux(plan));
       };
 
       $scope.paste_plan = function(plan) {
@@ -482,7 +483,7 @@
       };
 
       $scope.new = function() {
-        save_first("Save current plan before creating new plan?").then(() => {
+        switch_plan().then(() => {
           AQ.User.current()
             .then(user => {
               $scope.current_user = user;
@@ -558,7 +559,7 @@
             "Are you sure you want to cancel all not-completed operations?"
           )
         ) {
-          $scope.plan.cancel("Canceled via user inteface").then(() => {
+          $scope.plan.cancel("Canceled via user interface").then(() => {
             $scope.reload();
           });
         }
@@ -637,7 +638,7 @@
       $scope.delete_folder = function(name) {
         if (
           window.confirm(
-            "Are you sure you want to deleted this folder? Plans in it will be moved to 'Unsorted'."
+            "Are you sure you want to delete this folder? Plans in it will be moved to 'Unsorted'."
           )
         ) {
           var plans = aq.where($scope.plans, plan => plan.folder == name);

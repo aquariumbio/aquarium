@@ -203,9 +203,9 @@ class OperationTypesController < ApplicationController
         next if values.empty?
 
         if io.array
-          aft = AllowableFieldType.find_by_id(values[0][:allowable_field_type_id])
+          aft = AllowableFieldType.find_by(id: values[0][:allowable_field_type_id])
           samples = values.collect do |fv|
-            Sample.find_by_id(fv[:child_sample_id])
+            Sample.find_by(id: fv[:child_sample_id])
           end
           actual_fvs = op.set_property(io.name, samples, io.role, true, aft)
           raise "Nil value Error: Could not set #{values}" unless actual_fvs
@@ -214,8 +214,8 @@ class OperationTypesController < ApplicationController
 
           test_fv = values.first
           if io.sample?
-            aft = AllowableFieldType.find_by_id(test_fv[:allowable_field_type_id])
-            op.set_property(test_fv[:name], Sample.find_by_id(test_fv[:child_sample_id]), test_fv[:role], true, aft)
+            aft = AllowableFieldType.find_by(id: test_fv[:allowable_field_type_id])
+            op.set_property(test_fv[:name], Sample.find_by(id: test_fv[:child_sample_id]), test_fv[:role], true, aft)
             raise "Active Record Error: Could not set #{test_fv}: #{op.errors.full_messages.join(', ')}" unless op.errors.empty?
           elsif io.number?
             op.set_property(io.name, test_fv[:value].to_f, io.role, true, nil)

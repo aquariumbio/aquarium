@@ -11,9 +11,7 @@ FactoryBot.define do
     category { 'the_test_category' }
 
     after(:create) do |operation_type, evaluator|
-      if evaluator.source && evaluator.user
-        operation_type.add_source(content: evaluator.source, user: evaluator.user)
-      end
+      operation_type.add_source(content: evaluator.source, user: evaluator.user) if evaluator.source && evaluator.user
     end
   end
 end

@@ -74,7 +74,7 @@ class PlansController < ApplicationController
         redirect_to plans_url(params)
       end
       format.json do
-        p = Plan.find_by_id(params[:id])
+        p = Plan.find_by(id: params[:id])
         if p
           ps = Serialize.serialize(p)
           logger.info "Completed serialize in #{Time.now - s}s"
@@ -127,16 +127,16 @@ class PlansController < ApplicationController
     if data.class == Array
       data.collect { |str| Sample.find(sid(str)) }
     else
-      Sample.find_by_id(sid(data))
+      Sample.find_by(id: sid(data))
     end
   end
 
   def routing_value(route)
 
     if route.class == String
-      Sample.find_by_id(sid(route))
+      Sample.find_by(id: sid(route))
     else
-      route.keys.collect { |k| Sample.find_by_id(sid(route[k])) }
+      route.keys.collect { |k| Sample.find_by(id: sid(route[k])) }
     end
 
   end

@@ -193,13 +193,13 @@ class Wizard < ActiveRecord::Base
   end
 
   def self.wizard_for(locstr)
-    find_by_name(locstr.split('.').first)
+    find_by(name: locstr.split('.').first)
   end
 
   def self.find_locator(locstr)
     wiz = wizard_for locstr
     n = wiz.location_to_int locstr
-    Locator.where(wizard_id: wiz.id, number: n).first
+    Locator.find_by(wizard_id: wiz.id, number: n)
   end
 
 end

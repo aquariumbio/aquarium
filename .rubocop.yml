@@ -1,16 +1,14 @@
 inherit_from: .rubocop_todo.yml
 
+require: rubocop-rails
+
 AllCops:
   Exclude:
-    - db/schema.rb
-    - db/migrate/*
-    - bin/*
-    - node_modules/*
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'script/**/*'
+    - 'node_modules/**/*'
   TargetRubyVersion: 2.6
-  TargetRailsVersion: 4.2
-
-Rails:
-  Enabled: true
 
 Layout/EmptyLinesAroundBlockBody:
   Enabled: false

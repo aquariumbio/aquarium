@@ -45,10 +45,10 @@ module Krill
           next unless operation
 
           operation.temporary[table_input[:key].to_sym] = if table_input[:type] == 'number'
-                                                   table_input[:value].to_f
-                                                 else
-                                                   table_input[:value]
-                                                 end
+                                                            table_input[:value].to_f
+                                                          else
+                                                            table_input[:value]
+                                                          end
         end
 
         # return the technician input
