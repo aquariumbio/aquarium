@@ -53,7 +53,7 @@ $row-height: 18px;
       }
 
       #searched_item {
-        background-color: $sample-highlight-color
+        background-color: $sample-highlight-color;
       }
 
       li:before {
@@ -493,14 +493,20 @@ $row-height: 18px;
   }
 }
 
-
 // Style for item's pop-up dialog
 md-toolbar:not(.md-menu-toolbar) {
   background-color: $button-color;
 }
 
 .item-label {
-  color: white
+  color: white;
 }
 
-
+// override md-tooltip style for search
+.search-tooltip {
+  background-color: $tooltip-color !important;
+  border-radius: 3px !important;
+  color: $tooltip-text-color !important;
+  padding: 5px !important;
+  text-align: center !important;
+}
