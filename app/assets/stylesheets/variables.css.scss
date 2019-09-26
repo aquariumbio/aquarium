@@ -3,10 +3,13 @@ $error-highlight-color: #ffa500;
 $lightgray: #999;
 $view-selection-color: #b5d7ea;
 $selection-highlight-color: #d2f8d2;
+$sample-highlight-color: #e8fbe8;
+$sample-highlight-border: #a6f1a6;
 $main-navbar-color: #043d5e;
 $sub-navbar-color: #097bbc;
 $table-header-color: #136390;
 $button-color: #065683;
+$technician-step-color: #067e02;
 
 // Technician colors
 $plain-text-color: #000;
@@ -27,3 +30,5 @@ $plan-io-invalid-color: #fff;
 $plan-io-valid-color: #36cf36;
 $plan-io-stroke-color: #000;
 
+$tooltip-color: $main-navbar-color;
+$tooltip-text-color: #fff;

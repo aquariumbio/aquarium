@@ -184,7 +184,7 @@ AQ.Job.record_methods.abort = function() {
 }
 
 AQ.Job.active_jobs = function() {
-
+  // TODO: make this handle error
   return new Promise(function(resolve,reject) {
 
     AQ.http.get("/krill/jobs").then(response => {

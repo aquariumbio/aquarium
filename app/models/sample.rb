@@ -230,4 +230,17 @@ class Sample < ActiveRecord::Base
 
   end
 
+  # scopes for searching Samples
+  def self.with_sample_type(sample_type:)
+    where(sample_type_id: sample_type.id)
+  end
+
+  def self.for_project(project:)
+    where(project: project)
+  end
+
+  def self.owned_by(user:)
+    where(user_id: user.id)
+  end
+
 end

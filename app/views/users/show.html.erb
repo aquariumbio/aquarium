@@ -94,7 +94,7 @@
           <div ng-messages="!fullname.$error">
             <div ng-message="required">This is required.</div>
             <div ng-message="md-maxlength">The user name must be less than 255 characters long.</div>
-        </div>
+          </div>
         </md-input-container>
 
         <md-input-container>
@@ -102,18 +102,14 @@
           <input name='email' ng-model="user.params.email.value" ng-change="user.changed = true" minlength="6" maxlength="255" ng-pattern="/^.+@.+\..+$/">
           <div ng-messages="email.$error"></div>
           <div ng-messages="!email.$error">
-            <div ng-message-exp="['minlength', 'maxlength']">Your email must be 6 to 255 characters long.</div>
+            <div ng-message-exp="['minlength', 'maxlength']">Your email must be between 6 and 255 characters long.</div>
             <div ng-message='pattern'>Your email must look like a valid e-mail address.</div>
-            </div>
+          </div>
         </md-input-container>
         
         <md-input-container>
           <label>Phone Number</label>
-          <input name='phone' ng-model="user.params.phone.value" ng-change="user.changed = true" ng-pattern="number">
-          <div ng-messages="phone.$error"></div>
-          <div ng-messages="!phone.$error">
-            <div ng-message="pattern">Please enter a valid phone number.</div>
-          </div>
+          <input name='phone' ng-model="user.params.phone.value" ng-change="user.changed = true">
         </md-input-container>        
         </md-input-container>    
 

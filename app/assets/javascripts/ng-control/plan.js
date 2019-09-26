@@ -407,7 +407,8 @@
               )
               .ariaLabel("Switch plans?")
               .ok("Yes")
-              .cancel("Cancel");
+              .cancel("Cancel")
+              .clickOutsideToClose(true);
 
             $mdDialog.show(dialog).then(() => resolve(), () => null);
           } else {
