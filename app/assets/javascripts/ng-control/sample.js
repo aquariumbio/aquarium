@@ -106,54 +106,49 @@
       };
 
       $scope.toggle = function(sample) {
-        if ( !sample.edit ) {
+        if (!sample.edit) {
           if ($scope.views.search.sample_type || $scope.views.search.query) {
-            if ( sample.open ) {
+            if (sample.open) {
               sample.open = false;
             } else {
-              sample.find(sample.id,function(sample) {
+              sample.find(sample.id, function(sample) {
                 sample.open = true;
               });
             }
-          } 
-          else if ($scope.views.search.item_id) {
-            if ( sample.open ) {
+          } else if ($scope.views.search.item_id) {
+            if (sample.open) {
               sample.open = false;
             } else {
-              sample.find(sample.id,function(sample) {
+              sample.find(sample.id, function(sample) {
                 sample.open = true;
-                $scope.toggle_inventory(sample,true)
+                $scope.toggle_inventory(sample, true);
               });
             }
-          }
-          else {
-            if ( sample.open ) {
+          } else {
+            if (sample.open) {
               sample.open = false;
             } else {
-              sample.find(sample.id,function(sample) {
-                sample.open = true
+              sample.find(sample.id, function(sample) {
+                sample.open = true;
               });
-            }           
+            }
           }
         }
-      }
+      };
 
-      $scope.toggle_inventory = function(sample,val) {
-
-        if ( val ) sample.inventory = val;
+      $scope.toggle_inventory = function(sample, val) {
+        if (val) sample.inventory = val;
         sample.loading_inventory = true;
-  
-        if ( !val && !sample.edit && sample.inventory ) {
+
+        if (!val && !sample.edit && sample.inventory) {
           sample.inventory = false;
-        } else if ( val || !sample.edit ) {
+        } else if (val || !sample.edit) {
           sample.get_inventory(function() {
-            sample.loading_inventory = false;            
+            sample.loading_inventory = false;
             sample.inventory = true;
           });
         }
-  
-      } 
-  
+      };
 
       $scope.new_item = function(sample, container) {
         $http
