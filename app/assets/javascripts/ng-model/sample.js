@@ -121,15 +121,15 @@ Sample.prototype.set_defaults = function() {
   return this;
 };
 
-Sample.prototype.new = function(stid, promise) {
+Sample.prototype.new = function(sample_type_id, promise) {
   var sample = this;
 
-  new SampleType(this.http).find(stid, function(sample_type) {
+  new SampleType(this.http).find(sample_type_id, function(sample_type) {
     sample.name = "new_" + sample_type.name.toLowerCase();
     sample.description = "New sample type description";
     sample.field_values = [];
     sample.sample_type = sample_type;
-    sample.sample_type_id = stid;
+    sample.sample_type_id = sample_type_id;
     sample.set_defaults();
 
     if (promise) {
