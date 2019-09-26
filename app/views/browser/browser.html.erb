@@ -91,7 +91,7 @@
           <div flex>
             <md-menu ng-if="samples.length == 0">
               <md-button class='md-raised' ng-click="$mdMenu.open(ev)">Choose Sample Type</md-button>
-          
+
               <md-menu-content>
                   <md-menu-item ng-repeat="st in sample_types">
                     <md-button ng-click="new_sample(st)">{{st.name}}</md-button>
