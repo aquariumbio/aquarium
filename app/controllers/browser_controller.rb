@@ -158,7 +158,7 @@ class BrowserController < ApplicationController
 
     puts 'SAMPLE COUNT: ' + samples.length.to_s
     if params[:item_id].present?
-      item = Item.find_by_id(params[:item_id].to_i)
+      item = Item.find_by(id: params[:item_id].to_i)
       if item
         sample_id_list = if item.collection?
                            collection = item.becomes Collection
@@ -185,7 +185,7 @@ class BrowserController < ApplicationController
     end
     puts 'SAMPLE COUNT: ' + samples.length.to_s
     if params[:sample_type].present?
-      sample_type = SampleType.find_by_name(params[:sample_type])
+      sample_type = SampleType.find_by(name: params[:sample_type])
       samples = if sample_type
                   samples.with_sample_type(sample_type: sample_type)
                 else
