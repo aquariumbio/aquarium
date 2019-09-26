@@ -109,9 +109,9 @@
         <%= link_to "Manager", operations_path %>
       </md-button>      
 
-      <md-button href="/browser" aria-label="Inventory"
-                 class="main-button <%= yield(:title) == 'Inventory' ? 'underlined' : '' %>">
-        <a href="/browser">Samples</a>
+      <md-button href="/browser" aria-label="Samples"
+                 class="main-button <%= yield(:title) == 'Samples' ? 'underlined' : '' %>">
+        <%= link_to "Samples", browser_path %>
       </md-button>
 
       <% if current_user && current_user.is_admin %>        

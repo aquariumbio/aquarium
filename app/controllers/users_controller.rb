@@ -52,7 +52,7 @@ class UsersController < ApplicationController
 
     else
 
-      @user = User.find_by_login(params[:user][:login])
+      @user = User.find_by(login: params[:user][:login])
       @user.password = params[:user][:password]
       @user.password_confirmation = params[:user][:password_confirmation]
       if @user.save

@@ -178,6 +178,15 @@ class Collection < Item
     pas[0] if pas.length == 1
   end
 
+  # Return all parts for this collection
+  #
+  # @return [Array]
+  def parts
+    PartAssociation.where(collection_id: id).collect do |association|
+      association.part
+    end
+  end
+
   # Return the matrix of data associations associated with the given key
   # @param key [String]
   # @return [Array] an array of array of {DataAssociation}s
@@ -306,7 +315,7 @@ class Collection < Item
 
   # @private
   def part_type
-    @part_type ||= ObjectType.find_by_name('__Part')
+    @part_type ||= ObjectType.find_by(name: '__Part')
   end
 
   # Returns first Array element from #find
@@ -368,7 +377,7 @@ class Collection < Item
 
     if ctype.is_a?(String)
       name = ctype
-      o = ObjectType.find_by_name(name)
+      o = ObjectType.find_by(name: name)
     else
       o = ctype
     end
@@ -382,7 +391,7 @@ class Collection < Item
 
     if o
       i.object_type_id = o.id
-      wiz = Wizard.find_by_name(o.prefix)
+      wiz = Wizard.find_by(name: o.prefix)
       locator = wiz.next if wiz
       i.set_primitive_location locator.to_s if wiz
     end

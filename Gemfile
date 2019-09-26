@@ -22,6 +22,7 @@ gem 'rack-cors', require: 'rack/cors'
 
 # Style enforcer and linter
 gem 'rubocop'
+gem 'rubocop-rails'
 
 # For documentation
 gem 'yard', '>= 0.9.20'

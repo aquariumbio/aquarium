@@ -29,7 +29,7 @@ RSpec.describe FieldValue, type: :model do
       stripwell = example_collection
       gel = example_collection 'gel_type'
 
-      s = SampleType.find_by_name('Fragment').samples.sample
+      s = SampleType.find_by(name: 'Fragment').samples.sample
       expect(s.id).to_not be_nil
       stripwell.set 0, 0, s
       expect(stripwell.part(0, 0)).to_not be_nil

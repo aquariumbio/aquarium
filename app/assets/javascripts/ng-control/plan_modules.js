@@ -16,7 +16,7 @@ AQ.Plan.record_methods.visible = function(obj) {
       if (!obj.parent_id) {
         obj.parent_id = 0;
       }
-      return obj.id != 0 && obj.parent_id == plan.current_module.id;
+      return obj.id != 0 && obj.parent_id === plan.current_module.id;
 
     case "Wire":
       if (!obj.from_op.parent_id) {
@@ -26,8 +26,8 @@ AQ.Plan.record_methods.visible = function(obj) {
         obj.to_op.parent_id = 0;
       }
       return (
-        obj.from_op.parent_id == plan.current_module.id &&
-        obj.to_op.parent_id == plan.current_module.id
+        obj.from_op.parent_id === plan.current_module.id &&
+        obj.to_op.parent_id === plan.current_module.id
       );
   }
 };
@@ -75,8 +75,8 @@ AQ.Plan.record_methods.create_module = function() {
     // collect wires that connect things to selected module to newly created module
     aq.each(current.wires, wire => {
       if (
-        wire.from_module == selected_module ||
-        wire.to_module == selected_module
+        wire.from_module === selected_module ||
+        wire.to_module === selected_module
       ) {
         if (!plan.wire_in_module(current, wire)) {
           wires_to_be_moved.push(wire);
@@ -125,7 +125,7 @@ AQ.Plan.record_methods.wire_in_module = function(current, wire) {
 
   console.log(current.id, p1, p2);
 
-  return p1 == current.id && p2 == current.id;
+  return p1 === current.id && p2 === current.id;
 };
 
 AQ.Plan.record_methods.add_module_wires_from_real = function(new_module) {
@@ -134,8 +134,8 @@ AQ.Plan.record_methods.add_module_wires_from_real = function(new_module) {
 
   aq.each(plan.wires, w => {
     if (
-      w.from_op.parent_id == current.id &&
-      w.to_op.parent_id == new_module.id
+      w.from_op.parent_id === current.id &&
+      w.to_op.parent_id === new_module.id
     ) {
       var new_io = new_module.add_input();
       plan.connect(w.from, w.from_op, new_io, new_module);
@@ -147,8 +147,8 @@ AQ.Plan.record_methods.add_module_wires_from_real = function(new_module) {
 
   aq.each(plan.wires, w => {
     if (
-      w.from_op.parent_id == new_module.id &&
-      w.to_op.parent_id == current.id
+      w.from_op.parent_id === new_module.id &&
+      w.to_op.parent_id === current.id
     ) {
       var new_io = new_module.add_output();
       plan.current_module = new_module;
@@ -167,10 +167,10 @@ AQ.Plan.record_methods.add_module_wires_from_module_wires = function(
 
   aq.each_in_reverse(current.wires, w => {
     if (
-      (w.from_obj.parent_id == current.id &&
-        w.to_obj.parent_id == new_module.id) ||
-      (w.from_obj.parent_id == current.parent_id &&
-        w.to_obj.parent_id == new_module.id)
+      (w.from_obj.parent_id === current.id &&
+        w.to_obj.parent_id === new_module.id) ||
+      (w.from_obj.parent_id === current.parent_id &&
+        w.to_obj.parent_id === new_module.id)
     ) {
       console.log("Building new wires for " + w.to_s);
 
@@ -185,10 +185,10 @@ AQ.Plan.record_methods.add_module_wires_from_module_wires = function(
 
   aq.each(current.wires, w => {
     if (
-      (w.from_obj.parent_id == new_module.id &&
-        w.to_obj.parent_id == current.id) ||
-      (w.from_obj.parent_id == new_module.id &&
-        w.to_obj.parent_id == current.parent_id)
+      (w.from_obj.parent_id === new_module.id &&
+        w.to_obj.parent_id === current.id) ||
+      (w.from_obj.parent_id === new_module.id &&
+        w.to_obj.parent_id === current.parent_id)
     ) {
       console.log("Building new wires for " + w.to_s);
 
@@ -223,10 +223,10 @@ AQ.Plan.record_methods.delete_old_module_wires = function(new_module) {
 
 AQ.Plan.record_methods.uses_module = function(w, new_module) {
   return (
-    (w.from_module && w.from_module.parent_id == new_module.id) ||
-    (w.from_op && w.from_op.parent_id == new_module.id) ||
-    (w.to_module && w.to_module.parent_id == new_module.id) ||
-    (w.to_op && w.to_op.parent_id == new_module.id)
+    (w.from_module && w.from_module.parent_id === new_module.id) ||
+    (w.from_op && w.from_op.parent_id === new_module.id) ||
+    (w.to_module && w.to_module.parent_id === new_module.id) ||
+    (w.to_op && w.to_op.parent_id === new_module.id)
   );
 };
 
@@ -256,7 +256,7 @@ AQ.Plan.record_methods.find_module = function(id) {
   var plan = this,
     m;
 
-  return aq.find(plan.modules, mod => mod.id == id);
+  return aq.find(plan.modules, mod => mod.id === id);
 };
 
 AQ.Plan.record_methods.path_to_current_module = function() {

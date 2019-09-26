@@ -91,12 +91,12 @@
 
     <span ng-if="!not_found">
     <span ng-if="job.started">
-      <span class="step-number">
-        <span ng-if="job.backtrace.array[job.state.index].type == 'display'">{{job.state.index + 1}}</span>
-        <span ng-if="job.backtrace.array[job.state.index].type == 'complete'">✓</span>
-        <span ng-if="job.backtrace.array[job.state.index].type == 'error'">!</span>
-        <span ng-if="job.backtrace.array[job.state.index].type == 'aborted'">!</span>
-        <span ng-if="job.backtrace.length == 0">!</span>
+      <span >
+        <span class="step-number" ng-if="job.backtrace.array[job.state.index].type == 'display'">{{job.state.index + 1}}</span>
+        <span class="step-number" ng-if="job.backtrace.array[job.state.index].type == 'complete'">✓</span>
+        <span class="error-step-number" ng-if="job.backtrace.array[job.state.index].type == 'error'" >&#9888;</span>
+        <span class="error-step-number" ng-if="job.backtrace.array[job.state.index].type == 'aborted'">&#9888;</span>
+        <span class="error-step-number" ng-if="job.backtrace.length == 0">&#9888;</span>
       </span>
       <span class="step-title">{{job.operations[0].operation_type.name}}</span>
     </span>

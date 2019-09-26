@@ -40,12 +40,12 @@ RSpec.describe SampleType, type: :model do
 
       expect(ft2.errors.empty?).to be true
 
-      aft1 = ft2.allowable_field_types.create sample_type_id: SampleType.find_by_name('Primer').id
+      aft1 = ft2.allowable_field_types.create sample_type_id: SampleType.find_by(name: 'Primer').id
       aft1.save
 
       expect(aft1.errors.empty?).to be true
 
-      aft2 = ft2.allowable_field_types.create sample_type_id: SampleType.find_by_name('Primer').id
+      aft2 = ft2.allowable_field_types.create sample_type_id: SampleType.find_by(name: 'Primer').id
       aft2.save
 
     end
