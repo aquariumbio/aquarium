@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 class AccountsController < ApplicationController
 
   before_filter :signed_in_user
 
   def index
 
-    @user = User.find_by_id(params[:uid]) || current_user
+    @user = User.find_by(id: params[:uid]) || current_user
 
     @month = params[:month] || Date.today.month
     @year = params[:year] || Date.today.year
@@ -15,7 +17,6 @@ class AccountsController < ApplicationController
     @prev_month = @start_date.prev_month
 
     if @user == current_user || current_user.is_admin
-
       @all_rows = Account.where(
         'user_id = ?',
         @user.id
@@ -58,53 +59,40 @@ class AccountsController < ApplicationController
             .inject(0) { |sum, x| sum + x }
         }
       end
-
     else
-
       @unauthorized = true
       @rows = []
-
     end
-
   end
 
   def deposit
-
-    if current_user.is_admin
-
-      if params[:amount] != '' && params[:amount].to_f > 0
-
-        user = User.find(params[:uid])
-        budget = Budget.find(params[:bid])
-        description = "#{current_user.name} deposited $#{params[:amount]} associated budget #{budget.name}."
-
-        row = Account.new(
-          user_id: user.id,
-          category: nil,
-          amount: params[:amount].to_f,
-          budget_id: budget.id,
-          description: description,
-          job_id: -1,
-          transaction_type: 'credit'
-        )
-
-        row.save
-
-        flash[:notice] = description
-
-      else
-        flash[:notice] = "Could not deposit amount '#{params[:amount]}'."
-      end
-
-      redirect_to :accounts
-
-    else
-
+    unless current_user.is_admin
       flash[:error] = 'Not admin'
       redirect_to :accounts
-
+      return
     end
 
+    unless params[:amount] != '' && params[:amount].to_f > 0
+      flash[:notice] = "Could not deposit amount '#{params[:amount]}'."
+      redirect_to :accounts
+      return
+    end
+
+    user = User.find(params[:uid])
+    budget = Budget.find(params[:bid])
+    description = "#{current_user.name} deposited $#{params[:amount]} associated budget #{budget.name}."
+    row = Account.new(
+      user_id: user.id,
+      category: nil,
+      amount: params[:amount].to_f,
+      budget_id: budget.id,
+      description: description,
+      job_id: -1,
+      transaction_type: 'credit'
+    )
+    row.save
+    flash[:notice] = description
+    redirect_to :accounts
   end
 
 end

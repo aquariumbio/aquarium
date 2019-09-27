@@ -1,4 +1,4 @@
-# coding: utf-8
+# frozen_string_literal: true
 
 Bioturk::Application.routes.draw do
 
@@ -7,8 +7,8 @@ Bioturk::Application.routes.draw do
   get '/import', to: 'import#index'
 
   post '/publish/check_repo', to: 'publish#check_repo'
-  post '/publish/publish', to: 'publish#publish'  
-  post '/publish/export', to: 'publish#export'        
+  post '/publish/publish', to: 'publish#publish'
+  post '/publish/export', to: 'publish#export'
   get '/publish', to: 'publish#index'
 
   post 'static_pages/explorer_jobs'
@@ -129,7 +129,7 @@ Bioturk::Application.routes.draw do
 
   resources :posts, only: %i[index create]
 
-  get 'wizards/contents/:id',               to: 'wizards#contents'
+  get 'wizards/contents/:id', to: 'wizards#contents'
   resources :wizards
 
   get 'item_list', to: 'items#item_list'
@@ -142,7 +142,7 @@ Bioturk::Application.routes.draw do
   put '/collections/:object_type_id', to: 'collections#new_collection'
   post '/collections/save_data_associations', to: 'collections#save_data_associations'
   post '/collections/:id/assign_sample', to: 'collections#assign_sample'
-  get '/collections/:id/raw_matrix', to: 'collections#raw_matrix'  
+  get '/collections/:id/raw_matrix', to: 'collections#raw_matrix'
   post '/collections/:id/delete_selection', to: 'collections#delete_selection'
   get '/collections/:id', to: 'collections#show'
 
@@ -205,7 +205,7 @@ Bioturk::Application.routes.draw do
   get '/signin',      to: 'sessions#new'
   delete '/signout',  to: 'sessions#destroy'
 
-  get '/dismiss',      to: 'static_pages#dismiss'
+  get '/dismiss', to: 'static_pages#dismiss'
 
   get '/static_pages/direct_purchase', to: 'static_pages#direct_purchase'
 

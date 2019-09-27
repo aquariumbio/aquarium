@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 require 'securerandom'
 
@@ -39,6 +39,7 @@ def generic_wizard(b, c)
   wiz.description = 'A test wizard'
   wiz.save
   raise wiz.errors.full_messages.join(', ') unless wiz.errors.empty?
+
   wiz
 end
 
@@ -47,6 +48,7 @@ def generic_sample(st)
   samp = Sample.new sample_type_id: st.id, name: sample_name, description: 'A test sample', project: 'Test', user_id: 1
   samp.save
   raise samp.errors.full_messages.join(', ') unless samp.errors.empty?
+
   samp
 end
 
@@ -63,11 +65,13 @@ def generic_object(_st, wiz)
   ot.sample_type_id
   ot.save
   raise ot.errors.full_messages.join(', ') unless ot.errors.empty?
+
   ot
 end
 
 def make_item(ot, s)
   i = Item.make({ quantity: 1, inuse: 0 }, object_type: ot, sample: s)
   raise i.errors.full_messages.join(',') unless i.errors.empty?
+
   i
 end

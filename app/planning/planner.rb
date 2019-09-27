@@ -1,11 +1,11 @@
-
+# frozen_string_literal: true
 
 class Planner
 
   attr_accessor :errors
 
   def initialize(plan_id)
-    @plan = Plan.includes(operations: :operation_type).find_by_id(plan_id)
+    @plan = Plan.includes(operations: :operation_type).find_by(id: plan_id)
     @errors = []
     @errors << "Could not find plan #{plan_id}" unless @plan
   end
@@ -22,7 +22,6 @@ class Planner
         next unless op.status == 'planning'
 
         op.status = if leaf? op
-
                       if op.operation_type.on_the_fly?
                         'primed'
                       else
@@ -33,23 +32,17 @@ class Planner
                                     end
                       end
 
-                    else
-
-                      # if the op has an on the fly pred
-                      if ready? op
-                        if op.precondition_value
-                          'pending'
-                        else
-                          'delayed'
-                        end
+                    elsif ready? op # if the op has an on the fly pred
+                      if op.precondition_value
+                        'pending'
                       else
-                        'waiting'
+                        'delayed'
                       end
-
+                    else
+                      'waiting'
                     end
 
         op.save
-
       end
 
       @plan.status = nil # for historical reasons, this means the plan is active

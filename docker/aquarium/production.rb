@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Bioturk::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -46,7 +48,7 @@ Bioturk::Application.configure do
     storage: :s3,
     s3_protocol: 'http',
     s3_permissions: 'private',
-    s3_region: 'us-west-1', 
+    s3_region: 'us-west-1',
     s3_credentials: {
       bucket: 'development',
       access_key_id: 'aquarium_minio',
@@ -54,7 +56,7 @@ Bioturk::Application.configure do
     },
     s3_host_name: 'localhost:9000',
     s3_options: {
-      endpoint: "http://localhost:9000", # for aws-sdk
+      endpoint: 'http://localhost:9000', # for aws-sdk
       force_path_style: true # for aws-sdk (required for minio)
     }
   }

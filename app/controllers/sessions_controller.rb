@@ -1,17 +1,17 @@
+# frozen_string_literal: true
 
-
-class SessionsController < ApplicationController 
+class SessionsController < ApplicationController
 
   def new
 
     response.headers['Status'] = 'Not-logged-in'
     render layout: 'blank.html.erb'
-    
+
   end
 
   def create
 
-    user = User.find_by_login(params[:session][:login].downcase)
+    user = User.find_by(login: params[:session][:login].downcase)
 
     if user && user.authenticate(params[:session][:password])
       sign_in user

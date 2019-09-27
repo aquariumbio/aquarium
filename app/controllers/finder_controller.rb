@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FinderController < ApplicationController
 
   before_filter :signed_in_user
@@ -13,7 +15,7 @@ class FinderController < ApplicationController
     if params[:filter] != ''
 
       # Determine if filter an object type
-      ot = ObjectType.find_by_name(params[:filter])
+      ot = ObjectType.find_by(name: params[:filter])
       samp = if ot && ot.sample_type
                ot.sample_type.name
              else
@@ -33,14 +35,17 @@ class FinderController < ApplicationController
 
   def samples
     spec = JSON.parse(params[:spec], symbolize_names: true)
-    s = Sample.joins(:sample_type).where(project: spec[:project], sample_types: { name: spec[:type] })
-    render json: (s.collect { |s| { id: s.id, name: s.name } }).uniq.sort { |a, b| a[:name] <=> b[:name] }
+    sample_list = Sample.joins(:sample_type).where(
+      project: spec[:project],
+      sample_types: { name: spec[:type] }
+    )
+    render json: (sample_list.collect { |s| { id: s.id, name: s.name } }).uniq.sort { |a, b| a[:name] <=> b[:name] }
   end
 
   def containers
     spec = JSON.parse(params[:spec], symbolize_names: true)
     logger.info 'spec = ' + spec.to_json
-    filter = ObjectType.find_by_name(params[:filter])
+    filter = ObjectType.find_by(name: params[:filter])
 
     con = if filter
             (ObjectType
@@ -68,7 +73,7 @@ class FinderController < ApplicationController
 
     if ot.handler == 'collection'
 
-      sample = Sample.find_by_name(spec[:sample])
+      sample = Sample.find_by(name: spec[:sample])
 
       render json: (Collection.joins(:object_type)
         .where(object_types: { id: ot.id })
@@ -100,17 +105,14 @@ class FinderController < ApplicationController
   end
 
   def type
-
     t = params[:type].split '|'
 
-    if SampleType.find_by_name(t.first)
+    if SampleType.find_by(name: t.first)
       render json: { type: 'Samples' }
+    elsif ObjectType.find_by(name: t.first)
+      render json: { type: 'Items' }
     else
-      if ObjectType.find_by_name(t.first)
-        render json: { type: 'Items' }
-      else
-        render json: { type: 'Unknown' }
-      end
+      render json: { type: 'Unknown' }
     end
   end
 

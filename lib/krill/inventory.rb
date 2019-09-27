@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 module Krill
 
@@ -43,10 +43,11 @@ module Krill
     # @param name [String]  the name of the sample that will be instantiated into item
     # @param spec [String]  the name of the ObjectType that will be instantiated into item
     def new_sample(name, spec)
-      s = Sample.find_by_name(name)
-      ot = ObjectType.find_by_name(spec[:as])
+      s = Sample.find_by(name: name)
+      ot = ObjectType.find_by(name: spec[:as])
       raise "Unknown sample #{name}" unless s
       raise "Unknown container #{spec[:as]}" unless ot
+
       Item.make({ quantity: 1, inuse: 0 }, sample: s, object_type: ot)
     end
 
@@ -78,6 +79,7 @@ module Krill
     # @param items [Array<Item>]  list of items to sort
     def sort_by_location(items)
       return [] if items.empty?
+
       locations = items.map { |item| item.location.split('.') }
       sorted_locations = locations.sort do |loc1, loc2|
         comp = loc1[0] <=> loc2[0]
@@ -92,8 +94,6 @@ module Krill
     def boxes_for(items)
 
       boxes = {}
-      loc_matched_items = []
-      extras = []
 
       r = Regexp.new '(M20|M80|SF[0-9]*)\.[0-9]+\.[0-9]+\.[0-9]+'
 
@@ -135,10 +135,11 @@ module Krill
       end
 
       unless boxes.empty?
+        contents = boxes.keys.collect { |b| { content: b, check: true } }
         show do
           title 'Boxes Required'
           note 'You will need the following boxes from the freezer(s)'
-          table (boxes.keys.collect { |b| { content: b, check: true } }).each_slice(6).to_a
+          table contents.each_slice(6).to_a
         end
       end
 
@@ -151,20 +152,19 @@ module Krill
         end
       end
 
-      unless extras.empty?
-        takes = extras.collect(&:features)
-        show do
-          title extra_title
-          takes.each do |t|
-            item t
-          end
-          raw user_shows
-        end
-      end
+      return if extras.empty?
 
+      takes = extras.collect(&:features)
+      show do
+        title extra_title
+        takes.each do |t|
+          item t
+        end
+        raw user_shows
+      end
     end
 
-    # Associate the item with the job running the protocol, until it is released (see {release}). 
+    # Associate the item with the job running the protocol, until it is released (see {release}).
     # It also "touches" the item by the job, so that one can later determine that the item was used by the job.
     #
     # @param items [Array<Items>]  the items that will be associated with this job

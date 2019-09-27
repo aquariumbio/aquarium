@@ -1,24 +1,17 @@
+# frozen_string_literal: true
+
 class JsonController < ApplicationController
 
   before_filter :signed_in_user
 
   def method_ok(m)
+    return false unless m
+    raise "Illegal method #{m} requested from front end." unless %w[all where find find_by_name new].member? m
 
-    if m
-
-      if %w[all where find find_by_name new].member? m
-        true
-      else
-        raise "Illegal method #{m} requested from front end."
-      end
-    else
-      false
-    end
-
+    true
   end
 
   def index
-
     result = Object.const_get(params[:model])
     result = result.find(params[:id]) if params[:id]
     result = result.send(params[:method], *params[:arguments]) if method_ok(params[:method]) && params[:method] != 'where'
@@ -36,7 +29,7 @@ class JsonController < ApplicationController
     result = result.as_json(include: params[:include], methods: params[:methods]) if params[:methods] && params[:include]
 
     render json: result
-  rescue Exception => e
+  rescue StandardError => e
     logger.info e.inspect
     logger.info e.backtrace
     render json: { errors: e.to_s }, status: :unprocessable_entity
@@ -56,14 +49,13 @@ class JsonController < ApplicationController
 
     unless u.errors.empty?
       logger.info "ERRORS: #{u.errors.full_messages}"
-      render json: { error: "Got error" + u.errors.full_messages.to_s }
+      render json: { error: 'Got error' + u.errors.full_messages.to_s }
       return
     end
 
     render json: u.as_json(methods: :url)
-
   rescue StandardError => e
-    logger.error("Error in upload: #{e.to_s}")
+    logger.error("Error in upload: #{e}")
     render json: { errors: e.to_s }, status: :internal_server_error
   end
 
@@ -81,8 +73,8 @@ class JsonController < ApplicationController
 
     begin
       record.save
-    rescue ActiveRecord::RecordNotUnique => err
-      render json: { error: err.to_s },
+    rescue ActiveRecord::RecordNotUnique => e
+      render json: { error: e.to_s },
              status: :unprocessable_entity
       return
     end
@@ -120,11 +112,14 @@ class JsonController < ApplicationController
   end
 
   def items # ( sid, oid ) # This can be replaced by a call to Item.items_for sid, oid
-
-    sample = Sample.find_by_id(params[:sid])
-    ot = ObjectType.find_by_id(params[:oid])
-
-    if sample && ot
+    sample = Sample.find_by(id: params[:sid])
+    ot = ObjectType.find_by(id: params[:oid])
+    if sample
+      # TODO: this should return an error
+      unless ot
+        render json: []
+        return
+      end
 
       if ot.handler == 'collection'
         render json: Collection.parts(sample, ot).as_json(methods: :matrix)
@@ -133,27 +128,19 @@ class JsonController < ApplicationController
                            .reject { |i| i.deleted? || i.object_type_id != ot.id }
                            .as_json(include: :object_type)
       end
-
-    elsif sample && !ot
-
-      render json: []
-
     else
-
       items = Item.includes(locator: :wizard)
                   .where("object_type_id = ? AND location != 'deleted'", ot.id)
                   .limit(25)
 
       render json: items
-
     end
-  rescue Exception => e
+  rescue StandardError => e
+    # TODO: verify this is dead code: find_by_id returns nil if not found
     render json: { errors: "Could not find sample: #{e}: #{e.backtrace}" }, status: :unprocessable_entity
-
   end
 
   def current
     render json: current_user.as_json(methods: :is_admin)
   end
-
 end

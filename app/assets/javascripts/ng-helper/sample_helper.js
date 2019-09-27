@@ -51,13 +51,13 @@ SampleHelper.prototype.create_samples = function(samples,promise) {
   return this;
 }
 
-SampleHelper.prototype.spreadsheet = function(http,sample_types, sample_names, csv) {
+SampleHelper.prototype.spreadsheet = function(http, sample_types, sample_names, csv) {
 
   var lines = csv.split(/\r|\n/),
       headers = lines[0].split(','),
-      rows = lines.splice(1,lines.length),
+      rows = lines.splice(1, lines.length),
       sample_type_name = headers[0],
-      matches = aq.where(sample_types,function(st) { return st.name == sample_type_name; } ),
+      matches = aq.where(sample_types, function(st) { return st.name == sample_type_name; } ),
       sample_type,
       samples = [],
       warnings = [];
@@ -68,7 +68,7 @@ SampleHelper.prototype.spreadsheet = function(http,sample_types, sample_names, c
     throw("Could not find sample type " + sample_type_name);
   }
 
-  aq.each(rows,function(row,i) {
+  aq.each(rows, function(row,i) {
 
     var fields = row.split(',');
 
@@ -76,7 +76,7 @@ SampleHelper.prototype.spreadsheet = function(http,sample_types, sample_names, c
 
       (new Sample(http)).new(sample_type.id, function(sample) {
 
-        aq.each(headers,function(header,j) {
+        aq.each(headers, function(header,j) {
 
           if ( header == sample_type_name ) {
             sample.name = fields[j];

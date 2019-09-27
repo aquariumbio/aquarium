@@ -4,11 +4,14 @@
      class="sidebar">
 
   <div class="title">
-    <h1 class="md-title">Search Parameters</h1>
+    <h1 class="md-title">Sample Search</h1>
   </div>
 
   <div class="search-part">
     <label>Sample Name or ID</label>
+    <md-tooltip md-direction="right" class="search-tooltip">
+        Search for sample by sample name or numeric ID
+    </md-tooltip> 
     <input type="text"
            ng-model="views.search.query"
            style="width: 100%" 
@@ -17,7 +20,10 @@
   </div>
 
   <div class="search-part">
-    <label>Sample Type</label>
+    <label style="width: 40%">Sample Type</label>
+    <md-tooltip md-direction="right" class="search-tooltip">
+        Search for samples with sample type name
+    </md-tooltip> 
     <input type="text"
            ng-model="views.search.sample_type"
            style="width: 100%"
@@ -25,9 +31,29 @@
            data-search-input="sample-type"> 
   </div>
 
+  <md-input-container style="padding-top: 0">
+  <div class="search-part">
+    <label style="cursor: pointer; color: rgb(0,0,0,0.87); font-size: 14px; font-weight: 500; margin-left: 5.5px; margin-bottom: 0; transform: none">Item ID</label>
+    <md-tooltip md-direction="right" class="search-tooltip">
+      Search for sample of item by numeric item ID
+    </md-tooltip>  
+    <input  name="item_id"
+            type="text" min='1' 
+            style="width: 100%; margin-bottom: 0"
+            ng-change="user.changed = true"
+            ng-model="views.search.item_id"
+            ng-pattern="/^[0-9]+/"
+            data-search-input="find-item"> 
+  </div>
+  </md-input-container>
+
+
   <div class="search-part" layout="row">
     <div>
       <label>Project</label>
+      <md-tooltip md-direction="right" class="search-tooltip">
+        Input project name for filter
+      </md-tooltip> 
       <input type="text"
              ng-model="views.search.project"
              style="width: 70%"
@@ -43,6 +69,9 @@
   <div class="search-part" layout="row">  
     <div>
       <label>User</label>
+      <md-tooltip md-direction="right" class="search-tooltip">
+        Input user name for filter
+    </md-tooltip> 
       <input type="text"
              ng-model="views.search.user" 
              style="width: 70%" 
@@ -59,60 +88,6 @@
                ng-click="search(0); select_view('search')"
                data-search-button="search">Search</md-button> 
   </div>
-
-  <hr>
-
-  <div layout="column" class="extras">
-
-    <div layout="row"
-         layout-align="start center"
-         class="find-item">
-      <md-button style="width: 30%; margin-bottom: 0px" 
-                 class="md-raised" 
-                 ng-click="item_search()"
-                 data-search-button="find-item">
-        Find Item
-      </md-button>    
-      <input type="text" 
-             style="width: 50%"
-             ng-model="views.search.item_id"
-             data-search-input="find-item">
-    </div>
-    <hr>
-    <div layout="row"
-         layout-align="start center"
-         class="new-collection">    
-      <md-menu>
-        <md-button class="md-raised md-primary"
-          ng-click="openCollectionMenu($mdMenu, $event)"
-          id="new-collection-button"
-          data-search-button="new-collection">
-          New Collection
-        </md-button>
-        <md-menu-content>
-          <md-menu-item ng-repeat="ctype in collection_types">
-            <md-button ng-click="new_collection(ctype)"
-                       ng-attr-data-new-collection-type="{{ctype.name}}"
-                       data-search-menu="collection-types">{{ctype.name}}</md-button>
-          </md-menu-item>
-        </md-menu-content>
-      </md-menu>
-
-    </div>
-
-  </div>
-
-  <hr>
-  
-  <p style="line-height: 14pt">
-  <b>To upload a spreadsheet</b>: Click "Upload" on the left and choose a file, which will add your
-  new samples, but will not save them. Review the sample definitions and any warnings,
-  and then click "Save". Spreadsheets should be in .csv format. The first entry of the first row should
-  specify the sample type name. Remaining entries in the first row should be names of fields, the
-  word 'Project', or the word 'Description'. Fields that correspond to arrays may show up multiple times, 
-  and can be empty (in which case the entry is ignored). The remaining rows specify the samples. In the 
-  first column should be the name of the sample. All other columns correspond to their headings.
-  Subsamples can be referred to by name or id. </p>  
 
   <!-- item popup -->
   <div item="views.search.item" 

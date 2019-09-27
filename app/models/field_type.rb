@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 # Meta type of {FieldValue}.
 # An Item type, or parameter type of the inputs/outputs of an {OperationType} or of the properties of a {SampleType}.
@@ -28,14 +29,14 @@ class FieldType < ActiveRecord::Base
   #
   # @return [String]  class of parent object, as in "SampleType"
   attr_accessible :parent_class
-  
+
   attr_accessible :array, :choices, :required, :ftype, :role, :part, :routing
   attr_accessible :preferred_operation_type_id, :preferred_field_type_id
 
   validates :name, presence: true
   validates :ftype, presence: true
 
-  validates_inclusion_of :ftype, in: %w[string number url sample item json]
+  validates :ftype, inclusion: { in: %w[string number url sample item json] }
 
   def destroy
     allowable_field_types.each(&:destroy)
@@ -49,9 +50,9 @@ class FieldType < ActiveRecord::Base
   def allowed?(val)
     case ftype
     when 'string', 'url'
-      return val.class == String
+      val.is_a?(String)
     when 'number'
-      val.class == Integer || val.class == Float
+      val.is_a?(Integer) || val.is_a?(Float)
     when 'sample'
       allowable_field_types.collect { |aft| aft.sample_type.id }.member? val.sample_type_id
     when 'item'
@@ -60,7 +61,7 @@ class FieldType < ActiveRecord::Base
   end
 
   def allowable_sample_types
-    if ftype == 'sample'
+    if sample?
       allowable_field_types.collect(&:sample_type)
     else
       []
@@ -68,12 +69,12 @@ class FieldType < ActiveRecord::Base
   end
 
   def has_sample_type
-    asts = allowable_sample_types.select { |st| st }
-    !asts.empty?
+    sample_types = allowable_sample_types.select { |st| st }
+    !sample_types.empty?
   end
 
   def allowable_object_types
-    if ftype == 'item'
+    if item?
       allowable_field_types.collect(&:object_type)
     else
       []
@@ -82,6 +83,30 @@ class FieldType < ActiveRecord::Base
 
   def type
     ftype
+  end
+
+  def has_type(typename)
+    ftype == typename
+  end
+
+  def string?
+    has_type('string')
+  end
+
+  def sample?
+    has_type('sample')
+  end
+
+  def number?
+    has_type('number')
+  end
+
+  def json?
+    has_type('json')
+  end
+
+  def item?
+    has_type('item')
   end
 
   def empty?
@@ -112,7 +137,7 @@ class FieldType < ActiveRecord::Base
     results << "#{parent_name} field '#{name}' has role is #{!!role} but imported field of the same name has role = #{!!raw_field_type[:role]}" unless raw_field_type[:role] == role
     results << "#{parent_name} field '#{name}' has routing symbol is #{!!routing} but imported field of the same name has routing symbol = #{!!raw_field_type[:routing]}." unless raw_field_type[:role] == role
 
-    if ftype == 'sample'
+    if sample?
 
       l1 = allowable_field_types.collect do |aft|
         [
@@ -131,6 +156,23 @@ class FieldType < ActiveRecord::Base
 
     results
 
+  end
+
+  # Creates a hash for this field_type.
+  def export
+    {
+      ftype: type,
+      role: role,
+      name: name,
+      sample_types: allowable_field_types.collect { |aft| aft.sample_type ? aft.sample_type.name : nil },
+      object_types: allowable_field_types.collect { |aft| aft.object_type ? aft.object_type.name : nil },
+      part: part ? true : false,
+      array: array ? true : false,
+      routing: routing,
+      preferred_operation_type_id: preferred_operation_type_id,
+      preferred_field_type_id: preferred_field_type_id,
+      choices: choices
+    }
   end
 
 end

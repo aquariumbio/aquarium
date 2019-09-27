@@ -1,6 +1,6 @@
-ARG RUBY_VERSION=2.5
-ARG ALPINE_VERSION=3.8
-FROM ruby:${RUBY_VERSION}-alpine${ALPINE_VERSION} AS basebuilder
+ARG RUBY_VERSION=2.6.4
+ARG ALPINE_VERSION=3.10
+FROM ruby:${RUBY_VERSION}-alpine${ALPINE_VERSION} AS aquarium
 RUN apk update && apk add \
     bind-tools \
     build-base \
@@ -8,12 +8,18 @@ RUN apk update && apk add \
     git \
     imagemagick \
     iptables \
+    libgcrypt-dev \
+    libxml2 \
+    libxslt \
     mariadb-dev \
+    musl \
     mysql-client \
     nodejs \
     nodejs-npm \
     openjdk8-jre \
-    sqlite-dev
+    openssl \
+    sqlite-dev \
+    yarn
 
 RUN mkdir /aquarium
 
@@ -25,15 +31,22 @@ RUN mkdir -p /aquarium/shared/pids
 WORKDIR /aquarium
 
 # install js components
-RUN npm install -g bower@latest
-COPY bower.json ./bower.json
-RUN echo '{ "directory": "public/components", "allow_root": true }' > ./.bowerrc
-RUN bower install --config.interactive=false --force
+COPY package.json ./package.json
+COPY yarn.lock ./yarn.lock
 
-# install gems needed by Aquarium
+RUN yarn install --modules-folder public/node_modules && yarn cache clean
+
+# Change where bundler puts gems
+# see https://bundler.io/v2.0/guides/bundler_docker_guide.html
+ENV GEM_HOME="/usr/local/bundle"
+ENV PATH $GEM_HOME/bin:$GEM_HOME/gems/bin:$PATH
+
+# Install gems needed by Aquarium
 COPY Gemfile Gemfile.lock ./
 RUN gem update --system
-RUN gem install bundler && bundle install --jobs 20 --retry 5
+# rails 4.2.11.1 requires bundler < 2.0
+RUN gem install bundler --version '< 2.0' && \
+    bundle install --jobs 20 --retry 5
 COPY . ./
 
 # include entrypoint scripts for starting Aquarium and Krill

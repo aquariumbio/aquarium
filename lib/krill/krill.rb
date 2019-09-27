@@ -1,8 +1,10 @@
-
+# frozen_string_literal: true
 
 require_relative 'client'
 require_relative 'server'
-require_relative 'manager'
+require_relative 'protocol_sandbox'
+require_relative 'debug_manager'
+require_relative 'threaded_manager'
 require_relative 'namespace'
 require_relative 'base'
 require_relative 'show_block'

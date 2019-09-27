@@ -1,11 +1,9 @@
-
+# frozen_string_literal: true
 
 module ObjectTypesHelper
 
   def make_handler(ot)
-
     case ot.handler
-
     when 'collection'
       CollectionHandler.new ot
     when 'sample_container'
@@ -13,7 +11,6 @@ module ObjectTypesHelper
     else
       Handler.new ot
     end
-
   end
 
   class Handler
@@ -77,8 +74,8 @@ module ObjectTypesHelper
     def matrix(item)
 
       begin
-        m = JSON.parse item.data, symbolize_names: true
-      rescue Exception => e
+        m = JSON.parse(item.data, symbolize_names: true)
+      rescue JSON::ParserError
         m = nil
       end
 

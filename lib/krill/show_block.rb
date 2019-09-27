@@ -1,15 +1,15 @@
-
+# frozen_string_literal: true
 
 module Krill
 
   # The ShowBlock class implements the methods inside show blocks, which are used to interact with the technician. When
   # a show block is encountered, it is used to construct a page of instructions for the technician. Execution is suspended
   # until the user clicks "OK" in the protocol. The show method returns a ShowResponse object that contains any information
-  # entered by the user via get, select, or table inputs. 
-  # 
+  # entered by the user via get, select, or table inputs.
+  #
   # @example A show block with everything
   #   item = Item.last
-  #   response = show do 
+  #   response = show do
   #     title "Title describing what the technician should do in this step"
   #     note "Body text goes inside notes describing the details of this step of the protocol"
   #     warning "A warning will be displayed vibrantly"
@@ -74,7 +74,7 @@ module Krill
     end
 
     # Put the string s on the page, with a clickable checkbox in front of it. The user will need
-    # to click all checkboxes on a given page before the "OK" button is enabled. 
+    # to click all checkboxes on a given page before the "OK" button is enabled.
     # @param str [String]
     # @return [void]
     def check(str)
@@ -90,7 +90,7 @@ module Krill
 
     # Display a table represented by the matrix t. The method takes a 2x2 list of either numbers,
     # strings, or hashes. In the case of hashes, the following fields can be present.
-    # 
+    #
     # content: A number or string
     # check: Whether the entry is checkable, true or false
     # style: A hash containing css
@@ -98,12 +98,12 @@ module Krill
     #
     # See the [Operations](md-viewer?doc=Operations) documentation for more information about
     # how to construct tables automatically based on the inputs and outputs to a protocol's
-    # operation.    
+    # operation.
     # @param m [List]
     # @example
     #   show {
     #     table [ [ "A", "B" ], [ 1, 2 ] ]
-    #   }    
+    #   }
     # @example
     #   m = [
     #     [ "A", "Very", "Nice", { content: "Table", style: { color: "#f00" } } ],
@@ -112,8 +112,8 @@ module Krill
     #   show {
     #     title "A Table"
     #     table m
-    #   }   
-    # @return [void] 
+    #   }
+    # @return [void]
     def table(m)
       if m.class == Table
         @parts.push(table: m.all.render)
@@ -122,8 +122,8 @@ module Krill
       end
     end
 
-    # Display information about the item i -- its id, its location, its object type, and its sample type 
-    # (if any) -- so that the user can find it. 
+    # Display information about the item i -- its id, its location, its object type, and its sample type
+    # (if any) -- so that the user can find it.
     # @param i [Item]
     # @return [void]
     def item(i)
@@ -154,8 +154,8 @@ module Krill
       @parts.push(image: "#{Bioturk::Application.config.image_server_interface}#{name}")
     end
 
-    # Show a rudimentary timer. By default, the timer starts at one minute and counts down. 
-    # It starts beeping when it gets to zero, and keeps beeping until the user clicks "OK". 
+    # Show a rudimentary timer. By default, the timer starts at one minute and counts down.
+    # It starts beeping when it gets to zero, and keeps beeping until the user clicks "OK".
     # You can specify the starting number of hours, minutes, and seconds, with for example
     # The initial option can be used to set the initial time on the timer and has field
     # hours, minutes, and seconds, all numerical.
@@ -200,8 +200,10 @@ module Krill
       routing_details.each do |r|
         m = x.matrix
         raise 'm is null' unless m
+
         sid = m[r[:from][0]][r[:from][1]]
         raise "Tried to route from empty element #{[r[:from][0], r[:from][1]]} of collection #{x.id}" unless sid != -1
+
         r[:sample_name] = Sample.find(sid).name
       end
 
@@ -213,10 +215,10 @@ module Krill
 
     end
 
-    # Display an input box to the user to obtain data of some kind. If no options are supplied, 
-    # then the data is stored in a ShowResponse object returned by the **show** function with a 
-    # key called something like get_12 or get_13 (for get number 12 or get number 13). The name 
-    # of the variable name can be specified via the **var** option. A label for the input box can 
+    # Display an input box to the user to obtain data of some kind. If no options are supplied,
+    # then the data is stored in a ShowResponse object returned by the **show** function with a
+    # key called something like get_12 or get_13 (for get number 12 or get number 13). The name
+    # of the variable name can be specified via the **var** option. A label for the input box can
     # also be specified.
     #
     # @param type [String] Either "text" or "number"
@@ -236,6 +238,7 @@ module Krill
     #   z = data[:z]
     def get(type, opts = {})
       raise "First argument to get should be either 'number' or 'text'" unless type == 'number' || type == 'text'
+
       options = {
         var: "get_#{@@get_counter}",
         label: "Enter a #{type}"
@@ -246,20 +249,16 @@ module Krill
 
     # @api private
     def is_proper_array(c)
-      if c.class == Array
-        if !c.empty?
-          t = c[0].class
-          return false unless t == Integer || t == Float || t == String
-          c.each do |x|
-            return false if t != x.class
-          end
-          true
-        else
-          true
-        end
-      else
-        false
+      return false unless c.is_a?(Array)
+      return true if c.empty?
+      return false unless c[0].is_a?(Integer) || c[0].is_a?(Float) || c[0].is_a?(String)
+
+      type = c[0].class
+      c.each do |x|
+        return false unless x.is_a?(type)
       end
+
+      true
     end
 
     # Display a selection of choices for the user. The options are the same as for **get**. For example,
@@ -276,9 +275,11 @@ module Krill
     #     select [ "A", "B", "C" ], var: "choice", label: "Choose something", default: 1
     #   }
     #
-    #   choice = data[:choice]    
+    #   choice = data[:choice]
     def select(choices, opts = {})
+      choices = choices.uniq
       raise 'First argument to select should be an array of numbers or strings' unless is_proper_array choices
+
       options = {
         var: "select_#{@@select_counter}",
         label: 'Choose',
@@ -296,15 +297,14 @@ module Krill
 
     # @api private
     def method_missing(m, *args, &block)
+      raise "Cannot call 'show' within a show block." if m == :show
 
-      if m == :show
-        raise "Cannot call 'show' within a show block."
-      else
+      if @base.methods.include?(m)
         @base.send(m, *args, &block)
+      else
+        super
       end
-
     end
 
   end
-
 end

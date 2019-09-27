@@ -1,5 +1,4 @@
 .item-modal {
-
   position: fixed;
   z-index: 10000;
 
@@ -11,10 +10,9 @@
       padding: 0;
       margin: 0;
     }
-  }  
+  }
 
   .item-modal-content {
-
     width: 55%;
     height: 80%;
 
@@ -33,30 +31,29 @@
       font-weight: bold;
     }
 
-    .sample-name, .details, .location-editor, .data-associations {
+    .sample-name,
+    .details,
+    .location-editor,
+    .data-associations {
       padding: 2px 16px 2px 16px;
       margin: 0;
     }
 
     .location-editor {
-
       margin-top: 8px;
       border-top: 1pt solid #bbb;
       border-bottom: 1pt solid #bbb;
       padding: 16px 16px 10px 16px;
 
       .location-input {
-
         width: 100% !important;
         margin-bottom: 2px;
         padding: 2px 4px 2px 4px;
-
       }
 
       .buttons {
         text-align: right;
       }
-
     }
 
     .data-associations {
@@ -73,7 +70,7 @@
       border: 1pt solid #aaa !important;
       padding: 1pt;
       margin: 5px;
-      tr { 
+      tr {
         margin: 0;
         padding: 0;
         border: none;
@@ -83,25 +80,21 @@
         padding: 0;
         border: 1pt solid #aaa !important;
         width: 10px;
-        height: 10px;      
+        height: 10px;
       }
       .filled {
-        background: #aaf; 
+        background: #aaf;
         cursor: pointer;
       }
       .other {
-        background: #cccccc; 
+        background: #cccccc;
         cursor: pointer;
       }
-      .blank {
-      }  
+
       .selected {
-        background: #00f; 
-        cursor: pointer;      
-      }               
-
-    }  
-
+        background: #00f;
+        cursor: pointer;
+      }
+    }
   }
-
 }

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Budgeting
 
   def budget_ids
@@ -24,8 +26,9 @@ module Budgeting
   def budget_info
 
     user_budget_associations.collect do |uba|
-      b = Budget.find_by_id(uba.budget_id)
+      b = Budget.find_by(id: uba.budget_id)
       next unless b
+
       {
         budget: b,
         quota: uba.quota,

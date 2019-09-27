@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 class ChangeOwnerToUserId < ActiveRecord::Migration
   def change

@@ -1,16 +1,17 @@
-.leaderboard {
+@import "variables";
 
+.leaderboard {
   table {
     border: 1pt solid #eee;
     margin: 15px 0px 0px 15px;
-    padding: 0;  
+    padding: 0;
     td {
       padding: 5px;
     }
     th {
       text-align: left;
-      padding: 5px;   
-      background: rgb(16,108,200);
+      padding: 5px;
+      background: $table-header-color;
       color: white;
     }
     caption {
@@ -24,18 +25,17 @@
     padding: 0;
     width: 50%;
     .bar {
-       position: absolute;
-       top: 5px;  
-       background: rgb(255,200,130);
+      position: absolute;
+      top: 5px;
+      background: rgb(255, 200, 130);
     }
     .value {
-       position: absolute; 
-       top: 5px; 
-       color: black; 
-       z-index: 10
+      position: absolute;
+      top: 5px;
+      color: black;
+      z-index: 10;
     }
-  }  
-
+  }
 }
 
 .individual_stats {

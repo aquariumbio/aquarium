@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 #
 # SV := {
@@ -51,6 +51,7 @@ module SampleValidator
       constraints.each do |c|
         puts "Checking #{c}"
         return true if validate_aux ft, c
+
         puts '  ... False'
       end
       validation_error "Or: #{constraints} not satisfied"

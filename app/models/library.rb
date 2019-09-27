@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 class Library < ActiveRecord::Base
 
@@ -9,18 +9,30 @@ class Library < ActiveRecord::Base
   validates :name, presence: true
   validates :category, presence: true
 
-  validates :name, uniqueness: { 
-    scope: :category, 
-    case_sensitive: false, 
-    message: "Library names must be unique within a given category. When importing, consider first moving existing libraries to a different category"
-  }  
+  validates :name, uniqueness: {
+    scope: :category,
+    case_sensitive: false,
+    message: 'Library names must be unique within a given category. When importing, consider first moving existing libraries to a different category'
+  }
+
+  def source
+    code('source')
+  end
+
+  def add_source(content:, user:)
+    if source
+      source.commit(content, user)
+    else
+      new_code('source', content, user)
+    end
+  end
 
   def export
-    { 
+    {
       library: {
-        name: name, 
-        category: category, 
-        code_source: code('source') ? code('source').content : '' 
+        name: name,
+        category: category,
+        code_source: code('source') ? code('source').content : ''
       }
     }
   end
@@ -30,7 +42,7 @@ class Library < ActiveRecord::Base
 
     lib = Library.new name: obj[:name], category: obj[:category]
     lib.save
-    lib.new_code 'source', obj[:code_source], user
+    lib.add_source(content: obj[:code_source], user: user)
 
     issues = { notes: ["Created new library #{obj[:name]} in category #{obj[:category]}"], inconsistencies: [] }
     issues

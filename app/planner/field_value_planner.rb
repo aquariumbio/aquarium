@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 module FieldValuePlanner
 
@@ -34,17 +34,15 @@ module FieldValuePlanner
   end
 
   def object_type
-
     if child_item
       child_item.object_type
     elsif allowable_field_type
       allowable_field_type.object_type
     end
-
   end
 
   def operation
-    Operation.find_by_id(parent_id)
+    Operation.find_by(id: parent_id)
   end
 
   def satisfied_by_environment

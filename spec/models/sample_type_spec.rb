@@ -1,25 +1,25 @@
-
+# frozen_string_literal: true
 
 require 'rails_helper'
 
 RSpec.describe SampleType, type: :model do
-  let!(:fragment_type) { create(:sample_type_with_samples, name: "Primer") }
+  let!(:fragment_type) { create(:sample_type_with_samples, name: 'Primer') }
 
   context 'initialization' do
 
-    it "cannot have two sample types of the same name" do
+    it 'cannot have two sample types of the same name' do
 
-      name = "Wingbat"
+      name = 'Wingbat'
 
       st = SampleType.new name: name, description: 'A test sample type'
       st.save
 
-      expect(st.errors.empty?).to be true        
+      expect(st.errors.empty?).to be true
 
       st = SampleType.new name: name, description: 'A test sample type'
-      st.save   
+      st.save
 
-      expect(st.errors.empty?).to be false         
+      expect(st.errors.empty?).to be false
 
     end
 
@@ -40,12 +40,12 @@ RSpec.describe SampleType, type: :model do
 
       expect(ft2.errors.empty?).to be true
 
-      aft1 = ft2.allowable_field_types.create sample_type_id: SampleType.find_by_name('Primer').id
+      aft1 = ft2.allowable_field_types.create sample_type_id: SampleType.find_by(name: 'Primer').id
       aft1.save
 
       expect(aft1.errors.empty?).to be true
 
-      aft2 = ft2.allowable_field_types.create sample_type_id: SampleType.find_by_name('Primer').id
+      aft2 = ft2.allowable_field_types.create sample_type_id: SampleType.find_by(name: 'Primer').id
       aft2.save
 
     end

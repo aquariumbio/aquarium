@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 # Associates and manages {DataAssociation}s
 # @api krill
@@ -17,9 +17,8 @@ module DataAssociator
   # @return [Array<DataAssociation>] the array of associations with the key
   def data_associations(key = nil)
     klass = self.class.to_s
-    if klass == "Item" || klass == "Collection"
-      klass = [ "Item", "Collection" ]
-    end
+    klass = %w[Item Collection] if is_a?(Item) || is_a?(Collection)
+
     if key
       DataAssociation.includes(:upload).where(parent_id: id, parent_class: klass, key: key.to_s)
     else
@@ -109,7 +108,6 @@ module DataAssociator
     end
 
     self
-
   end
 
   # Create a {DataAssociation} to this object to a value and an `Upload`, and with the given key.
@@ -124,18 +122,14 @@ module DataAssociator
   # @example Associate concentration with an operation's input
   #   da = op.input("Fragment").item.lazy_associate :concentration, 42
   def lazy_associate(key, value, upload = nil)
-
-    da = DataAssociation.new(
+    DataAssociation.new(
       parent_id: id,
       parent_class: self.class.to_s,
       key: key.to_s,
       object: { key => value }.to_json,
       upload_id: upload ? upload.id : nil
     )
-
   end
-
-
 
   # Modifies the existing association for the key.
   # @see #associate
@@ -166,7 +160,6 @@ module DataAssociator
     else
       associate :notes, text.to_s
     end
-    text
   end
 
   # Appends text to the associated notes for this object.

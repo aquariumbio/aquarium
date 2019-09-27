@@ -1,6 +1,6 @@
 # Base docker-compose file for aquarium
 #
-# Defines services for Aquarium, Krill, database, and S3.  Uses Docker network 
+# Defines services for Aquarium, Krill, database, and S3.  Uses Docker network
 # address translation, and containers for MySQL, and the Minio S3 server.
 #
 # Initializes the database the first time MySQL is run from the database dump
@@ -8,7 +8,7 @@
 # file.
 #
 # To reininitialize the database with the original or an alternative dump file,
-# remove the docker/db directory with 
+# remove the docker/db directory with
 #
 #   sudo rm -rf docker/db/*
 #
@@ -36,18 +36,24 @@ services:
   db:
     image: mysql:5.7
     restart: always
+    environment:
+      MYSQL_DATABASE: production
+      MYSQL_USER: aquarium
+      MYSQL_PASSWORD: aSecretAquarium
+      MYSQL_ROOT_PASSWORD: aSecretAquarium
     volumes:
       - ./docker/db:/var/lib/mysql
       - ./docker/mysql_init/dump.sql:/docker-entrypoint-initdb.d/dump.sql
     networks:
-     - aquarium_net
+      - aquarium_net
 
   krill:
     entrypoint: ["/aquarium/docker/krill-entrypoint.sh"]
     networks:
-     - aquarium_net
+      - aquarium_net
     expose:
       - "3500"
+
     depends_on:
       - db
       - app
@@ -71,6 +77,23 @@ services:
     networks:
       - aquarium_net
 
+  createbucket:
+    image: minio/mc:latest
+    depends_on:
+      - s3
+    entrypoint: >
+      /bin/sh -c "
+      while ! nc -z s3 9000; do
+        sleep 1;
+      done;
+      /usr/bin/mc config host add aqminio http://s3:9000 aquarium_minio KUNAzqrNifmM6GwNVZ8IP7dxZAkYjhnwc0bfdz0W;
+      /usr/bin/mc mb --region us-west-1 -p aqminio/images;
+      /usr/bin/mc policy set download aqminio/images;
+      exit 0;
+      "
+    networks:
+      - aquarium_net
+
   web:
     image: nginx:stable-alpine
     ports:
@@ -81,6 +104,7 @@ services:
     depends_on:
       - app
       - s3
+      - createbucket
 
 networks:
   aquarium_net:

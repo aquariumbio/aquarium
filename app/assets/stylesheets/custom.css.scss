@@ -1,16 +1,14 @@
 // @import "bootstrap";
-@import "variables";
-
-
+@import 'variables';
 
 @media (min-width: 980px) {
 }
 
-/* universal */
+// universal
 
 body {
+  padding-bottom: 0;
   padding-top: 60px;
-  padding-bottom: 0px;
 }
 
 section {
@@ -30,33 +28,35 @@ textarea {
   margin-top: 12px;
 }
 
-/* typography */
+// typography
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   line-height: 1;
 }
 
 h1 {
   letter-spacing: -2px;
   margin-bottom: 30px;
-  text-align: center;
   margin-top: 12px;
+  text-align: center;
 }
 
 h2 {
+  color: $lightgray;
+  font-weight: normal;
   letter-spacing: -1px;
   margin-bottom: 30px;
-  text-align: left;
-  font-weight: normal;
-  color: $lightGray;
   margin-top: 12px;
+  text-align: left;
 }
 
 h3 {
   margin: 16px 0 10px 0;
-}
-
-h4  {
 }
 
 .help {
@@ -65,10 +65,7 @@ h4  {
 }
 
 p {
-  line-height:2;
-}
-
-.small {
+  line-height: 2;
 }
 
 .list {
@@ -77,51 +74,27 @@ p {
   }
 }
 
-.pagination {
-  ul {
-    li {
-      a {
-      }
-    }
-  }
-}
-
 .message {
   padding: 0;
   margin: 0;
 }
 
-.btn {
-}
-
 .btn-small {
-  padding: 10px;;
+  padding: 10px;
 }
 
 .table {
-  tr {
-    th {
-    }
-    td {
-    }
-  }
   tr:hover {
-    background-color: lightyellow;
+    background-color: $selection-highlight-color;
   }
-}
-
-input {
-#    padding: 10px !important;
 }
 
 .check {
-  -moz-appearance:none;
-  -webkit-appearance:none;
-  -o-appearance:none;
-top:50% !important;
-margin-top:-4px !important;
-#  padding: 10px;
-#  margin: 20px;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -o-appearance: none;
+  top: 50% !important;
+  margin-top: -4px !important;
   border-radius: 0px;
   height: 30px !important;
   width: 30px !important;
@@ -132,17 +105,16 @@ margin-top:-4px !important;
 }
 
 .file_upload {
-  #outline: 1pt dashed red;
-  input[type=file] {
+  input[type="file"] {
     display: none;
     height: 0px;
-    width:0px;
+    width: 0px;
     margin: 0;
     padding: 0;
   }
 }
 
-.file_upload{
+.file_upload {
   margin: 0 !important;
   padding: 0 !important;
   line-height: 0;
@@ -191,23 +163,15 @@ margin-top:-4px !important;
   color: white;
 }
 
-.dropdown-menu {
-  li {
-  }
-}
-
 .dropdown {
   padding: 4px 0 4px 0;
-}
-
-.caret {
 }
 
 #info-area {
   float: left;
   margin-right: 10px;
   margin-left: 20px;
-  font-size: 1.0em;
+  font-size: 1em;
   font-family: courier;
   color: #aaa;
   letter-spacing: -1px;
@@ -227,7 +191,7 @@ footer {
   margin-right: 20px;
   padding-top: 5px;
   border-top: 1px solid #eaeaea;
-  color: $lightGray;
+  color: $lightgray;
   a {
     color: #555;
     &:hover {
@@ -296,7 +260,10 @@ aside {
 
 /* forms */
 
-input, textarea, select, .uneditable-input {
+input,
+textarea,
+select,
+.uneditable-input {
   border: 1px solid #bbb;
   width: 100%;
   padding: 10px;
@@ -342,12 +309,12 @@ input {
 
 img {
   border-radius: 5px;
-  margin-top:15px;
+  margin-top: 15px;
   border: 1pt solid grey;
 }
 
 .well {
-  opacity:.90;
+  opacity: 0.9;
 }
 
 .location {
@@ -357,7 +324,7 @@ img {
 }
 
 .code {
-  margin:10px;
+  margin: 10px;
   font-size: 9pt;
 }
 
@@ -371,16 +338,15 @@ img {
   *overflow: hidden;
 }
 
-.bugico
-{
-   background:url(/assets/glyphicons-361-bug.png) left top;
-   width: 16px;
-   height: 16px;
-   background-size: 16px 16px;
-   display: block;
-   float: left;
-   padding-top: 2px;
-   filter: invert(50%);
+.bugico {
+  background: url(/assets/glyphicons-361-bug.png) left top;
+  width: 16px;
+  height: 16px;
+  background-size: 16px 16px;
+  display: block;
+  float: left;
+  padding-top: 2px;
+  filter: invert(50%);
 }
 
 .aquarium-version {
@@ -388,13 +354,13 @@ img {
 }
 
 .scrollable-menu {
-    height: auto;
-    max-height: 550px;
-    overflow-x: hidden;
+  height: auto;
+  max-height: 550px;
+  overflow-x: hidden;
 }
 
 .scrollable-menu-small {
-    height: 200px;
-    max-height: 200px;
-    overflow-x: hidden;
+  height: 200px;
+  max-height: 200px;
+  overflow-x: hidden;
 }

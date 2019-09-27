@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 class CreateCartItems < ActiveRecord::Migration
   def change

@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 # @api krill
 module Krill
@@ -131,6 +131,7 @@ module Krill
     end
 
     # Produce items for {Operation}s
+    #
     # @param custom_opts [Hash]
     # @option custom_opts [Bool] :errored Include {Operation}s with status "error"
     # @option custom_opts [String] :role "input" or "output"
@@ -192,7 +193,7 @@ module Krill
       items = []
 
       select { |op| opts[:errored] || op.status != 'error' }.each_with_index do |op, _i|
-        op.field_values.select { |fv| fv.field_type.ftype == 'sample' && (opts[:io] == 'all' || fv.role == opts[:io]) }.each do |input|
+        op.field_values.select { |fv| fv.field_type.sample? && (opts[:io] == 'all' || fv.role == opts[:io]) }.each do |input|
           items << input.child_item if input.child_item.location != 'deleted'
         end
       end
@@ -224,67 +225,50 @@ module Krill
     end
 
     def io_table(role = 'input')
-
       t = Table.new
 
       each_with_index do |op, _i|
-
-        op.field_values.select { |fv| fv.role == role }.each do |fv|
-
+        values = op.field_values.select { |fv| fv.role == role }
+        values.each do |fv|
           if fv.part?
-
             unless t.has_column? fv.name
               t.column(fv.name,               fv.name)
                .column(collection_column(fv), collection_column(fv))
                .column(row_column(fv),        row_column(fv))
                .column(column_column(fv),     column_column(fv))
             end
-
             t.set(fv.name,               fv.child_sample ? fv.child_sample.name : 'NO SAMPLE')
-             .set(collection_column(fv), fv.child_item_id ? fv.child_item_id : 'NO COLLECTION')
+             .set(collection_column(fv), fv.child_item_id || 'NO COLLECTION')
              .set(row_column(fv),        fv.row)
              .set(column_column(fv),     fv.column)
-
           elsif fv.value
-
             t.column(fv.name, fv.name)
             t.set(fv.name, fv.value)
-
           else
-
             unless t.has_column? fv.name
               t.column(fv.name,         fv.name)
                .column(item_column(fv), item_column(fv))
             end
-
             t.set(fv.name,         fv.child_sample ? fv.child_sample.name : 'NO SAMPLE')
-             .set(item_column(fv), fv.child_item_id ? fv.child_item_id : 'NO ITEM')
-
+             .set(item_column(fv), fv.child_item_id || 'NO ITEM')
           end
-
         end
-
         t.append
-
       end
 
       t
-
     end
 
     def add_static_inputs(name, sample_name, container_name)
-
       each do |op|
-        sample = Sample.find_by_name(sample_name)
-        container = ObjectType.find_by_name(container_name)
-        op.add_input name, sample, container
+        sample = Sample.find_by(name: sample_name)
+        container = ObjectType.find_by(name: container_name)
+        op.add_input(name, sample, container)
         op.input(name).set item: sample.in(container.name).first
       end
 
       self
-
     end
 
   end
-
 end

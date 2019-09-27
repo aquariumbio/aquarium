@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 # Rails version
-gem 'rails', '4.2.10'
+gem 'rails', '4.2.11.1'
 
 # SQL adapter
-gem 'mysql2', '~> 0.4.10'
+gem 'mysql2', '~> 0.5.2'
 
 # Needed for rails 3.2 => 4.0 upgrade
-gem 'protected_attributes'
+gem 'protected_attributes_continued'
 gem 'tzinfo-data'
 
 # Json helpers
@@ -20,15 +22,16 @@ gem 'rack-cors', require: 'rack/cors'
 
 # Style enforcer and linter
 gem 'rubocop'
+gem 'rubocop-rails'
 
 # For documentation
-gem 'yard'
+gem 'yard', '>= 0.9.20'
 gem 'yard-activerecord'
 
 # Various style related gems
 gem 'github-markup'
 gem 'redcarpet'
-gem 'sass-rails'
+gem 'sassc-rails'
 gem 'will_paginate'
 
 # For uploads and cloud storage
@@ -61,15 +64,10 @@ end
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'bcrypt-ruby', '~> 3.1.2'
+  gem 'bcrypt', '~> 3.1'
   gem 'closure-compiler'
 end
 
-gem 'PriorityQueue'
-
 # Klavins lab gems
-gem 'anemone', :git => 'https://github.com/klavinslab/anemone'
-gem 'aquadoc', :git => 'https://github.com/klavinslab/aquadoc'
-
-
-
+gem 'anemone', git: 'https://github.com/klavinslab/anemone', tag: 'v1.0.1'
+gem 'aquadoc', git: 'https://github.com/klavinslab/aquadoc'

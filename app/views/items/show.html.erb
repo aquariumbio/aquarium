@@ -40,7 +40,7 @@
           <td>{{h.field_value.role}}</td>
           <td>{{h.operation.operation_type.name}}</td>
           <td>
-            <a href="/launcher?plan_id={{h.operation.plan_associations[0].plan_id}}">
+            <a href="/plans?plan_id={{h.operation.plan_associations[0].plan_id}}">
               {{h.operation.plan_associations[0].plan_id}}
             </a>
           </td>
@@ -174,8 +174,15 @@
             <div ng-if="mode == 'data' && part.rid && key == da.key"
                  ng-repeat="da in part.data_associations"
                  class="data-input">
-              <input ng-model="da.new_value" 
-                     ng-change="gang_data_associations(da.new_value)">
+              <textarea
+                     ng-if="da.is_object"
+                     ng-model="da.new_value"
+                     json-text="da.new_value"
+                     ng-change="gang_data_associations(da.new_value)"></textarea>
+              <textarea
+                     ng-if="!da.is_object"
+                     ng-model="da.new_value"
+                     ng-change="gang_data_associations(da.new_value)"></textarea>
             </div>
           </td>
         </tr>

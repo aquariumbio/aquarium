@@ -1,10 +1,9 @@
 .data-associations-container {
-
   position: relative;
   clear: both;
   content: "";
   display: block;
-  overflow: hidden; 
+  overflow: hidden;
   margin: 0;
   padding: 0;
 
@@ -15,9 +14,6 @@
     .value {
       margin: 2px 0 10px 0;
       width: 100% !important;
-    }
-    .save {
-
     }
     .download {
       margin-top: 10px;
@@ -53,16 +49,12 @@
   .da-row {
     margin-bottom: 4px;
   }
-
 }
 
 .download-link {
-
   color: #08c;
   cursor: pointer;
   &:hover {
     text-decoration: underline;
   }
-
 }
-

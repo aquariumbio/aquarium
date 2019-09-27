@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 module OperationTypePlanner
 
@@ -38,8 +38,10 @@ module OperationTypePlanner
         found_match = false
         desired_value.child_sample.sample_type.field_types.each do |ft|
           next unless i.name == ft.name
+
           found_match = true
           next unless props[ft.name] # note: if no child sample, don't set the input, which signals
+
           # to the planner that desired_value's properties are incomplete
           op.set_input(i.name, props[ft.name])
           puts "  ==> SETTING #{i.name} to #{props[ft.name]}"

@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 module Krill
 
@@ -44,7 +44,7 @@ module Krill
                     else
                       "#{r + 1},#{c + 1}"
                     end
-              tab.push([col.id, loc] + ingredients.collect { |ing| { content: (ing[i].is_a? Item) ? ing[i].id : ing[i], check: true } })
+              tab.push([col.id, loc] + ingredients.collect { |ing| { content: ing[i].is_a?(Item) ? ing[i].id : ing[i], check: true } })
             end
             i += 1
           end
@@ -60,7 +60,7 @@ module Krill
 
     end # load_samples
 
-    # Displays a set of pages using the transfer method from show 
+    # Displays a set of pages using the transfer method from show
     # that describe to the user how to transfer individual parts of some
     # quantity of source wells to some quantity of destination wells.
     # Routing is computed automatically.
@@ -73,13 +73,11 @@ module Krill
     #    transfer( stripwells, gels ) {
     #      note "Use a 100 µL pipetter to transfer 10 µL from the PCR results to the gel as indicated."
     #    }
-    def transfer(sources, destinations, options = {})
+    def transfer(sources, destinations, _options = {})
 
       # go through each well of the sources and transfer it to the next empty well of
       # destinations. Every time a source or destination is used up, advance to
       # another step.
-
-      opts = { skip_non_empty: true }.merge options
 
       user_shows = if block_given?
                      ShowBlock.new.run(&Proc.new)
@@ -135,6 +133,7 @@ module Krill
         if sr && sources[s].matrix[sr][sc] == -1
           s += 1
           return unless s < sources.length
+
           sr = 0
           sc = 0
         end
@@ -144,14 +143,17 @@ module Krill
         unless sr
           s += 1
           return unless s < sources.length
+
           sr = 0
           sc = 0
         end
 
         # update destination indices
         next if dc
+
         d += 1
         return unless d < destinations.length
+
         dr = 0
         dc = 0
         dr, dc = destinations[d].next 0, 0, skip_non_empty: true unless destinations[d].matrix[dr][dc] == -1
@@ -178,7 +180,7 @@ module Krill
 
       opts = { except: [], interactive: false }.merge options
 
-      object_type = ObjectType.find_by_name(object_type_name)
+      object_type = ObjectType.find_by(name: object_type_name)
       raise "Could not find object type #{object_type_name} in distribute" unless object_type
 
       user_shows = if block_given?
@@ -194,6 +196,7 @@ module Krill
       (0..m.length - 1).each do |i|
         (0..m[i].length - 1).each do |j|
           next unless m[i][j] > 0 && !(opts[:except].include? [i, j])
+
           s = find(:sample, id: m[i][j])[0]
           item = Item.make({ quantity: 1, inuse: 0 }, sample: s, object_type: object_type)
           items.push item

@@ -46,7 +46,7 @@
 <!-- MESSAGES //////////////////////////////////////////////////////////////// -->
 
 <h1 class="md-title" ng-if="current_user.id != <%= current_user.id %>">Acting as 
-  <span style="background: yellow">{{current_user.login}}</span>
+  <span style="background: $selection-highlight-color">{{current_user.login}}</span>
 </h1>
 
 <div ng-if="state.messages.length > 0" class="message">

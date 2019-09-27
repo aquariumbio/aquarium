@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 # @api krill
 class Locator < ActiveRecord::Base
@@ -10,7 +10,7 @@ class Locator < ActiveRecord::Base
 
   # validate :no_collisions
   validate :has_wizard
-  validates :number, uniqueness: { scope: :wizard_id, message: "Should have max one locator per location" }
+  validates :number, uniqueness: { scope: :wizard_id, message: 'Should have max one locator per location' }
 
   def has_wizard
     errors.add(:no_wizard, 'no wizard') unless
@@ -36,16 +36,16 @@ class Locator < ActiveRecord::Base
   end
 
   def self.first_empty(wizard)
-    if wizard
-      locs = where(wizard_id: wizard.id, item_id: nil)
-      if !locs.empty?
-        locs.first
-      else
-        m = Locator.largest wizard
-        loc = Locator.new(wizard_id: wizard.id, number: m ? m.number + 1 : 0)
-        loc.save
-        loc
-      end
+    return unless wizard
+
+    locs = where(wizard_id: wizard.id, item_id: nil)
+    if !locs.empty?
+      locs.first
+    else
+      m = Locator.largest wizard
+      loc = Locator.new(wizard_id: wizard.id, number: m ? m.number + 1 : 0)
+      loc.save
+      loc
     end
   end
 
@@ -55,7 +55,7 @@ class Locator < ActiveRecord::Base
 
   def self.largest(wizard)
     # find greatest locator for this wizard, should always be the most recent
-    wizard.locators.order("id desc").first
+    wizard.locators.order('id desc').first
   end
 
   def self.port(wizard)
@@ -81,7 +81,7 @@ class Locator < ActiveRecord::Base
     items.each do |i|
 
       n = wizard.location_to_int(i.primitive_location)
-      l = Locator.where(wizard_id: wizard.id, number: n).first
+      l = Locator.find_by(wizard_id: wizard.id, number: n)
 
       if l.item_id
         collisions.push([l.item_id, i.id])
@@ -100,10 +100,10 @@ class Locator < ActiveRecord::Base
 
   def self.port_all
 
-    port Wizard.find_by_name('M20')
-    port Wizard.find_by_name('M80')
-    port Wizard.find_by_name('SF2')
-    port Wizard.find_by_name('DFP')
+    port Wizard.find_by(name: 'M20')
+    port Wizard.find_by(name: 'M80')
+    port Wizard.find_by(name: 'SF2')
+    port Wizard.find_by(name: 'DFP')
 
   end
 

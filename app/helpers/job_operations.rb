@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 module JobOperations # included in Job model
 
@@ -31,8 +31,9 @@ module JobOperations # included in Job model
 
       begin
         c = op.nominal_cost.merge(labor_rate: labor_rate, markup_rate: markup_rate)
-      rescue Exception => e
+      rescue StandardError => e
         op.associate :cost_error, e.to_s
+        raise e
       else
         if op.plan && op.plan.budget_id
 
@@ -78,24 +79,24 @@ module JobOperations # included in Job model
   end
 
   def start
-    if pc == Job.NOT_STARTED
-      self.pc = 0
-      save
-      operations.each(&:run)
-    end
+    return unless pc == Job.NOT_STARTED
+
+    self.pc = 0
+    save
+    operations.each(&:run)
   end
 
   def stop(status = 'done')
-    if pc >= 0
-      self.pc = Job.COMPLETED
-      save
-      if status == 'done'
-        charge
-        operations.each(&:finish)
-      else
-        operations.each do |op|
-          op.change_status 'error'
-        end
+    return unless pc >= 0
+
+    self.pc = Job.COMPLETED
+    save
+    if status == 'done'
+      charge
+      operations.each(&:finish)
+    else
+      operations.each do |op|
+        op.change_status 'error'
       end
     end
   end

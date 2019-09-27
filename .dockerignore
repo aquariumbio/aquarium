@@ -5,6 +5,8 @@ docker/db/
 docker/mysql_init/
 docker/s3/
 docs/
+node_modules/
+public/components
 tmp/
 vendor/
 

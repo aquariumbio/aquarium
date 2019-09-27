@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ItemsController < ApplicationController
 
   before_filter :signed_in_user
@@ -24,7 +26,7 @@ class ItemsController < ApplicationController
 
   def show
 
-    @item = Item.find_by_id(params[:id])
+    @item = Item.find_by(id: params[:id])
 
     if @item.nil?
       flash[:error] = "Could not find item with id #{params[:id]}"
@@ -52,12 +54,12 @@ class ItemsController < ApplicationController
   end
 
   def create
-
     @object_type = ObjectType.find(params[:object_type_id])
 
-    @handler = view_context.make_handler @object_type
+    # TODO: use Handler class directly
+    @handler = view_context.make_handler(@object_type)
 
-    @item = @handler.new_item params
+    @item = @handler.new_item(params)
     @item.save
 
     unless @item.errors.empty?
@@ -80,10 +82,10 @@ class ItemsController < ApplicationController
   end
 
   def make # used by the browser to create new items
-
     object_type = ObjectType.find(params[:oid])
-    handler = view_context.make_handler object_type
-    item = handler.new_item item: { quantity: 1, sample_id: params[:sid] }, object_type_id: object_type.id
+    # TODO: use Handler class directly
+    handler = view_context.make_handler(object_type)
+    item = handler.new_item(item: { quantity: 1, sample_id: params[:sid] }, object_type_id: object_type.id)
     item.save
 
     if !item.errors.empty?
@@ -91,7 +93,6 @@ class ItemsController < ApplicationController
     else
       render json: { item: item.as_json(include: [:locator]) }
     end
-
   end
 
   def destroy
@@ -192,6 +193,7 @@ class ItemsController < ApplicationController
 
     Item.includes(:object_type, sample: %i[sample_type user], locator: [:wizard]).all.each do |i|
       next if i.deleted?
+
       oname = if i.object_type
                 i.object_type.name
               else

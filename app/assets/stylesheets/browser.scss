@@ -1,9 +1,8 @@
+@import "variables";
+
 $row-height: 18px;
-$selected-sample-color: #f6ffff;
-$selected-sample-outline-color: #e0ffff;
 
 .browser {
-
   .search-part {
     padding-top: 0;
     padding-bottom: 0;
@@ -24,54 +23,56 @@ $selected-sample-outline-color: #e0ffff;
   }
 
   .page-selected {
-    background: #ff0;
-  }  
+    background: $selection-highlight-color;
+  }
 
   @mixin sample-tree-list($color) {
-
     .sample-tree-list {
-
-      margin:0 0 10px 1em; /* indentation */
+      margin: 0 0 10px 1em; /* indentation */
       padding: 0;
-      list-style:none;
-      position:relative;  
+      list-style: none;
+      position: relative;
 
       &:before {
-        content:"";
-        display:block;
-        width:0;
-        position:absolute;
-        top:0;
-        bottom:0;
-        left:0;
+        content: "";
+        display: block;
+        width: 0;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
         border-left: 1px solid #bbb;
-      }  
+      }
 
       li {
-        margin:0;
+        margin: 0;
         padding: 0 0 0 0.9em; /* indentation + .5em */
-        line-height:1.75em; /* default list item's `line-height` */
-        font-weight:bold;
-        position:relative;
+        line-height: 1.75em; /* default list item's `line-height` */
+        font-weight: bold;
+        position: relative;
+      }
+
+      #searched_item {
+        background-color: $sample-highlight-color;
       }
 
       li:before {
-        content:"";
-        display:block;
-        width:10px; /* same with indentation */
-        height:0;
-        border-top:1px solid #bbb;
-        margin-top:-1px; /* border top width */
-        position:absolute;
-        top:1em; /* (line-height/2) */
-        left:0;
+        content: "";
+        display: block;
+        width: 10px; /* same with indentation */
+        height: 0;
+        border-top: 1px solid #bbb;
+        margin-top: -1px; /* border top width */
+        position: absolute;
+        top: 1em; /* (line-height/2) */
+        left: 0;
       }
 
       li:last-child:before {
         background: $color; /* same with body background */
-        height:auto;
-        top:1em; /* (line-height/2) */
-        bottom:0;
+        height: auto;
+        top: 1em; /* (line-height/2) */
+        bottom: 0;
       }
 
       li:last-child {
@@ -85,12 +86,12 @@ $selected-sample-outline-color: #e0ffff;
         li:before {
           width: 0;
           border: none;
-        };
+        }
       }
 
       .data-list {
-        list-style: none;  
-        margin-left: 0;      
+        list-style: none;
+        margin-left: 0;
         margin-right: 0;
         li {
           padding: 0;
@@ -98,7 +99,7 @@ $selected-sample-outline-color: #e0ffff;
         li:before {
           width: 0;
           border: none;
-        };        
+        }
         .data-key {
           font-weight: bold;
         }
@@ -107,11 +108,9 @@ $selected-sample-outline-color: #e0ffff;
         }
         .data-upload {
           font-weight: normal;
-        }        
+        }
       }
-
     }
-
   }
 
   .view-description-well {
@@ -123,15 +122,15 @@ $selected-sample-outline-color: #e0ffff;
     td {
       height: 24px;
       overflow-x: scroll;
-      white-space:nowrap;
-      margin-left: 0;   
+      white-space: nowrap;
+      margin-left: 0;
       margin-right: 0;
       padding-left: 0 !important;
     }
   }
 
   .sample-heading-name {
-    white-space:nowrap; 
+    white-space: nowrap;
     overflow: hidden;
     overflow-x: auto;
     cursor: pointer;
@@ -141,14 +140,14 @@ $selected-sample-outline-color: #e0ffff;
 
   .button-heading-open {
     width: 200px;
-    overflow: visible !important;    
-    white-space:nowrap;    
+    overflow: visible !important;
+    white-space: nowrap;
   }
 
   .button-heading-closed {
     width: 0;
-    overflow: visible !important;    
-    white-space:nowrap;    
+    overflow: visible !important;
+    white-space: nowrap;
   }
 
   .browser-control {
@@ -156,16 +155,16 @@ $selected-sample-outline-color: #e0ffff;
     border: 1pt solid #ccc;
     margin: 10px 10px 10px 10px;
     cursor: pointer;
-    @include sample-tree-list(white)
+    @include sample-tree-list(white);
   }
 
   .browser-control-on {
     box-shadow: 0 0 10px #9ecaed;
-  }  
+  }
 
   .browser-control-plain {
     cursor: default;
-  }    
+  }
 
   .inline-control {
     display: inline-block;
@@ -188,11 +187,10 @@ $selected-sample-outline-color: #e0ffff;
   }
 
   .date {
-    color: orange;
+    color: $selection-highlight-color;
   }
 
   .collection-table {
-
     overflow: scroll;
     white-space: nowrap;
 
@@ -207,44 +205,39 @@ $selected-sample-outline-color: #e0ffff;
     }
 
     .collection-highlight {
-      background: yellow;
+      background: $selection-highlight-color;
     }
-
   }
 
   .input-no-style {
-    color: #0000cc;
-    display: inline-block;    
+    color: $main-navbar-color;
+    display: inline-block;
     padding: 0;
     margin: 0;
     border: none !important;
     height: $row-height !important;
     line-height: $row-height;
-    -webkit-appearance:none;
+    -webkit-appearance: none;
     -webkit-box-shadow: none !important;
     -moz-box-shadow: none !important;
     box-shadow: none !important;
     background: transparent;
   }
 
-  .input-no-style:hover {
-    /*outline: 1pt solid #eee;*/
-  }  
-
   .select-no-style {
-    color: #0000cc;
-    display: inline-block;    
+    color: $main-navbar-color;
+    display: inline-block;
     padding: 0;
     margin: 0;
     border: none !important;
     height: $row-height !important;
     line-height: $row-height;
-    -webkit-appearance:none;
+    -webkit-appearance: none;
     -webkit-box-shadow: none !important;
     -moz-box-shadow: none !important;
     box-shadow: none !important;
     background: transparent;
-  }  
+  }
 
   .full {
     width: 99% !important;
@@ -259,29 +252,20 @@ $selected-sample-outline-color: #e0ffff;
     margin-right: 5px;
   }
 
-  .controls {
-
-  }
-
   .field-table {
     width: 100%;
-    /*outline: 1pt solid #bfb;*/
     margin: 0;
-    tr {
-      /*height: $row-height;*/
-      
-    }
     td {
-      padding: 0 0 0 5px; 
+      padding: 0 0 0 5px;
       height: $row-height;
       overflow: visible;
-      /*outline: 1pt solid #def; */
     }
     .name {
       width: 210px;
-      font-weight: bold;      
+      font-weight: bold;
     }
-    .name-string, .name-number {
+    .name-string,
+    .name-number {
       color: #358235;
     }
     .name-url {
@@ -295,14 +279,13 @@ $selected-sample-outline-color: #e0ffff;
     }
     .value {
       font-weight: normal;
-      font-family: monospace;      
+      font-family: monospace;
     }
     .description {
       font-weight: normal;
-    }    
+    }
     .modifer {
       width: 16px;
-      /*border: 1pt solid green;*/
     }
   }
 
@@ -325,22 +308,18 @@ $selected-sample-outline-color: #e0ffff;
 
   .sample-type-name {
     font-weight: bold;
-  }  
-
-  .sample-type-id {
-    
-  }    
+  }
 
   .sample-id {
     font-weight: bold;
     a {
       color: black;
     }
-  }  
+  }
 
   .sample-name {
     font-weight: normal !important;
-  }    
+  }
 
   .tag {
     border: 1pt solid #eee;
@@ -352,7 +331,7 @@ $selected-sample-outline-color: #e0ffff;
   }
 
   .static-field-value {
-    font-weight: normal;   
+    font-weight: normal;
   }
 
   .mono {
@@ -366,7 +345,7 @@ $selected-sample-outline-color: #e0ffff;
     font-weight: bold;
     font-family: monospace;
     color: #888;
-  }   
+  }
 
   .bigger {
     margin: 4px;
@@ -387,26 +366,26 @@ $selected-sample-outline-color: #e0ffff;
   }
 
   .plain-list {
-    list-style:none;
+    list-style: none;
     margin: 10px;
     li {
       margin: 0;
+      cursor: pointer;
     }
   }
 
   .sample-container {
     padding: 0 0 0 5px;
     background: white;
-    @include sample-tree-list(white)
+    @include sample-tree-list(white);
+  }
+  .sample-heading-name:hover {
+    background: $sample-highlight-color;
+    outline: 1pt solid $sample-highlight-border;
+    border-radius: 2px;
+    @include sample-tree-list($sample-highlight-color);
   }
 
-  .sample-container:hover {
-    background: $selected-sample-color;
-    outline: 1pt solid $selected-sample-outline-color;
-    border-radius: 2px;
-    @include sample-tree-list($selected-sample-color);
-  }
- 
   /********************************************************************************************/
 
   .clickable {
@@ -416,16 +395,16 @@ $selected-sample-outline-color: #e0ffff;
   .project-list {
     padding-top: 10px;
     ul {
-      list-style:none;
+      list-style: none;
       margin-left: 22px;
       li {
         overflow: scroll;
         margin-left: 0px;
         position: relative;
-        overflow: scroll;        
-      }
         overflow: scroll;
-    }    
+      }
+      overflow: scroll;
+    }
   }
 
   .project-expander {
@@ -436,7 +415,6 @@ $selected-sample-outline-color: #e0ffff;
     padding-bottom: 0;
     font-weight: bold;
   }
-
 
   .bottom-margin {
     margin-bottom: 5px;
@@ -450,9 +428,7 @@ $selected-sample-outline-color: #e0ffff;
       font-weight: normal;
       overflow: hidden;
     }
-    .data-field {
 
-    }
     .deleted-item {
       color: #a00;
     }
@@ -461,7 +437,7 @@ $selected-sample-outline-color: #e0ffff;
     }
     .note-editor {
       width: 100%;
-      margin-top: 10px;      
+      margin-top: 10px;
     }
     .da-notes {
       font-weight: normal;
@@ -474,16 +450,16 @@ $selected-sample-outline-color: #e0ffff;
   }
 
   .st-offset-disabled {
-    cursor: pointer;    
-    disabled: true;
+    cursor: pointer;
     color: #ccc;
-  } 
+    disabled: true;
+  }
 
   .item-small-icon {
     padding-right: 5px;
     font-weight: bold;
-    text-decoration: none;    
-  } 
+    text-decoration: none;
+  }
 
   .small-note {
     font-size: 9pt !important;
@@ -515,5 +491,22 @@ $selected-sample-outline-color: #e0ffff;
       margin: 16px 0 10px 0;
     }
   }
+}
 
+// Style for item's pop-up dialog
+md-toolbar:not(.md-menu-toolbar) {
+  background-color: $button-color;
+}
+
+.item-label {
+  color: white;
+}
+
+// override md-tooltip style for search
+.search-tooltip {
+  background-color: $tooltip-color !important;
+  border-radius: 3px !important;
+  color: $tooltip-text-color !important;
+  padding: 5px !important;
+  text-align: center !important;
 }

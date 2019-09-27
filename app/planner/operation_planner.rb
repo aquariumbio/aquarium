@@ -1,14 +1,14 @@
-
+# frozen_string_literal: true
 
 module OperationPlanner
 
   def associate_plan(plan)
     pa = plan_associations.create plan_id: plan.id
     pa.save
-    unless plan.user_id
-      plan.user_id = user_id
-      plan.save
-    end
+    return if plan.user_id
+
+    plan.user_id = user_id
+    plan.save
   end
 
   def predecessors_aux(i, wires, pred_outputs, predecessors)
@@ -24,57 +24,49 @@ module OperationPlanner
     end
 
     preds
-
   end
 
   def ready?
 
     @@ready_errors ||= []
 
-    if on_the_fly
+    return false if on_the_fly
 
-      return false
+    inputs = FieldValue.includes(:field_type).where(parent_class: 'Operation', parent_id: id, role: 'input')
+    wires = Wire.where(to_id: inputs.collect(&:id))
+    pred_outputs = FieldValue.where(id: wires.collect(&:from_id))
+    predecessors = Operation.where(id: pred_outputs.collect(&:parent_id))
 
-    else
+    inputs.each do |i|
 
-      inputs = FieldValue.includes(:field_type).where(parent_class: 'Operation', parent_id: id, role: 'input')
-      wires = Wire.where(to_id: inputs.collect(&:id))
-      pred_outputs = FieldValue.where(id: wires.collect(&:from_id))
-      predecessors = Operation.where(id: pred_outputs.collect(&:parent_id))
+      next unless i.field_type.sample?
 
-      inputs.each do |i|
+      preds = predecessors_aux i, wires, pred_outputs, predecessors
 
-        next unless i.field_type.ftype == 'sample'
+      if !preds.empty?
 
-        preds = predecessors_aux i, wires, pred_outputs, predecessors
+        preds.each do |pred|
 
-        if !preds.empty?
+          next if pred.status == 'primed' ||
+                  pred.status == 'done' ||
+                  pred.status == 'unplanned' ||
+                  pred.status == 'planning'
 
-          preds.each do |pred|
-
-            next if pred.status == 'primed' ||
-                    pred.status == 'done' ||
-                    pred.status == 'unplanned' ||
-                    pred.status == 'planning'
-            @@ready_errors << "Operation #{id} is waiting for operation #{pred.id} which has status #{pred.status}"
-            return false
-
-          end
-
-        elsif !i.satisfied_by_environment
-
-          @@ready_errors << "No items in stock available for input '#{i.name}' of operation #{id}"
+          @@ready_errors << "Operation #{id} is waiting for operation #{pred.id} which has status #{pred.status}"
           return false
 
-        end # if
+        end
 
-        # if
+      elsif !i.satisfied_by_environment
 
-      end # each
+        @@ready_errors << "No items in stock available for input '#{i.name}' of operation #{id}"
+        return false
 
-      return true
+      end # if
 
-    end # if
+    end # each
+
+    true
 
   end
 
@@ -89,8 +81,8 @@ module OperationPlanner
 
   end
 
-  def has_no_stock_or_method
-    inputs.select { |i| i.field_type.ftype == 'sample' }.each do |i|
+  def no_possible_input?
+    inputs.select { |i| i.field_type.sample? }.each do |i|
       return true if i.predecessors.empty? && !i.satisfied_by_environment
     end
     false
@@ -110,7 +102,7 @@ module OperationPlanner
                   "(on_the_fly = #{op.on_the_fly}, ready = #{ready}, leaf=#{op.leaf?}, status=#{op.status})."
       elsif op.status == 'planning' && op.undetermined_inputs?
         issues << "Operation '#{op.operation_type.name}' has unspecified inputs."
-      elsif op.has_no_stock_or_method
+      elsif op.no_possible_input?
         issues << "No way to make at least one input of operation '#{op.operation_type.name}'."
       end
     end
@@ -216,7 +208,7 @@ module OperationPlanner
 
       id: id,
       operation_type_id: operation_type_id,
-      status: override_status ? override_status : status,
+      status: override_status || status,
       ready: ready?,
       inputs: input_list,
       problem: problem

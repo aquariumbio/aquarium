@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 require_relative 'testlib'
 
@@ -20,7 +20,7 @@ class Test
     @wiz = generic_wizard 16, 81
     puts '    created ' + @wiz.name
 
-    st = SampleType.find_by_name('Primer')
+    st = SampleType.find_by(name: 'Primer')
     @samp = generic_sample st
     puts '    created ' + @samp.name
 
@@ -33,6 +33,7 @@ class Test
     i.save
     raise i.errors.full_messages.join(',') unless i.errors.empty?
     raise "incorrect location #{i.location} for #{i.inspect}" unless i.location == 'Nether'
+
     puts '      new location = ' + i.location
     puts "      locator = #{i.locator_id}"
 
@@ -42,12 +43,13 @@ class Test
     puts i.inspect.to_s
 
     raise "incorrect location #{i.location} for #{i.inspect}" unless i.location == locstr
+
     puts '      new location = ' + i.location
     puts "      locator = #{i.locator_id}"
 
     cleanup
     pass
-  rescue Exception => e
+  rescue StandardError => e
     puts "\n"
     puts e.to_s
     puts e.backtrace.join("\n")

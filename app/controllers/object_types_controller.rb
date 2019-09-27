@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 class ObjectTypesController < ApplicationController
 
@@ -11,7 +12,7 @@ class ObjectTypesController < ApplicationController
 
     respond_to do |format|
       format.html do # index.html.erb
-        @handler = params[:handler] ? params[:handler] : 'glassware'
+        @handler = params[:handler] || 'glassware'
         @all_handlers = ObjectType.pluck(:handler).uniq.sort
         @first = !@all_handlers.empty? ? @all_handlers[0] : 'no handlers'
         @object_types = ObjectType.all.sort_by(&:name)
@@ -80,7 +81,7 @@ class ObjectTypesController < ApplicationController
   # POST /object_types
   # POST /object_types.json
   def create
-    
+
     @object_type = ObjectType.new(params[:object_type].except(:rows, :columns))
 
     if params[:object_type][:handler] == 'collection'
@@ -128,13 +129,8 @@ class ObjectTypesController < ApplicationController
 
     respond_to do |format|
       if ok
-        if @object_type.handler == 'sample_container'
-          format.html { redirect_to object_types_path, notice: "Object type '#{@object_type.name}' was successfully updated." }
-          format.json { head :no_content }
-        else
-          format.html { redirect_to object_types_path, notice: "Object type '#{@object_type.name}' was successfully updated." }
-          format.json { head :no_content }
-        end
+        format.html { redirect_to object_types_path, notice: "Object type '#{@object_type.name}' was successfully updated." }
+        format.json { head :no_content }
       else
         format.html { redirect_to edit_object_type_path, notice: "Object type could not be updated. #{@object_type.errors.full_messages.join(', ')}." }
         format.json { render json: @object_type.errors, status: :unprocessable_entity }
@@ -188,10 +184,11 @@ class ObjectTypesController < ApplicationController
 
     max = 500
 
-    for i in 0..(all_inserts.length / max)
+    0..(all_inserts.length / max).each do |i|
 
       inserts = all_inserts[max * i, max]
       next if inserts.empty?
+
       puts "inserting #{max * i} to #{max * i + max}"
       sql = "INSERT INTO #{to} (#{columns.join(',')}) VALUES #{inserts.join(',')}"
       ActiveRecord::Base.connection.execute sql

@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 module Krill
 
@@ -56,8 +56,8 @@ module Krill
     #
     # @param [symbol] name The name of the column
     # @param [object] value Value to set
-    def set name, value
-      @selection[name] = value   
+    def set(name, value)
+      @selection[name] = value
       self
     end
 
@@ -98,6 +98,7 @@ module Krill
     # @return [Table] The table, can be chained.
     def from(i)
       raise "Table: from(#{i}) is out of range" unless i < @rows.length
+
       @from = i
       self
     end
@@ -125,10 +126,10 @@ module Krill
     end
 
     # Append a column to the table with a list of values
-    # 
+    #
     # @param name [String]  the heading of this column
     # @param values [Array]  the values of the cells of this column
-    def add_column name, values
+    def add_column(name, values)
       column(name.to_sym, name)
       values.each_with_index do |v, i|
         @rows[i] ||= {}
@@ -140,7 +141,7 @@ module Krill
     # Append a column to the table which accepts user input
     # Response data is stored under the key `table_input` in the data hash returned by `show`
     # Note: data hash may not get properly populated in the protocol tester
-    # 
+    #
     # @param name [String]  the heading of this column
     # @param defaults [Array]  the default values of the cells of this column
     # @param opts [Hash]  additional options

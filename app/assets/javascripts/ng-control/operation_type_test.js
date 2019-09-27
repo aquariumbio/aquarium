@@ -32,9 +32,11 @@
             },
             function failureCallback(response) {
               operation_type.randomizing = false;
-              operation_type.test_error = response.data.error;
+              operation_type.test_error = {}
+              operation_type.test_error.message = response.data.error;
+              operation_type.test_error.backtrace = []
               if (response.data.backtrace) {
-                operation_type.test_error += response.data.backtrace[0];
+                operation_type.test_error.backtrace = response.data.backtrace
               }
             }
           );
@@ -98,7 +100,12 @@
               },
               function failureCallback(response) {
                 operation_type.running_test = false;
-                operation_type.test_error = response.data.error;
+                operation_type.test_error = {}
+                operation_type.test_error.message = response.data.error;
+                operation_type.test_error.backtrace = []
+                if (response.data.backtrace) {
+                  operation_type.test_error.backtrace = response.data.backtrace
+                }
               }
             );
         }

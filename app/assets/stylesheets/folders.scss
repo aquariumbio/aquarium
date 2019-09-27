@@ -1,8 +1,10 @@
+@import "variables";
+
 $row-height: 20px;
 $editable-height: 20px;
 $row-margin: 3px;
 
-$thick: 0pt;
+$thick: 0;
 $oo: $thick dashed orange;
 $go: $thick dashed green;
 $bo: $thick dashed blue;
@@ -10,7 +12,6 @@ $ro: $thick solid red;
 $po: $thick dashed pink;
 
 .folder-contents {
-
   position: relative;
 
   .sample-repeater {
@@ -19,7 +20,6 @@ $po: $thick dashed pink;
   }
 
   .row {
-
     border-bottom: 1pt solid #eee;
 
     outline: $go;
@@ -41,8 +41,8 @@ $po: $thick dashed pink;
     }
 
     .id {
-      height: $row-height; 
-      line-height: $row-height;      
+      height: $row-height;
+      line-height: $row-height;
       font-weight: bold;
       display: inline-block;
       cursor: pointer;
@@ -55,41 +55,37 @@ $po: $thick dashed pink;
 
     .name {
       height: $row-height;
-      line-height: $row-height;             
+      line-height: $row-height;
       display: inline-block;
-      outline: $bo;  
+      outline: $bo;
     }
 
     .info {
-      height: $row-height; 
-      line-height: $row-height;            
+      height: $row-height;
+      line-height: $row-height;
       display: inline-block;
       padding-right: 20px;
-      outline: $bo;      
+      outline: $bo;
     }
 
     .sample-type {
-      height: $row-height; 
-      line-height: $row-height;            
+      height: $row-height;
+      line-height: $row-height;
       color: #aaa;
       display: inline-block;
-      outline: $bo;      
+      outline: $bo;
     }
-
-  }
-
-  .data {
   }
 
   .editable {
-    color: #0000cc;
+    color: $main-navbar-color;
     vertical-align: top;
-    height: $row-height;         
-    display: inline-block;    
+    height: $row-height;
+    display: inline-block;
     padding: 0;
     margin: 0;
     border: none !important;
-    -webkit-appearance:none;
+    -webkit-appearance: none;
     -webkit-box-shadow: none !important;
     -moz-box-shadow: none !important;
     box-shadow: none !important;
@@ -98,55 +94,53 @@ $po: $thick dashed pink;
   }
 
   .editable:focus {
-    height: $row-height;      
+    height: $row-height;
     outline: none;
-    display: inline-block;       
+    display: inline-block;
     border: none !important;
-    -webkit-appearance:none;
+    -webkit-appearance: none;
     -webkit-box-shadow: none !important;
     -moz-box-shadow: none !important;
-    box-shadow: none !important;     
+    box-shadow: none !important;
   }
 
   .expander-container {
-
-    height: $row-height;  
+    height: $row-height;
     padding: 0 !important;
-    margin: 0 !important;  
+    margin: 0 !important;
     display: inline-block;
     outline: $po;
 
     .expander {
-      height: $row-height;   
-      line-height: $row-height !important;     
+      height: $row-height;
+      line-height: $row-height !important;
       cursor: pointer;
       color: #444;
       font-size: 8pt;
       padding: 0 !important;
-      margin: 0 !important;  
+      margin: 0 !important;
       display: inline-block;
-    } 
+    }
 
     .expander-large {
-      height: $row-height;   
-      line-height: $row-height !important;     
+      height: $row-height;
+      line-height: $row-height !important;
       cursor: pointer;
       color: #444;
       padding: 0 !important;
-      margin: 0 !important;  
+      margin: 0 !important;
       display: inline-block;
-    } 
-
-    .spacer {
-      height: $row-height;   
-      line-height: $row-height !important;
-      display: inline-block; 
     }
 
-  }  
+    .spacer {
+      height: $row-height;
+      line-height: $row-height !important;
+      display: inline-block;
+    }
+  }
 
   .thread-description {
-    height: $row-height;      
+    height: $row-height;
     display: inline-block;
     width: 75%;
   }
@@ -161,7 +155,7 @@ $po: $thick dashed pink;
   }
 
   .thread-builder-select {
-    color: #0000cc;
+    color: $main-navbar-color;
     display: inline-block;
     height: $row-height;
     width: auto;
@@ -170,31 +164,31 @@ $po: $thick dashed pink;
     margin: 0 0 1px 0;
     padding: 0;
     overflow: hidden;
-    margin: 0; 
+    margin: 0;
     background: transparent;
-    border-radius: 0px;
-  }  
+    border-radius: 0;
+  }
 
   .multiselect {
-    color: #0000cc;
+    color: $main-navbar-color;
     display: inline-block;
-  } 
+  }
 
   .multiselector {
     cursor: pointer;
     padding-right: 50px;
-  } 
+  }
 
   .multiselected {
     background: #ddffdd;
-  } 
+  }
 
   .parameter-name {
     vertical-align: top;
   }
 
   .value {
-    color: #0000cc;
+    color: $main-navbar-color;
     display: inline-block;
   }
 
@@ -203,7 +197,7 @@ $po: $thick dashed pink;
     color: black;
     font-weight: bold;
     font-size: 14pt;
-    cursor: pointer;    
+    cursor: pointer;
   }
 
   .thread-selector {
@@ -213,7 +207,6 @@ $po: $thick dashed pink;
   .workflow-message {
     color: #00cc00;
   }
-
 }
 
 .folder-workflow {
@@ -228,19 +221,19 @@ $po: $thick dashed pink;
 
 .folder {
   width: 100%;
-  cursor: pointer;   
+  cursor: pointer;
 }
 
 .folder-workflow {
   width: 100%;
-  cursor: pointer; 
-  border-bottom: 1pt solid #eee;  
+  cursor: pointer;
+  border-bottom: 1pt solid #eee;
 }
 
 .folder-sample-data {
   width: 100%;
-  cursor: pointer; 
-  padding: 0;  
+  cursor: pointer;
+  padding: 0;
   margin: 0;
 }
 
@@ -249,31 +242,27 @@ $po: $thick dashed pink;
   padding: 0;
 }
 
-.folder-noedit {
-  disabled: true;
-}
-
 .folder-selected {
   color: red;
   font-weight: bold;
 }
 
 .folder-ul {
-  list-style:none;
+  list-style: none;
   margin-left: 22px;
+  overflow: scroll;
+
   li {
+    margin-left: 0;
     overflow: scroll;
-    margin-left: 0px;
     position: relative;
-      overflow: scroll;
   }
-    overflow: scroll;
 }
 
 .folder-ul-top {
-  margin-left: 0px;
-    overflow: scroll;
-} 
+  margin-left: 0;
+  overflow: scroll;
+}
 
 .folder-expander-disabled {
   color: #ccc;
@@ -302,7 +291,7 @@ $po: $thick dashed pink;
 }
 
 .folder-current-name:hover {
-  border: 1pt solid #bbf !important
+  border: 1pt solid #bbf !important;
 }
 
 .folder-current-name {
@@ -319,62 +308,59 @@ $po: $thick dashed pink;
   position: fixed;
 }
 
-/*
- * Folder Contents
- */
+//
+// Folder Contents
+//
 
 #folder-content-container {
-    overflow: scroll;
-}
-
-#folder-current {
-  position: relative;
-  height: 100%;
-  overflow: hidden;
-  padding-right: 0px;
-}
-
-.folder-contents-heading {
-  /* outline: 1pt dashed red; */
-  margin-bottom: -1px;  
-  padding: 0px;
-  width: 100%;
-  font-weight: bold;
-  border-bottom: 1pt solid #ddd;   
-  background: #eee;
-}
-
-.folder-contents {
-   /*outline: 1pt dashed green; */
-  margin: 0px;  
-  padding: 0px;  
-  width: 100%;  
-  height: 100%;
   overflow: scroll;
 }
 
+#folder-current {
+  height: 100%;
+  overflow: hidden;
+  padding-right: 0;
+  position: relative;
+}
+
+.folder-contents-heading {
+  background: #eee;
+  border-bottom: 1pt solid #ddd;
+  font-weight: bold;
+  margin-bottom: -1px;
+  padding: 0;
+  width: 100%;
+}
+
+.folder-contents {
+  height: 100%;
+  margin: 0;
+  overflow: scroll;
+  padding: 0;
+  width: 100%;
+}
+
 .folder-contents-row {
-  /*outline: 1pt dashed orange;*/
-  border-right: 1pt solid #ddd; 
-  margin: 0px;  
-  padding: 0px;
+  border-right: 1pt solid #ddd;
   display: table;
+  margin: 0;
+  padding: 0;
   table-layout: fixed;
   width: 100%;
 }
 
 .folder-contents-cell {
-  border-top: 1pt solid #ddd;
   border-left: 1pt solid #ddd;
-  margin: 0px;  
-  padding: 5px;
+  border-top: 1pt solid #ddd;
   display: table-cell;
-  overflow: scroll;  
+  margin: 0;
+  overflow: scroll;
+  padding: 5px;
   white-space: nowrap;
 }
 
 .folder-role-select {
-  -webkit-appearance:none;
+  -webkit-appearance: none;
   box-shadow: none !important;
   border: 0;
   margin: 0;
@@ -386,10 +372,10 @@ $po: $thick dashed pink;
 .folder-contents-field-cell {
   border-top: 1pt solid #ddd;
   border-left: 1pt solid #ddd;
-  margin: 0px;  
+  margin: 0;
   padding: 0 0 0 5px;
   display: table-cell;
-  overflow: scroll;  
+  overflow: scroll;
   white-space: nowrap;
 }
 
@@ -402,4 +388,3 @@ $po: $thick dashed pink;
   font-size: 14pt;
   color: #aaa;
 }
-

@@ -1,14 +1,14 @@
-
+# frozen_string_literal: true
 
 class Array
 
   def conjoin(&block)
-    temp = collect &block
+    temp = collect(&block)
     temp.inject(true) { |a, b| a && b }
   end
 
   def disjoin(&block)
-    temp = collect &block
+    temp = collect(&block)
     temp.inject(false) { |a, b| a || b }
   end
 
@@ -54,6 +54,7 @@ class ActiveRecord::Base
   def self.import!(record_list)
     raise 'record_list not an Array of Hashes' unless record_list.is_a?(Array) && record_list.all? { |rec| rec.is_a? Hash }
     return record_list if record_list.empty?
+
     # Rails.logger.info "Inserting #{record_list.count} records"
     (1..record_list.count).step(200).each do |start|
       # Rails.logger.info "inserting ids: #{record_list[start-1..start+198].collect { |r| r['id'] }}"
@@ -77,7 +78,7 @@ class ActiveRecord::Base
 
     # If table has standard timestamps and they're not in the record list then add them to the record list
     time = ActiveRecord::Base.connection.quote(Time.now)
-    for field_name in %w[created_at updated_at]
+    %w[created_at updated_at].each do |field_name|
       if column_names.include?(field_name) && !key_list.include?(field_name)
         key_list << field_name
         value_list.each { |rec| rec << time }

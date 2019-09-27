@@ -13,7 +13,7 @@
 
     <a href="#" 
        ng-if="!current_operation_type.randomizing"
-       class="btn" 
+       class="md-raised md-button md-ink-ripple" 
        ng-click="randomize(current_operation_type)"
        ng-disabled="!current_operation_type.id">
       Generate Operations
@@ -21,21 +21,21 @@
 
     <a href="#" 
        ng-if="current_operation_type.randomizing"
-       class="btn" 
+       class="md-raised md-button md-ink-ripple" 
        ng-click="randomize(current_operation_type)"
        ng-disabled="true">
       Generating Operations ...
     </a>
 
     <a href="#"
-            class="btn btn-warning"
+            class="md-raised md-button md-ink-ripple md-warn"
             ng-click="test(current_operation_type)"
             ng-if="!current_operation_type.running_test && !current_operation_type.changed && !current_operation_type.protocol.changed && !current_operation_type.precondition.changed"
             ng-disabled="!current_operation_type.id || !current_operation_type.test_operations || current_operation_type.test_operations.length == 0">
       Test
     </a>
 
-    <button class="btn btn-warning"
+    <button class="md-raised md-button md-ink-ripple md-warn"
             ng-click="save_and_test(current_operation_type)"
             ng-if="!current_operation_type.running_test && ( current_operation_type.changed || current_operation_type.protocol.changed || current_operation_type.precondition.changed )"
             ng-disabled="!current_operation_type.id || !current_operation_type.test_operations || current_operation_type.test_operations.length == 0">
@@ -43,7 +43,7 @@
     </button>   
 
     <a href="#"
-            class="btn btn-warning"
+            class="md-raised md-button md-ink-ripple md-warn"
             ng-if="current_operation_type.running_test"
             ng-disabled="true">
       Testing...
@@ -112,7 +112,10 @@
   <div ng-show="current_operation_type.test_error" class='alert alert-error'>
     <h4>Error</h4>
     <div>
-      <b style='white-space: pre-wrap; font-family: "courier", monospace'>{{current_operation_type.test_error}}</b>
+      <b style='white-space: pre-wrap; font-family: "courier", monospace'>{{current_operation_type.test_error.message}}</b>
+      <ul class="backtrace">
+        <li ng-repeat="message in current_operation_type.test_error.backtrace track by $index">{{message}}</li>
+      </ul>
     </div>
   </div>
 

@@ -1,3 +1,5 @@
+@import "variables";
+
 .operation_types {
 
   .definition {
@@ -19,9 +21,6 @@
       margin-left: 0;
     }
   }  
-
-  .op-type {
-  }
 
   .library {
     font-style: italic;
@@ -53,7 +52,7 @@
 
   .op-type-current {
     font-weight: bold;
-    background: yellow;
+    background: $selection-highlight-color;
   }
 
   .library:before {       
@@ -109,10 +108,6 @@
 
   .input-fit {
     width: 100%;
-  }
-
-  .ot-part-container {
-    /*position: relative;*/
   }
 
   .ace_editor {
@@ -199,10 +194,7 @@
     }     
 
     .step-error {
-      background: #ffff11;
-    }
-
-    .content {
+      background: lightyellow;
     }
 
     .content-title {
@@ -231,9 +223,11 @@
       bottom: -2px;
       display: inline-block;
       margin: 4px;
-      baseline-shift: 40px;
     }
   }
 
-
 }
+
+
+
+
