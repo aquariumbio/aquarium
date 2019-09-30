@@ -116,25 +116,53 @@
 <% end %>
 
 <% content_for :action5 do %>
-  <div layout="row"
-         layout-align="start center"
-         class="new-collection">    
-      <md-menu>
-        <md-button class="md-raised md-button"
-          ng-click="openCollectionMenu($mdMenu, $event)"
-          id="new-collection-button"
-          data-search-button="new-collection">
-          New Collection
-        </md-button>
-        <md-menu-content>
-          <md-menu-item ng-repeat="ctype in collection_types">
-            <md-button ng-click="new_collection(ctype)"
-                       ng-attr-data-new-collection-type="{{ctype.name}}"
-                       data-search-menu="collection-types">{{ctype.name}}</md-button>
-          </md-menu-item>
-        </md-menu-content>
-      </md-menu>
-    </div>
+  <md-button class='md-raised' ng-click="create_collection_dialog()">Create Collection</md-button>
+
+  <script type="text/ng-template" id="create_collection_dialog.html">
+    <md-dialog style="width: 40%; height: auto">
+      <md-toolbar class="item-toolbar _md _md-toolbar-transitions">
+        <div class="md-toolbar-tools">
+          <h2 class="item-label md-truncate flex">Create New Collection</h2>
+        </div>
+      </md-toolbar>
+
+      <md-dialog-content class="md-dialog-content">
+      <div layout="row"
+            layout-align="start center"
+            class="new-collection">    
+        <md-menu>
+          <md-button class="md-raised md-button"
+            ng-click="$mdMenu.open(ev)"
+            id="new-collection-button"
+            data-search-button="new-collection">
+            Choose Collection Type
+          </md-button>
+          <md-menu-content>
+            <md-menu-item ng-repeat="ctype in collection_types">
+              <md-button ng-click="new_collection(ctype)"
+                          ng-attr-data-new-collection-type="{{ctype.name}}"
+                          data-search-menu="collection-types">{{ctype.name}}</md-button>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
+      </div>
+      <div layout-padding>
+
+        <p><b>To create new collection</b>: Click on the "choose collection type" button. Choose a collection type. Edit 
+        your collection. Click "Save".</p>
+
+      </div>
+
+      <div ng-include="'create_collection_form'"></div>
+
+      </md-dialog-content>
+
+      <md-dialog-actions layout="row">
+        <md-button class="md-primary md-cancel-button md-button ng-scope md-default-theme md-ink-ripple" ng-click="cancel()">Cancel</md-button>
+        <md-button class="md-primary md-confirm-button md-button md-ink-ripple md-default-theme" ng-click="save()">Save</md-button>
+      </md-dialog-actions>
+    </md-dialog>
+  </script>
 <% end %>
 
 <%= content_for :main do %>

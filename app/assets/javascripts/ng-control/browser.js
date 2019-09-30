@@ -155,6 +155,37 @@
         }
       }
 
+      // Collection Creation 
+
+      // The function shows the dialog for creating new sample
+      $scope.create_collection_dialog = function() {
+        $mdDialog.show({
+          templateUrl: 'create_collection_dialog.html',
+          locals: { 
+            collection_types: $scope.collection_types,
+            new_collection: $scope.new_collection,
+          },
+          controller: ['$scope', 'collection_types', 'new_collection', 
+                      collection_dialog_controller]
+        })
+      }
+
+      // Controller function for create sample dialog
+      function collection_dialog_controller($scope, collection_types, 
+                                        new_collection) {
+        $scope.collection_types = collection_types;
+
+        // Dialog actions
+        $scope.new_collection = new_collection;
+        $scope.save = function() {
+          $mdDialog.hide();
+          save()
+        };
+        $scope.cancel = function() {
+          $mdDialog.cancel()
+        };
+      }
+
       $scope.openCollectionMenu = function($mdMenu, ev) {
         originatorEv = ev;
         $mdMenu.open(ev);
@@ -319,10 +350,13 @@
         // Dialog actions
         $scope.new_sample = new_sample;
         $scope.remove_sample = remove_sample
-        $scope.save = save;
+        $scope.save = function() {
+          $mdDialog.hide();
+          save()
+        };
         $scope.cancel = function() {
           samples.length = 0;
-          $mdDialog.cancel();
+          $mdDialog.cancel()
         };
       }
 
