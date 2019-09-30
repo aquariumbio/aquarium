@@ -18,7 +18,7 @@ RSpec.describe Collection, type: :model do
   end
 
   def make_24_well_tube_rack
-    ot = ObjectType.find_by_name '24-Slot Tube Rack'
+    ot = ObjectType.find_by name: '24-Slot Tube Rack'
     return ot if ot
 
     ObjectType.new(

@@ -19,7 +19,7 @@ RSpec.describe Collection, type: :model do
   end
 
   def make_96_well_pcr_collection
-    ot = ObjectType.find_by_name '96 qPCR collection'
+    ot = ObjectType.find_by name: '96 qPCR collection'
     return ot if ot
 
     ObjectType.new(

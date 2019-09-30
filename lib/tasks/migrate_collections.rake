@@ -6,8 +6,8 @@ namespace :collections do
 
   task migrate: :environment do
 
-    part_type = ObjectType.find_by_name '__Part'
-    orphan_type = ObjectType.find_by_name 'Orphan'
+    part_type = ObjectType.find_by name: '__Part'
+    orphan_type = ObjectType.find_by name: 'Orphan'
 
     unless part_type
 

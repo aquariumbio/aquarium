@@ -44,11 +44,11 @@ module Krill
           operation = operations.find { |op| op.id == table_input[:opid] }
           next unless operation
 
-          operation.temporary[ti[:key].to_sym] = if table_input[:type] == 'number'
-                                                   table_input[:value].to_f
-                                                 else
-                                                   table_input[:value]
-                                                 end
+          operation.temporary[table_input[:key].to_sym] = if table_input[:type] == 'number'
+                                                            table_input[:value].to_f
+                                                          else
+                                                            table_input[:value]
+                                                          end
         end
 
         # return the technician input

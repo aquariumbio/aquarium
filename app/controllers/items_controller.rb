@@ -26,7 +26,7 @@ class ItemsController < ApplicationController
 
   def show
 
-    @item = Item.find_by_id(params[:id])
+    @item = Item.find_by(id: params[:id])
 
     if @item.nil?
       flash[:error] = "Could not find item with id #{params[:id]}"

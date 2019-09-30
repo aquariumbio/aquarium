@@ -797,7 +797,7 @@ $noteBottomMargin: 20px;
 }
 
 .krill-log-error {
-  background: $selection-highlight-color;
+  background: $error-highlight-color;
 }
 
 .krill-log-json {
@@ -805,7 +805,7 @@ $noteBottomMargin: 20px;
 }
 
 .krill-log-abort {
-  background: $selection-highlight-color;
+  background: $error-highlight-color;
 }
 
 ////////////

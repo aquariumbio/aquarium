@@ -18,8 +18,8 @@ namespace :workflow do
 
     OperationType.export_all 'ots.json'
 
-    ObjectType.find_by_name('Lyophilized Primer').destroy if ObjectType.find_by_name('Lyophilized Primer')
-    ObjectType.find_by_name('Checked E coli Plate of Plasmid').destroy if ObjectType.find_by_name('Checked E coli Plate of Plasmid')
+    ObjectType.find_by(name: 'Lyophilized Primer').destroy if ObjectType.find_by(name: 'Lyophilized Primer')
+    ObjectType.find_by(name: 'Checked E coli Plate of Plasmid').destroy if ObjectType.find_by(name: 'Checked E coli Plate of Plasmid')
     OperationType.destroy_all
     Operation.destroy_all
     Code.destroy_all
@@ -32,8 +32,8 @@ namespace :workflow do
 
   task unseed: :environment do
 
-    ObjectType.find_by_name('Lyophilized Primer').destroy if ObjectType.find_by_name('Lyophilized Primer')
-    ObjectType.find_by_name('Checked E coli Plate of Plasmid').destroy if ObjectType.find_by_name('Checked E coli Plate of Plasmid')
+    ObjectType.find_by(name: 'Lyophilized Primer').destroy if ObjectType.find_by(name: 'Lyophilized Primer')
+    ObjectType.find_by(name: 'Checked E coli Plate of Plasmid').destroy if ObjectType.find_by(name: 'Checked E coli Plate of Plasmid')
     OperationType.destroy_all
     Operation.destroy_all
     Code.destroy_all

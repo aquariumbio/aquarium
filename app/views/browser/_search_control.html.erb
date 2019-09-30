@@ -9,13 +9,8 @@
 
   <div class="search-part">
     <label>Sample Name or ID</label>
-    <md-tooltip md-direction="right" 
-        style=" background-color: #555;
-                color: white;
-                text-align: center;
-                border-radius: 3px;
-                padding: 5px">
-        Search by Sample name or numeric ID
+    <md-tooltip md-direction="right" class="search-tooltip">
+        Search for sample by sample name or numeric ID
     </md-tooltip> 
     <input type="text"
            ng-model="views.search.query"
@@ -26,13 +21,8 @@
 
   <div class="search-part">
     <label style="width: 40%">Sample Type</label>
-    <md-tooltip md-direction="right" 
-        style=" background-color: #555;
-                color: white;
-                text-align: center;
-                border-radius: 3px;
-                padding: 5px">
-        Search by Sample Type
+    <md-tooltip md-direction="right" class="search-tooltip">
+        Search for samples with sample type name
     </md-tooltip> 
     <input type="text"
            ng-model="views.search.sample_type"
@@ -44,26 +34,16 @@
   <md-input-container style="padding-top: 0">
   <div class="search-part">
     <label style="cursor: pointer; color: rgb(0,0,0,0.87); font-size: 14px; font-weight: 500; margin-left: 5.5px; margin-bottom: 0; transform: none">Item ID</label>
-    <md-tooltip md-direction="right" 
-      style=" background-color: #555;
-              color: white;
-              text-align: center;
-              border-radius: 3px;
-              padding: 5px">
-      Search by numeric item ID
+    <md-tooltip md-direction="right" class="search-tooltip">
+      Search for sample of item by numeric item ID
     </md-tooltip>  
     <input  name="item_id"
             type="text" min='1' 
             style="width: 100%; margin-bottom: 0"
             ng-change="user.changed = true"
             ng-model="views.search.item_id"
-            ng-pattern="/^[0-9]/"
-            data-search-input="find-item">
-    <div ng-messages="item_id.$error"></div>
-    <div ng-messages="!item_id.$error">
-      <div ng-message='pattern'>Your Item ID must be a number.</div>
-      <div ng-message="min">Your Item ID must be higher than 0.</div>
-    </div>  
+            ng-pattern="/^[0-9]+/"
+            data-search-input="find-item"> 
   </div>
   </md-input-container>
 
@@ -71,12 +51,7 @@
   <div class="search-part" layout="row">
     <div>
       <label>Project</label>
-      <md-tooltip md-direction="right" 
-        style=" background-color: #555;
-                color: white;
-                text-align: center;
-                border-radius: 3px;
-                padding: 5px">
+      <md-tooltip md-direction="right" class="search-tooltip">
         Input project name for filter
       </md-tooltip> 
       <input type="text"
@@ -94,12 +69,7 @@
   <div class="search-part" layout="row">  
     <div>
       <label>User</label>
-      <md-tooltip md-direction="right" 
-        style=" background-color: #555;
-                color: white;
-                text-align: center;
-                border-radius: 3px;
-                padding: 5px">
+      <md-tooltip md-direction="right" class="search-tooltip">
         Input user name for filter
     </md-tooltip> 
       <input type="text"

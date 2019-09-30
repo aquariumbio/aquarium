@@ -36,14 +36,20 @@ module Krill
       end
     end
 
+    # Run the specified command and send result to client.
+    #
+    # Note: all messages to client should be JSON.
+    #
+    # @param command [String] the name of the command
+    # @param client [Client] the Krill client object
     def run_command(command:, client:)
       if command[:operation] == 'jobs'
-        client.puts(response: 'ok', jobs: @managers.keys)
+        client.puts({ response: 'ok', jobs: @managers.keys }.to_json)
         return
       end
 
       unless command[:jid]
-        client.puts(response: 'error', error: 'Expecting job id')
+        client.puts({ response: 'error', error: 'Expecting job id' }.to_json)
         return
       end
 
@@ -51,7 +57,7 @@ module Krill
       begin
         job = Job.find(jid)
       rescue ActiveRecord::RecordNotFound
-        client.puts(response: 'error', error: "Job #{jid} not found")
+        client.puts({ response: 'error', error: "Job #{jid} not found" }.to_json)
         return
       end
 
@@ -61,13 +67,13 @@ module Krill
         client.puts({ response: 'error', error: e.error.to_s }.to_json)
         return
       rescue StandardError => e
-        client.puts(response: 'error', error: e.message)
+        client.puts({ response: 'error', error: e.message }.to_json)
         return
       end
 
       unless @managers[jid]
         message = "Krill Server: Process not found for job #{jid}."
-        client.puts(response: 'error', error: message)
+        client.puts({ response: 'error', error: message }.to_json)
         return
       end
 
@@ -91,7 +97,7 @@ module Krill
         # TODO: change to catch manager method exceptions
         message = "Krill Server: #{command[:operation]} on job #{jid} " \
                   "resulted in: #{e}: #{e.backtrace[0, 5]}."
-        client.puts(response: 'error', error: message)
+        client.puts({ response: 'error', error: message }.to_json)
         delete_job(job_id: jid)
       end
     end

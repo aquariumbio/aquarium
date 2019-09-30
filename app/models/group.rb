@@ -8,7 +8,7 @@ class Group < ActiveRecord::Base
   validates :name, presence: true, uniqueness: { case_sensitive: false }
 
   def self.list
-    retired = find_by_name('retired')
+    retired = find_by(name: 'retired')
     rid = retired ? retired.id : -1
     users = User.all.collect(&:login).sort
     active_users = (User.all.reject { |u| u.member? rid }).collect(&:login).sort

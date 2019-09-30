@@ -14,14 +14,14 @@ class Parameter < ActiveRecord::Base
   end
 
   def self.get_float(key)
-    p = Parameter.find_by_key(key)
+    p = Parameter.find_by(key: key)
     p ||= Parameter.make(key, '0.0')
 
     p.value.to_f
   end
 
   def self.get_string(key)
-    p = Parameter.find_by_key(key)
+    p = Parameter.find_by(key: key)
     p ||= Parameter.make(key, '')
 
     p.value
