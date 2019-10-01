@@ -510,3 +510,10 @@ md-toolbar:not(.md-menu-toolbar) {
   padding: 5px !important;
   text-align: center !important;
 }
+
+
+// Dialog styles
+md-dialog {
+  width: 40%; 
+  height: auto
+}
