@@ -165,14 +165,21 @@
             collection_types: $scope.collection_types,
             new_collection: $scope.new_collection,
           },
-          controller: ['$scope', 'collection_types', 'new_collection', 
-                      collection_dialog_controller]
+          controller: [
+            '$scope', 
+            'collection_types', 
+            'new_collection', 
+            collection_dialog_controller
+          ]
         })
       }
 
       // Controller function for create sample dialog
-      function collection_dialog_controller($scope, collection_types, 
-                                        new_collection) {
+      function collection_dialog_controller(
+        $scope, 
+        collection_types, 
+        new_collection
+      ) {
         $scope.collection_types = collection_types;
 
         // Dialog actions
