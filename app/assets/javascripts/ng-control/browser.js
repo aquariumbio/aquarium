@@ -373,8 +373,10 @@
         $scope.new_sample = new_sample;
         $scope.remove_sample = remove_sample
         $scope.save = function() {
-          $mdDialog.hide();
-          save()
+          if (samples.length > 0) {
+            $mdDialog.hide();
+            save()
+          }
         };
         $scope.cancel = function() {
           samples.length = 0;
