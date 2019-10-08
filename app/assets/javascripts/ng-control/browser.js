@@ -65,7 +65,8 @@
               samples: []
             }
           },
-          user: $scope.views.user
+          user: $scope.views.user,
+          errors: $scope.errors
         };
 
         aqCookieManager.put_object("browserViews", data);
@@ -340,7 +341,9 @@
             samples: $scope.views.create.samples,
             new_sample: $scope.new_sample,
             remove_sample: $scope.remove_sample,
-            save: $scope.save_new_samples
+            save: $scope.save_new_samples,
+            errors: $scope.errors,
+            dismiss_errors: $scope.dismiss_errors
           },
           controller: [
             "$scope",
@@ -350,6 +353,8 @@
             "new_sample",
             "remove_sample",
             "save",
+            "errors",
+            "dismiss_errors",
             sample_dialog_controller
           ]
         });
@@ -363,19 +368,23 @@
         samples,
         new_sample,
         remove_sample,
-        save
+        save,
+        errors,
+        dismiss_errors
       ) {
         $scope.sample_types = sample_types;
         $scope.selected = selected;
         $scope.samples = samples;
+        $scope.errors = errors;
 
         // Dialog actions
         $scope.new_sample = new_sample;
-        $scope.remove_sample = remove_sample
+        $scope.remove_sample = remove_sample;
+        $scope.dismiss_errors = dismiss_errors;
         $scope.save = function() {
           if (samples.length > 0) {
-            $mdDialog.hide();
-            save()
+            save();
+            console.log(errors)
           }
         };
         $scope.cancel = function() {
