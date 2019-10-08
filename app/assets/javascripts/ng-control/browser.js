@@ -66,7 +66,6 @@
             }
           },
           user: $scope.views.user,
-          errors: $scope.errors
         };
 
         aqCookieManager.put_object("browserViews", data);
@@ -186,7 +185,6 @@
         // Dialog actions
         $scope.new_collection = new_collection;
         $scope.save = function() {
-          $mdDialog.hide();
           save()
         };
         $scope.cancel = function() {
@@ -342,8 +340,7 @@
             new_sample: $scope.new_sample,
             remove_sample: $scope.remove_sample,
             save: $scope.save_new_samples,
-            errors: $scope.errors,
-            dismiss_errors: $scope.dismiss_errors
+            errors: $scope.errors
           },
           controller: [
             "$scope",
@@ -354,7 +351,6 @@
             "remove_sample",
             "save",
             "errors",
-            "dismiss_errors",
             sample_dialog_controller
           ]
         });
@@ -369,9 +365,8 @@
         new_sample,
         remove_sample,
         save,
-        errors,
-        dismiss_errors
-      ) {
+        errors
+        ) {
         $scope.sample_types = sample_types;
         $scope.selected = selected;
         $scope.samples = samples;
@@ -379,18 +374,22 @@
 
         // Dialog actions
         $scope.new_sample = new_sample;
-        $scope.remove_sample = remove_sample;
-        $scope.dismiss_errors = dismiss_errors;
+        $scope.remove_sample = function() {
+          remove_sample();
+          errors.length = 0
+        };
         $scope.save = function() {
           if (samples.length > 0) {
             save();
-            $mdDialog.hide();
-            console.log(errors)
+            console.log(errors);
           }
         };
         $scope.cancel = function() {
+          $mdDialog.cancel();
           samples.length = 0;
-          $mdDialog.cancel()
+          if (errors.length > 0) {
+            errors.length = 0
+          }
         };
       }
 
@@ -422,7 +421,6 @@
       };
 
       $scope.save_new_samples = function() {
-        $scope.errors = [];
         $scope.helper.create_samples($scope.views.create.samples, function(
           response
         ) {
@@ -441,7 +439,8 @@
             });
             load_sample_names();
           }
-        });
+        })
+        return $scope.errors;
       };
 
       $scope.copy = function(sample) {

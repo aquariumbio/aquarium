@@ -2,8 +2,7 @@
 
   <div class='alert alert-error' ng-show="errors.length > 0">
 
-    <button type="button" class="close" ng-click="dismiss_errors()">&times;</button>
-    <h4>Errors</h4>
+  <h4>Errors</h4>
     <ul>
       <li ng-repeat="error in errors">
         {{error}}
@@ -12,7 +11,7 @@
 
   </div>
 
-  <div class='alert alert-info' ng-show="messages.length > 0">
+  <div class='alert alert-info' ng-show="messages.length > 0" n>
 
     <button type="button" class="close" ng-click="dismiss_messages()">&times;</button>
     <h4>Messages</h4>
