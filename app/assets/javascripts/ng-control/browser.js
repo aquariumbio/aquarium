@@ -384,6 +384,7 @@
         $scope.save = function() {
           if (samples.length > 0) {
             save();
+            $mdDialog.hide();
             console.log(errors)
           }
         };
