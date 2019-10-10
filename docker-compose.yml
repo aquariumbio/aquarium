@@ -18,6 +18,8 @@ version: "3.5"
 services:
   app:
     entrypoint: ["/aquarium/docker/aquarium-entrypoint.sh"]
+    environment:
+      TZ: America/Los_Angeles
     volumes:
       - ./db:/aquarium/db
       - ./log:/aquarium/log
@@ -41,6 +43,7 @@ services:
       MYSQL_USER: aquarium
       MYSQL_PASSWORD: aSecretAquarium
       MYSQL_ROOT_PASSWORD: aSecretAquarium
+      TZ: America/Los_Angeles
     volumes:
       - ./docker/db:/var/lib/mysql
       - ./docker/mysql_init/dump.sql:/docker-entrypoint-initdb.d/dump.sql
@@ -53,7 +56,8 @@ services:
       - aquarium_net
     expose:
       - "3500"
-
+    environment:
+      TZ: America/Los_Angeles
     depends_on:
       - db
       - app
