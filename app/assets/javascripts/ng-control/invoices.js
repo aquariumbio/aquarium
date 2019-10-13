@@ -69,7 +69,11 @@
         .then(result => AQ.Transaction.apply_credit(transactions, result.percent, result.message))
         .then(response => {
           if ( ! response.error ) {
+            console.log(response)
+            console.log($scope.state.transactions.length)
+            $scope.state.transactions = $scope.state.transactions.concat(response.transactions);
             $scope.state.transaction_logs = $scope.state.transaction_logs.concat(response.transaction_logs);
+            console.log($scope.state.transactions.length)
             $scope.showAlert("Credit Successfully Applied");
             aq.each(transactions, t => t.checked = false); 
           } else {

@@ -100,7 +100,7 @@ class InvoicesController < ApplicationController
       response = if errors.present?
                    { error: errors.full_messages.join(', ') }
                  else
-                   { notes: notes, rows: rows }
+                   { notes: notes, rows: rows.as_json(include: :operation) }
                  end
     else
       response = { error: 'Only users in the admin group can make notes to transactions.' }
