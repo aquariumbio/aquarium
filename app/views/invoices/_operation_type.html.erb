@@ -1,0 +1,24 @@
+<div class="operation-type-name">{{operation_type.name}}</div>
+
+<div layout="row"> 
+
+    <ul class="transaction-list" flex=70>
+        <li ng-repeat="transaction in state.transactions | filter: { operation: { operation_type_id: operation_type.id } }" 
+            class="transaction-item">
+            <%= render partial: 'transaction' %>
+        </li>
+    </ul>
+
+    <div flex=30 class="operation-type-summary">
+        <b>Total:</b>                {{state.summary.operation_type_summaries[operation_type.id].total|currency}}<br>
+        <b>Base:</b>                 {{state.summary.operation_type_summaries[operation_type.id].total - 
+                                       state.summary.operation_type_summaries[operation_type.id].overhead|currency}}<br>
+        <b>Overhead:</b>             {{state.summary.operation_type_summaries[operation_type.id].overhead|currency}}<br>
+        <b>Total Labor:</b>          {{state.summary.operation_type_summaries[operation_type.id].labor_minutes / 60 | number:0}} hours, 
+                                     {{state.summary.operation_type_summaries[operation_type.id].labor_minutes % 60 | number:0}} minutes<br>
+        <b>Total Materials Cost</b>: {{state.summary.operation_type_summaries[operation_type.id].materials|currency}}<br>
+        <br>
+    </div>  
+
+</div>
+

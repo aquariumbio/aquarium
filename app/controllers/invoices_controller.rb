@@ -6,64 +6,17 @@ class InvoicesController < ApplicationController
   before_filter :up_to_date_user
 
   def index
-
-    year = if !params[:year]
-             Date.today.year
-           else
-             params[:year].to_i
-           end
-
-    user = if params[:all] && current_user.is_admin
-             nil
-           else
-             current_user
-           end
-
-    @monthly_invoices = (1..12).collect do |m|
-      {
-        month: m,
-        year: year,
-        date: DateTime.new(year, m),
-        entries: Account.users_and_budgets(year, m, user)
-      }
-    end.reverse.reject { |d| d[:entries].empty? }
-
-    @monthly_invoices += (1..12).collect do |m|
-      {
-        month: m,
-        year: year - 1,
-        date: DateTime.new(year - 1, m),
-        entries: Account.users_and_budgets(year - 1, m, user)
-      }
-    end.reverse.reject { |d| d[:entries].empty? }
-
-    respond_to do |format|
-      format.html { render layout: 'aq2' }
-    end
-
-  end
-
-  def show
-    @invoice = Invoice.find(params[:id])
-    @date = DateTime.new(@invoice.year, @invoice.month)
-    @rows = @invoice.rows
-    @operation_types = OperationType.all
-    @base = Account.total(@rows, false)
-    @base_labor = Account.total(@rows.select { |row| row.category == 'labor' }, false)
-    @base_materials = Account.total(@rows.select { |row| row.category == 'materials' }, false)
-    @total = Account.total(@rows, true)
-    @markup = @total - @base
     respond_to do |format|
       format.html { render layout: 'aq2' }
     end
   end
-
+ 
   def note
 
     if current_user.is_admin
 
       notes = []
-      params[:rows].each do |_k, row|
+      params[:rows].each do |row|
         al = AccountLog.new(
           row1: row[:id],
           row2: nil,
@@ -89,7 +42,7 @@ class InvoicesController < ApplicationController
     rows = []
 
     if params[:rows]
-      params[:rows].each do |_index, val|
+      params[:rows].each do |val|
         logger.info val[:id]
         row = Account.find(val[:id])
         row.budget_id = budget.id
@@ -123,7 +76,7 @@ class InvoicesController < ApplicationController
       rows = []
 
       errors = nil
-      params[:rows].each do |_k, row|
+      params[:rows].each do |row|
         credit = create_credit(transaction: Account.find(row[:id]),
                                percentage: params[:percent].to_f)
         credit.save

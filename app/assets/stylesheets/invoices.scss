@@ -1,15 +1,87 @@
-.invoice {
-  .action {
-    margin-left: 5px;
-    margin-right: 5px;
-  }
-  .percent {
-    width: 50px;
-    height: 10pt;
-    border-radius: 5px;
-    padding: 2px;
-  }
-  .change {
-    color: red;
-  }
+.invoice-main {
+    margin: 16px;
+}
+
+.operation-type {
+    .operation-type-name {
+        font-weight: bold;
+        font-size: 18pt;
+        margin: 0 0 10px 0;
+    }
+    margin: 0 0 10px 0;
+}
+
+.transaction-list { 
+ 
+    list-style-type: none;
+
+    .transaction-item {
+
+        .transaction {
+
+            display: inline-block;
+            width: 100%;
+            border-top: 1pt solid #eee;
+
+            .tr-check {
+                display: inline-block;
+                width: 5%;
+                input[type="checkbox"] {
+                    margin-top: -4px !important;
+                }            
+            }
+
+            .amount {
+                display: inline-block;
+                width: 15%;
+            }            
+
+            .type {
+                display: inline-block;
+                width: 20%;
+            }
+
+            .category {
+                display: inline-block;
+                width: 20%;
+            }            
+
+            .user {
+                display: inline-block;
+                width: 20%;
+            }
+
+            .date {
+                display: inline-block;
+                width: 15%;
+                text-align: right;
+            }            
+
+            .credit {
+                color: darkgreen;
+            }
+
+        }
+
+    }
+
+}
+.transaction-log {
+
+    .note {
+        display: inline-block;
+        text-align: left;
+        color: darkred;
+        padding-left: 28px;
+
+        a {
+            color: darkred;
+            font-weight: bold;
+        }
+    }        
+    
+}
+
+.operation-type-summary {
+    padding-left: 16px;
 }
