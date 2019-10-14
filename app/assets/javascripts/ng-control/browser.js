@@ -66,6 +66,7 @@
             }
           },
           user: $scope.views.user,
+          errors: $scope.errors
         };
 
         aqCookieManager.put_object("browserViews", data);
@@ -335,22 +336,22 @@
           templateUrl: "create_sample_dialog.html",
           locals: {
             sample_types: $scope.sample_types,
-            selected: $scope.views.create.selected,
             samples: $scope.views.create.samples,
             new_sample: $scope.new_sample,
             remove_sample: $scope.remove_sample,
             save: $scope.save_new_samples,
-            errors: $scope.errors
+            errors: $scope.errors,
+            helper: $scope.helper
           },
           controller: [
             "$scope",
             "sample_types",
-            "selected",
             "samples",
             "new_sample",
             "remove_sample",
             "save",
             "errors",
+            "helper",
             sample_dialog_controller
           ]
         });
@@ -360,28 +361,35 @@
       function sample_dialog_controller(
         $scope,
         sample_types,
-        selected,
         samples,
         new_sample,
         remove_sample,
         save,
-        errors
+        errors,
+        helper
         ) {
         $scope.sample_types = sample_types;
-        $scope.selected = selected;
         $scope.samples = samples;
         $scope.errors = errors;
+        $scope.helper = helper;
 
         // Dialog actions
         $scope.new_sample = new_sample;
         $scope.remove_sample = function() {
           remove_sample();
-          errors.length = 0
+          $scope.errors.length = 0
         };
         $scope.save = function() {
           if (samples.length > 0) {
-            save();
-            console.log(errors);
+            $scope.helper.create_samples(samples, function(
+              response
+            ) {
+              if (response.errors) {
+                $scope.errors = response.errors;
+              } else {
+                save()
+              }
+            })
           }
         };
         $scope.cancel = function() {
@@ -421,12 +429,6 @@
       };
 
       $scope.save_new_samples = function() {
-        $scope.helper.create_samples($scope.views.create.samples, function(
-          response
-        ) {
-          if (response.errors) {
-            $scope.errors = response.errors;
-          } else {
             $scope.views.create.samples = [];
             $scope.choose_user($scope.user.current);
             $scope.views.search.query = "";
@@ -438,9 +440,6 @@
               return "Created sample " + s.id + ": " + s.name;
             });
             load_sample_names();
-          }
-        })
-        return $scope.errors;
       };
 
       $scope.copy = function(sample) {
