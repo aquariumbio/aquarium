@@ -1,6 +1,0 @@
-# The file dump.sql in this directory is used to initialize
-# the database, but along with any other temporary dump files should be ignored:
-*
-# but want to keep this file and the default.sql
-!default.sql
-!.gitignore
