@@ -116,12 +116,12 @@
 
     $scope.state = {
         date: new Date(2019, 10-1), // JS months are zero indexed
-        budget: { id: 1, name: "All Budgets"}
+        budget: { id: -1, name: "All Budgets"}
     };
 
     $scope.new_state = {
         date: new Date(2019, 10-1),
-        budget_id: 1
+        budget_id: -1
     };
 
     Promise.all([

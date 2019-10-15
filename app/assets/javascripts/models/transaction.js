@@ -4,33 +4,28 @@ AQ["TransactionLog"] = new AQ.Base("AccountLog");
 AQ.Transaction.where_month = function(month, year, budget_id=-1) {
 
     let query = `MONTH(created_at) = ${month} AND YEAR(created_at) = ${year}`;
+    let transactions = null;
 
     if ( budget_id != -1 ) {
         query += ` AND budget_id = ${budget_id}`;
     }
 
-    return AQ.Transaction.where(query, {include: ["user", "operation"]});
+    return AQ.Transaction
+             .where(query, {include: ["user", "operation"]})
+             .then(result => transactions = result)
+             .then(() => AQ.PlanAssociation.where({operation_id: aq.collect(transactions, t=>t.operation_id)}))
+             .then(plan_associations => {
+                 aq.each(plan_associations, pa => {
+                     aq.each(transactions, t => {
+                         if (pa.operation_id == t.operation_id) {
+                             t.plan_id = pa.plan_id
+                         }
+                     })
+                 })
+                 return transactions;
+             })
 
 }
-
-/*
-
-{"id":286380,
-"transaction_type":"debit",
-"amount":0,
-"user_id":143,
-"budget_id":61,
-"category": "materials",
-"job_id":108827,
-"created_at":"2019-09-30T18:53:39.000-07:00",
-"updated_at":"2019-09-30T18:53:39.000-07:00",
-"description":"Materials",
-"labor_rate":0.3495,
-"markup_rate":0.5973,
-"operation_id":230020,
-"rid":76}
-
-*/
 
 /*
 

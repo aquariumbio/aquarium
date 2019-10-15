@@ -15,64 +15,83 @@
  
     list-style-type: none;
 
-    .transaction-item {
+}
 
-        .transaction {
+.transaction {
 
-            display: inline-block;
-            width: 100%;
-            border-top: 1pt solid #eee;
+    display: inline-block;
+    width: 100%;
+    border-top: 1pt solid #eee;
 
-            .tr-check {
-                display: inline-block;
-                width: 5%;
-                input[type="checkbox"] {
-                    margin-top: -4px !important;
-                }            
-            }
-
-            .amount {
-                display: inline-block;
-                width: 15%;
-            }            
-
-            .type {
-                display: inline-block;
-                width: 20%;
-            }
-
-            .category {
-                display: inline-block;
-                width: 20%;
-            }            
-
-            .user {
-                display: inline-block;
-                width: 20%;
-            }
-
-            .date {
-                display: inline-block;
-                width: 15%;
-                text-align: right;
-            }            
-
-            .credit {
-                color: darkgreen;
-            }
-
+    .tr-check {
+        display: inline-block;
+        width: 5%;
+        input[type="checkbox"] {
+            margin-top: -4px !important;
         }
+    }
 
+    .amount {
+        display: inline-block;
+        width: 10%;
+    }            
+
+    .type {
+        display: inline-block;
+        width: 10%;
+    }
+
+    .category {
+        display: inline-block;
+        width: 10%;
+    }            
+
+    .user {
+        display: inline-block;
+        width: 20%;
+    }
+
+    .plan {
+        display: inline-block;
+        width: 10%;              
+    }
+    
+    .operation {
+        display: inline-block;
+        width: 10%;               
+    }
+    
+    .job {
+        display: inline-block;
+        width: 10%;             
+    }            
+
+    .date {
+        display: inline-block;
+        width: 10%;
+    }     
+    
+    .credit {
+        color: darkgreen;
+    }
+
+    .heading {
+        font-weight: bold;
     }
 
 }
+
+.transaction-list-heading {
+    border: none !important;
+}
+
 .transaction-log {
 
     .note {
         display: inline-block;
         text-align: left;
         color: darkred;
-        padding-left: 28px;
+        padding-left: calc(5% + 10px);
 
         a {
             color: darkred;

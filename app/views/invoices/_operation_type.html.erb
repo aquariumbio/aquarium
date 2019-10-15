@@ -1,8 +1,28 @@
-<div class="operation-type-name">{{operation_type.name}}</div>
+<span class="operation-type-name">
+  {{operation_type.name}}
 
-<div layout="row"> 
+</span>
 
-    <ul class="transaction-list" flex=70>
+<span class="no-highlight clickable" ng-click="operation_type.show = !operation_type.show">
+  {{operation_type.show ? "&bigtriangleup;" : "&bigtriangledown;"}}
+</span>
+
+<div layout="row">
+
+    <ul class="transaction-list" flex=70  ng-if="operation_type.show">
+
+        <div class="transaction transaction-list-heading">
+            <span class="tr-check heading">&nbsp;</span>
+            <span class="amount heading">Amount</span>
+            <span class="type heading">Type</span>
+            <span class="category heading">Category</span>
+            <span class="user heading">User</span>
+            <span class="plan heading">Plan</span>
+            <span class="operation heading">Operation</span>
+            <span class="job heading">Job</span>
+            <span class="date heading">Date</span>
+        </div>
+
         <li ng-repeat="transaction in state.transactions | filter: { operation: { operation_type_id: operation_type.id } }" 
             class="transaction-item">
             <%= render partial: 'transaction' %>
