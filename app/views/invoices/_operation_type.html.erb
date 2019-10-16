@@ -1,10 +1,9 @@
-<span class="operation-type-name">
-  {{operation_type.name}}
-
+<span class="no-highlight clickable" ng-click="operation_type.show = !operation_type.show">
+{{operation_type.show ? "&#9660;" : "&#9658;"}}
 </span>
 
-<span class="no-highlight clickable" ng-click="operation_type.show = !operation_type.show">
-  {{operation_type.show ? "&bigtriangleup;" : "&bigtriangledown;"}}
+<span class="operation-type-name">
+  {{operation_type.name}}
 </span>
 
 <div layout="row">

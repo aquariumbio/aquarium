@@ -5,25 +5,34 @@
 <%= content_for :class do %>invoices<% end %>
 
 <% content_for :sidebar do %>
-  <md-button class="md-raised" 
-             ng-click="update()">
-    Update
-  </md-button>
-  <br><br> 
-  <md-datepicker
-      ng-model="new_state.date"
-      md-placeholder="Enter date"
-      md-mode="month">
-  </md-datepicker>
-  <br><br>
-  <div id="#budget-list">
-    <md-radio-group ng-model="new_state.budget_id">
-      <md-radio-button value="-1" class="md-primary">All Budgets</md-radio-button>
-      <md-radio-button ng-repeat="budget in budgets | orderBy: 'name'"
-                       value="{{budget.id}}">
-        {{budget.name}}
-      </md-radio-button>
-    </md-radio-group>
+  <div layout='column'>
+    <md-button class="md-raised" 
+              ng-click="update()">
+      Update
+    </md-button>
+    <hr>
+    <md-datepicker
+        ng-model="new_state.date"
+        md-placeholder="Enter date"
+        md-mode="month"
+        class="budget-data">
+    </md-datepicker>
+    <hr>
+    <div id="budget-list">
+      <md-radio-group ng-model="new_state.budget_id">
+        <md-radio-button class="budget-item" 
+                         value="-1" 
+                         class="md-primary">
+            All Budgets
+        </md-radio-button>
+        <md-radio-button class="budget-item" 
+                         ng-repeat="budget in budgets | orderBy: 'name'"
+                         value="{{budget.id}}"
+                         ng-if="state.budget_ids_used.indexOf(budget.id) >= 0">
+          {{budget.name}}
+        </md-radio-button>
+      </md-radio-group>
+    </div>
   </div>
 <% end %>
 

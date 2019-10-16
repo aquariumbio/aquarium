@@ -5,7 +5,7 @@
 .operation-type {
     .operation-type-name {
         font-weight: bold;
-        font-size: 18pt;
+        font-size: 14pt;
         margin: 0 0 10px 0;
     }
     margin: 0 0 10px 0;
@@ -103,4 +103,21 @@
 
 .operation-type-summary {
     padding-left: 16px;
+}
+
+
+.budget-item {
+    margin-bottom: 4px !important;
+}
+
+#budget-list {
+    padding-left: 16px;
+}
+
+.budget-data {
+
+    .md-datepicker-input {
+        margin-bottom: 2px !important;
+    }
+ 
 }

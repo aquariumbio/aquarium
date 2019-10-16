@@ -20,6 +20,11 @@
           $scope.state.summary = AQ.Transaction.summarize(transactions);
           $scope.$apply();
         })
+        .then(() => AQ.Budget.used($scope.state.date.getFullYear(), $scope.state.date.getMonth()+1))
+        .then(budget_ids => {
+            console.log(budget_ids);
+            $scope.state.budget_ids_used = budget_ids
+        })
         .then(() => AQ.Transaction.get_logs($scope.state.transactions))
         .then(logs => {
           $scope.state.transaction_logs = logs;

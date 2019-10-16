@@ -13,3 +13,9 @@ AQ.Budget.record_getters.spent = function() {
 
 }
 
+
+AQ.Budget.used = function(year, month) {
+  console.log(`/invoices/budgets_used/${year}/${month}`)
+  return AQ.get(`/invoices/budgets_used/${year}/${month}`)
+           .then(result => result.data)
+}

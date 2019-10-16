@@ -114,6 +114,7 @@ Bioturk::Application.routes.draw do
   get '/invoices/year/:year',                    to: 'invoices#index'
   post '/invoices/change_budget',                to: 'invoices#change_budget'
   get '/invoices/change_status/:id/:status',     to: 'invoices#change_status'
+  get '/invoices/budgets_used/:year/:month',     to: 'invoices#budgets_used'
   resources :invoices
 
   get '/accounts',                               to: 'accounts#index'

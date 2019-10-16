@@ -109,6 +109,15 @@ class InvoicesController < ApplicationController
     render json: response
   end
 
+  def budgets_used
+    budget_ids = Account
+      .where("year(created_at) = #{params[:year]} and month(created_at) = #{params[:month]}")
+      .select(:budget_id)
+      .collect { |a| a.budget_id }
+      .uniq
+    render json: budget_ids
+  end  
+
   private
 
   def create_credit(transaction:, percentage:)
@@ -124,4 +133,5 @@ class InvoicesController < ApplicationController
       description: 'Credit due to a lab error or similar issue: credit'
     )
   end
+
 end
