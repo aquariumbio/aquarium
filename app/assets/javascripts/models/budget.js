@@ -13,9 +13,13 @@ AQ.Budget.record_getters.spent = function() {
 
 }
 
+//
+// Asynchronously returns a list of budget ids corresponding to the year, month and
+// user_id given. 
+//
+AQ.Budget.used = function(year, month, user_id=-1) {
 
-AQ.Budget.used = function(year, month) {
-  console.log(`/invoices/budgets_used/${year}/${month}`)
-  return AQ.get(`/invoices/budgets_used/${year}/${month}`)
+  return AQ.get(`/invoices/budgets_used/${year}/${month}/${user_id}`)
            .then(result => result.data)
+
 }

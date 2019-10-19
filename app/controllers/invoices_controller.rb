@@ -71,6 +71,18 @@ class InvoicesController < ApplicationController
   end
 
   def credit
+
+    # This endpoint takes a params vector of the form,
+    #    }
+    #       rows: [ t1, t2, ... ], // transactions to apply credit to
+    #       percent: n,         // 0-100
+    #       note: str              // message to explain why
+    #    }   
+    # and creates new transactions and transaction logs applying the credit. It returns
+    # them to the caller. 
+    #
+    # This method is used by the invoices page. 
+
     if current_user.is_admin
       notes = []
       rows = []
@@ -110,8 +122,19 @@ class InvoicesController < ApplicationController
   end
 
   def budgets_used
+
+    # This endpoint returns a list of the budget ids used by transactions (a.k.a Accounts) for the
+    # given month and, if included, user id. It is called by the invoices page so that it can
+    # show only those budgets with activity in the left hand sidebar.
+
+    query = "year(created_at) = #{params[:year]} and month(created_at) = #{params[:month]}"
+
+    if params[:user_id] && params[:user_id] != "-1"
+        query += " and user_id = #{params[:user_id]}"
+    end
+
     budget_ids = Account
-      .where("year(created_at) = #{params[:year]} and month(created_at) = #{params[:month]}")
+      .where(query)
       .select(:budget_id)
       .collect { |a| a.budget_id }
       .uniq

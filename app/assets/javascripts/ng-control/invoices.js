@@ -8,21 +8,35 @@
     // Private methods 
 
     function refresh() {
+
       $scope.state.transactions = null;
+
+      let user_id = $scope.current_user.is_admin && $scope.all_invoices ? -1 : $scope.current_user.id;
+
       AQ.Transaction
-        .where_month($scope.state.date.getMonth()+1, 
-               $scope.state.date.getFullYear(),
-               $scope.state.budget.id)
+        .where_month(
+                $scope.state.date.getMonth()+1, 
+                $scope.state.date.getFullYear(),
+                $scope.state.budget.id,
+                user_id
+              )
         .then(transactions => {
           $scope.state.transactions = transactions;
-          let op_type_ids = aq.uniq(aq.collect(transactions, t => t.operation.operation_type_id));
-          $scope.state.operation_types = aq.where($scope.operation_types, ot => op_type_ids.indexOf(ot.id) >= 0 );
+          let op_type_ids = aq.uniq(
+              aq.collect(transactions, 
+              t => t.operation.operation_type_id)
+            );
+          $scope.state.operation_types = aq.where(
+            $scope.operation_types, 
+            ot => op_type_ids.indexOf(ot.id) >= 0
+          );
           $scope.state.summary = AQ.Transaction.summarize(transactions);
           $scope.$apply();
         })
-        .then(() => AQ.Budget.used($scope.state.date.getFullYear(), $scope.state.date.getMonth()+1))
+        .then(() => AQ.Budget.used($scope.state.date.getFullYear(), 
+                                   $scope.state.date.getMonth()+1, 
+                                   user_id))
         .then(budget_ids => {
-            console.log(budget_ids);
             $scope.state.budget_ids_used = budget_ids
         })
         .then(() => AQ.Transaction.get_logs($scope.state.transactions))
@@ -30,6 +44,7 @@
           $scope.state.transaction_logs = logs;
           $scope.$apply();
         })
+
     }
 
     // UI Accessible methods
@@ -74,11 +89,8 @@
         .then(result => AQ.Transaction.apply_credit(transactions, result.percent, result.message))
         .then(response => {
           if ( ! response.error ) {
-            console.log(response)
-            console.log($scope.state.transactions.length)
             $scope.state.transactions = $scope.state.transactions.concat(response.transactions);
             $scope.state.transaction_logs = $scope.state.transaction_logs.concat(response.transaction_logs);
-            console.log($scope.state.transactions.length)
             $scope.showAlert("Credit Successfully Applied");
             aq.each(transactions, t => t.checked = false); 
           } else {
@@ -117,7 +129,9 @@
 
     AQ.init($http);
     AQ.update = () => { $scope.$apply(); };
-    AQ.confirm = (msg) => { return confirm(msg); };        
+    AQ.confirm = (msg) => { return confirm(msg); };      
+    
+    $scope.all_invoices = aq.url_params().all == 'true'; 
 
     $scope.state = {
         date: new Date(2019, 10-1), // JS months are zero indexed
@@ -131,10 +145,12 @@
 
     Promise.all([
         AQ.Budget.all(),
-        AQ.OperationType.all()
+        AQ.OperationType.all(),
+        AQ.User.current()
     ]).then(results => {
         $scope.budgets = results[0];
         $scope.operation_types = results[1];
+        $scope.current_user = results[2];
     }).then( () => {
         refresh();
     })

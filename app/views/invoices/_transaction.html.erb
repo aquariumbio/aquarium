@@ -1,4 +1,8 @@
 
+<!--
+    Show a transaction and any transaction logs that go with it. 
+-->
+
 <div class="transaction">
   <span class="tr-check">
       <input type=checkbox 
@@ -24,6 +28,7 @@
   <span class="date">{{transaction.created_at|date : 'MMM d'}}</span>
 </div>
 
+<!-- Notes, or logs in which this transaction is the target of a credit -->
 <div class="transaction-log"
      ng-repeat="log in state.transaction_logs | filter: { row1: transaction.id }">
      <span class="note">
@@ -33,6 +38,7 @@
     </span>
 </div>
 
+<!-- Logs in which this transaction is the result of a credit -->
 <div class="transaction-log"
      ng-repeat="log in state.transaction_logs | filter: { row2: transaction.id }">
     <span class="note">

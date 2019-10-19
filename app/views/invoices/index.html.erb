@@ -23,7 +23,7 @@
         <md-radio-button class="budget-item" 
                          value="-1" 
                          class="md-primary">
-            All Budgets
+            <b>All Budgets</b>
         </md-radio-button>
         <md-radio-button class="budget-item" 
                          ng-repeat="budget in budgets | orderBy: 'name'"
@@ -37,7 +37,11 @@
 <% end %>
 
 <% content_for :specific_title do %>
-  &rangle; {{state.date | date : 'MMMM yyyy'}} &rangle; {{state.budget.name}}
+  &rangle; {{state.date | date : 'MMMM yyyy'}} 
+  &rangle; {{state.budget.name}}
+  <span ng-if="!current_user.is_admin || !all_invoices">
+    &rangle; {{current_user.name}}
+  </span>
 <% end %>
 
 <% content_for :main do %>
@@ -57,7 +61,7 @@
                                      {{state.summary.labor_minutes % 60 | number:0}} minutes<br>
         <b>Total Materials Cost:</b> {{state.summary.materials|currency}}<br>
         <br>
-    </div>    
+    </div>
 
     <div class="operation-type"
         ng-if="state.transactions && operation_types" 

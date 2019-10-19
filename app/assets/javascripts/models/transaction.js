@@ -1,7 +1,11 @@
 AQ["Transaction"] = new AQ.Base("Account");
 AQ["TransactionLog"] = new AQ.Base("AccountLog");
 
-AQ.Transaction.where_month = function(month, year, budget_id=-1) {
+//
+// Asynchronously returns the list of transactions for the given month, year,
+// budget_id, and user_id. 
+//
+AQ.Transaction.where_month = function(month, year, budget_id=-1, user_id=-1) {
 
     let query = `MONTH(created_at) = ${month} AND YEAR(created_at) = ${year}`;
     let transactions = null;
@@ -9,6 +13,10 @@ AQ.Transaction.where_month = function(month, year, budget_id=-1) {
     if ( budget_id != -1 ) {
         query += ` AND budget_id = ${budget_id}`;
     }
+
+    if ( user_id != -1 ) {
+        query += ` AND user_id = ${user_id}`;
+    }    
 
     return AQ.Transaction
              .where(query, {include: ["user", "operation"]})
@@ -42,6 +50,7 @@ AQ.Transaction.where_month = function(month, year, budget_id=-1) {
 
  */
 
+// Total amount, including overhead
 AQ.Transaction.record_getters.total = function() {
 
     if ( this.transaction_type == 'debit' ) {
@@ -52,6 +61,7 @@ AQ.Transaction.record_getters.total = function() {
 
 }
 
+// Number of minutes of labor
 AQ.Transaction.record_getters.labor_minutes = function() {
     
     // amount = labor_rate * labor_minutes
@@ -63,6 +73,7 @@ AQ.Transaction.record_getters.labor_minutes = function() {
 
 }
 
+// Cost of materials not including overhead
 AQ.Transaction.record_getters.materials_base = function() {
    
     // amount = materials_base
@@ -74,6 +85,7 @@ AQ.Transaction.record_getters.materials_base = function() {
 
 }
 
+// Just the overhead portion
 AQ.Transaction.record_getters.markup = function() {
    
     // overhead = total - amount
@@ -81,6 +93,7 @@ AQ.Transaction.record_getters.markup = function() {
 
 }
 
+// Returns a summary of the costs associated with a list of transactions
 AQ.Transaction.summarize_aux = function(transactions) {
 
   let summary = {
@@ -96,6 +109,7 @@ AQ.Transaction.summarize_aux = function(transactions) {
 
 }
 
+// Returns a summary of the costs associated with an operation type
 AQ.Transaction.summarize_operation_type = function(transactions, operation_type_id) {
 
     let sublist = aq.where(transactions, t => t.operation.operation_type_id == operation_type_id);
@@ -103,6 +117,7 @@ AQ.Transaction.summarize_operation_type = function(transactions, operation_type_
 
 } 
 
+// Returns a summary of the transactions, and list of summaries for each operation type used.
 AQ.Transaction.summarize = function(transactions) {
 
     let summary = AQ.Transaction.summarize_aux(transactions);
@@ -118,6 +133,7 @@ AQ.Transaction.summarize = function(transactions) {
 
 }
 
+// Asynchronously returns all logs used in the list of transactions
 AQ.Transaction.get_logs = function(transactions) {
 
     let tids = aq.collect(transactions, t => t.id);
@@ -125,6 +141,8 @@ AQ.Transaction.get_logs = function(transactions) {
 
 }
 
+// Asynchronously applies credits to the list of transactions, returning
+// the resulting list of credit transactions and their logs
 AQ.Transaction.apply_credit = function(transactions, percent, message) {
 
     let data = {
