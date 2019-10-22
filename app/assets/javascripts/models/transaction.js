@@ -22,6 +22,7 @@ AQ.Transaction.where_month = function(
     query += ` AND user_id = ${user_id}`;
   }
 
+  // TODO: move query into rails controller/model
   return AQ.Transaction.where(query, { include: ["user", "operation"] })
     .then(result => (transactions = result))
     .then(() =>
@@ -108,11 +109,12 @@ AQ.Transaction.summarize_operation_type = function(
   transactions,
   operation_type_id
 ) {
-  let sublist = aq.where(
+  // TODO: eliminate where (?)
+  let transaction_list = aq.where(
     transactions,
     t => t.operation.operation_type_id == operation_type_id
   );
-  return AQ.Transaction.summarize_aux(sublist);
+  return AQ.Transaction.summarize_aux(transaction_list);
 };
 
 // Returns a summary of the transactions, and list of summaries for each operation type used.
@@ -136,6 +138,7 @@ AQ.Transaction.summarize = function(transactions) {
 // Asynchronously returns all logs used in the list of transactions
 AQ.Transaction.get_logs = function(transactions) {
   let transaction_ids = aq.collect(transactions, t => t.id);
+  // TODO: eliminate where
   return AQ.TransactionLog.where(
     { row1: transaction_ids },
     { include: "user" }
