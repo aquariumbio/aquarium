@@ -341,6 +341,7 @@
             remove_sample: $scope.remove_sample,
             save: $scope.save_new_samples,
             errors: $scope.errors,
+            messages: $scope.messages,
             helper: $scope.helper
           },
           controller: [
@@ -351,6 +352,7 @@
             "remove_sample",
             "save",
             "errors",
+            "messages",
             "helper",
             sample_dialog_controller
           ]
@@ -366,18 +368,21 @@
         remove_sample,
         save,
         errors,
+        messages,
         helper
         ) {
         $scope.sample_types = sample_types;
         $scope.samples = samples;
         $scope.errors = errors;
+        $scope.messages = messages;
         $scope.helper = helper;
 
         // Dialog actions
         $scope.new_sample = new_sample;
         $scope.remove_sample = function() {
           remove_sample();
-          $scope.errors.length = 0
+          $scope.errors = [];
+          $scope.messages = [];
         };
         $scope.save = function() {
           if (samples.length > 0) {
@@ -387,7 +392,10 @@
               if (response.errors) {
                 $scope.errors = response.errors;
               } else {
-                save()
+                save();
+                $scope.messages = aq.collect(response.samples, function(s) {
+                  return "Created sample " + s.id + ": " + s.name;
+                });
               }
             })
           }
@@ -395,9 +403,11 @@
         $scope.cancel = function() {
           $mdDialog.cancel();
           samples.length = 0;
-          if (errors.length > 0) {
-            errors.length = 0
-          }
+          if ($scope.errors.length > 0) {
+              $scope.errors = [];
+            } else if ($scope.messages.length > 0) {
+              $scope.messages = []
+           }
         };
       }
 
@@ -429,16 +439,12 @@
       };
 
       $scope.save_new_samples = function() {
-            $scope.views.create.samples = [];
             $scope.choose_user($scope.user.current);
             $scope.views.search.query = "";
             $scope.views.search.sample_type = "";
             $scope.views.search.user = $scope.user.current.login;
             $scope.select_view("search");
             $scope.search(0);
-            $scope.messages = aq.collect(response.samples, function(s) {
-              return "Created sample " + s.id + ": " + s.name;
-            });
             load_sample_names();
       };
 
