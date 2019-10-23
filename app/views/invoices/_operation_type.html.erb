@@ -1,0 +1,47 @@
+<!--
+    Shows the transactions and totals for a given operation type.
+-->
+
+<span class="no-highlight clickable" ng-click="operation_type.show = !operation_type.show">
+{{operation_type.show ? "&#9660;" : "&#9658;"}}
+</span>
+
+<span class="operation-type-name">
+  {{operation_type.name}}
+</span>
+
+<div layout="row">
+
+    <ul class="transaction-list" flex=70  ng-if="operation_type.show">
+
+        <div class="transaction transaction-list-heading">
+            <span class="tr-check heading">&nbsp;</span>
+            <span class="amount heading">Amount</span>
+            <span class="type heading">Type</span>
+            <span class="category heading">Category</span>
+            <span class="user heading">User</span>
+            <span class="plan heading">Plan</span>
+            <span class="operation heading">Operation</span>
+            <span class="job heading">Job</span>
+            <span class="date heading">Date</span>
+        </div>
+
+        <li ng-repeat="transaction in state.transactions | filter: { operation: { operation_type_id: operation_type.id } }" 
+            class="transaction-item">
+            <%= render partial: 'transaction' %>
+        </li>
+    </ul>
+
+    <div flex=30 class="operation-type-summary">
+        <b>Total:</b>                {{state.summary.operation_type_summaries[operation_type.id].total|currency}}<br>
+        <b>Base:</b>                 {{state.summary.operation_type_summaries[operation_type.id].total - 
+                                       state.summary.operation_type_summaries[operation_type.id].overhead|currency}}<br>
+        <b>Overhead:</b>             {{state.summary.operation_type_summaries[operation_type.id].overhead|currency}}<br>
+        <b>Total Labor:</b>          {{state.summary.operation_type_summaries[operation_type.id].labor_minutes / 60 | number:0}} hours, 
+                                     {{state.summary.operation_type_summaries[operation_type.id].labor_minutes % 60 | number:0}} minutes<br>
+        <b>Total Materials Cost</b>: {{state.summary.operation_type_summaries[operation_type.id].materials|currency}}<br>
+        <br>
+    </div>  
+
+</div>
+

@@ -21,14 +21,15 @@ class JsonController < ApplicationController
       result = result.limit(params[:options][:limit]) if params[:options] && params[:options][:limit] && params[:options][:limit].to_i > 0
       result = result.offset(params[:options][:offset]) if params[:options] && params[:options][:offset] && params[:options][:offset].to_i > 0
       result = result.order('created_at DESC') if params[:options] && params[:options][:reverse]
-    end
+      result = result.includes(params[:include].collect { |i| i.to_sym }) if params[:include] && params[:include].is_a?(Array)
+      result = result.includes(params[:include].to_sym) if params[:include] && params[:include].is_a?(String)
+    end 
 
     result = result.as_json(methods: params[:methods]) if params[:methods] && !params[:include]
     result = result.as_json(include: params[:include]) if !params[:methods] && params[:include]
-
     result = result.as_json(include: params[:include], methods: params[:methods]) if params[:methods] && params[:include]
-
     render json: result
+
   rescue StandardError => e
     logger.info e.inspect
     logger.info e.backtrace
