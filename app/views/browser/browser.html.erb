@@ -106,8 +106,14 @@
         </md-dialog-content>
 
         <md-dialog-actions layout="row">
-          <md-button class="md-primary md-cancel-button md-button ng-scope md-default-theme md-ink-ripple" ng-click="cancel()">Cancel</md-button>
-          <md-button class="md-primary md-confirm-button md-button md-ink-ripple md-default-theme" ng-click="save()">Save</md-button>
+          <md-button class="md-raised md-primary" 
+            ng-disabled="samples.length > 0" ng-click="cancel()">
+            Cancel
+          </md-button>
+          <md-button class="md-raised md-primary" 
+            ng-disabled="samples.length == 0" ng-click="save()">
+            Save
+          </md-button>
         </md-dialog-actions>
     </md-dialog>
   </script>
