@@ -28,13 +28,17 @@ AQ.Transaction.where_month = function(
     .then(() =>
       AQ.PlanAssociation.where({
         operation_id: aq.collect(transactions, t => t.operation_id)
+      },
+      {
+        include: ["plan"]
       })
     )
     .then(plan_associations => {
       aq.each(plan_associations, pa => {
         aq.each(transactions, t => {
           if (pa.operation_id == t.operation_id) {
-            t.plan_id = pa.plan_id;
+            // t.plan_id = pa.plan_id;
+            t.plan_name = pa.plan.name;
           }
         });
       });

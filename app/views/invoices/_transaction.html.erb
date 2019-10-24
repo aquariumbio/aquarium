@@ -9,16 +9,9 @@
              ng-model="transaction.checked"
              ng-if="transaction.transaction_type == 'debit'"> 
   </span>
-  <span class="amount" ng-if="transaction.total >= 0">{{transaction.total|currency}}</span>
-  <span class="amount credit" ng-if="transaction.total < 0">({{-transaction.total|currency}})</span>
-  <span class="type">{{transaction.transaction_type}}</span>
-  <span class="category">{{transaction.category}}</span>
-  <span class="user">
-      <a href="/users/{{transaction.user.id}}" target="user">{{transaction.user.name}}</a>
-  </span>
   <span class="plan">
     <a href="/plans?plan_id={{transaction.plan_id}}" target="plan">
-      {{transaction.plan_id}}
+      {{transaction.plan_name}}
     </a>
   </span>
   <span class="operation">{{transaction.operation_id}}</span>
@@ -26,6 +19,13 @@
     <a href="/jobs/{{transaction.job_id}}" target="job">{{transaction.job_id}}</a>
   </span>
   <span class="date">{{transaction.created_at|date : 'MMM d'}}</span>
+  <span class="user">
+      <a href="/users/{{transaction.user.id}}" target="user">{{transaction.user.name}}</a>
+  </span>
+  <span class="category">{{transaction.category}}</span>
+  <span class="type">{{transaction.transaction_type}}</span>
+  <span class="amount" ng-if="transaction.total >= 0">{{transaction.total|currency}}</span>
+  <span class="amount credit" ng-if="transaction.total < 0">({{-transaction.total|currency}})</span>
 </div>
 
 <!-- Notes, or logs in which this transaction is the target of a credit -->

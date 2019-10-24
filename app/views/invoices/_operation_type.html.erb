@@ -16,14 +16,14 @@
 
         <div class="transaction transaction-list-heading">
             <span class="tr-check heading">&nbsp;</span>
-            <span class="amount heading">Amount</span>
-            <span class="type heading">Type</span>
-            <span class="category heading">Category</span>
-            <span class="user heading">User</span>
             <span class="plan heading">Plan</span>
             <span class="operation heading">Operation</span>
             <span class="job heading">Job</span>
             <span class="date heading">Date</span>
+            <span class="user heading">User</span>
+            <span class="category heading">Category</span>
+            <span class="type heading">Type</span>
+            <span class="amount heading">Amount</span>
         </div>
 
         <li ng-repeat="transaction in state.transactions | filter: { operation: { operation_type_id: operation_type.id } }" 
