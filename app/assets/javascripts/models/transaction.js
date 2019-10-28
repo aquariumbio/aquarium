@@ -37,7 +37,7 @@ AQ.Transaction.where_month = function(
       aq.each(plan_associations, pa => {
         aq.each(transactions, t => {
           if (pa.operation_id == t.operation_id) {
-            // t.plan_id = pa.plan_id;
+            t.plan_id = pa.plan_id;
             t.plan_name = pa.plan.name;
           }
         });
