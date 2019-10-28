@@ -96,7 +96,7 @@ module Krill
     #
     # @param name [String] the name for the new module
     # @param debug [Boolean] whether to run in debug mode
-    # @returns the constructed base module
+    # @return the constructed base module
     def make_base(name:, debug:, mutex:, thread_status:)
       b = Object.const_set(name, Module.new)
       b.send(:include, Base)
@@ -124,7 +124,7 @@ module Krill
     #
     # @param length [Integer] the max length of the string to generate
     # @param prefix [String] the prefix to use to check for existing constants
-    # @returns the unique random string
+    # @return the unique random string
     def generate_suffix(length:, prefix:)
       loop do
         suffix = SecureRandom.urlsafe_base64(length, false).gsub('-', '')
