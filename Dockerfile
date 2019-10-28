@@ -19,6 +19,7 @@ RUN apk update && apk add \
     openjdk8-jre \
     openssl \
     sqlite-dev \
+    tzdata \
     yarn
 
 RUN mkdir /aquarium
