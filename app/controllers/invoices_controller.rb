@@ -10,11 +10,9 @@ class InvoicesController < ApplicationController
       format.html { render layout: 'aq2' }
     end
   end
- 
+
   def note
-
     if current_user.is_admin
-
       notes = []
       params[:rows].each do |row|
         al = AccountLog.new(
@@ -27,17 +25,12 @@ class InvoicesController < ApplicationController
         notes << al
       end
       render json: { notes: notes }
-
     else
-
       render json: { error: 'Only users in the admin group can make notes to transactions.' }
-
     end
-
   end
 
   def change_budget
-
     budget = Budget.find(params[:budget_id])
     rows = []
 
@@ -51,13 +44,10 @@ class InvoicesController < ApplicationController
         rows << row
       end
     end
-
     render json: { budget: budget, rows: rows }
-
   end
 
   def change_status
-
     invoice = Invoice.find(params[:id])
     invoice.status = params[:status]
     invoice.save
@@ -67,21 +57,19 @@ class InvoicesController < ApplicationController
     else
       render json: { error: invoice.errors.full_messages.join(', ') }
     end
-
   end
 
   def credit
-
     # This endpoint takes a params vector of the form,
     #    }
     #       rows: [ t1, t2, ... ], // transactions to apply credit to
     #       percent: n,         // 0-100
     #       note: str              // message to explain why
-    #    }   
+    #    }
     # and creates new transactions and transaction logs applying the credit. It returns
-    # them to the caller. 
+    # them to the caller.
     #
-    # This method is used by the invoices page. 
+    # This method is used by the invoices page.
 
     if current_user.is_admin
       notes = []
@@ -122,24 +110,21 @@ class InvoicesController < ApplicationController
   end
 
   def budgets_used
-
     # This endpoint returns a list of the budget ids used by transactions (a.k.a Accounts) for the
     # given month and, if included, user id. It is called by the invoices page so that it can
     # show only those budgets with activity in the left hand sidebar.
 
     query = "year(created_at) = #{params[:year]} and month(created_at) = #{params[:month]}"
 
-    if params[:user_id] && params[:user_id] != "-1"
-        query += " and user_id = #{params[:user_id]}"
-    end
+    query += " and user_id = #{params[:user_id]}" if params[:user_id] && params[:user_id] != '-1'
 
     budget_ids = Account
-      .where(query)
-      .select(:budget_id)
-      .collect { |a| a.budget_id }
-      .uniq
+                 .where(query)
+                 .select(:budget_id)
+                 .collect(&:budget_id)
+                 .uniq
     render json: budget_ids
-  end  
+  end
 
   private
 
