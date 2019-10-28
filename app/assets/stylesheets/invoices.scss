@@ -1,15 +1,118 @@
-.invoice {
-  .action {
-    margin-left: 5px;
-    margin-right: 5px;
+@import 'variables';
+
+.invoice-main {
+  margin: 16px;
+}
+
+.operation-type {
+  margin: 0 0 10px;
+
+  .operation-type-name {
+    font-size: 14pt;
+    font-weight: bold;
+    margin: 0 0 10px;
   }
-  .percent {
-    width: 50px;
-    height: 10pt;
-    border-radius: 5px;
-    padding: 2px;
+}
+
+.transaction-list {
+  list-style-type: none;
+}
+
+.transaction {
+  border-top: 1pt solid $transaction-border-color;
+  display: inline-block;
+  width: 100%;
+
+  .tr-check {
+    display: inline-block;
+    width: 5%;
+
+    input[type='checkbox'] {
+      margin-top: -4px !important;
+    }
   }
-  .change {
-    color: red;
+
+  .amount {
+    display: inline-block;
+    width: 10%;
+  }
+
+  .type {
+    display: inline-block;
+    width: 10%;
+  }
+
+  .category {
+    display: inline-block;
+    width: 10%;
+  }
+
+  .user {
+    display: inline-block;
+    width: 20%;
+  }
+
+  .plan {
+    display: inline-block;
+    width: 10%;
+  }
+
+  .operation {
+    display: inline-block;
+    width: 10%;
+  }
+
+  .job {
+    display: inline-block;
+    width: 10%;
+  }
+
+  .date {
+    display: inline-block;
+    width: 10%;
+  }
+
+  .credit {
+    color: $credit-color;
+  }
+
+  .heading {
+    font-weight: bold;
+  }
+}
+
+.transaction-list-heading {
+  border: 0 !important;
+}
+
+.transaction-log {
+  .note {
+    color: $transaction-note-color;
+    display: inline-block;
+    padding-left: calc(5% + 10px);
+    text-align: left;
+
+    a {
+      color: $transaction-note-color;
+      font-weight: bold;
+    }
+  }
+}
+
+.operation-type-summary {
+  padding-left: 16px;
+}
+
+.budget-item {
+  margin-bottom: 4px !important;
+}
+
+.budget-list {
+  padding-left: 16px;
+}
+
+.budget-data {
+  .md-datepicker-input {
+    margin-bottom: 2px !important;
   }
 }
