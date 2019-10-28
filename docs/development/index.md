@@ -210,12 +210,22 @@ This file also limits the API to code used in Krill the protocol development lan
 
 ## Making an Aquarium Release
 
-1.  (make sure Rails tests pass)
+1.  make sure Rails tests pass
+
+    ```bash
+    ./develop-compose.sh exec app rspec
+    ```
+
 2.  Run `rubocop`, fix anything broken. Once done run `rubocop --auto-gen-config`.
 3.  (make sure JS tests pass)
 4.  Make sure JS linting passes
-5.  Update the version number in `config/initializers/version.rb` to the new version number.
-6.  Update API documentation by running `yard`
+5.  Update the version number in `package.json` and `config/initializers/version.rb` to the new version number.
+6.  Update API documentation by running 
+
+    ```bash
+    ./develop-compose.sh exec app yard
+    ```
+
 7.  (Update change log)
 8.  Create a tag for the new version:
 
