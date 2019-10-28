@@ -11,7 +11,7 @@
   </span>
   <span class="plan">
     <a href="/plans?plan_id={{transaction.plan_id}}" target="plan">
-      {{transaction.plan_name}}
+      {{transaction.plan_name | limitTo: 25}}
     </a>
   </span>
   <span class="operation">{{transaction.operation_id}}</span>
