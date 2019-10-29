@@ -378,7 +378,14 @@
         $scope.helper = helper;
 
         // Dialog actions
-        $scope.new_sample = new_sample;
+        $scope.new_sample = function(sample_types) {
+          if (samples.length > 0) {
+            remove_sample();
+            new_sample(sample_types);
+          } else {
+            new_sample(sample_types)
+          }
+        };
         $scope.remove_sample = function() {
           remove_sample();
           $scope.errors = [];

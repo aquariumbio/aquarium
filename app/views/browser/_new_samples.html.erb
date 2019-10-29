@@ -1,25 +1,9 @@
 <script type="text/ng-template" id="create_sample_form">
 
-  <div ng-if="samples.length > 0"
-      layout-padding>
-
-    <div>
-      <ul class='sample-tree-list'>
-        <li ng-repeat="sample in samples track by $index" 
-            ng-include="'sample_form'"
-            class='no-sample-hover'>
-        </li>
-      </ul>
+  <div ng-if="samples.length > 0">
+    <div ng-repeat="sample in samples track by $index" 
+          ng-include="'sample_form2'">
     </div>
-
-  </div>
-
-  <div ng-if="samples.length == 0"
-      layout-padding>
-
-    <p><b>To create new samples</b>: Click on the "choose sample type" button. Choose a sample type. Edit 
-    your samples. Click "Save".</p>
-
   </div>
 
 </script> 

@@ -161,3 +161,140 @@
  <br />
 
 </script>
+
+
+
+<script type="text/ng-template" id="sample_form2">
+
+  <div class='sample-container' ng-controller='sampleCtrl'>
+
+      <!-- ERRORS -->
+
+      <div ng-if="sample.error" ng-repeat="error in sample.error">
+        <span class='alert alert-error'>{{error}}</span>
+      </div>
+
+      <!-- STATIC FIELDS -->
+
+      <md-input-container md-no-float="" class="md-block">
+        <label>Sample Type</label>
+        <md-select ng-model="sample.sample_type.name" style:"margin-bottom: 15px">
+          <md-option ng-repeat="st in sample_types" value="{{st.name}}" ng-click="new_sample(st)">
+            {{st.name}}
+          </md-option>
+        </md-select>
+      </md-input-container>
+      
+      <br />
+
+      <md-input-container md-no-float="" class="md-block">
+        <label>Sample Name</label>
+        <input name="samplename" required ng-model="sample.name">
+      </md-input-container>
+      
+      <md-input-container md-no-float="" class="md-block">
+        <label>Description</label>
+        <input name="sampledesc" required ng-model="sample.description">
+      </md-input-container>
+      
+      <md-input-container md-no-float="" class="md-block">
+        <label>Project</label>
+        <input name="sampleproj" required ng-model="sample.project">
+      </md-input-container>        
+
+      <!-- SIMPLE FIELDS -->     
+      <div ng-repeat="ft in sample.sample_type.field_types | filter: non_sample" 
+          ng-init="field_type_name = ft.name">
+        <table class='field-table'>
+
+          <tr ng-repeat="fv in sample.field_values | filter: fv_name_filter(field_type_name)">
+            <td class='name name-{{ft.ftype}}'><span ng-if="$first">{{ft.name}}:</span></td>
+            <td class='modifer'><span ng-if="ft.array && $first" class='clickable' ng-click="add_to_array(sample,ft)">+</span></td>           
+            <td class='td-input'>
+              <input ng-if="!ft.choices"
+                      class='input-no-style full mono' 
+                      ng-model="fv.value" 
+                      type="{{ft.ftype == 'number' ? 'number' : 'text'}}" 
+                      step="any"></input>          
+                <select ng-if="ft.choices"
+                        class="select-no-style full mono"
+                        ng-model="fv.value"
+                        ng-options="choice for choice in ft.choices_array">
+            </td> 
+            <td class='modifer'>
+              <span ng-if="ft.array" class='clickable' ng-click="remove_from_array(fv)">&times;</span>
+            </td>           
+          </tr>
+
+          <tr ng-if="is_empty_array(sample,ft)">
+            <td class='name name-{{ft.ftype}}'>{{ft.name}}:</td>
+            <td class='modifer'><span ng-if="ft.array" class='clickable' ng-click="add_to_array(sample,ft)">+</span></td>
+            <td class='value subtle'>(empty)</td> 
+            <td class='modifer'></td>                       
+          </tr>  
+
+        </table>
+      </div> 
+
+      <!-- SUBSAMPLE FIELDS -->
+      <div ng-repeat="ft in sample.sample_type.field_types | filter: { ftype: 'sample' }:true" 
+          ng-init="field_type_name = ft.name">
+
+        <table class='field-table'>  
+
+          <tr ng-repeat-start="fv in sample.field_values | filter: fv_name_filter(field_type_name)">
+            <td class='name name-sample'>
+                <span ng-click='toggle_new_existing(sample,fv)' ng-if="!fv.new_child_sample" class='toggle-se'>&#x021C6;</span>           
+                {{ft.name}}<span ng-if="ft.array">({{$index}}):</span><span ng-if="!ft.array">:</span>              
+            </td>
+            <td class='modifer'>
+              <span ng-if="ft.array && $first" class='clickable' ng-click="add_to_array(sample,ft)">+</span>             
+            </td>
+            <td class='td-input'>
+                <input class='input-no-style full' 
+                        ng-if="!fv.choice || fv.choice == 'existing'"
+                        ng-model="fv.child_sample_name"
+                        samplecomplete="fv.allowable_child_types"
+                        type="text"></input>
+                <button ng-if="fv.choice == 'new'"
+                        ng-repeat="st_name in fv.allowable_child_types"
+                        ng-class="new_subsample_button_class(fv.new_child_sample,st_name)"
+                        ng-click="new_sub_sample(sample,fv,st_name)"
+                        ng-disabled="fv.new_child_sample != null">{{st_name}}</button> 
+                <span class='clickable' 
+                    ng-if="fv.new_child_sample" 
+                    ng-click="remove_subsample(fv)">&times;</span>   
+            </td>
+            <td class='modifer'>
+              <span ng-if="ft.array" class='clickable' ng-click="remove_from_array(fv)">&times;</span>
+            </td>             
+          </tr>
+
+          <tr ng-repeat-end>
+            <td colspan=4
+              ng-if="fv.new_child_sample" 
+              ng-include="'sample_form'" 
+              ng-init="sample = fv.new_child_sample; no_remove=true; no_cancel=true">
+            </td>
+          </tr>
+
+          <tr ng-if="is_empty_array(sample,ft)">
+            <td class='name name-{{ft.ftype}}'>{{ft.name}}:</td>
+            <td class='modifer'><i ng-if="ft.array" 
+                                    class='icon-plus clickable' 
+                                    ng-click="add_to_array(sample,ft)"></i></td>
+            <td class='value subtle'>(empty)</td> 
+            <td class='modifer'></td>                       
+          </tr>  
+
+        </table>
+
+      </div>
+
+  </div>
+  <br />
+  <br />
+  <br />
+  <br />
+
+</script>

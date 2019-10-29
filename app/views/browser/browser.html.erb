@@ -88,26 +88,27 @@
         </md-toolbar>
 
         <md-dialog-content class="md-dialog-content">
-          <div flex>
-            <md-menu ng-if="samples.length == 0">
-              <md-button class='md-raised' ng-click="$mdMenu.open(ev)">Choose Sample Type</md-button>
+          <div ng-if="samples.length == 0" layout-padding>  
+            <p><b>To create new samples</b>: Choose your sample type in the dropdown menu. Edit 
+            your sample form. Click "Save".</p>
 
-              <md-menu-content>
-                  <md-menu-item ng-repeat="st in sample_types">
-                    <md-button ng-click="new_sample(st)">{{st.name}}</md-button>
-                  </md-menu-item>
-              </md-menu-content>
-            </md-menu>
-
-            <div ng-include="'error_message'"></div>
-
-            <div ng-include="'create_sample_form'"></div>
+            <md-input-container layout-padding>
+            <label>Sample Type</label>
+              <md-select ng-model="sample">
+                <md-option ng-repeat="st in sample_types" value="{{st.name}}" ng-click="new_sample(st)">
+                  {{st.name}}
+                </md-option>
+              </md-select>
+            </md-input-container>
           </div>
+
+          <div ng-include="'error_message'"></div>
+
+          <div ng-include="'create_sample_form'"></div>      
         </md-dialog-content>
 
         <md-dialog-actions layout="row">
-          <md-button class="md-raised md-primary" 
-            ng-disabled="samples.length > 0" ng-click="cancel()">
+          <md-button class="md-raised md-primary" ng-click="cancel()">
             Cancel
           </md-button>
           <md-button class="md-raised md-primary" 
