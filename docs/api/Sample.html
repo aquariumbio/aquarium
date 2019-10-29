@@ -157,7 +157,51 @@ A Sample has many <span class='object_link'><a href="Item.html" title="Item (cla
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#for_project-class_method" title="for_project (class method)">.<strong>for_project</strong>(project:)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#okay_to_drop%3F-class_method" title="okay_to_drop? (class method)">.<strong>okay_to_drop?</strong>(sample, user)  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#owned_by-class_method" title="owned_by (class method)">.<strong>owned_by</strong>(user:)  &#x21d2; Object </a>
     
 
     
@@ -194,6 +238,29 @@ A Sample has many <span class='object_link'><a href="Item.html" title="Item (cla
 
   
     <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#with_sample_type-class_method" title="with_sample_type (class method)">.<strong>with_sample_type</strong>(sample_type:)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>scopes for searching Samples.</p>
+</div></span>
   
 </li>
 
@@ -538,8 +605,6 @@ A Sample has many <span class='object_link'><a href="Item.html" title="Item (cla
       <pre class="lines">
 
 
-62
-63
 64
 65
 66
@@ -550,17 +615,54 @@ A Sample has many <span class='object_link'><a href="Item.html" title="Item (cla
 71</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 62</span>
+      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 64</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_creator'>creator</span><span class='lparen'>(</span><span class='id identifier rubyid_raw'>raw</span><span class='comma'>,</span> <span class='id identifier rubyid_user'>user</span><span class='rparen'>)</span>
-
   <span class='id identifier rubyid_sample'>sample</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="Sample (class)">Sample</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
   <span class='id identifier rubyid_sample'>sample</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span> <span class='op'>=</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
   <span class='id identifier rubyid_sample'>sample</span><span class='period'>.</span><span class='id identifier rubyid_sample_type_id'>sample_type_id</span> <span class='op'>=</span> <span class='id identifier rubyid_raw'>raw</span><span class='lbracket'>[</span><span class='symbol'>:sample_type_id</span><span class='rbracket'>]</span>
   <span class='id identifier rubyid_sample'>sample</span><span class='period'>.</span><span class='id identifier rubyid_updater'>updater</span> <span class='id identifier rubyid_raw'>raw</span>
 
   <span class='id identifier rubyid_sample'>sample</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="for_project-class_method">
+  
+    .<strong>for_project</strong>(project:)  &#x21d2; <tt>Object</tt> 
+  
 
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+238
+239
+240</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 238</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_for_project'>for_project</span><span class='lparen'>(</span><span class='label'>project:</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>project:</span> <span class='id identifier rubyid_project'>project</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -604,18 +706,18 @@ A Sample has many <span class='object_link'><a href="Item.html" title="Item (cla
       <pre class="lines">
 
 
-216
-217
-218
-219
-220
-221
-222
-223
-224</pre>
+205
+206
+207
+208
+209
+210
+211
+212
+213</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 216</span>
+      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 205</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_okay_to_drop?'>okay_to_drop?</span><span class='lparen'>(</span><span class='id identifier rubyid_sample'>sample</span><span class='comma'>,</span> <span class='id identifier rubyid_user'>user</span><span class='rparen'>)</span>
 
@@ -625,6 +727,45 @@ A Sample has many <span class='object_link'><a href="Item.html" title="Item (cla
 
   <span class='kw'>true</span>
 
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="owned_by-class_method">
+  
+    .<strong>owned_by</strong>(user:)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+242
+243
+244</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 242</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_owned_by'>owned_by</span><span class='lparen'>(</span><span class='label'>user:</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>user_id:</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -655,21 +796,61 @@ A Sample has many <span class='object_link'><a href="Item.html" title="Item (cla
       <pre class="lines">
 
 
-40
-41
 42
 43
 44
-45</pre>
+45
+46
+47</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 40</span>
+      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 42</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_sample_from_identifier'>sample_from_identifier</span><span class='lparen'>(</span><span class='id identifier rubyid_str'>str</span><span class='rparen'>)</span>
-  <span class='kw'>if</span> <span class='id identifier rubyid_str'>str</span>
-    <span class='id identifier rubyid_parts'>parts</span> <span class='op'>=</span> <span class='id identifier rubyid_str'>str</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>: </span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
-    <span class='const'><span class='object_link'><a href="" title="Sample (class)">Sample</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_name'>find_by_name</span><span class='lparen'>(</span><span class='id identifier rubyid_parts'>parts</span><span class='lbracket'>[</span><span class='int'>1</span><span class='op'>..</span><span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>: </span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_parts'>parts</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>&gt;</span> <span class='int'>1</span>
-  <span class='kw'>end</span>
+  <span class='kw'>return</span> <span class='kw'>unless</span> <span class='id identifier rubyid_str'>str</span>
+
+  <span class='id identifier rubyid_parts'>parts</span> <span class='op'>=</span> <span class='id identifier rubyid_str'>str</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>: </span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="" title="Sample (class)">Sample</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by'>find_by</span><span class='lparen'>(</span><span class='label'>name:</span> <span class='id identifier rubyid_parts'>parts</span><span class='lbracket'>[</span><span class='int'>1</span><span class='op'>..</span><span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>: </span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_parts'>parts</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>&gt;</span> <span class='int'>1</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="with_sample_type-class_method">
+  
+    .<strong>with_sample_type</strong>(sample_type:)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>scopes for searching Samples</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+234
+235
+236</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 234</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_with_sample_type'>with_sample_type</span><span class='lparen'>(</span><span class='label'>sample_type:</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>sample_type_id:</span> <span class='id identifier rubyid_sample_type'>sample_type</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -706,12 +887,12 @@ A Sample has many <span class='object_link'><a href="Item.html" title="Item (cla
       <pre class="lines">
 
 
-226
-227
-228</pre>
+215
+216
+217</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 226</span>
+      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 215</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_data_hash'>data_hash</span>
   <span class='const'>JSON</span><span class='period'>.</span><span class='id identifier rubyid_parse'>parse</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='label'>symbolize_names:</span> <span class='kw'>true</span><span class='rparen'>)</span>
@@ -745,22 +926,22 @@ A Sample has many <span class='object_link'><a href="Item.html" title="Item (cla
       <pre class="lines">
 
 
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
 230
-231
-232
-233
-234
-235
-236
-237
-238
-239
-240
-241
-242</pre>
+231</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 230</span>
+      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 219</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_full_json'>full_json</span>
 
@@ -770,7 +951,7 @@ A Sample has many <span class='object_link'><a href="Item.html" title="Item (cla
   <span class='rparen'>)</span>
 
   <span class='comment'># rename field for compatibility with ng-control/sample.js
-</span>  <span class='id identifier rubyid_sample_hash'>sample_hash</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>field_values</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_sample_hash'>sample_hash</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>full_field_values</span><span class='tstring_end'>&quot;</span></span>
+</span>  <span class='id identifier rubyid_sample_hash'>sample_hash</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>field_values</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_sample_hash'>sample_hash</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>full_field_values</span><span class='tstring_end'>&#39;</span></span>
 
   <span class='id identifier rubyid_sample_hash'>sample_hash</span>
 
@@ -848,23 +1029,23 @@ A Sample has many <span class='object_link'><a href="Item.html" title="Item (cla
       <pre class="lines">
 
 
-168
-169
-170
-171
-172
-173
-174
-175
-176
-177</pre>
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 168</span>
+      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 157</span>
 
 <span class='kw'>def</span> <span class='kw'>in</span><span class='lparen'>(</span><span class='id identifier rubyid_container'>container</span><span class='rparen'>)</span>
 
-  <span class='id identifier rubyid_c'>c</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="ObjectType.html" title="ObjectType (class)">ObjectType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_name'>find_by_name</span> <span class='id identifier rubyid_container'>container</span>
+  <span class='id identifier rubyid_c'>c</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="ObjectType.html" title="ObjectType (class)">ObjectType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by'>find_by</span> <span class='label'>name:</span> <span class='id identifier rubyid_container'>container</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_c'>c</span>
     <span class='const'><span class='object_link'><a href="Item.html" title="Item (class)">Item</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>sample_id = ? AND object_type_id = ? AND NOT ( location = &#39;deleted&#39; )</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='kw'>else</span>
@@ -942,21 +1123,21 @@ by the location wizard</p>
       <pre class="lines">
 
 
-203
-204
-205
-206
-207
-208
-209
-210</pre>
+192
+193
+194
+195
+196
+197
+198
+199</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 203</span>
+      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 192</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_make_item'>make_item</span><span class='lparen'>(</span><span class='id identifier rubyid_object_type_name'>object_type_name</span><span class='rparen'>)</span>
 
-  <span class='id identifier rubyid_ot'>ot</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="ObjectType.html" title="ObjectType (class)">ObjectType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_name'>find_by_name</span><span class='lparen'>(</span><span class='id identifier rubyid_object_type_name'>object_type_name</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_ot'>ot</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="ObjectType.html" title="ObjectType (class)">ObjectType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by'>find_by</span><span class='lparen'>(</span><span class='label'>name:</span> <span class='id identifier rubyid_object_type_name'>object_type_name</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Could not find object type </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_ot'>ot</span>
 
   <span class='const'><span class='object_link'><a href="Item.html" title="Item (class)">Item</a></span></span><span class='period'>.</span><span class='id identifier rubyid_make'><span class='object_link'><a href="Item.html#make-class_method" title="Item.make (method)">make</a></span></span><span class='lparen'>(</span><span class='lbrace'>{</span> <span class='label'>quantity:</span> <span class='int'>1</span><span class='comma'>,</span> <span class='label'>inuse:</span> <span class='int'>0</span> <span class='rbrace'>}</span><span class='comma'>,</span> <span class='label'>sample:</span> <span class='kw'>self</span><span class='comma'>,</span> <span class='label'>object_type:</span> <span class='id identifier rubyid_ot'>ot</span><span class='rparen'>)</span>
@@ -1009,10 +1190,10 @@ by the location wizard</p>
       <pre class="lines">
 
 
-22</pre>
+24</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 22</span>
+      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 24</span>
 
 <span class='id identifier rubyid_attr_accessible'>attr_accessible</span> <span class='symbol'>:name</span></pre>
     </td>
@@ -1044,12 +1225,12 @@ by the location wizard</p>
       <pre class="lines">
 
 
-212
-213
-214</pre>
+201
+202
+203</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 212</span>
+      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 201</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_num_posts'>num_posts</span>
   <span class='id identifier rubyid_post_associations'>post_associations</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span>
@@ -1097,20 +1278,20 @@ by the location wizard</p>
       <pre class="lines">
 
 
-186
-187
-188
-189
-190
-191
-192
-193</pre>
+175
+176
+177
+178
+179
+180
+181
+182</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 186</span>
+      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 175</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_owner'>owner</span>
-  <span class='id identifier rubyid_u'>u</span> <span class='op'>=</span> <span class='const'>User</span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_user_id'>user_id</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_u'>u</span> <span class='op'>=</span> <span class='const'>User</span><span class='period'>.</span><span class='id identifier rubyid_find_by'>find_by</span><span class='lparen'>(</span><span class='label'>id:</span> <span class='id identifier rubyid_user_id'>user_id</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_u'>u</span>
     <span class='id identifier rubyid_u'>u</span><span class='period'>.</span><span class='id identifier rubyid_login'>login</span>
   <span class='kw'>else</span>
@@ -1147,12 +1328,12 @@ by the location wizard</p>
       <pre class="lines">
 
 
-11
-12
-13</pre>
+13
+14
+15</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 11</span>
+      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 13</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_parent_type'>parent_type</span> <span class='comment'># interface with FieldValuer
 </span>  <span class='id identifier rubyid_sample_type'>sample_type</span>
@@ -1204,10 +1385,10 @@ by the location wizard</p>
       <pre class="lines">
 
 
-27</pre>
+29</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 27</span>
+      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 29</span>
 
 <span class='id identifier rubyid_attr_accessible'>attr_accessible</span> <span class='symbol'>:sample_type_id</span></pre>
     </td>
@@ -1278,12 +1459,12 @@ by the location wizard</p>
       <pre class="lines">
 
 
-179
-180
-181</pre>
+168
+169
+170</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 179</span>
+      <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 168</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_s'>to_s</span>
   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;a href=&#39;/samples/</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39; class=&#39;aquarium-item&#39; id=&#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39;&gt;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>&lt;/a&gt;</span><span class='tstring_end'>&quot;</span></span>
@@ -1390,106 +1571,84 @@ by the location wizard</p>
 147
 148
 149
-150
-151
-152
-153
-154
-155
-156
-157
-158
-159
-160
-161</pre>
+150</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'app/models/sample.rb', line 77</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_updater'>updater</span><span class='lparen'>(</span><span class='id identifier rubyid_raw'>raw</span><span class='comma'>,</span> <span class='id identifier rubyid_user'>user</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
-
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='op'>=</span> <span class='id identifier rubyid_raw'>raw</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_description'>description</span> <span class='op'>=</span> <span class='id identifier rubyid_raw'>raw</span><span class='lbracket'>[</span><span class='symbol'>:description</span><span class='rbracket'>]</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_project'>project</span> <span class='op'>=</span> <span class='id identifier rubyid_raw'>raw</span><span class='lbracket'>[</span><span class='symbol'>:project</span><span class='rbracket'>]</span>
 
   <span class='const'><span class='object_link'><a href="" title="Sample (class)">Sample</a></span></span><span class='period'>.</span><span class='id identifier rubyid_transaction'>transaction</span> <span class='kw'>do</span>
-
     <span class='id identifier rubyid_save'>save</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Rollback</span> <span class='kw'>unless</span> <span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
 
-    <span class='kw'>if</span> <span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+    <span class='id identifier rubyid_sample_type'>sample_type</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="SampleType.html" title="SampleType (class)">SampleType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_raw'>raw</span><span class='lbracket'>[</span><span class='symbol'>:sample_type_id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_raw'>raw</span><span class='lbracket'>[</span><span class='symbol'>:field_values</span><span class='rbracket'>]</span>
 
-      <span class='id identifier rubyid_sample_type'>sample_type</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="SampleType.html" title="SampleType (class)">SampleType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_raw'>raw</span><span class='lbracket'>[</span><span class='symbol'>:sample_type_id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_raw'>raw</span><span class='lbracket'>[</span><span class='symbol'>:field_values</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='op'>|</span>
 
-      <span class='kw'>if</span> <span class='id identifier rubyid_raw'>raw</span><span class='lbracket'>[</span><span class='symbol'>:field_values</span><span class='rbracket'>]</span>
+        <span class='id identifier rubyid_ft'>ft</span> <span class='op'>=</span> <span class='id identifier rubyid_sample_type'>sample_type</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span><span class='lparen'>(</span><span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='rparen'>)</span>
 
-        <span class='id identifier rubyid_raw'>raw</span><span class='lbracket'>[</span><span class='symbol'>:field_values</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='op'>|</span>
+        <span class='kw'>if</span> <span class='id identifier rubyid_ft'>ft</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:deleted</span><span class='rbracket'>]</span>
 
-          <span class='id identifier rubyid_ft'>ft</span> <span class='op'>=</span> <span class='id identifier rubyid_sample_type'>sample_type</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span><span class='lparen'>(</span><span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+          <span class='id identifier rubyid_fv'>fv</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="FieldValue.html" title="FieldValue (class)">FieldValue</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by'>find_by</span><span class='lparen'>(</span><span class='label'>id:</span> <span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+          <span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_destroy'>destroy</span> <span class='kw'>if</span> <span class='id identifier rubyid_fv'>fv</span>
 
-          <span class='kw'>if</span> <span class='id identifier rubyid_ft'>ft</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:deleted</span><span class='rbracket'>]</span>
-
-            <span class='id identifier rubyid_fv'>fv</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="FieldValue.html" title="FieldValue (class)">FieldValue</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
-            <span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_destroy'>destroy</span> <span class='kw'>if</span> <span class='id identifier rubyid_fv'>fv</span>
-
-          <span class='kw'>elsif</span> <span class='id identifier rubyid_ft'>ft</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:deleted</span><span class='rbracket'>]</span> <span class='comment'># fv might have been made and marked deleted without ever having been saved
+        <span class='kw'>elsif</span> <span class='id identifier rubyid_ft'>ft</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:deleted</span><span class='rbracket'>]</span> <span class='comment'># fv might have been made and marked deleted without ever having been saved
 </span>
-            <span class='kw'>if</span> <span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span>
-              <span class='kw'>begin</span>
-                <span class='id identifier rubyid_fv'>fv</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="FieldValue.html" title="FieldValue (class)">FieldValue</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
-              <span class='kw'>rescue</span> <span class='const'>Exception</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
-                <span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:missing_field_value</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Field value </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'> not found in db.</span><span class='tstring_end'>&quot;</span></span>
-                <span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:missing_field_value</span><span class='comma'>,</span> <span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
-                <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Rollback</span>
-              <span class='kw'>end</span>
-            <span class='kw'>else</span>
-              <span class='id identifier rubyid_fv'>fv</span> <span class='op'>=</span> <span class='id identifier rubyid_field_values'>field_values</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span><span class='lparen'>(</span><span class='label'>name:</span> <span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='rparen'>)</span>
-            <span class='kw'>end</span>
-
-            <span class='kw'>if</span> <span class='id identifier rubyid_ft'>ft</span><span class='period'>.</span><span class='id identifier rubyid_ftype'>ftype</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sample</span><span class='tstring_end'>&#39;</span></span>
-              <span class='id identifier rubyid_child'>child</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:new_child_sample</span><span class='rbracket'>]</span>
-                        <span class='const'><span class='object_link'><a href="" title="Sample (class)">Sample</a></span></span><span class='period'>.</span><span class='id identifier rubyid_creator'><span class='object_link'><a href="#creator-class_method" title="Sample.creator (method)">creator</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:new_child_sample</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_user'>user</span> <span class='op'>?</span> <span class='id identifier rubyid_user'>user</span> <span class='op'>:</span> <span class='const'>User</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_user_id'>user_id</span><span class='rparen'>)</span><span class='rparen'>)</span>
-                      <span class='kw'>else</span>
-                        <span class='const'><span class='object_link'><a href="" title="Sample (class)">Sample</a></span></span><span class='period'>.</span><span class='id identifier rubyid_sample_from_identifier'><span class='object_link'><a href="#sample_from_identifier-class_method" title="Sample.sample_from_identifier (method)">sample_from_identifier</a></span></span> <span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:child_sample_name</span><span class='rbracket'>]</span>
-                      <span class='kw'>end</span>
-              <span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_child_sample_id'>child_sample_id</span> <span class='op'>=</span> <span class='id identifier rubyid_child'>child</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span> <span class='kw'>if</span> <span class='id identifier rubyid_child'>child</span>
-              <span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_child_sample_id'>child_sample_id</span> <span class='op'>=</span> <span class='kw'>nil</span> <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_child'>child</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:child_sample_name</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span>
-              <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_child'>child</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_ft'>ft</span><span class='period'>.</span><span class='id identifier rubyid_required'>required</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:child_sample_name</span><span class='rbracket'>]</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span>
-                <span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:required</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Sample required for field &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_ft'>ft</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39; not found or not specified.</span><span class='tstring_end'>&quot;</span></span>
-                <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Rollback</span>
-              <span class='kw'>end</span>
-              <span class='kw'>unless</span> <span class='op'>!</span><span class='id identifier rubyid_child'>child</span> <span class='op'>||</span> <span class='id identifier rubyid_child'>child</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
-                <span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:child_error</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_ft'>ft</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>: </span><span class='tstring_end'>&quot;</span></span> <span class='op'>+</span> <span class='id identifier rubyid_stringify_errors'>stringify_errors</span><span class='lparen'>(</span><span class='id identifier rubyid_child'>child</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='rparen'>)</span>
-                <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Rollback</span>
-              <span class='kw'>end</span>
-            <span class='kw'>elsif</span> <span class='id identifier rubyid_ft'>ft</span><span class='period'>.</span><span class='id identifier rubyid_ftype'>ftype</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>number</span><span class='tstring_end'>&#39;</span></span>
-              <span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:value</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span>
-            <span class='kw'>else</span> <span class='comment'># string, url
-</span>              <span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:value</span><span class='rbracket'>]</span>
-            <span class='kw'>end</span>
-
-            <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>before fv saved: {fv.inspect}</span><span class='tstring_end'>&#39;</span></span>
-            <span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
-            <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>fv saved. now </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
-
-            <span class='kw'>unless</span> <span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
-              <span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:field_value</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Could not save field </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_stringify_errors'>stringify_errors</span><span class='lparen'>(</span><span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+          <span class='kw'>if</span> <span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span>
+            <span class='kw'>begin</span>
+              <span class='id identifier rubyid_fv'>fv</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="FieldValue.html" title="FieldValue (class)">FieldValue</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+            <span class='kw'>rescue</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>RecordNotFound</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
+              <span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:missing_field_value</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Field value </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'> not found in db.</span><span class='tstring_end'>&quot;</span></span>
+              <span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:missing_field_value</span><span class='comma'>,</span> <span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
               <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Rollback</span>
             <span class='kw'>end</span>
+          <span class='kw'>else</span>
+            <span class='id identifier rubyid_fv'>fv</span> <span class='op'>=</span> <span class='id identifier rubyid_field_values'>field_values</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span><span class='lparen'>(</span><span class='label'>name:</span> <span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+          <span class='kw'>end</span>
 
-          <span class='kw'>end</span> <span class='comment'># if
+          <span class='kw'>if</span> <span class='id identifier rubyid_ft'>ft</span><span class='period'>.</span><span class='id identifier rubyid_sample?'>sample?</span>
+            <span class='id identifier rubyid_child'>child</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:new_child_sample</span><span class='rbracket'>]</span>
+                      <span class='const'><span class='object_link'><a href="" title="Sample (class)">Sample</a></span></span><span class='period'>.</span><span class='id identifier rubyid_creator'><span class='object_link'><a href="#creator-class_method" title="Sample.creator (method)">creator</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:new_child_sample</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_user'>user</span> <span class='op'>||</span> <span class='const'>User</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_user_id'>user_id</span><span class='rparen'>)</span><span class='rparen'>)</span>
+                    <span class='kw'>else</span>
+                      <span class='const'><span class='object_link'><a href="" title="Sample (class)">Sample</a></span></span><span class='period'>.</span><span class='id identifier rubyid_sample_from_identifier'><span class='object_link'><a href="#sample_from_identifier-class_method" title="Sample.sample_from_identifier (method)">sample_from_identifier</a></span></span> <span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:child_sample_name</span><span class='rbracket'>]</span>
+                    <span class='kw'>end</span>
+            <span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_child_sample_id'>child_sample_id</span> <span class='op'>=</span> <span class='id identifier rubyid_child'>child</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span> <span class='kw'>if</span> <span class='id identifier rubyid_child'>child</span>
+            <span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_child_sample_id'>child_sample_id</span> <span class='op'>=</span> <span class='kw'>nil</span> <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_child'>child</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:child_sample_name</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span>
+            <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_child'>child</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_ft'>ft</span><span class='period'>.</span><span class='id identifier rubyid_required'>required</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:child_sample_name</span><span class='rbracket'>]</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span>
+              <span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:required</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Sample required for field &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_ft'>ft</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39; not found or not specified.</span><span class='tstring_end'>&quot;</span></span>
+              <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Rollback</span>
+            <span class='kw'>end</span>
+            <span class='kw'>unless</span> <span class='op'>!</span><span class='id identifier rubyid_child'>child</span> <span class='op'>||</span> <span class='id identifier rubyid_child'>child</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+              <span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:child_error</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_ft'>ft</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>: </span><span class='tstring_end'>&quot;</span></span> <span class='op'>+</span> <span class='id identifier rubyid_stringify_errors'>stringify_errors</span><span class='lparen'>(</span><span class='id identifier rubyid_child'>child</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='rparen'>)</span>
+              <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Rollback</span>
+            <span class='kw'>end</span>
+          <span class='kw'>elsif</span> <span class='id identifier rubyid_ft'>ft</span><span class='period'>.</span><span class='id identifier rubyid_number?'>number?</span>
+            <span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:value</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span>
+          <span class='kw'>else</span> <span class='comment'># string, url
+</span>            <span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:value</span><span class='rbracket'>]</span>
+          <span class='kw'>end</span>
+
+          <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>before fv saved: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+          <span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
+          <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>fv saved. now </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+
+          <span class='kw'>unless</span> <span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+            <span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:field_value</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Could not save field </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_raw_fv'>raw_fv</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_stringify_errors'>stringify_errors</span><span class='lparen'>(</span><span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+            <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Rollback</span>
+          <span class='kw'>end</span>
+
+        <span class='kw'>end</span> <span class='comment'># if
 </span>
-        <span class='kw'>end</span> <span class='comment'># each
+      <span class='kw'>end</span> <span class='comment'># each
 </span>
-      <span class='kw'>end</span> <span class='comment'># if
+    <span class='kw'>end</span> <span class='comment'># if
 </span>
-    <span class='kw'>else</span>
-
-      <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Rollback</span>
-
-    <span class='kw'>end</span>
-
   <span class='kw'>end</span>
-
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1501,9 +1660,9 @@ by the location wizard</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Jul  2 18:20:15 2019 by
+  Generated on Sun Oct 27 20:08:46 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.20 (ruby-2.6.3).
+  0.9.20 (ruby-2.6.4).
 </div>
 
     </div>

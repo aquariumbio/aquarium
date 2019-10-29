@@ -7,7 +7,8 @@ class ProtocolTestEngine
 
   # Loads the test code.
   #
-  # @param code [Code] the test code object
+  # @param operation_type [OperationType] the operation type with test
+  # @param user [User] the user for executing test
   # @raise [KrillTestSyntaxError] if load raises {SyntaxError}
   # @raise [KrillTestError] if other execution errors occur
   def self.load_test(operation_type:, user:)

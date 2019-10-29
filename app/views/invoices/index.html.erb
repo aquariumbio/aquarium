@@ -1,121 +1,83 @@
-<style>
-.medium {
-  width: 20%;
-}
-.large {
-  width: 33%;
-}
-.indent {
-  margin-left: 5px;
-}
-.users {
-  width: 100%;
-  margin: 0;
-}
-.budget-name {
-  font-size: 14pt;
-  margin-bottom: 0;
-}
-.selected-view {
-  background: $selection-highlight-color;
-}
-</style>
+<% provide(:title, 'Invoices') %>
 
-<%= content_for :controller do %>invoicesCtrl as invoicesCtrl<% end %>
+<%= content_for :controller do %>invoicesCtrl<% end %>
 
-<%= content_for :specific_title do %>
-  Invoices &rang; 
-  <% if params[:all] %>
-    All
-  <% else %>
-    <%= current_user.name %>
-  <% end %>
-<% end %>
+<%= content_for :class do %>invoices<% end %>
 
 <% content_for :sidebar do %>
-  <% if @monthly_invoices && @monthly_invoices[0] %>
-    <md-list ng-init="status.month = '<%= @monthly_invoices[0][:date] %>'">
-
-      <% @monthly_invoices.each do |invoices| %>
-
-        <md-list-item ng-click="status.month = '<%= invoices[:date] %>'"
-                      ng-class="status.month == '<%= invoices[:date] %>' ? 'md-body-2 selected-view' : 'md-body-2'">
-          <p><%= invoices[:date].strftime("%B %Y") %></p>
-          <span>
-          <% if params[:all] %>
-            <%= number_to_currency(invoices[:entries].collect { |e| e[:spent] }.inject{|s,x| s + x}) %>
-          <% end %>
-          </span>
-        </md-list-item>
-
-      <% end %>
-
-    </md-list>
-  <% else %>
-    <md-content flex layout-padding>
-      <h2 class="md-flex">No invoices</h2>
-      <p>
-      No jobs have been run.
-      Once some have been run invoices will appear on this page.
-      </p>
-    </md-content>
-  <% end %>
+  <div layout='column'>
+    <md-button class="md-raised" 
+              ng-click="update()">
+      Update
+    </md-button>
+    <hr>
+    <md-datepicker
+        ng-model="new_state.date"
+        md-placeholder="Enter date"
+        md-mode="month"
+        class="budget-data">
+    </md-datepicker>
+    <hr>
+    <div class="budget-list">
+      <md-radio-group ng-model="new_state.budget_id">
+        <md-radio-button class="budget-item" 
+                         value="-1" 
+                         class="md-primary">
+            <b>All Budgets</b>
+        </md-radio-button>
+        <md-radio-button class="budget-item" 
+                         ng-repeat="budget in budgets | orderBy: 'name'"
+                         value="{{budget.id}}"
+                         ng-if="state.budget_ids_used.indexOf(budget.id) >= 0">
+          {{budget.name}}
+        </md-radio-button>
+      </md-radio-group>
+    </div>
+  </div>
 <% end %>
 
-<%= content_for :main do %>
+<% content_for :specific_title do %>
+  &rangle; {{state.date | date : 'MMMM yyyy'}} 
+  &rangle; {{state.budget.name}}
+  <span ng-if="!current_user.is_admin || !all_invoices">
+    &rangle; {{current_user.name}}
+  </span>
+<% end %>
 
-  <% @monthly_invoices.each do |invoices| %>
+<% content_for :main do %>
 
-    <md-content layout-padding ng-show="status.month == '<%= invoices[:date] %>'">
+  <div class="invoice-main">
 
-      <h3>
-        <%= invoices[:date].strftime("%B %Y") %>
-        <% if params[:all] %>
-          : <%= number_to_currency(invoices[:entries].collect { |e| e[:spent] }.inject{|s,x| s + x}) %>
-        <% end %>
-      </h3>
+    <div ng-if="!state.transactions || !operation_types">
+        Loading ...
+    </div>
 
-      <% invoices[:entries].collect { |account| account[:budget] }.uniq.each do |b| %>
+    <div ng-if="state.transactions && operation_types">
+        <b>Transactions:</b>         {{state.transactions.length}}<br>
+        <b>Total:</b>                {{state.summary.total|currency}}<br>
+        <b>Base:</b>                 {{state.summary.total - state.summary.overhead|currency}}<br>
+        <b>Overhead:</b>             {{state.summary.overhead|currency}}<br>
+        <b>Total Labor:</b>          {{state.summary.labor_minutes / 60 | number:0}} hours, 
+                                     {{state.summary.labor_minutes % 60 | number:0}} minutes<br>
+        <b>Total Materials Cost:</b> {{state.summary.materials|currency}}<br>
+        <br>
+    </div>
 
-        <p class='indent budget-name'><b><%= link_to b.name, b %></b> (<%= b.contact %>): <%= b.description %> </p>
+    <div class="operation-type"
+        ng-if="state.transactions && operation_types" 
+        ng-repeat="operation_type in state.operation_types | orderBy: 'name'">
 
-        <table class='table table-condensed users' style="table-layout: fixed">
-          <tr>
-            <th></th>
-            <th></th>
-            <th>Labor</th>
-            <th>Materials</th>
-            <th>Overhead</th>
-            <th>Total</th>
-          </tr>
-          <% invoices[:entries].select { |account| account[:budget].id == b.id }.each do |entry| %>
-            <tr>
-              <td><%= entry[:user].name %> (<%= link_to "#{entry[:user].login}", entry[:user] %>)</td>
-              <td><i><%= entry[:invoice].in_progress ? "in progress" : entry[:invoice].status %></i></td>
-              <td><%= number_to_currency(entry[:spent_labor]) %></td>
-              <td><%= number_to_currency(entry[:spent_materials]) %></td>
-              <td><%= number_to_currency(entry[:spent] - (entry[:spent_labor] + entry[:spent_materials])) %></td>
-              <td><%= link_to number_to_currency(entry[:spent]), entry[:invoice] %></td>
-            </tr>
-          <% end %>
-          <% total_labor = invoices[:entries].select { |e| e[:budget].id == b.id }.collect { |e| e[:spent_labor] }.inject{|sum,x| sum+x} %>
-          <% total_materials = invoices[:entries].select { |e| e[:budget].id == b.id }.collect { |e| e[:spent_materials] }.inject{|sum,x| sum+x} %>
-          <% total = invoices[:entries].select { |e| e[:budget].id == b.id }.collect { |e| e[:spent] }.inject{|sum,x| sum+x} %>
-          <tr>
-          <td></td>
-          <td></td>
-            <td><b><%= number_to_currency(total_labor) %></b></td>
-            <td><b><%= number_to_currency(total_materials) %></b></td>
-            <td><b><%= number_to_currency(total - (total_labor + total_materials)) %></b></td>
-          <td><b><%= number_to_currency(total) %></b></td>
-          </tr>
-        </table>
+        <%= render partial: 'operation_type' %>
 
-      <% end %>
+    </div>
 
-    </md-content>
+  </div>
 
-  <% end %>
+  <%= render partial: 'credit_dialog' %>
 
+<% end %>
+
+<% content_for :action1 do %>
+    <md-button class="md-raised" ng-click="apply_credit($event)">Credit</md-button>
 <% end %>
 
