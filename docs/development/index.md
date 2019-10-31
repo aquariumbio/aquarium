@@ -227,14 +227,15 @@ This file also limits the API to code used in Krill the protocol development lan
     ```
 
 7.  (Update change log)
-8.  Create a tag for the new version:
+8.  Commit and push changes.
+9.  Create a tag for the new version:
 
     ```bash
     git tag -a v$NEWVERSION -m "Aquarium version $NEWVERSION"
     git push --tags
     ```
 
-9.  [Create a release on github](https://help.github.com/articles/creating-releases/).
+10. [Create a release on github](https://help.github.com/articles/creating-releases/).
     Visit the [Aquarium releases page](https://github.com/klavinslab/aquarium/releases).
     Click "Tags".
     Click "add release notes" for the new tag, use the change log as the release notes.
