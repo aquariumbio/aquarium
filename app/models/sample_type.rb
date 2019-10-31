@@ -185,16 +185,21 @@ class SampleType < ActiveRecord::Base
   def self.clean_up_allowable_field_types(raw_sample_types)
 
     raw_sample_types.each do |rst|
+      next unless rst
 
-      st = SampleType.find_by name: rst[:name]
+      st = SampleType.find_by(name: rst[:name])
 
       st.field_types.each do |ft|
+        next unless rst[:field_types]
+
         rst[:field_types].each do |rft|
+          next unless rft
+          next unless rft[:sample_types]          
           next unless ft.name == rft[:name] && ft.role == rft[:role] && ft.sample?
 
           names = rft[:sample_types]
           ft.allowable_field_types.each do |aft|
-            names.delete aft.sample_type.name if names.member? aft.sample_type.name
+            names.delete(aft.sample_type.name) if names.member?(aft.sample_type.name)
           end
           names.each do |name|
             empty_afts = ft.allowable_field_types.select { |aft| aft.sample_type_id.nil? }
