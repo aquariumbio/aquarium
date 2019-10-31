@@ -240,6 +240,7 @@ This file also limits the API to code used in Krill the protocol development lan
     Click "Tags".
     Click "add release notes" for the new tag, use the change log as the release notes.
     Click "publish release".
+11. (Update zenodo entry)
 
 ## Docker configuration
 
