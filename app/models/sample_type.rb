@@ -194,7 +194,7 @@ class SampleType < ActiveRecord::Base
 
         rst[:field_types].each do |rft|
           next unless rft
-          next unless rft[:sample_types]          
+          next unless rft[:sample_types]
           next unless ft.name == rft[:name] && ft.role == rft[:role] && ft.sample?
 
           names = rft[:sample_types]
