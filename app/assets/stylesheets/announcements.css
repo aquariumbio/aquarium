@@ -9,21 +9,20 @@
   border-radius: 3px;
   border: 2px solid #E8AB3C;
   position: relative;
+}
 
-  .field {
+  .announcement .field {
     width: 100%;
   }
 
-  .close-x {
+  .announcement .close-x {
     position: absolute;
     top: 5px;
     right: 5px;
   }
 
-  .h4 {
+  .announcement .h4 {
     text-align: center;
     color: #ffffff;
   }
-
-}
 
