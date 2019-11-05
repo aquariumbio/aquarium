@@ -399,6 +399,7 @@
               if (response.errors) {
                 $scope.errors = response.errors;
               } else {
+                $scope.errors = [];
                 save();
                 $scope.messages = aq.collect(response.samples, function(s) {
                   return "Created sample " + s.id + ": " + s.name;
