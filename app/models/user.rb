@@ -97,6 +97,11 @@ class User < ActiveRecord::Base
 
   end
 
+  def user_email()
+    user_email = Parameter.where(user_id: id, key: 'email')
+    raise "Email address not defined for user {id}: #{name}" if user_email.empty?
+    return user_email
+  end 
   # Send an email to the user
   # @param subject [String] The subject of the email
   # @param message [String] The body of the email, in html
