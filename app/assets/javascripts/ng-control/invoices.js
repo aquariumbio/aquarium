@@ -83,6 +83,10 @@
             .ok("Ok")
         );
       };
+// 
+      $scope.create_invoice = function(event) {
+        alert("hello!")
+      }
 
       $scope.apply_credit = function(event) {
         let transactions = aq.where($scope.state.transactions, t => t.checked);
@@ -144,6 +148,11 @@
       }
 
       CreditDialogController.$inject = ["$scope", "$mdDialog", "transactions"];
+
+      function CreateInvoiceController($scope, $mdDialog){
+
+      };
+
 
       // Initialization
 

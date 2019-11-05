@@ -53,7 +53,8 @@
     </div>
 
     <div ng-if="state.transactions && operation_types">
-        <b>Transactions:</b>         {{state.transactions.length}}<br>
+    <%# This is the total summary for all operation types within the current budget shown %>
+        <b>Transactions???:</b>         {{state.transactions.length}}<br>
         <b>Total:</b>                {{state.summary.total|currency}}<br>
         <b>Base:</b>                 {{state.summary.total - state.summary.overhead|currency}}<br>
         <b>Overhead:</b>             {{state.summary.overhead|currency}}<br>
@@ -74,10 +75,15 @@
   </div>
 
   <%= render partial: 'credit_dialog' %>
+  <%= render partial: 'form' %>
 
 <% end %>
 
 <% content_for :action1 do %>
     <md-button class="md-raised" ng-click="apply_credit($event)">Credit</md-button>
+<% end %>
+
+<% content_for :action2 do %>
+    <md-button class="md-raised" ng-click="create_invoice($event)">Create Invoice</md-button>
 <% end %>
 
