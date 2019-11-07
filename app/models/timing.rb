@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Timing < ActiveRecord::Base
+class Timing < ApplicationRecord
 
   attr_accessible :parent_class, :parent_id, :start, :stop, :days, :active
 

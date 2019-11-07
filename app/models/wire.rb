@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Wire < ActiveRecord::Base
+class Wire < ApplicationRecord
 
   attr_accessible :from_id, :to_id, :active
 

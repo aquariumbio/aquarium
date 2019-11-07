@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PlanAssociation < ActiveRecord::Base
+class PlanAssociation < ApplicationRecord
 
   attr_accessible :plan_id, :operation_id
 

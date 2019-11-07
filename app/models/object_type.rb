@@ -2,7 +2,7 @@
 
 # Defines the type of physical object that would be represented in an {Item}
 # @api krill
-class ObjectType < ActiveRecord::Base
+class ObjectType < ApplicationRecord
 
   attr_accessible :cleanup, :data, :description, :max, :min, :safety,
                   :vendor, :unit, :image, :cost, :release_method, :release_description,

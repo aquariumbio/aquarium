@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Wizard < ActiveRecord::Base
+class Wizard < ApplicationRecord
 
   attr_accessible :name, :specification, :description
 

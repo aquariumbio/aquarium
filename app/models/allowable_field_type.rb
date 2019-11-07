@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AllowableFieldType < ActiveRecord::Base
+class AllowableFieldType < ApplicationRecord
 
   attr_accessible :sample_type_id, :object_type_id, :field_type_id
 

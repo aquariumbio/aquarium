@@ -3,7 +3,7 @@
 # Defines a type of lab procedure, with the input-types, output-types, and the instructions for converting inputs into outputs.
 # Executable unit {Operation}s can be instantiated from an OperationType, and specific inputs and outputs are then given.
 # @api krill
-class OperationType < ActiveRecord::Base
+class OperationType < ApplicationRecord
 
   include FieldTyper
   include OperationTypePlanner

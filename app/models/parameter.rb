@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # @api krill
-class Parameter < ActiveRecord::Base
+class Parameter < ApplicationRecord
 
   attr_accessible :key, :value, :description, :user_id
 

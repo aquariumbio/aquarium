@@ -5,7 +5,7 @@
 # FieldType holds a list of allowable values or objects for defining {Operation}s or {Sample}s
 # that would satisfy the specifications of their respective abstract {OperationType} or {SampleType}.
 # @api krill
-class FieldType < ActiveRecord::Base
+class FieldType < ApplicationRecord
 
   include FieldTypePlanner
 

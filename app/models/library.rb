@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Library < ActiveRecord::Base
+class Library < ApplicationRecord
 
   include CodeHelper
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PartAssociation < ActiveRecord::Base
+class PartAssociation < ApplicationRecord
 
   attr_accessible :part_id, :collection_id, :row, :column
 

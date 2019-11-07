@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # @api krill
-class Locator < ActiveRecord::Base
+class Locator < ApplicationRecord
 
   attr_accessible :item_id, :number, :wizard_id
 

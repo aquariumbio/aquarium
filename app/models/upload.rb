@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # @api krill
-class Upload < ActiveRecord::Base
+class Upload < ApplicationRecord
 
   attr_accessible :job_id, :upload
   has_attached_file :upload

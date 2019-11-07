@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # @api krill
-class DataAssociation < ActiveRecord::Base
+class DataAssociation < ApplicationRecord
 
   belongs_to :upload
   attr_accessible :parent_class, :key, :object, :parent_id, :upload_id

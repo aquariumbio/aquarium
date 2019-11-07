@@ -7,7 +7,7 @@
 # the respective parent {OperationType} or {SampleType}.
 # @api krill
 
-class FieldValue < ActiveRecord::Base
+class FieldValue < ApplicationRecord
 
   include FieldValuePlanner
   include FieldValueKrill

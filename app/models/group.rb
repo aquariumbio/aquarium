@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Group < ActiveRecord::Base
+class Group < ApplicationRecord
 
   attr_accessible :description, :name
   has_many :memberships, dependent: :destroy

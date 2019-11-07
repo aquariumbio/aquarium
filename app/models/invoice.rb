@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Invoice < ActiveRecord::Base
+class Invoice < ApplicationRecord
 
   attr_accessible :budget_id, :month, :user_id, :year, :status, :notes
 

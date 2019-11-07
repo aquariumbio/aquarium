@@ -4,7 +4,7 @@
 # Jobs are executed with the `protocol` of the {OperationType}. Protocols must handle being able to
 # run Jobs with varying amounts of Operations.
 # @api krill
-class Job < ActiveRecord::Base
+class Job < ApplicationRecord
   include JobOperations
 
   attr_accessible :arguments, :state, :user_id, :pc, :submitted_by, :group_id,

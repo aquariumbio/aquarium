@@ -3,7 +3,7 @@
 # Represents a code object for an operation type.
 #
 #
-class Code < ActiveRecord::Base
+class Code < ApplicationRecord
   attr_accessible :name, :content, :parent_id, :parent_class, :user_id
 
   # Creates a new `Code` object from this one with the new content.'

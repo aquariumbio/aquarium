@@ -4,7 +4,7 @@
 # A Sample has many {Item}s in inventory
 # @api krill
 
-class Sample < ActiveRecord::Base
+class Sample < ApplicationRecord
 
   include ActionView::Helpers::DateHelper
   include SampleValidator
