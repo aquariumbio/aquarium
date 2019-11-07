@@ -35,9 +35,11 @@ gem 'sassc-rails'
 gem 'will_paginate'
 
 # For uploads and cloud storage
-gem 'aws-sdk', '~> 1.7.1'
 gem 'aws-sdk-s3'
 gem 'paperclip'
+
+# For email
+gem 'aws-sdk-ses'
 
 # For bulk inserts (e.g. for loading a collection from a matrix)
 gem 'activerecord-import'
