@@ -61,6 +61,8 @@ GEM
     ast (2.4.0)
     aws-eventstream (1.0.3)
     aws-partitions (1.235.0)
+    aws-sdk (1.67.0)
+      aws-sdk-v1 (= 1.67.0)
     aws-sdk-core (3.75.0)
       aws-eventstream (~> 1.0, >= 1.0.2)
       aws-partitions (~> 1, >= 1.228.0)
@@ -76,6 +78,9 @@ GEM
     aws-sdk-ses (1.27.0)
       aws-sdk-core (~> 3, >= 3.71.0)
       aws-sigv4 (~> 1.1)
+    aws-sdk-v1 (1.67.0)
+      json (~> 1.4)
+      nokogiri (~> 1)
     aws-sigv4 (1.1.0)
       aws-eventstream (~> 1.0, >= 1.0.2)
     bcrypt (3.1.13)
@@ -103,6 +108,7 @@ GEM
     ipaddress (0.8.3)
     jaro_winkler (1.5.4)
     jmespath (1.4.0)
+    json (1.8.6)
     loofah (2.3.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -245,6 +251,7 @@ DEPENDENCIES
   anemone!
   angular_rails_csrf (= 2.1.1)
   aquadoc!
+  aws-sdk (< 2.0)
   aws-sdk-s3
   aws-sdk-ses
   bcrypt (~> 3.1)
@@ -254,7 +261,7 @@ DEPENDENCIES
   ipaddress
   mysql2 (~> 0.5.2)
   oj
-  paperclip
+  paperclip (~> 6.1)
   protected_attributes_continued
   puma
   rack-cors
