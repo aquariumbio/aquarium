@@ -87,7 +87,7 @@ Bioturk::Application.configure do
   # To enable, uncomment the following code and set the corresponding environment variables in the docker-compose.override.yml file
   # There is no substitute for AWS simple email service in development.
   #
-  # AWS.config(
+  # Aws.config.update(
   #   region: ENV.fetch('AWS_REGION'),
   #   simple_email_service_endpoint: "email.#{ENV.fetch('AWS_REGION')}.amazonaws.com",
   #   simple_email_service_region: ENV.fetch('AWS_REGION'),

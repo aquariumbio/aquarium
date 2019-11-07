@@ -95,7 +95,7 @@ Bioturk::Application.configure do
 
   # AWS Simple Email Service Config
 
-  AWS.config(
+  Aws.config.update(
     region: ENV.fetch('AWS_REGION'),
     simple_email_service_endpoint: "email.#{ENV.fetch('AWS_REGION')}.amazonaws.com",
     simple_email_service_region: ENV.fetch('AWS_REGION'),
