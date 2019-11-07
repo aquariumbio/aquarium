@@ -123,8 +123,7 @@ rm -rf docker/db/*
 
 ```bash
 ./develop-compose.sh up -d
-./develop-compose.sh exec app /bin/sh
-rspec
+./develop-compose.sh exec app rspec
 ./develop-compose.sh down -v
 ```
 
