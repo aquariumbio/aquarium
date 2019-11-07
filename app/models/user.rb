@@ -111,7 +111,7 @@ class User < ActiveRecord::Base
 
     Thread.new do
 
-      ses = Aws::SES.new
+      AWS::SimpleEmailService.new
 
       ses.send_email(
         subject: subject,
