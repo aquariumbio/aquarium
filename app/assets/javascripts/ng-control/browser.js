@@ -65,8 +65,7 @@
               samples: []
             }
           },
-          user: $scope.views.user,
-          errors: $scope.errors
+          user: $scope.views.user
         };
 
         aqCookieManager.put_object("browserViews", data);
@@ -342,7 +341,8 @@
             save: $scope.save_new_samples,
             errors: $scope.errors,
             messages: $scope.messages,
-            helper: $scope.helper
+            helper: $scope.helper,
+            disable_button: $scope.disable_button
           },
           controller: [
             "$scope",
@@ -354,6 +354,7 @@
             "errors",
             "messages",
             "helper",
+            "disable_button",
             sample_dialog_controller
           ]
         });
@@ -369,13 +370,15 @@
         save,
         errors,
         messages,
-        helper
+        helper,
+        disable_button
         ) {
         $scope.sample_types = sample_types;
         $scope.samples = samples;
         $scope.errors = errors;
         $scope.messages = messages;
         $scope.helper = helper;
+        $scope.disable_button = disable_button;
 
         // Dialog actions
         $scope.new_sample = function(sample_types) {
@@ -398,8 +401,10 @@
             ) {
               if (response.errors) {
                 $scope.errors = response.errors;
+                $scope.disable_button = false;
               } else {
                 $scope.errors = [];
+                $scope.disable_button = false;
                 save();
                 $scope.messages = aq.collect(response.samples, function(s) {
                   return "Created sample " + s.id + ": " + s.name;
@@ -418,6 +423,8 @@
            }
         };
       }
+
+      $scope.disable_button = true;
 
       // The function creates new sample based on selected sample types
       $scope.new_sample = function(st) {

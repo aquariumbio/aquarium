@@ -104,15 +104,20 @@
 
           <div ng-include="'error_message'"></div>
 
-          <div ng-include="'create_sample_form'"></div>      
+          <form name="input_form">
+            <div ng-include="'create_sample_form'"></div>  
+          </form>    
         </md-dialog-content>
 
         <md-dialog-actions layout="row">
-          <md-button class="md-raised md-primary" ng-click="cancel()">
+          <md-button class="md-raised md-primary" 
+            ng-disabled="(input_form.$dirty) && (disable_button)" 
+            ng-click="cancel()">
             Cancel
           </md-button>
           <md-button class="md-raised md-primary" 
-            ng-disabled="samples.length == 0" ng-click="save()">
+            ng-disabled="(samples.length == 0) || (!input_form.$dirty) || (messages.length > 0)" 
+            ng-click="save()">
             Save
           </md-button>
         </md-dialog-actions>
