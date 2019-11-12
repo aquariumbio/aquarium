@@ -348,16 +348,19 @@
 
       function sample_inventory(samples, set_sample_state) {
         return aq.collect(samples, function(s) {
+          console.log("s:")
           console.log(s);
           var sample = new Sample($http).from(s);
           if (sample && s.id === sample.id) {
             set_sample_state(sample);
           }
+          console.log("sample:")
           console.log(sample);
           return sample;
         });
       }
 
+      // TODO: this is only called by search when there is one item to be shown
       function show_inventory(sample) {
         sample.open = true;
         sample.inventory = true;
@@ -385,8 +388,10 @@
             if ($scope.views.search.item_id) {
               // TODO: this should only include the item searched for or the collection containing it
               console.log("item")
+              console.log(response.data.samples)
               $scope.views.search.samples = sample_inventory(
                 response.data.samples,
+                // TODO: use a function that filters inventory by item or collection ID
                 show_inventory
               );
             } else {
@@ -500,6 +505,7 @@
         );
       }
 
+      // TODO: this is dead code 
       // item_search function allows users to search for sample by Item ID
       $scope.item_search = function() {
         AQ.Item.find($scope.views.search.item_id).then(
