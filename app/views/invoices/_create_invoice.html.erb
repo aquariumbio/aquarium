@@ -1,7 +1,23 @@
-<form>
-<%# {{invoice.message}} %>
-<h1>THis is just a test form so I can see what's happening!</h1>
-<h2>Review info for invoice</h2>
-<h2>Add in extra costs: ____ <h3>
-<h3>Add any addiitonal info you need<h4>
-</form>
+<div> 
+    <md-content layout-padding="">
+    <h2>Start of content box</h2>
+        <div>
+            <md-input-container>
+                <label>Project Name</label>
+                <input ng-model="state.budget.name">
+            </md-input-container>
+        </div>
+    </md-content>
+
+    <md-content>
+        <form name="invoiceForm">
+        <h2>form state</h2>
+            <div layout="row">
+                <md-input-container class="md-block">
+                    <label>Budget Name</label>
+                    <input ng-model="state.budget.name">
+                </md-input-container>
+            </div>
+        </form>
+    </md-content>
+</div> 
