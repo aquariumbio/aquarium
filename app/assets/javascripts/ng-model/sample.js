@@ -42,9 +42,9 @@ Sample.prototype.get_inventory = function(promise) {
           c.sample = AQ.Sample.record(sample);
           return c;
         });
-
         sample.collection_containers = response.data.containers;
 
+        // TODO: determine whether this belongs here
         promise();
       });
   });
