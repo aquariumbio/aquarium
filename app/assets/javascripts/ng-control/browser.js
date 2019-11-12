@@ -450,13 +450,13 @@
       };
 
       $scope.save_new_samples = function() {
-            $scope.choose_user($scope.user.current);
-            $scope.views.search.query = "";
-            $scope.views.search.sample_type = "";
-            $scope.views.search.user = $scope.user.current.login;
-            $scope.select_view("search");
-            $scope.search(0);
-            load_sample_names();
+        $scope.choose_user($scope.user.current);
+        $scope.views.search.query = "";
+        $scope.views.search.sample_type = "";
+        $scope.views.search.user = $scope.user.current.login;
+        $scope.select_view("search");
+        $scope.search(0);
+        load_sample_names();
       };
 
       $scope.copy = function(sample) {
