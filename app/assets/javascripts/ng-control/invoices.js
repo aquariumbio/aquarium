@@ -156,14 +156,18 @@
       };
 
       $scope.all_invoices = aq.url_params().all == "true";
+      
+      let current_date = new Date(),
+          current_month = current_date.getMonth(),
+          current_year  = current_date.getFullYear()
 
       $scope.state = {
-        date: new Date(2019, 10 - 1), // JS months are zero indexed
+        date: new Date(current_year, current_month), // JS months are zero indexed
         budget: { id: -1, name: "All Budgets" }
       };
 
       $scope.new_state = {
-        date: new Date(2019, 10 - 1),
+        date: new Date(current_year, current_month),
         budget_id: -1
       };
 
