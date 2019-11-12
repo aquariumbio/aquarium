@@ -341,8 +341,7 @@
             save: $scope.save_new_samples,
             errors: $scope.errors,
             messages: $scope.messages,
-            helper: $scope.helper,
-            disable_button: $scope.disable_button
+            helper: $scope.helper
           },
           controller: [
             "$scope",
@@ -354,7 +353,6 @@
             "errors",
             "messages",
             "helper",
-            "disable_button",
             sample_dialog_controller
           ]
         });
@@ -370,15 +368,14 @@
         save,
         errors,
         messages,
-        helper,
-        disable_button
+        helper
         ) {
         $scope.sample_types = sample_types;
         $scope.samples = samples;
         $scope.errors = errors;
         $scope.messages = messages;
         $scope.helper = helper;
-        $scope.disable_button = disable_button;
+        $scope.disable_button = true;
 
         // Dialog actions
         $scope.new_sample = function(sample_types) {
@@ -424,7 +421,6 @@
         };
       }
 
-      $scope.disable_button = true;
 
       // The function creates new sample based on selected sample types
       $scope.new_sample = function(st) {
