@@ -361,14 +361,16 @@
       }
 
       // TODO: this is only called by search when there is one item to be shown
-      function show_inventory(sample) {
-        sample.open = true;
-        sample.inventory = true;
-        sample.loading_inventory = true;
-        sample.get_inventory(function() {
-          sample.loading_inventory = false;
+      function show_inventory_for(item_id) {
+        return (sample) => {
+          sample.open = true;
           sample.inventory = true;
-        });
+          sample.loading_inventory = true;
+          sample.get_inventory(function() {
+            sample.loading_inventory = false;
+            sample.inventory = true;
+          });
+        }
       }
 
       function show_description(sample) {
@@ -392,7 +394,7 @@
               $scope.views.search.samples = sample_inventory(
                 response.data.samples,
                 // TODO: use a function that filters inventory by item or collection ID
-                show_inventory
+                show_inventory_for($scope.views.search.item_id)
               );
             } else {
               console.log("not item")
