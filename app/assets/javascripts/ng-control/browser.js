@@ -348,29 +348,28 @@
 
       function sample_inventory(samples, set_sample_state) {
         return aq.collect(samples, function(s) {
-          console.log("s:")
-          console.log(s);
           var sample = new Sample($http).from(s);
           if (sample && s.id === sample.id) {
             set_sample_state(sample);
           }
-          console.log("sample:")
-          console.log(sample);
           return sample;
         });
       }
 
       // TODO: this is only called by search when there is one item to be shown
       function show_inventory_for(item_id) {
-        return (sample) => {
+        return sample => {
           sample.open = true;
           sample.inventory = true;
           sample.loading_inventory = true;
           sample.get_inventory(function() {
             sample.loading_inventory = false;
             sample.inventory = true;
+            sample.items = sample.items.filter(item => {
+              return item.id === item_id;
+            });
           });
-        }
+        };
       }
 
       function show_description(sample) {
@@ -389,15 +388,13 @@
             $scope.views.search.status = "preparing";
             if ($scope.views.search.item_id) {
               // TODO: this should only include the item searched for or the collection containing it
-              console.log("item")
-              console.log(response.data.samples)
+              item_id = parseInt($scope.views.search.item_id)
               $scope.views.search.samples = sample_inventory(
                 response.data.samples,
                 // TODO: use a function that filters inventory by item or collection ID
-                show_inventory_for($scope.views.search.item_id)
+                show_inventory_for(item_id)
               );
             } else {
-              console.log("not item")
               $scope.views.search.samples = sample_inventory(
                 response.data.samples,
                 show_description
@@ -507,7 +504,7 @@
         );
       }
 
-      // TODO: this is dead code 
+      // TODO: this is dead code
       // item_search function allows users to search for sample by Item ID
       $scope.item_search = function() {
         AQ.Item.find($scope.views.search.item_id).then(
