@@ -11,12 +11,16 @@
 
     <md-content>
         <form name="invoiceForm">
-        <h2>form state</h2>
             <div layout="row">
                 <md-input-container class="md-block">
                     <label>Budget Name</label>
                     <input ng-model="state.budget.name">
                 </md-input-container>
+
+                <md-input-container class="md-block">
+                    <label>Total Aquarium Charges</label>
+                    <input ng-model="state.summary.total">
+                    <%# {{state.summary.total|currency}} %>
             </div>
         </form>
     </md-content>
