@@ -46,15 +46,22 @@
 
 <% content_for :main do %>
 
-  <div class="invoice-main">
+  <div class="invoice-main"> 
 
     <div ng-if="!state.transactions || !operation_types">
         Loading ...
     </div>
-
+<%#  %>
     <div ng-if="state.transactions && operation_types">
-    <%# This is the total summary for all operation types within the current budget shown %>
-        <b>Transactions???:</b>         {{state.transactions.length}}<br>
+        <div ng-if="state.budget.name != 'All Budgets'">
+          <md-button class="md-raised" ng-click="create_invoice($event)">Create Invoice for Budget: {{ state.budget.name }} </md-button>
+            <%= render partial: 'create_invoice' %>
+        </div>
+
+          
+        <div>
+        <h2>Summary of costs for all Operation Types</h2>
+        <b>Transactions:</b>         {{state.transactions.length}}<br>
         <b>Total:</b>                {{state.summary.total|currency}}<br>
         <b>Base:</b>                 {{state.summary.total - state.summary.overhead|currency}}<br>
         <b>Overhead:</b>             {{state.summary.overhead|currency}}<br>
@@ -62,6 +69,7 @@
                                      {{state.summary.labor_minutes % 60 | number:0}} minutes<br>
         <b>Total Materials Cost:</b> {{state.summary.materials|currency}}<br>
         <br>
+        </div>
     </div>
 
     <div class="operation-type"
@@ -75,15 +83,10 @@
   </div>
 
   <%= render partial: 'credit_dialog' %>
-  <%= render partial: 'form' %>
 
 <% end %>
 
 <% content_for :action1 do %>
     <md-button class="md-raised" ng-click="apply_credit($event)">Credit</md-button>
-<% end %>
-
-<% content_for :action2 do %>
-    <md-button class="md-raised" ng-click="create_invoice($event)">Create Invoice</md-button>
 <% end %>
 
