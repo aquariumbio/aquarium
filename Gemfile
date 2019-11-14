@@ -48,6 +48,9 @@ gem 'activerecord-import'
 # Factories for testing of aquarium and protocols
 gem 'factory_bot_rails'
 
+# allows rails 5 style where().or() queries
+gem 'where-or'
+
 group :test do
   gem 'sqlite3'
 end

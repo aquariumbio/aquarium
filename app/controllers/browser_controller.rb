@@ -166,11 +166,11 @@ class BrowserController < ApplicationController
                          else
                            [item.sample_id]
                          end
+        sample_list = Sample.none
         sample_id_list.uniq.each do |sample_id|
-          # TODO: this is wrong should accumulate and not filter
-          samples = samples.where(id: sample_id)
-          break if samples.empty?
+          sample_list = sample_list.or(samples.where(id: sample_id))
         end
+        samples = sample_list
       end
     end
 

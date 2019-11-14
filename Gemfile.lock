@@ -238,6 +238,7 @@ GEM
       activemodel (>= 4.2)
       debug_inspector
       railties (>= 4.2)
+    where-or (0.1.6)
     will_paginate (3.2.1)
     yard (0.9.20)
     yard-activerecord (0.0.16)
@@ -275,6 +276,7 @@ DEPENDENCIES
   sqlite3
   tzinfo-data
   web-console (~> 3.0)
+  where-or
   will_paginate
   yard (>= 0.9.20)
   yard-activerecord
