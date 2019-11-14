@@ -356,7 +356,9 @@
         });
       }
 
-      // TODO: this is only called by search when there is one item to be shown
+      // This tortured and miserable code is necessary to allow an item id
+      // constraint in the sample search.
+      // If the id is for a part
       function show_inventory_for(item_id) {
         return sample => {
           sample.open = true;
@@ -365,9 +367,27 @@
           sample.get_inventory(function() {
             sample.loading_inventory = false;
             sample.inventory = true;
-            sample.items = sample.items.filter(item => {
+            num_items = sample.items.length
+            console.log("items: ")
+            console.log(sample.items)
+            console.log("collections: ")
+            console.log(sample.collections)
+            items = sample.items.filter(item => {
               return item.id === item_id;
             });
+            if (items.length === 1) {
+              console.log(items[0])
+            }
+            // TODO: filter correctly for containing collection
+            collections = sample.collections.filter(collection => {
+              return collection.id === item_id;
+            });
+
+            console.log("filtered items: ")
+            console.log(items)
+            console.log("filtered collections: ")
+            console.log(collections)
+            
           });
         };
       }
