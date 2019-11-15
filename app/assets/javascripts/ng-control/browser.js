@@ -372,21 +372,29 @@
             console.log(sample.items)
             console.log("collections: ")
             console.log(sample.collections)
+
             items = sample.items.filter(item => {
               return item.id === item_id;
             });
-            if (items.length === 1) {
-              console.log(items[0])
+            if (items.length === 1) { // id is a part or item
+              sample.items = items
+              sample.collections = []
+              console.log(items[0].object_type_id)
+              if (items[0].is_part) {
+                console.log("item is part")
+                sample.collections = [ items[0].collection ]
+              } 
+            } else {
+              // TODO: filter correctly for containing collection
+              collections = sample.collections.filter(collection => {
+                return collection.id === item_id;
+              });
             }
-            // TODO: filter correctly for containing collection
-            collections = sample.collections.filter(collection => {
-              return collection.id === item_id;
-            });
-
+            
             console.log("filtered items: ")
-            console.log(items)
+            console.log(sample.items)
             console.log("filtered collections: ")
-            console.log(collections)
+            console.log(sample.collections)
             
           });
         };
