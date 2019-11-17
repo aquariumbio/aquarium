@@ -63,11 +63,11 @@ module Krill
 
       begin
         @managers[jid] = ThreadedManager.new(job) if command[:operation] == 'start'
-      rescue Krill::KrillSyntaxError => e
-        client.puts({ response: 'error', error: e.error.to_s }.to_json)
+      rescue Krill::KrillBaseError => e
+        client.puts({ response: 'error', error: e.error_message, backtrace: e.error_backtrace }.to_json)
         return
       rescue StandardError => e
-        client.puts({ response: 'error', error: e.message }.to_json)
+        client.puts({ response: 'error', error:  e.to_s, backtrace: e.backtrace }.to_json)
         return
       end
 
@@ -93,6 +93,13 @@ module Krill
         status = @managers[jid].send(command[:operation])
         delete_job(job_id: jid) if status == 'done'
         client.puts({ response: status }.to_json)
+      rescue Krill::KrillBaseError => e
+        client.puts({ 
+          response: 'error', 
+          error: e.error_message, 
+          backtrace: e.error_backtrace 
+        }.to_json)
+        delete_job(job_id: jid)
       rescue StandardError => e
         # TODO: change to catch manager method exceptions
         message = "Krill Server: #{command[:operation]} on job #{jid} " \
