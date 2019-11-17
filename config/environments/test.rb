@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Bioturk::Application.configure do
 
   config.eager_load = false

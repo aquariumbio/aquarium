@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatePrimers < ActiveRecord::Migration
   def change
     create_table :primers do |t|

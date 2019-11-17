@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SamplesController < ApplicationController
 
   before_filter :signed_in_user
@@ -6,7 +8,7 @@ class SamplesController < ApplicationController
   # GET /samples.json
   def index
 
-    @sample_type_id = params[:sample_type_id] ? params[:sample_type_id] : Sample.all.first.id
+    @sample_type_id = params[:sample_type_id] || Sample.all.first.id
     @sample_type = SampleType.find(@sample_type_id)
 
     @cookie_name = "sample_search_string_#{@sample_type.name}".to_sym
@@ -128,9 +130,7 @@ class SamplesController < ApplicationController
     fields = %w[name project]
 
     (1..8).each do |i|
-      fn = "field#{i}name".to_sym
       ft = "field#{i}type".to_sym
-      f = "field#{i}".to_sym
 
       if sample_type[ft] != 'not used' && !sample_type[ft].nil?
         fields.push sample_type[ft]
@@ -151,7 +151,7 @@ class SamplesController < ApplicationController
     redirect_to spreadsheet_path, notice: 'Samples not imported. File contains no parsable data' if data.empty?
 
     name = data.shift[0]
-    @sample_type = SampleType.find_by_name(name)
+    @sample_type = SampleType.find_by(name: name)
     @schema = schema @sample_type
 
     redirect_to spreadsheet_path, notice: "Samples not imported. Could not find sample type #{name}" unless @sample_type
@@ -164,7 +164,7 @@ class SamplesController < ApplicationController
       if row.length != @schema.length
         redirect_to spreadsheet_path, notice: "Samples not imported. This row has the wrong number of fields: #{row}."
         return []
-      elsif Sample.find_by_name(sample_name)
+      elsif Sample.find_by(name: sample_name)
         redirect_to spreadsheet_path, notice: "Samples not imported. The sample name #{sample_name} is already taken."
         return []
       end
@@ -196,7 +196,7 @@ class SamplesController < ApplicationController
       if t == ['string'] || t == ['url'] || t == ['number']
         fv = s.field_values.new name: n, value: s["field#{i}"].to_s
       elsif t != ['not used'] && s["field#{i}"] && s["field#{i}"] != '-none-' && s["field#{i}"] != '' && s["field#{i}"] != 'NA'
-        c = Sample.find_by_name(s["field#{i}"])
+        c = Sample.find_by(name: s["field#{i}"])
         @messages << "Sample #{s.id}: #{n}: Could not find '#{s["field#{i}"]}' with type in #{t}." unless c
         fv = s.field_values.new(name: n, child_sample_id: c.id) if c
       end
@@ -213,7 +213,6 @@ class SamplesController < ApplicationController
       redirect_to spreadsheet_path, notice: 'No path specified'
     else
 
-      path = params[:spreadsheet].original_filename
       content = params[:spreadsheet].read
       @data = content.split(/[\n\r]+/).collect do |l|
         l.split(/,\s*/)

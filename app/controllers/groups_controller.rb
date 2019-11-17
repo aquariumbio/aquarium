@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class GroupsController < ApplicationController
 
   before_filter :signed_in_user
@@ -22,12 +24,12 @@ class GroupsController < ApplicationController
   # GET /groups/1.json
   def show
 
-    @group = Group.find_by_id(params[:id])
+    @group = Group.find_by(id: params[:id])
 
     # Add new users
     if params[:user_id]
 
-      m = Membership.find_by_user_id_and_group_id(params[:user_id], @group.id)
+      m = Membership.find_by(user_id: params[:user_id], group_id: @group.id)
 
       unless m
 
@@ -45,7 +47,7 @@ class GroupsController < ApplicationController
     # Delete users
     if params[:drop_user]
 
-      m = Membership.find_by_user_id_and_group_id(params[:drop_user], @group.id)
+      m = Membership.find_by(user_id: params[:drop_user], group_id: @group.id)
 
       m.destroy if m
 

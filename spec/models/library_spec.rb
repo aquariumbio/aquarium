@@ -38,14 +38,10 @@ RSpec.describe Library do
       }
     }
     Library.import(library_hash, a_user)
-    new_library = Library.find_by_name('a_new_library')
+    new_library = Library.find_by(name: 'a_new_library')
     expect(new_library.name).to eq('a_new_library')
   end
 
   it 'expect importing exported library to fail because of duplication'
 
-end
-
-def empty_binding
-  binding
 end

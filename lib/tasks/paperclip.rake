@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :paperclip do
 
   desc 'Upgrade to S3'

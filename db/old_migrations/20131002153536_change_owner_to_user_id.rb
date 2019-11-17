@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChangeOwnerToUserId < ActiveRecord::Migration
   def change
     remove_column :samples, :owner, :string

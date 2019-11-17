@@ -59,9 +59,6 @@ h3 {
   margin: 16px 0 10px 0;
 }
 
-h4 {
-}
-
 .help {
   color: #999;
   font-style: italic;
@@ -71,21 +68,9 @@ p {
   line-height: 2;
 }
 
-.small {
-}
-
 .list {
   li {
     margin-left: 26px;
-  }
-}
-
-.pagination {
-  ul {
-    li {
-      a {
-      }
-    }
   }
 }
 
@@ -94,20 +79,11 @@ p {
   margin: 0;
 }
 
-.btn {
-}
-
 .btn-small {
   padding: 10px;
 }
 
 .table {
-  tr {
-    th {
-    }
-    td {
-    }
-  }
   tr:hover {
     background-color: $selection-highlight-color;
   }
@@ -187,16 +163,8 @@ p {
   color: white;
 }
 
-.dropdown-menu {
-  li {
-  }
-}
-
 .dropdown {
   padding: 4px 0 4px 0;
-}
-
-.caret {
 }
 
 #info-area {

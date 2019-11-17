@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class JobAssociation < ActiveRecord::Base
 
   attr_accessible :job_id, :operation_id

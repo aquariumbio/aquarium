@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 # Rails version
@@ -20,6 +22,7 @@ gem 'rack-cors', require: 'rack/cors'
 
 # Style enforcer and linter
 gem 'rubocop'
+gem 'rubocop-rails'
 
 # For documentation
 gem 'yard', '>= 0.9.20'
@@ -32,9 +35,12 @@ gem 'sassc-rails'
 gem 'will_paginate'
 
 # For uploads and cloud storage
-gem 'aws-sdk', '~> 1.7.1'
+gem 'aws-sdk', '< 2.0'
 gem 'aws-sdk-s3'
-gem 'paperclip'
+gem 'paperclip', '~> 6.1'
+
+# For email
+gem 'aws-sdk-ses'
 
 # For bulk inserts (e.g. for loading a collection from a matrix)
 gem 'activerecord-import'

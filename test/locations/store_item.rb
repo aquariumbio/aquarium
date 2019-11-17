@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'testlib'
 
 class Test
@@ -18,7 +20,7 @@ class Test
     @wiz = generic_wizard 16, 81
     puts '    created ' + @wiz.name
 
-    st = SampleType.find_by_name('Primer')
+    st = SampleType.find_by(name: 'Primer')
     @samp = generic_sample st
     puts '    created ' + @samp.name
 
@@ -73,7 +75,7 @@ class Test
 
     cleanup
     pass
-  rescue Exception => e
+  rescue StandardError => e
     puts "\n"
     puts e.to_s
     puts e.backtrace[0, 3].join("\n")

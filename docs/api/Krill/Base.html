@@ -589,7 +589,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#transfer-instance_method" title="#transfer (instance method)">#<strong>transfer</strong>(sources, destinations, options = {}) {|block| ... } &#x21d2; Object </a>
+      <a href="#transfer-instance_method" title="#transfer (instance method)">#<strong>transfer</strong>(sources, destinations, _options = {}) {|block| ... } &#x21d2; Object </a>
     
 
     
@@ -642,8 +642,6 @@
       <pre class="lines">
 
 
-117
-118
 119
 120
 121
@@ -689,10 +687,11 @@
 161
 162
 163
-164</pre>
+164
+165</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/inventory.rb', line 117</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/inventory.rb', line 119</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_box_interactive'>box_interactive</span><span class='lparen'>(</span><span class='id identifier rubyid_items'>items</span><span class='comma'>,</span> <span class='id identifier rubyid_method'>method</span><span class='comma'>,</span> <span class='id identifier rubyid_user_shows'>user_shows</span><span class='rparen'>)</span>
 
@@ -730,17 +729,16 @@
     <span class='kw'>end</span>
   <span class='kw'>end</span>
 
-  <span class='kw'>unless</span> <span class='id identifier rubyid_extras'>extras</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
-    <span class='id identifier rubyid_takes'>takes</span> <span class='op'>=</span> <span class='id identifier rubyid_extras'>extras</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:features</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_show'>show</span> <span class='kw'>do</span>
-      <span class='id identifier rubyid_title'>title</span> <span class='id identifier rubyid_extra_title'>extra_title</span>
-      <span class='id identifier rubyid_takes'>takes</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_t'>t</span><span class='op'>|</span>
-        <span class='id identifier rubyid_item'>item</span> <span class='id identifier rubyid_t'>t</span>
-      <span class='kw'>end</span>
-      <span class='id identifier rubyid_raw'>raw</span> <span class='id identifier rubyid_user_shows'>user_shows</span>
-    <span class='kw'>end</span>
-  <span class='kw'>end</span>
+  <span class='kw'>return</span> <span class='kw'>if</span> <span class='id identifier rubyid_extras'>extras</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
 
+  <span class='id identifier rubyid_takes'>takes</span> <span class='op'>=</span> <span class='id identifier rubyid_extras'>extras</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:features</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_show'>show</span> <span class='kw'>do</span>
+    <span class='id identifier rubyid_title'>title</span> <span class='id identifier rubyid_extra_title'>extra_title</span>
+    <span class='id identifier rubyid_takes'>takes</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_t'>t</span><span class='op'>|</span>
+      <span class='id identifier rubyid_item'>item</span> <span class='id identifier rubyid_t'>t</span>
+    <span class='kw'>end</span>
+    <span class='id identifier rubyid_raw'>raw</span> <span class='id identifier rubyid_user_shows'>user_shows</span>
+  <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -771,8 +769,6 @@
       <pre class="lines">
 
 
-92
-93
 94
 95
 96
@@ -794,10 +790,12 @@
 112
 113
 114
-115</pre>
+115
+116
+117</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/inventory.rb', line 92</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/inventory.rb', line 94</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_boxes_for'>boxes_for</span><span class='lparen'>(</span><span class='id identifier rubyid_items'>items</span><span class='rparen'>)</span>
 
@@ -889,12 +887,12 @@
       <pre class="lines">
 
 
-63
-64
-65</pre>
+65
+66
+67</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/inventory.rb', line 63</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/inventory.rb', line 65</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_collection_from'>collection_from</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="../Collection.html" title="Collection (class)">Collection</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find'><span class='object_link'><a href="../Collection.html#find-instance_method" title="Collection#find (method)">find</a></span></span> <span class='id identifier rubyid_id'>id</span>
@@ -942,12 +940,12 @@
       <pre class="lines">
 
 
-9
-10
-11</pre>
+11
+12
+13</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/base.rb', line 9</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/base.rb', line 11</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_debug'>debug</span>
   <span class='kw'>false</span>
@@ -1113,7 +1111,7 @@ from each part of a collection into distinct new Items.</p>
 
   <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='label'>except:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>interactive:</span> <span class='kw'>false</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span> <span class='id identifier rubyid_options'>options</span>
 
-  <span class='id identifier rubyid_object_type'>object_type</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../ObjectType.html" title="ObjectType (class)">ObjectType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_name'>find_by_name</span><span class='lparen'>(</span><span class='id identifier rubyid_object_type_name'>object_type_name</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_object_type'>object_type</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../ObjectType.html" title="ObjectType (class)">ObjectType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by'>find_by</span><span class='lparen'>(</span><span class='label'>name:</span> <span class='id identifier rubyid_object_type_name'>object_type_name</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Could not find object type </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_object_type_name'>object_type_name</span><span class='embexpr_end'>}</span><span class='tstring_content'> in distribute</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_object_type'>object_type</span>
 
   <span class='id identifier rubyid_user_shows'>user_shows</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1178,12 +1176,12 @@ from each part of a collection into distinct new Items.</p>
       <pre class="lines">
 
 
-64
-65
-66</pre>
+71
+72
+73</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/base.rb', line 64</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/base.rb', line 71</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='id identifier rubyid_e'>e</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="../Job.html" title="Job (class)">Job</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_jid'>jid</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_reload'>reload</span><span class='period'>.</span><span class='id identifier rubyid_append_step'>append_step</span> <span class='label'>operation:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>error</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>message:</span> <span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='comma'>,</span> <span class='label'>backtrace:</span> <span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_backtrace'>backtrace</span><span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>10</span><span class='rbracket'>]</span>
@@ -1256,7 +1254,14 @@ from each part of a collection into distinct new Items.</p>
 59
 60
 61
-62</pre>
+62
+63
+64
+65
+66
+67
+68
+69</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/krill/base.rb', line 23</span>
@@ -1276,13 +1281,20 @@ from each part of a collection into distinct new Items.</p>
     <span class='const'>Thread</span><span class='period'>.</span><span class='id identifier rubyid_stop'>stop</span>
 
     <span class='comment'># get technician input
-</span>    <span class='id identifier rubyid_input'>input</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="ShowResponse.html" title="Krill::ShowResponse (class)">ShowResponse</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='const'>JSON</span><span class='period'>.</span><span class='id identifier rubyid_parse'>parse</span><span class='lparen'>(</span><span class='ivar'>@job</span><span class='period'>.</span><span class='id identifier rubyid_reload'>reload</span><span class='period'>.</span><span class='id identifier rubyid_state'>state</span><span class='comma'>,</span> <span class='label'>symbolize_names:</span> <span class='kw'>true</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_last'>last</span><span class='lbracket'>[</span><span class='symbol'>:inputs</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+</span>    <span class='ivar'>@job</span><span class='period'>.</span><span class='id identifier rubyid_reload'>reload</span>
+    <span class='id identifier rubyid_job_state'>job_state</span> <span class='op'>=</span> <span class='ivar'>@job</span><span class='period'>.</span><span class='id identifier rubyid_job_state'>job_state</span>
+    <span class='id identifier rubyid_input'>input</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="ShowResponse.html" title="Krill::ShowResponse (class)">ShowResponse</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_job_state'>job_state</span><span class='period'>.</span><span class='id identifier rubyid_last'>last</span><span class='lbracket'>[</span><span class='symbol'>:inputs</span><span class='rbracket'>]</span><span class='rparen'>)</span>
 
     <span class='comment'># populate operations with table input data
-</span>    <span class='id identifier rubyid_input'>input</span><span class='lbracket'>[</span><span class='symbol'>:table_inputs</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_ti'>ti</span><span class='op'>|</span>
-      <span class='id identifier rubyid_op'>op</span> <span class='op'>=</span> <span class='id identifier rubyid_operations'>operations</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_op'>op</span><span class='op'>|</span> <span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span> <span class='op'>==</span> <span class='id identifier rubyid_ti'>ti</span><span class='lbracket'>[</span><span class='symbol'>:opid</span><span class='rbracket'>]</span> <span class='rbrace'>}</span>
-      <span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_temporary'>temporary</span><span class='lbracket'>[</span><span class='id identifier rubyid_ti'>ti</span><span class='lbracket'>[</span><span class='symbol'>:key</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_ti'>ti</span><span class='lbracket'>[</span><span class='symbol'>:value</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span> <span class='kw'>if</span> <span class='id identifier rubyid_op'>op</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_ti'>ti</span><span class='lbracket'>[</span><span class='symbol'>:type</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>number</span><span class='tstring_end'>&#39;</span></span>
-      <span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_temporary'>temporary</span><span class='lbracket'>[</span><span class='id identifier rubyid_ti'>ti</span><span class='lbracket'>[</span><span class='symbol'>:key</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_ti'>ti</span><span class='lbracket'>[</span><span class='symbol'>:value</span><span class='rbracket'>]</span>      <span class='kw'>if</span> <span class='id identifier rubyid_op'>op</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_ti'>ti</span><span class='lbracket'>[</span><span class='symbol'>:type</span><span class='rbracket'>]</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>number</span><span class='tstring_end'>&#39;</span></span>
+</span>    <span class='id identifier rubyid_input'>input</span><span class='lbracket'>[</span><span class='symbol'>:table_inputs</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_table_input'>table_input</span><span class='op'>|</span>
+      <span class='id identifier rubyid_operation'>operation</span> <span class='op'>=</span> <span class='id identifier rubyid_operations'>operations</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_op'>op</span><span class='op'>|</span> <span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span> <span class='op'>==</span> <span class='id identifier rubyid_table_input'>table_input</span><span class='lbracket'>[</span><span class='symbol'>:opid</span><span class='rbracket'>]</span> <span class='rbrace'>}</span>
+      <span class='kw'>next</span> <span class='kw'>unless</span> <span class='id identifier rubyid_operation'>operation</span>
+
+      <span class='id identifier rubyid_operation'>operation</span><span class='period'>.</span><span class='id identifier rubyid_temporary'>temporary</span><span class='lbracket'>[</span><span class='id identifier rubyid_table_input'>table_input</span><span class='lbracket'>[</span><span class='symbol'>:key</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='id identifier rubyid_table_input'>table_input</span><span class='lbracket'>[</span><span class='symbol'>:type</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>number</span><span class='tstring_end'>&#39;</span></span>
+                                                        <span class='id identifier rubyid_table_input'>table_input</span><span class='lbracket'>[</span><span class='symbol'>:value</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span>
+                                                      <span class='kw'>else</span>
+                                                        <span class='id identifier rubyid_table_input'>table_input</span><span class='lbracket'>[</span><span class='symbol'>:value</span><span class='rbracket'>]</span>
+                                                      <span class='kw'>end</span>
     <span class='kw'>end</span>
 
     <span class='comment'># return the technician input
@@ -1291,7 +1303,7 @@ from each part of a collection into distinct new Items.</p>
   <span class='kw'>else</span>
 
     <span class='comment'># figure out default technician response
-</span>    <span class='id identifier rubyid_i'>i</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="ShowResponse.html" title="Krill::ShowResponse (class)">ShowResponse</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_simulated_input_for'>simulated_input_for</span> <span class='id identifier rubyid_page'>page</span><span class='rparen'>)</span>
+</span>    <span class='id identifier rubyid_i'>i</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="ShowResponse.html" title="Krill::ShowResponse (class)">ShowResponse</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_simulated_input_for'>simulated_input_for</span><span class='lparen'>(</span><span class='id identifier rubyid_page'>page</span><span class='rparen'>)</span><span class='rparen'>)</span>
     <span class='ivar'>@job</span><span class='period'>.</span><span class='id identifier rubyid_append_step'>append_step</span> <span class='label'>operation:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>next</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>time:</span> <span class='const'>Time</span><span class='period'>.</span><span class='id identifier rubyid_now'>now</span><span class='comma'>,</span> <span class='label'>inputs:</span> <span class='id identifier rubyid_i'>i</span>
 
     <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Job </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_jid'>jid</span><span class='embexpr_end'>}</span><span class='tstring_content'> executed too many steps (50) in debug mode. Could be an infinite loop.</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='ivar'>@job</span><span class='period'>.</span><span class='id identifier rubyid_pc'>pc</span> <span class='op'>&gt;</span> <span class='int'>500</span>
@@ -1330,18 +1342,18 @@ from each part of a collection into distinct new Items.</p>
       <pre class="lines">
 
 
-33
-34
 35
 36
 37
 38
 39
 40
-41</pre>
+41
+42
+43</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operations.rb', line 33</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operations.rb', line 35</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_insert_operation'>insert_operation</span><span class='lparen'>(</span><span class='id identifier rubyid_index'>index</span><span class='comma'>,</span> <span class='id identifier rubyid_element'>element</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_before'>before</span> <span class='op'>=</span> <span class='ivar'>@operations</span><span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span>
@@ -1465,8 +1477,6 @@ from each part of a collection into distinct new Items.</p>
       <pre class="lines">
 
 
-19
-20
 21
 22
 23
@@ -1505,10 +1515,12 @@ from each part of a collection into distinct new Items.</p>
 56
 57
 58
-59</pre>
+59
+60
+61</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/transfers.rb', line 19</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/transfers.rb', line 21</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_load_samples'>load_samples</span><span class='lparen'>(</span><span class='id identifier rubyid_headings'>headings</span><span class='comma'>,</span> <span class='id identifier rubyid_ingredients'>ingredients</span><span class='comma'>,</span> <span class='id identifier rubyid_collections'>collections</span><span class='rparen'>)</span> <span class='comment'># needs a better name
 </span>
@@ -1536,7 +1548,7 @@ from each part of a collection into distinct new Items.</p>
                 <span class='kw'>else</span>
                   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_r'>r</span> <span class='op'>+</span> <span class='int'>1</span><span class='embexpr_end'>}</span><span class='tstring_content'>,</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_c'>c</span> <span class='op'>+</span> <span class='int'>1</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
                 <span class='kw'>end</span>
-          <span class='id identifier rubyid_tab'>tab</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_col'>col</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='id identifier rubyid_loc'>loc</span><span class='rbracket'>]</span> <span class='op'>+</span> <span class='id identifier rubyid_ingredients'>ingredients</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_ing'>ing</span><span class='op'>|</span> <span class='lbrace'>{</span> <span class='label'>content:</span> <span class='lparen'>(</span><span class='id identifier rubyid_ing'>ing</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'><span class='object_link'><a href="../Item.html" title="Item (class)">Item</a></span></span><span class='rparen'>)</span> <span class='op'>?</span> <span class='id identifier rubyid_ing'>ing</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span> <span class='op'>:</span> <span class='id identifier rubyid_ing'>ing</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>check:</span> <span class='kw'>true</span> <span class='rbrace'>}</span> <span class='rbrace'>}</span><span class='rparen'>)</span>
+          <span class='id identifier rubyid_tab'>tab</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_col'>col</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='id identifier rubyid_loc'>loc</span><span class='rbracket'>]</span> <span class='op'>+</span> <span class='id identifier rubyid_ingredients'>ingredients</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_ing'>ing</span><span class='op'>|</span> <span class='lbrace'>{</span> <span class='label'>content:</span> <span class='id identifier rubyid_ing'>ing</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../Item.html" title="Item (class)">Item</a></span></span><span class='rparen'>)</span> <span class='op'>?</span> <span class='id identifier rubyid_ing'>ing</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span> <span class='op'>:</span> <span class='id identifier rubyid_ing'>ing</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>check:</span> <span class='kw'>true</span> <span class='rbrace'>}</span> <span class='rbrace'>}</span><span class='rparen'>)</span>
         <span class='kw'>end</span>
         <span class='id identifier rubyid_i'>i</span> <span class='op'>+=</span> <span class='int'>1</span>
       <span class='kw'>end</span>
@@ -1588,12 +1600,12 @@ from each part of a collection into distinct new Items.</p>
       <pre class="lines">
 
 
-55
-56
-57</pre>
+57
+58
+59</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/inventory.rb', line 55</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/inventory.rb', line 57</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_new_collection'>new_collection</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="../Collection.html" title="Collection (class)">Collection</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new_collection'><span class='object_link'><a href="../Collection.html#new_collection-class_method" title="Collection.new_collection (method)">new_collection</a></span></span> <span class='id identifier rubyid_name'>name</span>
@@ -1647,12 +1659,12 @@ from each part of a collection into distinct new Items.</p>
       <pre class="lines">
 
 
-35
-36
-37</pre>
+37
+38
+39</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/inventory.rb', line 35</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/inventory.rb', line 37</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_new_object'>new_object</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="../Item.html" title="Item (class)">Item</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new_object'><span class='object_link'><a href="../Item.html#new_object-class_method" title="Item.new_object (method)">new_object</a></span></span> <span class='id identifier rubyid_name'>name</span>
@@ -1721,21 +1733,21 @@ from each part of a collection into distinct new Items.</p>
       <pre class="lines">
 
 
-43
-44
 45
 46
 47
 48
 49
-50</pre>
+50
+51
+52</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/inventory.rb', line 43</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/inventory.rb', line 45</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_new_sample'>new_sample</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_spec'>spec</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_s'>s</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Sample.html" title="Sample (class)">Sample</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_name'>find_by_name</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_ot'>ot</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../ObjectType.html" title="ObjectType (class)">ObjectType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_name'>find_by_name</span><span class='lparen'>(</span><span class='id identifier rubyid_spec'>spec</span><span class='lbracket'>[</span><span class='symbol'>:as</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_s'>s</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../Sample.html" title="Sample (class)">Sample</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by'>find_by</span><span class='lparen'>(</span><span class='label'>name:</span> <span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_ot'>ot</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../ObjectType.html" title="ObjectType (class)">ObjectType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by'>find_by</span><span class='lparen'>(</span><span class='label'>name:</span> <span class='id identifier rubyid_spec'>spec</span><span class='lbracket'>[</span><span class='symbol'>:as</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Unknown sample </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_s'>s</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Unknown container </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_spec'>spec</span><span class='lbracket'>[</span><span class='symbol'>:as</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_ot'>ot</span>
 
@@ -1784,16 +1796,16 @@ from each part of a collection into distinct new Items.</p>
       <pre class="lines">
 
 
-25
-26
 27
 28
 29
 30
-31</pre>
+31
+32
+33</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operations.rb', line 25</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operations.rb', line 27</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_operation_type'>operation_type</span>
 
@@ -1849,8 +1861,6 @@ from each part of a collection into distinct new Items.</p>
       <pre class="lines">
 
 
-8
-9
 10
 11
 12
@@ -1861,10 +1871,12 @@ from each part of a collection into distinct new Items.</p>
 17
 18
 19
-20</pre>
+20
+21
+22</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operations.rb', line 8</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operations.rb', line 10</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_operations'>operations</span><span class='lparen'>(</span><span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='label'>force:</span> <span class='kw'>false</span> <span class='rbrace'>}</span><span class='rparen'>)</span>
 
@@ -1908,17 +1920,17 @@ from each part of a collection into distinct new Items.</p>
       <pre class="lines">
 
 
-262
 263
 264
 265
 266
 267
 268
-269</pre>
+269
+270</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/inventory.rb', line 262</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/inventory.rb', line 263</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_produce'>produce</span><span class='lparen'>(</span><span class='id identifier rubyid_items'>items</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_items'>items</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Array</span>
@@ -2041,7 +2053,6 @@ or to silently release the items</p>
       <pre class="lines">
 
 
-224
 225
 226
 227
@@ -2077,10 +2088,11 @@ or to silently release the items</p>
 257
 258
 259
-260</pre>
+260
+261</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/inventory.rb', line 224</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/inventory.rb', line 225</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_release'>release</span><span class='lparen'>(</span><span class='id identifier rubyid_items'>items</span><span class='comma'>,</span> <span class='id identifier rubyid_args'>args</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
 
@@ -2156,21 +2168,17 @@ or to silently release the items</p>
       <pre class="lines">
 
 
-16
-17
 18
 19
 20
 21</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/base.rb', line 16</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/base.rb', line 18</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_show'>show</span>
-
   <span class='id identifier rubyid_page'>page</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="ShowBlock.html" title="Krill::ShowBlock (class)">ShowBlock</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='kw'>self</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_run'>run</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_finish_show'>finish_show</span><span class='lparen'>(</span><span class='id identifier rubyid_page'>page</span><span class='rparen'>)</span>
-
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -2204,9 +2212,6 @@ Pass optional block with additional instructions</p>
       <pre class="lines">
 
 
-125
-126
-127
 128
 129
 130
@@ -2233,10 +2238,13 @@ Pass optional block with additional instructions</p>
 151
 152
 153
-154</pre>
+154
+155
+156
+157</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_input_table.rb', line 125</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_input_table.rb', line 128</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_show_with_input_table'>show_with_input_table</span><span class='lparen'>(</span><span class='id identifier rubyid_ops'>ops</span><span class='comma'>,</span> <span class='id identifier rubyid_create_block'>create_block</span><span class='comma'>,</span> <span class='id identifier rubyid_num_tries'>num_tries</span> <span class='op'>=</span> <span class='int'>5</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_ops'>ops</span><span class='period'>.</span><span class='id identifier rubyid_extend'>extend</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="OperationList.html" title="Krill::OperationList (module)">OperationList</a></span></span><span class='rparen'>)</span>
@@ -2317,8 +2325,6 @@ Pass optional block with additional instructions</p>
       <pre class="lines">
 
 
-78
-79
 80
 81
 82
@@ -2329,10 +2335,12 @@ Pass optional block with additional instructions</p>
 87
 88
 89
-90</pre>
+90
+91
+92</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/inventory.rb', line 78</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/inventory.rb', line 80</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_sort_by_location'>sort_by_location</span><span class='lparen'>(</span><span class='id identifier rubyid_items'>items</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='lbracket'>[</span><span class='rbracket'>]</span> <span class='kw'>if</span> <span class='id identifier rubyid_items'>items</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
@@ -2384,13 +2392,13 @@ Pass optional block with additional instructions</p>
       <pre class="lines">
 
 
-70
-71
 72
-73</pre>
+73
+74
+75</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/inventory.rb', line 70</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/inventory.rb', line 72</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_spread'>spread</span><span class='lparen'>(</span><span class='id identifier rubyid_samples'>samples</span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='label'>reverse:</span> <span class='kw'>false</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
@@ -2510,7 +2518,6 @@ or to silently take the items</p>
       <pre class="lines">
 
 
-176
 177
 178
 179
@@ -2547,10 +2554,11 @@ or to silently take the items</p>
 210
 211
 212
-213</pre>
+213
+214</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/inventory.rb', line 176</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/inventory.rb', line 177</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_take'>take</span><span class='lparen'>(</span><span class='id identifier rubyid_items'>items</span><span class='comma'>,</span> <span class='id identifier rubyid_args'>args</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
 
@@ -2598,7 +2606,7 @@ or to silently take the items</p>
       <div class="method_details ">
   <h3 class="signature " id="transfer-instance_method">
   
-    #<strong>transfer</strong>(sources, destinations, options = {}) {|block| ... } &#x21d2; <tt>Object</tt> 
+    #<strong>transfer</strong>(sources, destinations, _options = {}) {|block| ... } &#x21d2; <tt>Object</tt> 
   
 
   
@@ -2688,8 +2696,6 @@ from the source collections</p>
       <pre class="lines">
 
 
-74
-75
 76
 77
 78
@@ -2782,16 +2788,14 @@ from the source collections</p>
 165</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/transfers.rb', line 74</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/transfers.rb', line 76</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_transfer'>transfer</span><span class='lparen'>(</span><span class='id identifier rubyid_sources'>sources</span><span class='comma'>,</span> <span class='id identifier rubyid_destinations'>destinations</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_transfer'>transfer</span><span class='lparen'>(</span><span class='id identifier rubyid_sources'>sources</span><span class='comma'>,</span> <span class='id identifier rubyid_destinations'>destinations</span><span class='comma'>,</span> <span class='id identifier rubyid__options'>_options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
 
   <span class='comment'># go through each well of the sources and transfer it to the next empty well of
 </span>  <span class='comment'># destinations. Every time a source or destination is used up, advance to
 </span>  <span class='comment'># another step.
 </span>
-  <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='label'>skip_non_empty:</span> <span class='kw'>true</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span> <span class='id identifier rubyid_options'>options</span>
-
   <span class='id identifier rubyid_user_shows'>user_shows</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
                  <span class='const'><span class='object_link'><a href="ShowBlock.html" title="Krill::ShowBlock (class)">ShowBlock</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='period'>.</span><span class='id identifier rubyid_run'>run</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='rparen'>)</span>
                <span class='kw'>else</span>
@@ -2886,9 +2890,9 @@ from the source collections</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Jul  2 18:20:14 2019 by
+  Generated on Wed Oct 30 20:03:15 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.20 (ruby-2.6.3).
+  0.9.20 (ruby-2.6.4).
 </div>
 
     </div>

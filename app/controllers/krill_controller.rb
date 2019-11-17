@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class KrillController < ApplicationController
 
   before_filter :signed_in_user
@@ -14,19 +16,19 @@ class KrillController < ApplicationController
 
       # Tell Krill server to start protocol
       begin
-        server_result = (Krill::Client.new.start params[:job])
+        server_result = Krill::Client.new.start(params[:job])
       rescue Exception => e
         return redirect_to krill_error_path(job: @job.id, message: e.to_s, backtrace: e.backtrace[0, 2])
       end
 
-      if !server_result
-        return redirect_to krill_error_path(job: @job.id, message: 'Krill server returned nil, which is a bad sign.', backtrace: [])
-      elsif server_result[:error]
+      return redirect_to krill_error_path(job: @job.id, message: 'Krill server returned nil, which is a bad sign.', backtrace: []) unless server_result
+
+      if server_result[:error]
         logger.info server_result[:error]
         return redirect_to krill_error_path(
           job: @job.id,
           message: ('server error: ' + server_result[:error][0, 512]).html_safe,
-          backtrace: []
+          backtrace: server_result[:backtrace]
         )
       end
 
@@ -38,40 +40,13 @@ class KrillController < ApplicationController
   end
 
   def debug
-
-    errors = []
     @job = Job.find(params[:id])
-
-    # if not running, then start
-    if @job.pc == Job.NOT_STARTED
-
-      @job.user_id = current_user.id
-      @job.save
-
-      begin
-        manager = Krill::Manager.new @job.id, true, 'master', 'master'
-      rescue Exception => e
-        error = e
-      end
-
-      if error
-        errors << error
-      else
-
-        begin
-          manager.run
-        rescue Exception => e
-          errors << e.message
-        end
-
-      end
-
-    end
-
-    Operation.step @job.operations.collect { |op| op.plan.operations }.flatten
-
+    errors = ProtocolDebugEngine.debug_job(@job)
     render json: { errors: errors, operations: @job.reload.operations, job: @job }
-
+  rescue ActiveRecord::RecordNotFound => e
+    # raise "Error: Job #{jid} not found"
+    # TODO: change to AqResponse ??
+    render json: { errors: [e] }
   end
 
   def error
@@ -89,14 +64,14 @@ class KrillController < ApplicationController
   def state
 
     @job = Job.find(params[:job])
-    render json: { state: (JSON.parse @job.state), result: { response: 'n/a' } }
+    render json: { state: @job.job_state, result: { response: 'n/a' } }
 
   end
 
   def abort
 
     begin
-      result = Krill::Client.new.abort params[:job]
+      result = Krill::Client.new.abort(params[:job])
     rescue Exception => e
       result = { response: 'error', message: e.to_s }
     else
@@ -106,7 +81,7 @@ class KrillController < ApplicationController
         op.associate :aborted, "Operation was canceled when job #{@job.id} was aborted"
       end
 
-      state = JSON.parse @job.state, symbolize_names: true
+      state = @job.job_state
       if state.length.odd? # backtrace ends with a 'next'
         @job.append_step operation: 'display', content: [
           { title: 'Interrupted' },
@@ -142,9 +117,7 @@ class KrillController < ApplicationController
     @job = Job.find(params[:job])
 
     if @job.pc >= 0
-
-      state = JSON.parse @job.state, symbolize_names: true
-
+      state = @job.job_state
       unless state.last[:operation] == 'next' || params[:command] == 'check_again'
         inputs = params[:inputs]
         inputs[:table_inputs] = [] unless inputs[:table_inputs]
@@ -159,7 +132,7 @@ class KrillController < ApplicationController
 
       # Tell Krill server to continue in the protocol
       begin
-        result = (Krill::Client.new.continue params[:job])
+        result = Krill::Client.new.continue(params[:job])
       rescue Exception => e
         result = { response: 'error', error: "Call to server raised #{e}" }
       end
@@ -184,7 +157,7 @@ class KrillController < ApplicationController
 
     end
 
-    render json: { state: (JSON.parse @job.state), result: result }
+    render json: { state: @job.job_state, result: result }
 
   end
 

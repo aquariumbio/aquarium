@@ -1,16 +1,14 @@
 inherit_from: .rubocop_todo.yml
 
+require: rubocop-rails
+
 AllCops:
   Exclude:
-    - db/schema.rb
-    - db/migrate/*
-    - bin/*
-    - node_modules/*
-  TargetRubyVersion: 2.5
-  TargetRailsVersion: 4.2
-
-Rails:
-  Enabled: true
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'script/**/*'
+    - 'node_modules/**/*'
+  TargetRubyVersion: 2.6
 
 Layout/EmptyLinesAroundBlockBody:
   Enabled: false
@@ -30,8 +28,11 @@ Metrics/AbcSize:
 Metrics/CyclomaticComplexity:
   Enabled: false
 
-Metrics/AbcSize:
-  Enabled: false
-
 Metrics/PerceivedComplexity:
   Enabled: false
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/RaiseArgs:
+  EnforcedStyle: compact

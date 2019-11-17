@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 dups = []
 
 ObjectType.all.each do |a|

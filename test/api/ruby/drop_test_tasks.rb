@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'testlib'
 
 tasks = [2466, 2465, 2464, 2463, 2444, 2443, 2443, 2441, 2440]

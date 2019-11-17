@@ -1,4 +1,4 @@
-ARG RUBY_VERSION=2.6.3
+ARG RUBY_VERSION=2.6.5
 ARG ALPINE_VERSION=3.10
 FROM ruby:${RUBY_VERSION}-alpine${ALPINE_VERSION} AS aquarium
 RUN apk update && apk add \
@@ -19,6 +19,7 @@ RUN apk update && apk add \
     openjdk8-jre \
     openssl \
     sqlite-dev \
+    tzdata \
     yarn
 
 RUN mkdir /aquarium
@@ -33,6 +34,7 @@ WORKDIR /aquarium
 # install js components
 COPY package.json ./package.json
 COPY yarn.lock ./yarn.lock
+
 RUN yarn install --modules-folder public/node_modules && yarn cache clean
 
 # Change where bundler puts gems

@@ -29,7 +29,7 @@
 
         <md-toolbar class="item-toolbar">
           <div class="md-toolbar-tools">
-            <h2 flex md-truncate>
+            <h2 class="item-label" flex md-truncate>
               <span ng-attr-data-popup-title-item-id="{{item.id}}">Item {{item.id}}:</span>
               <span ng-if="!collection"
                     ng-attr-data-popup-title-container-name="{{container.name}}">{{container.name}}</span>
@@ -187,7 +187,7 @@
                 <td>{{h.operation.id}}</td>
                 <td>{{h.operation.operation_type.name}}</td>
                 <td>
-                  <a href="/launcher?plan_id={{h.operation.plan_associations[0].plan_id}}">
+                  <a href="/plans?plan_id={{h.operation.plan_associations[0].plan_id}}">
                     {{h.operation.plan_associations[0].plan_id}}
                   </a>
                 </td>

@@ -1,4 +1,4 @@
-<% provide(:title, 'Inventory') %>
+<% provide(:title, 'Samples') %>
 
 <style>
   body {
@@ -59,26 +59,27 @@
   <span ng-if="views.create.selected">Unsaved Samples</span>
 
   <span ng-if="views.search.selected">
-    <span ng-show="views.search.sample_type && views.search.sample_type">{{views.search.sample_type}} &rang;</span>
+
     <span ng-show="views.search.project_filter && views.search.project_filter != '' &&
-                   views.search.project && views.search.project != ''">{{views.search.project}} &rang;</span>
+      views.search.project && views.search.project != ''">{{views.search.project}} &rang;</span>
+
     <span ng-show="views.search.user_filter && views.search.user_filter != '' && 
-                   views.search.user && views.search.user != ''">{{views.search.user}} &rang;</span>    
-    <span ng-if="views.search.count == 1">1 Sample</span>
-    <span ng-if="views.search.count > 1">{{views.search.count}} Samples</span>
+      views.search.user && views.search.user != ''">{{views.search.user}} &rang;</span> 
+
+    <span ng-if="views.search.count == 1" ng-show="views.search.sample_type && views.search.sample_type">
+      {{views.search.sample_type}} (1 sample) &rang;</span>
+
+    <span ng-if="views.search.count > 1" ng-show="views.search.sample_type && views.search.sample_type">
+      {{views.search.sample_type}} ({{views.search.count}} samples) &rang;</span>
+
   </span>
 
-<% end %>
-
-<% content_for :action1 do %>
-  <md-button ng-class="views.search.selected ? 'md-raised md-primary' : 'md-raised'" 
-   ng-click="search(0); select_view('search')">Search</md-button> 
 <% end %>
 
 <% content_for :action2 do %>
   <md-menu>
 
-    <md-button class='md-raised' ng-click="openMenu($mdMenu, $event)">New</md-button>
+    <md-button class='md-raised' ng-click="openMenu($mdMenu, $event)">Create Sample</md-button>
 
     <md-menu-content>
       <md-menu-item ng-repeat="st in sample_types">
@@ -99,6 +100,28 @@
 
 <% content_for :action4 do %>
   <%= render partial: "create_control" %> 
+<% end %>
+
+<% content_for :action5 do %>
+  <div layout="row"
+         layout-align="start center"
+         class="new-collection">    
+      <md-menu>
+        <md-button class="md-raised md-button"
+          ng-click="openCollectionMenu($mdMenu, $event)"
+          id="new-collection-button"
+          data-search-button="new-collection">
+          New Collection
+        </md-button>
+        <md-menu-content>
+          <md-menu-item ng-repeat="ctype in collection_types">
+            <md-button ng-click="new_collection(ctype)"
+                       ng-attr-data-new-collection-type="{{ctype.name}}"
+                       data-search-menu="collection-types">{{ctype.name}}</md-button>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+    </div>
 <% end %>
 
 <%= content_for :main do %>

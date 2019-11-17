@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PlansController < ApplicationController
 
   before_filter :signed_in_user
@@ -72,14 +74,14 @@ class PlansController < ApplicationController
         redirect_to plans_url(params)
       end
       format.json do
-        p = Plan.find_by_id(params[:id])
+        p = Plan.find_by(id: params[:id])
         if p
           ps = Serialize.serialize(p)
           logger.info "Completed serialize in #{Time.now - s}s"
           render json: ps
           logger.info "Completed show in #{Time.now - s}s"
         else
-          render json: { errors: "Could not find plan with id #{params[:id]}" }, status: 404
+          render json: { errors: "Could not find plan with id #{params[:id]}" }, status: :not_found
         end
       end
     end
@@ -125,22 +127,22 @@ class PlansController < ApplicationController
     if data.class == Array
       data.collect { |str| Sample.find(sid(str)) }
     else
-      Sample.find_by_id(sid(data))
+      Sample.find_by(id: sid(data))
     end
   end
 
   def routing_value(route)
 
     if route.class == String
-      Sample.find_by_id(sid(route))
+      Sample.find_by(id: sid(route))
     else
-      route.keys.collect { |k| Sample.find_by_id(sid(route[k])) }
+      route.keys.collect { |k| Sample.find_by(id: sid(route[k])) }
     end
 
   end
 
   def route_name(r)
-    r ? r : 'null'
+    r || 'null'
   end
 
   def destroy
@@ -179,63 +181,13 @@ class PlansController < ApplicationController
   end
 
   def debug
-
     plan = Plan.find(params[:id])
-    errors = []
-
-    # find all pending operations
-    pending = plan.operations.select { |o| o.status == 'pending' && o.precondition_value }
-
-    # group them by operation type
-    type_ids = pending.collect(&:operation_type_id).uniq
-
-    # batch each group and run a job
-    type_ids.each do |ot_id|
-
-      ops = pending.select { |op| op.operation_type_id == ot_id }
-
-      job, newops = OperationType.find(ot_id)
-                                 .schedule(ops, current_user, Group.find_by_name('technicians'))
-
-      error = nil
-
-      job.user_id = current_user.id
-      job.save
-
-      begin
-        manager = Krill::Manager.new job.id, true, 'master', 'master'
-      rescue Exception => e
-        error = e.to_s
-      end
-
-      if error
-
-        errors << error
-
-        ops.each do |op|
-          op.plan.error "Could not start job: #{error}", :job_start
-        end
-
-      else
-
-        begin
-          ops.extend(Krill::OperationList)
-
-          ops.each(&:run)
-
-          manager.run
-        rescue Exception => e
-          errors << 'Bug encountered while testing: ' + e.message + ' at ' + e.backtrace.join("\n") + '. '
-        end # begin
-
-      end # if
-
-    end # type_ids.each
-
-    Operation.step(plan.operations.select { |op| op.status == 'waiting' || op.status == 'deferred' })
-
+    errors = ProtocolDebugEngine.debug_plan(plan)
     render json: { errors: errors }
-
+  rescue ActiveRecord::RecordNotFound => e
+    # raise "Error: plan #{params[:id]} not found"
+    # TODO: change to AqResponse ??
+    render json: { errors: [e] }
   end # def debug
 
   def move

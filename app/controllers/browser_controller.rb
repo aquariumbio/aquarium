@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BrowserController < ApplicationController
 
   before_filter :signed_in_user
@@ -26,7 +28,7 @@ class BrowserController < ApplicationController
   end
 
   def recent_samples
-    user = User.find_by_id(params[:id]) if params[:id]
+    user = User.find_by(id: params[:id]) if params[:id]
     if !user
       render json: Sample
         .last(25)
@@ -42,7 +44,7 @@ class BrowserController < ApplicationController
   end
 
   def projects
-    user = User.find_by_id(params[:uid]) if params[:uid]
+    user = User.find_by(id: params[:uid]) if params[:uid]
     if !user
       render json: {
         projects: Sample.uniq.pluck(:project)
@@ -109,7 +111,7 @@ class BrowserController < ApplicationController
           end
         end
       end
-    rescue Exception => e
+    rescue StandardError => e
       render json: { errors: [e.to_s, e.backtrace[0..5].join(', ')] }
     else
       if !@errors.empty?
@@ -125,7 +127,7 @@ class BrowserController < ApplicationController
     s = Sample.find(params[:id])
     begin
       data = JSON.parse(s.data)
-    rescue JSON::ParseError
+    rescue JSON::ParserError
       data = {}
     end
     data[:note] = (params[:note] == '_EMPTY_' ? '' : params[:note])
@@ -135,10 +137,9 @@ class BrowserController < ApplicationController
   end
 
   def items
-
     sample = Sample.find(params[:id])
     item_list = Item.includes(:locator).where(sample_id: params[:id])
-    containers = ObjectType.where(sample_type_id: sample.sample_type_id).where.not(name: "__Part")
+    containers = ObjectType.where(sample_type_id: sample.sample_type_id).where.not(name: '__Part')
     render json: { items: item_list.as_json(include: [:locator]),
                    containers: containers.as_json(only: %i[name id]) }
   end
@@ -152,31 +153,60 @@ class BrowserController < ApplicationController
   end
 
   def search
-
+    # TODO: move search code to Sample and Item/Collection
     samples = Sample.where('name like ? or id = ?', "%#{params[:query]}%", params[:query].to_i)
 
-    if params[:user_filter]
-      user = User.find_by_login(params[:user])
-      samples = samples.where(user_id: user.id) if user
+    puts 'SAMPLE COUNT: ' + samples.length.to_s
+    if params[:item_id].present?
+      item = Item.find_by(id: params[:item_id].to_i)
+      if item
+        sample_id_list = if item.collection?
+                           collection = item.becomes Collection
+                           collection.parts.collect(&:sample_id)
+                         else
+                           [item.sample_id]
+                         end
+        sample_id_list.uniq.each do |sample_id|
+          # TODO: this is wrong should accumulate and not filter
+          samples = samples.where(id: sample_id)
+          break if samples.empty?
+        end
+      end
     end
 
-    project = params[:project]
-    samples = samples.where(project: params[:project]) if params[:project_filter]
+    puts 'SAMPLE COUNT: ' + samples.length.to_s
+    if params[:user_filter]
+      user = User.find_by(login: params[:user])
+      samples = samples.owned_by(user: user) if user
+    end
+    puts 'SAMPLE COUNT: ' + samples.length.to_s
+    if params[:project_filter]
+      samples = samples.for_project(project: params[:project]) if params[:project].present?
+    end
+    puts 'SAMPLE COUNT: ' + samples.length.to_s
+    if params[:sample_type].present?
+      sample_type = SampleType.find_by(name: params[:sample_type])
+      samples = if sample_type
+                  samples.with_sample_type(sample_type: sample_type)
+                else
+                  []
+                end
+    end
+    puts 'SAMPLE COUNT: ' + samples.length.to_s
 
-    sample_type = SampleType.find_by_name(params[:sample_type])
-    samples = samples.where(sample_type_id: sample_type.id) if sample_type
-
-    sample_list =  samples.offset(params[:page] * 30)
-                          .last(30)
-                          .reverse
-                          .as_json(only: %i[name id user_id data sample_type_id])
+    sample_list = if samples.empty?
+                    []
+                  else
+                    samples.offset(params[:page] * 30)
+                           .last(30)
+                           .reverse
+                           .as_json(only: %i[name id user_id data sample_type_id])
+                  end
 
     render json: { samples: sample_list, count: samples.count }
-
   end
 
   def samples
-
     samples = if params[:user_id]
                 Sample.where(sample_type_id: params[:id], user_id: params[:user_id])
               else
@@ -185,7 +215,6 @@ class BrowserController < ApplicationController
 
     render json: samples.offset(params[:offset]).last(30).reverse
                         .to_json(only: %i[name id user_id data created_at])
-
   end
 
   def delete_item

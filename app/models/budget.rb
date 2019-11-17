@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Budget < ActiveRecord::Base
 
   has_many :user_budget_associations, dependent: :destroy

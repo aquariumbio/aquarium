@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CollectionsDatatable < Datatable
 
   private
@@ -37,6 +39,7 @@ class CollectionsDatatable < Datatable
     end
   end
 
+  # TODO: remove? this doesn't appear to be used
   def sort_column
     columns = %w[id matrix id created_at updated_at] # possibly redefine in children classes
     columns[params[:iSortCol_0].to_i]

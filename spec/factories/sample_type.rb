@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :sample do
     sequence(:name) { |n| "sample_#{n}" }
-    project { 'the project' }
+    project { 'testing' }
     user_id { 1 }
     sample_type
   end

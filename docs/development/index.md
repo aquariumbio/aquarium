@@ -123,8 +123,7 @@ rm -rf docker/db/*
 
 ```bash
 ./develop-compose.sh up -d
-./develop-compose.sh exec app /bin/sh
-rspec
+./develop-compose.sh exec app rspec
 ./develop-compose.sh down -v
 ```
 
@@ -210,25 +209,37 @@ This file also limits the API to code used in Krill the protocol development lan
 
 ## Making an Aquarium Release
 
-1.  (make sure Rails tests pass)
+1.  make sure Rails tests pass
+
+    ```bash
+    ./develop-compose.sh exec app rspec
+    ```
+
 2.  Run `rubocop`, fix anything broken. Once done run `rubocop --auto-gen-config`.
 3.  (make sure JS tests pass)
 4.  Make sure JS linting passes
-5.  Update the version number in `config/initializers/version.rb` to the new version number.
-6.  Update API documentation by running `yard`
+5.  Update the version number in `package.json` and `config/initializers/version.rb` to the new version number.
+6.  Update API documentation by running 
+
+    ```bash
+    ./develop-compose.sh exec app yard
+    ```
+
 7.  (Update change log)
-8.  Create a tag for the new version:
+8.  Commit and push changes.
+9.  Create a tag for the new version:
 
     ```bash
     git tag -a v$NEWVERSION -m "Aquarium version $NEWVERSION"
     git push --tags
     ```
 
-9.  [Create a release on github](https://help.github.com/articles/creating-releases/).
+10. [Create a release on github](https://help.github.com/articles/creating-releases/).
     Visit the [Aquarium releases page](https://github.com/klavinslab/aquarium/releases).
     Click "Tags".
     Click "add release notes" for the new tag, use the change log as the release notes.
     Click "publish release".
+11. (Update zenodo entry)
 
 ## Docker configuration
 

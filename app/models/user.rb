@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ActiveRecord::Base
 
   include Budgeting
@@ -24,7 +26,7 @@ class User < ActiveRecord::Base
   validates :password_confirmation, presence: true, on: :create
 
   def is_admin
-    g = Group.find_by_name('admin')
+    g = Group.find_by(name: 'admin')
     g && !Membership.where(group_id: g.id, user_id: id).empty?
     # return (!g || g.memberships.length == 0 || g.member?(id))
   end
@@ -35,7 +37,7 @@ class User < ActiveRecord::Base
   end
 
   def retired?
-    g = Group.find_by_name('retired')
+    g = Group.find_by(name: 'retired')
     g && g.member?(id)
   end
 
@@ -103,26 +105,23 @@ class User < ActiveRecord::Base
     email_parameters = Parameter.where(user_id: id, key: 'email')
     raise "Email address not defined for user {id}: #{name}" if email_parameters.empty?
 
-    from = 'aquarium@uwbiofab.org'
-    to = email_parameters[0].value
+    to_address = email_parameters[0].value
 
     sleep 0.1 # Throttle email sending rate in case this method is called from within a loop
 
     Thread.new do
 
-      begin
-        ses = AWS::SimpleEmailService.new
+      ses = AWS::SimpleEmailService.new
 
-        ses.send_email(
-          subject: subject,
-          from: Bioturk::Application.config.email_from_address,
-          to: to,
-          body_text: "This email is better viewed with an email handler capable of rendering HTML\n\n#{message}",
-          body_html: message
-        )
-      rescue Exception => e
-        Rails.logger.error "Emailer Error: #{e}"
-      end
+      ses.send_email(
+        subject: subject,
+        from: Bioturk::Application.config.email_from_address,
+        to: to_address,
+        body_text: "This email is better viewed with an email handler capable of rendering HTML\n\n#{message}",
+        body_html: message
+      )
+    rescue StandardError => e
+      Rails.logger.error "Emailer Error: #{e}"
 
     end
 
@@ -136,12 +135,12 @@ class User < ActiveRecord::Base
     data = {}
 
     ops.each do |op|
-      if op
-        data[op.operation_type.name] ||= { count: 0, done: 0, error: 0 }
-        data[op.operation_type.name][:count] += 1
-        data[op.operation_type.name][:done] += 1 if op.status == "done"
-        data[op.operation_type.name][:error] += 1 if op.status == "error"
-      end
+      next unless op
+
+      data[op.operation_type.name] ||= { count: 0, done: 0, error: 0 }
+      data[op.operation_type.name][:count] += 1
+      data[op.operation_type.name][:done] += 1 if op.status == 'done'
+      data[op.operation_type.name][:error] += 1 if op.status == 'error'
     end
 
     data.collect { |k, v| { name: k }.merge v }.sort_by { |stat| stat[:count] }.reverse

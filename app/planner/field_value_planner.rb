@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module FieldValuePlanner
 
   extend ActiveSupport::Concern
@@ -40,7 +42,7 @@ module FieldValuePlanner
   end
 
   def operation
-    Operation.find_by_id(parent_id)
+    Operation.find_by(id: parent_id)
   end
 
   def satisfied_by_environment

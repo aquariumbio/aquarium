@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # @api krill
 class Parameter < ActiveRecord::Base
 
@@ -12,23 +14,17 @@ class Parameter < ActiveRecord::Base
   end
 
   def self.get_float(key)
-    p = Parameter.find_by_key(key)
-    if p
-      p.value.to_f
-    else
-      p = Parameter.make key, '0.0'
-      p.value.to_f
-    end
+    p = Parameter.find_by(key: key)
+    p ||= Parameter.make(key, '0.0')
+
+    p.value.to_f
   end
 
   def self.get_string(key)
-    p = Parameter.find_by_key(key)
-    if p
-      p.value
-    else
-      p = Parameter.make key, ''
-      p.value
-    end
+    p = Parameter.find_by(key: key)
+    p ||= Parameter.make(key, '')
+
+    p.value
   end
 
   def self.get(key)

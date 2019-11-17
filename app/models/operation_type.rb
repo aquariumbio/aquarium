@@ -57,12 +57,27 @@ class OperationType < ActiveRecord::Base
     field_types.select { |ft| ft.role == 'input' }
   end
 
+  # Returns the input of this OperationType with the given name.
+  #
+  # @param name [String] the name of the input
+  def input(name)
+    inputs.select { |field_type| field_type[:name] == name }.first
+  end
+
   # The output types of this OperationType.
   #
   # @return [Array<FieldType>]  meta definitions of the outputs
   #           that could be produced by a successful operation of this type
   def outputs
     field_types.select { |ft| ft.role == 'output' }
+  end
+
+  # Returns the output of this OperationType with the given name.
+  #
+  # @param name [String] the name of the input
+  # @return [FieldType] the named output
+  def output(name)
+    outputs.select { |field_type| field_type[:name] == name }.name
   end
 
   def waiting
@@ -121,61 +136,21 @@ class OperationType < ActiveRecord::Base
     code('test')
   end
 
-  # TODO: this should be a Job factory method
-  def schedule_aux(ops, user, group, opts = {})
-    job = Job.new
-
-    job.path = 'operation.rb'
-    job.pc = Job.NOT_STARTED
-    job.set_arguments(operation_type_id: id)
-    job.group_id = group.id
-    job.submitted_by = user.id
-    job.desired_start_time = Time.now
-    job.latest_start_time = Time.now + 1.hour
-    job.successor_id = opts[:successor].id if opts[:successor]
-    job.save
-
-    ops.each do |op|
-      if opts[:defer]
-        op.defer
-      else
-        op.schedule
-      end
-      JobAssociation.create(job_id: job.id, operation_id: op.id)
-      op.save
+  def add_test(content:, user:)
+    if test
+      test.commit(content, user)
+    else
+      new_code('test', content, user)
     end
-
-    job
-  end
-
-  # TODO: also a Job factory method, returned ops are not used
-  def schedule(operations, user, group, opts = {})
-    ops_to_schedule = []
-    ops_to_defer = []
-
-    operations.each do |op|
-      pps = op.primed_predecessors
-      if !pps.empty?
-        ops_to_schedule += pps
-        ops_to_defer << op
-      else
-        ops_to_schedule << op
-      end
-    end
-
-    schedule_aux(ops_to_defer, user, group, opts.merge(defer: true))
-    job = schedule_aux(ops_to_schedule, user, group, opts)
-
-    [job, ops_to_schedule]
   end
 
   #
   # Update Methods for Field Types from Front End Start Here
   #
 
-  def add_new_allowable_field_type(ft, newaft)
-    st = (SampleType.find_by_name(newaft[:sample_type][:name]) if newaft[:sample_type])
-    ot = (ObjectType.find_by_name(newaft[:object_type][:name]) if newaft[:object_type] && newaft[:object_type][:name] != '')
+  def add_new_allowable_field_type(ft, new_type)
+    st = (SampleType.find_by(name: new_type[:sample_type][:name]) if new_type[:sample_type])
+    ot = (ObjectType.find_by(name: new_type[:object_type][:name]) if new_type[:object_type] && new_type[:object_type][:name] != '')
 
     ft.allowable_field_types.create(
       sample_type_id: st ? st.id : nil,
@@ -185,14 +160,14 @@ class OperationType < ActiveRecord::Base
 
   def update_allowable_field_type(old_aft, new_aft)
     if new_aft[:sample_type]
-      st = SampleType.find_by_name(new_aft[:sample_type][:name])
+      st = SampleType.find_by(name: new_aft[:sample_type][:name])
       old_aft.sample_type_id = st.id if st
     else
       old_aft.sample_type_id = nil
     end
 
     if new_aft[:object_type] && new_aft[:object_type][:name] != ''
-      ot = ObjectType.find_by_name(new_aft[:object_type][:name])
+      ot = ObjectType.find_by(name: new_aft[:object_type][:name])
       old_aft.object_type_id = ot.id if ot
     else
       old_aft.sample_type_id = nil
@@ -201,17 +176,17 @@ class OperationType < ActiveRecord::Base
     old_aft.save
   end
 
-  def add_new_field_type(newft)
-    if newft[:allowable_field_types]
+  def add_new_field_type(new_type)
+    if new_type[:allowable_field_types]
 
-      sample_type_names = newft[:allowable_field_types].collect do |aft|
+      sample_type_names = new_type[:allowable_field_types].collect do |aft|
         aft[:sample_type] ? aft[:sample_type][:name] : nil
       end
 
-      container_names = newft[:allowable_field_types]
+      container_names = new_type[:allowable_field_types]
                         .select { |aft| aft[:object_type] && aft[:object_type][:name] && aft[:object_type][:name] != '' }
                         .collect do |aft|
-        raise "Object type '#{aft[:object_type][:name]}' not defined by browser for #{ft[:name]}." unless ObjectType.find_by_name(aft[:object_type][:name])
+        raise "Object type '#{aft[:object_type][:name]}' not defined by browser for #{ft[:name]}." unless ObjectType.find_by(name: aft[:object_type][:name])
 
         aft[:object_type][:name]
       end
@@ -221,54 +196,54 @@ class OperationType < ActiveRecord::Base
     end
 
     add_io(
-      newft[:name],
+      new_type[:name],
       sample_type_names,
       container_names,
-      newft[:role],
-      array: newft[:array],
-      part: newft[:part],
-      routing: newft[:routing],
-      ftype: newft[:ftype],
-      choices: newft[:choices]
+      new_type[:role],
+      array: new_type[:array],
+      part: new_type[:part],
+      routing: new_type[:routing],
+      ftype: new_type[:ftype],
+      choices: new_type[:choices]
     )
 
-    field_types.where(name: newft[:name], role: newft[:role])[0]
+    field_types.where(name: new_type[:name], role: new_type[:role])[0]
   end
 
-  def update_field_type(oldft, newft)
-    oldft.name = newft[:name]
-    if oldft.ftype == 'sample'
-      oldft.routing = newft[:routing]
-      oldft.array = newft[:array]
-      oldft.part = newft[:part]
-      oldft.preferred_operation_type_id = newft[:preferred_operation_type_id]
-      oldft.preferred_field_type_id = newft[:preferred_field_type_id]
+  def update_field_type(old_type, new_type)
+    old_type.name = new_type[:name]
+    if old_type.sample?
+      old_type.routing = new_type[:routing]
+      old_type.array = new_type[:array]
+      old_type.part = new_type[:part]
+      old_type.preferred_operation_type_id = new_type[:preferred_operation_type_id]
+      old_type.preferred_field_type_id = new_type[:preferred_field_type_id]
 
-      puts "PREF(#{oldft.name}): #{newft[:preferred_field_type_id]}"
+      puts "PREF(#{old_type.name}): #{new_type[:preferred_field_type_id]}"
 
       keepers = []
-      if newft[:allowable_field_types]
-        newft[:allowable_field_types].each do |newaft|
-          matching_afts = oldft.allowable_field_types.select { |aft| aft.id == newaft[:id] }
-          if matching_afts.length == 1
-            oldaft = matching_afts[0]
+      if new_type[:allowable_field_types]
+        new_type[:allowable_field_types].each do |newaft|
+          matching_types = old_type.allowable_field_types.select { |aft| aft.id == newaft[:id] }
+          if matching_types.length == 1
+            oldaft = matching_types[0]
             keepers << oldaft
             update_allowable_field_type oldaft, newaft
-          elsif matching_afts.empty?
-            keepers << add_new_allowable_field_type(oldft, newaft)
+          elsif matching_types.empty?
+            keepers << add_new_allowable_field_type(old_type, newaft)
           else
             raise 'More than one allowable field type matched.'
           end
         end
       end
     else
-      oldft.ftype = newft[:ftype]
-      oldft.choices = newft[:choices]
+      old_type.ftype = new_type[:ftype]
+      old_type.choices = new_type[:choices]
     end
 
-    oldft.save
+    old_type.save
 
-    oldft.allowable_field_types.reject { |aft| keepers.include? aft }.each(&:destroy)
+    old_type.allowable_field_types.reject { |aft| keepers.include? aft }.each(&:destroy)
   end
 
   def update_field_types(fts)

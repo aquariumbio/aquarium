@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Krill
 
   # The ShowBlock class implements the methods inside show blocks, which are used to interact with the technician. When
@@ -247,21 +249,16 @@ module Krill
 
     # @api private
     def is_proper_array(c)
-      if c.class == Array
-        if !c.empty?
-          t = c[0].class
-          return false unless t == Integer || t == Float || t == String
+      return false unless c.is_a?(Array)
+      return true if c.empty?
+      return false unless c[0].is_a?(Integer) || c[0].is_a?(Float) || c[0].is_a?(String)
 
-          c.each do |x|
-            return false if t != x.class
-          end
-          true
-        else
-          true
-        end
-      else
-        false
+      type = c[0].class
+      c.each do |x|
+        return false unless x.is_a?(type)
       end
+
+      true
     end
 
     # Display a selection of choices for the user. The options are the same as for **get**. For example,
@@ -280,6 +277,7 @@ module Krill
     #
     #   choice = data[:choice]
     def select(choices, opts = {})
+      choices = choices.uniq
       raise 'First argument to select should be an array of numbers or strings' unless is_proper_array choices
 
       options = {
@@ -299,15 +297,14 @@ module Krill
 
     # @api private
     def method_missing(m, *args, &block)
+      raise "Cannot call 'show' within a show block." if m == :show
 
-      if m == :show
-        raise "Cannot call 'show' within a show block."
-      else
+      if @base.methods.include?(m)
         @base.send(m, *args, &block)
+      else
+        super
       end
-
     end
 
   end
-
 end

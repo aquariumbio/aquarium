@@ -491,27 +491,27 @@ entered by the user via get, select, or table inputs.</p>
       <pre class="lines">
 
 
+299
+300
 301
 302
 303
 304
 305
 306
-307
-308
-309</pre>
+307</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 301</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 299</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_method_missing'>method_missing</span><span class='lparen'>(</span><span class='id identifier rubyid_m'>m</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Cannot call &#39;show&#39; within a show block.</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_m'>m</span> <span class='op'>==</span> <span class='symbol'>:show</span>
 
-  <span class='kw'>if</span> <span class='id identifier rubyid_m'>m</span> <span class='op'>==</span> <span class='symbol'>:show</span>
-    <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Cannot call &#39;show&#39; within a show block.</span><span class='tstring_end'>&quot;</span></span>
-  <span class='kw'>else</span>
+  <span class='kw'>if</span> <span class='ivar'>@base</span><span class='period'>.</span><span class='id identifier rubyid_methods'>methods</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_m'>m</span><span class='rparen'>)</span>
     <span class='ivar'>@base</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_m'>m</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
+  <span class='kw'>else</span>
+    <span class='kw'>super</span>
   <span class='kw'>end</span>
-
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -565,12 +565,12 @@ entered by the user via get, select, or table inputs.</p>
       <pre class="lines">
 
 
-85
-86
-87</pre>
+87
+88
+89</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 85</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 87</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_bullet'>bullet</span><span class='lparen'>(</span><span class='id identifier rubyid_str'>str</span><span class='rparen'>)</span>
   <span class='ivar'>@parts</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='label'>bullet:</span> <span class='id identifier rubyid_str'>str</span><span class='rparen'>)</span>
@@ -621,12 +621,12 @@ to click all checkboxes on a given page before the &quot;OK&quot; button is enab
       <pre class="lines">
 
 
-78
-79
-80</pre>
+80
+81
+82</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 78</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 80</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_check'>check</span><span class='lparen'>(</span><span class='id identifier rubyid_str'>str</span><span class='rparen'>)</span>
   <span class='ivar'>@parts</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='label'>check:</span> <span class='id identifier rubyid_str'>str</span><span class='rparen'>)</span>
@@ -775,8 +775,6 @@ also be specified.</p>
       <pre class="lines">
 
 
-237
-238
 239
 240
 241
@@ -784,10 +782,12 @@ also be specified.</p>
 243
 244
 245
-246</pre>
+246
+247
+248</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 237</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 239</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get'>get</span><span class='lparen'>(</span><span class='id identifier rubyid_type'>type</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>First argument to get should be either &#39;number&#39; or &#39;text&#39;</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_type'>type</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>number</span><span class='tstring_end'>&#39;</span></span> <span class='op'>||</span> <span class='id identifier rubyid_type'>type</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>text</span><span class='tstring_end'>&#39;</span></span>
@@ -854,12 +854,12 @@ config/initializers/aquarium.rb</p>
       <pre class="lines">
 
 
-151
-152
-153</pre>
+153
+154
+155</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 151</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 153</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_image'>image</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
   <span class='ivar'>@parts</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='label'>image:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='const'>Bioturk</span><span class='op'>::</span><span class='const'>Application</span><span class='period'>.</span><span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_image_server_interface'>image_server_interface</span><span class='embexpr_end'>}</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
@@ -910,12 +910,12 @@ config/initializers/aquarium.rb</p>
       <pre class="lines">
 
 
-127
-128
-129</pre>
+129
+130
+131</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 127</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 129</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_item'>item</span><span class='lparen'>(</span><span class='id identifier rubyid_i'>i</span><span class='rparen'>)</span>
   <span class='ivar'>@parts</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='label'>take:</span> <span class='id identifier rubyid_i'>i</span><span class='rparen'>)</span>
@@ -965,12 +965,12 @@ config/initializers/aquarium.rb</p>
       <pre class="lines">
 
 
-55
-56
-57</pre>
+57
+58
+59</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 55</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 57</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_note'>note</span><span class='lparen'>(</span><span class='id identifier rubyid_str'>str</span><span class='rparen'>)</span>
   <span class='ivar'>@parts</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='label'>note:</span> <span class='id identifier rubyid_str'>str</span><span class='rparen'>)</span>
@@ -1100,6 +1100,9 @@ config/initializers/aquarium.rb</p>
       <pre class="lines">
 
 
+279
+280
+281
 282
 283
 284
@@ -1108,14 +1111,13 @@ config/initializers/aquarium.rb</p>
 287
 288
 289
-290
-291
-292</pre>
+290</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 282</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 279</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_select'>select</span><span class='lparen'>(</span><span class='id identifier rubyid_choices'>choices</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_choices'>choices</span> <span class='op'>=</span> <span class='id identifier rubyid_choices'>choices</span><span class='period'>.</span><span class='id identifier rubyid_uniq'>uniq</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>First argument to select should be an array of numbers or strings</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_is_proper_array'>is_proper_array</span> <span class='id identifier rubyid_choices'>choices</span>
 
   <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span>
@@ -1156,12 +1158,12 @@ config/initializers/aquarium.rb</p>
       <pre class="lines">
 
 
-140
-141
-142</pre>
+142
+143
+144</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 140</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 142</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_separator'>separator</span>
   <span class='ivar'>@parts</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='label'>separator:</span> <span class='kw'>true</span><span class='rparen'>)</span>
@@ -1240,16 +1242,16 @@ operation.</p>
       <pre class="lines">
 
 
-115
-116
 117
 118
 119
 120
-121</pre>
+121
+122
+123</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 115</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 117</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_table'>table</span><span class='lparen'>(</span><span class='id identifier rubyid_m'>m</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_m'>m</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'><span class='object_link'><a href="Table.html" title="Krill::Table (class)">Table</a></span></span>
@@ -1339,17 +1341,17 @@ hours, minutes, and seconds, all numerical.</p>
       <pre class="lines">
 
 
-165
-166
 167
 168
 169
 170
 171
-172</pre>
+172
+173
+174</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 165</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 167</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_timer'>timer</span><span class='lparen'>(</span><span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span>
@@ -1404,12 +1406,12 @@ hours, minutes, and seconds, all numerical.</p>
       <pre class="lines">
 
 
-48
-49
-50</pre>
+50
+51
+52</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 48</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 50</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_title'>title</span><span class='lparen'>(</span><span class='id identifier rubyid_str'>str</span><span class='rparen'>)</span>
   <span class='ivar'>@parts</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='label'>title:</span> <span class='id identifier rubyid_str'>str</span><span class='rparen'>)</span>
@@ -1495,16 +1497,16 @@ hours, minutes, and seconds, all numerical.</p>
       <pre class="lines">
 
 
-183
-184
 185
 186
 187
 188
-189</pre>
+189
+190
+191</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 183</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 185</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_upload'>upload</span><span class='lparen'>(</span><span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span>
@@ -1559,12 +1561,12 @@ it and heed your advice.</p>
       <pre class="lines">
 
 
-70
-71
-72</pre>
+72
+73
+74</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 70</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/show_block.rb', line 72</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_warning'>warning</span><span class='lparen'>(</span><span class='id identifier rubyid_str'>str</span><span class='rparen'>)</span>
   <span class='ivar'>@parts</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='label'>warning:</span> <span class='id identifier rubyid_str'>str</span><span class='rparen'>)</span>
@@ -1579,9 +1581,9 @@ it and heed your advice.</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Jul  2 18:20:17 2019 by
+  Generated on Wed Oct 30 20:03:19 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.20 (ruby-2.6.3).
+  0.9.20 (ruby-2.6.4).
 </div>
 
     </div>

@@ -25,8 +25,8 @@ Bioturk::Application.config.vision_server_interface = ''
 # 
 Bioturk::Application.config.debug_tools = true # false will hide debug buttons in planner and manager
 Bioturk::Application.config.krill_port = 3500
-#Bioturk::Application.config.krill_hostname = 'localhost' # for krill and aq on same server (no docker)
-Bioturk::Application.config.krill_hostname = 'krill' # for krill docker container
+Bioturk::Application.config.krill_hostname = 'localhost' # for krill and aq on same server (no docker)
+#Bioturk::Application.config.krill_hostname = 'krill' # for krill docker container
 
 
 #

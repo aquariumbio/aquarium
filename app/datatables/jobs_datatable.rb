@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class JobsDatatable < Datatable
 
   private
@@ -27,7 +29,7 @@ class JobsDatatable < Datatable
     rows.map do |j|
 
       sub = User.find(j.submitted_by)
-      doer = User.find_by_id(j.user_id)
+      doer = User.find_by(id: j.user_id)
       group = Group.find(j.group_id)
       name = j.path.split('/').last.split('.').first
       meta = j.metacol_id && !(/metacol/ =~ params[:type]) ? (' (' + link_to(j.metacol_id, j.metacol) + ')') : ''
@@ -89,8 +91,10 @@ class JobsDatatable < Datatable
 
   end
 
+  # TODO: remove? doesn't appear to be used
   def sort_column
     columns = %w[id]
+    columns[params[:iSortCol_0].to_i]
   end
 
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Krill
 
   class Box
@@ -41,8 +43,8 @@ module Krill
     # @param name [String]  the name of the sample that will be instantiated into item
     # @param spec [String]  the name of the ObjectType that will be instantiated into item
     def new_sample(name, spec)
-      s = Sample.find_by_name(name)
-      ot = ObjectType.find_by_name(spec[:as])
+      s = Sample.find_by(name: name)
+      ot = ObjectType.find_by(name: spec[:as])
       raise "Unknown sample #{name}" unless s
       raise "Unknown container #{spec[:as]}" unless ot
 
@@ -150,17 +152,16 @@ module Krill
         end
       end
 
-      unless extras.empty?
-        takes = extras.collect(&:features)
-        show do
-          title extra_title
-          takes.each do |t|
-            item t
-          end
-          raw user_shows
-        end
-      end
+      return if extras.empty?
 
+      takes = extras.collect(&:features)
+      show do
+        title extra_title
+        takes.each do |t|
+          item t
+        end
+        raw user_shows
+      end
     end
 
     # Associate the item with the job running the protocol, until it is released (see {release}).

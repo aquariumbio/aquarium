@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 names = [
   %w[Borgman Joshua],
   %w[Chavali Venkata],
@@ -33,8 +35,8 @@ names.each do |name|
   # g.save
 
   m = Membership.new
-  u = User.find_by_login(login)
-  g = Group.find_by_name(login)
+  u = User.find_by(login: login)
+  g = Group.find_by(name: login)
   m.user_id = u.id
   m.group_id = g.id
   m.save

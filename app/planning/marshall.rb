@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Marshall
 
   def self.user=(u)
@@ -28,29 +30,26 @@ module Marshall
   end
 
   def self.operations(p, ops)
-
     ids = []
 
     if ops
       ops.each do |op|
-        begin
-          if op[:id]
-            operation = operation_update op
-          else
-            operation = self.operation op
-            operation.associate_plan p
-            operation.save
-          end
-          ids << operation.id
-          map_id op[:rid], operation.id
-        rescue Exception => e
-          raise "Marshalling error: #{e}: #{e.backtrace[0]}"
+
+        if op[:id]
+          operation = operation_update op
+        else
+          operation = self.operation op
+          operation.associate_plan p
+          operation.save
         end
+        ids << operation.id
+        map_id op[:rid], operation.id
+      rescue StandardError => e
+        raise "Marshalling error: #{e}: #{e.backtrace[0]}"
       end
     end
 
     ids
-
   end
 
   def self.operation(x)
@@ -126,8 +125,8 @@ module Marshall
 
     ft = op.operation_type.type(fv[:name], fv[:role])
 
-    aft = AllowableFieldType.find_by_id(fv[:allowable_field_type_id])
-    sample = Sample.find_by_id(sid)
+    aft = AllowableFieldType.find_by(id: fv[:allowable_field_type_id])
+    sample = Sample.find_by(id: sid)
 
     sid = nil if aft && (!sample || aft.sample_type_id != sample.sample_type_id)
 
@@ -167,7 +166,7 @@ module Marshall
   def self.plan_update(x)
 
     p = Plan.find(x[:id])
-    p.name = x[:name] ? x[:name] : 'New Plan'
+    p.name = x[:name] || 'New Plan'
     p.cost_limit = x[:cost_limit]
     p.status = x[:status]
     # p.user_id = @@user.id

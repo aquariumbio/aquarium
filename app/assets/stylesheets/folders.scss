@@ -1,3 +1,5 @@
+@import "variables";
+
 $row-height: 20px;
 $editable-height: 20px;
 $row-margin: 3px;
@@ -75,11 +77,8 @@ $po: $thick dashed pink;
     }
   }
 
-  .data {
-  }
-
   .editable {
-    color: #0000cc;
+    color: $main-navbar-color;
     vertical-align: top;
     height: $row-height;
     display: inline-block;
@@ -156,7 +155,7 @@ $po: $thick dashed pink;
   }
 
   .thread-builder-select {
-    color: #0000cc;
+    color: $main-navbar-color;
     display: inline-block;
     height: $row-height;
     width: auto;
@@ -171,7 +170,7 @@ $po: $thick dashed pink;
   }
 
   .multiselect {
-    color: #0000cc;
+    color: $main-navbar-color;
     display: inline-block;
   }
 
@@ -189,7 +188,7 @@ $po: $thick dashed pink;
   }
 
   .value {
-    color: #0000cc;
+    color: $main-navbar-color;
     display: inline-block;
   }
 
@@ -241,10 +240,6 @@ $po: $thick dashed pink;
 .folder-sample-key {
   margin: 0;
   padding: 0;
-}
-
-.folder-noedit {
-  disabled: true;
 }
 
 .folder-selected {

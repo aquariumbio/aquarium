@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Simply put: a representation of an input, output, or parameter of an Operation.
 #
 # In more detail: an Item, Sample, or parameter of the inputs/outputs of an {Operation} or of the properties of a {Sample}
@@ -73,13 +75,9 @@ class FieldValue < ActiveRecord::Base
   # @param row [Fixnum]
   # @param column [Fixnum]
   # @return [Item]
-  def collection_part row, column
+  def collection_part(row, column)
     pas = PartAssociation.where(collection_id: child_item_id, row: row, column: column)
-    if pas.length == 1
-      pas[0].part
-    else
-      nil
-    end
+    pas.first.part if pas.length == 1
   end
 
   # Return associated parameter value.
@@ -88,27 +86,24 @@ class FieldValue < ActiveRecord::Base
   #   {FieldValue} of the type specified in the operation type
   #   definition
   def val
-
     if field_type
       ft = field_type
     elsif sample && sample_type
-      fts = sample.sample_type.field_types.select { |ft| ft.name == name }
-      if fts.length == 1
-        ft = fts[0]
-      else
-        return nil
-      end
+      fts = sample.sample_type.field_types.select { |type| type.name == name }
+      return nil unless fts.length == 1
+
+      ft = ft.first
     else
       return nil
     end
 
-    case ft.ftype
+    case ft.type
     when 'string', 'url'
       return value
     when 'json'
       begin
         return JSON.parse value, symbolize_names: true
-      rescue Exception => e
+      rescue JSON::ParserError => e
         return { error: e, original_value: value }
       end
     when 'number'
@@ -118,9 +113,9 @@ class FieldValue < ActiveRecord::Base
     when 'item'
       return child_item
     end
-
   end
 
+  # TODO: dead code
   def self.create_string(sample, ft, values)
     values.each do |v|
       if ft.choices && ft.choices != ''
@@ -135,6 +130,7 @@ class FieldValue < ActiveRecord::Base
     end
   end
 
+  # TODO: dead code
   def self.create_number(sample, ft, values)
     values.each do |v|
       if ft.choices && ft.choices != ''
@@ -149,6 +145,7 @@ class FieldValue < ActiveRecord::Base
     end
   end
 
+  # TODO: dead code
   def self.create_url(sample, ft, values)
     values.each do |v|
       fv = sample.field_values.create name: ft.name, value: v
@@ -156,14 +153,13 @@ class FieldValue < ActiveRecord::Base
     end
   end
 
+  # TODO: dead code
   def self.create_sample(sample, ft, values)
-
     values.each do |v|
-
       if v.class == Sample
         child = v
       elsif v.class == Integer
-        child = Sample.find_by_id(v)
+        child = Sample.find_by(id: v)
         unless sample
           sample.errors.add :sample, "Could not find sample with id #{v} for #{ft.name}"
           raise ActiveRecord::Rollback
@@ -183,31 +179,7 @@ class FieldValue < ActiveRecord::Base
     end
   end
 
-  def self.create_item(sample, ft, values)
-    values.each do |v|
-      if v.class == Item
-        item = v
-      elsif v.class == Integer
-        item = Item.find(v)
-        unless item
-          sample.errors.add :item, "Could not find item with id #{v} for #{ft.name}"
-          raise ActiveRecord::Rollback
-        end
-      else
-        sample.errors.add :sample, "#{v} should be an item for #{ft.name}"
-        raise ActiveRecord::Rollback
-      end
-
-      unless ft.allowed? child
-        sample.errors.add :sample, "#{v} is not an allowable sample_type for #{ft.name}"
-        raise ActiveRecord::Rollback
-      end
-
-      fv = sample.field_values.create name: ft.name, child_item_id: sid
-      fv.save
-    end
-  end
-
+  # TODO: dead code
   def self.creator(sample, field_type, raw) # sample, field_type, raw_field_data
 
     values = []
@@ -221,20 +193,20 @@ class FieldValue < ActiveRecord::Base
       values = [raw]
     end
 
-    method('create_' + field_type.ftype).call(sample, field_type, values)
-
+    method('create_' + field_type.type).call(sample, field_type, values)
   end
 
+  # TODO: URLs belong elsewhere
   def to_s
     if child_sample_id
-      c = Sample.find_by_id(child_sample_id)
+      c = Sample.find_by(id: child_sample_id)
       if c
         "<a href='/samples/#{c.id}'>#{c.name}</a>"
       else
         "? #{child_sample_id} not found ?"
       end
     elsif child_item_id
-      c = Item.includes(:object_type).find_by_id(child_sample_id)
+      c = Item.includes(:object_type).find_by(id: child_sample_id)
       if c
         "<a href='/items/#{c.id}'>#{c.object_type.name} #{c.id}</a>"
       else
@@ -243,7 +215,6 @@ class FieldValue < ActiveRecord::Base
     else
       value
     end
-
   end
 
   def export

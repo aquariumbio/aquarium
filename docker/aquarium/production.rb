@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Bioturk::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -54,7 +56,7 @@ Bioturk::Application.configure do
     },
     s3_host_name: 'localhost:9000',
     s3_options: {
-      endpoint: "http://localhost:9000", # for aws-sdk
+      endpoint: 'http://localhost:9000', # for aws-sdk
       force_path_style: true # for aws-sdk (required for minio)
     }
   }

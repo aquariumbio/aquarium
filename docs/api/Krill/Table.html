@@ -520,17 +520,17 @@ show easier.</p>
       <pre class="lines">
 
 
-26
-27
 28
 29
 30
 31
 32
-33</pre>
+33
+34
+35</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 26</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 28</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_columns'>columns</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='ivar'>@columns</span> <span class='op'>=</span> <span class='id identifier rubyid_columns'>columns</span>
@@ -589,18 +589,18 @@ show easier.</p>
       <pre class="lines">
 
 
-171
-172
 173
 174
 175
 176
 177
 178
-179</pre>
+179
+180
+181</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 171</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 173</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_method_missing'>method_missing</span><span class='lparen'>(</span><span class='id identifier rubyid_m'>m</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
 
@@ -682,19 +682,19 @@ show easier.</p>
       <pre class="lines">
 
 
-130
-131
 132
 133
 134
 135
 136
-137</pre>
+137
+138
+139</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 130</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 132</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_add_column'>add_column</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_values'>values</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_add_column'>add_column</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_values'>values</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_column'>column</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_values'>values</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='comma'>,</span> <span class='id identifier rubyid_i'>i</span><span class='op'>|</span>
     <span class='ivar'>@rows</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
@@ -839,8 +839,6 @@ Note: data hash may not get properly populated in the protocol tester</p>
       <pre class="lines">
 
 
-149
-150
 151
 152
 153
@@ -852,10 +850,12 @@ Note: data hash may not get properly populated in the protocol tester</p>
 159
 160
 161
-162</pre>
+162
+163
+164</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 149</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 151</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_add_response_column'>add_response_column</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_defaults'>defaults</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_default_opts'>default_opts</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='label'>key:</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>number</span><span class='tstring_end'>&#39;</span></span> <span class='rbrace'>}</span>
@@ -918,13 +918,13 @@ Note: data hash may not get properly populated in the protocol tester</p>
       <pre class="lines">
 
 
-81
-82
 83
-84</pre>
+84
+85
+86</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 81</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 83</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_all'>all</span>
   <span class='ivar'>@choice</span> <span class='op'>=</span> <span class='ivar'>@columns</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span>
@@ -977,14 +977,14 @@ Note: data hash may not get properly populated in the protocol tester</p>
       <pre class="lines">
 
 
-73
-74
 75
 76
-77</pre>
+77
+78
+79</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 73</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 75</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_append'>append</span>
   <span class='ivar'>@rows</span> <span class='op'>&lt;&lt;</span> <span class='ivar'>@selection</span>
@@ -1057,13 +1057,13 @@ Note: data hash may not get properly populated in the protocol tester</p>
       <pre class="lines">
 
 
-89
-90
 91
-92</pre>
+92
+93
+94</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 89</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 91</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_choose'>choose</span><span class='lparen'>(</span><span class='id identifier rubyid_columns'>columns</span><span class='rparen'>)</span>
   <span class='ivar'>@choice</span> <span class='op'>=</span> <span class='id identifier rubyid_columns'>columns</span>
@@ -1116,15 +1116,15 @@ Note: data hash may not get properly populated in the protocol tester</p>
       <pre class="lines">
 
 
-64
-65
 66
 67
 68
-69</pre>
+69
+70
+71</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 64</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 66</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_clear'>clear</span>
   <span class='ivar'>@selection</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
@@ -1213,13 +1213,13 @@ Note: data hash may not get properly populated in the protocol tester</p>
       <pre class="lines">
 
 
-40
-41
 42
-43</pre>
+43
+44
+45</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 40</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 42</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_column'>column</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_heading'>heading</span><span class='rparen'>)</span>
   <span class='ivar'>@columns</span><span class='lbracket'>[</span><span class='id identifier rubyid_name'>name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_heading'>heading</span>
@@ -1291,15 +1291,15 @@ Note: data hash may not get properly populated in the protocol tester</p>
       <pre class="lines">
 
 
-97
-98
 99
 100
 101
-102</pre>
+102
+103
+104</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 97</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 99</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_from'>from</span><span class='lparen'>(</span><span class='id identifier rubyid_i'>i</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Table: from(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_i'>i</span><span class='embexpr_end'>}</span><span class='tstring_content'>) is out of range</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_i'>i</span> <span class='op'>&lt;</span> <span class='ivar'>@rows</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
@@ -1349,12 +1349,12 @@ Note: data hash may not get properly populated in the protocol tester</p>
       <pre class="lines">
 
 
-49
-50
-51</pre>
+51
+52
+53</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 49</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 51</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_has_column?'>has_column?</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
   <span class='ivar'>@columns</span><span class='lbracket'>[</span><span class='id identifier rubyid_key'>key</span><span class='rbracket'>]</span> <span class='op'>!=</span> <span class='kw'>nil</span>
@@ -1401,12 +1401,12 @@ Note: data hash may not get properly populated in the protocol tester</p>
       <pre class="lines">
 
 
-45
-46
-47</pre>
+47
+48
+49</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 45</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 47</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_has_columns?'>has_columns?</span>
   <span class='op'>!</span><span class='ivar'>@columns</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
@@ -1458,8 +1458,6 @@ Note: data hash may not get properly populated in the protocol tester</p>
       <pre class="lines">
 
 
-114
-115
 116
 117
 118
@@ -1468,10 +1466,12 @@ Note: data hash may not get properly populated in the protocol tester</p>
 121
 122
 123
-124</pre>
+124
+125
+126</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 114</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 116</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_render'>render</span>
 
@@ -1548,15 +1548,15 @@ Note: data hash may not get properly populated in the protocol tester</p>
       <pre class="lines">
 
 
-57
-58
 59
-60</pre>
+60
+61
+62</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 57</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 59</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_set'>set</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_set'>set</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='ivar'>@selection</span><span class='lbracket'>[</span><span class='id identifier rubyid_name'>name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_value'>value</span>
   <span class='kw'>self</span>
 <span class='kw'>end</span></pre>
@@ -1626,13 +1626,13 @@ Note: data hash may not get properly populated in the protocol tester</p>
       <pre class="lines">
 
 
-107
-108
 109
-110</pre>
+110
+111
+112</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 107</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 109</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to'>to</span><span class='lparen'>(</span><span class='id identifier rubyid_i'>i</span><span class='rparen'>)</span>
   <span class='ivar'>@to</span> <span class='op'>=</span> <span class='id identifier rubyid_i'>i</span>
@@ -1648,9 +1648,9 @@ Note: data hash may not get properly populated in the protocol tester</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Jul  2 18:20:17 2019 by
+  Generated on Wed Oct 30 20:03:19 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.20 (ruby-2.6.3).
+  0.9.20 (ruby-2.6.4).
 </div>
 
     </div>

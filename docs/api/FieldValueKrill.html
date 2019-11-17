@@ -277,6 +277,20 @@
       <pre class="lines">
 
 
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
 89
 90
 91
@@ -286,34 +300,17 @@
 95
 96
 97
-98
-99
-100
-101
-102
-103
-104
-105
-106
-107
-108
-109
-110
-111
-112
-113
-114</pre>
+98</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/krill/field_value_krill.rb', line 89</span>
+      <pre class="code"><span class="info file"># File 'app/krill/field_value_krill.rb', line 75</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info'>info</span>
-
   <span class='id identifier rubyid_si'>si</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>No sample</span><span class='tstring_end'>&#39;</span></span>
   <span class='id identifier rubyid_ii'>ii</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>No Item</span><span class='tstring_end'>&#39;</span></span>
 
   <span class='kw'>if</span> <span class='id identifier rubyid_child_sample_id'>child_sample_id</span>
-    <span class='id identifier rubyid_sample'>sample</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Sample.html" title="Sample (class)">Sample</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_child_sample_id'>child_sample_id</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_sample'>sample</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Sample.html" title="Sample (class)">Sample</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by'>find_by</span><span class='lparen'>(</span><span class='label'>id:</span> <span class='id identifier rubyid_child_sample_id'>child_sample_id</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_si'>si</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='id identifier rubyid_sample'>sample</span>
            <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_sample'>sample</span><span class='period'>.</span><span class='id identifier rubyid_sample_type'>sample_type</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_sample'>sample</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'> (</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_sample'>sample</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span>
          <span class='kw'>else</span>
@@ -322,7 +319,7 @@
   <span class='kw'>end</span>
 
   <span class='kw'>if</span> <span class='id identifier rubyid_child_item_id'>child_item_id</span>
-    <span class='id identifier rubyid_item'>item</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Item.html" title="Item (class)">Item</a></span></span><span class='period'>.</span><span class='id identifier rubyid_includes'>includes</span><span class='lparen'>(</span><span class='symbol'>:object_type</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_child_item_id'>child_item_id</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_item'>item</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Item.html" title="Item (class)">Item</a></span></span><span class='period'>.</span><span class='id identifier rubyid_includes'>includes</span><span class='lparen'>(</span><span class='symbol'>:object_type</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_find_by'>find_by</span><span class='lparen'>(</span><span class='label'>id:</span> <span class='id identifier rubyid_child_item_id'>child_item_id</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_ii'>ii</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='id identifier rubyid_item'>item</span>
            <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_item'>item</span><span class='period'>.</span><span class='id identifier rubyid_object_type'>object_type</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_item'>item</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'> at </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_item'>item</span><span class='period'>.</span><span class='id identifier rubyid_location'>location</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
          <span class='kw'>else</span>
@@ -331,7 +328,6 @@
   <span class='kw'>end</span>
 
   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>: { sample: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_si'>si</span><span class='embexpr_end'>}</span><span class='tstring_content'>, item: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_ii'>ii</span><span class='embexpr_end'>}</span><span class='tstring_content'>, array: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_field_type'>field_type</span><span class='period'>.</span><span class='id identifier rubyid_array'>array</span> <span class='op'>?</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>true</span><span class='tstring_end'>&#39;</span></span> <span class='op'>:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>false</span><span class='tstring_end'>&#39;</span></span><span class='embexpr_end'>}</span><span class='tstring_content'>, part: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_field_type'>field_type</span><span class='period'>.</span><span class='id identifier rubyid_part'>part</span> <span class='op'>?</span> <span class='lbracket'>[</span><span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='id identifier rubyid_column'>column</span><span class='rbracket'>]</span> <span class='op'>:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-</span><span class='tstring_end'>&#39;</span></span><span class='embexpr_end'>}</span><span class='tstring_content'> }</span><span class='tstring_end'>&quot;</span></span>
-
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -362,37 +358,33 @@
       <pre class="lines">
 
 
+37
+38
+39
+40
+41
+42
 43
 44
 45
 46
 47
-48
-49
-50
-51
-52
-53
-54
-55
-56</pre>
+48</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/krill/field_value_krill.rb', line 43</span>
+      <pre class="code"><span class="info file"># File 'app/krill/field_value_krill.rb', line 37</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_make'>make</span>
-
-  <span class='kw'>if</span> <span class='id identifier rubyid_object_type'>object_type</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_child_item_id'>child_item_id</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_object_type'>object_type</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_child_item_id'>child_item_id</span>
     <span class='ivar'>@item</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Item.html" title="Item (class)">Item</a></span></span><span class='period'>.</span><span class='id identifier rubyid_make'><span class='object_link'><a href="Item.html#make-class_method" title="Item.make (method)">make</a></span></span><span class='lparen'>(</span><span class='lbrace'>{</span> <span class='label'>quantity:</span> <span class='int'>1</span><span class='comma'>,</span> <span class='label'>inuse:</span> <span class='int'>0</span> <span class='rbrace'>}</span><span class='comma'>,</span> <span class='label'>sample:</span> <span class='id identifier rubyid_child_sample'>child_sample</span><span class='comma'>,</span> <span class='label'>object_type:</span> <span class='id identifier rubyid_object_type'>object_type</span><span class='rparen'>)</span>
     <span class='ivar'>@item</span><span class='period'>.</span><span class='id identifier rubyid_store'>store</span> <span class='kw'>if</span> <span class='ivar'>@item</span><span class='period'>.</span><span class='id identifier rubyid_location'>location</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Unknown</span><span class='tstring_end'>&#39;</span></span>
     <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_child_item_id'>child_item_id</span> <span class='op'>=</span> <span class='ivar'>@item</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
     <span class='id identifier rubyid_save'>save</span>
-  <span class='kw'>elsif</span> <span class='id identifier rubyid_object_type'>object_type</span> <span class='op'>&amp;&amp;</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_child_item_id'>child_item_id</span>
-    <span class='const'>Rails</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Item </span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_child_item_id'>child_item_id</span><span class='embexpr_end'>}</span><span class='tstring_content'> already assigned to field value</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>elsif</span> <span class='id identifier rubyid_object_type'>object_type</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_child_item_id'>child_item_id</span>
+    <span class='const'>Rails</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Item </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_child_item_id'>child_item_id</span><span class='embexpr_end'>}</span><span class='tstring_content'> already assigned to field value</span><span class='tstring_end'>&quot;</span></span>
   <span class='kw'>end</span>
 
   <span class='ivar'>@item</span>
-
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -423,45 +415,37 @@
       <pre class="lines">
 
 
+50
+51
+52
+53
+54
+55
+56
+57
 58
 59
 60
 61
 62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75</pre>
+63</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/krill/field_value_krill.rb', line 58</span>
+      <pre class="code"><span class="info file"># File 'app/krill/field_value_krill.rb', line 50</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_make_collection'>make_collection</span>
-
   <span class='id identifier rubyid_ot'>ot</span> <span class='op'>=</span> <span class='id identifier rubyid_object_type'>object_type</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Could not find object type: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_object_type'>object_type</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_ot'>ot</span>
 
-  <span class='kw'>if</span> <span class='id identifier rubyid_ot'>ot</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_handler'>handler</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>collection</span><span class='tstring_end'>&#39;</span></span>
-    <span class='id identifier rubyid_c'>c</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Collection.html" title="Collection (class)">Collection</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new_collection'><span class='object_link'><a href="Collection.html#new_collection-class_method" title="Collection.new_collection (method)">new_collection</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_object_type'>object_type</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_store'>store</span> <span class='kw'>if</span> <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_location'>location</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Unknown</span><span class='tstring_end'>&#39;</span></span>
-    <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_child_item_id'>child_item_id</span> <span class='op'>=</span> <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
-    <span class='id identifier rubyid_save'>save</span>
-    <span class='id identifier rubyid_c'>c</span>
-  <span class='kw'>elsif</span> <span class='id identifier rubyid_ot'>ot</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_handler'>handler</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>collection</span><span class='tstring_end'>&#39;</span></span>
-    <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Could not make a new collection from the object type name &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39;, </span><span class='tstring_end'>&quot;</span></span> \
-          <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>because its handler is &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_handler'>handler</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39;, not &#39;collection&#39;</span><span class='tstring_end'>&quot;</span></span>
-  <span class='kw'>else</span>
-    <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Could not find object type: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_object_type'>object_type</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
-  <span class='kw'>end</span>
+  <span class='id identifier rubyid_message'>message</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Cannot make a new collection from object type &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39; with handler &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_handler'>handler</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39;</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='id identifier rubyid_message'>message</span> <span class='kw'>if</span> <span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_handler'>handler</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>collection</span><span class='tstring_end'>&#39;</span></span>
 
+  <span class='id identifier rubyid_c'>c</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Collection.html" title="Collection (class)">Collection</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new_collection'><span class='object_link'><a href="Collection.html#new_collection-class_method" title="Collection.new_collection (method)">new_collection</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_object_type'>object_type</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_store'>store</span> <span class='kw'>if</span> <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_location'>location</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Unknown</span><span class='tstring_end'>&#39;</span></span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_child_item_id'>child_item_id</span> <span class='op'>=</span> <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
+  <span class='id identifier rubyid_save'>save</span>
+
+  <span class='id identifier rubyid_c'>c</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -492,31 +476,27 @@
       <pre class="lines">
 
 
-77
-78
-79
-80
-81
-82
-83
-84
-85
-86
-87</pre>
+65
+66
+67
+68
+69
+70
+71
+72
+73</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/krill/field_value_krill.rb', line 77</span>
+      <pre class="code"><span class="info file"># File 'app/krill/field_value_krill.rb', line 65</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_make_part'>make_part</span><span class='lparen'>(</span><span class='id identifier rubyid_collection'>collection</span><span class='comma'>,</span> <span class='id identifier rubyid_r'>r</span><span class='comma'>,</span> <span class='id identifier rubyid_c'>c</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='kw'>unless</span> <span class='id identifier rubyid_collection'>collection</span>
 
-  <span class='kw'>if</span> <span class='id identifier rubyid_collection'>collection</span>
-    <span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_set'>set</span> <span class='id identifier rubyid_r'>r</span><span class='comma'>,</span> <span class='id identifier rubyid_c'>c</span><span class='comma'>,</span> <span class='id identifier rubyid_child_sample'>child_sample</span>
-    <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_child_item_id'>child_item_id</span> <span class='op'>=</span> <span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
-    <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_row'>row</span> <span class='op'>=</span> <span class='id identifier rubyid_r'>r</span>
-    <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_column'>column</span> <span class='op'>=</span> <span class='id identifier rubyid_c'>c</span>
-    <span class='id identifier rubyid_save'>save</span>
-  <span class='kw'>end</span>
-
+  <span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_set'>set</span><span class='lparen'>(</span><span class='id identifier rubyid_r'>r</span><span class='comma'>,</span> <span class='id identifier rubyid_c'>c</span><span class='comma'>,</span> <span class='id identifier rubyid_child_sample'>child_sample</span><span class='rparen'>)</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_child_item_id'>child_item_id</span> <span class='op'>=</span> <span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_row'>row</span> <span class='op'>=</span> <span class='id identifier rubyid_r'>r</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_column'>column</span> <span class='op'>=</span> <span class='id identifier rubyid_c'>c</span>
+  <span class='id identifier rubyid_save'>save</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -560,12 +540,12 @@
       <pre class="lines">
 
 
-116
-117
-118</pre>
+100
+101
+102</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/krill/field_value_krill.rb', line 116</span>
+      <pre class="code"><span class="info file"># File 'app/krill/field_value_krill.rb', line 100</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_part?'>part?</span>
   <span class='id identifier rubyid_field_type'>field_type</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_field_type'>field_type</span><span class='period'>.</span><span class='id identifier rubyid_part'>part</span>
@@ -599,8 +579,6 @@
       <pre class="lines">
 
 
-4
-5
 6
 7
 8
@@ -630,31 +608,19 @@
 32
 33
 34
-35
-36
-37
-38
-39
-40
-41</pre>
+35</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/krill/field_value_krill.rb', line 4</span>
+      <pre class="code"><span class="info file"># File 'app/krill/field_value_krill.rb', line 6</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_retrieve'>retrieve</span>
-
   <span class='kw'>if</span> <span class='id identifier rubyid_child_item_id'>child_item_id</span>
-
-    <span class='ivar'>@item</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Item.html" title="Item (class)">Item</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_id'>find_by_id</span><span class='lparen'>(</span><span class='id identifier rubyid_child_item_id'>child_item_id</span><span class='rparen'>)</span>
-
+    <span class='ivar'>@item</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Item.html" title="Item (class)">Item</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by'>find_by</span><span class='lparen'>(</span><span class='label'>id:</span> <span class='id identifier rubyid_child_item_id'>child_item_id</span><span class='rparen'>)</span>
   <span class='kw'>elsif</span> <span class='op'>!</span><span class='id identifier rubyid_predecessors'>predecessors</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
-
     <span class='comment'># TODO: THIS SHOULD USE THE ACTIVE PREDECESSOR, IN CASE THERE IS MORE THAN ONE
 </span>    <span class='comment'>#       FILTER BY STATUS (e.g. &quot;done&quot;)?
 </span>    <span class='id identifier rubyid_copy_inventory'>copy_inventory</span><span class='lparen'>(</span><span class='id identifier rubyid_predecessors'>predecessors</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rparen'>)</span>
-
   <span class='kw'>else</span>
-
     <span class='id identifier rubyid_items'>items</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='id identifier rubyid_object_type'>object_type</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_field_type'>field_type</span><span class='period'>.</span><span class='id identifier rubyid_part'>part</span>
               <span class='const'><span class='object_link'><a href="Item.html" title="Item (class)">Item</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>sample_id:</span> <span class='id identifier rubyid_child_sample_id'>child_sample_id</span><span class='comma'>,</span> <span class='label'>object_type_id:</span> <span class='id identifier rubyid_object_type'>object_type</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_reject'>reject</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:deleted?</span><span class='rparen'>)</span>
             <span class='kw'>elsif</span> <span class='id identifier rubyid_object_type'>object_type</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_field_type'>field_type</span><span class='period'>.</span><span class='id identifier rubyid_part'>part</span>
@@ -673,11 +639,9 @@
       <span class='kw'>end</span>
       <span class='id identifier rubyid_save'>save</span>
     <span class='kw'>end</span>
-
   <span class='kw'>end</span>
 
   <span class='ivar'>@item</span>
-
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -689,9 +653,9 @@
 </div>
 
       <div id="footer">
-  Generated on Tue Jul  2 18:20:13 2019 by
+  Generated on Wed Oct 30 20:03:15 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.20 (ruby-2.6.3).
+  0.9.20 (ruby-2.6.4).
 </div>
 
     </div>

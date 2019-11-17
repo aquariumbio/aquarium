@@ -2,11 +2,11 @@ AQ.Item.getter(AQ.ObjectType,"object_type");
 AQ.Item.getter(AQ.Sample,"sample");
 
 AQ.Item.record_getters.is_collection = function() {
-  return (this.object_type.handler == 'collection');
+  return (this.object_type.handler === 'collection');
 }
 
 AQ.Item.record_getters.is_part = function() {
-  return (this.object_type && this.object_type.name == '__Part');
+  return (this.object_type && this.object_type.name === '__Part');
 }
 
 AQ.Item.record_getters.collection = function() {

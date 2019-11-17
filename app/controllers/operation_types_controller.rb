@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+require 'minitest'
+
 class OperationTypesController < ApplicationController
 
   before_filter :signed_in_user
@@ -10,7 +14,6 @@ class OperationTypesController < ApplicationController
   end
 
   def index
-
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
     respond_to do |format|
@@ -20,11 +23,9 @@ class OperationTypesController < ApplicationController
       end
       format.html { render layout: 'aq2', status: :ok }
     end
-
   end
 
   def create
-
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
     ot = OperationType.new(
@@ -63,58 +64,46 @@ class OperationTypesController < ApplicationController
   end
 
   def destroy
-
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
     ot = OperationType.find(params[:id])
-
     if ot.operations.count != 0
-      render json: { error: "Operation Type #{ot.name} has associated operations." },
-             status: :unprocessable_entity
+      resp = { error: "Operation Type #{ot.name} has associated operations." },
+             status = :unprocessable_entity
     elsif ot.deployed
-      render json: { error: "Operation Type #{ot.name} has been deployed." },
-             status: :unprocessable_entity
+      resp = { error: "Operation Type #{ot.name} has been deployed." }
+      status = :unprocessable_entity
     else
       ot.destroy
-      render json: { ok: true }, status: :ok
+      resp = { ok: true }
+      status = :ok
     end
-
+    render json: resp, status: status
   end
 
   def code
-
     if params[:no_edit]
-
       render json: {}, status: :ok
-
-    else
-
-      ot = OperationType.find(params[:id])
-      c = ot.code(params[:name])
-
-      unless params[:no_edit]
-        c = if c
-              c.commit(params[:content], current_user)
-            else
-              ot.new_code(params[:name], params[:content], current_user)
-            end
-      end
-
-      render json: c, status: :ok
-
+      return
     end
 
+    ot = OperationType.find(params[:id])
+    code_object = ot.code(params[:name])
+    code_object = if code_object
+                    code_object.commit(params[:content], current_user)
+                  else
+                    ot.new_code(params[:name], params[:content], current_user)
+                  end
+    render json: code_object, status: :ok
   end
 
   def update_from_ui(data, update_fields = true)
-
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
     ot = OperationType.find(data[:id])
     update_errors = []
 
     ActiveRecord::Base.transaction do
-
       ot.name = data[:name]
       ot.category = data[:category]
       ot.deployed = data[:deployed]
@@ -128,25 +117,20 @@ class OperationTypesController < ApplicationController
       end
 
       if update_fields
-
         begin
           ot.update_field_types data[:field_types]
-        rescue Exception => e
+        rescue StandardError => e
           update_errors << e.to_s << e.backtrace.to_s
           logger.error("Error updating operation type field types: #{e.backtrace}")
           raise ActiveRecord::Rollback
         end
-
       end
-
     end
 
     { op_type: ot, update_errors: update_errors }
-
   end
 
   def update
-
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
     ot = update_from_ui params
@@ -155,7 +139,7 @@ class OperationTypesController < ApplicationController
       render json: operation_type.as_json(methods: %i[field_types protocol precondition cost_model documentation]),
              status: :ok
     else
-      render json: { errors: ot[:update_errors] },
+      render json: { error: ot[:update_errors] },
              status: :unprocessable_entity
     end
   end
@@ -166,77 +150,77 @@ class OperationTypesController < ApplicationController
            status: :ok
   end
 
+  # returns serialized output from operation_type.random
   def random
-
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
-    ops_json = []
-
-    begin
-      ActiveRecord::Base.transaction do
-
-        ops = OperationType.find(params[:id]).random(params[:num].to_i)
-
-        error = false
-
-        precondition_errors = ops.select do |op|
-          begin
-            op.precondition_value
-          rescue Exception
-            error = true
-          end
+    ActiveRecord::Base.transaction do
+      begin
+        operation_type = OperationType.find(params[:id])
+        ops = operation_type.random(params[:num].to_i)
+        ops.select(&:precondition_value)
+        ops_json = ops.as_json(methods: %i[field_values precondition_value])
+        ops_json.each do |op|
+          op['field_values'] = op['field_values'].collect(&:full_json)
         end
 
-        if !error
-          ops_json = ops.as_json(methods: %i[field_values precondition_value])
-          ops_json.each do |op|
-            op["field_values"] = op["field_values"].collect(&:full_json)
-          end
-          render json: ops_json, status: :ok
-        else
-          render json: { error: 'One or more preconditions could not be evaluated.' },
+        if ops_json.empty?
+          render json: { error: 'No operations generated', backtrace: [] },
                  status: :unprocessable_entity
+        else
+          render json: ops_json, status: :ok
         end
-        raise ActiveRecord::Rollback
-
+      rescue StandardError => e
+        logger.error(e.message)
+        e.backtrace.each do |b|
+          logger.error(b)
+        end
+        # TODO: some errors may need backtrace
+        backtrace = [] # e.backtrace || []
+        render json: { error: e.message, backtrace: backtrace },
+               status: :unprocessable_entity
       end
-    rescue Exception => e
-      render json: { error: e.to_s, backtrace: e.backtrace },
-             status: :unprocessable_entity
+      raise ActiveRecord::Rollback
     end
-
   end
 
+  # Creates test operations for a test generated by {random}.
+  #
+  # @param ot [OperationType] the operation type
+  # @param tops [Array<Hash>] test details
+  # TODO: rewrite so this deserializes output from random
   def make_test_ops(ot, tops)
-
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
+    return [] if tops.blank?
 
     tops.collect do |test_op|
-
-      op = ot.operations.create status: 'pending', user_id: test_op[:user_id]
+      op = ot.operations.create(status: 'pending', user_id: test_op[:user_id])
 
       (ot.inputs + ot.outputs).each do |io|
-        test_fvs = test_op[:field_values].select { |fv| fv[:name] == io.name && fv[:role] == io.role }
-        if io.array && !test_fvs.empty?
-          aft = AllowableFieldType.find_by_id(test_fvs[0][:allowable_field_type_id])
-          samples = test_fvs.collect do |fv|
-            Sample.find_by_id(fv[:child_sample_id])
+        values = test_op[:field_values].select do |fv|
+          fv[:name] == io.name && fv[:role] == io.role
+        end
+        next if values.empty?
+
+        if io.array
+          aft = AllowableFieldType.find_by(id: values[0][:allowable_field_type_id])
+          samples = values.collect do |fv|
+            Sample.find_by(id: fv[:child_sample_id])
           end
           actual_fvs = op.set_property(io.name, samples, io.role, true, aft)
-          raise "Nil value Error: Could not set #{test_fvs}" unless actual_fvs
+          raise "Nil value Error: Could not set #{values}" unless actual_fvs
         else # io is not an array
-          raise "Test Operation Error: This operation type may have illegal routing, or zero/multiple io with the same name: #{io.name} (#{io.role}#{io.array ? ', array' : ''}) of type #{io.ftype}" unless io.ftype != 'sample' || test_fvs.one?
+          raise "Test Operation Error: This operation type may have illegal routing, or zero/multiple io with the same name: #{io.name} (#{io.role}#{io.array ? ', array' : ''}) of type #{io.type}" unless io.type != 'sample' || values.one?
 
-          test_fv = test_fvs.first
-          if io.ftype == 'sample'
-            aft = AllowableFieldType.find_by_id(test_fv[:allowable_field_type_id])
-            actual_fv = op.set_property(test_fv[:name], Sample.find_by_id(test_fv[:child_sample_id]), test_fv[:role], true, aft)
-            raise "Nil value Error: Could not set #{test_fv}" unless actual_fv
-            raise "Active Record Error: Could not set #{test_fv}: #{actual_fv.errors.full_messages.join(', ')}" unless actual_fv.errors.empty?
-          elsif io.ftype == 'number'
-            op.set_property io.name, test_fv[:value].to_f, io.role, true, nil
+          test_fv = values.first
+          if io.sample?
+            aft = AllowableFieldType.find_by(id: test_fv[:allowable_field_type_id])
+            op.set_property(test_fv[:name], Sample.find_by(id: test_fv[:child_sample_id]), test_fv[:role], true, aft)
+            raise "Active Record Error: Could not set #{test_fv}: #{op.errors.full_messages.join(', ')}" unless op.errors.empty?
+          elsif io.number?
+            op.set_property(io.name, test_fv[:value].to_f, io.role, true, nil)
           else # string or json io
-            op.set_property io.name, test_fv[:value], io.role, true, nil
+            op.set_property(io.name, test_fv[:value], io.role, true, nil)
           end
         end
       end
@@ -245,116 +229,112 @@ class OperationTypesController < ApplicationController
   end
 
   def test
-
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
-    # save the operaton
+    # save the operation
     ot = update_from_ui params, false
-
     unless ot[:update_errors].empty?
-      render json: { errors: ot[:update_errors] }, status: :unprocessable_entity
+      render json: { error: ot[:update_errors] }, status: :unprocessable_entity
       return
     end
+    operation_type = ot[:op_type]
 
     # start a transaction
     ActiveRecord::Base.transaction do
 
       # (re)build the operations
       begin
-        ops = if params[:test_operations]
-                make_test_ops(OperationType.find(params[:id]), params[:test_operations])
-              else
-                []
-              end
+        operations = if params[:test_operations]
+                       make_test_ops(operation_type, params[:test_operations])
+                     else
+                       []
+                     end
       rescue StandardError => e
-        render json: { errors: [e.to_s] }, status: :unprocessable_entity
+        logger.error(e.message)
+        e.message.backtrace.each do |b|
+          logger.error(b)
+        end
+        response = {
+          error: e.message,
+          backtrace: e.backtrace
+        }
+        render json: response, status: :unprocessable_entity
         raise ActiveRecord::Rollback
       end
 
-      plans = []
-      ops.each do |op|
-        plan = Plan.new user_id: current_user.id, budget_id: Budget.all.first.id
-        plan.save
-        plans << plan
-        pa = PlanAssociation.new operation_id: op.id, plan_id: plan.id
-        pa.save
+      operations = operations.select(&:precondition_value) if params[:use_precondition]
+      if operations.empty?
+        response = {
+          error: 'Unable to run test: no preconditions passed',
+          backtrace: []
+        }
+        render json: response, status: :unprocessable_entity
+        raise ActiveRecord::Rollback
       end
 
-      ops = ops.select(&:precondition_value) if params[:use_precondition]
-
-      # run the protocol
-      operation_type = ot[:op_type]
-      job, newops = operation_type.schedule(ops, current_user, Group.find_by_name('technicians'))
-      error = nil
+      test = ProtocolTestBase.new(operation_type, current_user)
+      test.add_operations(operations)
 
       begin
-        manager = Krill::Manager.new job.id, true, 'master', 'master'
-      rescue Exception => e
-        error = e
-      end
+        test.run
 
-      if error
-        render json: {
-          error: error.message,
-          backtrace: error.backtrace
-        },
-               status: :unprocessable_entity
-
-      else
-        begin
-          ops.extend(Krill::OperationList)
-          ops.make(role: 'input')
-
-          ops.each(&:run)
-
-          manager.run
-
-          ops.each(&:reload)
-
-          # render the resulting data including the job and the operations
-          render json: {
-            operations: ops.as_json(methods: %i[field_values associations]),
-            plans: plans.collect { |p| p.as_json(include: :operations, methods: %i[associations costs]) },
-            job: job.reload
-          },
-                 status: :ok
-        rescue Exception => e
-          logger.error 'Bug encountered while testing: ' + e.message + ' -- ' + e.backtrace.to_s
-
-          e.backtrace.each do |b|
-            logger.error b
-          end
-
-          render json: {
-            error: 'Bug encountered while testing: ' + e.message + ' at ' + e.backtrace.join("\n") + '. ',
-            backtrace: e.backtrace
-          },
-                 status: :unprocessable_entity
+        response = {
+          operations: operations.as_json(methods: %i[field_values associations]),
+          plans: test.plans.collect { |p| p.as_json(include: :operations, methods: %i[associations costs]) },
+          job: test.job.reload
+        }
+        render json: response, status: :ok
+      rescue Krill::KrillSyntaxError => e
+        logger.error(e.error.message)
+        e.error.backtrace.each do |b|
+          logger.error(b)
         end
-
+        response = {
+          error: e.error_message,
+          backtrace: e.error_backtrace
+        }
+        render json: response, status: :unprocessable_entity
+      rescue Krill::KrillError => e
+        logger.error(e.error.message)
+        e.error.backtrace.each do |b|
+          logger.error(b)
+        end
+        response = {
+          error: e.error_message,
+          backtrace: e.error_backtrace
+        }
+        render json: response,
+               status: :unprocessable_entity
+      rescue StandardError => e
+        message = e.message
+        logger.error(message)
+        e.backtrace.each do |b|
+          logger.error(b)
+        end
+        response = {
+          error: 'Internal error. Please report.'
+        }
+        render json: response,
+               status: :unprocessable_entity
       end
-
       # rollback the transaction so test data is not added to the inventory
       raise ActiveRecord::Rollback
-
     end
-
   end
 
   def export
-
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
     begin
       render json: [OperationType.find(params[:id]).export], status: :ok
-    rescue Exception => e
+      # TODO: determine what exception might be raised here
+    rescue StandardError => e
       render json: { error: 'Could not export: ' + e.to_s + ', ' + e.backtrace[0] },
              status: :internal_server_error
     end
   end
 
   def export_category
-
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
     begin
@@ -362,15 +342,14 @@ class OperationTypesController < ApplicationController
       libs = Library.where(category: params[:category]).collect(&:export)
 
       render json: ots.concat(libs), status: :ok
-    rescue Exception => e
+      # TODO: determine what exceptions might be raised here
+    rescue StandardError => e
       render json: { error: 'Could not export: ' + e.to_s + ', ' + e.backtrace[0] },
              status: :internal_server_error
     end
-
   end
 
   def import
-
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
     ots = []
@@ -384,25 +363,25 @@ class OperationTypesController < ApplicationController
           issues = { notes: [], inconsistencies: [] }
           notes = []
 
-          if x.has_key?(:library)
+          if x.key?(:library)
             if params[:options][:resolution_method] == 'fail'
               issues = Library.import(x, current_user)
             elsif params[:options][:resolution_method] == 'rename-existing'
               libs = Library.where(name: x[:library][:name], category: x[:library][:category])
               if libs.length == 1
                 libs[0].name = libs[0].name + " archived #{Time.now.to_i}"
-                libs[0].category = libs[0].category + " (old)"
+                libs[0].category = libs[0].category + ' (old)'
                 libs[0].save
                 notes << "Changed name of existing Library to '#{libs[0].name}'"
-                raise libs[0].errors.full_messages.join(", ") if libs[0].errors.any?
+                raise libs[0].errors.full_messages.join(', ') if libs[0].errors.any?
               elsif libs.length > 1
                 raise "Found multiple existing operation types named #{x[:library][:name]}"
               end
               issues = Library.import(x, current_user) if libs.length <= 1
             elsif params[:options][:resolution_method] == 'skip'
               libs = Library.where(name: x[:library][:name], category: x[:library][:category])
-              issues = Library.import(x, current_user) if libs.length == 0
-              notes << "Skipping Library #{x[:library][:name]} because a library by the same name already exists." if libs.length > 0
+              issues = Library.import(x, current_user) if libs.empty?
+              notes << "Skipping Library #{x[:library][:name]} because a library by the same name already exists." unless libs.empty?
             else
               raise "Unknown option '#{params[:options][:resolution_method]}' for resolution method"
             end
@@ -417,19 +396,19 @@ class OperationTypesController < ApplicationController
               ots = OperationType.where(name: x[:operation_type][:name], category: x[:operation_type][:category])
               if ots.length == 1
                 ots[0].name = ots[0].name + " archived #{Time.now.to_i}"
-                ots[0].category = ots[0].category + " (old)"
+                ots[0].category = ots[0].category + ' (old)'
                 ots[0].deployed = false
                 ots[0].save
                 notes << "Changed name of existing OperationType to '#{ots[0].name}'"
-                raise ots.errors.full_messages.join(", ") if ots[0].errors.any?
+                raise ots.errors.full_messages.join(', ') if ots[0].errors.any?
               elsif ots.length > 1
                 raise "Found multiple existing operation types named #{x[:operation_type][:name]}"
               end
               issues = OperationType.import(x, current_user) if ots.length <= 1
             elsif params[:options][:resolution_method] == 'skip'
               ots = OperationType.where(name: x[:operation_type][:name], category: x[:operation_type][:category])
-              issues = OperationType.import(x, current_user) if ots.length == 0
-              notes << "Skipping OperationType #{x[:operation_type][:name]} because a type by the same name already exists." if ots.length > 0
+              issues = OperationType.import(x, current_user) if ots.empty?
+              notes << "Skipping OperationType #{x[:operation_type][:name]} because a type by the same name already exists." unless ots.empty?
             else
               raise "Unknown option '#{params[:options][:resolution_method]}' for resolution method"
             end
@@ -468,7 +447,8 @@ class OperationTypesController < ApplicationController
           }, status: :ok
 
         end
-      rescue Exception => e
+        # TODO: determine what exceptions might the raised here
+      rescue StandardError => e
         error = true
         logger.info e.to_s
         logger.info e.backtrace.to_s
@@ -491,7 +471,8 @@ class OperationTypesController < ApplicationController
       ot = OperationType.find(params[:id]).copy current_user
       render json: { operation_type: ot.as_json(methods: %i[field_types protocol precondition cost_model documentation]) },
              status: :ok
-    rescue Exception => e
+      # TODO: determine what exceptions might be raised here
+    rescue StandardError => e
       render json: { error: 'Could not copy operation type: ' + e.to_s },
              status: :internal_server_error
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # @api krill
 module Krill
 
@@ -119,9 +121,9 @@ module Krill
     # @param opts [Hash]
     # @option heading [String] Column heading
     # @option checkable [Bool] Column cells can be clicked
-    def custom_column(opts = { heading: "Custom Column", checkable: false }, &block)
+    def custom_column(opts = { heading: 'Custom Column', checkable: false }, &block)
       entries = running.collect(&block).collect do |x|
-        opts[:checkable] ? ({ content: x, check: true }) : x
+        opts[:checkable] ? { content: x, check: true } : x
       end
       @table.add_column(opts[:heading], entries)
 
@@ -140,7 +142,9 @@ module Krill
     # @param opts [Hash]
     # @option heading [String] Column heading
     # @option clickable [Bool] Column cells can be clicked
-    def input_item        name, opts = {}; item name,       "input", opts;  end
+    def input_item(name, opts = {})
+      item name, 'input', opts
+    end
 
     # Add column with list of output items by the given output name
     #
@@ -148,7 +152,9 @@ module Krill
     # @param opts [Hash]
     # @option heading [String] Column heading
     # @option clickable [Bool] Column cells can be clicked
-    def output_item       name, opts = {}; item name,       "output", opts; end
+    def output_item(name, opts = {})
+      item name, 'output', opts
+    end
 
     # Add column with list of input samples by the given input name
     #
@@ -156,7 +162,9 @@ module Krill
     # @param opts [Hash]
     # @option heading [String] Column heading
     # @option clickable [Bool] Column cells can be clicked
-    def input_sample      name, opts = {}; sample name,     "input", opts;  end
+    def input_sample(name, opts = {})
+      sample name, 'input', opts
+    end
 
     # Add column with list of ouput samples by the given ouput name
     #
@@ -164,7 +172,9 @@ module Krill
     # @param opts [Hash]
     # @option heading [String] Column heading
     # @option clickable [Bool] Column cells can be clicked
-    def output_sample     name, opts = {}; sample name,     "output", opts; end
+    def output_sample(name, opts = {})
+      sample name, 'output', opts
+    end
 
     # Add column with list of input collection by the given input name
     #
@@ -173,7 +183,9 @@ module Krill
     # @param opts [Hash]
     # @option heading [String] Column heading
     # @option clickable [Bool] Column cells can be clicked
-    def input_collection  name, opts = {}; collection name, "input", opts;  end
+    def input_collection(name, opts = {})
+      collection name, 'input', opts
+    end
 
     # Add column with list of ouput collection by the given ouput name
     #
@@ -182,16 +194,20 @@ module Krill
     # @param opts [Hash]
     # @option heading [String] Column heading
     # @option clickable [Bool] Column cells can be clicked
-    def output_collection name, opts = {}; collection name, "output", opts; end
+    def output_collection(name, opts = {})
+      collection name, 'output', opts
+    end
 
-    # Add column with list of input row indicies by the given input name
+    # Add column with list of input row indices by the given input name
     #
     # Input by the given name is a part
     # @param name [String]  the name of the input to display
     # @param opts [Hash]
     # @option heading [String] Column heading
     # @option clickable [Bool] Column cells can be clicked
-    def input_row         name, opts = {}; row name,        "input", opts;  end
+    def input_row(name, opts = {})
+      row name, 'input', opts
+    end
 
     # Add column with list of output row indicies by the given output name
     #
@@ -200,7 +216,9 @@ module Krill
     # @param opts [Hash]
     # @option heading [String] Column heading
     # @option clickable [Bool] Column cells can be clicked
-    def output_row        name, opts = {}; row name,        "output", opts; end
+    def output_row(name, opts = {})
+      row name, 'output', opts
+    end
 
     # Add column with list of input column indicies by the given input name
     #
@@ -209,7 +227,9 @@ module Krill
     # @param opts [Hash]
     # @option heading [String] Column heading
     # @option clickable [Bool] Column cells can be clicked
-    def input_column      name, opts = {}; column name,     "input", opts;  end
+    def input_column(name, opts = {})
+      column name, 'input', opts
+    end
 
     # Add column with list of output row indicies by the given output name
     #
@@ -218,7 +238,9 @@ module Krill
     # @param opts [Hash]
     # @option heading [String] Column heading
     # @option clickable [Bool] Column cells can be clicked
-    def output_column     name, opts = {}; column name,     "output", opts; end
+    def output_column(name, opts = {})
+      column name, 'output', opts
+    end
 
     # Append a column to the OperationList Table that accepts user input
     #
@@ -226,7 +248,7 @@ module Krill
     # @param opts [Hash]  Additional options
     # @option type [String]  defines type of user input -- can be either 'number' or 'text'
     # @option default [String, Number]  fill table with a default value
-    def get key, opts
+    def get(key, opts)
       @table.add_column(opts[:heading] || key.to_s, running.collect do |op|
         { type: opts[:type] || 'number', operation_id: op.id, key: key, default: opts[:default] || 0 }
       end)
