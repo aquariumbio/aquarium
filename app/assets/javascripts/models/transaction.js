@@ -119,8 +119,6 @@ AQ.Transaction.summarize_aux = function(transactions) {
     materials: aq.sum(transactions, t => t.materials_base),
     overhead: aq.sum(transactions, t => t.markup),
     additional_charges: 0, 
-    // user_names: 
-    // user_emails: aq.uniq(transactions, t => t.email);
   };
 
   return summary;

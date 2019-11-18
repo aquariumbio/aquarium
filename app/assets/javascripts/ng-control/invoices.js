@@ -18,7 +18,7 @@
           $scope.current_user.is_admin && $scope.all_invoices
             ? -1
             : $scope.current_user.id;
-// 
+
         AQ.Transaction.where_month(
           $scope.state.date.getMonth() + 1,
           $scope.state.date.getFullYear(),
@@ -87,20 +87,15 @@
         );
       };
 
-      $scope.create_invoice = function(event) {
-        // let budget = aq.where()
-        // $scope.showAlert("Select at least one transaction!!!!");
-        //   return; 
-     
-        // $mdDialog
-          // .show({ 
-          //   template: $("#create-invoice").html();
-          //   parent: anglular.element(document.body),
-          //   controller: CreateInvoiceController,
-          //   targetEvent: event,
-          //   locals: {transactions: transactions }
-          // })
-      }
+    //   $scope.create_invoice = function(event) {
+    //     $mdDialog
+    //       .show({ 
+    //         template: $("#create-invoice").html(),
+    //         controller: CreateInvoiceController,
+    //         parent: anglular.element(document.body),
+    //         targetEvent: event,
+    //       })
+    //   }
 
       $scope.apply_credit = function(event) {
         let transactions = aq.where($scope.state.transactions, t => t.checked);
@@ -163,16 +158,17 @@
 
       CreditDialogController.$inject = ["$scope", "$mdDialog", "transactions"];
 
-      function CreateInvoiceController($scope, transactions){
-        $scope.invoice = {
-        //   message: "Explanation here",
-        //   percent: 100,
-        //   transactions: transactions,
-        //   total: aq.sum(transactions, t => t.total)
-        };
-      };
+      function CreateInvoiceController($scope, $mdDialog) {
+        //   $scope.hide = function() {
+            //   $mdDialog.hide();
+        // //   };
 
-      CreateInvoiceController.$inject = ["$scope", "mdDialog", "transactions"];
+        //   $scope.cancel = function() {
+        //       $mdDialog.cancel();
+        //   };
+      }
+
+      CreateInvoiceController.$inject = ["$scope", "mdDialog"];
 
 // 
       // Initialization

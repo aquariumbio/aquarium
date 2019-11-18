@@ -1,25 +1,24 @@
-<div> 
-    <md-content layout-padding="">
-    <h2>Invoice Data</h2>
-        <h5>Project (Budget) Name: {{ state.budget.name }}</h5>
+<%# <md-dialog> %>
+    <%# <md-dialog-content> %>
+<md-content>
+   <h2>Invoice Data</h2>
+        <h5>Project Name: {{ state.budget.name }}</h5>
         <h5>Budget Description: {{state.budget.description }}</h5>
         <h5>Contact: {{state.budget.contact}}</h5>
         <h5>Email: {{state.budget.email}}</h5>
         <h5>cc Users: {{ state.user_emails }}</h5>
         <h5>Aquarium Charges: {{state.summary.total | currency}}</h5>
-    </md-content>
 
-    <%# <md-content> %>
         <form name="invoiceForm">
             <div layout="row" ng-app>
                 <md-input-container class="md-block">
                     <label>Enter Additional Charges Here: </label>
                     <input ng-model="state.summary.additional_charges">
                 </md-input-container>
-
-                <b>Total Charges:</b>
-                {{state.summary.total + state.summary.additional_charges |currency}}
             </div>
         </form>
-    <%# </md-content> %>
-</div> 
+        <b>Total Charges:</b>
+            {{state.summary.total + state.summary.additional_charges |currency}}
+</md-content>
+    <%# </md-dialog-content> %>
+<%# </md-dialog> %>
