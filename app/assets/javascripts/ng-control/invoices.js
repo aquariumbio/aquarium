@@ -1,6 +1,6 @@
 (function() {
   var w = angular.module("aquarium");
-
+// Calling module called aquarium 
   w.controller("invoicesCtrl", [
     "$scope",
     "$http",
@@ -27,6 +27,12 @@
         )
           .then(transactions => {
             $scope.state.transactions = transactions;
+            // let unique_users = aq.uniq(
+            //     aq.collect(transactions, t => t.user_id)
+            // );
+            // $scope.state.user_emails = aq.each(unique_users, t => {
+            //     aq.find(parameters, p => p.user_id == user.id && p.key == "email")
+            // })
             let op_type_ids = aq.uniq(
               aq.collect(transactions, t => t.operation.operation_type_id)
             );
@@ -70,7 +76,7 @@
         }
         refresh();
       };
-
+// 
       $scope.showAlert = function(message) {
         $mdDialog.show(
           $mdDialog
@@ -83,9 +89,20 @@
             .ok("Ok")
         );
       };
-// 
+
       $scope.create_invoice = function(event) {
-        alert("hello!")
+        // let budget = aq.where()
+        // $scope.showAlert("Select at least one transaction!!!!");
+        //   return; 
+     
+        // $mdDialog
+          // .show({ 
+          //   template: $("#create-invoice").html();
+          //   parent: anglular.element(document.body),
+          //   controller: CreateInvoiceController,
+          //   targetEvent: event,
+          //   locals: {transactions: transactions }
+          // })
       }
 
       $scope.apply_credit = function(event) {
@@ -149,11 +166,18 @@
 
       CreditDialogController.$inject = ["$scope", "$mdDialog", "transactions"];
 
-      function CreateInvoiceController($scope, $mdDialog){
-
+      function CreateInvoiceController($scope, transactions){
+        $scope.invoice = {
+        //   message: "Explanation here",
+        //   percent: 100,
+        //   transactions: transactions,
+        //   total: aq.sum(transactions, t => t.total)
+        };
       };
 
+      CreateInvoiceController.$inject = ["$scope", "mdDialog", "transactions"];
 
+// 
       // Initialization
 
       AQ.init($http);

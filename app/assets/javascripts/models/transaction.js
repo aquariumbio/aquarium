@@ -1,7 +1,7 @@
 AQ["Transaction"] = new AQ.Base("Account");
 AQ["TransactionLog"] = new AQ.Base("AccountLog");
 
-//
+
 // Asynchronously returns the list of transactions for the given month, year,
 // budget_id, and user_id.
 //
@@ -21,8 +21,7 @@ AQ.Transaction.where_month = function(
   if (user_id != -1) {
     query += ` AND user_id = ${user_id}`;
   }
-
-  // TODO: move query into rails controller/model
+  // TODO: move query into rails controller/model 
   return AQ.Transaction.where(query, { include: ["user", "operation"] })
     .then(result => (transactions = result))
     .then(() =>
@@ -42,7 +41,23 @@ AQ.Transaction.where_month = function(
           }
         });
       });
-      return transactions;
+    })
+    .then(() => 
+        AQ.Parameter.where({
+        user_id: aq.collect(transactions, t => t.user_id)
+      })
+    )
+    .then(parameters => {
+        aq.each(parameters, p => {
+            aq.each(transactions, t => {
+                if (p.user_id == t.user_id && p.key == "email") { 
+                    t.email = p.value;
+                }
+            });
+        });
+        console.log("post user id code");
+        console.log(transactions);
+        return transactions; 
     });
 };
 
@@ -98,11 +113,15 @@ AQ.Transaction.record_getters.markup = function() {
 
 // Returns a summary of the costs associated with a list of transactions
 AQ.Transaction.summarize_aux = function(transactions) {
+  console.log("summarizing in transaction.js")
   let summary = {
     total: aq.sum(transactions, t => t.total),
     labor_minutes: aq.sum(transactions, t => t.labor_minutes),
     materials: aq.sum(transactions, t => t.materials_base),
-    overhead: aq.sum(transactions, t => t.markup)
+    overhead: aq.sum(transactions, t => t.markup),
+    additional_charges: 0, 
+    // user_names: 
+    // user_emails: 
   };
 
   return summary;
@@ -148,7 +167,7 @@ AQ.Transaction.get_logs = function(transactions) {
     { include: "user" }
   );
 };
-
+// 
 // Asynchronously applies credits to the list of transactions, returning
 // the resulting list of credit transactions and their logs
 AQ.Transaction.apply_credit = function(transactions, percent, message) {
