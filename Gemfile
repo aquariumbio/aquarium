@@ -18,7 +18,7 @@ gem 'rails-patch-json-encode'
 
 # Authentication and cross origin
 gem 'angular_rails_csrf', '2.1.1'
-gem 'rack-cors', require: 'rack/cors'
+gem 'rack-cors', '~> 1.0.5', require: 'rack/cors'
 
 # Style enforcer and linter
 gem 'rubocop'
