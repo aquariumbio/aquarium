@@ -18,7 +18,7 @@
           $scope.current_user.is_admin && $scope.all_invoices
             ? -1
             : $scope.current_user.id;
-
+// 
         AQ.Transaction.where_month(
           $scope.state.date.getMonth() + 1,
           $scope.state.date.getFullYear(),
@@ -27,12 +27,9 @@
         )
           .then(transactions => {
             $scope.state.transactions = transactions;
-            // let unique_users = aq.uniq(
-            //     aq.collect(transactions, t => t.user_id)
-            // );
-            // $scope.state.user_emails = aq.each(unique_users, t => {
-            //     aq.find(parameters, p => p.user_id == user.id && p.key == "email")
-            // })
+            $scope.state.user_emails = aq.uniq(
+                aq.collect(transactions, t => t.email)
+            );
             let op_type_ids = aq.uniq(
               aq.collect(transactions, t => t.operation.operation_type_id)
             );

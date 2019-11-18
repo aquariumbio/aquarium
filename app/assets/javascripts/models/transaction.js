@@ -55,8 +55,6 @@ AQ.Transaction.where_month = function(
                 }
             });
         });
-        console.log("post user id code");
-        console.log(transactions);
         return transactions; 
     });
 };
@@ -114,6 +112,7 @@ AQ.Transaction.record_getters.markup = function() {
 // Returns a summary of the costs associated with a list of transactions
 AQ.Transaction.summarize_aux = function(transactions) {
   console.log("summarizing in transaction.js")
+  console.log(transactions);
   let summary = {
     total: aq.sum(transactions, t => t.total),
     labor_minutes: aq.sum(transactions, t => t.labor_minutes),
@@ -121,7 +120,7 @@ AQ.Transaction.summarize_aux = function(transactions) {
     overhead: aq.sum(transactions, t => t.markup),
     additional_charges: 0, 
     // user_names: 
-    // user_emails: 
+    // user_emails: aq.uniq(transactions, t => t.email);
   };
 
   return summary;
