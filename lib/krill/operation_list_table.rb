@@ -198,7 +198,7 @@ module Krill
       collection name, 'output', opts
     end
 
-    # Add column with list of input row indicies by the given input name
+    # Add column with list of input row indices by the given input name
     #
     # Input by the given name is a part
     # @param name [String]  the name of the input to display
