@@ -9,6 +9,7 @@ AQ.Item.record_getters.is_part = function() {
   return (this.object_type && this.object_type.name === '__Part');
 }
 
+// TODO: this method is supposed to be a getter, but uses a promise
 AQ.Item.record_getters.collection = function() {
   let item = this;
   if ( item.is_part ) {
@@ -23,6 +24,8 @@ AQ.Item.record_getters.collection = function() {
           AQ.update();
         }
       })
+      .catch(error => console.log("Error: " + error["errors"]))
+
   } else {
     return undefined;
   }
