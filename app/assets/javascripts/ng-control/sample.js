@@ -130,7 +130,9 @@
         if (sample.edit) return;
 
         if (sample.inventory) {
-          sample.inventory = false;
+          sample.find(sample.id, function(sample) {
+            sample.inventory = false;
+          });
         } else {
           if (!sample.items || !sample.items.length) {
             sample.loading_inventory = true;
