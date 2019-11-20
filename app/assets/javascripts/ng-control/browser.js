@@ -465,31 +465,55 @@
         $scope.select_view("create");
       };
 
-      function sample_inventory(samples, set_sample_state) {
-        return aq.collect(samples, function(s) {
-          console.log(s);
-          var sample = new Sample($http).from(s);
-          if (sample && s.id === sample.id) {
-            set_sample_state(sample);
-          }
-          console.log(sample);
-          return sample;
-        });
-      }
-
-      function show_inventory(sample) {
-        sample.open = true;
-        sample.inventory = true;
-        sample.loading_inventory = true;
-        sample.get_inventory(function() {
-          sample.loading_inventory = false;
+      // This tortured and miserable code implements an item id constraint in 
+      // the sample search.
+      function show_inventory_for(item_id) {
+        return sample => {
+          sample.open = true;
           sample.inventory = true;
-        });
+          sample.loading_inventory = true;
+          sample.get_inventory(function() {
+            sample.loading_inventory = false;
+            sample.inventory = true;
+
+            items = sample.items.filter(item => {
+              return item.id === item_id;
+            });
+            if (items.length === 1) { // id is a part or item
+              if (items[0].is_part) {
+                // TODO: filter correctly for containing collection
+                sample.items = items
+              } else {
+                sample.items = items
+                sample.collections = []
+              }
+            } else {
+              // TODO: filter correctly for contained parts (?)
+              collections = sample.collections.filter(collection => {
+                return collection.id === item_id;
+              });
+              if (collections.length === 1) {
+                sample.items = []
+                sample.collections = collections
+              }
+            }
+          });
+        };
       }
 
       function show_description(sample) {
         sample.open = false;
         sample.inventory = false;
+      }
+
+      function sample_inventory(samples, set_sample_state) {
+        return aq.collect(samples, function(s) {
+          var sample = new Sample($http).from(s);
+          if (sample && s.id === sample.id) {
+            set_sample_state(sample);
+          }
+          return sample;
+        });
       }
 
       // Search function handles all of the cases that depend on the state of the input fields
@@ -502,10 +526,10 @@
           response => {
             $scope.views.search.status = "preparing";
             if ($scope.views.search.item_id) {
-              // TODO: this should only include the item searched for or the collection containing it
+              item_id = parseInt($scope.views.search.item_id)
               $scope.views.search.samples = sample_inventory(
                 response.data.samples,
-                show_inventory
+                show_inventory_for(item_id)
               );
             } else {
               $scope.views.search.samples = sample_inventory(
@@ -617,6 +641,7 @@
         );
       }
 
+      // TODO: this is dead code
       // item_search function allows users to search for sample by Item ID
       $scope.item_search = function() {
         AQ.Item.find($scope.views.search.item_id).then(
