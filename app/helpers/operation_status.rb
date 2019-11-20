@@ -40,19 +40,35 @@ module OperationStatus
     step
   end
 
+  def scheduled?
+    status == 'scheduled'
+  end
+
+
   def schedule
+    return if scheduled?
     raise "Cannot schedule operation #{id} from state #{status}" unless status == 'pending' || status == 'deferred' || status == 'primed'
 
     change_status 'scheduled'
   end
 
+  def running?
+    status == 'running'
+  end
+
   def run
+    return if running?
     raise "Cannot run operation #{id} from state #{status}" unless status == 'scheduled'
 
     change_status 'running'
   end
 
+  def deferred?
+    status == 'deferred'
+  end
+
   def defer
+    return if deferred?
     raise "Cannot defer operation #{id} from state #{status}" unless status == 'pending'
 
     change_status 'deferred'
