@@ -1,6 +1,5 @@
 (function() {
   var w = angular.module("aquarium");
-// Calling module called aquarium 
   w.controller("invoicesCtrl", [
     "$scope",
     "$http",

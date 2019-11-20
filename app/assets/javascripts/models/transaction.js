@@ -21,7 +21,7 @@ AQ.Transaction.where_month = function(
   if (user_id != -1) {
     query += ` AND user_id = ${user_id}`;
   }
-  // TODO: move query into rails controller/model 
+  // TODO: move query into rails controller/model
   return AQ.Transaction.where(query, { include: ["user", "operation"] })
     .then(result => (transactions = result))
     .then(() =>
