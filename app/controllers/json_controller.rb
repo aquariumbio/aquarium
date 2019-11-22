@@ -21,8 +21,16 @@ class JsonController < ApplicationController
       result = result.limit(params[:options][:limit]) if params[:options] && params[:options][:limit] && params[:options][:limit].to_i > 0
       result = result.offset(params[:options][:offset]) if params[:options] && params[:options][:offset] && params[:options][:offset].to_i > 0
       result = result.order('created_at DESC') if params[:options] && params[:options][:reverse]
-      result = result.includes(params[:include].collect(&:to_sym)) if params[:include] && params[:include].is_a?(Array)
-      result = result.includes(params[:include].to_sym) if params[:include] && params[:include].is_a?(String)
+
+      if params[:include]
+        puts "include: #{params[:include]}"
+        include_result = gather_includes(params[:include])
+        puts "include_result: #{include_result}"
+        
+        # result = result.includes(params[:include].collect(&:to_sym)) if params[:include] && params[:include].is_a?(Array)
+        # result = result.includes(params[:include].to_sym) if params[:include] && params[:include].is_a?(String)
+        # result = result.includes(include_result)
+      end
     end
 
     result = result.as_json(methods: params[:methods]) if params[:methods] && !params[:include]
@@ -34,6 +42,24 @@ class JsonController < ApplicationController
     logger.info e.backtrace
     render json: { errors: e.to_s }, status: :unprocessable_entity
 
+  end
+
+  # 
+
+  def gather_includes(include_object)
+    if include_object.is_a?(String)
+      include_object.to_sym
+    elsif include_object.is_a?(Array)
+      include_object.collect {|element| gather_includes(element)}
+    elsif include_object.is_a?(Hash)
+      include_hash = Hash.new
+      include_object.each do |key, value| 
+        include_hash[key.to_sym] = gather_includes(value)
+      end
+      include_hash
+    else
+      include_object
+    end
   end
 
   def upload
