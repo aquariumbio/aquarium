@@ -32,6 +32,7 @@ class OperationsController < ApplicationController
 
   def batch
     operations = params[:operation_ids].collect { |oid| Operation.find(oid) }
+    operations = operations.reject(&:scheduled?)
     unless operations.empty?
       Job.schedule(
         operations: operations,

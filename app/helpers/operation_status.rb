@@ -17,7 +17,7 @@ module OperationStatus
   end
 
   def start
-    raise "Cannot start operation #{id} from state #{status}" unless status == 'planning'
+    raise "Cannot start operation #{id} from state #{status}" unless planning?
 
     if on_the_fly
       change_status 'primed'
@@ -34,26 +34,73 @@ module OperationStatus
   end
 
   def retry
-    raise "Cannot restart operation #{id} because it is not in an error state" unless status == 'error' || status == 'done'
+    raise "Cannot restart operation #{id} because it is not in an error state" unless error? || done?
 
     change_status 'waiting'
     step
   end
 
+  def deferred?
+    status == 'deferred'
+  end
+
+  def delayed?
+    status == 'delayed'
+  end
+
+  def done?
+    status == 'done'
+  end
+
+  def error?
+    status == 'error'
+  end
+
+  def pending?
+    status == 'pending'
+  end
+
+  def planning?
+    status == 'planning'
+  end
+
+  def primed?
+    status == 'primed'
+  end
+
+  def running?
+    status == 'running'
+  end
+
+  def scheduled?
+    status == 'scheduled'
+  end
+
+  def unplanned?
+    status == 'unplanned'
+  end
+
+  def waiting?
+    status == 'waiting'
+  end
+
   def schedule
-    raise "Cannot schedule operation #{id} from state #{status}" unless status == 'pending' || status == 'deferred' || status == 'primed'
+    return if scheduled?
+    raise "Cannot schedule operation #{id} from state #{status}" unless pending? || deferred? || primed?
 
     change_status 'scheduled'
   end
 
   def run
-    raise "Cannot run operation #{id} from state #{status}" unless status == 'scheduled'
+    return if running?
+    raise "Cannot run operation #{id} from state #{status}" unless scheduled?
 
     change_status 'running'
   end
 
   def defer
-    raise "Cannot defer operation #{id} from state #{status}" unless status == 'pending'
+    return if deferred?
+    raise "Cannot defer operation #{id} from state #{status}" unless pending?
 
     change_status 'deferred'
   end
@@ -63,17 +110,17 @@ module OperationStatus
   def step # not to be confused with def self.step in Operation.rb
 
     print "op #{id}: #{status}"
-    if status != 'scheduled' &&
-       status != 'running' &&
-       status != 'done' &&
-       status != 'error' &&
+    if !scheduled? &&
+       !running? &&
+       !done? &&
+       !error? &&
        ready? # in planner/operation_planner.rb
 
       get_items_from_predecessor
 
       if on_the_fly
         change_status 'primed'
-      elsif status == 'deferred'
+      elsif deferred?
         change_status 'scheduled'
       elsif precondition_value
         change_status 'pending'
@@ -89,7 +136,7 @@ module OperationStatus
   end
 
   def finish
-    change_status 'done' if status == 'running'
+    change_status 'done' if running?
   end
 
   # Set the {Operation} to "error", and create a {DataAssociation} to
