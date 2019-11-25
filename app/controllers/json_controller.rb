@@ -4,62 +4,14 @@ class JsonController < ApplicationController
 
   before_filter :signed_in_user
 
-  def method_ok(m)
-    return false unless m
-    raise "Illegal method #{m} requested from front end." unless %w[all where find find_by_name new].member? m
-
-    true
-  end
-
   def index
-    result = Object.const_get(params[:model])
-    result = result.find(params[:id]) if params[:id]
-    result = result.send(params[:method], *params[:arguments]) if method_ok(params[:method]) && params[:method] != 'where'
-
-    if params[:method] == 'where'
-      result = result.where(params[:arguments])
-      result = result.limit(params[:options][:limit]) if params[:options] && params[:options][:limit] && params[:options][:limit].to_i > 0
-      result = result.offset(params[:options][:offset]) if params[:options] && params[:options][:offset] && params[:options][:offset].to_i > 0
-      result = result.order('created_at DESC') if params[:options] && params[:options][:reverse]
-
-      if params[:include]
-        puts "include: #{params[:include]}"
-        include_result = gather_includes(params[:include])
-        puts "include_result: #{include_result}"
-        
-        # result = result.includes(params[:include].collect(&:to_sym)) if params[:include] && params[:include].is_a?(Array)
-        # result = result.includes(params[:include].to_sym) if params[:include] && params[:include].is_a?(String)
-        # result = result.includes(include_result)
-      end
-    end
-
-    result = result.as_json(methods: params[:methods]) if params[:methods] && !params[:include]
-    result = result.as_json(include: params[:include]) if !params[:methods] && params[:include]
-    result = result.as_json(include: params[:include], methods: params[:methods]) if params[:methods] && params[:include]
+    result = JsonQueryResult.create_from(params)
     render json: result
   rescue StandardError => e
     logger.info e.inspect
     logger.info e.backtrace
     render json: { errors: e.to_s }, status: :unprocessable_entity
 
-  end
-
-  # 
-
-  def gather_includes(include_object)
-    if include_object.is_a?(String)
-      include_object.to_sym
-    elsif include_object.is_a?(Array)
-      include_object.collect {|element| gather_includes(element)}
-    elsif include_object.is_a?(Hash)
-      include_hash = Hash.new
-      include_object.each do |key, value| 
-        include_hash[key.to_sym] = gather_includes(value)
-      end
-      include_hash
-    else
-      include_object
-    end
   end
 
   def upload
