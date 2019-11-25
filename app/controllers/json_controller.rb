@@ -4,30 +4,8 @@ class JsonController < ApplicationController
 
   before_filter :signed_in_user
 
-  def method_ok(m)
-    return false unless m
-    raise "Illegal method #{m} requested from front end." unless %w[all where find find_by_name new].member? m
-
-    true
-  end
-
   def index
-    result = Object.const_get(params[:model])
-    result = result.find(params[:id]) if params[:id]
-    result = result.send(params[:method], *params[:arguments]) if method_ok(params[:method]) && params[:method] != 'where'
-
-    if params[:method] == 'where'
-      result = result.where(params[:arguments])
-      result = result.limit(params[:options][:limit]) if params[:options] && params[:options][:limit] && params[:options][:limit].to_i > 0
-      result = result.offset(params[:options][:offset]) if params[:options] && params[:options][:offset] && params[:options][:offset].to_i > 0
-      result = result.order('created_at DESC') if params[:options] && params[:options][:reverse]
-      result = result.includes(params[:include].collect(&:to_sym)) if params[:include] && params[:include].is_a?(Array)
-      result = result.includes(params[:include].to_sym) if params[:include] && params[:include].is_a?(String)
-    end
-
-    result = result.as_json(methods: params[:methods]) if params[:methods] && !params[:include]
-    result = result.as_json(include: params[:include]) if !params[:methods] && params[:include]
-    result = result.as_json(include: params[:include], methods: params[:methods]) if params[:methods] && params[:include]
+    result = JsonQueryResult.create_from(params)
     render json: result
   rescue StandardError => e
     logger.info e.inspect
