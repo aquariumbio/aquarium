@@ -39,7 +39,7 @@ class ProtocolDebugEngine
     errors = []
 
     # find all pending operations
-    pending = plan.operations.select { |o| o.status == 'pending' && o.precondition_value }
+    pending = plan.operations.select { |o| o.pending? && o.precondition_value }
 
     # group them by operation type
     # type_ids = pending.collect(&:operation_type_id).uniq
@@ -60,7 +60,7 @@ class ProtocolDebugEngine
       errors = run_job(job: job)
     end # type_ids.each
 
-    Operation.step(plan.operations.select { |op| op.status == 'waiting' || op.status == 'deferred' })
+    Operation.step(plan.operations.select { |op| op.waiting? || op.deferred? })
 
     errors
   end

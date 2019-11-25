@@ -296,7 +296,7 @@ class Operation < ApplicationRecord
     ops = []
     inputs.each do |input|
       input.predecessors.each do |predecessor|
-        ops << predecessor.operation if predecessor.operation && predecessor.operation.status == 'primed'
+        ops << predecessor.operation if predecessor.operation && predecessor.operation.primed?
       end
     end
 
