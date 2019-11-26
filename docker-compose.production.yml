@@ -1,0 +1,42 @@
+# production docker-compose
+
+version: "3.5"
+services:
+  app:
+    build:
+      context: .
+      target: aquarium
+    image: aquarium
+    command: ["production"]
+    environment:
+      RAILS_ENV: production
+      RACK_ENV: production
+    volumes:
+      - public:/aquarium/public
+      - logs:/aquarium/log
+      - shared:/aquarium/shared
+      - ./docker/aquarium/database.yml:/aquarium/config/database.yml
+      - ./docker/aquarium/aquarium.rb:/aquarium/config/initializers/aquarium.rb
+      - ./docker/aquarium/production.rb:/aquarium/config/environments/production.rb
+      - ./docker/aquarium/production_puma.rb:/aquarium/config/production_puma.rb
+
+  krill:
+    image: aquarium
+    command: ["production"]
+    volumes:
+      - ./docker/aquarium/database.yml:/aquarium/config/database.yml
+      - ./docker/aquarium/aquarium.rb:/aquarium/config/initializers/aquarium.rb
+      - ./docker/aquarium/production.rb:/aquarium/config/environments/production.rb
+      - ./docker/aquarium/production_puma.rb:/aquarium/config/production_puma.rb
+
+  web:
+    volumes:
+      - public:/aquarium/public
+      - logs:/aquarium/log
+      - shared:/aquarium/shared
+      - ./docker/nginx.production.conf:/etc/nginx/conf.d/default.conf:ro
+
+volumes:
+  public:
+  logs:
+  shared:
