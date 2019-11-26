@@ -10,11 +10,10 @@ class JsonController::JsonQueryResult
     model = get_model(model: parameters[:model], include: parameters[:include])
     result = apply_method(model: model, method: parameters[:method], arguments: parameters[:arguments], id: parameters[:id], options: parameters[:options])
 
-    result = result.as_json(methods: parameters[:methods]) if parameters[:methods] && !parameters[:include]
-    result = result.as_json(include: parameters[:include]) if !parameters[:methods] && parameters[:include]
-    result = result.as_json(include: parameters[:include], methods: parameters[:methods]) if parameters[:methods] && parameters[:include]
-
-    result
+    return result.as_json(include: parameters[:include], methods: parameters[:methods]) if parameters[:methods] && parameters[:include]
+    return result.as_json(methods: parameters[:methods]) if parameters[:methods] && !parameters[:include]
+    return result.as_json(include: parameters[:include]) if !parameters[:methods] && parameters[:include]
+    return result.as_json 
   end
 
   # private method definitions
@@ -92,9 +91,9 @@ class JsonController::JsonQueryResult
   #
   # @param m [String] the name of the method
   # @return [Boolean] true if the name is a valid query method
-  def self.method_ok?(m)
-    return false unless m
-    raise "Illegal method #{m} requested from front end." unless %w[all where find find_by_name new].member? m
+  def self.method_ok?(name)
+    return false unless name
+    raise "Illegal method #{name} requested from front end." unless %w[all where find find_by_name new].member?(name)
 
     true
   end
