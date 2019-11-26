@@ -12,8 +12,8 @@ services:
   app:
     build:
       context: .
-      target: aquarium
-    image: aquarium
+      target: aquarium-development
+    image: aquarium-development
     command: ["development"]
     volumes:
       - ./app:/aquarium/app
@@ -27,7 +27,7 @@ services:
       - ./yarn.lock:/aquarium/yarn.lock
 
   krill:
-    image: aquarium
+    image: aquarium-development
     command: ["development"]
     volumes:
       - ./config:/aquarium/config   

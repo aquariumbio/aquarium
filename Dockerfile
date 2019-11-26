@@ -1,6 +1,6 @@
 ARG RUBY_VERSION=2.6.5
 ARG ALPINE_VERSION=3.10
-FROM ruby:${RUBY_VERSION}-alpine${ALPINE_VERSION} AS aquarium
+FROM ruby:${RUBY_VERSION}-alpine${ALPINE_VERSION} AS aquarium-development
 RUN apk update && apk add \
     bind-tools \
     build-base \
@@ -49,6 +49,9 @@ COPY . ./
 RUN chmod +x ./docker/aquarium-entrypoint.sh \
              ./docker/krill-entrypoint.sh
 
+
+FROM aquarium-development AS aquarium-builder
+
 # directories used by puma configuration in production
 RUN mkdir -p /aquarium/shared/sockets
 RUN mkdir -p /aquarium/shared/log
@@ -59,3 +62,25 @@ RUN mkdir -p /aquarium/shared/pids
 # http://blog.zeit.io/use-a-fake-db-adapter-to-play-nice-with-rails-assets-precompilation/
 # TODO: does this need secrets?
 RUN RAILS_ENV=production SECRET_KEY_BASE=foo DB_ADAPTER=nulldb bundle exec rake assets:precompile --trace
+
+FROM ruby:${RUBY_VERSION}-alpine${ALPINE_VERSION} AS aquarium
+
+RUN apk add --update --no-cache \
+    bind-tools \
+    file \
+    imagemagick \
+    iptables \
+    mariadb-dev \
+    mysql-client \
+    tzdata
+
+RUN mkdir /aquarium
+WORKDIR /aquarium
+
+# pull gems from builder stage
+COPY --from=aquarium-builder /usr/local/bundle/ /usr/local/bundle/
+ENV GEM_HOME="/usr/local/bundle"
+ENV PATH $GEM_HOME/bin:$GEM_HOME/gems/bin:$PATH
+
+# pull app from builder-stage
+COPY --from=aquarium-builder /aquarium /aquarium
