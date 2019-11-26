@@ -37,6 +37,8 @@ Bioturk::Application.configure do
   config.assets.compress = false
   #  config.serve_static_assets = false
   config.assets.debug = false
+  # use dev directory for assets
+  config.assets.prefix = "/dev-assets"
 
   # config.time_zone = "Pacific Time (US & Canada)"
 
