@@ -41,4 +41,8 @@ RSpec.describe JsonController::JsonQueryResult do
     expect(JsonController::JsonQueryResult.create_from(model: 'AccountLog', method: 'where', arguments: { row1: [59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71] }, options: { offset: -1, limit: -1, reverse: false }, include: 'user')).not_to be_empty
   end
 
+  it 'find query should not crash' do
+    expect(JsonController::JsonQueryResult.create_from(model: 'Job', method: 'find', id: 10)).not_to be nil
+  end
+
 end
