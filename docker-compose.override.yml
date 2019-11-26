@@ -17,14 +17,12 @@ services:
     command: ["development"]
     volumes:
       - ./app:/aquarium/app
+      - ./config:/aquarium/config   
       - ./docs:/aquarium/docs
       - ./lib:/aquarium/lib
       - ./spec:/aquarium/spec
       - ./test:/aquarium/test
       - ./ui:/aquarium/ui
-      - ./docker/aquarium/database.yml:/aquarium/config/database.yml
-      - ./docker/aquarium/aquarium.rb:/aquarium/config/initializers/aquarium.rb
-      - ./docker/aquarium/development.rb:/aquarium/config/environments/development.rb
       - ./Gemfile.lock:/aquarium/Gemfile.lock
       - ./yarn.lock:/aquarium/yarn.lock
 
@@ -32,10 +30,8 @@ services:
     image: aquarium
     command: ["development"]
     volumes:
+      - ./config:/aquarium/config   
       - ./lib:/aquarium/lib
-      - ./docker/aquarium/database.yml:/aquarium/config/database.yml
-      - ./docker/aquarium/aquarium.rb:/aquarium/config/initializers/aquarium.rb
-      - ./docker/aquarium/development.rb:/aquarium/config/environments/development.rb
 
   web:
     command: [nginx-debug, "-g", "daemon off;"]
