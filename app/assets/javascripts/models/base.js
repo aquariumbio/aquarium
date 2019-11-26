@@ -26,7 +26,7 @@ AQ.Base.prototype.find = function(id) {
   //   debugger;
   // }
   return new Promise(function(resolve,reject) {
-    AQ.post('/json.json',{model: base.model, id: id}).then(
+    AQ.post('/json.json',{model: base.model, method: 'find', id: id}).then(
       (response) => {
         resolve(base.record(response.data));
       },(response) => {
