@@ -15,15 +15,10 @@ services:
       - public:/aquarium/public
       - logs:/aquarium/log
       - shared:/aquarium/shared
-      - ./docker/aquarium/production.rb:/aquarium/config/environments/production.rb
-      - ./docker/aquarium/production_puma.rb:/aquarium/config/production_puma.rb
 
   krill:
     image: aquarium
     command: ["production"]
-    volumes:
-      - ./docker/aquarium/production.rb:/aquarium/config/environments/production.rb
-      - ./docker/aquarium/production_puma.rb:/aquarium/config/production_puma.rb
 
   web:
     volumes:
