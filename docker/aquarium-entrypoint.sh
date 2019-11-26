@@ -36,10 +36,10 @@ elif [[ $1 == "production" ]]; then
   # Note only works once db is up (e.g., can't be done in Dockerfile)
   # ALSO SEE application.rb lines 8:13
   # TODO: figure out why precompiling requires database and must be done here
-  echo "Precompiling assets"
-  RAILS_ENV=production
+  # echo "Precompiling assets"
+  # RAILS_ENV=production
   
-  rake assets:precompile
+  # rake assets:precompile
   echo "Starting Rails server"
   exec puma -C config/production_puma.rb -e $1
 else

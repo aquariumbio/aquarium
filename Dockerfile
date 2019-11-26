@@ -24,11 +24,6 @@ RUN apk update && apk add \
 
 RUN mkdir /aquarium
 
-# directories used by puma configuration in production
-RUN mkdir -p /aquarium/shared/sockets
-RUN mkdir -p /aquarium/shared/log
-RUN mkdir -p /aquarium/shared/pids
-
 WORKDIR /aquarium
 
 # install js components
@@ -51,5 +46,16 @@ RUN gem install bundler --version '< 2.0' && \
 COPY . ./
 
 # include entrypoint scripts for starting Aquarium and Krill
-RUN chmod +x ./docker/aquarium-entrypoint.sh
-RUN chmod +x ./docker/krill-entrypoint.sh
+RUN chmod +x ./docker/aquarium-entrypoint.sh \
+             ./docker/krill-entrypoint.sh
+
+# directories used by puma configuration in production
+RUN mkdir -p /aquarium/shared/sockets
+RUN mkdir -p /aquarium/shared/log
+RUN mkdir -p /aquarium/shared/pids
+
+# Precompile assets
+# This requires an active database connection, use nulldb:
+# http://blog.zeit.io/use-a-fake-db-adapter-to-play-nice-with-rails-assets-precompilation/
+# TODO: does this need secrets?
+RUN RAILS_ENV=production SECRET_KEY_BASE=foo DB_ADAPTER=nulldb bundle exec rake assets:precompile --trace

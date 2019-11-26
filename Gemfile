@@ -67,6 +67,9 @@ group :production do
   gem 'puma'
 end
 
+# Used to fake db during asset compilation in Dockerfile
+gem 'activerecord-nulldb-adapter'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
