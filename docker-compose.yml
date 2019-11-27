@@ -14,6 +14,8 @@
 #
 # before running `docker-compose up`
 
+# set environment variable EMAIL_SERVICE to AWS to use AWS SES
+
 version: "3.5"
 services:
   app:
