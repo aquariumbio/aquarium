@@ -33,8 +33,11 @@ Bioturk::Application.configure do
   # See everything in the log (default is :info)
   config.log_level = :error
 
-  # logging in Docker requires sending logs to STDOUT
-  config.logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
+  # TODO: decide how to deal with logging
+  # Writes logs to disk
+  config.logger = Logger.new(config.paths['log'].first, 1, 1024 * 1024)
+  # logs to STDOUT for standard Docker configuration
+  # config.logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation can not be found)
@@ -43,33 +46,52 @@ Bioturk::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 
-  # Paperclip => minio
-  config.paperclip_defaults = {
-    storage: :s3,
-    s3_protocol: 'http',
-    s3_permissions: 'private',
-    s3_region: 'us-west-1',
-    s3_credentials: {
-      bucket: 'development',
-      access_key_id: 'aquarium_minio',
-      secret_access_key: 'KUNAzqrNifmM6GwNVZ8IP7dxZAkYjhnwc0bfdz0W'
-    },
-    s3_host_name: 'localhost:9000',
-    s3_options: {
-      endpoint: 'http://localhost:9000', # for aws-sdk
-      force_path_style: true # for aws-sdk (required for minio)
-    }
-  }
+  # TODO: change usage of AWS environment variables to instead use S3_
+  # Paperclip settings for using minio S3
+  if ENV['S3_SERVICE']
+    config.paperclip_defaults = if ENV['S3_SERVICE'].casecmp('AWS').zero?
+                                  {
+                                    storage: :s3,
+                                    s3_host_name: "s3-#{ENV['AWS_REGION']}.amazonaws.com",
+                                    s3_permissions: :private,
+                                    s3_credentials: {
+                                      bucket: ENV['S3_BUCKET_NAME'],
+                                      access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+                                      secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+                                      s3_region: ENV['AWS_REGION']
+                                    }
+                                  }
+                                elsif ENV['S3_SERVICE'].casecmp('minio').zero?
+                                  {
+                                    storage: :s3,
+                                    s3_protocol: 'http',
+                                    s3_permissions: 'private',
+                                    s3_region: ENV['S3_REGION'],
+                                    s3_credentials: {
+                                      bucket: ENV['S3_BUCKET_NAME'],
+                                      access_key_id: ENV['S3_ACCESS_KEY_ID'],
+                                      secret_access_key: ENV['S3_SECRET_ACCESS_KEY']
+                                    },
+                                    s3_host_name: ENV['S3_HOST'],
+                                    s3_options: {
+                                      endpoint: "http://#{ENV['S3_HOST']}", # for aws-sdk
+                                      force_path_style: true # for aws-sdk (required for minio)
+                                    }
+                                  }
+                                end
+  end
 
+
+  # TODO: configure email
   # Email notifications in Aquarium assume you ae using the AWS simple email service.
   # To enable, uncomment the following code and set the corresponding environment variables in the docker-compose.override.yml file
   #
   # AWS.config(
-  #   region: ENV.fetch('AWS_REGION'),
-  #   simple_email_service_endpoint: "email.#{ENV.fetch('AWS_REGION')}.amazonaws.com",
-  #   simple_email_service_region: ENV.fetch('AWS_REGION'),
-  #   ses: { region: ENV.fetch('AWS_REGION') },
-  #   access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
-  #   secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY')
+  #   region: ENV['AWS_REGION'],
+  #   simple_email_service_endpoint: "email.#{ENV['AWS_REGION']}.amazonaws.com",
+  #   simple_email_service_region: ENV['AWS_REGION'],
+  #   ses: { region: ENV['AWS_REGION'] },
+  #   access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+  #   secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
   # )
 end
