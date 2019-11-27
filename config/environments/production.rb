@@ -82,16 +82,16 @@ Bioturk::Application.configure do
   end
 
 
-  # TODO: configure email
   # Email notifications in Aquarium assume you ae using the AWS simple email service.
   # To enable, uncomment the following code and set the corresponding environment variables in the docker-compose.override.yml file
-  #
-  # AWS.config(
-  #   region: ENV['AWS_REGION'],
-  #   simple_email_service_endpoint: "email.#{ENV['AWS_REGION']}.amazonaws.com",
-  #   simple_email_service_region: ENV['AWS_REGION'],
-  #   ses: { region: ENV['AWS_REGION'] },
-  #   access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-  #   secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
-  # )
+  if ENV['EMAIL_SERVICE'].casecmp('AWS').zero?
+    AWS.config(
+      region: ENV['AWS_REGION'],
+      simple_email_service_endpoint: "email.#{ENV['AWS_REGION']}.amazonaws.com",
+      simple_email_service_region: ENV['AWS_REGION'],
+      ses: { region: ENV['AWS_REGION'] },
+      access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+      secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
+    )
+  end
 end
