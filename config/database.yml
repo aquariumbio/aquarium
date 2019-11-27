@@ -1,23 +1,22 @@
 # database configuration for docker contained aquarium
 
 default: &default
-  adapter: <%= ENV['DB_ADAPTER'] ||= 'mysql2' %>
+  adapter: <%= ENV['DB_ADAPTER'] %>
   encoding: utf8
   reconnect: false
-  host: db
-  port: 3306
-  username: aquarium
-  password: aSecretAquarium
+  host: <%= ENV['DB_HOST'] %>
+  port: <%= ENV['DB_PORT'] %>
+  username: <%= ENV['DB_USER'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
+  database: <%= ENV['DB_NAME'] %>
 
 production:
   <<: *default
-  database: production
   pool: 100
 
-# use the same name to avoid issues with switching env in docker
+# use the same name as production to avoid issues with switching env in docker
 development:
   <<: *default
-  database: production 
   pool: 5
 
 test:
