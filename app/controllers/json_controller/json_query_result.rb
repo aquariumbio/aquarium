@@ -28,7 +28,8 @@ class JsonController::JsonQueryResult
     return model unless include
 
     include_object = gather_includes(model: model, value: include)
-    model.includes(include_object) if include_object
+    return model unless include_object
+    model.includes(include_object)
   end
 
   # Gathers the include object specified by the value.
@@ -40,20 +41,24 @@ class JsonController::JsonQueryResult
   # @return the include specification with symbolized strings and non-associations excluded
   def self.gather_includes(model:, value:)
     if value.is_a?(String)
-      value.to_sym if association?(model: model, name: value)
-    elsif value.is_a?(Array)
-      value.collect { |element| gather_includes(model: model, value: element) }
-    elsif value.is_a?(Hash)
+      return value.to_sym  if association?(model: model, name: value)
+      value_symbol = value.to_sym
+      raise "Invalid include: #{value}" unless model.method_defined?(value_symbol)
+    end
+
+    return value.collect { |element| gather_includes(model: model, value: element) } if value.is_a?(Array)
+
+    if value.is_a?(Hash)
       include_hash = {}
       value.each do |key, v|
         next unless association?(model: model, name: key)
 
         include_hash[key.to_sym] = gather_includes(model: model, value: v)
       end
-      include_hash
-    else
-      value
+      return include_hash
     end
+
+    nil
   end
 
   # Applies the specified method of the model to the arguments or id.
@@ -66,8 +71,8 @@ class JsonController::JsonQueryResult
   # @param options: [Hash] the hash with options for the query
   # @return [ActiveRecord] record created by the query
   def self.apply_method(model:, method:, arguments:, id:, options:)
-    return nil unless method_ok?(method)
-    return model.find(id) if method == 'find' && id
+    raise 'Query method expected' unless method_ok?(method) || id
+    return model.find(id) if id
     return model.send(method, *arguments) if method != 'where'
 
     result = model.where(arguments)
