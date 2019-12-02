@@ -14,30 +14,23 @@ to get a local copy of the Aquarium git repository.
 
 To run Aquarium in development mode using the Docker configuration in a Unix&trade;-like environment, do the following.
 
-### Initial steps
-
-Make the `develop-compose.sh` script executable
-
-```bash
-chmod u+x develop-compose.sh
-```
-
 ### Commands
 
 1. Build the docker images with
 
    ```bash
-   ./develop-compose.sh build
+   docker-compose build
    ```
 
    This should only be necessary the first time you run Aquarium in development mode.
-   However, it may be needed any time you change the Aquarium configuration.
-   In situations where dependencies change, you will also want to run `build` with the `--no-cache` option.
+   However, it may be needed any time you change `Dockerfile`, `Gemfile` or `package.json`.
+
+   In situations where MySQL or minio change, you will also want to use the `--no-cache` option.
 
 2. Start Aquarium with
 
    ```bash
-   ./develop-compose.sh up
+   docker-compose up
    ```
 
    This command starts services for Aquarium, Krill, MySQL, minio and nginx, which are needed to run Aquarium.
@@ -49,28 +42,28 @@ chmod u+x develop-compose.sh
    ./develop-compose down -v
    ```
 
-3. To run commands inside the Aquarium Ruby environment, precede each with
+3. To run commands within the running Aquarium container, precede each with
 
    ```bash
-   ./develop-compose.sh run --rm app
+   docker-compose exec app
    ```
 
    Specifically, you can run a shell within the Aquarium container with the command
 
    ```bash
-   ./develop-compose.sh run --rm app /bin/sh
+   docker-compose exec app /bin/sh
    ```
 
    where you can run `rake` or even the Rails console.
 
-Note: The `develop-compose.sh` script helps shorten each command.
-Without the script, each command would start with
+   Alternatively, using a command starting with
 
-```bash
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml
-```
+   ```bash
+   docker-compose run --rm app
+   ```
 
-instead of the script name.
+   will create a temporary container, which can be useful for running single commands.
+
 
 ## Switching databases
 
@@ -122,9 +115,9 @@ rm -rf docker/db/*
 ## Testing Aquarium
 
 ```bash
-./develop-compose.sh up -d
-./develop-compose.sh exec app rspec
-./develop-compose.sh down -v
+docker-compose up -d
+docker-compose exec app rspec
+docker-compose down -v
 ```
 
 ## Editing Aquarium
@@ -212,7 +205,7 @@ This file also limits the API to code used in Krill the protocol development lan
 1.  make sure Rails tests pass
 
     ```bash
-    ./develop-compose.sh exec app rspec
+    docker-compose exec app rspec
     ```
 
 2.  Run `rubocop`, fix anything broken. Once done run `rubocop --auto-gen-config`.
@@ -222,7 +215,7 @@ This file also limits the API to code used in Krill the protocol development lan
 6.  Update API documentation by running 
 
     ```bash
-    ./develop-compose.sh exec app yard
+    docker-compose exec app yard
     ```
 
 7.  (Update change log)
@@ -241,26 +234,25 @@ This file also limits the API to code used in Krill the protocol development lan
     Click "publish release".
 11. (Update zenodo entry)
 
-## Docker configuration
+## Aquarium configuration
 
-The Aquarium Docker configuration is determined by these files:
+Aquarium is configured to run within Docker using the following files:
 
 ```bash
 aquarium
-|-- Dockerfile                  # defines the image for Aquarium
 |-- docker
-|   |-- aquarium                # Aquarium configuration files
-|   |-- aquarium-entrypoint.sh  # entrypoint for running Aquarium
-|   |-- db                      # directory to store database files
-|   |-- krill-entrypoint.sh     # entrypoint for running Krill
-|   |-- mysql_init              # database dump to initialize database
-|   |-- nginx.development.conf  # nginx configuration for development server
-|   |-- nginx.production.conf   # nginx configuration for production server
-|   `-- s3                      # directory for minio files
-|-- docker-compose.dev.yml      # development compose file
-|-- docker-compose.override.yml # production compose file
-|-- docker-compose.windows.yml  # windows compose file
-`-- docker-compose.yml          # base compose file
+|   |-- db                        # directory to store database files
+|   |-- mysql_init                # database dump to initialize database
+|   |-- s3                        # directory for minio files
+|   |-- aquarium-entrypoint.sh    # entrypoint for running Aquarium
+|   |-- krill-entrypoint.sh       # entrypoint for running Krill
+|   |-- nginx.development.conf    # nginx configuration for development server
+|   `-- nginx.production.conf     # nginx configuration for production server
+|-- docker-compose.override.yml   # development compose file
+|-- docker-compose.production.yml # production compose file
+|-- docker-compose.windows.yml    # windows compose file
+|-- docker-compose.yml            # base compose file
+`-- Dockerfile                    # defines the image for Aquarium
 ```
 
 ### Images
