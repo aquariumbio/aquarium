@@ -28,7 +28,7 @@ class KrillController < ApplicationController
         return redirect_to krill_error_path(
           job: @job.id,
           message: ('server error: ' + server_result[:error][0, 512]).html_safe,
-          backtrace: []
+          backtrace: server_result[:backtrace]
         )
       end
 

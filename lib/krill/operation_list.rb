@@ -69,16 +69,13 @@ module Krill
     end
 
     def running
-      result = select do |op|
-        op.status != 'error'
-      end
-      result
+      reject(&:error?)
     end
 
     # Select {Operation}s with status "error"
     # @return {Array} extended with {OperationList}
     def errored
-      select { |op| op.status == 'error' }
+      select(&:error?)
     end
 
     # Get all items.
@@ -108,7 +105,7 @@ module Krill
             op.associate 'input error', "Could not find input #{input.name}: #{sname} / #{oname}"
           end
         end
-        items += op_items unless op.status == 'error'
+        items += op_items unless op.error?
       end
 
       if block_given?
