@@ -33,7 +33,7 @@ class Sample < ActiveRecord::Base
   has_many :items
   has_many :post_associations
 
-  validates :name, uniqueness: { message: "The sample name '%{value}' is the name of an existing sample" }
+  validates :name, uniqueness: { message: "The sample name '#{value}' is the name of an existing sample" }
 
   validates :name, presence: true
   validates :project, presence: true
