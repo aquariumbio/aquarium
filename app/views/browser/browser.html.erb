@@ -86,7 +86,7 @@
         </md-toolbar>
 
         <md-dialog-content class="md-dialog-content">
-          <div ng-if="samples.length == 0" layout-padding>  
+          <div ng-if="newsamples.length == 0" layout-padding>  
             <p><b>To create new sample</b>: Choose your sample type in the dropdown menu. Edit 
             your sample form. Click "Save".</p>
 
@@ -109,11 +109,12 @@
 
         <md-dialog-actions layout="row">
           <md-button class="md-raised md-primary" 
+            ng-disabled="(input_form.$dirty) && (disable_button)" 
             ng-click="cancel()">
             Cancel
           </md-button>
           <md-button class="md-raised md-primary" 
-            ng-disabled="(samples.length == 0) || (!input_form.$dirty) || (messages.length > 0)" 
+            ng-disabled="(newsamples.length == 0) || (!input_form.$dirty) || (messages.length > 0)" 
             ng-click="save()">
             Save
           </md-button>

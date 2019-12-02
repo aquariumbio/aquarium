@@ -44,7 +44,8 @@
           },
           create: {
             selected: $scope.views.create.selected,
-            samples: []
+            samples: [],
+            newsamples: []
           },
           search: {
             selected: $scope.views.search.selected,
@@ -335,7 +336,7 @@
           templateUrl: "create_sample_dialog.html",
           locals: {
             sample_types: $scope.sample_types,
-            samples: $scope.views.create.samples,
+            newsamples: $scope.views.create.newsamples,
             new_sample: $scope.new_sample,
             remove_sample: $scope.remove_sample,
             save: $scope.save_new_samples,
@@ -347,7 +348,7 @@
           controller: [
             "$scope",
             "sample_types",
-            "samples",
+            "newsamples",
             "new_sample",
             "remove_sample",
             "save",
@@ -364,7 +365,7 @@
       function sample_dialog_controller(
         $scope,
         sample_types,
-        samples,
+        newsamples,
         new_sample,
         remove_sample,
         save,
@@ -374,7 +375,7 @@
         disable_button
         ) {
         $scope.sample_types = sample_types;
-        $scope.samples = samples;
+        $scope.newsamples = newsamples;
         $scope.errors = errors;
         $scope.messages = messages;
         $scope.helper = helper;
@@ -382,7 +383,7 @@
 
         // Dialog actions
         $scope.new_sample = function(sample_types) {
-          if (samples.length > 0) {
+          if (newsamples.length > 0) {
             remove_sample();
             new_sample(sample_types);
           } else {
@@ -395,8 +396,8 @@
           $scope.messages = [];
         };
         $scope.save = function() {
-          if (samples.length > 0) {
-            $scope.helper.create_samples(samples, function(
+          if (newsamples.length > 0) {
+            $scope.helper.create_samples(newsamples, function(
               response
             ) {
               if (response.errors) {
@@ -406,7 +407,7 @@
                 $scope.errors = [];
                 $scope.disable_button = false;
                 save();
-                $scope.messages = aq.collect(response.samples, function(s) {
+                $scope.messages = aq.collect(response.newsamples, function(s) {
                   return "Created sample " + s.id + ": " + s.name;
                 });
               }
@@ -415,7 +416,7 @@
         };
         $scope.cancel = function() {
           $mdDialog.cancel();
-          samples.length = 0;
+          newsamples.length = 0;
           if ($scope.errors.length > 0) {
               $scope.errors = [];
             } else if ($scope.messages.length > 0) {
@@ -428,7 +429,7 @@
 
       // The function creates new sample based on selected sample types
       $scope.new_sample = function(st) {
-        $scope.views.create.samples.push(
+        $scope.views.create.newsamples.push(
           new Sample($http).new(st.id, function() {
             $scope.select_view("create");
           })

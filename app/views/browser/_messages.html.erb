@@ -1,6 +1,6 @@
 <script type="text/ng-template" id="error_message">
 
-  <div class='alert alert-error' ng-show="errors.length > 0 && samples.length > 0">
+  <div class='alert alert-error' ng-show="errors.length > 0 && newsamples.length > 0">
 
   <h4>Errors</h4>
     <ul>
@@ -23,3 +23,28 @@
   </div>
 
 </script>
+
+# Form for upload sample action
+<div class='alert alert-error' ng-show="errors.length > 0">
+
+  <button type="button" class="close" ng-click="dismiss_errors()">&times;</button>
+  <h4>Errors</h4>
+  <ul>
+    <li ng-repeat="error in errors">
+      {{error}}
+    </li>
+  </ul>
+
+</div>
+
+<div class='alert alert-info' ng-show="messages.length > 0">
+
+  <button type="button" class="close" ng-click="dismiss_messages()">&times;</button>
+  <h4>Messages</h4>
+  <ul>
+    <li ng-repeat="message in messages track by $index">
+      {{message}}
+    </li>
+  </ul>
+
+</div>
