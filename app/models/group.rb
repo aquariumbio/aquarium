@@ -21,7 +21,7 @@ class Group < ActiveRecord::Base
   end
 
   def member?(uid)
-    (memberships.select { |m| m.user_id == uid }) != []
+    memberships.where(user_id: uid).present?
   end
 
 end

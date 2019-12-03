@@ -39,8 +39,7 @@ class User < ActiveRecord::Base
   end
 
   def member?(group_id)
-    !Membership.where(group_id: group_id, user_id: id).empty?
-    # g && g.member?(id)
+    memberships.where(group_id: group_id).present?
   end
 
   def retired?
