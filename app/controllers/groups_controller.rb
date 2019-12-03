@@ -32,12 +32,9 @@ class GroupsController < ApplicationController
       m = Membership.find_by(user_id: params[:user_id], group_id: @group.id)
 
       unless m
-
+        # TODO: decide whether show should be adding user to group
         u = User.find(params[:user_id])
-        m = Membership.new
-        m.user_id = u.id
-        m.group_id = @group.id
-        m.save
+        @group.add(u)
         # flash[:notice] = "Added #{u.login} to #{@group.name}."
 
       end

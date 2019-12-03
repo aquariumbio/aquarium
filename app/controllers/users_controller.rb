@@ -32,20 +32,13 @@ class UsersController < ApplicationController
   def create
 
     if !params[:change_password]
+      
+        @user = User.new(params[:user])
 
-      @user = User.new(params[:user])
-
-      if @user.save
-        @group = Group.new
-        @group.name = @user.login
-        @group.description = "A group containing only user #{@user.name}"
-        @group.save
-        m = Membership.new
-        m.group_id = @group.id
-        m.user_id = @user.id
-        m.save
-        flash[:success] = "#{params[:user][:name]} has been assimilated."
-        redirect_to @user
+        if @user.save
+          @group = @user.create_user_group
+          flash[:success] = "#{params[:user][:name]} has been assimilated."
+          redirect_to @user
       else
         render 'new'
       end
@@ -178,10 +171,7 @@ class UsersController < ApplicationController
     ret = Group.find_by(name: 'retired')
 
     if ret
-      m = Membership.new
-      m.user_id = u.id
-      m.group_id = ret.id
-      m.save
+      ret.add(u)
       flash[:success] = 'The user has been disconnected. Why did they resist? We only wish to raise quality of life for all species.'
     else
       flash[:error] = "Could not retire user because the 'retired' group does not exist. Go make it and try again."

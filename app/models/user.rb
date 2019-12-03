@@ -25,9 +25,16 @@ class User < ActiveRecord::Base
   validates :password, presence: true, length: { minimum: 6 }, on: :create
   validates :password_confirmation, presence: true, on: :create
 
+  def create_user_group
+    group = Group.create!(name: login, description: "A group containing only user #{name}")
+    group.add(self)
+
+    group
+  end
+
   def is_admin
     g = Group.find_by(name: 'admin')
-    g && !Membership.where(group_id: g.id, user_id: id).empty?
+    g && member?(g.id)
     # return (!g || g.memberships.length == 0 || g.member?(id))
   end
 
@@ -69,6 +76,11 @@ class User < ActiveRecord::Base
     memberships.collect(&:group)
   end
 
+  def make_admin
+    admin_group = Group.find_by(name: 'admin')
+    admin_group.add(self)
+  end
+
   def as_json(opts = {})
     j = super opts
     j[:groups] = groups.as_json
@@ -90,6 +102,7 @@ class User < ActiveRecord::Base
 
     email  = parameters.find { |p| p.key == 'email' && p.value && !p.value.empty? }
     phone  = parameters.find { |p| p.key == 'phone' && p.value && !p.value.empty? }
+    # TODO: remove lab name specific variables and parameter
     biofab = parameters.find { |p| p.key == 'biofab' && p.value && p.value == 'true' }
     aq     = parameters.find { |p| p.key == 'aquarium' && p.value && p.value == 'true' }
 
@@ -97,15 +110,18 @@ class User < ActiveRecord::Base
 
   end
 
+  def email_address
+    email_parameters = Parameter.where(user_id: id, key: 'email')
+    raise "Email address not defined for user {id}: #{name}" if email_parameters.empty?
+
+    email_parameters[0].value
+  end
+
   # Send an email to the user
   # @param subject [String] The subject of the email
   # @param message [String] The body of the email, in html
   def send_email(subject, message)
-
-    email_parameters = Parameter.where(user_id: id, key: 'email')
-    raise "Email address not defined for user {id}: #{name}" if email_parameters.empty?
-
-    to_address = email_parameters[0].value
+    to_address = email_address
 
     sleep 0.1 # Throttle email sending rate in case this method is called from within a loop
 

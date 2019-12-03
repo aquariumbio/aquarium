@@ -7,6 +7,10 @@ class Group < ActiveRecord::Base
 
   validates :name, presence: true, uniqueness: { case_sensitive: false }
 
+  def add(user)
+    memberships.create!(user_id: user.id)
+  end
+
   def self.list
     retired = find_by(name: 'retired')
     rid = retired ? retired.id : -1
