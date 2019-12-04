@@ -11,11 +11,11 @@
 
   </div>
 
-  <div class='alert alert-info' ng-show="messages.length > 0" n>
+  <div class='alert alert-info' ng-show="create_messages.length > 0">
 
     <h4>Messages</h4>
     <ul>
-      <li ng-repeat="message in messages track by $index">
+      <li ng-repeat="message in create_messages track by $index">
         {{message}}
       </li>
     </ul>

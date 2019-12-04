@@ -103,6 +103,8 @@
         cookie();
 
         $scope.messages = [];
+        $scope.create_messages = [];
+
       } else {
         if (!$scope.views.sample_type) {
           $scope.views.sample_type = { selected: false };
@@ -341,7 +343,7 @@
             remove_sample: $scope.remove_sample,
             save: $scope.save_new_samples,
             errors: $scope.errors,
-            messages: $scope.messages,
+            create_messages: $scope.create_messages,
             helper: $scope.helper,
             disable_button: $scope.disable_button
           },
@@ -353,7 +355,7 @@
             "remove_sample",
             "save",
             "errors",
-            "messages",
+            "create_messages",
             "helper",
             "disable_button",
             sample_dialog_controller
@@ -370,14 +372,14 @@
         remove_sample,
         save,
         errors,
-        messages,
+        create_messages,
         helper,
         disable_button
         ) {
         $scope.sample_types = sample_types;
         $scope.newsamples = newsamples;
         $scope.errors = errors;
-        $scope.messages = messages;
+        $scope.create_messages = create_messages;
         $scope.helper = helper;
         $scope.disable_button = disable_button;
 
@@ -393,7 +395,7 @@
         $scope.remove_sample = function() {
           remove_sample();
           $scope.errors = [];
-          $scope.messages = [];
+          $scope.create_messages = [];
         };
         $scope.save = function() {
           if (newsamples.length > 0) {
@@ -407,7 +409,7 @@
                 $scope.errors = [];
                 $scope.disable_button = false;
                 save();
-                $scope.messages = aq.collect(response.newsamples, function(s) {
+                $scope.create_messages = aq.collect(response.samples, function(s) {
                   return "Created sample " + s.id + ": " + s.name;
                 });
               }
@@ -419,8 +421,8 @@
           newsamples.length = 0;
           if ($scope.errors.length > 0) {
               $scope.errors = [];
-            } else if ($scope.messages.length > 0) {
-              $scope.messages = []
+            } else if ($scope.create_messages.length > 0) {
+              $scope.create_messages = []
            }
         };
       }
