@@ -19,7 +19,7 @@
 version: "3.5"
 services:
   app:
-    entrypoint: ["/aquarium/docker/aquarium-entrypoint.sh"]
+    entrypoint: ["/aquarium/entrypoint.sh"]
     environment:
       DB_ADAPTER: mysql2
       DB_HOST: db
@@ -65,7 +65,7 @@ services:
       - aquarium_net
 
   krill:
-    entrypoint: ["/aquarium/docker/krill-entrypoint.sh"]
+    entrypoint: ["/aquarium/entrypoint.sh"]
     networks:
       - aquarium_net
     expose:

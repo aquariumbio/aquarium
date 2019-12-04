@@ -50,8 +50,7 @@ RUN gem update --system \
 COPY . ./
 
 # include entrypoint scripts for starting Aquarium and Krill
-RUN chmod +x ./docker/aquarium-entrypoint.sh \
-             ./docker/krill-entrypoint.sh
+RUN chmod +x ./entrypoint.sh
 
 
 # Temporary stage for building production environment based on development stage

@@ -28,7 +28,7 @@ services:
 
   krill:
     image: aquarium-development
-    command: ["development"]
+    command: ["krill", "development", "local"]
     volumes:
       - ./config:/aquarium/config   
       - ./lib:/aquarium/lib

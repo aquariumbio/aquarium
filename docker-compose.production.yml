@@ -7,7 +7,7 @@ services:
       context: .
       target: aquarium
     image: aquarium
-    command: ["production"]
+    command: ["production", "local"]
     environment:
       RAILS_ENV: production
       RACK_ENV: production
@@ -18,7 +18,7 @@ services:
 
   krill:
     image: aquarium
-    command: ["production"]
+    command: ["krill", "production", "local"]
 
   web:
     volumes:
