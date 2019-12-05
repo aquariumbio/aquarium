@@ -51,6 +51,7 @@ COPY . ./
 
 # include entrypoint scripts for starting Aquarium and Krill
 RUN chmod +x ./entrypoint.sh
+ENTRYPOINT [ "/aquarium/entrypoint.sh" ]
 
 
 # Temporary stage for building production environment based on development stage
@@ -95,3 +96,5 @@ ENV PATH $GEM_HOME/bin:$GEM_HOME/gems/bin:$PATH
 
 # pull app from builder-stage
 COPY --from=aquarium-builder /aquarium /aquarium
+
+ENTRYPOINT [ "/aquarium/entrypoint.sh" ]
