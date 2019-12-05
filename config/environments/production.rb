@@ -46,45 +46,45 @@ Bioturk::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 
-  # TODO: change usage of AWS environment variables to instead use S3_
-  # Paperclip settings for using minio S3
-  if ENV['S3_SERVICE']
-    config.paperclip_defaults = if ENV['S3_SERVICE'].casecmp('AWS').zero?
-                                  {
-                                    storage: :s3,
-                                    s3_host_name: "s3-#{ENV['AWS_REGION']}.amazonaws.com",
-                                    s3_permissions: :private,
-                                    s3_credentials: {
-                                      bucket: ENV['S3_BUCKET_NAME'],
-                                      access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-                                      secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
-                                      s3_region: ENV['AWS_REGION']
-                                    }
-                                  }
-                                elsif ENV['S3_SERVICE'].casecmp('minio').zero?
-                                  {
-                                    storage: :s3,
-                                    s3_protocol: 'http',
-                                    s3_permissions: 'private',
-                                    s3_region: ENV['S3_REGION'],
-                                    s3_credentials: {
-                                      bucket: ENV['S3_BUCKET_NAME'],
-                                      access_key_id: ENV['S3_ACCESS_KEY_ID'],
-                                      secret_access_key: ENV['S3_SECRET_ACCESS_KEY']
-                                    },
-                                    s3_host_name: ENV['S3_HOST'],
-                                    s3_options: {
-                                      endpoint: "http://#{ENV['S3_HOST']}", # for aws-sdk
-                                      force_path_style: true # for aws-sdk (required for minio)
-                                    }
-                                  }
-                                end
-  end
+  
+  # By default use minio for S3, but set to AWS if S3_SERVICE is set to 'AWS'
+  config.paperclip_defaults = if ENV['S3_SERVICE']&.casecmp('AWS')&.zero?
+                              {
+                                # TODO: change usage of AWS environment variables to instead use S3_
+                                storage: :s3,
+                                s3_host_name: "s3-#{ENV['AWS_REGION']}.amazonaws.com",
+                                s3_permissions: :private,
+                                s3_credentials: {
+                                  bucket: ENV['S3_BUCKET_NAME'],
+                                  access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+                                  secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+                                  s3_region: ENV['AWS_REGION']
+                                }
+                              }
+                            else
+                              {
+                                storage: :s3,
+                                s3_protocol: 'http',
+                                s3_permissions: 'private',
+                                s3_region: ENV['S3_REGION'],
+                                s3_credentials: {
+                                  bucket: ENV['S3_BUCKET_NAME'],
+                                  access_key_id: ENV['S3_ACCESS_KEY_ID'],
+                                  secret_access_key: ENV['S3_SECRET_ACCESS_KEY']
+                                },
+                                s3_host_name: ENV['S3_HOST'],
+                                s3_options: {
+                                  endpoint: "http://#{ENV['S3_HOST']}", # for aws-sdk
+                                  force_path_style: true # for aws-sdk (required for minio)
+                                }
+                              }
+                            end
+  
 
 
   # Email notifications in Aquarium assume you ae using the AWS simple email service.
   # To enable, uncomment the following code and set the corresponding environment variables in the docker-compose.override.yml file
-  if ENV['EMAIL_SERVICE'].casecmp('AWS').zero?
+  if ENV['EMAIL_SERVICE']&.casecmp('AWS')&.zero?
     AWS.config(
       region: ENV['AWS_REGION'],
       simple_email_service_endpoint: "email.#{ENV['AWS_REGION']}.amazonaws.com",
