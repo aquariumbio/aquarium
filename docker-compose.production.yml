@@ -6,6 +6,7 @@ services:
     build:
       context: .
       target: aquarium
+    # TODO: change to aquarium org
     image: bjkeller/aquarium:2.7.1
     command: ["production"]
     environment:
