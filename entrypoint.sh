@@ -33,8 +33,8 @@ _fix_local_minio_ip() {
 }
 
 _wait_for_database() {
-    # wait for mysql to start
-    while ! nc -z $DB_HOST $DB_PORT; do
+    # wait for database to start
+    while ! nc -z ${DB_HOST:-'db'} ${DB_PORT:-3306}; do
         sleep 1 # wait for 1 second before check again
     done
 }
@@ -75,25 +75,36 @@ _main() {
 
     _clean_up_stray_server
     _wait_for_database
-    if [[ $S3_HOST == "localhost"* ]]; then
-        _fix_local_minio_ip
-    fi
+    
+    echo "here $1"
+    # fix minio ip address if either no host set or is localhost
+    match=`expr "$S3_HOST" : 'localhost.*'`
+    echo "host"
+    echo "match $match"
+    # if [ -z ${S3_HOST+x} ] || [ $match -gt 0 ]; then
+    #     echo "fixing minio"
+    #     _fix_local_minio_ip
+    # fi
 
-    if [[ $1 == "development" ]]; then
+    if [ $1 = "development" ]; then
+        echo "development"
         _start_development_server
-    elif [[ $1 == "production" ]]; then
+
+    elif [ $1 = "production" ]; then
+        echo "production"
         _start_production_server
-    elif [[ $1 == "krill" ]]; then
+    elif [ $1 = "krill" ]; then
+        echo "krill"
         _start_krill_server $2
     else
         # If the normal image startup flags were not given as arguments, 
         # then exec whatever arguments were given
+        echo "other"
         exec "$@"
     fi
 }
 
 # Run _main unless sourced
 if [ ${0##*/} != 'sh' ]; then
-    echo "running"
   _main "$@"
 fi
