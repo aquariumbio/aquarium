@@ -48,7 +48,7 @@ Bioturk::Application.configure do
 
   
   # By default use minio for S3, but set to AWS if S3_SERVICE is set to 'AWS'
-  config.paperclip_defaults = if ENV['S3_SERVICE']&.casecmp('AWS')&.zero?
+  config.paperclip_defaults = if ENV['S3_SERVICE'] && ENV['S3_SERVICE'].casecmp('AWS').zero?
                               {
                                 # TODO: change usage of AWS environment variables to instead use S3_
                                 storage: :s3,
