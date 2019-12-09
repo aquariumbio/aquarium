@@ -95,6 +95,11 @@ class BrowserController < ApplicationController
   end
 
   def create_samples
+    unless params[:samples]
+      render json: { errors: ['No samples to create',''] },
+             status: :unprocessable_entity
+      return
+    end
 
     @errors = []
     @samples = []
