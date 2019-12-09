@@ -759,7 +759,13 @@
             );
 
             $scope.views.create.samples = data.samples;
-            $scope.autosave();
+            $scope.messages = data.warnings;
+            $scope.messages.push(
+              "Spreadsheet '" +
+                f.name +
+                "' processed. Review the new samples below and click 'Save' to save this data to Aquarium."
+            );
+            $scope.select_view("create");
 
           } catch (e) {
             $scope.messages = ["Error processing spreadsheet: " + e];
@@ -768,29 +774,6 @@
         };
 
         r.readAsText(f);
-      };
-
-      $scope.autosave = function() {
-        $scope.errors = [];
-        $scope.helper.create_samples($scope.views.create.samples, function(
-          response
-        ) {
-          if (response.errors) {
-            $scope.errors = response.errors;
-          } else {
-            $scope.views.create.samples = [];
-            $scope.choose_user($scope.user.current);
-            $scope.views.search.query = "";
-            $scope.views.search.sample_type = "";
-            $scope.views.search.user = $scope.user.current.login;
-            $scope.select_view("search");
-            $scope.search(0);
-            $scope.messages = aq.collect(response.samples, function(s) {
-              return "Created sample " + s.id + ": " + s.name;
-            });
-            load_sample_names();
-          }
-        });
       };
 
       $scope.openMenu = function($mdMenu, ev) {
