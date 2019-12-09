@@ -1,5 +1,5 @@
 #!/bin/sh
-set -e
+set -euxo pipefail
 
 # entrypoint for Aquarium Docker. 
 # Can be used for starting either Aquarium or Krill.
