@@ -97,4 +97,7 @@ ENV PATH $GEM_HOME/bin:$GEM_HOME/gems/bin:$PATH
 # pull app from builder-stage
 COPY --from=aquarium-builder /aquarium /aquarium
 
+ENV RAILS_ENV=production
+ENV RACK_ENV=production
+
 ENTRYPOINT [ "/aquarium/entrypoint.sh" ]

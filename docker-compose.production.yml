@@ -9,9 +9,6 @@ services:
     # TODO: change to aquarium org
     image: bjkeller/aquarium:2.7.1
     command: ["production"]
-    environment:
-      RAILS_ENV: production
-      RACK_ENV: production
     volumes:
       - public:/aquarium/public
       - logs:/aquarium/log
