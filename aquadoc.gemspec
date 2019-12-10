@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name        = 'aquadoc'
-  s.version     = '1.0.0'
+  s.version     = '1.0.1'
   s.date        = '2018-11-02'
   s.summary     = 'A Documentation Generator for Aquarium Workflows'
   s.description = 'Use this tool to publish your workflows!'
