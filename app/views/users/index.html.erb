@@ -1,4 +1,4 @@
-<% provide(:title, 'All users') %>
+<% provide(:title, 'Users') %>
 
 <% content_for :class do %>users<% end %>
 
@@ -66,14 +66,12 @@
 
   <div layout-padding>
 
-    <%= will_paginate @users, previous_label: 'Previous', next_label: 'Next' %>
-
     <table class="table">
        <tr>
-        <th>login</th>
-        <th>Name</th>
+        <th>Username</th>
+        <th>Full Name</th>
         <th>Since</th>
-        <th></th>
+        <th>Status</th>
         <th></th>
        </tr>
        <%= render @users %>
