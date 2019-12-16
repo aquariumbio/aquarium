@@ -67,7 +67,7 @@ module Krill
         client.puts({ response: 'error', error: e.error_message, backtrace: e.error_backtrace }.to_json)
         return
       rescue StandardError => e
-        client.puts({ response: 'error', error:  e.to_s, backtrace: e.backtrace }.to_json)
+        client.puts({ response: 'error', error: e.to_s, backtrace: e.backtrace }.to_json)
         return
       end
 
@@ -94,10 +94,10 @@ module Krill
         delete_job(job_id: jid) if status == 'done'
         client.puts({ response: status }.to_json)
       rescue Krill::KrillBaseError => e
-        client.puts({ 
-          response: 'error', 
-          error: e.error_message, 
-          backtrace: e.error_backtrace 
+        client.puts({
+          response: 'error',
+          error: e.error_message,
+          backtrace: e.error_backtrace
         }.to_json)
         delete_job(job_id: jid)
       rescue StandardError => e
