@@ -12,11 +12,11 @@ default_config = {
 begin
   instance_config = Bioturk::Application.config_for(:instance).symbolize_keys
 rescue StandardError => e
-  print("failed to read instance.yml #{e}")
+  puts("Failed to read instance.yml #{e}")
   instance_config = {}
 end
 instance_config = default_config.merge(instance_config)
-print(instance_config.to_s )
+puts(instance_config.to_s)
 
 #
 # Name of the instance (Change to the name of your lab)
