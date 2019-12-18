@@ -113,6 +113,7 @@ module OperationTypeExport
     #
     # @param data [Hash] the data hash
     # @param user [User] the user for creating code objects
+    # TODO: resolve duplicate code with OperationTypesController::update_from_ui
     def simple_import(data, user)
 
       obj = data[:operation_type]
@@ -124,15 +125,7 @@ module OperationTypeExport
 
       if obj[:field_types]
         obj[:field_types].each do |ft|
-          ot.add_io(
-            ft[:name], ft[:sample_types], ft[:object_types], ft[:role],
-            part: ft[:part],
-            array: ft[:array],
-            routing: ft[:routing],
-            ftype: ft[:ftype],
-            preferred_operation_type_id: ft[:preferred_operation_type_id],
-            preferred_field_type_id: ft[:preferred_field_type_id]
-          )
+          ot.add_new_field_type(ft)
         end
       end
 
