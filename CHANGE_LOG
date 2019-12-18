@@ -1,5 +1,5 @@
 v2.7.2
-- Fixes bug in recent changes to sample search where results where filtered
+- Fixes bug in recent changes to sample search where results were filtered
   instead of accumulated and inventory would not be displayed.
 - Fixes default date for invoices to use current date.
 - Fixes error in json queries where includes were not handled correctly.
