@@ -97,6 +97,7 @@ class OperationTypesController < ApplicationController
     render json: code_object, status: :ok
   end
 
+  # TODO: resolve duplicate code with OperationType::simple_import in OperationTypeExport
   def update_from_ui(data, update_fields = true)
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
@@ -133,7 +134,7 @@ class OperationTypesController < ApplicationController
   def update
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
-    ot = update_from_ui params
+    ot = update_from_ui(params)
     if ot[:update_errors].empty?
       operation_type = ot[:op_type]
       render json: operation_type.as_json(methods: %i[field_types protocol precondition cost_model documentation]),

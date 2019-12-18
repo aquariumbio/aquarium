@@ -49,6 +49,10 @@ class OperationType < ApplicationRecord
     add_field(name, sample_name, container_name, 'output', opts)
   end
 
+  def add_parameter(name:, type:, choices:)
+    add_field(name, nil, nil, 'input', ftype: type, choices: choices)
+  end
+
   # The input types of this OperationType.
   #
   # @return [Array<FieldType>]  meta definitions of the inputs
@@ -210,8 +214,10 @@ class OperationType < ApplicationRecord
     field_types.where(name: new_type[:name], role: new_type[:role])[0]
   end
 
-  def update_field_type(old_type, new_type)
+  def update_field_type(old_type:, new_type:)
+    keepers = []
     old_type.name = new_type[:name]
+
     if old_type.sample?
       old_type.routing = new_type[:routing]
       old_type.array = new_type[:array]
@@ -221,7 +227,6 @@ class OperationType < ApplicationRecord
 
       puts "PREF(#{old_type.name}): #{new_type[:preferred_field_type_id]}"
 
-      keepers = []
       if new_type[:allowable_field_types]
         new_type[:allowable_field_types].each do |newaft|
           matching_types = old_type.allowable_field_types.select { |aft| aft.id == newaft[:id] }
@@ -236,6 +241,7 @@ class OperationType < ApplicationRecord
           end
         end
       end
+
     else
       old_type.ftype = new_type[:ftype]
       old_type.choices = new_type[:choices]
@@ -243,23 +249,23 @@ class OperationType < ApplicationRecord
 
     old_type.save
 
-    old_type.allowable_field_types.reject { |aft| keepers.include? aft }.each(&:destroy)
+    old_type.allowable_field_types.reject { |aft| keepers.include? aft }.each(&:destroy) unless keepers.empty?
   end
 
   def update_field_types(fts)
     keepers = []
 
     if fts
-      fts.each do |newft|
-        matching_fts = field_types.select { |oldft| oldft.id == newft[:id] && oldft.role == newft[:role] }
+      fts.each do |new_ft|
+        matching_fts = field_types.select { |field_type| field_type.id == new_ft[:id] && field_type.role == new_ft[:role] }
         if matching_fts.length == 1
-          oldft = matching_fts[0]
-          keepers << oldft
-          update_field_type oldft, newft
+          old_ft = matching_fts[0]
+          keepers << old_ft
+          update_field_type(old_type: old_ft, new_type: new_ft)
         elsif matching_fts.empty?
-          keepers << add_new_field_type(newft)
+          keepers << add_new_field_type(new_ft)
         else
-          raise "Multiple inputs (or outputs) named #{newft[:name]}"
+          raise "Multiple inputs (or outputs) named #{new_ft[:name]}"
         end
       end
     end
