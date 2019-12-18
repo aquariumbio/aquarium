@@ -3083,7 +3083,7 @@ will use once launched.</p>
   <span class='id identifier rubyid_ops'>ops</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
   <span class='id identifier rubyid_inputs'>inputs</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_input'>input</span><span class='op'>|</span>
     <span class='id identifier rubyid_input'>input</span><span class='period'>.</span><span class='id identifier rubyid_predecessors'>predecessors</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_predecessor'>predecessor</span><span class='op'>|</span>
-      <span class='id identifier rubyid_ops'>ops</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_predecessor'>predecessor</span><span class='period'>.</span><span class='id identifier rubyid_operation'>operation</span> <span class='kw'>if</span> <span class='id identifier rubyid_predecessor'>predecessor</span><span class='period'>.</span><span class='id identifier rubyid_operation'>operation</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_predecessor'>predecessor</span><span class='period'>.</span><span class='id identifier rubyid_operation'>operation</span><span class='period'>.</span><span class='id identifier rubyid_status'>status</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>primed</span><span class='tstring_end'>&#39;</span></span>
+      <span class='id identifier rubyid_ops'>ops</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_predecessor'>predecessor</span><span class='period'>.</span><span class='id identifier rubyid_operation'>operation</span> <span class='kw'>if</span> <span class='id identifier rubyid_predecessor'>predecessor</span><span class='period'>.</span><span class='id identifier rubyid_operation'>operation</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_predecessor'>predecessor</span><span class='period'>.</span><span class='id identifier rubyid_operation'>operation</span><span class='period'>.</span><span class='id identifier rubyid_primed?'>primed?</span>
     <span class='kw'>end</span>
   <span class='kw'>end</span>
 
@@ -3904,9 +3904,9 @@ will use once launched.</p>
 </div>
 
       <div id="footer">
-  Generated on Wed Oct 30 20:03:17 2019 by
+  Generated on Wed Dec 18 10:27:15 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.20 (ruby-2.6.4).
+  0.9.20 (ruby-2.6.5).
 </div>
 
     </div>

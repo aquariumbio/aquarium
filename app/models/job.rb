@@ -280,9 +280,9 @@ class Job < ActiveRecord::Base
   def error?
     if krill?
       begin
-        return done? && backtrace.last[:operation] != 'complete'
+        done? && backtrace.last[:operation] != 'complete'
       rescue StandardError
-        return true
+        true
       end
     elsif plankton?
       entries = logs.reject { |l| l.entry_type != 'CANCEL' && l.entry_type != 'ERROR' && l.entry_type != 'ABORT' }
