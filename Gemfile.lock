@@ -8,10 +8,10 @@ GIT
 
 GIT
   remote: https://github.com/klavinslab/aquadoc
-  revision: ab2e5d72b2daf20b318bdc96ccc071fc17aec56b
+  revision: 0d59c7fc78834e2a887d2c367254813df3922de1
   specs:
-    aquadoc (1.0.0)
-      octokit (= 4.13.0)
+    aquadoc (1.0.1)
+      octokit (= 4.14.0)
       yard (= 0.9.20)
 
 GEM
@@ -60,10 +60,10 @@ GEM
     arel (6.0.4)
     ast (2.4.0)
     aws-eventstream (1.0.3)
-    aws-partitions (1.252.0)
+    aws-partitions (1.256.0)
     aws-sdk (1.67.0)
       aws-sdk-v1 (= 1.67.0)
-    aws-sdk-core (3.85.0)
+    aws-sdk-core (3.86.0)
       aws-eventstream (~> 1.0, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
@@ -71,7 +71,7 @@ GEM
     aws-sdk-kms (1.27.0)
       aws-sdk-core (~> 3, >= 3.71.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.59.0)
+    aws-sdk-s3 (1.59.1)
       aws-sdk-core (~> 3, >= 3.83.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.1)
@@ -84,7 +84,7 @@ GEM
     aws-sigv4 (1.1.0)
       aws-eventstream (~> 1.0, >= 1.0.2)
     bcrypt (3.1.13)
-    builder (3.2.3)
+    builder (3.2.4)
     climate_control (0.2.0)
     closure-compiler (1.1.14)
     concurrent-ruby (1.1.5)
@@ -127,7 +127,7 @@ GEM
     nio4r (2.5.2)
     nokogiri (1.10.7)
       mini_portile2 (~> 2.4.0)
-    octokit (4.13.0)
+    octokit (4.14.0)
       sawyer (~> 0.8.0, >= 0.5.3)
     oj (3.10.0)
     paperclip (6.1.0)
@@ -227,7 +227,7 @@ GEM
     sqlite3 (1.4.1)
     terrapin (0.6.0)
       climate_control (>= 0.0.3, < 1.0)
-    thor (0.20.3)
+    thor (1.0.1)
     thread_safe (0.3.6)
     tilt (2.0.10)
     tzinfo (1.2.5)
