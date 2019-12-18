@@ -1,3 +1,33 @@
+docker-deployment branch
+
+This release makes Docker configuration the default.
+It should no longer be necessary for non-developers to clone this repository,
+and instead users should be using the Docker image available on Docker hub from 
+BLAH-LINK:
+- For production deployment, see the deployment instructions at aquarium.bio.
+- For a local deployment, clone the https://github.com/klavinslab/aquarium-local
+repository.
+
+Changes:
+- Rewrite entrypoint script so that provides more capabilities for configuring
+  Aquarium.
+- Change creation interface for users and groups to make it easier to script
+  adding users.
+- Parameterize database and application configuration with environment variables.
+- Change puma configuration so that database.yml can contain ERB.
+- Flip docker-compose files so that development mode is the default.
+- Change Dockerfile to use a multi-stage build with a development stage,
+  a production-build stage, and the stage for the production image.
+- Make changes so that asset precompilation can occur in Docker production-build.
+  Includes removing unnecessary monkey patches, and parameterizing database.yml
+  file.
+- Consolidated deployment configuration with previous docker configuration, and
+  parameterized configuration using environment variables and a YAML file for 
+  instance details. Change S3 configuration to use either S3 or minio based on
+  environment variables.
+- Starting Aquarium in production using Docker will print the license.
+
+
 v2.7.2
 - Fixes bug in recent changes to sample search where results were filtered
   instead of accumulated and inventory would not be displayed.
