@@ -3,8 +3,8 @@ v2.7.2
   instead of accumulated and inventory would not be displayed.
 - Fixes default date for invoices to use current date.
 - Fixes error in json queries where includes were not handled correctly.
-- Fix bug in import where parameters were not being imported properly.
-- Fix error that occurred when browser looked for /favicon.ico 
+- Fixes bug in import where parameters were not being imported properly.
+- Fixes error that occurred when browser looked for /favicon.ico 
 - Makes invoice output easier to read by including names and reordering columns.
 - Improves krill error output.
 
