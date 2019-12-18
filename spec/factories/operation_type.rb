@@ -10,6 +10,7 @@ FactoryBot.define do
       user {}
       inputs { [] }
       outputs { [] }
+      parameters { [] }
     end
 
     sequence(:name) { |n| "operation_type_#{n}" }
@@ -31,6 +32,13 @@ FactoryBot.define do
             input[:object_type],
             array: input[:array] || false,
             part: input[:part] || false
+          )
+        end
+        evaluator.parameters.each do |parameter|
+          operation_type.add_parameter(
+            name: parameter[:name],
+            type: parameter[:type],
+            choices: parameter[:choices]
           )
         end
         evaluator.outputs.each do |output|
