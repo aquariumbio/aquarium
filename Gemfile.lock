@@ -8,10 +8,11 @@ GIT
 
 GIT
   remote: https://github.com/klavinslab/aquadoc
-  revision: 0d59c7fc78834e2a887d2c367254813df3922de1
+  revision: ffb6e1d3ed23a52dc2aef99b150c4b713fb28636
+  tag: v1.0.2
   specs:
-    aquadoc (1.0.1)
-      octokit (= 4.14.0)
+    aquadoc (1.0.2)
+      octokit (= 4.15.0)
       yard (= 0.9.20)
 
 GEM
@@ -127,7 +128,8 @@ GEM
     nio4r (2.5.2)
     nokogiri (1.10.7)
       mini_portile2 (~> 2.4.0)
-    octokit (4.14.0)
+    octokit (4.15.0)
+      faraday (>= 0.9)
       sawyer (~> 0.8.0, >= 0.5.3)
     oj (3.10.0)
     paperclip (6.1.0)
