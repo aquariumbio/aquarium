@@ -138,15 +138,15 @@ class BrowserController < ApplicationController
 
   def items
     sample = Sample.find(params[:id])
-    item_list = Item.includes(:locator).includes(:object_type).where(sample_id: params[:id])
-    containers = ObjectType.where(sample_type_id: sample.sample_type_id).where.not(name: '__Part')
+    item_list = Item.with_sample(sample: sample)
+    containers = ObjectType.container_types(sample_type: sample.sample_type)
     render json: { items: item_list.as_json(include: [:locator, :object_type]),
                    containers: containers.as_json(only: %i[name id]) }
   end
 
   def collections
-    s = Sample.find(params[:sample_id])
-    collections = Collection.containing(s)
+    sample = Sample.find(params[:sample_id])
+    collections = Collection.containing(sample)
     containers = collections.collect(&:object_type).uniq
     render json: { collections: collections.as_json(include: :object_type, methods: :matrix),
                    containers: containers.as_json(only: %i[name id]) }
