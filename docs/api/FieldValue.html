@@ -1999,19 +1999,19 @@ definition</p>
 
   <span class='kw'>case</span> <span class='id identifier rubyid_ft'>ft</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span>
   <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>string</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>url</span><span class='tstring_end'>&#39;</span></span>
-    <span class='kw'>return</span> <span class='id identifier rubyid_value'>value</span>
+    <span class='id identifier rubyid_value'>value</span>
   <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>json</span><span class='tstring_end'>&#39;</span></span>
     <span class='kw'>begin</span>
-      <span class='kw'>return</span> <span class='const'>JSON</span><span class='period'>.</span><span class='id identifier rubyid_parse'>parse</span> <span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='label'>symbolize_names:</span> <span class='kw'>true</span>
+      <span class='const'>JSON</span><span class='period'>.</span><span class='id identifier rubyid_parse'>parse</span> <span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='label'>symbolize_names:</span> <span class='kw'>true</span>
     <span class='kw'>rescue</span> <span class='const'>JSON</span><span class='op'>::</span><span class='const'>ParserError</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
-      <span class='kw'>return</span> <span class='lbrace'>{</span> <span class='label'>error:</span> <span class='id identifier rubyid_e'>e</span><span class='comma'>,</span> <span class='label'>original_value:</span> <span class='id identifier rubyid_value'>value</span> <span class='rbrace'>}</span>
+      <span class='lbrace'>{</span> <span class='label'>error:</span> <span class='id identifier rubyid_e'>e</span><span class='comma'>,</span> <span class='label'>original_value:</span> <span class='id identifier rubyid_value'>value</span> <span class='rbrace'>}</span>
     <span class='kw'>end</span>
   <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>number</span><span class='tstring_end'>&#39;</span></span>
-    <span class='kw'>return</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span>
+    <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span>
   <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sample</span><span class='tstring_end'>&#39;</span></span>
-    <span class='kw'>return</span> <span class='id identifier rubyid_child_sample'>child_sample</span>
+    <span class='id identifier rubyid_child_sample'>child_sample</span>
   <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>item</span><span class='tstring_end'>&#39;</span></span>
-    <span class='kw'>return</span> <span class='id identifier rubyid_child_item'>child_item</span>
+    <span class='id identifier rubyid_child_item'>child_item</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -2024,9 +2024,9 @@ definition</p>
 </div>
 
       <div id="footer">
-  Generated on Wed Oct 30 20:03:19 2019 by
+  Generated on Wed Dec 18 10:27:16 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.20 (ruby-2.6.4).
+  0.9.20 (ruby-2.6.5).
 </div>
 
     </div>
