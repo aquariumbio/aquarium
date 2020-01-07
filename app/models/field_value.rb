@@ -99,19 +99,19 @@ class FieldValue < ApplicationRecord
 
     case ft.type
     when 'string', 'url'
-      return value
+      value
     when 'json'
       begin
-        return JSON.parse value, symbolize_names: true
+        JSON.parse value, symbolize_names: true
       rescue JSON::ParserError => e
-        return { error: e, original_value: value }
+        { error: e, original_value: value }
       end
     when 'number'
-      return value.to_f
+      value.to_f
     when 'sample'
-      return child_sample
+      child_sample
     when 'item'
-      return child_item
+      child_item
     end
   end
 
