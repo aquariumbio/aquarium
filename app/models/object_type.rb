@@ -210,4 +210,13 @@ class ObjectType < ActiveRecord::Base
     end
   end
 
+  # scopes for searching ObjectTypes
+  def self.container_types(sample_type:)
+    where(sample_type_id: sample_type.id).where.not(name: '__Part')
+  end
+
+  def self.part_type
+    find_by(name: '__Part')
+  end
+
 end

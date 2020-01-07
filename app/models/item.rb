@@ -62,7 +62,7 @@ class Item < ActiveRecord::Base
 
   # @private
   def part_type
-    @@part_type ||= ObjectType.find_by(name: '__Part')
+    @@part_type ||= ObjectType.part_type
   end
 
   # Returns true if the item is a part of a collection
@@ -364,6 +364,12 @@ class Item < ActiveRecord::Base
       append_notes "\n#{Date.today}: Attempt to upgrade failed. Item already had associations."
     end
   end
+
+  # scopes for searching Items
+  def self.with_sample(sample:)
+    includes(:locator).includes(:object_type).where(sample_id: sample.id)
+  end
+
 
   ###########################################################################
   # OLD
