@@ -428,6 +428,13 @@
         );
       };
 
+      $scope.get_all_inventory = function(sample) {
+        sample.get_inventory(function() {
+          sample.loading_inventory = false;
+          $scope.views.search.item_id = null
+        });
+      }
+
       // remove_duplicate function removes duplicates in the list
       function remove_duplicate(list, prop) {
         return list.filter((obj, pos, arr) => {
