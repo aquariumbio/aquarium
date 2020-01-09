@@ -365,6 +365,7 @@
                 // TODO: filter correctly for containing collection
                 sample.items = items
               } else {
+                sample.show_deleted = items[0].is_deleted
                 sample.items = items
                 sample.collections = []
               }
