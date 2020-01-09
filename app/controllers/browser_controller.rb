@@ -158,6 +158,7 @@ class BrowserController < ApplicationController
 
     puts 'SAMPLE COUNT: ' + samples.length.to_s
     if params[:item_id].present?
+      sample_list = Sample.none
       item = Item.find_by(id: params[:item_id].to_i)
       if item
         sample_id_list = if item.collection?
@@ -166,12 +167,12 @@ class BrowserController < ApplicationController
                          else
                            [item.sample_id]
                          end
-        sample_list = Sample.none
+
         sample_id_list.uniq.each do |sample_id|
           sample_list = sample_list.or(samples.where(id: sample_id))
         end
-        samples = sample_list
       end
+      samples = sample_list
     end
 
     puts 'SAMPLE COUNT: ' + samples.length.to_s
