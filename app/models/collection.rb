@@ -315,7 +315,7 @@ class Collection < Item
 
   # @private
   def part_type
-    @part_type ||= ObjectType.find_by(name: '__Part')
+    @part_type ||= ObjectType.part_type
   end
 
   # Returns first Array element from #find
