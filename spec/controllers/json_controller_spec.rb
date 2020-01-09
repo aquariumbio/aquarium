@@ -2,6 +2,8 @@
 
 require 'rails_helper'
 
+# see spec/models/json_query_result_spec.rb
+
 # TODO: write tests for all of the following:
 # all:
 #   /json, {model: model_name, method: 'all', arguments: [], options: {offset: -1, limit: -1, reverse: false} }
