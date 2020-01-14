@@ -25,6 +25,7 @@ services:
       DB_PASSWORD: aSecretAquarium
       S3_ACCESS_KEY_ID: aquarium_minio
       S3_SECRET_ACCESS_KEY: KUNAzqrNifmM6GwNVZ8IP7dxZAkYjhnwc0bfdz0W
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
       TZ: America/Los_Angeles
     volumes:
       - ./db:/aquarium/db
