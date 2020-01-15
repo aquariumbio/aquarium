@@ -85,12 +85,16 @@ RUN apk add --update --no-cache \
     mariadb-dev \
     mysql-client \
     tzdata \
- && mkdir /aquarium
+ # make app directory
+ && mkdir /aquarium \
+ # make sure that using the same version of rubygems
+ && gem update --system
 
 WORKDIR /aquarium
 
 # pull gems from builder stage
 COPY --from=aquarium-builder /usr/local/bundle/ /usr/local/bundle/
+# set paths because gems are in a different place
 ENV GEM_HOME="/usr/local/bundle"
 ENV PATH $GEM_HOME/bin:$GEM_HOME/gems/bin:$PATH
 
