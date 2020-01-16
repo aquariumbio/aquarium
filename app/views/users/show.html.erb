@@ -29,9 +29,9 @@
   <% if current_user.id == @user.id %>
 
     <p class="md-body-2 not-up-to-date"
-       ng-if="!user.params.email.value || !user.params.phone.value || user.params.biofab.value != 'true' || 
+       ng-if="!user.params.email.value || !user.params.phone.value || user.params.lab_agreement.value != 'true' || 
                user.params.aquarium.value != 'true' && !user.changed">
-      Please save your email and phone number and agree to the BIOFAB and Aquarium user agreements.
+      Please save your email and phone number and agree to the lab and Aquarium user agreements.
     </p>  
 
   <% end %>  
@@ -43,7 +43,7 @@
                     ng-class="view == status.view ? 'md-body-2 selected-view' : 'md-body-2'">
         <p>{{view}}</p>
         <span ng-if="view == 'Information' &&  ( !user.params.email.value || !user.params.phone.value )" class="notice-me">!</span>
-        <span ng-if="view == 'BIOFAB Agreement' && user.params.biofab.value != 'true'" class="notice-me">!</span>
+        <span ng-if="view == 'Lab Agreement' && user.params.lab_agreement.value != 'true'" class="notice-me">!</span>
         <span ng-if="view == 'Aquarium Agreement' && user.params.aquarium.value != 'true'" class="notice-me">!</span>
       </md-list-item>
     </md-list>
@@ -224,20 +224,20 @@
 
     </md-content>
 
-    <md-content flex layout-fill layout-padding ng-if="status.view == 'BIOFAB Agreement'" class='md-white'>    
-      <%= render partial: 'biofab_agreement' %>
+    <md-content flex layout-fill layout-padding ng-if="status.view == 'Lab Agreement'" class='md-white'>    
+      <%= render partial: 'lab_agreement' %>
       <hr>
       <% if current_user.id == @user.id %>      
         <md-button class='md-raised md-primary' 
-                   ng-click="agree('biofab')"
-                   ng-if="!user.params.biofab.value || user.params.biofab.value == 'false'">Agree</md-button>
+                   ng-click="agree('lab_agreement')"
+                   ng-if="!user.params.lab_agreement.value || user.params.lab_agreement.value == 'false'">Agree</md-button>
       <% else %>
       <p class='md-title'
-         ng-if="user.params.biofab.value != 'true'">This user has not agreed to this document.</p>
+         ng-if="user.params.lab_agreement.value != 'true'">This user has not agreed to this document.</p>
       <% end %>
       <p class='md-title'
-         ng-if="user.params.biofab.value == 'true'">
-         {{user.name}} agreed on {{user.params.biofab.updated_at|date}}.</p>
+         ng-if="user.params.lab_agreement.value == 'true'">
+         {{user.name}} agreed on {{user.params.lab_agreement.updated_at|date}}.</p>
     </md-content>
 
     <md-content flex layout-fill layout-padding ng-if="status.view == 'Aquarium Agreement'" class='md-white'>    

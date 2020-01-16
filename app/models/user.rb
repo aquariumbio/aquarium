@@ -102,10 +102,10 @@ class User < ActiveRecord::Base
     email  = parameters.find { |p| p.key == 'email' && p.value && !p.value.empty? }
     phone  = parameters.find { |p| p.key == 'phone' && p.value && !p.value.empty? }
     # TODO: remove lab name specific variables and parameter
-    biofab = parameters.find { |p| p.key == 'biofab' && p.value && p.value == 'true' }
+    lab = parameters.find { |p| p.key == 'lab_agreement' && p.value && p.value == 'true' }
     aq     = parameters.find { |p| p.key == 'aquarium' && p.value && p.value == 'true' }
 
-    !email.nil? && !phone.nil? && !biofab.nil? && !aq.nil?
+    !email.nil? && !phone.nil? && !lab.nil? && !aq.nil?
 
   end
 
