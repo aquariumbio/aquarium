@@ -66,19 +66,19 @@
 
   <div layout-padding>
 
-    <table class="table">
-       <tr>
-        <th>Username</th>
+    <%= alphabetical_paginate @alphaParams %>
+        
+    <table class="table" id="pagination_table">
+      <tr>
         <th>Full Name</th>
+        <th>Username</th>
         <th>Since</th>
         <th>Status</th>
         <th></th>
-       </tr>
-       <%= render @users %>
+      </tr>
+      <%= render @Users %>
     </table>
-
-    <%= will_paginate @users, previous_label: 'Previous', next_label: 'Next' %>
-
+    
   </div>
 
 <% end %>
