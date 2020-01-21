@@ -56,3 +56,11 @@ Bioturk::Application.config.angular_rails_csrf_options = {
 }
 
 
+begin
+  user_agreement = Bioturk::Application.config_for(:user_agreement).symbolize_keys
+  Bioturk::Application.config.user_agreement = UserAgreement.create_from(user_agreement)
+
+rescue StandardError => e
+  logger.info("Failed to read user_agreement.yml #{e}")
+  Bioturk::Application.config.user_agreement = nil
+end

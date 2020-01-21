@@ -1,0 +1,12 @@
+default: &default
+  title: End User Agreement
+  updated: 21 January 2020
+  clauses:
+    - title: No User Agreement
+      text: This instance of Aquarium has no user agreement. If you manage this instance, you may want to add one.
+
+production:
+  <<: *default 
+
+development:
+  <<: *default

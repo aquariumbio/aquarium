@@ -25,8 +25,9 @@ class UsersController < ApplicationController
       return
     end
 
-    render layout: 'aq2'
+    @lab_agreement = Bioturk::Application.config.user_agreement
 
+    render layout: 'aq2'
   end
 
   def create
@@ -37,7 +38,7 @@ class UsersController < ApplicationController
 
         if @user.save
           @group = @user.create_user_group
-          flash[:success] = "#{params[:user][:name]} has been assimilated."
+          flash[:success] = "#{params[:user][:name]} has been added."
           redirect_to @user
       else
         render 'new'
