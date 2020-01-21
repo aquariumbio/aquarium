@@ -30,6 +30,7 @@ services:
     volumes:
       - ./db:/aquarium/db
       - ./log:/aquarium/log
+      - ./biofab-eula.yml:/aquarium/config/user_agreement.yml
     networks:
       - aquarium_net
     expose:
