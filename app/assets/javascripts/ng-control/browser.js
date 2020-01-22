@@ -491,6 +491,7 @@
                 // TODO: filter correctly for containing collection
                 sample.items = items
               } else {
+                sample.show_deleted = items[0].is_deleted
                 sample.items = items
                 sample.collections = []
               }
@@ -553,6 +554,13 @@
           }
         );
       };
+
+      $scope.get_all_inventory = function(sample) {
+        sample.get_inventory(function() {
+          sample.loading_inventory = false;
+          $scope.views.search.item_id = null
+        });
+      }
 
       // remove_duplicate function removes duplicates in the list
       function remove_duplicate(list, prop) {

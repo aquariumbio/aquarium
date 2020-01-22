@@ -63,16 +63,19 @@ module FieldValuePlanner
 
             if collections.empty?
               puts '  ... found nothing'
-              return false
+
+              false
             else
               puts "  ... found collection #{collections[0].id} at #{collections[0].location} with matrix #{collections[0].matrix}"
               self.child_item_id = collections[0].id
               save
-              return true
+
+              true
             end
           else
             puts 'already has an item specified'
-            return true
+
+            true
           end
 
         else
@@ -94,21 +97,14 @@ module FieldValuePlanner
             puts 'not found'
             false
           end
-
         end
 
       else # No object type specified
-
         false
-
       end
-
     else # Not a sample
-
       false
-
     end
-
   end
 
   def satisfies(fv)

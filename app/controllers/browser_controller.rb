@@ -138,15 +138,15 @@ class BrowserController < ApplicationController
 
   def items
     sample = Sample.find(params[:id])
-    item_list = Item.includes(:locator).includes(:object_type).where(sample_id: params[:id])
-    containers = ObjectType.where(sample_type_id: sample.sample_type_id).where.not(name: '__Part')
+    item_list = Item.with_sample(sample: sample)
+    containers = ObjectType.container_types(sample_type: sample.sample_type)
     render json: { items: item_list.as_json(include: [:locator, :object_type]),
                    containers: containers.as_json(only: %i[name id]) }
   end
 
   def collections
-    s = Sample.find(params[:sample_id])
-    collections = Collection.containing(s)
+    sample = Sample.find(params[:sample_id])
+    collections = Collection.containing(sample)
     containers = collections.collect(&:object_type).uniq
     render json: { collections: collections.as_json(include: :object_type, methods: :matrix),
                    containers: containers.as_json(only: %i[name id]) }
@@ -158,6 +158,7 @@ class BrowserController < ApplicationController
 
     puts 'SAMPLE COUNT: ' + samples.length.to_s
     if params[:item_id].present?
+      sample_list = Sample.none
       item = Item.find_by(id: params[:item_id].to_i)
       if item
         sample_id_list = if item.collection?
@@ -166,12 +167,12 @@ class BrowserController < ApplicationController
                          else
                            [item.sample_id]
                          end
-        sample_list = Sample.none
+
         sample_id_list.uniq.each do |sample_id|
           sample_list = sample_list.or(samples.where(id: sample_id))
         end
-        samples = sample_list
       end
+      samples = sample_list
     end
 
     puts 'SAMPLE COUNT: ' + samples.length.to_s

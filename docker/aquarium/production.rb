@@ -30,6 +30,9 @@ Bioturk::Application.configure do
   # Generate digests for assets URLs
   config.assets.digest = true
 
+  # Specifies the header that your server uses for sending files
+  config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
+
   # See everything in the log (default is :info)
   config.log_level = :error
 
