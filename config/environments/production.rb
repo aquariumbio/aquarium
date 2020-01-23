@@ -55,13 +55,13 @@ Bioturk::Application.configure do
                               {
                                 # TODO: change usage of AWS environment variables to instead use S3_
                                 storage: :s3,
-                                s3_host_name: "s3-#{ENV['AWS_REGION']}.amazonaws.com",
+                                s3_host_name: "s3-#{ENV['S3_REGION']}.amazonaws.com",
                                 s3_permissions: :private,
                                 s3_credentials: {
                                   bucket: ENV['S3_BUCKET_NAME'],
-                                  access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-                                  secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
-                                  s3_region: ENV['AWS_REGION']
+                                  access_key_id: ENV['S3_ACCESS_KEY_ID'],
+                                  secret_access_key: ENV['S3_SECRET_ACCESS_KEY'],
+                                  s3_region: ENV['S3_REGION']
                                 }
                               }
                             else
@@ -78,7 +78,7 @@ Bioturk::Application.configure do
                                 },
                                 s3_host_name: s3_host,
                                 s3_options: {
-                                  endpoint: "http://#{s3_host}" , # for aws-sdk
+                                  endpoint: "http://#{s3_host}", # for aws-sdk
                                   force_path_style: true # for aws-sdk (required for minio)
                                 }
                               }
