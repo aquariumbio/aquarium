@@ -33,6 +33,7 @@ gem 'github-markup'
 gem 'redcarpet'
 gem 'sassc-rails'
 gem 'will_paginate'
+gem 'alphabetical_paginate'
 
 # For uploads and cloud storage
 gem 'aws-sdk', '< 2.0'
