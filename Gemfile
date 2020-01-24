@@ -33,7 +33,6 @@ gem 'github-markup'
 gem 'redcarpet'
 gem 'sassc-rails'
 gem 'will_paginate'
-gem 'alphabetical_paginate'
 
 # For uploads and cloud storage
 gem 'aws-sdk', '< 2.0'
@@ -77,4 +76,4 @@ end
 
 # Klavins lab gems
 gem 'anemone', git: 'https://github.com/klavinslab/anemone', tag: 'v1.0.1'
-gem 'aquadoc', git: 'https://github.com/klavinslab/aquadoc'
+gem 'aquadoc', git: 'https://github.com/klavinslab/aquadoc', tag: 'v1.0.2'
