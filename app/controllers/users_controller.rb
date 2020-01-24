@@ -136,10 +136,7 @@ class UsersController < ApplicationController
         retired = Group.find_by(name: 'retired')
         rid = retired ? retired.id : -1
 
-        @users = User.includes(memberships: :group)
-                     .reject { |u| u.member? rid }
-                     .sort { |a, b| a[:login] <=> b[:login] }
-                     .paginate(page: params[:page], per_page: 15)
+        @users, @alphaParams = User.all.alpha_paginate(params[:letter], {db_mode: true, db_field: "name"})
 
         render layout: 'aq2'
 

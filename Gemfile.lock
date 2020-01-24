@@ -58,6 +58,7 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
+    alphabetical_paginate (2.3.4)
     angular_rails_csrf (2.1.1)
       railties (>= 3, < 5.2)
     arel (6.0.4)
@@ -253,6 +254,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-import
   activerecord-nulldb-adapter
+  alphabetical_paginate
   anemone!
   angular_rails_csrf (= 2.1.1)
   aquadoc!

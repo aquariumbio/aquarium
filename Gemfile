@@ -8,6 +8,8 @@ gem 'activerecord-import'
 # Used to fake db during asset compilation in Dockerfile
 gem 'activerecord-nulldb-adapter'
 
+gem 'alphabetical_paginate'
+
 # Authentication and cross origin
 gem 'angular_rails_csrf', '2.1.1'
 
