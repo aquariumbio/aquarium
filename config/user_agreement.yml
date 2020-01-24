@@ -1,12 +1,13 @@
-default: &default
-  title: End User Agreement
-  updated: 21 January 2020
-  clauses:
-    - title: No User Agreement
-      text: This instance of Aquarium has no user agreement. If you manage this instance, you may want to add one.
-
-production:
-  <<: *default 
-
-development:
-  <<: *default
+title: End User Agreement
+updated: 21 January 2020
+clauses:
+  - title: No User Agreement
+    text: This instance of Aquarium has no user agreement. If you manage this instance, you may want to add one.
+  - title: Agreement file format
+    text: |
+      A user agreement is given as a YAML file with values for 'title' and 'updated' and a list 'clauses'.
+      The first two values are strings, and the value for updated is the date.
+      Each clause has a 'title' and 'text' both of which are strings.
+      The title of each clause should be preceded by a hyphen ('-').
+  - title: Find out more
+    title: More detail on configuration can be found at the site aquarium.bio.

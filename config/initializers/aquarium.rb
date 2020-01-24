@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'yaml'
+
 #
 # Installation specific stuff here
 #
@@ -57,10 +59,16 @@ Bioturk::Application.config.angular_rails_csrf_options = {
 
 
 begin
-  user_agreement = Bioturk::Application.config_for(:user_agreement).symbolize_keys
+  # Load the lab user agreement file 'config/user_agreement.yml'.
+  # A default file should exist, but it is expected that Docker magic will be
+  # used to mount the actual file over top of the default.
+  #
+  # NOTE: the web says that using using this code to load a YAML dump will fail
+  #       because the serialization adds a class type tag to the beginning of
+  #       the file.
+  user_agreement = YAML.load_file('config/user_agreement.yml').symbolize_keys
   Bioturk::Application.config.user_agreement = UserAgreement.create_from(user_agreement)
-
 rescue StandardError => e
-  logger.info("Failed to read user_agreement.yml #{e}")
+  puts("Failed to read user_agreement.yml #{e}")
   Bioturk::Application.config.user_agreement = nil
 end
