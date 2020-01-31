@@ -8,11 +8,16 @@ class GroupsController < ApplicationController
   # GET /groups
   # GET /groups.json
   def index
-    @groups = Group.all
-
     respond_to do |format|
-      format.html { render layout: 'aq2' } # index.html.erb
-      format.json { render json: @groups }
+
+      format.html do
+
+        @groups, @alphaParams = Group.all.alpha_paginate(params[:letter], {db_mode: true, db_field: "name"})
+        render layout: 'aq2' 
+
+      end
+      format.json { render json: G }
+
     end
   end
 
