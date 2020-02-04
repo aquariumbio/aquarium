@@ -119,6 +119,33 @@ AQ.Item.record_methods.mark_as_deleted = function() {
 
 AQ.Collection.record_methods.mark_as_deleted = AQ.Item.record_methods.mark_as_deleted;
 
+AQ.Item.record_methods.request_delete = function() {
+
+  var item = this;
+
+  var da = AQ.DataAssociation.record({
+    unsaved: true,
+    key: "delete_requested",
+    value:"This item is marked for discard and will not be used in operations." ,
+    new_value: "This item is marked for discard and will not be used in operations.",
+    parent_class: item.model.model,
+    parent_id: item.id
+  });
+
+  if ( typeof item.data_associations === "object" ) {
+    item.data_associations.push(da);
+  }
+
+  var temp = {},
+  old_object = da.object;
+  temp[da.key] = da.new_value;
+  da.object = JSON.stringify(temp);
+  da.new_value = "This item is marked for discard and will not be used in operations."
+  da.save()
+    .then(() => { da.value = da.new_value, AQ.update() })
+    .catch(() => { da.object = old_object; })
+}
+
 AQ.Item.record_methods.get_history = function() {
 
   var item = this;
