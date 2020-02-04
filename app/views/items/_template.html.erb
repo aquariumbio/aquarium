@@ -134,6 +134,10 @@
                               ng-attr-data-item-id="{{item.id}}"></ng-md-icon>
                 </a>
               <% end %>
+
+              <a href="#" ng-click="item.approve_sequencing()" ng-if="item.has_sequencing" class="no-highlight" style="position: relative; top: -5px">
+                <md-icon md-svg-src='/assets/seq_ok.svg' aria-label="Approve sequencing" size="22" style="width: 45px; height: 20px"></md-icon>  
+              </a>
             </div>
           </div>
 
