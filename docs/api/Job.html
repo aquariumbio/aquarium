@@ -1922,9 +1922,9 @@ Defers an operation if it has a primed predecessor.</p>
 <span class='kw'>def</span> <span class='id identifier rubyid_error?'>error?</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_krill?'>krill?</span>
     <span class='kw'>begin</span>
-      <span class='kw'>return</span> <span class='id identifier rubyid_done?'>done?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_backtrace'>backtrace</span><span class='period'>.</span><span class='id identifier rubyid_last'>last</span><span class='lbracket'>[</span><span class='symbol'>:operation</span><span class='rbracket'>]</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>complete</span><span class='tstring_end'>&#39;</span></span>
+      <span class='id identifier rubyid_done?'>done?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_backtrace'>backtrace</span><span class='period'>.</span><span class='id identifier rubyid_last'>last</span><span class='lbracket'>[</span><span class='symbol'>:operation</span><span class='rbracket'>]</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>complete</span><span class='tstring_end'>&#39;</span></span>
     <span class='kw'>rescue</span> <span class='const'>StandardError</span>
-      <span class='kw'>return</span> <span class='kw'>true</span>
+      <span class='kw'>true</span>
     <span class='kw'>end</span>
   <span class='kw'>elsif</span> <span class='id identifier rubyid_plankton?'>plankton?</span>
     <span class='id identifier rubyid_entries'>entries</span> <span class='op'>=</span> <span class='id identifier rubyid_logs'>logs</span><span class='period'>.</span><span class='id identifier rubyid_reject'>reject</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_l'>l</span><span class='op'>|</span> <span class='id identifier rubyid_l'>l</span><span class='period'>.</span><span class='id identifier rubyid_entry_type'>entry_type</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>CANCEL</span><span class='tstring_end'>&#39;</span></span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_l'>l</span><span class='period'>.</span><span class='id identifier rubyid_entry_type'>entry_type</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>ERROR</span><span class='tstring_end'>&#39;</span></span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_l'>l</span><span class='period'>.</span><span class='id identifier rubyid_entry_type'>entry_type</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>ABORT</span><span class='tstring_end'>&#39;</span></span> <span class='rbrace'>}</span>
@@ -3012,9 +3012,9 @@ TODO: seems like this should be a delegate, but not clear if can do it</p>
 </div>
 
       <div id="footer">
-  Generated on Wed Oct 30 20:03:16 2019 by
+  Generated on Wed Dec 18 10:27:14 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.20 (ruby-2.6.4).
+  0.9.20 (ruby-2.6.5).
 </div>
 
     </div>

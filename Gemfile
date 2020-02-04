@@ -18,7 +18,7 @@ gem 'rails-patch-json-encode'
 
 # Authentication and cross origin
 gem 'angular_rails_csrf', '2.1.1'
-gem 'rack-cors', require: 'rack/cors'
+gem 'rack-cors', '~> 1.0.5', require: 'rack/cors'
 
 # Style enforcer and linter
 gem 'rubocop'
@@ -33,6 +33,7 @@ gem 'github-markup'
 gem 'redcarpet'
 gem 'sassc-rails'
 gem 'will_paginate'
+gem 'alphabetical_paginate'
 
 # For uploads and cloud storage
 gem 'aws-sdk', '< 2.0'
@@ -48,9 +49,12 @@ gem 'activerecord-import'
 # Factories for testing of aquarium and protocols
 gem 'factory_bot_rails'
 
-# group :test do
-#    gem 'sqlite3'
-# end
+# allows rails 5 style where().or() queries
+gem 'where-or'
+
+group :test do
+  gem 'sqlite3'
+end
 
 group :development do
   gem 'rspec-rails'
@@ -72,8 +76,8 @@ group :assets do
 end
 
 # Klavins lab authored gems
-gem 'anemone', :git => 'https://github.com/klavinslab/anemone', tag: 'v1.0.1'
-gem 'aquadoc', :git => 'https://github.com/klavinslab/aquadoc'
+gem 'anemone', git: 'https://github.com/klavinslab/anemone', tag: 'v1.0.1'
+gem 'aquadoc', git: 'https://github.com/klavinslab/aquadoc', tag: 'v1.0.2'
 
 ###############
 # DAMP lab-specific gems:
@@ -81,3 +85,5 @@ gem 'aquadoc', :git => 'https://github.com/klavinslab/aquadoc'
 # These gems are not used in Aquarium but may be needed for protocols within
 # the DAMP lab.  Confirm that a gem is not used in a protocol before deleting it.
 gem 'google_drive'
+
+

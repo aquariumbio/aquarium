@@ -19,7 +19,7 @@ class Planner
       # set all leaves to pending
       @plan.operations.each do |op|
 
-        next unless op.status == 'planning'
+        next unless op.planning?
 
         op.status = if leaf? op
                       if op.operation_type.on_the_fly?

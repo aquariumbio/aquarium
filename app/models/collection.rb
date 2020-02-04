@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-# A subclass of {Item} that has associated parts via the {PartAssociation} model. Stripwells,
-# 96 well plates, and gels are examples. Note that you may in some cases be working with an item
-# that is also a {Collection}, which you can tell by checking that item.collection? In this case you
-# promote the item using the ruby method becomes.
+# A subclass of {Item} that has associated parts via the {PartAssociation} model.
+# Stripwells, 96 well plates, and gels are examples.
+# Note that you may in some cases be working with an item that is also a {Collection}, which you can tell by checking that item.collection? 
+# In this case you promote the item using the ruby method becomes.
 # @example Cast an item as a collection
 #   collection = item.becomes Collection
 # @api krill
@@ -17,6 +17,7 @@ class Collection < Item
   end
 
   # Remove all part data associations with the matching key
+  #
   # @param key [String]
   # @return [Collection] the collection, for chaining
   def drop_data_matrix(key)
@@ -26,6 +27,7 @@ class Collection < Item
   end
 
   # Create or assign data to parts according to the given key and matrix.
+  #
   # @param key [String]
   # @param matrix [Array] an array of arrays of either numbers or strings whose dimensions are either equal to or small than the collection's dimensions
   # @param offset [Array] the offset used to compute which sub-matrix of parts to which the data should be assigned
@@ -85,6 +87,7 @@ class Collection < Item
   end
 
   # Create or assign zeros to all part data associations for the given key
+  #
   # @param key [String]
   # @return [Array] the part matrix, with new data associations inserted if required
   def new_data_matrix(key)
@@ -102,6 +105,7 @@ class Collection < Item
   end
 
   # Create or assign data for the given key at the specific row and column
+  #
   # @param key [String]
   # @param r [Fixnum] the row
   # @param c [Fixnum] the column
@@ -123,6 +127,7 @@ class Collection < Item
   end
 
   # Retrieve data at the specified row and column for the given key
+  #
   # @param key [String]
   # @param r [Fixnum] the row
   # param c [Fixnum] the column
@@ -134,6 +139,7 @@ class Collection < Item
   end
 
   # Iterate over all rows and columns of the given matrix, adding the offset
+  #
   # @example Iterate over a sub-matrix
   #   collection.each_row_column([[1,2],[3,4]], offset: [1,1]) do |r,c,x,y|
   #     # r, c will be the row and column of the matrix argument
@@ -265,7 +271,7 @@ class Collection < Item
           duplicates: true
         )
       else
-        set r, c, sample
+        set(r, c, sample)
       end
     end
 
@@ -303,6 +309,7 @@ class Collection < Item
 
   # Return a list of collections containing the given sample, and optionally of the given object
   # type.
+  #
   # @param s [Sample]
   # @param ot [ObjectType]
   # @return [ActiveRecord::Relation]
@@ -315,7 +322,7 @@ class Collection < Item
 
   # @private
   def part_type
-    @part_type ||= ObjectType.find_by(name: '__Part')
+    @part_type ||= ObjectType.part_type
   end
 
   # Returns first Array element from #find
@@ -543,7 +550,7 @@ class Collection < Item
     end
     return nil if r.nil? || c.nil?
 
-    set r, c, x
+    set(r, c, x)
     [r, c, x]
   end
 
@@ -573,7 +580,7 @@ class Collection < Item
       r, c = sel.first
     end
     s = matrix[r][c]
-    set r, c, EMPTY
+    set(r, c, EMPTY)
     [r, c, s]
   end
 
@@ -633,7 +640,7 @@ class Collection < Item
         remaining << s
       else
         r, c = rc
-        set r, c, s
+        set(r, c, s)
       end
     end
     remaining

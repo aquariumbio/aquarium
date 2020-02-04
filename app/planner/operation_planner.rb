@@ -47,10 +47,10 @@ module OperationPlanner
 
         preds.each do |pred|
 
-          next if pred.status == 'primed' ||
-                  pred.status == 'done' ||
-                  pred.status == 'unplanned' ||
-                  pred.status == 'planning'
+          next if pred.primed? ||
+                  pred.done? ||
+                  pred.unplanned? ||
+                  pred.planning?
 
           @@ready_errors << "Operation #{id} is waiting for operation #{pred.id} which has status #{pred.status}"
           return false
@@ -95,12 +95,12 @@ module OperationPlanner
 
     recurse do |op|
       ready = op.ready?
-      if op.on_the_fly
-        # do nothing
-      elsif op.status == 'planning' && op.leaf? && !ready
+      next if op.on_the_fly
+
+      if op.planning? && op.leaf? && !ready
         issues << "Operation '#{op.operation_type.name}' is not ready " \
                   "(on_the_fly = #{op.on_the_fly}, ready = #{ready}, leaf=#{op.leaf?}, status=#{op.status})."
-      elsif op.status == 'planning' && op.undetermined_inputs?
+      elsif op.planning? && op.undetermined_inputs?
         issues << "Operation '#{op.operation_type.name}' has unspecified inputs."
       elsif op.no_possible_input?
         issues << "No way to make at least one input of operation '#{op.operation_type.name}'."
@@ -115,7 +115,7 @@ module OperationPlanner
 
     op = self
 
-    if op.status == 'planning'
+    if op.planning?
       print "#{space}\e[95m#{op.operation_type.name} #{op.id}, status: #{op.status}\e[39m"
     else
       print "#{space}\e[90m#{op.operation_type.name} #{op.id}, status: #{op.status}\e[39m"
@@ -176,14 +176,14 @@ module OperationPlanner
           sat = i.satisfied_by_environment
           preds = i.predecessors
           os = override_status if override_status
-          os = status if !override_status && status == 'unplanned'
+          os = status if !override_status && unplanned?
           problem ||= (!sat && preds.empty?)
 
           input_list << {
             name: i.name,
             satisfied: sat,
             issue: !sat && preds.empty?,
-            predecessors: preds.reject { |p| p.operation.status == 'unplanned' }.collect do |p|
+            predecessors: preds.reject { |p| p.operation.unplanned? }.collect do |p|
               {
                 id: p.id,
                 name: p.name,
