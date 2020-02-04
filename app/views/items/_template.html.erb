@@ -41,6 +41,10 @@
                data-item-popup-action="close"
                ng-attr-data-item-id="{{item.id}}">&times;</div>
         </md-toolbar>
+         
+        <div class="sample-name md-subhead" layout="row" layout-align="center center">
+          <a href="/browser?sid={{sample.id}}">{{sample.name}}</a>
+        </div>
 
         <div>
 
@@ -117,7 +121,7 @@
                                   ng-model="item.new_location"
                                   data-item-popup-input="location"
                                   ng-attr-data-item-id="{{item.id}}"></div>
-            <div flex="20" class='buttons'>
+            <div flex="20" class='buttons' ng-if="<%= current_user.is_admin %> || (item.sample && <%= current_user.id %> == item.sample.user_id)">
               <a href="#" ng-click="item.move(item.new_location)" ng-if="item.new_location != item.location">
                 <ng-md-icon icon="system_update_alt" size="22" aria-label="Update Location" style="fill: #444"></ng-md-icon>
               </a>
@@ -138,7 +142,7 @@
           </div>
 
           <!-- Data -->
-          <div class='data-associations'>
+          <div class='data-associations' ng-if="<%= current_user.is_admin %> || (item.sample && <%= current_user.id %> == item.sample.user_id)">
             <da record="item"></da>
             <br>
             <div layout="row" layout-align="center center">
