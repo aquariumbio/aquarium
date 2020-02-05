@@ -8,15 +8,21 @@ class GroupsController < ApplicationController
   # GET /groups
   # GET /groups.json
   def index
+
     respond_to do |format|
 
       format.html do
-
-        @groups, @alphaParams = Group.all.alpha_paginate(params[:letter], {db_mode: true, db_field: "name"})
+        (Group.list[:groups] + ['retired']).each do |name| 
+          group = Group.find_by_name(name) 
+            if group
+              @groups, @alphaParams = Group.all.alpha_paginate(params[:letter], {db_mode: true, db_field: "name"})
+            end
+          end
+          
         render layout: 'aq2' 
 
       end
-      format.json { render json: G }
+      format.json { render json: @groups.includes(memberships: :group).all.sort { |a, b| a[:login] <=> b[:login] } }
 
     end
   end
