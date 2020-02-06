@@ -12,28 +12,6 @@
     <div class='flash md-body-2'><%= value %></div>
   <% end %>
 
-    <%= form_for(@user, :html => { :id => "new_user" } ) do |f| %>
-
-      <%= render 'shared/error_messages' %>
-
-      <%= f.label :name %>
-      <%= f.text_field :name %>
-
-      <%= f.label :login %>
-      <%= f.text_field :login, id: "new_login" %>
-
-      <%= f.label :password %>
-      <%= f.password_field :password, id: "new_password" %>
-
-      <%= f.label :password_confirmation, "Confirmation" %>
-      <%= f.password_field :password_confirmation, id: "new_confirmation" %>
-
-      <%= f.submit "New User", class: "md-button md-raised md-primary" %>
-
-    <% end %>
-
-    <hr>
-
     <%= form_for(@user, html: { action: 'change_password', id: "change_user_password" }) do |f| %>
 
       <%= render 'shared/error_messages' %>
@@ -80,4 +58,8 @@
 
   </div>
 
+<% end %>
+
+<%= content_for :action1 do %>
+  <%= link_to 'New User', new_user_path, class: 'md-button md-raised md-primary' %>
 <% end %>
