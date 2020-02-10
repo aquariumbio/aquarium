@@ -8,6 +8,11 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
+
+    respond_to do |format|
+      format.html { render layout: 'aq2' } # new.html.erb
+      format.json { render json: @user }
+    end
   end
 
   def password

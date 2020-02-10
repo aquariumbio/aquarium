@@ -43,8 +43,7 @@ class User < ActiveRecord::Base
   end
 
   def retired?
-    g = Group.find_by(name: 'retired')
-    g && g.member?(id)
+    Group.retired&.member?(id)
   end
 
   def copy(u)
@@ -160,6 +159,15 @@ class User < ActiveRecord::Base
 
     data.collect { |k, v| { name: k }.merge v }.sort_by { |stat| stat[:count] }.reverse
 
+  end
+
+  def self.logins
+    all.collect(&:login).sort
+  end
+
+  def self.select_active
+    retired = Group.retired
+    all.reject { |user| retired.member?(user.id) }
   end
 
   private

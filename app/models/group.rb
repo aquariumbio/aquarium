@@ -11,17 +11,28 @@ class Group < ActiveRecord::Base
     memberships.create!(user_id: user.id)
   end
 
-  def self.list
-    retired = find_by(name: 'retired')
-    rid = retired ? retired.id : -1
-    users = User.all.collect(&:login).sort
-    active_users = (User.all.reject { |u| u.member? rid }).collect(&:login).sort
-    groups = (all.reject { |g| g.name == 'retired' || users.select { |u| g.name == u } != [] }).collect(&:name).sort
-    { groups: groups, users: active_users }
-  end
-
   def member?(uid)
     memberships.where(user_id: uid).present?
   end
 
+  def self.list_names
+    users = User.logins
+    active_logins = User.select_active.collect(&:login).sort
+    group_names = non_user_groups.collect(&:name).sort - ['retired']
+    { groups: group_names, users: active_logins }
+  end
+
+  # Scope to limit groups to non-user groups.
+  def self.non_user_groups
+    where.not(name: User.logins)
+  end
+
+  def self.retired
+    retired = Group.find_by(name: 'retired')
+    unless retired
+      retired = Group.create(name: 'retired', description: 'Retired Users')
+    end
+
+    retired
+  end
 end
