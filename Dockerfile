@@ -1,5 +1,5 @@
 ARG RUBY_VERSION=2.6.5
-ARG ALPINE_VERSION=3.10
+ARG ALPINE_VERSION=3.11
 
 # A ruby-alpine image for development
 FROM ruby:${RUBY_VERSION}-alpine${ALPINE_VERSION} AS aquarium-development
