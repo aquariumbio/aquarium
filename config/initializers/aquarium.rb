@@ -6,10 +6,12 @@ require 'yaml'
 # Installation specific stuff here
 #
 
+s3_host = ENV['S3_HOST'] || 'localhost:9000'
+s3_protocol = ENV['S3_PROTOCOL'] || 'http'
 default_config = {
   instance_name: 'Your Lab',
   logo_path: 'aquarium-logo.png',
-  image_uri: 'http://localhost:9000/images/'
+  image_uri: "#{s3_protocol}://#{s3_host}/images/"
 }
 begin
   instance_config = Bioturk::Application.config_for(:instance).symbolize_keys

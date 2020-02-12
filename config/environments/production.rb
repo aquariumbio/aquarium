@@ -66,9 +66,10 @@ Bioturk::Application.configure do
                               }
                             else
                               s3_host = ENV['S3_HOST'] || 'localhost:9000'
+                              s3_protocol = ENV['S3_PROTOCOL'] || 'http'
                               {
                                 storage: :s3,
-                                s3_protocol: 'http',
+                                s3_protocol: s3_protocol,
                                 s3_permissions: 'private',
                                 s3_region: ENV['S3_REGION'] || 'us-west-1',
                                 s3_credentials: {
@@ -78,7 +79,7 @@ Bioturk::Application.configure do
                                 },
                                 s3_host_name: s3_host,
                                 s3_options: {
-                                  endpoint: "http://#{s3_host}", # for aws-sdk
+                                  endpoint: "#{s3_protocol}://#{s3_host}", # for aws-sdk
                                   force_path_style: true # for aws-sdk (required for minio)
                                 }
                               }
