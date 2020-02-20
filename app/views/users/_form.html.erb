@@ -5,16 +5,18 @@
       <%= render 'shared/error_messages' %>
 
       <%= f.label :name %>
-      <%= f.text_field :name %>
+      <%= f.text_field :name, class: 'span10' %>
 
       <%= f.label :login %>
-      <%= f.text_field :login, id: "new_login"  %>
+      <%= f.text_field :login, id: "new_login", class: 'span10'  %>
 
       <%= f.label :password %>
-      <%= f.password_field :password, id: "new_password"  %>
+      <%= f.password_field :password, id: "new_password", class: 'span10'  %>
 
       <%= f.label :password_confirmation, "Confirmation" %>
-      <%= f.password_field :password_confirmation, id: "new_confirmation"%>
+      <%= f.password_field :password_confirmation, id: "new_confirmation", class: 'span10'%>
+      
+      <br/>
 
       <%= f.submit "Create account", class: 'md-button md-raised md-primary' %>
       <%= link_to 'Back', users_path, class: 'md-button md-raised md-primary' %>
