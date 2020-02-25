@@ -1,6 +1,10 @@
-<% provide(:title, 'New Group') %>
+<% provide(:title, 'Add New Group') %>
 
-<h1>Add New group</h1>
+<% content_for :class do %>groups<% end %>
 
-<%= render 'form' %>
+<%= content_for :controller do %>noCtrl<% end %>
+
+<%= content_for :main do %>
+    <%= render 'form' %>
+<% end %>
 
