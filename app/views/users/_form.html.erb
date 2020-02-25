@@ -2,21 +2,35 @@
 
     <%= form_for(@user) do |f| %>
 
-      <%= render 'shared/error_messages' %>
+      <% if @user.errors.any? %>
+        <div id="error_explanation">
+          <div class="alert alert-error">
+            The form contains <%= pluralize(@user.errors.count, "error") %>.
+          </div>
+          <ul>
+          <% @user.errors.full_messages.each do |msg| %>
+            <li>* <%= msg %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
 
-      <%= f.label :name %>
-      <%= f.text_field :name, class: 'span10' %>
+
+      <%= f.label :name%>
+      <%= f.text_field :name, class: 'span8',   
+      placeholder: "Your name"%>
 
       <%= f.label :login %>
-      <%= f.text_field :login, id: "new_login", class: 'span10'  %>
+      <%= f.text_field :login, id: "new_login", class: 'span8',   
+      placeholder: "Your login name"%>
 
       <%= f.label :password %>
-      <%= f.password_field :password, id: "new_password", class: 'span10'  %>
+      <%= f.password_field :password, id: "new_password", class: 'span8',   
+      placeholder: "Your password"%>
 
       <%= f.label :password_confirmation, "Confirmation" %>
-      <%= f.password_field :password_confirmation, id: "new_confirmation", class: 'span10'%>
-      
-      <br/>
+      <%= f.password_field :password_confirmation, id: "new_confirmation", class: 'span8',   
+      placeholder: "Re-type your password"%>
 
       <%= f.submit "Create account", class: 'md-button md-raised md-primary' %>
       <%= link_to 'Back', users_path, class: 'md-button md-raised md-primary' %>
