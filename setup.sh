@@ -17,6 +17,7 @@ else
     echo 'S3_SERVICE=minio' >> $ENV_FILE
     echo 'S3_ID=aquarium_minio' >> $ENV_FILE
     echo 'S3_SECRET_ACCESS_KEY='$s3_key >> $ENV_FILE
+    echo 'S3_REGION=us-west-1' >> $ENV_FILE
     echo 'TIMEZONE='$timezone >> $ENV_FILE
     echo 'SECRET_KEY_BASE='$new_key_base >> $ENV_FILE 
 fi

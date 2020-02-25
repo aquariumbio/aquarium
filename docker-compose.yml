@@ -87,7 +87,7 @@ services:
     environment:
       MINIO_ACCESS_KEY: ${S3_ID}
       MINIO_SECRET_KEY: ${S3_SECRET_ACCESS_KEY}
-      MINIO_REGION: us-west-1 
+      MINIO_REGION: ${S3_REGION} 
     networks:
       - aquarium_net
 
@@ -101,7 +101,7 @@ services:
         sleep 1;
       done;
       /usr/bin/mc config host add aqminio http://s3:9000 ${S3_ID} ${S3_SECRET_ACCESS_KEY};
-      /usr/bin/mc mb --region us-west-1 -p aqminio/images;
+      /usr/bin/mc mb --region ${S3_REGION} -p aqminio/images;
       /usr/bin/mc policy set download aqminio/images;
       exit 0;
       "
