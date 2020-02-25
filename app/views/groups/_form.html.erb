@@ -4,8 +4,9 @@
 
     <% if @group.errors.any? %>
       <div id="error_explanation">
-        <h5><%= pluralize(@group.errors.count, "error") %> prohibited this group from being saved:</h5>
-
+          <div class="alert alert-error">
+            The form contains <%= pluralize(@group.errors.count, "error") %>.
+          </div>
         <ul>
         <% @group.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
