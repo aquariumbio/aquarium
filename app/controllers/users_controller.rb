@@ -52,7 +52,7 @@ class UsersController < ApplicationController
         flash[:success] = "#{params[:user][:name]} has been assimilated."
         redirect_to @user
       else
-        render 'new'
+        render layout: 'aq2', action: 'new' 
       end
 
     else
