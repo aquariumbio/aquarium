@@ -46,7 +46,7 @@ class UsersController < ApplicationController
           flash[:success] = "#{params[:user][:name]} has been added."
           redirect_to @user
       else
-        render 'new'
+        render layout: 'aq2', action: 'new' 
       end
 
     else
