@@ -24,14 +24,17 @@ unset BUNDLE_PATH
 unset BUNDLE_BIN
 
 # Fixes ip address for using a minio service from within the
-# local docker-compose configuration.  In this case, to talk to minio, paperclip
-# needs the minio host name to be localhost:9000, and we have to force that
-# address to point to the minio s3 service.
+# local docker-compose configuration.  In this case, paperclip needs the minio
+# host name to be localhost:9000, and we have to force that address to point to
+# the minio s3 service.
 #
-# This will apply fix if either S3_HOST is not set, or is set to localhost:9000.
+# This will apply fix if one of the following is true:
+# - S3_LOCAL is set, 
+# - S3_HOST is not set, or
+# - S3_HOST is set to localhost:9000.
 _fix_local_minio_ip() {
     echo "Fixing IP address for local minio"
-    if [ -z ${S3_HOST+x} ] || [ $(expr "$S3_HOST" : 'localhost.*') -gt 0 ]; then
+    if [ ! -z ${S3_LOCAL+x} ] || [ -z ${S3_HOST+x} ] || [ $(expr "$S3_HOST" : 'localhost.*') -gt 0 ]; then
         # see https://serverfault.com/questions/551487/dnat-from-localhost-127-0-0-1
         echo "fix ip address for local s3"
         S3_IP=`dig s3 +short`
