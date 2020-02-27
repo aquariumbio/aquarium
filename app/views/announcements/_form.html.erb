@@ -10,25 +10,20 @@
       </ul>
     </div>
   <% end %>
-  
-  <div class="field">
-    <%= f.label :title %><br />
-    <%= f.text_field :title %>
-  </div>
 
-  <div class="field">
-    <%= f.label :message %><br />
-    <%= f.text_area :message, style: 'width: 100%;' %>
-  </div>
+  <h3>Create Announcement</h3><br/>
 
-  <div class="field">
-    <%= f.label :active %>
-    <%= f.check_box :active %>
-  </div>
+  <%= f.label :title %>
+  <%= f.text_field :title, placeholder: "Your announcement title" %>
 
-  <br>
+  <%= f.label :message %>
+  <%= f.text_area :message, placeholder: "Your announcement message", style: 'width: 100%' %>
 
-  <div class="actions">
-    <%= f.submit class: 'md-button md-raised md-primary' %>
-  </div>
+  <%= f.label :active %>
+  <%= f.check_box :active %>
+
+  <br/>
+  <br/>
+
+  <%= f.submit class: 'md-button md-raised md-primary' %>
 <% end %>
