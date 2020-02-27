@@ -46,7 +46,7 @@ class AnnouncementsController < ApplicationController
   # GET /announcements/1/edit
   def edit
     @announcement = Announcement.find(params[:id])
-    render layout: 'aq2-plain'
+    render layout: 'aq2'
   end
 
   # POST /announcements
