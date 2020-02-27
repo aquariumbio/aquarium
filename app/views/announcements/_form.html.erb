@@ -14,10 +14,10 @@
   <h3>Create Announcement</h3><br/>
 
   <%= f.label :title %>
-  <%= f.text_field :title, placeholder: "Your announcement title" %>
+  <%= f.text_field :title, required: true, placeholder: "Your announcement title" %>
 
   <%= f.label :message %>
-  <%= f.text_area :message, placeholder: "Your announcement message", style: 'width: 100%' %>
+  <%= f.text_area :message, required: true, placeholder: "Your announcement message", style: 'width: 100%' %>
 
   <%= f.label :active %>
   <%= f.check_box :active %>
