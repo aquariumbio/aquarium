@@ -39,6 +39,7 @@ _fix_local_minio_ip() {
         echo "fix ip address for local s3"
         S3_IP=`dig s3 +short`
         iptables -t nat -A OUTPUT -m addrtype --src-type LOCAL --dst-type LOCAL -p tcp --dport 9000 -j DNAT --to-destination $S3_IP:9000
+        iptables -t nat -A OUTPUT -m addrtype --src-type LOCAL --dst-type LOCAL -p tcp --dport 80 -j DNAT --to-destination $S3_IP:9000
         iptables -t nat -A POSTROUTING -m addrtype --src-type LOCAL --dst-type UNICAST -j MASQUERADE
     fi
 }
