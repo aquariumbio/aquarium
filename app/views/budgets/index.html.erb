@@ -13,15 +13,13 @@
 
 <% content_for :main do %>
 
-  <div flex layout-padding>
-
     <table class='table'>
       <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Contact</th>  
-        <th>Users</th>      
-        <th></th>
+        <th style="width: 10%">Name</th>
+        <th style="width: 30%">Description</th>
+        <th style="width: 10%">Contact</th>  
+        <th style="width: 40%">Users</th>      
+        <th style="width: 5%"></th>
       </tr>
 
       <% @budgets.each do |budget| %>
@@ -35,12 +33,14 @@
               }.join(', ')
             %>
           </td>            
-          <td><%= link_to 'Edit', edit_budget_path(budget) %></td>
+          <td>
+            <%= link_to edit_budget_path(budget) do %>
+              <icon class='icon-pencil'></icon>
+            <% end %>
+          </td>
         </tr>
       <% end %>
 
     </table>
-
-  </div>
 
 <% end %>
