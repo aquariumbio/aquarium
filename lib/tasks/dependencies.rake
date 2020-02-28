@@ -47,21 +47,21 @@ namespace :dependencies do
       return user_names.uniq! 
     end 
 
-    library_code = {} 
-    libraries.each do |library| 
-      library_code[library.category + "/" + library.name] = library.source.content 
-    end
-   
-
     # Get names and categories for deployed operaions <OperationType id: 15, name: "Run Gel", category: "Cloning">
-    op_types = OperationType.select(:id, :name, :category).where(:deployed => true)
-    
-    # Get protocol code associated with each operation type {"Cloning/Run Gel" -> "code"}
-    op_types_to_protocol_code = {}                                                                                         
-    op_types.each do |op_type|
-       op_types_to_protocol_code[op_type.category + '/' + op_type.name] = op_type.protocol.content
-    end
-  
+    op_type_data = {}
+    op_types[0..5].each do |op_type| 
+      category_and_name = (get_category_key(op_type)) 
+
+      protocol_content = op_type.protocol.content # get code for protocols 
+      developers = get_developers(op_type.protocol) # get developers who worked on code 
+
+      libraries_cited = check_libraries(protocol_content, libraries) #get libraries that were cited  
+
+      included = (libraries_cited.map { |x| x.split(pattern = /\//)[0] }).count(op_type.category)
+      #methods_included = get_methods(library) 
+      print "#{category_and_name},#{libraries_cited},#{libraries_cited.length},#{included},#{libraries.length - included},#{developers}\n"
+    end 
+
     # make hash with optypes as keys and {libraries => methods} as values 
     optypes_to_libraries = {}
     op_types_to_protocol_code.each do |optype, code|
@@ -76,21 +76,6 @@ namespace :dependencies do
       end
     end
     
-    optypes_to_libraries.each do |optype, libraries|
-      puts "optypes: #{optype} is #{optype.class}" 
-      puts "libraries: #{libraries} are #{libraries.class}"
-      puts "___________________________________"
-      libraries.values.each do |lib, methods|
-        puts "lib: #{lib} is #{lib.class}"
-        puts "methods: #{methods} are #{methods.class}"
-        puts "*******************"
-      end
-    end
-        #
-      end
-    end
-
-
     #library_code.keep_if{|k, v| libraries_to_optypes.keys.include?(k)}
     # Create hash with library as the key, protocols that cite that library as the value 
     libraries_to_optypes = {}
@@ -107,38 +92,9 @@ namespace :dependencies do
     # count total number of times library is cited, times it's cited within its own category, 
     # and times it's cited out of it's category
     # append count to hash  
-    libraries_to_optypes.each do |library, protocols| 
-      counts = [protocols.length, 0, 0]
-      protocols.each do |p|
-        if p[1].split(pattern = /\//)[0] == library.split(pattern = /\//)[0] 
-          counts[1] += 1 
-        else 
-          counts[2] += 1 
-        end
-      end 
-      protocols << counts 
-    end 
-
     # Get Code for all operation types. Get users.  
     code = Code.select(:id, :parent_id, :user_id).where(:parent_class => 'OperationType')
-    users = User.select(:id, :name).all
 
-    # Get users who worked on code for each op type    
-    # {[OperationType id: 15, name: "Run Gel", category: "Cloning"] => [253, 214, 240, 66, 227, 209]}
-    op_types_to_users = {}
-    op_types.each do |op_type|
-      op_types_to_users[op_type] = []
-    end
-
-    op_types.each do |op_type| 
-      code.each do |code|
-        if op_type.id == code.parent_id && code.user_id != nil 
-          if !op_types_to_users[op_type].include?(code.user_id)
-            op_types_to_users[op_type] << code.user_id
-          end
-        end
-      end
-    end
 
   end 
 end 
@@ -158,4 +114,9 @@ end
     #  end
     #end
     #
-t
+
+    library_code = {} 
+    libraries.each do |library| 
+      library_code[library.category + "/" + library.name] = library.source.content 
+    end
+   
