@@ -6,18 +6,52 @@ namespace :dependencies do
     
     # Get Library Names and Categories -- 151  <Library id: 2, name: "Handling", category: "Hydra Transgenics">
     libraries = Library.select(:id, :name, :category).order(category: :asc, name: :asc)
+    # Get names and categories for deployed operations <OperationType id: 15, name: "Run Gel", category: "Cloning">
+    op_types = OperationType.select(:id, :name, :category).where(:deployed => true)
+
+    users = User.select(:id, :name).all
+
+    def get_category_key(code)
+      return code.category + '/' + code.name 
+    end 
+
+    def check_libraries(protocol_content, libraries) 
+      libraries_cited = []
+      libraries.each do |library|
+        category_and_name = get_category_key(library)
+
+        if protocol_content.include?(category_and_name)
+              libraries_cited << (category_and_name)
+              methods = get_methods(library) 
+              methods.each do |method|
+                if protocol_content.include?(method) 
+                    puts "#{method}"
+                end
+              end
+        end
+      end 
+        return libraries_cited
+    end 
+
+    def get_methods(library)
+      library.source.content.scan(/\s{2,}def\s+([A-Za-z0-9_\.]*)/).flatten!
+    end
     
+    def get_developers(protocol)
+      user_names = []
+      protocol.versions.each do |version|
+        if version.user_id != nil
+          user_names << User.select(:name).find(version.user_id).name 
+        end 
+      end
+      return user_names.uniq! 
+    end 
+
     library_code = {} 
     libraries.each do |library| 
       library_code[library.category + "/" + library.name] = library.source.content 
     end
    
-    # Scan Library code for method names 
-    libraries_to_methods = {} 
-    library_code.each do |lib, code| 
-      libraries_to_methods[lib] = code.scan(/\s{2,}def\s+([A-Za-z0-9_\.]*)/) 
-      libraries_to_methods[lib].flatten!
-    end
 
     # Get names and categories for deployed operaions <OperationType id: 15, name: "Run Gel", category: "Cloning">
     op_types = OperationType.select(:id, :name, :category).where(:deployed => true)
@@ -42,6 +76,21 @@ namespace :dependencies do
       end
     end
     
+    optypes_to_libraries.each do |optype, libraries|
+      puts "optypes: #{optype} is #{optype.class}" 
+      puts "libraries: #{libraries} are #{libraries.class}"
+      puts "___________________________________"
+      libraries.values.each do |lib, methods|
+        puts "lib: #{lib} is #{lib.class}"
+        puts "methods: #{methods} are #{methods.class}"
+        puts "*******************"
+      end
+    end
+        #
+      end
+    end
+
+
     #library_code.keep_if{|k, v| libraries_to_optypes.keys.include?(k)}
     # Create hash with library as the key, protocols that cite that library as the value 
     libraries_to_optypes = {}
