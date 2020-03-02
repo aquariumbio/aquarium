@@ -19,15 +19,17 @@ namespace :dependencies do
       libraries.each do |library|
         category_and_name = get_category_key(library)
 
-         if protocol_content.include?(category_and_name)
+        if protocol_content.include?(category_and_name)
               current_library = []
               current_library << (category_and_name)
               methods = get_methods(library)
-              methods.each do |method|
-                if protocol_content.include?(method) 
-                  current_library << method 
+              if !methods.nil?
+                methods.each do |method|
+                  if protocol_content.include?(method) 
+                    current_library << method 
+                  end
                 end
-              end
+              end 
             libraries_cited << current_library 
         end
       end 
@@ -48,7 +50,7 @@ namespace :dependencies do
       return user_names.uniq! 
     end 
 
-    op_types[0..5].each do |op_type| 
+    op_types.each do |op_type| 
       category_and_name = (get_category_key(op_type)) 
       protocol_content = op_type.protocol.content # get code for protocols 
 
