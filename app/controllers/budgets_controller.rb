@@ -65,7 +65,7 @@ class BudgetsController < ApplicationController
         format.html { redirect_to @budget, notice: 'Budget was successfully created.' }
         format.json { render json: @budget, status: :created, location: @budget }
       else
-        format.html { render action: 'new' }
+        format.html { render layout: 'aq2', action: 'new' }
         format.json { render json: @budget.errors, status: :unprocessable_entity }
       end
     end
