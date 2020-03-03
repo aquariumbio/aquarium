@@ -50,6 +50,10 @@ namespace :dependencies do
       return user_names.uniq! 
     end 
 
+    f = File.new("lib/dependencies.csv", "w") 
+    
+    f.puts "operation type category/name, [libraries cited, methods cited], number of libraries cited, #libraries within category, #libraries outside of category, developers who worked on code"
+
     op_types.each do |op_type| 
       category_and_name = (get_category_key(op_type)) 
       protocol_content = op_type.protocol.content # get code for protocols 
@@ -60,8 +64,9 @@ namespace :dependencies do
 
       included = (libraries_cited.map { |x| x.split(pattern = /\//)[0] }).count(op_type.category)
 
-      print "#{category_and_name},#{libraries_cited.flatten},#{libraries_cited.length},#{included},#{libraries_cited.length - included},#{developers}\n"
+      f.print "#{category_and_name},#{libraries_cited.flatten},#{libraries_cited.length},#{included},#{libraries_cited.length - included},#{developers}\n"
     end 
+
   end 
 end 
     # Remove libraries that we aren't using 
