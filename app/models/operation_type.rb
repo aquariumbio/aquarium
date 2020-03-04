@@ -109,23 +109,23 @@ class OperationType < ActiveRecord::Base
   end
 
   def defined_methods
-    source.defined_methods
+    protocol.defined_methods
   end
 
   def defined_classes
-    source.defined_classes
+    protocol.defined_classes
   end
 
   def defined_modules
-    source.defined_modules
+    protocol.defined_modules
   end
 
   def referenced_libraries
-    source.referenced_libraries
+    protocol.referenced_libraries
   end
 
   def referenced_modules
-    source.referenced_modules
+    protocol.referenced_modules
   end
 
   def cost_model

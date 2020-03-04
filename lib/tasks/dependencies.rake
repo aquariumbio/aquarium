@@ -10,11 +10,22 @@ namespace :dependencies do
 
     # Scrape definitions and references in the given protocol or library.
     #
-    # @param code [Protocol, Library] the object with code contents
+    # @param code [OperationType, Library] the object with code contents
     # @return [Hash] hash of definitions and references
     def create_map(code)
       {
         # TODO: capture definitions and references for operation_type/library 
+       definitions: {
+                     methods: code.defined_methods,
+                     modules: code.defined_modules, 
+                     classes: code.defined_classes
+                    },
+       references: {
+                    methods: [],
+                    modules: code.referenced_modules,
+                    classes: [],
+                    libraries: code.referenced_libraries 
+                }
       }
     end
 
@@ -26,11 +37,15 @@ namespace :dependencies do
     end
 
     op_types = OperationType.select(:id, :name, :category).where(:deployed => true)
-    # TODO: build map for protocols
+    op_type_map = Hash.new
+    op_types.each do |op_type|
+        op_type_key = get_category_key(op_type)
+        op_type_map[op_type_key] = create_map(op_type)
+    end 
 
     dependency_map = {
-      libraries: library_map
-      protocols: {}
+      libraries: library_map,
+      op_types: op_type_map  
     }
 
     File.open('log/dependencies.json', 'w') do |f|
