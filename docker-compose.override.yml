@@ -25,6 +25,8 @@ services:
       - ./ui:/aquarium/ui
       - ./Gemfile.lock:/aquarium/Gemfile.lock
       - ./yarn.lock:/aquarium/yarn.lock
+      - ./.rubocop.yml:/aquarium/.rubocop.yml
+      - ./.rubocop_todo.yml:/aquarium/.rubocop_todo.yml
 
   krill:
     image: aquarium-development
