@@ -11,10 +11,10 @@ RSpec.describe User, type: :model do
     group = user.create_user_group
     expect(Group.find_by(name: login_name)).to eq(group)
 
-    expect{user.create_user_group}.to raise_error(ActiveRecord::RecordInvalid)
+    expect { user.create_user_group }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
-  let!(:user){create(:user)}
+  let!(:user) { create(:user) }
   it 'make_admin should make user admin' do
     expect(user.is_admin).to be false
     user.make_admin
