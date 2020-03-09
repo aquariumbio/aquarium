@@ -47,7 +47,7 @@ class UsersController < ApplicationController
         redirect_to @user
       else
         render layout: 'aq2', action: 'new'
-    end
+      end
 
     else
 
@@ -137,14 +137,13 @@ class UsersController < ApplicationController
     respond_to do |format|
 
       format.html do
+        # TODO: make sure retired users are being handled correctly here
+        # retired = Group.find_by(name: 'retired')
+        # rid = retired ? retired.id : -1
 
-        retired = Group.find_by(name: 'retired')
-        rid = retired ? retired.id : -1
-
-        @users, @alphaParams = User.all.alpha_paginate(params[:letter], { db_mode: true, db_field: "name" })
+        @users, @alpha_params = User.all.alpha_paginate(params[:letter], { db_mode: true, db_field: 'name' })
 
         render layout: 'aq2'
-
       end
       format.json { render json: User.includes(memberships: :group).all.sort { |a, b| a[:login] <=> b[:login] } }
 

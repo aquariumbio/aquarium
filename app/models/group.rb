@@ -16,7 +16,6 @@ class Group < ActiveRecord::Base
   end
 
   def self.list_names
-    users = User.logins
     active_logins = User.select_active.collect(&:login).sort
     group_names = non_user_groups.collect(&:name).sort - ['retired']
     { groups: group_names, users: active_logins }
@@ -29,9 +28,7 @@ class Group < ActiveRecord::Base
 
   def self.retired
     retired = Group.find_by(name: 'retired')
-    unless retired
-      retired = Group.create(name: 'retired', description: 'Retired Users')
-    end
+    retired ||= Group.create(name: 'retired', description: 'Retired Users')
 
     retired
   end
