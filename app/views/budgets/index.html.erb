@@ -6,10 +6,9 @@
 
 <% content_for :sidebar do %>
   <div flex layout-padding>
+    <h3>Create Budget</h3>
 
 <%= form_for(@budget) do |f| %>
-  <h3>Create Bugget</h3>
-
   <% if @budget.errors.any? %>
       <%= render 'form' %> 
   <% end %>
