@@ -1,79 +1,89 @@
 # Aquarium Development Guide
 
-These guidelines are intended for those working directly on Aquarium.
+These guidelines are intended for those working directly on [Aquarium](aquarium.bio).
 
 ---
 
 ## Getting Started
 
-Follow the Aquarium installation instructions at
-<a href="aquarium.bio">aquarium.bio</a>
-to get a local copy of the Aquarium git repository.
+1. Install [Docker](https://www.docker.com/get-started)
+
+2. Get Aquarium using [git](https://git-scm.com) with the command
+
+   ```bash
+   git clone https://github.com/klavinslab/aquarium.git
+   ```
 
 ## Running Aquarium
 
-To run Aquarium in development mode using the Docker configuration in a Unix&trade;-like environment, do the following.
+The following commands will allow you to run Aquarium in Rails development mode in a Unix&trade;-like environment.
 
-### Commands
-
-1. Build the docker images with
+1. **Build** the docker images with
 
    ```bash
    docker-compose build
    ```
 
-   This should only be necessary the first time you run Aquarium in development mode.
-   However, it may be needed any time you change `Dockerfile`, `Gemfile` or `package.json`.
-
-   In situations where MySQL or minio change, you will also want to use the `--no-cache` option.
-
-2. Start Aquarium with
+2. **Start** Aquarium in development mode with
 
    ```bash
    docker-compose up
    ```
 
-   This command starts services for Aquarium, Krill, MySQL, minio and nginx, which are needed to run Aquarium.
-   In development mode, Aquarium is available at `localhost:3000` instead of `localhost`.
+   In development mode, Aquarium is available at `localhost:3000`.
 
-   To stop the services, type `ctrl-c` followed by
+3. **Stop** the Aquarium services, type `ctrl-c` followed by
 
    ```bash
-   ./develop-compose down -v
+   docker-compose down -v
    ```
 
-3. To run commands within the running Aquarium container, precede each with
+   Alternatively, you can run this command in a separate terminal within the `aquarium` directory .
+
+## Working with an Aquarium Container
+
+To run commands within the running Aquarium container, precede each command with
 
    ```bash
    docker-compose exec app
    ```
 
-   Specifically, you can run a shell within the Aquarium container with the command
+For instance, you can run the Rails console with the command
+
+  ```bash
+  docker-compose exec app rails c
+  ```
+
+And, you can also run an interactive shell within the Aquarium container with the command
 
    ```bash
    docker-compose exec app /bin/sh
    ```
 
-   where you can run `rake` or even the Rails console.
+which allows you to work within the container.
 
-   Alternatively, using a command starting with
+For commands that don't require that Aquarium is running, using a command starting with
 
    ```bash
    docker-compose run --rm app
    ```
 
-   will create a temporary container, which can be useful for running single commands.
+will create a temporary container. 
+This can be useful for running single commands such as
 
+  ```bash
+  docker-compose run --rm app rspec
+  ```
+
+which runs RSpec on the tests in the `spec` directory.
 
 ## Switching databases
 
 The configuration for Docker uses the MySQL Docker image, which is capable of automatically importing a database dump the first time it is started.
-This is convenient for standard usage, but it makes it harder to switch to another database.
+You can switch the database, but doing so will destroy any changes you have made to the current database.
+If you want to save these changes, you will have to create a database dump.
 
-Switching databases will destroy any changes you have made to the current database.
-If you want to save these, you will have to create a database dump.
-
-To make database dump, using the values of `MYSQL_USER` and `MYSQL_PASSWORD` from `docker-compose.yml` run the following
+To make database dump, using the values of `MYSQL_USER` and `MYSQL_PASSWORD` from `.env` run the following
 
 ```bash
 MYSQL_USER=<username>
@@ -92,11 +102,11 @@ rm -rf docker/db/*
 Then copy the dump of the database that you want to use to the default location:
 
 ```bash
-cp desired_dump.sql docker/mysql_init/dump.sql
+cp production_dump.sql docker/mysql_init/dump.sql
 ```
 
-It may be necessary to run migrations on database dump from a prior version of Aquarium.
-See the Docker installation instructions at <a href="aquarium.bio">aquarium.bio</a> for details.
+Note: It may be necessary to run migrations on database dump from a prior version of Aquarium.
+See the Docker installation instructions at [aquarium.bio](aquarium.bio) for details.
 
 ## Restoring the default database dump
 
@@ -114,11 +124,15 @@ rm -rf docker/db/*
 
 ## Testing Aquarium
 
+### Running Tests
+
 ```bash
 docker-compose up -d
 docker-compose exec app rspec
 docker-compose down -v
 ```
+
+### Adding Tests
 
 ## Editing Aquarium
 
@@ -137,6 +151,8 @@ Note that it will always complain about the `JOB::NOT_STARTED` and `JOB::COMPLET
 You should fix them.
 If you only have `Layout` issues, use `rubocop -x` to do it automatically.
 RuboCop can do other auto-corrections, but don't use that feature unless your tests ensure that the behavior is not changed.
+
+### Fixing Style TODOs
 
 ### Documenting Aquarium Ruby Code
 
@@ -200,41 +216,97 @@ will generate the documentation and write it to the directory `docs/api`.
 This location is determined by the file `.yardopts` in the project repository.
 This file also limits the API to code used in Krill the protocol development language.
 
+### Updating Dependencies
+
+### Modifying this Document
+
 ## Making an Aquarium Release
 
-1.  make sure Rails tests pass
+1.  Ensure that your clone is up to date
+
+    ```bash
+    git pull
+    ```
+
+2.  Make sure Rails tests pass
 
     ```bash
     docker-compose exec app rspec
     ```
 
-2.  Run `rubocop`, fix anything broken. Once done run `rubocop --auto-gen-config`.
-3.  (make sure JS tests pass)
-4.  Make sure JS linting passes
-5.  Update the version number in `package.json` and `config/initializers/version.rb` to the new version number.
-6.  Update API documentation by running 
+    If there are any failures, fix them and start over.
+
+3.  Fix any layout problems 
+
+    ```bash
+    docker-compose run --rm app rubocop -x
+    ```
+
+4.  Run `rubocop`
+
+    ```bash
+    docker-compose run --rm app rubocop
+    ```
+
+    Fix any issues and start over.
+
+5.  Update RuboCop TODO file
+
+    ```bash
+    docker-compose run -rm app rubocop --auto-gen-config
+    ```
+
+6.  (make sure JS tests pass)
+
+7.  (Make sure JS linting passes)
+
+8.  Update the version number in `package.json` and `config/initializers/version.rb` to the new version number.
+
+9.  Update API documentation by running 
 
     ```bash
     docker-compose exec app yard
     ```
 
-7.  (Update change log)
-8.  Commit and push changes.
-9.  Create a tag for the new version:
+10. Update `CHANGE_LOG`
+
+    ```bash
+    git log v$OLDVERSION..
+    ```
+
+11. Ensure all changes have been committed and pushed.
+
+    ```bash
+    git status && git log --branches --not --remotes
+    ```
+
+    Commit and push any changes found.
+
+12. Create a tag for the new version:
 
     ```bash
     git tag -a v$NEWVERSION -m "Aquarium version $NEWVERSION"
     git push --tags
     ```
 
-10. [Create a release on github](https://help.github.com/articles/creating-releases/).
+13. [Create a release on github](https://help.github.com/articles/creating-releases/).
     Visit the [Aquarium releases page](https://github.com/klavinslab/aquarium/releases).
-    Click "Tags".
-    Click "add release notes" for the new tag, use the change log as the release notes.
-    Click "publish release".
-11. (Update zenodo entry)
+    - Click "Tags".
+    - Click "add release notes" for the new tag, use the change log as the release notes.
+    - Click "publish release".
 
-## Aquarium configuration
+14. (Update zenodo entry)
+
+15. Push image to Docker Hub
+
+    ```bash
+    bash ./aquarium.sh build
+    docker push aquariumbio/aquarium:v$NEWVERSION
+    ```
+
+## Aquarium Internals
+
+## Aquarium Configuration
 
 Aquarium is configured to run within Docker using the following files:
 
