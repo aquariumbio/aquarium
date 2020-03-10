@@ -139,18 +139,45 @@ docker-compose run --rm app rspec
 ### Formatting Aquarium code
 
 The Aquarium repository is setup to use [RuboCop](https://rubocop.readthedocs.io).
-Settings are in the `.rubocop.yml` file in the repository directory.
-When the Rails or Ruby versions are changed the target versions in this file should also be changed.
-Otherwise, you probably wont need to change this file.
 
-When you make changes to Aquarium code, run the `rubocop` command to see if you have introduced any issues.
+When you make changes to Aquarium code, run the command 
+
+  ```bash
+  docker-compose run --rm app rubocop -x
+  ```
+
+to fix layout issues.
+Then run the command
+
+  ```bash
+  docker-compose run --rm app rubocop -x
+  ```
+
+to see if you have introduced any other issues.
 This will check for several potential issues that occur in Rails apps.
-Note that it will always complain about the `JOB::NOT_STARTED` and `JOB::COMPLETED`, but, because of the `.rubocop_todo.yml` file, any other issues that are found should be things that you have introduced.
-You should fix them.
-If you only have `Layout` issues, use `rubocop -x` to do it automatically.
+
+You should fix any issues, but be certain to test them.
 RuboCop can do other auto-corrections, but don't use that feature unless your tests ensure that the behavior is not changed.
 
+Because RuboCop may change, it may be necessary to make changes to the `.rubocop.yml` file in the repository directory.
+When the Ruby version is changed the target version in this file should also be changed.
+Otherwise, you probably wont need to change this file.
+
 ### Fixing Style TODOs
+
+The file `.rubocop_todo.yml` in the `aquarium` repository configures RuboCop so that it will ignore the listed issues when it processes the Ruby code in Aquarium.
+This makes it possible for developers to focus on issues that they introduce when changing code.
+However, it also identifies issues that we should try to eliminate.
+
+The process of doing this is to pick one issue, fix it, test the fix, and then update the todo file.
+When fixing issues make sure that there is a test that will exercise the fix, and be extra careful when applying auto-correct.
+Some fixes may not be possible without affecting the Krill library for protocols, which could break protocols that are in use.
+
+This command will regenerate the `.rubocop_todo.yml` file
+
+  ```bash
+  docker-compose run -rm app rubocop --auto-gen-config
+  ```
 
 ### Documenting Aquarium Ruby Code
 
@@ -231,6 +258,9 @@ docker-compose down -v
 ```
 
 ### Modifying this Document
+
+This document is `docs/development/index.md` in the `aquarium` repository.
+Keep it up-to-date if you change something that affects Aquarium development.
 
 ## Making an Aquarium Release
 
