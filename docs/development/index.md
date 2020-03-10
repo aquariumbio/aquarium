@@ -127,9 +127,7 @@ rm -rf docker/db/*
 ### Running Tests
 
 ```bash
-docker-compose up -d
-docker-compose exec app rspec
-docker-compose down -v
+docker-compose run --rm app rspec
 ```
 
 ### Adding Tests
@@ -217,6 +215,20 @@ This location is determined by the file `.yardopts` in the project repository.
 This file also limits the API to code used in Krill the protocol development language.
 
 ### Updating Dependencies
+
+```bash
+docker-compose up -d
+docker-compose exec app /bin/sh
+bundle upgrade
+docker-compose down -v
+```
+
+```bash
+docker-compose up -d
+docker-compose exec app /bin/sh
+yarn update
+docker-compose down -v
+```
 
 ### Modifying this Document
 
