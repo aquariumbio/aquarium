@@ -24,6 +24,7 @@ services:
       - ./test:/aquarium/test
       - ./ui:/aquarium/ui
       - ./Gemfile.lock:/aquarium/Gemfile.lock
+      - ./package.json:/aquarium/package.json
       - ./yarn.lock:/aquarium/yarn.lock
       - ./.rubocop.yml:/aquarium/.rubocop.yml
       - ./.rubocop_todo.yml:/aquarium/.rubocop_todo.yml
