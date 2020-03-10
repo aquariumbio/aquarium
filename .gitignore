@@ -10,7 +10,7 @@
 # Ignore Yardoc config and folder
 /.yardoc
 
-# Ignore docker environment file
+# Ignore docker environment file (contains secrets)
 /.env
 
 # don't include the yardoc generated api directory
