@@ -74,12 +74,11 @@ module Krill
 
     private
 
+    # TODO: result of this should look more like result of user table input
     def simulated_input_for(page)
-
       i = {}
 
       page.each do |j|
-
         if j[:input]
 
           var = j[:input][:var].to_sym
@@ -107,7 +106,14 @@ module Krill
             row.each do |entry|
               if entry.class == Hash && entry[:type]
                 operation = operations.find { |op| op.id == entry[:operation_id] }
-                operation.temporary[entry[:key]] = entry[:default] if operation
+                if operation
+                  value = if entry[:type] == 'number'
+                            entry[:default].to_f
+                          else
+                            entry[:default]
+                          end
+                  operation.temporary[entry[:key].to_sym] = value
+                end
               end
             end
           end
