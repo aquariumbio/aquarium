@@ -46,7 +46,9 @@
 
 <% content_for :main do %>
 
-    <table class='table'>
+  <%= alphabetical_paginate @alphaParams %>
+ 
+  <table class="table" id="pagination_table" style="table-layout: fixed, width: 100%">
       <tr>
         <th style="width: 10%">Name</th>
         <th style="width: 30%">Description</th>
