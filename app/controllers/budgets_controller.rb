@@ -12,11 +12,13 @@ class BudgetsController < ApplicationController
   # GET /budgets
   # GET /budgets.json
   def index
-    @budgets = Budget.all
     @budget = Budget.new
 
     respond_to do |format|
-      format.html { render layout: 'aq2' } # index.html.erb
+      format.html do
+        @budgets, @alphaParams = Budget.alpha_paginate(params[:letter], {db_mode: true, db_field: "name"})
+        render layout: 'aq2' 
+      end
       format.json { render json: @budgets }
     end
   end
@@ -65,7 +67,7 @@ class BudgetsController < ApplicationController
         format.html { redirect_to @budget, notice: 'Budget was successfully created.' }
         format.json { render json: @budget, status: :created, location: @budget }
       else
-        format.html { render action: 'new' }
+        format.html { render layout: 'aq2', action: 'new' }
         format.json { render json: @budget.errors, status: :unprocessable_entity }
       end
     end

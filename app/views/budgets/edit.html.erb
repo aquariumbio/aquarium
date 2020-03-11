@@ -1,6 +1,10 @@
+<% provide(:title, "Budget #{@budget.id}") %>
+
 <%= content_for :controller do %>noCtrl<% end %>
 
-<% provide(:title, "Budget #{@budget.id}") %>
+<% content_for :specific_title do %><% end %>
+
+<% content_for :sidebar do %><% end %>
 
 <% content_for :main do %>
 
