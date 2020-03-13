@@ -15,15 +15,14 @@
       </div>
     <% end %>
     
-      <label>Name</label>
-      <%= f.text_field :name, class: 'span8',   
-      placeholder: "Your group name"%>
+    <label>Name</label>
+    <%= f.text_field :name, class: 'span8',   
+    placeholder: "Your group name"%>
 
-      <label>Description</label>
-      <%= f.text_field :description, class: 'span8', 
-      placeholder: "Your group description"%>
+    <label>Description</label>
+    <%= f.text_field :description, class: 'span8', 
+    placeholder: "Your group description"%>
 
-    <br/>
     <%= f.submit "Save", class: 'md-button md-primary md-raised' %>
     <%= link_to 'Back', groups_path, class: 'md-button md-primary md-raised' %>
 

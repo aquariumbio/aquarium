@@ -43,8 +43,6 @@
 
 <% content_for :main do %>
 
-  <div layout-padding>
-
     <%= alphabetical_paginate @alphaParams %>
 
     <table class="table" id="pagination_table" style="table-layout: fixed">
@@ -56,8 +54,6 @@
       </tr>
       <%= render @users %>
     </table>
-
-  </div>
 
 <% end %>
 
