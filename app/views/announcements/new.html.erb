@@ -1,18 +1,9 @@
-<% provide(:title, 'New Announcement') %>
+<% provide(:title, 'Add New Announcement') %>
+
+<% content_for :class do %>announcements<% end %>
 
 <% content_for :controller do %>noCtrl<% end %>
 
 <% content_for :main do %>
-
-  <div layout-padding layout="row">
-
-    <div flex="25"></div>
-
-    <div flex="50">
-      <%= render 'form' %>
-      <%= link_to 'Back', announcements_path %>
-    </div>
-
-  </div>
-
+  <%= render 'form' %>
 <% end %>
