@@ -9,7 +9,7 @@
           </div>
           <ul>
           <% @user.errors.full_messages.each do |msg| %>
-            <li>* <%= msg %></li>
+            <li><%= msg %></li>
           <% end %>
           </ul>
         </div>
@@ -17,19 +17,19 @@
 
 
       <%= f.label :name%>
-      <%= f.text_field :name, class: 'span8',   
+      <%= f.text_field :name, class: 'span8', required: true,  
       placeholder: "Your name"%>
 
       <%= f.label :login %>
-      <%= f.text_field :login, id: "new_login", class: 'span8',   
+      <%= f.text_field :login, id: "new_login", class: 'span8', required: true,  
       placeholder: "Your login name"%>
 
       <%= f.label :password %>
-      <%= f.password_field :password, id: "new_password", class: 'span8',   
+      <%= f.password_field :password, id: "new_password", class: 'span8', required: true,   
       placeholder: "Your password"%>
 
       <%= f.label :password_confirmation, "Confirmation" %>
-      <%= f.password_field :password_confirmation, id: "new_confirmation", class: 'span8',   
+      <%= f.password_field :password_confirmation, id: "new_confirmation", class: 'span8', required: true,   
       placeholder: "Re-type your password"%>
 
       <%= f.submit "Create account", class: 'md-button md-raised md-primary' %>

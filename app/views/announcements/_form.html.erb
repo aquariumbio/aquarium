@@ -1,8 +1,10 @@
 <%= form_for(@announcement) do |f| %>
+
   <% if @announcement.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@announcement.errors.count, "error") %> prohibited this announcement from being saved:</h2>
-
+        <div class="alert alert-error">
+          The form contains <%= pluralize(@announcement.errors.count, "error") %>.
+        </div>
       <ul>
       <% @announcement.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
@@ -25,3 +27,5 @@
 
   <%= f.submit class: 'md-button md-raised md-primary' %>
 <% end %>
+
+

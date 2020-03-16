@@ -1,44 +1,44 @@
 <% provide(:title, 'Budgets') %>
 
+<% content_for :class do %>budgets<% end %>
+
 <%= content_for :controller do %>noCtrl<% end %>
 
 <% content_for :specific_title do %><% end %>
 
 <% content_for :sidebar do %>
-  <div flex layout-padding>
-    <h3>Create Budget</h3>
 
-<%= form_for(@budget) do |f| %>
-  <% if @budget.errors.any? %>
-      <%= render 'form' %> 
-  <% end %>
+  <div layout-padding>
 
-  <%= f.label "Budget Number / short name" %>
-  <%= f.text_field :name, placeholder: "Your budget number/name"%>
+    <%= form_for(@budget) do |f| %>
+      <% if @budget.errors.any? %>
+          <%= render 'form' %> 
+      <% end %>
 
-  <%= f.label :description %>
-  <%= f.text_field :description, placeholder: "Budget description" %>
+      <h3>Create Budget</h3>
+      <%= f.label "Budget Number / short name" %>
+      <%= f.text_field :name, placeholder: "Your budget number/name", required: true%>
 
-  <%= f.label "Contact" %>
-  <%= f.text_field :contact, placeholder: "Contact name" %>
+      <%= f.label :description %>
+      <%= f.text_field :description, placeholder: "Budget description" %>
 
-  <%= f.label "Contact's email" %>
-  <%= f.text_field :email, placeholder: "Contact email"%>
+      <%= f.label "Contact" %>
+      <%= f.text_field :contact, placeholder: "Contact name", required: true %>
 
-  <%= f.label "Contact's phone" %>
-  <%= f.text_field :phone, placeholder: "Contact phone"%>
+      <%= f.label "Contact's email" %>
+      <%= f.text_field :email, placeholder: "Contact email", required: true%>
 
-  <div class="actions">
-    <br />
-    <% if @budget.id %>
-      <%= f.submit 'Save', class: 'md-button md-raised md-primary' %>
-    <% else %>
-      <%= f.submit 'New Budget', class: 'md-button md-raised md-primary' %>
+      <%= f.label "Contact's phone" %>
+      <%= f.text_field :phone, placeholder: "Contact phone", required: true%>
+
+      <br />
+      <% if @budget.id %>
+        <%= f.submit 'Save', class: 'md-button md-raised md-primary' %>
+      <% else %>
+        <%= f.submit 'New Budget', class: 'md-button md-raised md-primary' %>
+      <% end %>  
+          
     <% end %>
-       
-<% end %>
-
-</div>
 
   </div>
 <% end %>
