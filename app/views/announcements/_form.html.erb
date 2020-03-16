@@ -12,20 +12,20 @@
       </ul>
     </div>
   <% end %>
-  
-  <h3> Create Announcement </p>
+
   <%= f.label :title %>
-  <%= f.text_field :title, class: 'span4'%>
+  <%= f.text_field :title, required: true, placeholder: "Your announcement title" %>
 
   <%= f.label :message %>
-  <%= f.text_area :message, class: 'span4'%>
+  <%= f.text_area :message, required: true, placeholder: "Your announcement message", style: 'width: 100%' %>
 
   <%= f.label :active %>
   <%= f.check_box :active %>
 
   <br/>
-  <%= f.submit "Save", class: 'md-button md-raised md-primary' %>
+  <br/>
 
+  <%= f.submit class: 'md-button md-raised md-primary' %>
 <% end %>
 
 
