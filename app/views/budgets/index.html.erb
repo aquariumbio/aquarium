@@ -17,19 +17,19 @@
 
       <h3>Create Budget</h3>
       <%= f.label "Budget Number / short name" %>
-      <%= f.text_field :name, placeholder: "Your budget number/name"%>
+      <%= f.text_field :name, placeholder: "Your budget number/name", required: true%>
 
       <%= f.label :description %>
       <%= f.text_field :description, placeholder: "Budget description" %>
 
       <%= f.label "Contact" %>
-      <%= f.text_field :contact, placeholder: "Contact name" %>
+      <%= f.text_field :contact, placeholder: "Contact name", required: true %>
 
       <%= f.label "Contact's email" %>
-      <%= f.text_field :email, placeholder: "Contact email"%>
+      <%= f.text_field :email, placeholder: "Contact email", required: true%>
 
       <%= f.label "Contact's phone" %>
-      <%= f.text_field :phone, placeholder: "Contact phone"%>
+      <%= f.text_field :phone, placeholder: "Contact phone", required: true%>
 
       <br />
       <% if @budget.id %>
