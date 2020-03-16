@@ -21,32 +21,10 @@ class AnnouncementsController < ApplicationController
     end
   end
 
-  # GET /announcements/1
-  # GET /announcements/1.json
-  def show
-    @announcement = Announcement.find(params[:id])
-
-    respond_to do |format|
-      format.html { render layout: 'aq2' }
-      format.json { render json: @announcement }
-    end
-  end
-
-  # GET /announcements/new
-  # GET /announcements/new.json
-  def new
-    @announcement = Announcement.new
-
-    respond_to do |format|
-      format.html { render layout: 'aq2' }
-      format.json { render json: @announcement }
-    end
-  end
-
   # GET /announcements/1/edit
   def edit
     @announcement = Announcement.find(params[:id])
-    render layout: 'aq2-plain'
+    render layout: 'aq2'
   end
 
   # POST /announcements
@@ -56,10 +34,10 @@ class AnnouncementsController < ApplicationController
 
     respond_to do |format|
       if @announcement.save
-        format.html { redirect_to @announcement, notice: 'Announcement was successfully created.' }
+        format.html { redirect_to announcements_path, notice: 'Announcement was successfully created.' }
         format.json { render json: @announcement, status: :created, location: @announcement }
       else
-        format.html { render action: 'new' }
+        format.html { render layout: 'aq2', action: 'new' }
         format.json { render json: @announcement.errors, status: :unprocessable_entity }
       end
     end
@@ -72,7 +50,7 @@ class AnnouncementsController < ApplicationController
 
     respond_to do |format|
       if @announcement.update_attributes(params[:announcement])
-        format.html { redirect_to @announcement, notice: 'Announcement was successfully updated.' }
+        format.html { redirect_to announcements_path, notice: 'Announcement was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }

@@ -4,22 +4,26 @@
 
 <% content_for :sidebar do %>
   <div layout-padding %>
+
+    <% flash.each do |key, value| %>
+      <div class='flash md-body-2'><%= value %></div>
+    <% end %>
+
+    <h3>Create Announcement</h3><br/>
     <%= render 'form' %>
   </div>
 <% end %>
 
 <% content_for :main do %>
 
-  <div layout-padding>
-
     <table class='table'>
       <tr>
-        <th>Id</th>
-        <th>Title</th>
-        <th>Message</th>
-        <th>Active</th>
-        <th></th>
-        <th></th>
+        <th style="width: 5%">Id</th>
+        <th style="width: 20%">Title</th>
+        <th style="width: 62%">Message</th>
+        <th style="width: 5%">Active</th>
+        <th style="width: 4%"></th>
+        <th style="width: 4%"></th>
       </tr>
 
     <% @announcements.reverse.each do |announcement| %>
@@ -31,13 +35,19 @@
           <td><%= announcement.active %></td>
         <% else %>
           <td></td>
-        <% end %>
-        <td><%= link_to 'Edit', edit_announcement_path(announcement) %></td>
-        <td><%= link_to 'Destroy', announcement, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %> 
+        <td>
+          <%= link_to edit_announcement_path(announcement) do %>
+            <icon class='icon-pencil'></icon>
+          <% end %>
+        </td>
+        <td> 
+          <%= link_to announcement, method: :delete, data: {confirm: 'Are you sure?' } do %>
+            <icon class='icon-remove'></icon>
+          <% end %>
+        </td>
       </tr>
     <% end %>
     </table>
-
-  </div>
 
 <% end %>
