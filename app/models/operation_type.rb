@@ -108,6 +108,26 @@ class OperationType < ActiveRecord::Base
     end
   end
 
+  def defined_methods
+    protocol.defined_methods
+  end
+
+  def defined_classes
+    protocol.defined_classes
+  end
+
+  def defined_modules
+    protocol.defined_modules
+  end
+
+  def referenced_libraries
+    protocol.referenced_libraries
+  end
+
+  def referenced_modules
+    protocol.referenced_modules
+  end
+
   def cost_model
     code('cost_model')
   end
@@ -181,6 +201,8 @@ class OperationType < ActiveRecord::Base
   end
 
   def add_new_field_type(new_type)
+    sample_type_names = []
+    container_names = []
     if new_type[:allowable_field_types]
 
       sample_type_names = new_type[:allowable_field_types].collect do |aft|
@@ -195,8 +217,8 @@ class OperationType < ActiveRecord::Base
         aft[:object_type][:name]
       end
     else
-      sample_type_names = []
-      container_names = []
+      sample_type_names = new_type[:sample_types] if new_type[:sample_types]
+      container_names = new_type[:object_types] if new_type[:object_types]
     end
 
     add_io(
