@@ -23,10 +23,10 @@
                     .collect { |u| [ u.login, u.login ] }, current_user.id )) %>
 
       <%= f.label :password %>
-      <%= f.password_field :password %>
+      <%= f.password_field :password, required: true, placeholder: "Your password" %>
 
       <%= f.label :password_confirmation, "Confirm Password" %>
-      <%= f.password_field :password_confirmation %>
+      <%= f.password_field :password_confirmation, required: true, placeholder: "Re-type your password"  %>
 
       <input id="change_password" name="change_password" type="hidden" value="true" />
 
