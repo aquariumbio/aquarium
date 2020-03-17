@@ -52,7 +52,7 @@ class UsersController < ApplicationController
         flash[:success] = "#{params[:user][:name]} has been assimilated."
         redirect_to @user
       else
-        render layout: 'aq2', action: 'new' 
+        render layout: 'aq2', action: 'new'
       end
 
     else
@@ -147,7 +147,7 @@ class UsersController < ApplicationController
         retired = Group.find_by(name: 'retired')
         rid = retired ? retired.id : -1
 
-        @users, @alphaParams = User.all.alpha_paginate(params[:letter], {db_mode: true, db_field: "name"})
+        @users, @alphaParams = User.all.alpha_paginate(params[:letter], { db_mode: true, db_field: "name" })
 
         render layout: 'aq2'
 
