@@ -16,7 +16,7 @@ class BudgetsController < ApplicationController
 
     respond_to do |format|
       format.html do
-        @budgets, @alpha_params = Budget.alpha_paginate(params[:letter], { db_mode: true, db_field: "name" })
+        @budgets, @alpha_params = Budget.alpha_paginate(params[:letter], { db_mode: true, db_field: 'name' })
         render layout: 'aq2'
       end
       format.json { render json: @budgets }

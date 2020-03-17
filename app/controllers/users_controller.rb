@@ -147,7 +147,7 @@ class UsersController < ApplicationController
         retired = Group.find_by(name: 'retired')
         rid = retired ? retired.id : -1
 
-        @users, @alpha_params = User.all.alpha_paginate(params[:letter], { db_mode: true, db_field: "name" })
+        @users, @alpha_params = User.all.alpha_paginate(params[:letter], { db_mode: true, db_field: 'name' })
 
         render layout: 'aq2'
 
