@@ -12,11 +12,13 @@ class BudgetsController < ApplicationController
   # GET /budgets
   # GET /budgets.json
   def index
-    @budgets = Budget.all
     @budget = Budget.new
 
     respond_to do |format|
-      format.html { render layout: 'aq2' } # index.html.erb
+      format.html do
+        @budgets, @alphaParams = Budget.alpha_paginate(params[:letter], {db_mode: true, db_field: "name"})
+        render layout: 'aq2' 
+      end
       format.json { render json: @budgets }
     end
   end
