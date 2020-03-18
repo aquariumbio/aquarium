@@ -27,7 +27,7 @@ RSpec.describe Code do
     expect(code2.versions).to include(code, code2, code3)
   end
 
-  let(:class_code) { create(:code, content: "needs 'C/L'; module B; class A; extend M; def a; end; end; end")}
+  let(:class_code) { create(:code, content: "needs 'C/L'; module B; class A; extend M; def a; end; end; end") }
   it 'should have defined class and method' do
     expect(class_code.defined_classes).to eq(['A'])
     expect(class_code.defined_methods).to eq(['a'])
