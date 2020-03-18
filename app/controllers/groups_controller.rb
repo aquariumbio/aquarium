@@ -10,8 +10,8 @@ class GroupsController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @groups, @alphaParams = Group.non_user_groups.alpha_paginate(params[:letter], {db_mode: true, db_field: "name"})
-        render layout: 'aq2' 
+        @groups, @alpha_params = Group.non_user_groups.alpha_paginate(params[:letter], { db_mode: true, db_field: "name" })
+        render layout: 'aq2'
       end
       format.json { render json: Group.non_user_groups.includes(memberships: :group).sort { |a, b| a[:name] <=> b[:name] } }
     end

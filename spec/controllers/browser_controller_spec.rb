@@ -11,8 +11,7 @@ RSpec.describe BrowserController, type: :controller do
   let(:dummy_sample_type) { create(:sample_type, name: 'DummySampleType') }
   let!(:dummy_sample) { create(:sample, name: 'DummySample', sample_type: dummy_sample_type) }
   let!(:dummy_object_type) { create(:object_type, name: 'DummyObjectType') }
-  let!(:dummy_item_1) { create(:item, sample_id: dummy_sample.id, object_type_id: dummy_object_type.id)}
-  
+  let!(:dummy_item_1) { create(:item, sample_id: dummy_sample.id, object_type_id: dummy_object_type.id) }
 
   it 'search on dummy_item should return dummy_sample' do
     params = { item_id: dummy_item_1.id, page: 0 }

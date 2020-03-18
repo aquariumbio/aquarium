@@ -2,7 +2,7 @@
 
 # A subclass of {Item} that has associated parts via the {PartAssociation} model.
 # Stripwells, 96 well plates, and gels are examples.
-# Note that you may in some cases be working with an item that is also a {Collection}, which you can tell by checking that item.collection? 
+# Note that you may in some cases be working with an item that is also a {Collection}, which you can tell by checking that item.collection?
 # In this case you promote the item using the ruby method becomes.
 # @example Cast an item as a collection
 #   collection = item.becomes Collection
