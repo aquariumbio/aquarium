@@ -4,6 +4,10 @@
 <% content_for :sidebar do %>
   <div layout-padding>
 
+    <% flash.each do |key, value| %>
+      <div class='flash md-body-2'><%= value %></div>
+    <% end %>
+
     <%= form_for(@parameter) do |f| %>
       <% if @parameter.errors.any? %>
           <%= render 'form' %> 
