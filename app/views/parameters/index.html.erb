@@ -1,8 +1,33 @@
 <% provide(:title, 'Parameters') %>
 <%= content_for :controller do %>noCtrl<% end %>
+
 <% content_for :sidebar do %>
   <div layout-padding>
-    <%= render 'form' %>
+
+    <%= form_for(@parameter) do |f| %>
+      <% if @parameter.errors.any? %>
+          <%= render 'form' %> 
+      <% end %>
+
+      <h3>Create Parameter</h3>
+      <%= f.label :key %>
+      <%= f.text_field :key, placeholder: "Your key", required: true %>
+
+      <%= f.label :value %>
+      <%= f.text_field :value, placeholder: "Your Value", required: true %>
+      
+      <%= f.label :description %>
+      <%= f.text_field :description, placeholder: "Your description", required: true %>
+
+      <br />
+      <% if @parameter.id %>
+        <%= f.submit 'Save', class: 'md-button md-raised md-primary' %>
+      <% else %>
+        <%= f.submit 'New Parameter', class: 'md-button md-raised md-primary' %>
+      <% end %>  
+          
+    <% end %>
+
   </div>
 <% end %>
 
