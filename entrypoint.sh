@@ -63,7 +63,11 @@ _clean_up_stray_server() {
 # Folds the license file into 80 columns, strips off the markdown header, and
 # sends the result to standard output.
 _show_license() {
-    fold -w 80 -s license.md | tail -n +3
+    if [ -f LICENSE ]; then
+        fold -w 80 -s LICENSE | tail -n +3
+    else
+        echo "LICENSE file not found. Please report."
+    fi
 }
 
 # Starts the production server.
