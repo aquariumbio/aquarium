@@ -9,7 +9,7 @@ class KrillController < ApplicationController
     @job = Job.find(params[:job])
 
     # if not running, then start
-    if @job.pc == Job.NOT_STARTED
+    if @job.not_started?
 
       @job.user_id = current_user.id
       @job.save
@@ -116,7 +116,7 @@ class KrillController < ApplicationController
 
     @job = Job.find(params[:job])
 
-    if @job.pc >= 0
+    if @job.active?
       state = @job.job_state
       unless state.last[:operation] == 'next' || params[:command] == 'check_again'
         inputs = params[:inputs]

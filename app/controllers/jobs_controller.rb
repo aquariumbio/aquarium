@@ -46,7 +46,7 @@ class JobsController < ApplicationController
     start = DateTime.parse(params[:date]).beginning_of_day
     render json: Job.includes(:user, job_associations: { operation: :operation_type })
                     .where('? < updated_at AND updated_at < ?', start - 1.day, start + 1.day)
-                    .select { |job| job.pc == Job.COMPLETED && !job.job_associations.empty? }
+                    .select { |job| job.done? && !job.job_associations.empty? }
                     .to_json(include: [:user, { job_associations: { include: { operation: { include: :operation_type } } } }])
   rescue StandardError => e
     render json: { error: e.to_s }

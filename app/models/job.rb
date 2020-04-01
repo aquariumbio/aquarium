@@ -122,9 +122,9 @@ class Job < ActiveRecord::Base
   end
 
   def status
-    if pc >= 0
+    if active?
       status = 'ACTIVE'
-    elsif pc == Job.NOT_STARTED
+    elsif not_started?
       status = 'PENDING'
     else
       entries = (logs.reject do |log|
@@ -196,12 +196,12 @@ class Job < ActiveRecord::Base
     confirm = options[:confirm] ? "class='confirm'" : ''
 
     if /\.rb$/.match?(path)
-      if pc == Job.NOT_STARTED
+      if not_started?
         "<a #{confirm} target=_top href='/krill/start?job=#{id}'>#{el}</a>".html_safe
       else
         "<a #{confirm} target=_top href='/krill/ui?job=#{id}'>#{el}</a>".html_safe
       end
-    elsif pc == Job.NOT_STARTED
+    elsif not_started?
       "<a #{confirm} target=_top href='/interpreter/advance?job=#{id}'>#{el}</a>".html_safe
     elsif pc != Job.COMPLETED
       "<a #{confirm} target=_top href='/interpreter/current?job=#{id}'>#{el}</a>".html_safe
@@ -250,7 +250,7 @@ class Job < ActiveRecord::Base
   end
 
   def cancel(user)
-    return if pc == Job.COMPLETED
+    return if done?
 
     self.pc = Job.COMPLETED
     self.user_id = user.id
