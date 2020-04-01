@@ -23,6 +23,15 @@ class Group < ActiveRecord::Base
     where.not(name: User.logins)
   end
 
+  def self.admin
+    admin = Group.find_by(name: 'admin')
+    unless admin
+      admin = Group.create(name: 'admin', description: 'Administrative users')
+    end
+
+    admin
+  end
+
   def self.retired
     retired = Group.find_by(name: 'retired')
     unless retired
@@ -30,5 +39,14 @@ class Group < ActiveRecord::Base
     end
 
     retired
+  end
+
+  def self.technicians
+    technicians = Group.find_by(name: 'technicians')
+    unless technicians
+      technicians = Group.create(name: 'technicians', description: 'Users who carryout protocols')
+    end
+
+    technicians
   end
 end
