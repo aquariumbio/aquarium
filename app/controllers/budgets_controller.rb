@@ -6,7 +6,7 @@ class BudgetsController < ApplicationController
   before_filter :up_to_date_user
 
   before_filter do
-    redirect_to root_path, notice: 'Administrative privileges required to access budgets.' unless current_user && current_user.is_admin
+    redirect_to root_path, notice: 'Administrative privileges required to access budgets.' unless current_user && current_user.admin?
   end
 
   # GET /budgets
@@ -102,7 +102,7 @@ class BudgetsController < ApplicationController
   end
 
   def add_user
-    if current_user.is_admin
+    if current_user.admin?
       uba = UserBudgetAssociation.new
       uba.budget_id = params[:bid].to_i
       uba.user_id = params[:uid].to_i
@@ -116,7 +116,7 @@ class BudgetsController < ApplicationController
   end
 
   def remove_user
-    if current_user.is_admin
+    if current_user.admin?
       ubas = UserBudgetAssociation.where(budget_id: params[:bid].to_i, user_id: params[:uid])
       ubas[0].destroy unless ubas.empty?
     else
