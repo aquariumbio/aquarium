@@ -155,13 +155,8 @@ class UsersController < ApplicationController
   end
 
   def active
-
-    users = User.includes(memberships: :group)
-                .all
-                .reject { |u| u.groups.collect(&:name).member? 'retired' }
-
+    users = User.select_active
     render json: users.collect { |u| { id: u.id, name: u.name, login: u.login } }
-
   end
 
   def destroy
