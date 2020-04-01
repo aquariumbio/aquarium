@@ -5,10 +5,8 @@ class JobsController < ApplicationController
   before_filter :signed_in_user
 
   def index
-
-    @users = User.all - User.includes(memberships: :group)
-                            .where(memberships: { group_id: Group.find_by(name: 'retired') })
-    @groups = Group.includes(:memberships).all.reject { |g| g.memberships.length == 1 }
+    @users = User.select_active
+    @groups = Group.non_user_groups
 
     respond_to do |format|
       format.html { render layout: 'aq2' }
