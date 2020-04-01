@@ -260,8 +260,7 @@ RSpec.describe Krill::ProtocolSandbox do
     plan = build_plan(operation: operation, user_id: test_user.id)
     job = Job.schedule(
       operations: plan.operations,
-      user: test_user,
-      group: Group.find_by(name: 'technicians')
+      user: test_user
     )
 
     sandbox = Krill::ProtocolSandbox.new(job: job, debug: true)
@@ -281,8 +280,7 @@ RSpec.describe Krill::ProtocolSandbox do
     plan = build_plan(operation: operation, user_id: user.id)
     Job.schedule(
       operations: plan.operations,
-      user: user,
-      group: Group.find_by(name: 'technicians')
+      user: user
     )
   end
 
