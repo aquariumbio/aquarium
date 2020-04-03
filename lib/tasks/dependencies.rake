@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :dependencies do
 
   desc 'Gather dependency data from database'
@@ -5,7 +7,7 @@ namespace :dependencies do
   task libraries: :environment do
 
     def get_category_key(code)
-      return code.category + '/' + code.name
+      code.category + '/' + code.name
     end
 
     # Scrape definitions and references in the given protocol or library.
@@ -30,14 +32,14 @@ namespace :dependencies do
     end
 
     libraries = Library.select(:id, :name, :category).order(category: :asc, name: :asc)
-    library_map = Hash.new
+    library_map = {}
     libraries.each do |library|
       library_key = get_category_key(library)
       library_map[library_key] = create_map(library)
     end
 
-    op_types = OperationType.select(:id, :name, :category).where(:deployed => true)
-    op_type_map = Hash.new
+    op_types = OperationType.select(:id, :name, :category).where(deployed: true)
+    op_type_map = {}
     op_types.each do |op_type|
       op_type_key = get_category_key(op_type)
       op_type_map[op_type_key] = create_map(op_type)

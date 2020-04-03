@@ -214,7 +214,7 @@ class Job < ActiveRecord::Base
       p
     when Hash
       h = {}
-      p.keys.each do |key|
+      p.each_key do |key|
         h[key.to_s.split(' ')[0].to_sym] = remove_types(p[key])
       end
       h

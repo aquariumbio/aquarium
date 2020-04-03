@@ -41,7 +41,7 @@ class KrillController < ApplicationController
 
   def debug
     @job = Job.find(params[:id])
-    errors = ProtocolDebugEngine.debug_job(job: @job, user_id: : current_user.id)
+    errors = ProtocolDebugEngine.debug_job(job: @job, user_id: current_user.id)
     render json: { errors: errors, operations: @job.reload.operations, job: @job }
   rescue ActiveRecord::RecordNotFound => e
     # raise "Error: Job #{jid} not found"

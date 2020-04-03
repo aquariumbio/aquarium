@@ -104,17 +104,17 @@ module Krill
 
           j[:table].each do |row|
             row.each do |entry|
-              if entry.class == Hash && entry[:type]
-                operation = operations.find { |op| op.id == entry[:operation_id] }
-                if operation
-                  value = if entry[:type] == 'number'
-                            entry[:default].to_f
-                          else
-                            entry[:default]
-                          end
-                  operation.temporary[entry[:key].to_sym] = value
-                end
-              end
+              next unless entry.class == Hash && entry[:type]
+
+              operation = operations.find { |op| op.id == entry[:operation_id] }
+              next unless operation
+
+              value = if entry[:type] == 'number'
+                        entry[:default].to_f
+                      else
+                        entry[:default]
+                      end
+              operation.temporary[entry[:key].to_sym] = value
             end
           end
 

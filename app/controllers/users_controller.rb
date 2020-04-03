@@ -166,7 +166,7 @@ class UsersController < ApplicationController
       user.retire
       flash[:success] = 'The user has been disconnected. Why did they resist? We only wish to raise quality of life for all species.'
     else
-      flash[:error] = "Cannot retire user that does not exist."
+      flash[:error] = 'Cannot retire user that does not exist.'
     end
 
     redirect_to users_url

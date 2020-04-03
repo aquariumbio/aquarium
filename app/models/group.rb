@@ -12,7 +12,6 @@ class Group < ActiveRecord::Base
   end
 
   def self.list_names
-    users = User.logins
     active_logins = User.select_active.collect(&:login).sort
     group_names = non_user_groups.collect(&:name).sort - ['retired']
     { groups: group_names, users: active_logins }
@@ -39,7 +38,7 @@ class Group < ActiveRecord::Base
   # Gets the group with the name.
   # If the named group exists, returns the group.
   # Otherwise, returns the group created with the name and description.
-  # 
+  #
   # Note: Does not change the description of an existing group.
   #
   # @param name [String] the name of the group
@@ -47,9 +46,7 @@ class Group < ActiveRecord::Base
   # @return [Group] the named group
   def self.get_group(name:, description:)
     group = Group.find_by(name: name)
-    unless group
-      group = Group.create(name: name, description: description)
-    end
+    group ||= Group.create(name: name, description: description)
 
     group
   end

@@ -33,10 +33,9 @@ RSpec.describe ProtocolDebugEngine do
     )
   end
 
-
   it 'expect singleton job of simple protocol to debug without error' do
     operation_list = make_operations_list(
-      operation_type: simple_protocol, 
+      operation_type: simple_protocol,
       user_id: job_user.id
     )
     job = make_job(
@@ -51,7 +50,7 @@ RSpec.describe ProtocolDebugEngine do
 
   it 'expect job with two simple protocols to debug without error' do
     operation_list = make_operations_list(
-      operation_type: simple_protocol, 
+      operation_type: simple_protocol,
       user_id: job_user.id,
       count: 2
     )
@@ -67,7 +66,7 @@ RSpec.describe ProtocolDebugEngine do
 
   it 'expect singleton job of op show protocol to debug without error' do
     operation_list = make_operations_list(
-      operation_type: op_show_protocol, 
+      operation_type: op_show_protocol,
       user_id: job_user.id
     )
     job = make_job(
@@ -82,7 +81,7 @@ RSpec.describe ProtocolDebugEngine do
 
   it 'expect job with two op show protocols to debug without error' do
     operation_list = make_operations_list(
-      operation_type: op_show_protocol, 
+      operation_type: op_show_protocol,
       user_id: job_user.id,
       count: 2
     )
@@ -98,7 +97,7 @@ RSpec.describe ProtocolDebugEngine do
 
   it 'expect singleton job of exception protocol to debug without error' do
     operation_list = make_operations_list(
-      operation_type: raise_protocol, 
+      operation_type: raise_protocol,
       user_id: job_user.id
     )
     job = make_job(
@@ -113,7 +112,7 @@ RSpec.describe ProtocolDebugEngine do
 
   it 'expect job with two exception protocols to debug without error' do
     operation_list = make_operations_list(
-      operation_type: raise_protocol, 
+      operation_type: raise_protocol,
       user_id: job_user.id,
       count: 2
     )
@@ -139,7 +138,7 @@ RSpec.describe ProtocolDebugEngine do
       count: 2
     )
     operations_list = simple_operation_list + show_operation_list
-    operations_list.each {|op| op.status = 'pending' }
+    operations_list.each { |op| op.status = 'pending' }
     plan = build_plan(
       operations: operations_list,
       user_id: debug_user.id
@@ -190,10 +189,10 @@ RSpec.describe ProtocolDebugEngine do
   end
 
   def debug_job(job)
-    ProtocolDebugEngine::debug_job(job: job, user_id: debug_user.id)
+    ProtocolDebugEngine.debug_job(job: job, user_id: debug_user.id)
   end
 
   def debug_plan(plan)
-    ProtocolDebugEngine::debug_plan(plan: plan, current_user: debug_user)
+    ProtocolDebugEngine.debug_plan(plan: plan, current_user: debug_user)
   end
 end
