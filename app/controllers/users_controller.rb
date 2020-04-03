@@ -52,7 +52,7 @@ class UsersController < ApplicationController
         flash[:success] = "#{params[:user][:name]} has been assimilated."
         redirect_to @user
       else
-        render layout: 'aq2', action: 'new' 
+        render layout: 'aq2', action: 'new'
       end
 
     else
@@ -77,7 +77,7 @@ class UsersController < ApplicationController
   def update
     user = User.find(params[:id])
 
-    unless user.id == current_user.id || current_user.is_admin
+    unless user.id == current_user.id || current_user.admin?
       render json: { error: "User #{current_user.login} is not authorized to update user #{user.login}'s profile." }, status: :unprocessable_entity
       return
     end
@@ -119,7 +119,7 @@ class UsersController < ApplicationController
 
     user = User.find(params[:id])
 
-    unless user.id == current_user.id || current_user.is_admin
+    unless user.id == current_user.id || current_user.admin?
       render json: { error: "User #{current_user.login} is not authorized to change #{user.login}'s password." }, status: :unprocessable_entity
       return
     end
@@ -137,25 +137,15 @@ class UsersController < ApplicationController
   end
 
   def index
-
     @user = User.new
 
     respond_to do |format|
-
       format.html do
-
-        retired = Group.find_by(name: 'retired')
-        rid = retired ? retired.id : -1
-
-        @users, @alphaParams = User.all.alpha_paginate(params[:letter], {db_mode: true, db_field: "name"})
-
+        @users, @alpha_params = User.all.alpha_paginate(params[:letter], { db_mode: true, db_field: 'name' })
         render layout: 'aq2'
-
       end
       format.json { render json: User.includes(memberships: :group).all.sort { |a, b| a[:login] <=> b[:login] } }
-
     end
-
   end
 
   def current
@@ -165,32 +155,21 @@ class UsersController < ApplicationController
   end
 
   def active
-
-    users = User.includes(memberships: :group)
-                .all
-                .reject { |u| u.groups.collect(&:name).member? 'retired' }
-
+    users = User.select_active
     render json: users.collect { |u| { id: u.id, name: u.name, login: u.login } }
-
   end
 
   def destroy
+    user = User.find(params[:id])
 
-    u = User.find(params[:id])
-    ret = Group.find_by(name: 'retired')
-
-    if ret
-      m = Membership.new
-      m.user_id = u.id
-      m.group_id = ret.id
-      m.save
+    if user
+      user.retire
       flash[:success] = 'The user has been disconnected. Why did they resist? We only wish to raise quality of life for all species.'
     else
-      flash[:error] = "Could not retire user because the 'retired' group does not exist. Go make it and try again."
+      flash[:error] = 'Cannot retire user that does not exist.'
     end
 
     redirect_to users_url
-
   end
 
   def stats
@@ -205,8 +184,8 @@ class UsersController < ApplicationController
   end
 
   def admin_user
-    flash[:error] = 'You do not have admin privileges' unless current_user.is_admin
-    redirect_to(root_path) unless current_user.is_admin
+    flash[:error] = 'You do not have admin privileges' unless current_user.admin?
+    redirect_to(root_path) unless current_user.admin?
   end
 
 end

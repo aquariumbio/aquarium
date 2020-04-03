@@ -71,7 +71,7 @@ class Job < ActiveRecord::Base
   # @param user [User] the user scheduling the {Job}
   # @param group [Group] the group of the user
   # @return [Job] the job of scheduled operations
-  def self.schedule(operations:, user:, group:)
+  def self.schedule(operations:, user:, group: Group.technicians)
     ops_to_schedule = []
     ops_to_defer = []
 
@@ -122,9 +122,9 @@ class Job < ActiveRecord::Base
   end
 
   def status
-    if pc >= 0
+    if active?
       status = 'ACTIVE'
-    elsif pc == Job.NOT_STARTED
+    elsif not_started?
       status = 'PENDING'
     else
       entries = (logs.reject do |log|
@@ -196,12 +196,12 @@ class Job < ActiveRecord::Base
     confirm = options[:confirm] ? "class='confirm'" : ''
 
     if /\.rb$/.match?(path)
-      if pc == Job.NOT_STARTED
+      if not_started?
         "<a #{confirm} target=_top href='/krill/start?job=#{id}'>#{el}</a>".html_safe
       else
         "<a #{confirm} target=_top href='/krill/ui?job=#{id}'>#{el}</a>".html_safe
       end
-    elsif pc == Job.NOT_STARTED
+    elsif not_started?
       "<a #{confirm} target=_top href='/interpreter/advance?job=#{id}'>#{el}</a>".html_safe
     elsif pc != Job.COMPLETED
       "<a #{confirm} target=_top href='/interpreter/current?job=#{id}'>#{el}</a>".html_safe
@@ -214,7 +214,7 @@ class Job < ActiveRecord::Base
       p
     when Hash
       h = {}
-      p.keys.each do |key|
+      p.each_key do |key|
         h[key.to_s.split(' ')[0].to_sym] = remove_types(p[key])
       end
       h
@@ -250,7 +250,7 @@ class Job < ActiveRecord::Base
   end
 
   def cancel(user)
-    return if pc == Job.COMPLETED
+    return if done?
 
     self.pc = Job.COMPLETED
     self.user_id = user.id

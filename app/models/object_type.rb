@@ -155,54 +155,59 @@ class ObjectType < ActiveRecord::Base
     sample_type ? sample_type.name : nil
   end
 
-  def self.compare_and_upgrade(raw_ots)
+  def self.create_from(raw_type)
+    attributes = %i[cleanup data description handler max min name safety
+                    vendor unit cost release_method release_description prefix]
+    ot = ObjectType.new
+    attributes.each do |attribute|
+      ot[attribute] = raw_type[attribute]
+    end
 
+    if ot.handler == 'collection'
+      ot[:rows] = raw_type[:rows]
+      ot[:columns] = raw_type[:columns]
+    end
+
+    ot
+  end
+
+  def self.compare_and_upgrade(raw_types)
     parts = %i[cleanup data description handler max min name safety
                vendor unit cost release_method release_description prefix]
-    icons = []
+    inconsistencies = []
     notes = []
-    make = []
 
-    raw_ots.each do |raw_ot|
+    raw_types.each do |raw_type|
+      type = ObjectType.find_by(name: raw_type[:name])
 
-      ot = ObjectType.find_by name: raw_ot[:name]
-
-      if ot
+      if type
         parts.each do |part|
-          icons << "Container '#{raw_ot[:name]}': field #{part} differs from imported container's corresponding field." unless ot[part] == raw_ot[part]
+          inconsistencies << "Container '#{raw_type[:name]}': field #{part} differs from imported object type's corresponding field." unless type[part] == raw_type[part]
         end
-        notes << "Container '#{raw_ot[:name]}' matches existing container type." unless icons.any?
+        notes << "Container '#{raw_type[:name]}' matches existing object type." unless inconsistencies.any?
+        next
+      end
+
+      next if inconsistencies.any?
+
+      type = ObjectType.create_from(raw_type)
+      type.save
+      if type.errors.any?
+        inconsistencies << "Could not create '#{raw_type[:name]}': #{type.errors.full_messages.join(', ')}"
       else
-        make << raw_ot
+        notes << "Created new object type '#{raw_type[:name]}' with id #{type.id}"
       end
-
     end
 
-    if icons.none?
-      make.each do |raw_ot|
-        ot = ObjectType.new
-        parts.each do |part|
-          ot[part] = raw_ot[part]
-        end
-        ot.save
-        if ot.errors.any?
-          icons << "Could not create '#{raw_ot[:name]}': #{ot.errors.full_messages.join(', ')}"
-        else
-          notes << "Created new container '#{raw_ot[:name]}' with id #{ot.id}"
-        end
-      end
-    else
-      notes << 'Could not create required container(s) due to type definition inconsistencies.'
-    end
+    notes << 'Could not create required object type(s) due to type definition inconsistencies.' if inconsistencies.any?
 
-    { notes: notes, inconsistencies: icons }
-
+    { notes: notes, inconsistencies: inconsistencies }
   end
 
   def self.clean_up_sample_type_links(raw_object_types)
     raw_object_types.each do |rot|
-      ot = ObjectType.find_by name: rot[:name]
-      st = SampleType.find_by name: rot[:sample_type_name]
+      ot = ObjectType.find_by(name: rot[:name])
+      st = SampleType.find_by(name: rot[:sample_type_name])
       if st && ot
         ot.sample_type_id = st.id
         ot.save

@@ -119,6 +119,6 @@ class JsonController < ApplicationController
   end
 
   def current
-    render json: current_user.as_json(methods: :is_admin)
+    render json: current_user.as_json(methods: :admin?)
   end
 end
