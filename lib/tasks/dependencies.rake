@@ -79,7 +79,6 @@ namespace :dependencies do
     # def get_methods(library)
     #   library.source.content.scan(/\s{2,}def\s+([A-Za-z0-9_\.]*)/).flatten!
     # end
-
     # def get_developers(protocol)
     #   user_names = []
     #   protocol.versions.each do |version|
