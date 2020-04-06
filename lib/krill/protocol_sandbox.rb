@@ -86,7 +86,7 @@ module Krill
     #
     # @return [TrueClass, FalseClass] true if the job is complete, otherwise false
     def done?
-      @job.pc == Job.COMPLETED
+      @job.done?
     end
 
     private

@@ -32,18 +32,28 @@ class User < ActiveRecord::Base
     group
   end
 
-  def is_admin
-    g = Group.find_by(name: 'admin')
-    g && member?(g.id)
-    # return (!g || g.memberships.length == 0 || g.member?(id))
-  end
-
   def member?(group_id)
     memberships.where(group_id: group_id).present?
   end
 
+  # deprecated
+  def is_admin
+    admin?
+  end
+
+  def admin?
+    Group.admin&.member?(id)
+  end
+
   def retired?
     Group.retired&.member?(id)
+  end
+
+  def retire
+    m = Membership.new
+    m.user_id = id
+    m.group_id = Group.retired.id
+    m.save
   end
 
   def copy(u)
@@ -166,8 +176,7 @@ class User < ActiveRecord::Base
   end
 
   def self.select_active
-    retired = Group.retired
-    all.reject { |user| retired.member?(user.id) }
+    all.reject(&:retired?)
   end
 
   private

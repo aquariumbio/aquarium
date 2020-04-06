@@ -12,18 +12,14 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :key %>
-    <%= f.text_field :key %>
-  </div>
-  <div class="field">
-    <%= f.label :value %>
-    <%= f.text_field :value %>
-  </div>
-  <div class="field">
-    <%= f.label :description %>
-    <%= f.text_field :description %>
-  </div>  
+  <%= f.label :key %>
+  <%= f.text_field :key, placeholder: "Your key", required: true %>
+
+  <%= f.label :value %>
+  <%= f.text_field :value, placeholder: "Your Value", required: true %>
+  
+  <%= f.label :description %>
+  <%= f.text_field :description, placeholder: "Your description", required: true %>
 
   <br>
 

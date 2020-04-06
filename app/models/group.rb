@@ -26,10 +26,34 @@ class Group < ActiveRecord::Base
     where.not(name: User.logins)
   end
 
-  def self.retired
-    retired = Group.find_by(name: 'retired')
-    retired ||= Group.create(name: 'retired', description: 'Retired Users')
-
-    retired
+  def self.admin
+    get_group(name: 'admin', description: 'Administrative users')
   end
+
+  def self.retired
+    get_group(name: 'retired', description: 'Retired Users')
+  end
+
+  def self.technicians
+    get_group(name: 'technicians', description: 'Users who carryout protocols')
+  end
+
+  # [private method]
+  # Gets the group with the name.
+  # If the named group exists, returns the group.
+  # Otherwise, returns the group created with the name and description.
+  #
+  # Note: Does not change the description of an existing group.
+  #
+  # @param name [String] the name of the group
+  # @param description [String] the description for a new group
+  # @return [Group] the named group
+  def self.get_group(name:, description:)
+    group = Group.find_by(name: name)
+    group ||= Group.create(name: name, description: description)
+
+    group
+  end
+
+  private_class_method :get_group
 end

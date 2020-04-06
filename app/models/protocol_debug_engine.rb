@@ -3,39 +3,23 @@
 class ProtocolDebugEngine
 
   # from krill_controller
-  def self.debug_job(job)
+  def self.debug_job(job:, user_id:)
     errors = []
     # if not running, then start
-    if job.pc == Job.NOT_STARTED
-      job.user_id = current_user.id
+    if job.not_started?
+      job.user_id = user_id
       job.save
 
       errors = run_job(job: job)
     end
 
-    Operation.step @job.operations.collect { |op| op.plan.operations }.flatten
-
-    errors
-  end
-
-  # TODO: how does this overlap with test engine?
-  def run_job(job:)
-    errors = []
-    begin
-      manager = Krill::DebugManager(job, true)
-      manager.start
-    rescue Krill::KrillSyntaxError, Krill::KrillError => e
-      errors << e.message
-      ops.each do |op|
-        op.plan.error("Could not start job: #{e}", :job_start)
-      end
-    end
+    Operation.step(job.operations.collect { |op| op.plan.operations }.flatten)
 
     errors
   end
 
   # from plan_controller
-  def debug_plan(plan)
+  def self.debug_plan(plan:, current_user:)
     errors = []
 
     # find all pending operations
@@ -53,8 +37,7 @@ class ProtocolDebugEngine
 
       job = Job.schedule(
         operations: ops,
-        user: current_user,
-        group: Group.find_by(name: 'technicians')
+        user: current_user
       )
 
       errors = run_job(job: job)
@@ -64,5 +47,23 @@ class ProtocolDebugEngine
 
     errors
   end
+
+  # TODO: how does this overlap with test engine?
+  def self.run_job(job:)
+    errors = []
+    begin
+      manager = Krill::DebugManager.new(job)
+      manager.start
+    rescue Krill::KrillSyntaxError, Krill::KrillError => e
+      errors << e.error.message
+      job.operations.each do |op|
+        op.plan.error("Could not debug job: #{e}", :job_start)
+      end
+    end
+
+    errors
+  end
+
+  private_class_method :run_job
 
 end

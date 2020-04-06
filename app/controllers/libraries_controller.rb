@@ -17,7 +17,7 @@ class LibrariesController < ApplicationController
   end
 
   def create
-    redirect_to root_path, notice: 'Administrative privileges required to access library code.' unless current_user.is_admin
+    redirect_to root_path, notice: 'Administrative privileges required to access library code.' unless current_user.admin?
 
     lib = Library.new(name: params[:name], category: params[:category])
     lib.save
@@ -27,7 +27,7 @@ class LibrariesController < ApplicationController
   end
 
   def destroy
-    redirect_to root_path, notice: 'Administrative privileges required to access library code.' unless current_user.is_admin
+    redirect_to root_path, notice: 'Administrative privileges required to access library code.' unless current_user.admin?
 
     lib = Library.find(params[:id])
     lib.destroy
@@ -37,7 +37,7 @@ class LibrariesController < ApplicationController
   end
 
   def update
-    redirect_to root_path, notice: 'Administrative privileges required to access library code' unless current_user.is_admin
+    redirect_to root_path, notice: 'Administrative privileges required to access library code' unless current_user.admin?
 
     lib = Library.find(params[:id])
     if lib.update_attributes(name: params[:name], category: params[:category])
