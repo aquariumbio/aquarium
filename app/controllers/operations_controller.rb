@@ -36,8 +36,7 @@ class OperationsController < ApplicationController
     unless operations.empty?
       Job.schedule(
         operations: operations,
-        user: current_user,
-        group: Group.find_by(name: 'technicians')
+        user: current_user
       )
     end
 

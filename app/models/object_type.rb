@@ -199,9 +199,7 @@ class ObjectType < ActiveRecord::Base
       end
     end
 
-    if inconsistencies.any?
-      notes << 'Could not create required object type(s) due to type definition inconsistencies.'
-    end
+    notes << 'Could not create required object type(s) due to type definition inconsistencies.' if inconsistencies.any?
 
     { notes: notes, inconsistencies: inconsistencies }
   end

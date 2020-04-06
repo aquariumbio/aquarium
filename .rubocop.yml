@@ -31,7 +31,21 @@ Metrics/CyclomaticComplexity:
 Metrics/PerceivedComplexity:
   Enabled: false
 
+Naming/MethodName:
+  IgnoredPatterns:
+    - 'NOT\_STARTED'
+    - 'COMPLETED'
+
 Style/AsciiComments:
+  Enabled: false
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: false
+
+Style/HashTransformValues:
   Enabled: false
 
 Style/RaiseArgs:
