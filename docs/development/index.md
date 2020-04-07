@@ -209,37 +209,80 @@ This file also limits the API to code used in Krill the protocol development lan
 
 ## Making an Aquarium Release
 
-1.  make sure Rails tests pass
+1. Ensure that your clone is up-to-date:
+
+   ```bash
+   git pull
+   ```
+
+2. make sure Rails tests pass
+
+   ```bash
+   ./develop-compose.sh up --build -d
+   ./develop-compose.sh run --rm app rspec
+   ./develop-compose.sh down -v
+   ```
+
+   If there are any failures, fix them and start over.
+
+3. Fix any layout problems
+
+   ```bash
+   ./develop-compose.sh run --rm app rubocop -x
+   ```
+
+4. Run `rubocop`
+
+   ```bash
+   ./develop-compose.sh run --rm app rubocop
+   ```
+
+   Fix anything issues and start over.
+
+5. Update RuboCop TODO file
+
+   ```bash
+   ./develop-compose.sh run --rm app rubocop --auto-gen-config
+   ```
+
+6. (make sure JS tests pass)
+
+7. (Make sure JS linting passes)
+
+8. Update the version number in `package.json` and `config/initializers/version.rb` to the new version number.
+
+9. Update API documentation by running
+
+   ```bash
+   ./develop-compose.sh exec app yard
+   ```
+
+10. Update `CHANGE_LOG`
 
     ```bash
-    ./develop-compose.sh exec app rspec
+    get log v$OLDVERSION..
     ```
 
-2.  Run `rubocop`, fix anything broken. Once done run `rubocop --auto-gen-config`.
-3.  (make sure JS tests pass)
-4.  Make sure JS linting passes
-5.  Update the version number in `package.json` and `config/initializers/version.rb` to the new version number.
-6.  Update API documentation by running 
+11. Ensure all changes have been committed and pushed.
 
     ```bash
-    ./develop-compose.sh exec app yard
+    git status && git log --branches --not --remotes
     ```
 
-7.  (Update change log)
-8.  Commit and push changes.
-9.  Create a tag for the new version:
+12. Create a tag for the new version:
 
     ```bash
     git tag -a v$NEWVERSION -m "Aquarium version $NEWVERSION"
     git push --tags
     ```
 
-10. [Create a release on github](https://help.github.com/articles/creating-releases/).
+13. [Create a release on github](https://help.github.com/articles/creating-releases/).
     Visit the [Aquarium releases page](https://github.com/klavinslab/aquarium/releases).
     Click "Tags".
     Click "add release notes" for the new tag, use the change log as the release notes.
     Click "publish release".
-11. (Update zenodo entry)
+14. (Update zenodo entry)
+
 
 ## Docker configuration
 
