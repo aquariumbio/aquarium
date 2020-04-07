@@ -151,7 +151,74 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#compare_and_upgrade-class_method" title="compare_and_upgrade (class method)">.<strong>compare_and_upgrade</strong>(raw_ots)  &#x21d2; Object </a>
+      <a href="#compare_and_upgrade-class_method" title="compare_and_upgrade (class method)">.<strong>compare_and_upgrade</strong>(raw_types)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#container_types-class_method" title="container_types (class method)">.<strong>container_types</strong>(sample_type:)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>scopes for searching ObjectTypes.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#create_from-class_method" title="create_from (class method)">.<strong>create_from</strong>(raw_type)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#part_type-class_method" title="part_type (class method)">.<strong>part_type</strong>  &#x21d2; Object </a>
     
 
     
@@ -613,24 +680,24 @@
       <pre class="lines">
 
 
-202
-203
-204
-205
-206
 207
 208
 209
 210
-211</pre>
+211
+212
+213
+214
+215
+216</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/object_type.rb', line 202</span>
+      <pre class="code"><span class="info file"># File 'app/models/object_type.rb', line 207</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_clean_up_sample_type_links'>clean_up_sample_type_links</span><span class='lparen'>(</span><span class='id identifier rubyid_raw_object_types'>raw_object_types</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raw_object_types'>raw_object_types</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_rot'>rot</span><span class='op'>|</span>
-    <span class='id identifier rubyid_ot'>ot</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="ObjectType (class)">ObjectType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by'>find_by</span> <span class='label'>name:</span> <span class='id identifier rubyid_rot'>rot</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span>
-    <span class='id identifier rubyid_st'>st</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="SampleType.html" title="SampleType (class)">SampleType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by'>find_by</span> <span class='label'>name:</span> <span class='id identifier rubyid_rot'>rot</span><span class='lbracket'>[</span><span class='symbol'>:sample_type_name</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_ot'>ot</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="ObjectType (class)">ObjectType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by'>find_by</span><span class='lparen'>(</span><span class='label'>name:</span> <span class='id identifier rubyid_rot'>rot</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_st'>st</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="SampleType.html" title="SampleType (class)">SampleType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by'>find_by</span><span class='lparen'>(</span><span class='label'>name:</span> <span class='id identifier rubyid_rot'>rot</span><span class='lbracket'>[</span><span class='symbol'>:sample_type_name</span><span class='rbracket'>]</span><span class='rparen'>)</span>
     <span class='kw'>if</span> <span class='id identifier rubyid_st'>st</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_ot'>ot</span>
       <span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_sample_type_id'>sample_type_id</span> <span class='op'>=</span> <span class='id identifier rubyid_st'>st</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
       <span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
@@ -645,7 +712,144 @@
       <div class="method_details ">
   <h3 class="signature " id="compare_and_upgrade-class_method">
   
-    .<strong>compare_and_upgrade</strong>(raw_ots)  &#x21d2; <tt>Object</tt> 
+    .<strong>compare_and_upgrade</strong>(raw_types)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/object_type.rb', line 174</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_compare_and_upgrade'>compare_and_upgrade</span><span class='lparen'>(</span><span class='id identifier rubyid_raw_types'>raw_types</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_parts'>parts</span> <span class='op'>=</span> <span class='qsymbols_beg'>%i[</span><span class='tstring_content'>cleanup</span><span class='words_sep'> </span><span class='tstring_content'>data</span><span class='words_sep'> </span><span class='tstring_content'>description</span><span class='words_sep'> </span><span class='tstring_content'>handler</span><span class='words_sep'> </span><span class='tstring_content'>max</span><span class='words_sep'> </span><span class='tstring_content'>min</span><span class='words_sep'> </span><span class='tstring_content'>name</span><span class='words_sep'> </span><span class='tstring_content'>safety</span><span class='words_sep'>
+             </span><span class='tstring_content'>vendor</span><span class='words_sep'> </span><span class='tstring_content'>unit</span><span class='words_sep'> </span><span class='tstring_content'>cost</span><span class='words_sep'> </span><span class='tstring_content'>release_method</span><span class='words_sep'> </span><span class='tstring_content'>release_description</span><span class='words_sep'> </span><span class='tstring_content'>prefix</span><span class='tstring_end'>]</span></span>
+  <span class='id identifier rubyid_inconsistencies'>inconsistencies</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_notes'>notes</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+
+  <span class='id identifier rubyid_raw_types'>raw_types</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_raw_type'>raw_type</span><span class='op'>|</span>
+    <span class='id identifier rubyid_type'>type</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="ObjectType (class)">ObjectType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by'>find_by</span><span class='lparen'>(</span><span class='label'>name:</span> <span class='id identifier rubyid_raw_type'>raw_type</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+
+    <span class='kw'>if</span> <span class='id identifier rubyid_type'>type</span>
+      <span class='id identifier rubyid_parts'>parts</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_part'>part</span><span class='op'>|</span>
+        <span class='id identifier rubyid_inconsistencies'>inconsistencies</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Container &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_raw_type'>raw_type</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39;: field </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_part'>part</span><span class='embexpr_end'>}</span><span class='tstring_content'> differs from imported object type&#39;s corresponding field.</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_type'>type</span><span class='lbracket'>[</span><span class='id identifier rubyid_part'>part</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='id identifier rubyid_raw_type'>raw_type</span><span class='lbracket'>[</span><span class='id identifier rubyid_part'>part</span><span class='rbracket'>]</span>
+      <span class='kw'>end</span>
+      <span class='id identifier rubyid_notes'>notes</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Container &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_raw_type'>raw_type</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39; matches existing object type.</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_inconsistencies'>inconsistencies</span><span class='period'>.</span><span class='id identifier rubyid_any?'>any?</span>
+      <span class='kw'>next</span>
+    <span class='kw'>end</span>
+
+    <span class='kw'>next</span> <span class='kw'>if</span> <span class='id identifier rubyid_inconsistencies'>inconsistencies</span><span class='period'>.</span><span class='id identifier rubyid_any?'>any?</span>
+
+    <span class='id identifier rubyid_type'>type</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="ObjectType (class)">ObjectType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create_from'><span class='object_link'><a href="#create_from-class_method" title="ObjectType.create_from (method)">create_from</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_raw_type'>raw_type</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_type'>type</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_type'>type</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_any?'>any?</span>
+      <span class='id identifier rubyid_inconsistencies'>inconsistencies</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Could not create &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_raw_type'>raw_type</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39;: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_type'>type</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_full_messages'>full_messages</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>, </span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_notes'>notes</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Created new object type &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_raw_type'>raw_type</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39; with id </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_type'>type</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_notes'>notes</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Could not create required object type(s) due to type definition inconsistencies.</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_inconsistencies'>inconsistencies</span><span class='period'>.</span><span class='id identifier rubyid_any?'>any?</span>
+
+  <span class='lbrace'>{</span> <span class='label'>notes:</span> <span class='id identifier rubyid_notes'>notes</span><span class='comma'>,</span> <span class='label'>inconsistencies:</span> <span class='id identifier rubyid_inconsistencies'>inconsistencies</span> <span class='rbrace'>}</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="container_types-class_method">
+  
+    .<strong>container_types</strong>(sample_type:)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>scopes for searching ObjectTypes</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+219
+220
+221</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/object_type.rb', line 219</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_container_types'>container_types</span><span class='lparen'>(</span><span class='label'>sample_type:</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>sample_type_id:</span> <span class='id identifier rubyid_sample_type'>sample_type</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='period'>.</span><span class='id identifier rubyid_not'>not</span><span class='lparen'>(</span><span class='label'>name:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>__Part</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="create_from-class_method">
+  
+    .<strong>create_from</strong>(raw_type)  &#x21d2; <tt>Object</tt> 
   
 
   
@@ -680,81 +884,64 @@
 169
 170
 171
-172
-173
-174
-175
-176
-177
-178
-179
-180
-181
-182
-183
-184
-185
-186
-187
-188
-189
-190
-191
-192
-193
-194
-195
-196
-197
-198
-199
-200</pre>
+172</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'app/models/object_type.rb', line 158</span>
 
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_compare_and_upgrade'>compare_and_upgrade</span><span class='lparen'>(</span><span class='id identifier rubyid_raw_ots'>raw_ots</span><span class='rparen'>)</span>
-
-  <span class='id identifier rubyid_parts'>parts</span> <span class='op'>=</span> <span class='qsymbols_beg'>%i[</span><span class='tstring_content'>cleanup</span><span class='words_sep'> </span><span class='tstring_content'>data</span><span class='words_sep'> </span><span class='tstring_content'>description</span><span class='words_sep'> </span><span class='tstring_content'>handler</span><span class='words_sep'> </span><span class='tstring_content'>max</span><span class='words_sep'> </span><span class='tstring_content'>min</span><span class='words_sep'> </span><span class='tstring_content'>name</span><span class='words_sep'> </span><span class='tstring_content'>safety</span><span class='words_sep'>
-             </span><span class='tstring_content'>vendor</span><span class='words_sep'> </span><span class='tstring_content'>unit</span><span class='words_sep'> </span><span class='tstring_content'>cost</span><span class='words_sep'> </span><span class='tstring_content'>release_method</span><span class='words_sep'> </span><span class='tstring_content'>release_description</span><span class='words_sep'> </span><span class='tstring_content'>prefix</span><span class='tstring_end'>]</span></span>
-  <span class='id identifier rubyid_icons'>icons</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
-  <span class='id identifier rubyid_notes'>notes</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
-  <span class='id identifier rubyid_make'>make</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
-
-  <span class='id identifier rubyid_raw_ots'>raw_ots</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_raw_ot'>raw_ot</span><span class='op'>|</span>
-
-    <span class='id identifier rubyid_ot'>ot</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="ObjectType (class)">ObjectType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by'>find_by</span> <span class='label'>name:</span> <span class='id identifier rubyid_raw_ot'>raw_ot</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span>
-
-    <span class='kw'>if</span> <span class='id identifier rubyid_ot'>ot</span>
-      <span class='id identifier rubyid_parts'>parts</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_part'>part</span><span class='op'>|</span>
-        <span class='id identifier rubyid_icons'>icons</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Container &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_raw_ot'>raw_ot</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39;: field </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_part'>part</span><span class='embexpr_end'>}</span><span class='tstring_content'> differs from imported container&#39;s corresponding field.</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_ot'>ot</span><span class='lbracket'>[</span><span class='id identifier rubyid_part'>part</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='id identifier rubyid_raw_ot'>raw_ot</span><span class='lbracket'>[</span><span class='id identifier rubyid_part'>part</span><span class='rbracket'>]</span>
-      <span class='kw'>end</span>
-      <span class='id identifier rubyid_notes'>notes</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Container &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_raw_ot'>raw_ot</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39; matches existing container type.</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_icons'>icons</span><span class='period'>.</span><span class='id identifier rubyid_any?'>any?</span>
-    <span class='kw'>else</span>
-      <span class='id identifier rubyid_make'>make</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_raw_ot'>raw_ot</span>
-    <span class='kw'>end</span>
-
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_create_from'>create_from</span><span class='lparen'>(</span><span class='id identifier rubyid_raw_type'>raw_type</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_attributes'>attributes</span> <span class='op'>=</span> <span class='qsymbols_beg'>%i[</span><span class='tstring_content'>cleanup</span><span class='words_sep'> </span><span class='tstring_content'>data</span><span class='words_sep'> </span><span class='tstring_content'>description</span><span class='words_sep'> </span><span class='tstring_content'>handler</span><span class='words_sep'> </span><span class='tstring_content'>max</span><span class='words_sep'> </span><span class='tstring_content'>min</span><span class='words_sep'> </span><span class='tstring_content'>name</span><span class='words_sep'> </span><span class='tstring_content'>safety</span><span class='words_sep'>
+                  </span><span class='tstring_content'>vendor</span><span class='words_sep'> </span><span class='tstring_content'>unit</span><span class='words_sep'> </span><span class='tstring_content'>cost</span><span class='words_sep'> </span><span class='tstring_content'>release_method</span><span class='words_sep'> </span><span class='tstring_content'>release_description</span><span class='words_sep'> </span><span class='tstring_content'>prefix</span><span class='tstring_end'>]</span></span>
+  <span class='id identifier rubyid_ot'>ot</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="ObjectType (class)">ObjectType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+  <span class='id identifier rubyid_attributes'>attributes</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_attribute'>attribute</span><span class='op'>|</span>
+    <span class='id identifier rubyid_ot'>ot</span><span class='lbracket'>[</span><span class='id identifier rubyid_attribute'>attribute</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_raw_type'>raw_type</span><span class='lbracket'>[</span><span class='id identifier rubyid_attribute'>attribute</span><span class='rbracket'>]</span>
   <span class='kw'>end</span>
 
-  <span class='kw'>if</span> <span class='id identifier rubyid_icons'>icons</span><span class='period'>.</span><span class='id identifier rubyid_none?'>none?</span>
-    <span class='id identifier rubyid_make'>make</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_raw_ot'>raw_ot</span><span class='op'>|</span>
-      <span class='id identifier rubyid_ot'>ot</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="ObjectType (class)">ObjectType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
-      <span class='id identifier rubyid_parts'>parts</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_part'>part</span><span class='op'>|</span>
-        <span class='id identifier rubyid_ot'>ot</span><span class='lbracket'>[</span><span class='id identifier rubyid_part'>part</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_raw_ot'>raw_ot</span><span class='lbracket'>[</span><span class='id identifier rubyid_part'>part</span><span class='rbracket'>]</span>
-      <span class='kw'>end</span>
-      <span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
-      <span class='kw'>if</span> <span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_any?'>any?</span>
-        <span class='id identifier rubyid_icons'>icons</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Could not create &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_raw_ot'>raw_ot</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39;: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_full_messages'>full_messages</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>, </span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
-      <span class='kw'>else</span>
-        <span class='id identifier rubyid_notes'>notes</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Created new container &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_raw_ot'>raw_ot</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39; with id </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
-      <span class='kw'>end</span>
-    <span class='kw'>end</span>
-  <span class='kw'>else</span>
-    <span class='id identifier rubyid_notes'>notes</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Could not create required container(s) due to type definition inconsistencies.</span><span class='tstring_end'>&#39;</span></span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_handler'>handler</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>collection</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_ot'>ot</span><span class='lbracket'>[</span><span class='symbol'>:rows</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_raw_type'>raw_type</span><span class='lbracket'>[</span><span class='symbol'>:rows</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_ot'>ot</span><span class='lbracket'>[</span><span class='symbol'>:columns</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_raw_type'>raw_type</span><span class='lbracket'>[</span><span class='symbol'>:columns</span><span class='rbracket'>]</span>
   <span class='kw'>end</span>
 
-  <span class='lbrace'>{</span> <span class='label'>notes:</span> <span class='id identifier rubyid_notes'>notes</span><span class='comma'>,</span> <span class='label'>inconsistencies:</span> <span class='id identifier rubyid_icons'>icons</span> <span class='rbrace'>}</span>
+  <span class='id identifier rubyid_ot'>ot</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="part_type-class_method">
+  
+    .<strong>part_type</strong>  &#x21d2; <tt>Object</tt> 
+  
 
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+223
+224
+225</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/object_type.rb', line 223</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_part_type'>part_type</span>
+  <span class='id identifier rubyid_find_by'>find_by</span><span class='lparen'>(</span><span class='label'>name:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>__Part</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1628,7 +1815,7 @@ ObjectType as its container</p>
 </div>
 
       <div id="footer">
-  Generated on Wed Dec 18 10:27:16 2019 by
+  Generated on Tue Apr  7 07:22:09 2020 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.20 (ruby-2.6.5).
 </div>
