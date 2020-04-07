@@ -27,6 +27,17 @@ Changes:
   environment variables.
 - Starting Aquarium in production using Docker will print the license.
 
+v2.7.3
+- Changes system menu pages to be more consistent. Changes list pagination to
+  be alphabetical.
+- Fixes bug in job execution code that prevented debug operation from manager page.
+- Fixes a bug preventing import of collection dimensions.
+- Switches Aquarium to MIT License.
+- Add rake task to identify protocol dependencies.
+- Update sample search to show all items for a sample.
+
+- Update gem and yarn dependencies.
+
 
 v2.7.2
 - Fixes bug in recent changes to sample search where results were filtered
