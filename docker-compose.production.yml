@@ -6,7 +6,7 @@ services:
     build:
       context: .
       target: aquarium
-    image: aquariumbio/aquarium:2.7.2
+    image: aquariumbio/aquarium:2.7.3
     command: ["production"]
     volumes:
       - public:/aquarium/public
