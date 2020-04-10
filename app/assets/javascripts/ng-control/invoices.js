@@ -15,7 +15,7 @@
         $scope.state.transactions = null;
 
         let user_id =
-          $scope.current_user.is_admin && $scope.all_invoices
+          $scope.current_user.admin && $scope.all_invoices
             ? -1
             : $scope.current_user.id;
 
