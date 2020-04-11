@@ -150,7 +150,7 @@ class UsersController < ApplicationController
 
   def current
     u = current_user.as_json
-    u[:memberships] = current_user.groups
+    u[:memberships] = current_user.groups.as_json
     render json: u
   end
 
