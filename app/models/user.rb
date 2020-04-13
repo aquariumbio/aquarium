@@ -25,7 +25,9 @@ class User < ActiveRecord::Base
   validates :password, presence: true, length: { minimum: 6 }, on: :create
   validates :password_confirmation, presence: true, on: :create
 
-  # deprecated
+  # TODO: eliminate need for this
+  # keep because it is used by json_controller.current
+  # otherwise should not be used
   def is_admin
     admin?
   end
