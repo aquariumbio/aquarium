@@ -22,7 +22,8 @@ else
     echo 'SECRET_KEY_BASE='$new_key_base >> $ENV_FILE 
 fi
 
-DB_INIT_DIR=./data/mysql_init
+DATA_DIR=./docker
+DB_INIT_DIR=$DATA_DIR/mysql_init
 DB_FILE=$DB_INIT_DIR/dump.sql
 if [[ ! -f "$DB_FILE" ]]; then
     cp $DB_INIT_DIR/default.sql $DB_INIT_DIR/dump.sql
