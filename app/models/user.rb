@@ -37,6 +37,9 @@ class User < ActiveRecord::Base
   end
 
   # deprecated
+  # TODO: eliminate need for this
+  # keep because it is used by json_controller.current
+  # otherwise should not be used
   def is_admin
     admin?
   end
