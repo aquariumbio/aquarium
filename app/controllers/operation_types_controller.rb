@@ -29,8 +29,10 @@ class OperationTypesController < ApplicationController
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.admin?
 
     ot = OperationType.new(
-      name: params[:name], category: params[:category],
-      deployed: params[:deployed], on_the_fly: params[:on_the_fly]
+      name: params[:name],
+      category: params[:category],
+      deployed: params[:deployed],
+      on_the_fly: params[:on_the_fly]
     )
 
     unless ot.valid?
@@ -50,7 +52,7 @@ class OperationTypesController < ApplicationController
 
     if params[:field_types]
       params[:field_types].each do |ft|
-        ot.add_new_field_type ft
+        ot.add_new_field_type(ft)
       end
     end
 

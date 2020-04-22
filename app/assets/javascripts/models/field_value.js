@@ -41,6 +41,15 @@ AQ.FieldValue.record_getters.is_param = function() {
   return this.field_type.ftype != "sample";
 };
 
+// field type names are case insensitive, but don't want to deal with locales here
+AQ.FieldValue.record_getters.is_option = function() {
+  return this.is_json && (this.name === "Options" || this.name === "options");
+}
+
+AQ.FieldValue.record_getters.is_json = function() {
+  return this.field_type.ftype === "json"
+}
+
 AQ.FieldValue.record_getters.type = function() {
   return this.field_type.ftype;
 };
