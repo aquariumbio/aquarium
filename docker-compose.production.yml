@@ -14,7 +14,7 @@ services:
       - shared:/aquarium/shared
 
   krill:
-    image: aquariumbio/aquarium:2.7.1
+    image: aquariumbio/aquarium:2.7.3
     command: ["krill", "production"]
 
   web:
