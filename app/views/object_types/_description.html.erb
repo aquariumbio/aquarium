@@ -14,7 +14,7 @@
 
 <% unless  @object_type.handler == 'sample_container' %>
   <li><b>Handler: </b>
-    <% if @object_type.handler == 'collection' %>
+    <% if @object_type.collection_type? %>
       <%= @object_type.rows %>&times;<%= @object_type.columns %>
     <% end %>
     <%= @object_type.handler %>

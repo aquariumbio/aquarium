@@ -1,7 +1,7 @@
 <%= render partial: '/data_associations/template' %> 
 <%= render partial: "/items/template" %>
 
-<% provide(:title, "#{@item.object_type.handler == 'collection' ? 'Collection' : 'Item' } #{@item.id}") %>
+<% provide(:title, "#{@item.object_type.collection_type? ? 'Collection' : 'Item' } #{@item.id}") %>
 
 <%= content_for :controller do %>itemCtrl<% end %>
 

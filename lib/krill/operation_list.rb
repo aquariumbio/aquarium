@@ -160,7 +160,7 @@ module Krill
 
             fv.make_part(@output_collections[fv.name][i / size], (i % size) / columns, (i % size) % columns)
 
-          elsif fv.object_type && fv.object_type.handler == 'collection'
+          elsif fv.object_type && fv.object_type.collection_type?
 
             fv.make_collection
 
