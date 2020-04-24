@@ -69,7 +69,7 @@ class ItemsController < ApplicationController
       end
     end
 
-    if @object_type.handler == 'sample_container'
+    if @object_type.sample?
 
       redirect_to sample_path(@item.sample)
 

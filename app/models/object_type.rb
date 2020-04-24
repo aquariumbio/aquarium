@@ -42,6 +42,10 @@ class ObjectType < ActiveRecord::Base
     handler == 'collection'
   end
 
+  def sample?
+    handler == 'sample_container'
+  end
+
   def rows
     return unless collection_type?
 
