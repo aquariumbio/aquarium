@@ -41,6 +41,10 @@ module FieldValuePlanner
     end
   end
 
+  def collection?
+    object_type.collection_type?
+  end
+
   def operation
     Operation.find_by(id: parent_id)
   end
