@@ -27,7 +27,7 @@ Bioturk::Application.config.debug_tools = true # false will hide debug buttons i
 Bioturk::Application.config.krill_port = 3500
 Bioturk::Application.config.krill_hostname = 'localhost' # for krill and aq on same server (no docker)
 #Bioturk::Application.config.krill_hostname = 'krill' # for krill docker container
-
+Bioturk::Application.config.technician_dashboard = false # false will hide the technician view dashboard from the top nav menu
 
 #
 # Set CSRF token names
