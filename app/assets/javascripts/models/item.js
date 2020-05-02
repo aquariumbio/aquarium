@@ -9,6 +9,10 @@ AQ.Item.record_getters.is_part = function() {
   return (this.object_type && this.object_type.name === '__Part');
 }
 
+AQ.Item.record_getters.is_deleted = function() {
+  return this.location === "deleted"
+}
+
 // TODO: this method is supposed to be a getter, but uses a promise
 AQ.Item.record_getters.collection = function() {
   let item = this;

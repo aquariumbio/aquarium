@@ -1,4 +1,4 @@
-<% provide(:title, 'All users') %>
+<% provide(:title, 'Users') %>
 
 <% content_for :class do %>users<% end %>
 
@@ -12,42 +12,21 @@
     <div class='flash md-body-2'><%= value %></div>
   <% end %>
 
-    <%= form_for(@user, :html => { :id => "new_user" } ) do |f| %>
-
-      <%= render 'shared/error_messages' %>
-
-      <%= f.label :name %>
-      <%= f.text_field :name %>
-
-      <%= f.label :login %>
-      <%= f.text_field :login, id: "new_login" %>
-
-      <%= f.label :password %>
-      <%= f.password_field :password, id: "new_password" %>
-
-      <%= f.label :password_confirmation, "Confirmation" %>
-      <%= f.password_field :password_confirmation, id: "new_confirmation" %>
-
-      <%= f.submit "New User", class: "md-button md-raised md-primary" %>
-
-    <% end %>
-
-    <hr>
-
     <%= form_for(@user, html: { action: 'change_password', id: "change_user_password" }) do |f| %>
 
       <%= render 'shared/error_messages' %>
 
-      <%= f.label :login %>
+      <h3> Change Password </p>
+      <%= f.label :username %>
       <%= f.select(:login, options_for_select(
             User.all.sort_by { |u| u.login }
                     .collect { |u| [ u.login, u.login ] }, current_user.id )) %>
 
       <%= f.label :password %>
-      <%= f.password_field :password %>
+      <%= f.password_field :password, required: true, placeholder: "Your password" %>
 
       <%= f.label :password_confirmation, "Confirm Password" %>
-      <%= f.password_field :password_confirmation %>
+      <%= f.password_field :password_confirmation, required: true, placeholder: "Re-type your password"  %>
 
       <input id="change_password" name="change_password" type="hidden" value="true" />
 
@@ -64,23 +43,20 @@
 
 <% content_for :main do %>
 
-  <div layout-padding>
+    <%= alphabetical_paginate @alpha_params %>
 
-    <%= will_paginate @users, previous_label: 'Previous', next_label: 'Next' %>
-
-    <table class="table">
-       <tr>
-        <th>login</th>
-        <th>Name</th>
+    <table class="table" id="pagination_table" style="table-layout: fixed">
+      <tr>
+        <th>Full Name</th>
+        <th>Username</th>
         <th>Since</th>
-        <th></th>
-        <th></th>
-       </tr>
-       <%= render @users %>
+        <th>Status</th>
+      </tr>
+      <%= render @users %>
     </table>
 
-    <%= will_paginate @users, previous_label: 'Previous', next_label: 'Next' %>
+<% end %>
 
-  </div>
-
+<%= content_for :action1 do %>
+  <%= link_to 'New User', new_user_path, class: 'md-button md-raised md-primary' %>
 <% end %>

@@ -27,6 +27,12 @@ class Library < ActiveRecord::Base
     end
   end
 
+  delegate :defined_methods, to: :source
+  delegate :defined_classes, to: :source
+  delegate :defined_modules, to: :source
+  delegate :referenced_libraries, to: :source
+  delegate :referenced_modules, to: :source
+
   def export
     {
       library: {

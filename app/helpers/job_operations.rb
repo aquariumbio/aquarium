@@ -79,7 +79,7 @@ module JobOperations # included in Job model
   end
 
   def start
-    return unless pc == Job.NOT_STARTED
+    return unless not_started?
 
     self.pc = 0
     save
@@ -87,7 +87,7 @@ module JobOperations # included in Job model
   end
 
   def stop(status = 'done')
-    return unless pc >= 0
+    return unless active?
 
     self.pc = Job.COMPLETED
     save

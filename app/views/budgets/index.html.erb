@@ -1,27 +1,59 @@
 <% provide(:title, 'Budgets') %>
 
+<% content_for :class do %>budgets<% end %>
+
 <%= content_for :controller do %>noCtrl<% end %>
 
 <% content_for :specific_title do %><% end %>
 
 <% content_for :sidebar do %>
-  <div flex layout-padding>
-    <br><br>
-    <%= render 'form' %>
+
+  <div layout-padding>
+
+    <%= form_for(@budget) do |f| %>
+      <% if @budget.errors.any? %>
+          <%= render 'form' %> 
+      <% end %>
+
+      <h3>Create Budget</h3>
+      <%= f.label "Budget Number / short name" %>
+      <%= f.text_field :name, placeholder: "Your budget number/name", required: true%>
+
+      <%= f.label :description %>
+      <%= f.text_field :description, placeholder: "Budget description" %>
+
+      <%= f.label "Contact" %>
+      <%= f.text_field :contact, placeholder: "Contact name", required: true %>
+
+      <%= f.label "Contact's email" %>
+      <%= f.text_field :email, placeholder: "Contact email", required: true%>
+
+      <%= f.label "Contact's phone" %>
+      <%= f.text_field :phone, placeholder: "Contact phone", required: true%>
+
+      <br />
+      <% if @budget.id %>
+        <%= f.submit 'Save', class: 'md-button md-raised md-primary' %>
+      <% else %>
+        <%= f.submit 'New Budget', class: 'md-button md-raised md-primary' %>
+      <% end %>  
+          
+    <% end %>
+
   </div>
 <% end %>
 
 <% content_for :main do %>
 
-  <div flex layout-padding>
-
-    <table class='table'>
+  <%= alphabetical_paginate @alpha_params %>
+ 
+  <table class="table" id="pagination_table" style="table-layout: fixed, width: 100%">
       <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Contact</th>  
-        <th>Users</th>      
-        <th></th>
+        <th style="width: 10%">Name</th>
+        <th style="width: 30%">Description</th>
+        <th style="width: 10%">Contact</th>  
+        <th style="width: 40%">Users</th>      
+        <th style="width: 5%"></th>
       </tr>
 
       <% @budgets.each do |budget| %>
@@ -35,12 +67,14 @@
               }.join(', ')
             %>
           </td>            
-          <td><%= link_to 'Edit', edit_budget_path(budget) %></td>
+          <td>
+            <%= link_to edit_budget_path(budget) do %>
+              <icon class='icon-pencil'></icon>
+            <% end %>
+          </td>
         </tr>
       <% end %>
 
     </table>
-
-  </div>
 
 <% end %>
