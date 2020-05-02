@@ -62,6 +62,7 @@ group :development do
 
   # used to determine subnet for docker containers for web-console
   gem 'ipaddress'
+  gem 'simplecov', require: false
 end
 
 group :production do
