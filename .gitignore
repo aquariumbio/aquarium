@@ -10,19 +10,11 @@
 # Ignore Yardoc config and folder
 /.yardoc
 
-# Ignore docker environment file
+# Ignore docker environment file (contains secrets)
 /.env
 
 # don't include the yardoc generated api directory
 /doc/api
-
-# Ignore the actual database config file
-/config/database.yml
-
-# Igmore the installation specific configuration file
-/config/initializers/aquarium.rb
-/config/environments/development.rb
-/config/environments/original-development.notrb
 
 # Ignore the default SQLite database.
 /db/*.sqlite3
@@ -76,6 +68,8 @@ ui/node_modules
 
 # ignore vscode settings
 .vscode
+
+coverage
 
 # please do not ignore Gemfile.lock !!!
 coverage

@@ -1,86 +1,89 @@
 # Aquarium Development Guide
 
-These guidelines are intended for those working directly on Aquarium.
+These guidelines are intended for those working directly on [Aquarium](aquarium.bio).
 
 ---
 
 ## Getting Started
 
-Follow the Aquarium installation instructions at
-<a href="aquarium.bio">aquarium.bio</a>
-to get a local copy of the Aquarium git repository.
+1. Install [Docker](https://www.docker.com/get-started)
+
+2. Get Aquarium using [git](https://git-scm.com) with the command
+
+   ```bash
+   git clone https://github.com/klavinslab/aquarium.git
+   ```
 
 ## Running Aquarium
 
-To run Aquarium in development mode using the Docker configuration in a Unix&trade;-like environment, do the following.
+The following commands will allow you to run Aquarium in Rails development mode in a Unix&trade;-like environment.
 
-### Initial steps
-
-Make the `develop-compose.sh` script executable
-
-```bash
-chmod u+x develop-compose.sh
-```
-
-### Commands
-
-1. Build the docker images with
+1. **Build** the docker images with
 
    ```bash
-   ./develop-compose.sh build
+   docker-compose build
    ```
 
-   This should only be necessary the first time you run Aquarium in development mode.
-   However, it may be needed any time you change the Aquarium configuration.
-   In situations where dependencies change, you will also want to run `build` with the `--no-cache` option.
-
-2. Start Aquarium with
+2. **Start** Aquarium in development mode with
 
    ```bash
-   ./develop-compose.sh up
+   docker-compose up
    ```
 
-   This command starts services for Aquarium, Krill, MySQL, minio and nginx, which are needed to run Aquarium.
-   In development mode, Aquarium is available at `localhost:3000` instead of `localhost`.
+   In development mode, Aquarium is available at `localhost:3000`.
 
-   To stop the services, type `ctrl-c` followed by
+3. **Stop** the Aquarium services, type `ctrl-c` followed by
 
    ```bash
-   ./develop-compose down -v
+   docker-compose down -v
    ```
 
-3. To run commands inside the Aquarium Ruby environment, precede each with
+   Alternatively, you can run this command in a separate terminal within the `aquarium` directory .
+
+## Working with an Aquarium Container
+
+To run commands within the running Aquarium container, precede each command with
 
    ```bash
-   ./develop-compose.sh run --rm app
+   docker-compose exec app
    ```
 
-   Specifically, you can run a shell within the Aquarium container with the command
+For instance, you can run the Rails console with the command
+
+  ```bash
+  docker-compose exec app rails c
+  ```
+
+And, you can also run an interactive shell within the Aquarium container with the command
 
    ```bash
-   ./develop-compose.sh run --rm app /bin/sh
+   docker-compose exec app /bin/sh
    ```
 
-   where you can run `rake` or even the Rails console.
+which allows you to work within the container.
 
-Note: The `develop-compose.sh` script helps shorten each command.
-Without the script, each command would start with
+For commands that don't require that Aquarium is running, using a command starting with
 
-```bash
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml
-```
+   ```bash
+   docker-compose run --rm app
+   ```
 
-instead of the script name.
+will create a temporary container. 
+This can be useful for running single commands such as
+
+  ```bash
+  docker-compose run --rm app rspec
+  ```
+
+which runs RSpec on the tests in the `spec` directory.
 
 ## Switching databases
 
 The configuration for Docker uses the MySQL Docker image, which is capable of automatically importing a database dump the first time it is started.
-This is convenient for standard usage, but it makes it harder to switch to another database.
+You can switch the database, but doing so will destroy any changes you have made to the current database.
+If you want to save these changes, you will have to create a database dump.
 
-Switching databases will destroy any changes you have made to the current database.
-If you want to save these, you will have to create a database dump.
-
-To make database dump, using the values of `MYSQL_USER` and `MYSQL_PASSWORD` from `docker-compose.yml` run the following
+To make database dump, using the values of `MYSQL_USER` and `MYSQL_PASSWORD` from `.env` run the following
 
 ```bash
 MYSQL_USER=<username>
@@ -99,11 +102,11 @@ rm -rf docker/db/*
 Then copy the dump of the database that you want to use to the default location:
 
 ```bash
-cp desired_dump.sql docker/mysql_init/dump.sql
+cp production_dump.sql docker/mysql_init/dump.sql
 ```
 
-It may be necessary to run migrations on database dump from a prior version of Aquarium.
-See the Docker installation instructions at <a href="aquarium.bio">aquarium.bio</a> for details.
+Note: It may be necessary to run migrations on database dump from a prior version of Aquarium.
+See the Docker installation instructions at [aquarium.bio](aquarium.bio) for details.
 
 ## Restoring the default database dump
 
@@ -121,11 +124,13 @@ rm -rf docker/db/*
 
 ## Testing Aquarium
 
+### Running Tests
+
 ```bash
-./develop-compose.sh up -d
-./develop-compose.sh exec app rspec
-./develop-compose.sh down -v
+docker-compose run --rm app rspec
 ```
+
+### Adding Tests
 
 ## Editing Aquarium
 
@@ -134,16 +139,45 @@ rm -rf docker/db/*
 ### Formatting Aquarium code
 
 The Aquarium repository is setup to use [RuboCop](https://rubocop.readthedocs.io).
-Settings are in the `.rubocop.yml` file in the repository directory.
-When the Rails or Ruby versions are changed the target versions in this file should also be changed.
+
+When you make changes to Aquarium code, run the command 
+
+  ```bash
+  docker-compose run --rm app rubocop -x
+  ```
+
+to fix layout issues.
+Then run the command
+
+  ```bash
+  docker-compose run --rm app rubocop -x
+  ```
+
+to see if you have introduced any other issues.
+This will check for several potential issues that occur in Rails apps.
+
+You should fix any issues, but be certain to test them.
+RuboCop can do other auto-corrections, but don't use that feature unless your tests ensure that the behavior is not changed.
+
+Because RuboCop may change, it may be necessary to make changes to the `.rubocop.yml` file in the repository directory.
+When the Ruby version is changed the target version in this file should also be changed.
 Otherwise, you probably wont need to change this file.
 
-When you make changes to Aquarium code, run the `rubocop` command to see if you have introduced any issues.
-This will check for several potential issues that occur in Rails apps.
-Note that it will always complain about the `JOB::NOT_STARTED` and `JOB::COMPLETED`, but, because of the `.rubocop_todo.yml` file, any other issues that are found should be things that you have introduced.
-You should fix them.
-If you only have `Layout` issues, use `rubocop -x` to do it automatically.
-RuboCop can do other auto-corrections, but don't use that feature unless your tests ensure that the behavior is not changed.
+### Fixing Style TODOs
+
+The file `.rubocop_todo.yml` in the `aquarium` repository configures RuboCop so that it will ignore the listed issues when it processes the Ruby code in Aquarium.
+This makes it possible for developers to focus on issues that they introduce when changing code.
+However, it also identifies issues that we should try to eliminate.
+
+The process of doing this is to pick one issue, fix it, test the fix, and then update the todo file.
+When fixing issues make sure that there is a test that will exercise the fix, and be extra careful when applying auto-correct.
+Some fixes may not be possible without affecting the Krill library for protocols, which could break protocols that are in use.
+
+This command will regenerate the `.rubocop_todo.yml` file
+
+  ```bash
+  docker-compose run -rm app rubocop --auto-gen-config
+  ```
 
 ### Documenting Aquarium Ruby Code
 
@@ -207,60 +241,79 @@ will generate the documentation and write it to the directory `docs/api`.
 This location is determined by the file `.yardopts` in the project repository.
 This file also limits the API to code used in Krill the protocol development language.
 
+### Updating Dependencies
+
+```bash
+docker-compose up -d
+docker-compose exec app /bin/sh
+bundle upgrade
+docker-compose down -v
+```
+
+```bash
+docker-compose up -d
+docker-compose exec app /bin/sh
+yarn update
+docker-compose down -v
+```
+
+### Modifying this Document
+
+This document is `docs/development/index.md` in the `aquarium` repository.
+Keep it up-to-date if you change something that affects Aquarium development.
+
 ## Making an Aquarium Release
 
-1. Ensure that your clone is up-to-date:
+1.  Ensure that your clone is up to date
 
-   ```bash
-   git pull
-   ```
+    ```bash
+    git pull
+    ```
 
-2. make sure Rails tests pass
+2.  Make sure Rails tests pass
 
-   ```bash
-   ./develop-compose.sh up --build -d
-   ./develop-compose.sh run --rm app rspec
-   ./develop-compose.sh down -v
-   ```
+    ```bash
+    docker-compose exec app rspec
+    ```
 
-   If there are any failures, fix them and start over.
+    If there are any failures, fix them and start over.
 
-3. Fix any layout problems
+3.  Fix any layout problems 
 
-   ```bash
-   ./develop-compose.sh run --rm app rubocop -x
-   ```
+    ```bash
+    docker-compose run --rm app rubocop -x
+    ```
 
-4. Run `rubocop`
+4.  Run `rubocop`
 
-   ```bash
-   ./develop-compose.sh run --rm app rubocop
-   ```
+    ```bash
+    docker-compose run --rm app rubocop
+    ```
 
-   Fix anything issues and start over.
+    Fix any issues and start over.
 
-5. Update RuboCop TODO file
+5.  Update RuboCop TODO file
 
-   ```bash
-   ./develop-compose.sh run --rm app rubocop --auto-gen-config
-   ```
+    ```bash
+    docker-compose run -rm app rubocop --auto-gen-config
+    ```
 
-6. (make sure JS tests pass)
+6.  (make sure JS tests pass)
 
-7. (Make sure JS linting passes)
+7.  (Make sure JS linting passes)
 
-8. Update the version number in `package.json` and `config/initializers/version.rb` to the new version number.
+8.  Update the version number in `package.json` and `config/initializers/version.rb` to the new version number.
 
-9. Update API documentation by running
+9.  Update API documentation by running 
 
-   ```bash
-   ./develop-compose.sh exec app yard
-   ```
+    ```bash
+    docker-compose exec app yard
+    ```
 
 10. Update `CHANGE_LOG`
 
     ```bash
-    get log v$OLDVERSION..
+    git log v$OLDVERSION..
     ```
 
 11. Ensure all changes have been committed and pushed.
@@ -268,6 +321,8 @@ This file also limits the API to code used in Krill the protocol development lan
     ```bash
     git status && git log --branches --not --remotes
     ```
+
+    Commit and push any changes found.
 
 12. Create a tag for the new version:
 
@@ -278,32 +333,40 @@ This file also limits the API to code used in Krill the protocol development lan
 
 13. [Create a release on github](https://help.github.com/articles/creating-releases/).
     Visit the [Aquarium releases page](https://github.com/klavinslab/aquarium/releases).
-    Click "Tags".
-    Click "add release notes" for the new tag, use the change log as the release notes.
-    Click "publish release".
+    - Click "Tags".
+    - Click "add release notes" for the new tag, use the change log as the release notes.
+    - Click "publish release".
+
 14. (Update zenodo entry)
 
+15. Push image to Docker Hub
 
-## Docker configuration
+    ```bash
+    bash ./aquarium.sh build
+    docker push aquariumbio/aquarium:v$NEWVERSION
+    ```
 
-The Aquarium Docker configuration is determined by these files:
+## Aquarium Internals
+
+## Aquarium Configuration
+
+Aquarium is configured to run within Docker using the following files:
 
 ```bash
 aquarium
-|-- Dockerfile                  # defines the image for Aquarium
 |-- docker
-|   |-- aquarium                # Aquarium configuration files
-|   |-- aquarium-entrypoint.sh  # entrypoint for running Aquarium
-|   |-- db                      # directory to store database files
-|   |-- krill-entrypoint.sh     # entrypoint for running Krill
-|   |-- mysql_init              # database dump to initialize database
-|   |-- nginx.development.conf  # nginx configuration for development server
-|   |-- nginx.production.conf   # nginx configuration for production server
-|   `-- s3                      # directory for minio files
-|-- docker-compose.dev.yml      # development compose file
-|-- docker-compose.override.yml # production compose file
-|-- docker-compose.windows.yml  # windows compose file
-`-- docker-compose.yml          # base compose file
+|   |-- db                        # directory to store database files
+|   |-- mysql_init                # database dump to initialize database
+|   |-- s3                        # directory for minio files
+|   |-- aquarium-entrypoint.sh    # entrypoint for running Aquarium
+|   |-- krill-entrypoint.sh       # entrypoint for running Krill
+|   |-- nginx.development.conf    # nginx configuration for development server
+|   `-- nginx.production.conf     # nginx configuration for production server
+|-- docker-compose.override.yml   # development compose file
+|-- docker-compose.production.yml # production compose file
+|-- docker-compose.windows.yml    # windows compose file
+|-- docker-compose.yml            # base compose file
+`-- Dockerfile                    # defines the image for Aquarium
 ```
 
 ### Images

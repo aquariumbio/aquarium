@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'bundler/setup'
+require 'erb'
 
 # https://gist.github.com/andrius/7c26a8deef10f3105a136f958b0d582d
 workers Integer(ENV['WEB_CONCURRENCY'] || [1, `grep -c processor /proc/cpuinfo`.to_i].max)
@@ -33,5 +34,5 @@ on_worker_boot do
   rescue StandardError
     ActiveRecord::ConnectionNotEstablished
   end
-  ActiveRecord::Base.establish_connection(YAML.load_file("#{app_dir}/config/database.yml")[rails_env])
+  ActiveRecord::Base.establish_connection( YAML.load( ERB.new( File.read( "#{app_dir}/config/database.yml" )).result)[rails_env])
 end

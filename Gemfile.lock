@@ -49,6 +49,8 @@ GEM
       arel (~> 6.0)
     activerecord-import (1.0.4)
       activerecord (>= 3.2)
+    activerecord-nulldb-adapter (0.4.0)
+      activerecord (>= 2.0.0)
     activesupport (4.2.11.1)
       i18n (~> 0.7)
       minitest (~> 5.1)
@@ -103,7 +105,6 @@ GEM
     faraday (1.0.1)
       multipart-post (>= 1.2, < 3)
     ffi (1.12.2)
-    github-markup (3.0.4)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     i18n (0.9.5)
@@ -180,8 +181,8 @@ GEM
     rake (13.0.1)
     redcarpet (3.5.0)
     rexml (3.2.4)
-    rspec-core (3.9.1)
-      rspec-support (~> 3.9.1)
+    rspec-core (3.9.2)
+      rspec-support (~> 3.9.3)
     rspec-expectations (3.9.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.9.0)
@@ -196,7 +197,7 @@ GEM
       rspec-expectations (~> 3.9)
       rspec-mocks (~> 3.9)
       rspec-support (~> 3.9)
-    rspec-support (3.9.2)
+    rspec-support (3.9.3)
     rubocop (0.82.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
@@ -232,7 +233,6 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    sqlite3 (1.4.2)
     terrapin (0.6.0)
       climate_control (>= 0.0.3, < 1.0)
     thor (1.0.1)
@@ -258,6 +258,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-import
+  activerecord-nulldb-adapter
   alphabetical_paginate
   anemone!
   angular_rails_csrf (= 2.1.1)
@@ -268,7 +269,6 @@ DEPENDENCIES
   bcrypt (~> 3.1)
   closure-compiler
   factory_bot_rails
-  github-markup
   ipaddress
   json (= 1.8.6)
   mysql2 (~> 0.5.2)

@@ -34,11 +34,8 @@ names.each do |name|
   # g.description = "A group containing only user #{login}"
   # g.save
 
-  m = Membership.new
   u = User.find_by(login: login)
   g = Group.find_by(name: login)
-  m.user_id = u.id
-  m.group_id = g.id
-  m.save
+  g.add(u)
 
 end

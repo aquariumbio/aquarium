@@ -14,15 +14,24 @@
 #
 # before running `docker-compose up`
 
+# set environment variable EMAIL_SERVICE to AWS to use AWS SES
+
 version: "3.5"
 services:
   app:
-    entrypoint: ["/aquarium/docker/aquarium-entrypoint.sh"]
     environment:
-      TZ: America/Los_Angeles
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      S3_ACCESS_KEY_ID: ${S3_ID}
+      S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      S3_REGION: ${S3_REGION}
+      TZ: ${TIMEZONE}
     volumes:
       - ./db:/aquarium/db
       - ./log:/aquarium/log
+      - ./biofab-eula.yml:/aquarium/config/user_agreement.yml
     networks:
       - aquarium_net
     expose:
@@ -39,11 +48,11 @@ services:
     image: mysql:5.7
     restart: always
     environment:
-      MYSQL_DATABASE: production
-      MYSQL_USER: aquarium
-      MYSQL_PASSWORD: aSecretAquarium
-      MYSQL_ROOT_PASSWORD: aSecretAquarium
-      TZ: America/Los_Angeles
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      TZ: ${TIMEZONE}
     volumes:
       - ./docker/db:/var/lib/mysql
       - ./docker/mysql_init/dump.sql:/docker-entrypoint-initdb.d/dump.sql
@@ -51,13 +60,15 @@ services:
       - aquarium_net
 
   krill:
-    entrypoint: ["/aquarium/docker/krill-entrypoint.sh"]
     networks:
       - aquarium_net
     expose:
       - "3500"
     environment:
-      TZ: America/Los_Angeles
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      TZ: ${TIMEZONE}
     depends_on:
       - db
       - app
@@ -75,9 +86,9 @@ services:
     expose:
       - "9000"
     environment:
-      MINIO_ACCESS_KEY: aquarium_minio
-      MINIO_SECRET_KEY: KUNAzqrNifmM6GwNVZ8IP7dxZAkYjhnwc0bfdz0W
-      MINIO_REGION: us-west-1
+      MINIO_ACCESS_KEY: ${S3_ID}
+      MINIO_SECRET_KEY: ${S3_SECRET_ACCESS_KEY}
+      MINIO_REGION: ${S3_REGION} 
     networks:
       - aquarium_net
 
@@ -90,8 +101,9 @@ services:
       while ! nc -z s3 9000; do
         sleep 1;
       done;
-      /usr/bin/mc config host add aqminio http://s3:9000 aquarium_minio KUNAzqrNifmM6GwNVZ8IP7dxZAkYjhnwc0bfdz0W;
-      /usr/bin/mc mb --region us-west-1 -p aqminio/images;
+      sleep 5;
+      /usr/bin/mc config host add aqminio http://s3:9000 ${S3_ID} ${S3_SECRET_ACCESS_KEY};
+      /usr/bin/mc mb --region ${S3_REGION} -p aqminio/images;
       /usr/bin/mc policy set download aqminio/images;
       exit 0;
       "

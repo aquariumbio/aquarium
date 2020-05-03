@@ -37,23 +37,26 @@ Bioturk::Application.configure do
   config.assets.compress = false
   #  config.serve_static_assets = false
   config.assets.debug = false
+  # use dev directory for assets
+  config.assets.prefix = "/dev-assets"
 
   # config.time_zone = "Pacific Time (US & Canada)"
 
   # Paperclip => minio
+  s3_host = ENV['S3_HOST'] || 'localhost:9000'
   config.paperclip_defaults = {
     storage: :s3,
     s3_protocol: 'http',
     s3_permissions: 'private',
-    s3_region: 'us-west-1',
+    s3_region: ENV['S3_REGION'] || 'us-west-1',
     s3_credentials: {
-      bucket: 'development',
-      access_key_id: 'aquarium_minio',
-      secret_access_key: 'KUNAzqrNifmM6GwNVZ8IP7dxZAkYjhnwc0bfdz0W'
+      bucket: ENV['S3_BUCKET_NAME'] || 'development',
+      access_key_id: ENV['S3_ACCESS_KEY_ID'],
+      secret_access_key: ENV['S3_SECRET_ACCESS_KEY']
     },
-    s3_host_name: 'localhost:9000',
+    s3_host_name: s3_host,
     s3_options: {
-      endpoint: 'http://localhost:9000', # for aws-sdk
+      endpoint: "http://#{s3_host}", # for aws-sdk
       force_path_style: true # for aws-sdk (required for minio)
     }
   }
@@ -68,7 +71,6 @@ Bioturk::Application.configure do
   ip_list = []
   service_names = %w[db s3 krill app]
   service_names.each do |name|
-
     ip = Resolv.getaddress(name)
     ip_list.push(IPAddress(ip))
   rescue Resolv::ResolvError
