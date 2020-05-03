@@ -45,7 +45,10 @@ RUN gem update --system \
  #
  # rails 4.2.11.1 requires bundler < 2.0
  && gem install bundler --version '< 2.0' \
- && bundle install --jobs 20 --retry 5
+ && bundle install --jobs 20 --retry 5 \
+ # ruby 2.6+ has default json gem
+ # remove it because bundler installs 1.8.6, which crashes rspec with simplecov
+ && rm -f /usr/local/lib/ruby/gems/2.6.0/specifications/default/json-2.1.0.gemspec
 
 COPY . ./
 
