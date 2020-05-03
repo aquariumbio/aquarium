@@ -45,11 +45,11 @@ class User < ActiveRecord::Base
   end
 
   def admin?
-    Group.admin&.member?(id)
+    Group.admin&.member?(self)
   end
 
   def retired?
-    Group.retired&.member?(id)
+    Group.retired&.member?(self)
   end
 
   def retire

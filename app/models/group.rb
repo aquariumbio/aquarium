@@ -11,8 +11,8 @@ class Group < ActiveRecord::Base
     memberships.create!(user_id: user.id)
   end
 
-  def member?(uid)
-    memberships.where(user_id: uid).present?
+  def member?(user)
+    memberships.where(user_id: user.id).present?
   end
 
   def self.list_names
