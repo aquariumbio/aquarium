@@ -12,6 +12,7 @@ RSpec.describe BudgetsController, type: :controller do
 
     get :index, as: :json 
     expect(response.headers['Content-Type']).to eq('text/html; charset=utf-8')
+    skip('should redirect because user is not admin rather than not logged in')
     expect(response.body).to be_nil
   end
 
