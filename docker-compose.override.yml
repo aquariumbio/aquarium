@@ -17,7 +17,8 @@ services:
     command: ["development"]
     volumes:
       - ./app:/aquarium/app
-      - ./config:/aquarium/config   
+      - ./config:/aquarium/config
+      - ./coverage:/aquarium/coverage 
       - ./docs:/aquarium/docs
       - ./lib:/aquarium/lib
       - ./spec:/aquarium/spec
