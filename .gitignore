@@ -80,4 +80,6 @@ ui/node_modules
 # ignore config file for google sheets (contains authentication secret)
 google_sheets_config.json
 
+coverage
+
 # please do not ignore Gemfile.lock !!!
