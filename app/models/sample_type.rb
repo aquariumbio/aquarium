@@ -25,6 +25,7 @@ class SampleType < ActiveRecord::Base
     attributes
   end
 
+  # used in operation_type_export
   def required_sample_types(st_list = [])
 
     field_types.select(&:sample?).each do |ft|
