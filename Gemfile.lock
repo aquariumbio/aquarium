@@ -8,8 +8,8 @@ PATH
   remote: components/aquadoc
   specs:
     aquadoc (1.0.2)
-      octokit (= 4.15.0)
-      yard (= 0.9.20)
+      octokit (~> 4.15)
+      yard (~> 0.9.20)
 
 GEM
   remote: https://rubygems.org/
@@ -126,7 +126,7 @@ GEM
     nio4r (2.5.2)
     nokogiri (1.10.9)
       mini_portile2 (~> 2.4.0)
-    octokit (4.15.0)
+    octokit (4.18.0)
       faraday (>= 0.9)
       sawyer (~> 0.8.0, >= 0.5.3)
     oj (3.10.6)
