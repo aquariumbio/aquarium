@@ -1,0 +1,127 @@
+<html ng-app='aquaverse' ng-controller="aquaverseCtrl" id="aquaverseCtrl" ng-cloak>
+
+  <head>
+
+    <title>Aquarium</title>
+
+    <meta name="description" content="The Aquarium Laboratory Operating System">
+    <meta name="author" content="Eric Klavins">
+    <meta name="keywords"
+          content="Aquarium, Molecular Biology, Lab Automation, Protocols, Workflows, Reproducibility, LIMS, Synthetic Biology">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://www.aquarium.bio/node_modules/angular/angular.min.js"></script>
+    <script src="https://www.aquarium.bio/node_modules/angular-animate/angular-animate.min.js"></script>
+    <script src="https://www.aquarium.bio/node_modules/angular-aria/angular-aria.min.js"></script>
+    <script src="https://www.aquarium.bio/node_modules/angular-messages/angular-messages.min.js"></script>
+    <script src="https://www.aquarium.bio/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="https://www.aquarium.bio/node_modules/angular-material/angular-material.min.js"></script>
+
+    <script src="https://www.aquarium.bio/node_modules/showdown/dist/showdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+
+    <script src="https://www.aquarium.bio/js/highlight.js"></script>
+    <script src="https://www.aquarium.bio/js/aquaverse.js"></script>
+    <script src="js/definitions.js"></script>
+
+    <link rel="icon" href="https://www.aquarium.bio/aqicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="https://www.aquarium.bio/aqicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="https://www.aquarium.bio/node_modules/angular-material/angular-material.min.css">
+    <link rel="stylesheet" href="https://www.aquarium.bio/node_modules/github-markdown-css/github-markdown.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/vs.min.css">
+    <link rel="stylesheet" href="https://www.aquarium.bio/css/aquaverse.css">
+
+  </head>
+
+  <body style="position: relative">
+
+    <header class="logo-container">
+      <h1 class="logo md-display-4"><span class="aq">Aq</span></h1>
+      <h2 class="tagline md-title" ng-bind-html="tagline"></h2>
+    </header>
+
+    <md-toolbar flex class="header">
+
+      <div class="md-toolbar-tools main-toolbar">
+
+          <svg xmlns="http://www.w3.org/2000/svg"
+               viewBox="0 0 24 24" width="30" height="30"
+               class="md-toolbar-item menu-icon"
+               ng-click="open_sidenav()">
+            <path d="M3 18h18v-2H3v2z"></path>
+            <path d="M3 13h18v-2H3v2z"></path>
+            <path d="M3 6v2h18V6H3z"></path>
+          </svg>
+
+        <h2 class="md-toolbar-item md-headline">
+          <span class="aquarium">
+            <a href="#" ng-click="easy_select('Overview', 'Introduction')">
+              PROTOCOLS
+            </a>
+         </span>
+          <span class="location">/ {{title}}</span>
+        </h2>
+      </div>
+
+    </md-toolbar>
+
+    <div layout="row">
+
+      <md-sidenav
+        class="md-sidenav-left sidenav"
+        md-component-id="sidenav"
+        md-is-locked-open="$mdMedia('gt-sm')"
+        id="sidenav">
+
+        <ul class="nav-list">
+          <li ng-repeat="section in navigation">
+            <div class="category-container"
+                 ng-click="section.open = !section.open">
+              <div class="md-body category-title">
+                {{section.category}}
+              </div>
+            </div>
+            <ul ng-show="section.open" class="nav-sublist">
+              <li ng-repeat="content in section.contents"
+                  ng-class="link_class(section,content)">
+                <a class="clickable" ng-click="select(section,content)">
+                  {{content.name}}
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+      </md-sidenav>
+
+      <md-content flex class="main-container">
+
+        <!-- Content from Aquarium Documtation -->
+        <div flex class="main main-frame"
+             ng-if="state.active_content.type == 'aquarium-doc' || state.active_content.type == 'local-webpage'">
+          <iframe ng-attr-src="{{state.iframe_url}}"
+                  ng-if="state.iframe_url"
+                  class="content-frame">
+          </iframe>
+        </div>
+
+        <!-- Local md content -->
+        <div id="main-md"
+             class="main markdown-body"
+             ng-if="state.active_content.type == 'local-md'">
+        </div>
+
+        <!-- Local html content -->
+        <div id="main-html"
+             class="main"
+             ng-if="state.active_content.type == 'local-html'">
+        </div>
+
+      </md-content>
+
+    </div>
+
+  </body>
+
+</html>

@@ -1,0 +1,15 @@
+# Container: <%= object_type[:name] %>
+
+<%= object_type[:description] %>
+
+<% if object_type[:handler] == 'collection' %>
+  <%= object_type[:rows] %> &times; <%= object_type[:columns] %> Collection
+<% end %>
+
+<% if object_type[:handler] == 'sample_container' && object_type[:sample_type_name] %>
+  **contains:** <%= sample_type_link(object_type[:sample_type_name]) %>
+<% end %>
+
+<% if object_type[:handler] == 'sample_container' && !object_type[:sample_type_name] %>
+  **Warning:** This container is marked as a sample comtainer, but has no link to a sample type.
+<% end %>

@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=<%= charset %>" />
+    <%= erb(:headers) %>
+    <script>
+      // Fix to yard's js
+      pathId = 0;
+      // Remove unneeded parts of docs (TODO: Figure out a nicer way to do this)
+      $(function() {
+        $("h1")[0].remove()
+        $("h2")[0].remove()
+        $("#readme").remove()
+        $("p")[0].remove()
+        $("#content").show()
+      })
+    </script>
+  </head>
+  <body>
+    <div id="content" style="display: none; overflow: scroll; width: 100%">
+      <%= yieldall %>
+    </div>
+    <div style="display: none">
+      <iframe id="nav"></iframe>
+    </div>
+  </body>
+</html>

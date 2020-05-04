@@ -1,0 +1,13 @@
+{
+  "name": "Aquadoc generated webpage",
+  "dependencies": {
+    "jquery": "latest",
+    "markdown-it": "latest",
+    "github-markdown-css": "latest",
+    "highlight": "latest",
+    "bootstrap": "latest"
+  },
+  "resolutions": {
+    "jquery": "3.3.1"
+  }
+}

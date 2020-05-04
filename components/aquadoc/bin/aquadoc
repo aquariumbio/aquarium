@@ -1,0 +1,71 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'aquadoc'
+
+opts = {}
+ARGV.each do |arg|
+  case arg
+
+  when '--no-workflows'
+    opts[:workflows] = false
+
+  when '--no-libraries'
+    opts[:libraries] = false
+
+  when '--no-inventory'
+    opts[:inventory] = false
+
+  when '--no-yard'
+    opts[:yard_docs] = false
+
+  when '--local'
+    opts[:local] = true
+
+  when '--help'
+
+    puts <<~HELP
+      aquadoc [options...]
+        --no-inventory     Do not include inventory definitions.
+        --no-libraries     Do not include library code.
+        --no-workflows     Do not include workflow (operation type) code.
+        --local            Generate documentation on local machine, not on git
+        --no-yard          Do not automatically generation library documentation
+                           using yard.
+    HELP
+    exit(0)
+
+  else
+
+    puts "Unknown option: #{arg}"
+    exit(-1)
+
+  end
+end
+
+begin
+  config = File.read('./config.json')
+  config = JSON.parse(config, symbolize_names: true)
+rescue StandardError => error
+  raise "Could not find valid config file: #{error}"
+end
+
+categories = []
+Dir['categories/*.json'].each do |c|
+  file = File.read(c)
+  categories << JSON.parse(file, symbolize_names: true)
+end
+
+ag = if opts[:local]
+       Aquadoc::Local.new(config, categories, opts)
+     else
+       Aquadoc::Git.new(config, categories, opts)
+     end
+
+if ag.authorized
+  ag.run
+else
+  puts 'Could not authenticate with github'
+end
+
+puts "\n"
