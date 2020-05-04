@@ -77,4 +77,6 @@ ui/node_modules
 # ignore vscode settings
 .vscode
 
+coverage
+
 # please do not ignore Gemfile.lock !!!
