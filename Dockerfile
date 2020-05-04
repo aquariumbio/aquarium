@@ -41,6 +41,11 @@ ENV PATH $GEM_HOME/bin:$GEM_HOME/gems/bin:$PATH
 
 # Install gems needed by Aquarium
 COPY Gemfile Gemfile.lock ./
+
+# components directory contains local gems and engines
+RUN mkdir -p /aquarium/components
+COPY components ./components
+
 RUN gem update --system \
  #
  # rails 4.2.11.1 requires bundler < 2.0
