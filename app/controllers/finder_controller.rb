@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# TODO: this seems to be dead code
 class FinderController < ApplicationController
 
   before_filter :signed_in_user
