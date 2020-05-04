@@ -57,7 +57,7 @@ module FieldValuePlanner
 
       if object_type
 
-        if object_type.collection_type? && field_type.part
+        if collection? && field_type.part
 
           collections = Collection.containing(val, object_type).reject(&:deleted?)
 
