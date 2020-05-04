@@ -38,14 +38,22 @@ class ObjectType < ActiveRecord::Base
   validate :proper_release_method
   validates :name, uniqueness: true
 
+  def collection_type?
+    handler == 'collection'
+  end
+
+  def sample?
+    handler == 'sample_container'
+  end
+
   def rows
-    return unless handler == 'collection'
+    return unless collection_type?
 
     self[:rows] || 1
   end
 
   def columns
-    return unless handler == 'collection'
+    return unless collection_type?
 
     self[:columns] || 12
   end
@@ -122,7 +130,7 @@ class ObjectType < ActiveRecord::Base
   end
 
   def default_dimensions # for collections
-    raise 'Tried to get dimensions of a container that is not a collection' unless handler == 'collection'
+    raise 'Tried to get dimensions of a container that is not a collection' unless collection_type?
 
     begin
       h = JSON.parse(data, symbolize_names: true)
@@ -163,7 +171,7 @@ class ObjectType < ActiveRecord::Base
       ot[attribute] = raw_type[attribute]
     end
 
-    if ot.handler == 'collection'
+    if ot.collection_type?
       ot[:rows] = raw_type[:rows]
       ot[:columns] = raw_type[:columns]
     end

@@ -71,7 +71,7 @@ class FinderController < ApplicationController
 
     ot = ObjectType.where(name: spec[:container])[0]
 
-    if ot.handler == 'collection'
+    if ot.collection_type?
 
       sample = Sample.find_by(name: spec[:sample])
 

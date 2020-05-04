@@ -80,7 +80,7 @@
               </a>
             </div>
 
-            <div ng-if="!noColLink && container.handler == 'collection'"
+            <div ng-if="!noColLink && container.collection_type?"
                  flex="40" layout="column" layout-align="center center">
               <table class='tiny-collection'>
                 <tr ng-repeat="r in item.matrix track by $index">

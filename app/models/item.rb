@@ -292,7 +292,7 @@ class Item < ActiveRecord::Base
   #
   # @return [Bool] true if this Item is a Collection, false otherwise
   def collection?
-    object_type && object_type.handler == 'collection'
+    object_type && object_type.collection_type?
   end
 
   # Returns the parent Collection of this item, if it is a part. Otherwise, returns nil
@@ -425,7 +425,7 @@ class Item < ActiveRecord::Base
 
     if sample
       return [] unless ot
-      return Collection.parts(sample, ot) if ot.handler == 'collection'
+      return Collection.parts(sample, ot) if ot.collection_type?
 
       return sample.items.reject { |i| i.deleted? || i.object_type_id != ot.id }
     end

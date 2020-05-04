@@ -99,7 +99,7 @@ class JsonController < ApplicationController
         return
       end
 
-      if ot.handler == 'collection'
+      if ot.collection_type?
         render json: Collection.parts(sample, ot).as_json(methods: :matrix)
       else
         render json: sample.items
