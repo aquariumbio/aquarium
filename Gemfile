@@ -13,7 +13,7 @@ gem 'alphabetical_paginate'
 # Authentication and cross origin
 gem 'angular_rails_csrf', '2.1.1'
 
-gem 'anemone', git: 'https://github.com/klavinslab/anemone', tag: 'v1.0.1'
+gem 'anemone', path: 'components/anemone'
 gem 'aquadoc', git: 'https://github.com/klavinslab/aquadoc', tag: 'v1.0.2'
 
 # For uploads and cloud storage
