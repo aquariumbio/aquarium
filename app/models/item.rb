@@ -370,7 +370,6 @@ class Item < ActiveRecord::Base
     includes(:locator).includes(:object_type).where(sample_id: sample.id)
   end
 
-
   ###########################################################################
   # OLD
   ###########################################################################

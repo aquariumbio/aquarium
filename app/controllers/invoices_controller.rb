@@ -12,7 +12,7 @@ class InvoicesController < ApplicationController
   end
 
   def note
-    if current_user.is_admin
+    if current_user.admin?
       notes = []
       params[:rows].each do |row|
         al = AccountLog.new(
@@ -71,7 +71,7 @@ class InvoicesController < ApplicationController
     #
     # This method is used by the invoices page.
 
-    if current_user.is_admin
+    if current_user.admin?
       notes = []
       rows = []
 

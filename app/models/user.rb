@@ -25,20 +25,30 @@ class User < ActiveRecord::Base
   validates :password, presence: true, length: { minimum: 6 }, on: :create
   validates :password_confirmation, presence: true, on: :create
 
+  # TODO: eliminate need for this
+  # keep because it is used by json_controller.current
+  # otherwise should not be used
   def is_admin
-    g = Group.find_by(name: 'admin')
-    g && !Membership.where(group_id: g.id, user_id: id).empty?
-    # return (!g || g.memberships.length == 0 || g.member?(id))
+    admin?
+  end
+
+  def admin?
+    Group.admin&.member?(id)
   end
 
   def member?(group_id)
     !Membership.where(group_id: group_id, user_id: id).empty?
-    # g && g.member?(id)
   end
 
   def retired?
-    g = Group.find_by(name: 'retired')
-    g && g.member?(id)
+    Group.retired&.member?(id)
+  end
+
+  def retire
+    m = Membership.new
+    m.user_id = id
+    m.group_id = Group.retired.id
+    m.save
   end
 
   def copy(u)
@@ -145,6 +155,14 @@ class User < ActiveRecord::Base
 
     data.collect { |k, v| { name: k }.merge v }.sort_by { |stat| stat[:count] }.reverse
 
+  end
+
+  def self.logins
+    all.collect(&:login).sort
+  end
+
+  def self.select_active
+    all.reject(&:retired?)
   end
 
   private

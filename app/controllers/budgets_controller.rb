@@ -6,17 +6,19 @@ class BudgetsController < ApplicationController
   before_filter :up_to_date_user
 
   before_filter do
-    redirect_to root_path, notice: 'Administrative privileges required to access budgets.' unless current_user && current_user.is_admin
+    redirect_to root_path, notice: 'Administrative privileges required to access budgets.' unless current_user && current_user.admin?
   end
 
   # GET /budgets
   # GET /budgets.json
   def index
-    @budgets = Budget.all
     @budget = Budget.new
 
     respond_to do |format|
-      format.html { render layout: 'aq2' } # index.html.erb
+      format.html do
+        @budgets, @alpha_params = Budget.alpha_paginate(params[:letter], { db_mode: true, db_field: 'name' })
+        render layout: 'aq2'
+      end
       format.json { render json: @budgets }
     end
   end
@@ -65,7 +67,7 @@ class BudgetsController < ApplicationController
         format.html { redirect_to @budget, notice: 'Budget was successfully created.' }
         format.json { render json: @budget, status: :created, location: @budget }
       else
-        format.html { render action: 'new' }
+        format.html { render layout: 'aq2', action: 'new' }
         format.json { render json: @budget.errors, status: :unprocessable_entity }
       end
     end
@@ -100,7 +102,7 @@ class BudgetsController < ApplicationController
   end
 
   def add_user
-    if current_user.is_admin
+    if current_user.admin?
       uba = UserBudgetAssociation.new
       uba.budget_id = params[:bid].to_i
       uba.user_id = params[:uid].to_i
@@ -114,7 +116,7 @@ class BudgetsController < ApplicationController
   end
 
   def remove_user
-    if current_user.is_admin
+    if current_user.admin?
       ubas = UserBudgetAssociation.where(budget_id: params[:bid].to_i, user_id: params[:uid])
       ubas[0].destroy unless ubas.empty?
     else

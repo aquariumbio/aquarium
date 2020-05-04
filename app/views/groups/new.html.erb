@@ -1,5 +1,10 @@
-<h1>New group</h1>
+<% provide(:title, 'Add New Group') %>
 
-<%= render 'form' %>
+<% content_for :class do %>groups<% end %>
 
-<%= link_to 'Back', groups_path %>
+<%= content_for :controller do %>noCtrl<% end %>
+
+<%= content_for :main do %>
+    <%= render 'form' %>
+<% end %>
+

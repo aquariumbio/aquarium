@@ -220,7 +220,7 @@ run Jobs with varying amounts of Operations.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#schedule-class_method" title="schedule (class method)">.<strong>schedule</strong>(operations:, user:, group:)  &#x21d2; Job </a>
+      <a href="#schedule-class_method" title="schedule (class method)">.<strong>schedule</strong>(operations:, user:, group: Group.technicians)  &#x21d2; Job </a>
     
 
     
@@ -1204,7 +1204,7 @@ run Jobs with varying amounts of Operations.</p>
       <div class="method_details ">
   <h3 class="signature " id="schedule-class_method">
   
-    .<strong>schedule</strong>(operations:, user:, group:)  &#x21d2; <tt><span class='object_link'><a href="" title="Job (class)">Job</a></span></tt> 
+    .<strong>schedule</strong>(operations:, user:, group: Group.technicians)  &#x21d2; <tt><span class='object_link'><a href="" title="Job (class)">Job</a></span></tt> 
   
 
   
@@ -1321,7 +1321,7 @@ Defers an operation if it has a primed predecessor.</p>
     <td>
       <pre class="code"><span class="info file"># File 'app/models/job.rb', line 74</span>
 
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_schedule'>schedule</span><span class='lparen'>(</span><span class='label'>operations:</span><span class='comma'>,</span> <span class='label'>user:</span><span class='comma'>,</span> <span class='label'>group:</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_schedule'>schedule</span><span class='lparen'>(</span><span class='label'>operations:</span><span class='comma'>,</span> <span class='label'>user:</span><span class='comma'>,</span> <span class='label'>group:</span> <span class='const'>Group</span><span class='period'>.</span><span class='id identifier rubyid_technicians'>technicians</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_ops_to_schedule'>ops_to_schedule</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
   <span class='id identifier rubyid_ops_to_defer'>ops_to_defer</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
 
@@ -1730,7 +1730,7 @@ Defers an operation if it has a primed predecessor.</p>
       <pre class="code"><span class="info file"># File 'app/models/job.rb', line 252</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_cancel'>cancel</span><span class='lparen'>(</span><span class='id identifier rubyid_user'>user</span><span class='rparen'>)</span>
-  <span class='kw'>return</span> <span class='kw'>if</span> <span class='id identifier rubyid_pc'>pc</span> <span class='op'>==</span> <span class='const'><span class='object_link'><a href="" title="Job (class)">Job</a></span></span><span class='period'>.</span><span class='const'><span class='object_link'><a href="#COMPLETED-class_method" title="Job.COMPLETED (method)">COMPLETED</a></span></span>
+  <span class='kw'>return</span> <span class='kw'>if</span> <span class='id identifier rubyid_done?'>done?</span>
 
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_pc'>pc</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="Job (class)">Job</a></span></span><span class='period'>.</span><span class='const'><span class='object_link'><a href="#COMPLETED-class_method" title="Job.COMPLETED (method)">COMPLETED</a></span></span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_user_id'>user_id</span> <span class='op'>=</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
@@ -2565,7 +2565,7 @@ TODO: seems like this should be a delegate, but not clear if can do it</p>
     <span class='id identifier rubyid_p'>p</span>
   <span class='kw'>when</span> <span class='const'>Hash</span>
     <span class='id identifier rubyid_h'>h</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
-    <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span>
+    <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_each_key'>each_key</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span>
       <span class='id identifier rubyid_h'>h</span><span class='lbracket'>[</span><span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'> </span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_remove_types'>remove_types</span><span class='lparen'>(</span><span class='id identifier rubyid_p'>p</span><span class='lbracket'>[</span><span class='id identifier rubyid_key'>key</span><span class='rbracket'>]</span><span class='rparen'>)</span>
     <span class='kw'>end</span>
     <span class='id identifier rubyid_h'>h</span>
@@ -2800,12 +2800,12 @@ TODO: seems like this should be a delegate, but not clear if can do it</p>
   <span class='id identifier rubyid_confirm'>confirm</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:confirm</span><span class='rbracket'>]</span> <span class='op'>?</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>class=&#39;confirm&#39;</span><span class='tstring_end'>&quot;</span></span> <span class='op'>:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span>
 
   <span class='kw'>if</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\.rb$</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_match?'>match?</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='rparen'>)</span>
-    <span class='kw'>if</span> <span class='id identifier rubyid_pc'>pc</span> <span class='op'>==</span> <span class='const'><span class='object_link'><a href="" title="Job (class)">Job</a></span></span><span class='period'>.</span><span class='const'><span class='object_link'><a href="#NOT_STARTED-class_method" title="Job.NOT_STARTED (method)">NOT_STARTED</a></span></span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_not_started?'>not_started?</span>
       <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;a </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_confirm'>confirm</span><span class='embexpr_end'>}</span><span class='tstring_content'> target=_top href=&#39;/krill/start?job=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39;&gt;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_el'>el</span><span class='embexpr_end'>}</span><span class='tstring_content'>&lt;/a&gt;</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_html_safe'>html_safe</span>
     <span class='kw'>else</span>
       <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;a </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_confirm'>confirm</span><span class='embexpr_end'>}</span><span class='tstring_content'> target=_top href=&#39;/krill/ui?job=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39;&gt;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_el'>el</span><span class='embexpr_end'>}</span><span class='tstring_content'>&lt;/a&gt;</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_html_safe'>html_safe</span>
     <span class='kw'>end</span>
-  <span class='kw'>elsif</span> <span class='id identifier rubyid_pc'>pc</span> <span class='op'>==</span> <span class='const'><span class='object_link'><a href="" title="Job (class)">Job</a></span></span><span class='period'>.</span><span class='const'><span class='object_link'><a href="#NOT_STARTED-class_method" title="Job.NOT_STARTED (method)">NOT_STARTED</a></span></span>
+  <span class='kw'>elsif</span> <span class='id identifier rubyid_not_started?'>not_started?</span>
     <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;a </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_confirm'>confirm</span><span class='embexpr_end'>}</span><span class='tstring_content'> target=_top href=&#39;/interpreter/advance?job=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39;&gt;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_el'>el</span><span class='embexpr_end'>}</span><span class='tstring_content'>&lt;/a&gt;</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_html_safe'>html_safe</span>
   <span class='kw'>elsif</span> <span class='id identifier rubyid_pc'>pc</span> <span class='op'>!=</span> <span class='const'><span class='object_link'><a href="" title="Job (class)">Job</a></span></span><span class='period'>.</span><span class='const'><span class='object_link'><a href="#COMPLETED-class_method" title="Job.COMPLETED (method)">COMPLETED</a></span></span>
     <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;a </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_confirm'>confirm</span><span class='embexpr_end'>}</span><span class='tstring_content'> target=_top href=&#39;/interpreter/current?job=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39;&gt;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_el'>el</span><span class='embexpr_end'>}</span><span class='tstring_content'>&lt;/a&gt;</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_html_safe'>html_safe</span>
@@ -2862,9 +2862,9 @@ TODO: seems like this should be a delegate, but not clear if can do it</p>
       <pre class="code"><span class="info file"># File 'app/models/job.rb', line 124</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_status'>status</span>
-  <span class='kw'>if</span> <span class='id identifier rubyid_pc'>pc</span> <span class='op'>&gt;=</span> <span class='int'>0</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_active?'>active?</span>
     <span class='id identifier rubyid_status'>status</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>ACTIVE</span><span class='tstring_end'>&#39;</span></span>
-  <span class='kw'>elsif</span> <span class='id identifier rubyid_pc'>pc</span> <span class='op'>==</span> <span class='const'><span class='object_link'><a href="" title="Job (class)">Job</a></span></span><span class='period'>.</span><span class='const'><span class='object_link'><a href="#NOT_STARTED-class_method" title="Job.NOT_STARTED (method)">NOT_STARTED</a></span></span>
+  <span class='kw'>elsif</span> <span class='id identifier rubyid_not_started?'>not_started?</span>
     <span class='id identifier rubyid_status'>status</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>PENDING</span><span class='tstring_end'>&#39;</span></span>
   <span class='kw'>else</span>
     <span class='id identifier rubyid_entries'>entries</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_logs'>logs</span><span class='period'>.</span><span class='id identifier rubyid_reject'>reject</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_log'>log</span><span class='op'>|</span>
@@ -3012,7 +3012,7 @@ TODO: seems like this should be a delegate, but not clear if can do it</p>
 </div>
 
       <div id="footer">
-  Generated on Wed Dec 18 10:27:14 2019 by
+  Generated on Tue Apr  7 07:22:07 2020 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.20 (ruby-2.6.5).
 </div>
