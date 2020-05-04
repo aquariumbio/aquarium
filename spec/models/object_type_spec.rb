@@ -42,10 +42,30 @@ RSpec.describe ObjectType, type: :model do
     end
   end
 
-  it 'collection_type predicate is true if object_type is collection'
-  it 'sample predicate is true if object_type is sample container'
-  it 'rows only works if object is collection'
-  it 'columns only works if object type is collection'
-  it 'default_dimensions raises exception if object is not collection'
-  
+  let!(:stripwell_type) { create(:stripwell) }
+  let!(:sample_container_type) { create(:dummy_stock) }
+  it 'collection_type predicate is true if object_type is collection' do
+    expect(stripwell_type).to be_collection_type
+    expect(sample_container_type).not_to be_collection_type
+  end
+
+  it 'sample predicate is true if object_type is sample container' do
+    expect(stripwell_type).not_to be_sample
+    expect(sample_container_type).to be_sample
+  end
+
+  it 'rows only works if object is collection' do
+    expect(stripwell_type.rows).to eq(1)
+    expect(sample_container_type.rows).to be_nil
+  end
+
+  it 'columns only works if object type is collection' do
+    expect(stripwell_type.columns).to eq(12)
+    expect(sample_container_type.columns).to be_nil
+  end
+  it 'default_dimensions raises exception if object is not collection' do
+    expect { sample_container_type.default_dimensions }.to raise_error
+  end
+
+  it 'part type expectations'
 end
