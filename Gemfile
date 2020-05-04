@@ -14,7 +14,7 @@ gem 'alphabetical_paginate'
 gem 'angular_rails_csrf', '2.1.1'
 
 gem 'anemone', path: 'components/anemone'
-gem 'aquadoc', git: 'https://github.com/klavinslab/aquadoc', tag: 'v1.0.2'
+gem 'aquadoc', path: 'components/aquadoc'
 
 # For uploads and cloud storage
 gem 'aws-sdk', '< 2.0'

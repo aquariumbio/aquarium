@@ -1,17 +1,15 @@
-GIT
-  remote: https://github.com/klavinslab/aquadoc
-  revision: ffb6e1d3ed23a52dc2aef99b150c4b713fb28636
-  tag: v1.0.2
-  specs:
-    aquadoc (1.0.2)
-      octokit (= 4.15.0)
-      yard (= 0.9.20)
-
 PATH
   remote: components/anemone
   specs:
     anemone (1.0.1)
       rails (= 4.2.11.1)
+
+PATH
+  remote: components/aquadoc
+  specs:
+    aquadoc (1.0.2)
+      octokit (= 4.15.0)
+      yard (= 0.9.20)
 
 GEM
   remote: https://rubygems.org/
