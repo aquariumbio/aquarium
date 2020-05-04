@@ -86,6 +86,7 @@ class ObjectType < ActiveRecord::Base
   has_many :items, dependent: :destroy
   belongs_to :sample_type
 
+  # used in views/search/search.html.erb
   def quantity
     q = 0
     items.each do |i|
@@ -94,6 +95,7 @@ class ObjectType < ActiveRecord::Base
     q
   end
 
+  # TODO: dead code
   def in_use
     q = 0
     items.each do |i|
@@ -102,6 +104,7 @@ class ObjectType < ActiveRecord::Base
     q
   end
 
+  # TODO: dead code
   def save_as_test_type(name)
 
     self.name = name
@@ -125,10 +128,12 @@ class ObjectType < ActiveRecord::Base
 
   end
 
+  # used by item.export
   def export
     attributes
   end
 
+  # TODO: dead code?
   def default_dimensions # for collections
     raise 'Tried to get dimensions of a container that is not a collection' unless collection_type?
 
@@ -146,10 +151,12 @@ class ObjectType < ActiveRecord::Base
     end
   end
 
+  # TODO: this shouldn't have view details, probably dead code
   def to_s
     "<a href='/object_types/#{id}' class='aquarium-item' id='#{id}'>#{id}</a>"
   end
 
+  # used in object_type views
   def data_object
     begin
       result = JSON.parse(data, symbolize_names: true)
@@ -159,10 +166,12 @@ class ObjectType < ActiveRecord::Base
     result
   end
 
+  # TODO: dead code
   def sample_type_name
     sample_type ? sample_type.name : nil
   end
 
+  # used by compare_and_upgrade
   def self.create_from(raw_type)
     attributes = %i[cleanup data description handler max min name safety
                     vendor unit cost release_method release_description prefix]
@@ -179,6 +188,7 @@ class ObjectType < ActiveRecord::Base
     ot
   end
 
+  # used in app/planner/operation_type_export
   def self.compare_and_upgrade(raw_types)
     parts = %i[cleanup data description handler max min name safety
                vendor unit cost release_method release_description prefix]
@@ -212,6 +222,7 @@ class ObjectType < ActiveRecord::Base
     { notes: notes, inconsistencies: inconsistencies }
   end
 
+  # used in app/planner/operation_type_export
   def self.clean_up_sample_type_links(raw_object_types)
     raw_object_types.each do |rot|
       ot = ObjectType.find_by(name: rot[:name])
