@@ -41,4 +41,11 @@ RSpec.describe ObjectType, type: :model do
       expect(plate_type.columns).to eq(object_type[:columns])
     end
   end
+
+  it 'collection_type predicate is true if object_type is collection'
+  it 'sample predicate is true if object_type is sample container'
+  it 'rows only works if object is collection'
+  it 'columns only works if object type is collection'
+  it 'default_dimensions raises exception if object is not collection'
+  
 end

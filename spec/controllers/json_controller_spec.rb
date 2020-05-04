@@ -42,4 +42,6 @@ RSpec.describe JsonController, type: :controller do
       expect(response.status).to eq(422)
     end
   end
+
+  it 'returns parts of collection if object_type is collection'
 end
