@@ -15,6 +15,18 @@ FactoryBot.define do
       handler { 'collection' }
     end
 
+    trait :sample_container_type do
+      handler { 'sample_container' }
+    end
+
+    factory :dummy_stock do
+      name { 'Dummy Stock' }
+      description { 'Stock for testing' }
+      sample_container_type
+      release_method { 'return' }
+      unit { 'dummy' }
+    end
+
     factory :stripwell do
       name { 'Stripwell' }
       description { 'Stripwell' }
