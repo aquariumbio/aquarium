@@ -63,7 +63,7 @@ gem 'rubocop', :group => :development
 gem 'rubocop-rails', :group => :development
 gem 'simplecov', require: false, :group => :development
 gem 'sorbet', :group => [:development, :test]
-gem 'sorbet-rails'
+gem 'sorbet-rails', '0.5.6'
 gem 'sorbet-runtime'
 gem 'web-console', '~> 3.0', :group => :development
 gem 'yard', '>= 0.9.20', :group => :development
