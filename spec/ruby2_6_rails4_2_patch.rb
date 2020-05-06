@@ -1,3 +1,4 @@
+# typed: true
 # frozen_string_literal: true
 
 # Added b/c controller tests were failing with ruby 2.6 and rails 4.2
