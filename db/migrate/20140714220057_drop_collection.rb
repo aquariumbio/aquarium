@@ -1,3 +1,4 @@
+# typed: false
 class DropCollection < ActiveRecord::Migration
   def change
   	drop_table :collections

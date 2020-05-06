@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 # Simply put: a representation of an input, output, or parameter of an Operation.

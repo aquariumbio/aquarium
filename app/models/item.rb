@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 # Class that represents a physical object in the lab

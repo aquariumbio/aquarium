@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 # A subclass of {Item} that has associated parts via the {PartAssociation} model.

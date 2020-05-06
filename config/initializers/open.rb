@@ -1,3 +1,4 @@
+# typed: strict
 # frozen_string_literal: true
 
 # By default, the open method returns a StringIO object when the file is smaller than a certain size,

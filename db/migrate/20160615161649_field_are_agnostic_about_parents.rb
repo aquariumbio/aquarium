@@ -1,3 +1,4 @@
+# typed: false
 class FieldAreAgnosticAboutParents < ActiveRecord::Migration
   def change
     add_column    :field_types,  :parent_class, :string

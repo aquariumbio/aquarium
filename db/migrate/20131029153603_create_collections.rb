@@ -1,3 +1,4 @@
+# typed: false
 class CreateCollections < ActiveRecord::Migration
   def change
     create_table :collections do |t|

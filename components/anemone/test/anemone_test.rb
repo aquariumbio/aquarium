@@ -1,3 +1,4 @@
+# typed: false
 require 'test_helper'
 
 class Anemone::Test < ActiveSupport::TestCase

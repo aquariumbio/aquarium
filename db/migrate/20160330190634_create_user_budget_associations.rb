@@ -1,3 +1,4 @@
+# typed: false
 class CreateUserBudgetAssociations < ActiveRecord::Migration
   def change
     create_table :user_budget_associations do |t|

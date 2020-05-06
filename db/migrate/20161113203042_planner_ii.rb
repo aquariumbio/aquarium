@@ -1,3 +1,4 @@
+# typed: false
 class PlannerIi < ActiveRecord::Migration
   
   def change

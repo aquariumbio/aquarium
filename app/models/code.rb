@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 # Represents a code object for an operation type.

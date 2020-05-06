@@ -1,3 +1,4 @@
+# typed: false
 class AddEmailAndPhoneToBudget < ActiveRecord::Migration
   def change
     add_column :budgets, :email, :string

@@ -1,3 +1,4 @@
+# typed: false
 class CreateTaskPrototypes < ActiveRecord::Migration
   def change
     create_table :task_prototypes do |t|

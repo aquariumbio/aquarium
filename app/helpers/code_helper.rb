@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 # Mixin for managing code objects associated with an object.
