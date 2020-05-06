@@ -18298,7 +18298,6 @@ module AbstractController
 end
 
 class Account
-  include ::Account::GeneratedAssociationMethods
   def after_add_for_first_row_logs(); end
 
   def after_add_for_first_row_logs=(after_add_for_first_row_logs); end
@@ -18364,35 +18363,21 @@ class Account
   def validate_associated_records_for_first_row_logs(*args); end
 
   def validate_associated_records_for_second_row_logs(*args); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class Account::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Account::ActiveRecord_AssociationRelation
-end
-
 class Account::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Account::ActiveRecord_Associations_CollectionProxy
-end
-
 class Account::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class Account::ActiveRecord_Relation
 end
 
 module Account::GeneratedAssociationMethods
-  def budget(*args); end
-
-  def budget=(value); end
-
   def build_budget(*args, &block); end
 
   def build_job(*args, &block); end
@@ -18421,32 +18406,9 @@ module Account::GeneratedAssociationMethods
 
   def first_row_log_ids=(ids); end
 
-  def first_row_logs(*args); end
-
-  def first_row_logs=(value); end
-
-  def job(*args); end
-
-  def job=(value); end
-
-  def operation(*args); end
-
-  def operation=(value); end
-
   def second_row_log_ids(); end
 
   def second_row_log_ids=(ids); end
-
-  def second_row_logs(*args); end
-
-  def second_row_logs=(value); end
-
-  def user(*args); end
-
-  def user=(value); end
-end
-
-module Account::GeneratedAssociationMethods
 end
 
 class Account
@@ -18500,7 +18462,6 @@ class Account
 end
 
 class AccountLog
-  include ::AccountLog::GeneratedAssociationMethods
   def autosave_associated_records_for_first_row(*args); end
 
   def autosave_associated_records_for_second_row(*args); end
@@ -18508,28 +18469,18 @@ class AccountLog
   def autosave_associated_records_for_user(*args); end
 
   def belongs_to_counter_cache_after_update(reflection); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class AccountLog::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class AccountLog::ActiveRecord_AssociationRelation
-end
-
 class AccountLog::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class AccountLog::ActiveRecord_Associations_CollectionProxy
-end
-
 class AccountLog::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class AccountLog::ActiveRecord_Relation
 end
 
 module AccountLog::GeneratedAssociationMethods
@@ -18550,21 +18501,6 @@ module AccountLog::GeneratedAssociationMethods
   def create_user(*args, &block); end
 
   def create_user!(*args, &block); end
-
-  def first_row(*args); end
-
-  def first_row=(value); end
-
-  def second_row(*args); end
-
-  def second_row=(value); end
-
-  def user(*args); end
-
-  def user=(value); end
-end
-
-module AccountLog::GeneratedAssociationMethods
 end
 
 class ActionController::ActionControllerError
@@ -27254,7 +27190,6 @@ class ActiveRecord::Base
   extend ::WillPaginate::ActiveRecord::Pagination
   extend ::WillPaginate::ActiveRecord::BaseMethods
   extend ::SorbetRails::CustomFinderMethods
-  extend ::SorbetRails::PluckToTStruct
   extend ::ActiveRecord::Import::Connection
   def self._accessible_attributes(); end
 
@@ -29202,44 +29137,15 @@ class ActiveRecord::EagerLoadPolymorphicError
 end
 
 module ActiveRecord::Enum
-  include ::Kernel
-  def _define_enum(*args, &blk); end
-
-  def _define_typed_enum(*args, &blk); end
-
-  def enum(*args, &blk); end
-
-  def extract_enum_values(*args, &blk); end
-
-  def gen_typed_enum_values(*args, &blk); end
+  def enum(*args, **kwargs); end
 
   def inherited(base); end
 
   def old_enum(definitions); end
-
-  def typed_enum(*args, &blk); end
-
-  def typed_enum_reflections(*args, &blk); end
   ENUM_CONFLICT_MESSAGE = ::T.let(nil, ::T.untyped)
-  SR_ENUM_KEYWORDS = ::T.let(nil, ::T.untyped)
-end
-
-class ActiveRecord::Enum::ConflictTypedEnumNameError
-end
-
-class ActiveRecord::Enum::ConflictTypedEnumNameError
-end
-
-class ActiveRecord::Enum::MultipleEnumsDefinedError
-end
-
-class ActiveRecord::Enum::MultipleEnumsDefinedError
 end
 
 module ActiveRecord::Enum
-  extend ::T::Sig
-  extend ::T::Private::Methods::MethodHooks
-  extend ::T::Private::Methods::SingletonMethodHooks
   def self.extended(base); end
 end
 
@@ -30813,7 +30719,6 @@ class ActiveRecord::Relation
   include ::AlphabeticalPaginate::ControllerHelpers
   include ::WillPaginate::ActiveRecord::Pagination
   include ::SorbetRails::CustomFinderMethods
-  include ::SorbetRails::PluckToTStruct
   def ==(other); end
 
   def _update_record(values, id, id_was); end
@@ -31000,21 +30905,12 @@ class ActiveRecord::SchemaMigration::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class ActiveRecord::SchemaMigration::ActiveRecord_AssociationRelation
-end
-
 class ActiveRecord::SchemaMigration::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class ActiveRecord::SchemaMigration::ActiveRecord_Associations_CollectionProxy
-end
-
 class ActiveRecord::SchemaMigration::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class ActiveRecord::SchemaMigration::ActiveRecord_Relation
 end
 
 module ActiveRecord::SchemaMigration::GeneratedAssociationMethods
@@ -33881,126 +33777,6 @@ module ActiveSupport
   def self.version(); end
 end
 
-class Add
-end
-
-class AddBudgetIdToPlan
-end
-
-class AddBudgetToTask
-end
-
-class AddCostToTaskPrototype
-end
-
-class AddDataToItem
-end
-
-class AddDataToSamples
-end
-
-class AddDescriptionToParameters
-end
-
-class AddDescriptionToWizard
-end
-
-class AddDescriptionsToBudgetAndAccount
-end
-
-class AddEmailAndPhoneToBudget
-end
-
-class AddFieldsAndDescriptionToSamples
-end
-
-class AddFolderToPlans
-end
-
-class AddJobIdToBlobs
-end
-
-class AddKeyToUsers
-end
-
-class AddLocatorIdToItem
-end
-
-class AddMessageToMetacols
-end
-
-class AddMetacolToTaskPrototype
-end
-
-class AddNameIndexToOperationType
-end
-
-class AddNotesAndStatusToInvoices
-end
-
-class AddParentIdToFolders
-end
-
-class AddPreferredToFieldType
-end
-
-class AddPrefixToObjectType
-end
-
-class AddRatesToAccount
-end
-
-class AddSampleTypeIdToObjectType
-end
-
-class AddScheduleingToJobs
-end
-
-class AddShaToPostAssocation
-end
-
-class AddStatusOptionsToTaskPrototype
-end
-
-class AddTableToItem
-end
-
-class AddTaskIdAndMetacolIdToTouch
-end
-
-class AddTaskPrototypeIdToTasks
-end
-
-class AddUserIdToFolders
-end
-
-class AddUserIdToParemeters
-end
-
-class AddUserIdToSamples
-end
-
-class AddUserIdToTasks
-end
-
-class AddUserIdToWorkflowThread
-end
-
-class AddUserToCode
-end
-
-class AddValidatorToTaskPrototype
-end
-
-class AddWorfklowIdToWorkflowThread
-end
-
-class AddWorkflowIdToFolderContent
-end
-
-class AddWorkflowProcessIdToJob
-end
-
 module Addressable
 end
 
@@ -34410,11 +34186,7 @@ class Addrinfo
   def connect_internal(local_addrinfo, timeout=T.unsafe(nil)); end
 end
 
-class AdjustAccounts
-end
-
 class AllowableFieldType
-  include ::AllowableFieldType::GeneratedAssociationMethods
   def autosave_associated_records_for_field_type(*args); end
 
   def autosave_associated_records_for_object_type(*args); end
@@ -34422,28 +34194,18 @@ class AllowableFieldType
   def autosave_associated_records_for_sample_type(*args); end
 
   def belongs_to_counter_cache_after_update(reflection); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class AllowableFieldType::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class AllowableFieldType::ActiveRecord_AssociationRelation
-end
-
 class AllowableFieldType::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class AllowableFieldType::ActiveRecord_Associations_CollectionProxy
-end
-
 class AllowableFieldType::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class AllowableFieldType::ActiveRecord_Relation
 end
 
 module AllowableFieldType::GeneratedAssociationMethods
@@ -34464,21 +34226,6 @@ module AllowableFieldType::GeneratedAssociationMethods
   def create_sample_type(*args, &block); end
 
   def create_sample_type!(*args, &block); end
-
-  def field_type(*args); end
-
-  def field_type=(value); end
-
-  def object_type(*args); end
-
-  def object_type=(value); end
-
-  def sample_type(*args); end
-
-  def sample_type=(value); end
-end
-
-module AllowableFieldType::GeneratedAssociationMethods
 end
 
 module AlphabeticalPaginate
@@ -34541,9 +34288,6 @@ end
 module AlphabeticalPaginate
 end
 
-class AlterImageHandlingInObjectType
-end
-
 class Anemone::Engine
 end
 
@@ -34558,21 +34302,12 @@ class Anemone::Worker::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Anemone::Worker::ActiveRecord_AssociationRelation
-end
-
 class Anemone::Worker::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Anemone::Worker::ActiveRecord_Associations_CollectionProxy
-end
-
 class Anemone::Worker::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class Anemone::Worker::ActiveRecord_Relation
 end
 
 module Anemone::Worker::GeneratedAssociationMethods
@@ -34605,28 +34340,18 @@ end
 
 class Announcement
   include ::Announcement::GeneratedAssociationMethods
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class Announcement::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Announcement::ActiveRecord_AssociationRelation
-end
-
 class Announcement::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Announcement::ActiveRecord_Associations_CollectionProxy
-end
-
 class Announcement::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class Announcement::ActiveRecord_Relation
 end
 
 module Announcement::GeneratedAssociationMethods
@@ -34640,7 +34365,6 @@ end
 
 class ApplicationRecord
   include ::ApplicationRecord::GeneratedAssociationMethods
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class ApplicationRecord::ActiveRecord_AssociationRelation
@@ -47271,7 +46995,6 @@ module BooleanStringImpl
 end
 
 class Budget
-  include ::Budget::GeneratedAssociationMethods
   def after_add_for_user_budget_associations(); end
 
   def after_add_for_user_budget_associations=(after_add_for_user_budget_associations); end
@@ -47299,41 +47022,24 @@ class Budget
   def before_remove_for_user_budget_associations?(); end
 
   def validate_associated_records_for_user_budget_associations(*args); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class Budget::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Budget::ActiveRecord_AssociationRelation
-end
-
 class Budget::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Budget::ActiveRecord_Associations_CollectionProxy
-end
-
 class Budget::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class Budget::ActiveRecord_Relation
 end
 
 module Budget::GeneratedAssociationMethods
   def user_budget_association_ids(); end
 
   def user_budget_association_ids=(ids); end
-
-  def user_budget_associations(*args); end
-
-  def user_budget_associations=(value); end
-end
-
-module Budget::GeneratedAssociationMethods
 end
 
 class Budget
@@ -48085,27 +47791,6 @@ end
 module CGI::HtmlExtension
 end
 
-class ChangeFieldTypeIdToName
-end
-
-class ChangeOwnerToUserId
-end
-
-class ChangeSpecToState
-end
-
-class ChangeTaskJsonToText
-end
-
-class ChangeTypeNameInAccount
-end
-
-class ChangeTypeToFtype
-end
-
-class ChangeUserIdTypeInSamples
-end
-
 class Class
   def any_instance(); end
 
@@ -48213,28 +47898,18 @@ end
 
 class Code
   include ::Code::GeneratedAssociationMethods
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class Code::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Code::ActiveRecord_AssociationRelation
-end
-
 class Code::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Code::ActiveRecord_Associations_CollectionProxy
-end
-
 class Code::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class Code::ActiveRecord_Relation
 end
 
 module Code::GeneratedAssociationMethods
@@ -48244,7 +47919,6 @@ module Code::GeneratedAssociationMethods
 end
 
 class Collection
-  include ::Collection::GeneratedAssociationMethods
   def after_add_for_part_associations(); end
 
   def after_add_for_part_associations=(after_add_for_part_associations); end
@@ -48272,41 +47946,24 @@ class Collection
   def before_remove_for_part_associations?(); end
 
   def validate_associated_records_for_part_associations(*args); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class Collection::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Collection::ActiveRecord_AssociationRelation
-end
-
 class Collection::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Collection::ActiveRecord_Associations_CollectionProxy
-end
-
 class Collection::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class Collection::ActiveRecord_Relation
 end
 
 module Collection::GeneratedAssociationMethods
   def part_association_ids(); end
 
   def part_association_ids=(ids); end
-
-  def part_associations(*args); end
-
-  def part_associations=(value); end
-end
-
-module Collection::GeneratedAssociationMethods
 end
 
 class Collection
@@ -50785,126 +50442,6 @@ module Crass
   def self.parse_properties(input, options=T.unsafe(nil)); end
 end
 
-class CreateAccountLogAssociations
-end
-
-class CreateAccounts
-end
-
-class CreateAllowableFieldTypes
-end
-
-class CreateAnemoneWorker
-end
-
-class CreateAnnouncements
-end
-
-class CreateBudgets
-end
-
-class CreateCartItems
-end
-
-class CreateCollections
-end
-
-class CreateDataAssociations
-end
-
-class CreateFieldTypes
-end
-
-class CreateFieldValues
-end
-
-class CreateFolderContents
-end
-
-class CreateFolders
-end
-
-class CreateGroups
-end
-
-class CreateInvoices
-end
-
-class CreateJobAssociations
-end
-
-class CreateLibrary
-end
-
-class CreateLocators
-end
-
-class CreateMemberships
-end
-
-class CreateMetacols
-end
-
-class CreateOperations
-end
-
-class CreateParameters
-end
-
-class CreateParts
-end
-
-class CreatePostAssociations
-end
-
-class CreatePosts
-end
-
-class CreatePrimers
-end
-
-class CreateSampleTypes
-end
-
-class CreateSamples
-end
-
-class CreateTakes
-end
-
-class CreateTaskNotifications
-end
-
-class CreateTaskPrototypes
-end
-
-class CreateTasks
-end
-
-class CreateTouches
-end
-
-class CreateUploads
-end
-
-class CreateUserBudgetAssociations
-end
-
-class CreateWizards
-end
-
-class CreateWorkflowAssociations
-end
-
-class CreateWorkflowProcesses
-end
-
-class CreateWorkflowThreads
-end
-
-class CreateWorkflows
-end
-
 module DRb
 end
 
@@ -51252,32 +50789,21 @@ DRbObject = DRb::DRbObject
 DRbUndumped = DRb::DRbUndumped
 
 class DataAssociation
-  include ::DataAssociation::GeneratedAssociationMethods
   def autosave_associated_records_for_upload(*args); end
 
   def belongs_to_counter_cache_after_update(reflection); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class DataAssociation::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class DataAssociation::ActiveRecord_AssociationRelation
-end
-
 class DataAssociation::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class DataAssociation::ActiveRecord_Associations_CollectionProxy
-end
-
 class DataAssociation::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class DataAssociation::ActiveRecord_Relation
 end
 
 module DataAssociation::GeneratedAssociationMethods
@@ -51286,13 +50812,6 @@ module DataAssociation::GeneratedAssociationMethods
   def create_upload(*args, &block); end
 
   def create_upload!(*args, &block); end
-
-  def upload(*args); end
-
-  def upload=(value); end
-end
-
-module DataAssociation::GeneratedAssociationMethods
 end
 
 class Date
@@ -51557,9 +51076,6 @@ end
 
 class DateTime
   def self.civil_from_format(utc_or_local, year, month=T.unsafe(nil), day=T.unsafe(nil), hour=T.unsafe(nil), min=T.unsafe(nil), sec=T.unsafe(nil)); end
-end
-
-class DeadCodeRemoval
 end
 
 class Delegator
@@ -51980,21 +51496,6 @@ module Docile
   def self.dsl_eval_immutable(dsl, *args, &block); end
 
   def self.dsl_eval_with_block_return(dsl, *args, &block); end
-end
-
-class DropCollection
-end
-
-class DropCreditFromAccount
-end
-
-class DropJobFromOperation
-end
-
-class DropPrimers
-end
-
-class DropStaticFields
 end
 
 class ERB
@@ -55178,7 +54679,6 @@ end
 
 class FalseClass
   include ::JSON::Ext::Generator::GeneratorMethods::FalseClass
-  include ::SafeType::BooleanMixin
   def to_json(options=T.unsafe(nil)); end
 end
 
@@ -56371,11 +55871,7 @@ class Fiber
   def self.yield(*_); end
 end
 
-class FieldAreAgnosticAboutParents
-end
-
 class FieldType
-  include ::FieldType::GeneratedAssociationMethods
   def after_add_for_allowable_field_types(); end
 
   def after_add_for_allowable_field_types=(after_add_for_allowable_field_types); end
@@ -56439,38 +55935,24 @@ class FieldType
   def validate_associated_records_for_allowable_field_types(*args); end
 
   def validate_associated_records_for_field_values(*args); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class FieldType::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class FieldType::ActiveRecord_AssociationRelation
-end
-
 class FieldType::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class FieldType::ActiveRecord_Associations_CollectionProxy
-end
-
 class FieldType::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class FieldType::ActiveRecord_Relation
 end
 
 module FieldType::GeneratedAssociationMethods
   def allowable_field_type_ids(); end
 
   def allowable_field_type_ids=(ids); end
-
-  def allowable_field_types(*args); end
-
-  def allowable_field_types=(value); end
 
   def build_preferred_field_type(*args, &block); end
 
@@ -56494,10 +55976,6 @@ module FieldType::GeneratedAssociationMethods
 
   def field_value_ids=(ids); end
 
-  def field_values(*args); end
-
-  def field_values=(value); end
-
   def preferred_field_type(*args); end
 
   def preferred_field_type=(value); end
@@ -56509,9 +55987,6 @@ module FieldType::GeneratedAssociationMethods
   def sample_type(*args); end
 
   def sample_type=(value); end
-end
-
-module FieldType::GeneratedAssociationMethods
 end
 
 class FieldType
@@ -56565,7 +56040,6 @@ class FieldType
 end
 
 class FieldValue
-  include ::FieldValue::GeneratedAssociationMethods
   def after_add_for_predecessors(); end
 
   def after_add_for_predecessors=(after_add_for_predecessors); end
@@ -56715,35 +56189,21 @@ class FieldValue
   def validate_associated_records_for_wires_as_dest(*args); end
 
   def validate_associated_records_for_wires_as_source(*args); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class FieldValue::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class FieldValue::ActiveRecord_AssociationRelation
-end
-
 class FieldValue::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class FieldValue::ActiveRecord_Associations_CollectionProxy
-end
-
 class FieldValue::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class FieldValue::ActiveRecord_Relation
 end
 
 module FieldValue::GeneratedAssociationMethods
-  def allowable_field_type(*args); end
-
-  def allowable_field_type=(value); end
-
   def build_allowable_field_type(*args, &block); end
 
   def build_child_item(*args, &block); end
@@ -56751,14 +56211,6 @@ module FieldValue::GeneratedAssociationMethods
   def build_child_sample(*args, &block); end
 
   def build_field_type(*args, &block); end
-
-  def child_item(*args); end
-
-  def child_item=(value); end
-
-  def child_sample(*args); end
-
-  def child_sample=(value); end
 
   def create_allowable_field_type(*args, &block); end
 
@@ -56776,52 +56228,25 @@ module FieldValue::GeneratedAssociationMethods
 
   def create_field_type!(*args, &block); end
 
-  def field_type(*args); end
-
-  def field_type=(value); end
-
   def predecessor_ids(); end
 
   def predecessor_ids=(ids); end
-
-  def predecessors(*args); end
-
-  def predecessors=(value); end
 
   def successor_ids(); end
 
   def successor_ids=(ids); end
 
-  def successors(*args); end
-
-  def successors=(value); end
-
   def wire_ids(); end
 
   def wire_ids=(ids); end
-
-  def wires(*args); end
-
-  def wires=(value); end
-
-  def wires_as_dest(*args); end
-
-  def wires_as_dest=(value); end
 
   def wires_as_dest_ids(); end
 
   def wires_as_dest_ids=(ids); end
 
-  def wires_as_source(*args); end
-
-  def wires_as_source=(value); end
-
   def wires_as_source_ids(); end
 
   def wires_as_source_ids=(ids); end
-end
-
-module FieldValue::GeneratedAssociationMethods
 end
 
 class FieldValue
@@ -57344,701 +56769,6 @@ module Gem
   def self.suffix_regexp(); end
 end
 
-module GeneratedUrlHelpers
-  include ::ActionDispatch::Routing::UrlFor
-  include ::ActionDispatch::Routing::PolymorphicRoutes
-  include ::ActionController::ModelNaming
-  def _routes(); end
-
-  def accounts_deposit_path(*args); end
-
-  def accounts_deposit_url(*args); end
-
-  def accounts_path(*args); end
-
-  def accounts_url(*args); end
-
-  def announcement_path(*args); end
-
-  def announcement_url(*args); end
-
-  def announcements_path(*args); end
-
-  def announcements_url(*args); end
-
-  def browser_all_path(*args); end
-
-  def browser_all_url(*args); end
-
-  def browser_create_samples_path(*args); end
-
-  def browser_create_samples_url(*args); end
-
-  def browser_path(*args); end
-
-  def browser_projects_path(*args); end
-
-  def browser_projects_url(*args); end
-
-  def browser_samples_for_tree_path(*args); end
-
-  def browser_samples_for_tree_url(*args); end
-
-  def browser_save_data_association_path(*args); end
-
-  def browser_save_data_association_url(*args); end
-
-  def browser_save_path(*args); end
-
-  def browser_save_url(*args); end
-
-  def browser_search_path(*args); end
-
-  def browser_search_url(*args); end
-
-  def browser_url(*args); end
-
-  def budget_path(*args); end
-
-  def budget_url(*args); end
-
-  def budgets_path(*args); end
-
-  def budgets_url(*args); end
-
-  def code_libraries_path(*args); end
-
-  def code_libraries_url(*args); end
-
-  def code_operation_types_path(*args); end
-
-  def code_operation_types_url(*args); end
-
-  def collection_containers_list_path(*args); end
-
-  def collection_containers_list_url(*args); end
-
-  def collections_save_data_associations_path(*args); end
-
-  def collections_save_data_associations_url(*args); end
-
-  def containers_list_path(*args); end
-
-  def containers_list_url(*args); end
-
-  def default_operation_types_path(*args); end
-
-  def default_operation_types_url(*args); end
-
-  def default_url_options=(obj); end
-
-  def delete_inventory_path(*args); end
-
-  def delete_inventory_url(*args); end
-
-  def developer_get_path(*args); end
-
-  def developer_get_url(*args); end
-
-  def developer_path(*args); end
-
-  def developer_pull_path(*args); end
-
-  def developer_pull_url(*args); end
-
-  def developer_save_path(*args); end
-
-  def developer_save_url(*args); end
-
-  def developer_test_path(*args); end
-
-  def developer_test_url(*args); end
-
-  def developer_url(*args); end
-
-  def dismiss_path(*args); end
-
-  def dismiss_url(*args); end
-
-  def edit_announcement_path(*args); end
-
-  def edit_announcement_url(*args); end
-
-  def edit_budget_path(*args); end
-
-  def edit_budget_url(*args); end
-
-  def edit_group_path(*args); end
-
-  def edit_group_url(*args); end
-
-  def edit_invoice_path(*args); end
-
-  def edit_invoice_url(*args); end
-
-  def edit_item_path(*args); end
-
-  def edit_item_url(*args); end
-
-  def edit_library_path(*args); end
-
-  def edit_library_url(*args); end
-
-  def edit_object_type_item_path(*args); end
-
-  def edit_object_type_item_url(*args); end
-
-  def edit_object_type_path(*args); end
-
-  def edit_object_type_url(*args); end
-
-  def edit_operation_path(*args); end
-
-  def edit_operation_type_path(*args); end
-
-  def edit_operation_type_url(*args); end
-
-  def edit_operation_url(*args); end
-
-  def edit_parameter_path(*args); end
-
-  def edit_parameter_url(*args); end
-
-  def edit_plan_path(*args); end
-
-  def edit_plan_url(*args); end
-
-  def edit_sample_path(*args); end
-
-  def edit_sample_type_path(*args); end
-
-  def edit_sample_type_url(*args); end
-
-  def edit_sample_url(*args); end
-
-  def edit_user_path(*args); end
-
-  def edit_user_url(*args); end
-
-  def edit_wizard_path(*args); end
-
-  def edit_wizard_url(*args); end
-
-  def group_path(*args); end
-
-  def group_url(*args); end
-
-  def groups_names_path(*args); end
-
-  def groups_names_url(*args); end
-
-  def groups_path(*args); end
-
-  def groups_url(*args); end
-
-  def import_path(*args); end
-
-  def import_url(*args); end
-
-  def invoice_path(*args); end
-
-  def invoice_url(*args); end
-
-  def invoices_change_budget_path(*args); end
-
-  def invoices_change_budget_url(*args); end
-
-  def invoices_credit_path(*args); end
-
-  def invoices_credit_url(*args); end
-
-  def invoices_note_path(*args); end
-
-  def invoices_note_url(*args); end
-
-  def invoices_path(*args); end
-
-  def invoices_url(*args); end
-
-  def item_list_path(*args); end
-
-  def item_list_url(*args); end
-
-  def item_path(*args); end
-
-  def item_url(*args); end
-
-  def items_path(*args); end
-
-  def items_url(*args); end
-
-  def job_path(*args); end
-
-  def job_url(*args); end
-
-  def joblist_path(*args); end
-
-  def joblist_url(*args); end
-
-  def jobs_index_path(*args); end
-
-  def jobs_index_url(*args); end
-
-  def jobs_path(*args); end
-
-  def jobs_report_path(*args); end
-
-  def jobs_report_url(*args); end
-
-  def jobs_summary_path(*args); end
-
-  def jobs_summary_url(*args); end
-
-  def jobs_url(*args); end
-
-  def json_current_path(*args); end
-
-  def json_current_url(*args); end
-
-  def json_delete_path(*args); end
-
-  def json_delete_url(*args); end
-
-  def json_items_path(*args); end
-
-  def json_items_url(*args); end
-
-  def json_path(*args); end
-
-  def json_save_path(*args); end
-
-  def json_save_url(*args); end
-
-  def json_upload_path(*args); end
-
-  def json_upload_url(*args); end
-
-  def json_url(*args); end
-
-  def krill_abort_path(*args); end
-
-  def krill_abort_url(*args); end
-
-  def krill_attach_path(*args); end
-
-  def krill_attach_url(*args); end
-
-  def krill_continue_path(*args); end
-
-  def krill_continue_url(*args); end
-
-  def krill_error_path(*args); end
-
-  def krill_error_url(*args); end
-
-  def krill_inventory_path(*args); end
-
-  def krill_inventory_url(*args); end
-
-  def krill_jobs_path(*args); end
-
-  def krill_jobs_url(*args); end
-
-  def krill_log_path(*args); end
-
-  def krill_log_url(*args); end
-
-  def krill_next_path(*args); end
-
-  def krill_next_url(*args); end
-
-  def krill_start_path(*args); end
-
-  def krill_start_url(*args); end
-
-  def krill_state_path(*args); end
-
-  def krill_state_url(*args); end
-
-  def krill_upload_path(*args); end
-
-  def krill_upload_url(*args); end
-
-  def krill_uploads_path(*args); end
-
-  def krill_uploads_url(*args); end
-
-  def launcher_estimate_path(*args); end
-
-  def launcher_estimate_url(*args); end
-
-  def launcher_path(*args); end
-
-  def launcher_plans_path(*args); end
-
-  def launcher_plans_url(*args); end
-
-  def launcher_submit_path(*args); end
-
-  def launcher_submit_url(*args); end
-
-  def launcher_url(*args); end
-
-  def libraries_path(*args); end
-
-  def libraries_url(*args); end
-
-  def library_path(*args); end
-
-  def library_url(*args); end
-
-  def log_path(*args); end
-
-  def log_url(*args); end
-
-  def logout_path(*args); end
-
-  def logout_url(*args); end
-
-  def logs_path(*args); end
-
-  def logs_url(*args); end
-
-  def new_announcement_path(*args); end
-
-  def new_announcement_url(*args); end
-
-  def new_budget_path(*args); end
-
-  def new_budget_url(*args); end
-
-  def new_group_path(*args); end
-
-  def new_group_url(*args); end
-
-  def new_invoice_path(*args); end
-
-  def new_invoice_url(*args); end
-
-  def new_item_path(*args); end
-
-  def new_item_url(*args); end
-
-  def new_library_path(*args); end
-
-  def new_library_url(*args); end
-
-  def new_object_type_item_path(*args); end
-
-  def new_object_type_item_url(*args); end
-
-  def new_object_type_path(*args); end
-
-  def new_object_type_url(*args); end
-
-  def new_operation_path(*args); end
-
-  def new_operation_type_path(*args); end
-
-  def new_operation_type_url(*args); end
-
-  def new_operation_url(*args); end
-
-  def new_parameter_path(*args); end
-
-  def new_parameter_url(*args); end
-
-  def new_plan_path(*args); end
-
-  def new_plan_url(*args); end
-
-  def new_sample_path(*args); end
-
-  def new_sample_type_path(*args); end
-
-  def new_sample_type_url(*args); end
-
-  def new_sample_url(*args); end
-
-  def new_session_path(*args); end
-
-  def new_session_url(*args); end
-
-  def new_user_path(*args); end
-
-  def new_user_url(*args); end
-
-  def new_wizard_path(*args); end
-
-  def new_wizard_url(*args); end
-
-  def object_type_item_path(*args); end
-
-  def object_type_item_url(*args); end
-
-  def object_type_items_path(*args); end
-
-  def object_type_items_url(*args); end
-
-  def object_type_path(*args); end
-
-  def object_type_url(*args); end
-
-  def object_types_path(*args); end
-
-  def object_types_url(*args); end
-
-  def operation_path(*args); end
-
-  def operation_type_path(*args); end
-
-  def operation_type_url(*args); end
-
-  def operation_types_deployed_with_timing_path(*args); end
-
-  def operation_types_deployed_with_timing_url(*args); end
-
-  def operation_types_import_path(*args); end
-
-  def operation_types_import_url(*args); end
-
-  def operation_types_path(*args); end
-
-  def operation_types_test_all_path(*args); end
-
-  def operation_types_test_all_url(*args); end
-
-  def operation_types_url(*args); end
-
-  def operation_url(*args); end
-
-  def operations_batch_path(*args); end
-
-  def operations_batch_url(*args); end
-
-  def operations_jobs_path(*args); end
-
-  def operations_jobs_url(*args); end
-
-  def operations_manager_list_path(*args); end
-
-  def operations_manager_list_url(*args); end
-
-  def operations_path(*args); end
-
-  def operations_step_path(*args); end
-
-  def operations_step_url(*args); end
-
-  def operations_unbatch_path(*args); end
-
-  def operations_unbatch_url(*args); end
-
-  def operations_url(*args); end
-
-  def parameter_path(*args); end
-
-  def parameter_url(*args); end
-
-  def parameters_path(*args); end
-
-  def parameters_url(*args); end
-
-  def password_path(*args); end
-
-  def password_url(*args); end
-
-  def plan_path(*args); end
-
-  def plan_url(*args); end
-
-  def plans_folders_path(*args); end
-
-  def plans_folders_url(*args); end
-
-  def plans_move_path(*args); end
-
-  def plans_move_url(*args); end
-
-  def plans_path(*args); end
-
-  def plans_plan_path(*args); end
-
-  def plans_plan_url(*args); end
-
-  def plans_url(*args); end
-
-  def posts_path(*args); end
-
-  def posts_url(*args); end
-
-  def process_spreadsheet_path(*args); end
-
-  def process_spreadsheet_url(*args); end
-
-  def publish_check_repo_path(*args); end
-
-  def publish_check_repo_url(*args); end
-
-  def publish_export_path(*args); end
-
-  def publish_export_url(*args); end
-
-  def publish_path(*args); end
-
-  def publish_publish_path(*args); end
-
-  def publish_publish_url(*args); end
-
-  def publish_url(*args); end
-
-  def rails_info_path(*args); end
-
-  def rails_info_properties_path(*args); end
-
-  def rails_info_properties_url(*args); end
-
-  def rails_info_routes_path(*args); end
-
-  def rails_info_routes_url(*args); end
-
-  def rails_info_url(*args); end
-
-  def rails_mailers_path(*args); end
-
-  def rails_mailers_url(*args); end
-
-  def root_path(*args); end
-
-  def root_url(*args); end
-
-  def sample_list_path(*args); end
-
-  def sample_list_url(*args); end
-
-  def sample_path(*args); end
-
-  def sample_type_path(*args); end
-
-  def sample_type_url(*args); end
-
-  def sample_types_list_path(*args); end
-
-  def sample_types_list_url(*args); end
-
-  def sample_types_path(*args); end
-
-  def sample_types_url(*args); end
-
-  def sample_url(*args); end
-
-  def samples_path(*args); end
-
-  def samples_url(*args); end
-
-  def search_path(*args); end
-
-  def search_url(*args); end
-
-  def session_path(*args); end
-
-  def session_url(*args); end
-
-  def sessions_path(*args); end
-
-  def sessions_url(*args); end
-
-  def signin_path(*args); end
-
-  def signin_url(*args); end
-
-  def signout_path(*args); end
-
-  def signout_url(*args); end
-
-  def signup_path(*args); end
-
-  def signup_url(*args); end
-
-  def spreadsheet_path(*args); end
-
-  def spreadsheet_url(*args); end
-
-  def static_pages_direct_purchase_path(*args); end
-
-  def static_pages_direct_purchase_url(*args); end
-
-  def static_pages_explorer_jobs_path(*args); end
-
-  def static_pages_explorer_jobs_url(*args); end
-
-  def static_pages_explorer_path(*args); end
-
-  def static_pages_explorer_url(*args); end
-
-  def template_path(*args); end
-
-  def template_url(*args); end
-
-  def test_operation_types_path(*args); end
-
-  def test_operation_types_url(*args); end
-
-  def test_path(*args); end
-
-  def test_url(*args); end
-
-  def timing_path(*args); end
-
-  def timing_url(*args); end
-
-  def timings_path(*args); end
-
-  def timings_url(*args); end
-
-  def upload_path(*args); end
-
-  def upload_url(*args); end
-
-  def user_change_password_path(*args); end
-
-  def user_change_password_url(*args); end
-
-  def user_path(*args); end
-
-  def user_url(*args); end
-
-  def users_active_path(*args); end
-
-  def users_active_url(*args); end
-
-  def users_current_path(*args); end
-
-  def users_current_url(*args); end
-
-  def users_password_path(*args); end
-
-  def users_password_url(*args); end
-
-  def users_path(*args); end
-
-  def users_url(*args); end
-
-  def wizard_path(*args); end
-
-  def wizard_url(*args); end
-
-  def wizards_path(*args); end
-
-  def wizards_url(*args); end
-end
-
-module GeneratedUrlHelpers
-  def self._routes(); end
-
-  def self.default_url_options=(obj); end
-end
-
 class GlobalID
   def ==(other); end
 
@@ -58149,7 +56879,6 @@ class GlobalID
 end
 
 class Group
-  include ::Group::GeneratedAssociationMethods
   def after_add_for_memberships(); end
 
   def after_add_for_memberships=(after_add_for_memberships); end
@@ -58177,41 +56906,24 @@ class Group
   def before_remove_for_memberships?(); end
 
   def validate_associated_records_for_memberships(*args); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class Group::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Group::ActiveRecord_AssociationRelation
-end
-
 class Group::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Group::ActiveRecord_Associations_CollectionProxy
-end
-
 class Group::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class Group::ActiveRecord_Relation
 end
 
 module Group::GeneratedAssociationMethods
   def membership_ids(); end
 
   def membership_ids=(ids); end
-
-  def memberships(*args); end
-
-  def memberships=(value); end
-end
-
-module Group::GeneratedAssociationMethods
 end
 
 class Group
@@ -59884,26 +58596,14 @@ module IPAddress
 end
 
 module ITypeAssert
-  def assert(*args, &blk); end
-
   def get_type(); end
-  Elem = type_member(:out)
 end
 
 module ITypeAssert
-  extend ::T::Sig
-  extend ::T::Generic
-  extend ::T::Helpers
   extend ::T::Private::Abstract::Hooks
   extend ::T::InterfaceWrapper::Helpers
   extend ::T::Private::Methods::MethodHooks
   extend ::T::Private::Methods::SingletonMethodHooks
-end
-
-class Improvecollections
-end
-
-class IncreaseFieldValueSize
 end
 
 class Insertion
@@ -59974,41 +58674,26 @@ module IntegerStringImpl
 end
 
 class Invoice
-  include ::Invoice::GeneratedAssociationMethods
   def autosave_associated_records_for_budget(*args); end
 
   def autosave_associated_records_for_user(*args); end
 
   def belongs_to_counter_cache_after_update(reflection); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class Invoice::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Invoice::ActiveRecord_AssociationRelation
-end
-
 class Invoice::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Invoice::ActiveRecord_Associations_CollectionProxy
-end
-
 class Invoice::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class Invoice::ActiveRecord_Relation
 end
 
 module Invoice::GeneratedAssociationMethods
-  def budget(*args); end
-
-  def budget=(value); end
-
   def build_budget(*args, &block); end
 
   def build_user(*args, &block); end
@@ -60020,17 +58705,9 @@ module Invoice::GeneratedAssociationMethods
   def create_user(*args, &block); end
 
   def create_user!(*args, &block); end
-
-  def user(*args); end
-
-  def user=(value); end
-end
-
-module Invoice::GeneratedAssociationMethods
 end
 
 class Item
-  include ::Item::GeneratedAssociationMethods
   def after_add_for_post_associations(); end
 
   def after_add_for_post_associations=(after_add_for_post_associations); end
@@ -60072,28 +58749,18 @@ class Item
   def validate_associated_records_for_post_associations(*args); end
 
   def validate_associated_records_for_sample(*args); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class Item::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Item::ActiveRecord_AssociationRelation
-end
-
 class Item::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Item::ActiveRecord_Associations_CollectionProxy
-end
-
 class Item::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class Item::ActiveRecord_Relation
 end
 
 module Item::GeneratedAssociationMethods
@@ -60121,19 +58788,7 @@ module Item::GeneratedAssociationMethods
 
   def create_sample!(*args, &block); end
 
-  def locator(*args); end
-
-  def locator=(value); end
-
-  def object_type(*args); end
-
-  def object_type=(value); end
-
   def object_type_attributes=(attributes); end
-
-  def part(*args); end
-
-  def part=(value); end
 
   def post_association_ids(); end
 
@@ -60148,9 +58803,6 @@ module Item::GeneratedAssociationMethods
   def sample=(value); end
 
   def sample_attributes=(attributes); end
-end
-
-module Item::GeneratedAssociationMethods
 end
 
 class Item
@@ -60905,21 +59557,11 @@ module JMESPath
 end
 
 class JSON::Ext::Generator::State
-  def quirks_mode(); end
-
-  def quirks_mode=(quirks_mode); end
-
-  def quirks_mode?(); end
-end
-
-class JSON::Ext::Generator::State
   def self.from_state(_); end
 end
 
 class JSON::Ext::Parser
   def initialize(*_); end
-
-  def quirks_mode?(); end
 end
 
 JSON::Parser = JSON::Ext::Parser
@@ -60953,7 +59595,6 @@ module JaroWinkler
 end
 
 class Job
-  include ::Job::GeneratedAssociationMethods
   def after_add_for_job_associations(); end
 
   def after_add_for_job_associations=(after_add_for_job_associations); end
@@ -61105,28 +59746,18 @@ class Job
   def validate_associated_records_for_predecessors(*args); end
 
   def validate_associated_records_for_uploads(*args); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class Job::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Job::ActiveRecord_AssociationRelation
-end
-
 class Job::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Job::ActiveRecord_Associations_CollectionProxy
-end
-
 class Job::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class Job::ActiveRecord_Relation
 end
 
 module Job::GeneratedAssociationMethods
@@ -61160,25 +59791,13 @@ module Job::GeneratedAssociationMethods
 
   def create_workflow_process!(*args, &block); end
 
-  def group(*args); end
-
-  def group=(value); end
-
   def job_association_ids(); end
 
   def job_association_ids=(ids); end
 
-  def job_associations(*args); end
-
-  def job_associations=(value); end
-
   def log_ids(); end
 
   def log_ids=(ids); end
-
-  def logs(*args); end
-
-  def logs=(value); end
 
   def metacol(*args); end
 
@@ -61219,9 +59838,6 @@ module Job::GeneratedAssociationMethods
   def workflow_process(*args); end
 
   def workflow_process=(value); end
-end
-
-module Job::GeneratedAssociationMethods
 end
 
 class Job
@@ -61347,34 +59963,23 @@ class Job
 end
 
 class JobAssociation
-  include ::JobAssociation::GeneratedAssociationMethods
   def autosave_associated_records_for_job(*args); end
 
   def autosave_associated_records_for_operation(*args); end
 
   def belongs_to_counter_cache_after_update(reflection); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class JobAssociation::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class JobAssociation::ActiveRecord_AssociationRelation
-end
-
 class JobAssociation::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class JobAssociation::ActiveRecord_Associations_CollectionProxy
-end
-
 class JobAssociation::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class JobAssociation::ActiveRecord_Relation
 end
 
 module JobAssociation::GeneratedAssociationMethods
@@ -61389,17 +59994,6 @@ module JobAssociation::GeneratedAssociationMethods
   def create_operation(*args, &block); end
 
   def create_operation!(*args, &block); end
-
-  def job(*args); end
-
-  def job=(value); end
-
-  def operation(*args); end
-
-  def operation=(value); end
-end
-
-module JobAssociation::GeneratedAssociationMethods
 end
 
 module Kernel
@@ -61465,28 +60059,18 @@ end
 
 class Library
   include ::Library::GeneratedAssociationMethods
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class Library::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Library::ActiveRecord_AssociationRelation
-end
-
 class Library::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Library::ActiveRecord_Associations_CollectionProxy
-end
-
 class Library::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class Library::ActiveRecord_Relation
 end
 
 module Library::GeneratedAssociationMethods
@@ -61509,34 +60093,23 @@ class LocalJumpError
 end
 
 class Locator
-  include ::Locator::GeneratedAssociationMethods
   def autosave_associated_records_for_item(); end
 
   def autosave_associated_records_for_wizard(*args); end
 
   def belongs_to_counter_cache_after_update(reflection); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class Locator::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Locator::ActiveRecord_AssociationRelation
-end
-
 class Locator::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Locator::ActiveRecord_Associations_CollectionProxy
-end
-
 class Locator::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class Locator::ActiveRecord_Relation
 end
 
 module Locator::GeneratedAssociationMethods
@@ -61551,46 +60124,24 @@ module Locator::GeneratedAssociationMethods
   def create_wizard(*args, &block); end
 
   def create_wizard!(*args, &block); end
-
-  def item(*args); end
-
-  def item=(value); end
-
-  def wizard(*args); end
-
-  def wizard=(value); end
-end
-
-module Locator::GeneratedAssociationMethods
 end
 
 class Log
-  include ::Log::GeneratedAssociationMethods
   def autosave_associated_records_for_user(*args); end
 
   def belongs_to_counter_cache_after_update(reflection); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class Log::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Log::ActiveRecord_AssociationRelation
-end
-
 class Log::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Log::ActiveRecord_Associations_CollectionProxy
-end
-
 class Log::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class Log::ActiveRecord_Relation
 end
 
 module Log::GeneratedAssociationMethods
@@ -61599,13 +60150,6 @@ module Log::GeneratedAssociationMethods
   def create_user(*args, &block); end
 
   def create_user!(*args, &block); end
-
-  def user(*args); end
-
-  def user=(value); end
-end
-
-module Log::GeneratedAssociationMethods
 end
 
 class Logger
@@ -65152,34 +63696,23 @@ module Marshal
 end
 
 class Membership
-  include ::Membership::GeneratedAssociationMethods
   def autosave_associated_records_for_group(*args); end
 
   def autosave_associated_records_for_user(*args); end
 
   def belongs_to_counter_cache_after_update(reflection); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class Membership::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Membership::ActiveRecord_AssociationRelation
-end
-
 class Membership::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Membership::ActiveRecord_Associations_CollectionProxy
-end
-
 class Membership::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class Membership::ActiveRecord_Relation
 end
 
 module Membership::GeneratedAssociationMethods
@@ -65194,111 +63727,6 @@ module Membership::GeneratedAssociationMethods
   def create_user(*args, &block); end
 
   def create_user!(*args, &block); end
-
-  def group(*args); end
-
-  def group=(value); end
-
-  def user(*args); end
-
-  def user=(value); end
-end
-
-module Membership::GeneratedAssociationMethods
-end
-
-class Method
-  include ::MethodSource::SourceLocation::MethodExtensions
-  include ::MethodSource::MethodExtensions
-end
-
-module MethodSource
-  VERSION = ::T.let(nil, ::T.untyped)
-end
-
-module MethodSource::CodeHelpers
-  def comment_describing(file, line_number); end
-
-  def complete_expression?(str); end
-
-  def expression_at(file, line_number, options=T.unsafe(nil)); end
-end
-
-module MethodSource::CodeHelpers::IncompleteExpression
-  GENERIC_REGEXPS = ::T.let(nil, ::T.untyped)
-  RBX_ONLY_REGEXPS = ::T.let(nil, ::T.untyped)
-end
-
-module MethodSource::CodeHelpers::IncompleteExpression
-  def self.===(ex); end
-
-  def self.rbx?(); end
-end
-
-module MethodSource::CodeHelpers
-end
-
-module MethodSource::MethodExtensions
-  def comment(); end
-
-  def source(); end
-end
-
-module MethodSource::MethodExtensions
-  def self.included(klass); end
-end
-
-module MethodSource::ReeSourceLocation
-  def source_location(); end
-end
-
-module MethodSource::ReeSourceLocation
-end
-
-module MethodSource::SourceLocation
-end
-
-module MethodSource::SourceLocation::MethodExtensions
-  def source_location(); end
-end
-
-module MethodSource::SourceLocation::MethodExtensions
-end
-
-module MethodSource::SourceLocation::ProcExtensions
-  def source_location(); end
-end
-
-module MethodSource::SourceLocation::ProcExtensions
-end
-
-module MethodSource::SourceLocation::UnboundMethodExtensions
-  def source_location(); end
-end
-
-module MethodSource::SourceLocation::UnboundMethodExtensions
-end
-
-module MethodSource::SourceLocation
-end
-
-class MethodSource::SourceNotFoundError
-end
-
-class MethodSource::SourceNotFoundError
-end
-
-module MethodSource
-  extend ::MethodSource::CodeHelpers
-  def self.comment_helper(source_location, name=T.unsafe(nil)); end
-
-  def self.extract_code(source_location); end
-
-  def self.lines_for(file_name, name=T.unsafe(nil)); end
-
-  def self.source_helper(source_location, name=T.unsafe(nil)); end
-
-  def self.valid_expression?(str); end
 end
 
 Methods = T::Private::Methods
@@ -68883,7 +67311,6 @@ module ObjectSpace
 end
 
 class ObjectType
-  include ::ObjectType::GeneratedAssociationMethods
   def after_add_for_items(); end
 
   def after_add_for_items=(after_add_for_items); end
@@ -68915,28 +67342,18 @@ class ObjectType
   def belongs_to_counter_cache_after_update(reflection); end
 
   def validate_associated_records_for_items(*args); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class ObjectType::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class ObjectType::ActiveRecord_AssociationRelation
-end
-
 class ObjectType::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class ObjectType::ActiveRecord_Associations_CollectionProxy
-end
-
 class ObjectType::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class ObjectType::ActiveRecord_Relation
 end
 
 module ObjectType::GeneratedAssociationMethods
@@ -68949,17 +67366,6 @@ module ObjectType::GeneratedAssociationMethods
   def item_ids(); end
 
   def item_ids=(ids); end
-
-  def items(*args); end
-
-  def items=(value); end
-
-  def sample_type(*args); end
-
-  def sample_type=(value); end
-end
-
-module ObjectType::GeneratedAssociationMethods
 end
 
 class ObjectType
@@ -71628,7 +70034,6 @@ module OpenURI
 end
 
 class Operation
-  include ::Operation::GeneratedAssociationMethods
   def after_add_for_job_associations(); end
 
   def after_add_for_job_associations=(after_add_for_job_associations); end
@@ -71746,28 +70151,18 @@ class Operation
   def validate_associated_records_for_plan_associations(*args); end
 
   def validate_associated_records_for_plans(*args); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class Operation::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Operation::ActiveRecord_AssociationRelation
-end
-
 class Operation::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Operation::ActiveRecord_Associations_CollectionProxy
-end
-
 class Operation::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class Operation::ActiveRecord_Relation
 end
 
 module Operation::GeneratedAssociationMethods
@@ -71787,44 +70182,17 @@ module Operation::GeneratedAssociationMethods
 
   def job_association_ids=(ids); end
 
-  def job_associations(*args); end
-
-  def job_associations=(value); end
-
   def job_ids(); end
 
   def job_ids=(ids); end
-
-  def jobs(*args); end
-
-  def jobs=(value); end
-
-  def operation_type(*args); end
-
-  def operation_type=(value); end
 
   def plan_association_ids(); end
 
   def plan_association_ids=(ids); end
 
-  def plan_associations(*args); end
-
-  def plan_associations=(value); end
-
   def plan_ids(); end
 
   def plan_ids=(ids); end
-
-  def plans(*args); end
-
-  def plans=(value); end
-
-  def user(*args); end
-
-  def user=(value); end
-end
-
-module Operation::GeneratedAssociationMethods
 end
 
 class Operation
@@ -71926,7 +70294,6 @@ class Operation
 end
 
 class OperationType
-  include ::OperationType::GeneratedAssociationMethods
   def after_add_for_operations(); end
 
   def after_add_for_operations=(after_add_for_operations); end
@@ -71954,41 +70321,24 @@ class OperationType
   def before_remove_for_operations?(); end
 
   def validate_associated_records_for_operations(*args); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class OperationType::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class OperationType::ActiveRecord_AssociationRelation
-end
-
 class OperationType::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class OperationType::ActiveRecord_Associations_CollectionProxy
-end
-
 class OperationType::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class OperationType::ActiveRecord_Relation
 end
 
 module OperationType::GeneratedAssociationMethods
   def operation_ids(); end
 
   def operation_ids=(ids); end
-
-  def operations(*args); end
-
-  def operations=(value); end
-end
-
-module OperationType::GeneratedAssociationMethods
 end
 
 class OperationType
@@ -72209,32 +70559,21 @@ module Parallel
 end
 
 class Parameter
-  include ::Parameter::GeneratedAssociationMethods
   def autosave_associated_records_for_user(*args); end
 
   def belongs_to_counter_cache_after_update(reflection); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class Parameter::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Parameter::ActiveRecord_AssociationRelation
-end
-
 class Parameter::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Parameter::ActiveRecord_Associations_CollectionProxy
-end
-
 class Parameter::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class Parameter::ActiveRecord_Relation
 end
 
 module Parameter::GeneratedAssociationMethods
@@ -72243,13 +70582,6 @@ module Parameter::GeneratedAssociationMethods
   def create_user(*args, &block); end
 
   def create_user!(*args, &block); end
-
-  def user(*args); end
-
-  def user=(value); end
-end
-
-module Parameter::GeneratedAssociationMethods
 end
 
 module Parlour
@@ -72299,27 +70631,6 @@ module Parlour::Debugging
   def self.debug_puts(*args, &blk); end
 
   def self.name_for_debug_caller(*args, &blk); end
-end
-
-class Parlour::DetachedRbiGenerator
-  def detached!(*args, &blk); end
-end
-
-class Parlour::DetachedRbiGenerator
-end
-
-class Parlour::ParseError
-  def buffer(*args, &blk); end
-
-  def initialize(buffer, range); end
-
-  def range(*args, &blk); end
-end
-
-class Parlour::ParseError
-  extend ::T::Sig
-  extend ::T::Private::Methods::MethodHooks
-  extend ::T::Private::Methods::SingletonMethodHooks
 end
 
 class Parlour::Plugin
@@ -72398,13 +70709,6 @@ end
 class Parlour::RbiGenerator::Constant
 end
 
-class Parlour::RbiGenerator::EnumClassNamespace
-  def enums(*args, &blk); end
-end
-
-class Parlour::RbiGenerator::EnumClassNamespace
-end
-
 class Parlour::RbiGenerator::Extend
   def ==(*args, &blk); end
 end
@@ -72425,8 +70729,6 @@ class Parlour::RbiGenerator::Method
   def abstract(*args, &blk); end
 
   def class_method(*args, &blk); end
-
-  def final(*args, &blk); end
 
   def implementation(*args, &blk); end
 
@@ -72474,8 +70776,6 @@ class Parlour::RbiGenerator::Namespace
 
   def create_constant(*args, &blk); end
 
-  def create_enum_class(*args, &blk); end
-
   def create_extend(*args, &blk); end
 
   def create_extends(*args, &blk); end
@@ -72488,11 +70788,7 @@ class Parlour::RbiGenerator::Namespace
 
   def create_module(*args, &blk); end
 
-  def create_type_alias(*args, &blk); end
-
   def extends(*args, &blk); end
-
-  def final(*args, &blk); end
 
   def includes(*args, &blk); end
 
@@ -72508,8 +70804,6 @@ class Parlour::RbiGenerator::Options
   def indented(*args, &blk); end
 
   def initialize(*args, &blk); end
-
-  def sort_namespaces(*args, &blk); end
 
   def tab_size(*args, &blk); end
 end
@@ -72584,115 +70878,6 @@ class Parlour::RbiGenerator
   extend ::T::Sig
   extend ::T::Private::Methods::MethodHooks
   extend ::T::Private::Methods::SingletonMethodHooks
-end
-
-module Parlour::TypeLoader
-end
-
-module Parlour::TypeLoader
-  extend ::T::Sig
-  extend ::T::Private::Methods::MethodHooks
-  extend ::T::Private::Methods::SingletonMethodHooks
-  def self.load_file(*args, &blk); end
-
-  def self.load_project(*args, &blk); end
-
-  def self.load_source(*args, &blk); end
-end
-
-class Parlour::TypeParser
-  def ast(*args, &blk); end
-
-  def ast=(ast); end
-
-  def body_has_modifier?(*args, &blk); end
-
-  def body_includes_and_extends(*args, &blk); end
-
-  def constant_names(*args, &blk); end
-
-  def initialize(*args, &blk); end
-
-  def node_to_s(*args, &blk); end
-
-  def parse_all(*args, &blk); end
-
-  def parse_err(*args, &blk); end
-
-  def parse_path_to_object(*args, &blk); end
-
-  def parse_sig_into_methods(*args, &blk); end
-
-  def parse_sig_into_sig(*args, &blk); end
-
-  def sig_node?(*args, &blk); end
-
-  def unknown_node_errors(*args, &blk); end
-
-  def zip_by(*args, &blk); end
-end
-
-class Parlour::TypeParser::IntermediateSig
-  def abstract(); end
-
-  def abstract=(val); end
-
-  def final(); end
-
-  def final=(val); end
-
-  def initialize(*args, &blk); end
-
-  def overridable(); end
-
-  def overridable=(val); end
-
-  def override(); end
-
-  def override=(val); end
-
-  def params(); end
-
-  def params=(val); end
-
-  def return_type(); end
-
-  def return_type=(val); end
-
-  def type_parameters(); end
-
-  def type_parameters=(val); end
-end
-
-class Parlour::TypeParser::IntermediateSig
-  def self.inherited(s); end
-end
-
-class Parlour::TypeParser::NodePath
-  def child(*args, &blk); end
-
-  def indices(*args, &blk); end
-
-  def initialize(*args, &blk); end
-
-  def parent(*args, &blk); end
-
-  def sibling(*args, &blk); end
-
-  def traverse(*args, &blk); end
-end
-
-class Parlour::TypeParser::NodePath
-  extend ::T::Sig
-  extend ::T::Private::Methods::MethodHooks
-  extend ::T::Private::Methods::SingletonMethodHooks
-end
-
-class Parlour::TypeParser
-  extend ::T::Sig
-  extend ::T::Private::Methods::MethodHooks
-  extend ::T::Private::Methods::SingletonMethodHooks
-  def self.from_source(*args, &blk); end
 end
 
 module Parlour
@@ -73336,8 +71521,6 @@ end
 
 class Parser::CurrentArgStack
 end
-
-Parser::CurrentRuby = Parser::Ruby26
 
 module Parser::Deprecation
   def warn_of_deprecation(); end
@@ -74637,884 +72820,6 @@ end
 class Parser::Ruby24
 end
 
-class Parser::Ruby26
-  def _reduce_10(val, _values, result); end
-
-  def _reduce_100(val, _values, result); end
-
-  def _reduce_101(val, _values, result); end
-
-  def _reduce_102(val, _values, result); end
-
-  def _reduce_103(val, _values, result); end
-
-  def _reduce_104(val, _values, result); end
-
-  def _reduce_105(val, _values, result); end
-
-  def _reduce_106(val, _values, result); end
-
-  def _reduce_107(val, _values, result); end
-
-  def _reduce_108(val, _values, result); end
-
-  def _reduce_109(val, _values, result); end
-
-  def _reduce_11(val, _values, result); end
-
-  def _reduce_110(val, _values, result); end
-
-  def _reduce_111(val, _values, result); end
-
-  def _reduce_113(val, _values, result); end
-
-  def _reduce_114(val, _values, result); end
-
-  def _reduce_115(val, _values, result); end
-
-  def _reduce_12(val, _values, result); end
-
-  def _reduce_121(val, _values, result); end
-
-  def _reduce_125(val, _values, result); end
-
-  def _reduce_126(val, _values, result); end
-
-  def _reduce_127(val, _values, result); end
-
-  def _reduce_13(val, _values, result); end
-
-  def _reduce_14(val, _values, result); end
-
-  def _reduce_15(val, _values, result); end
-
-  def _reduce_17(val, _values, result); end
-
-  def _reduce_18(val, _values, result); end
-
-  def _reduce_19(val, _values, result); end
-
-  def _reduce_199(val, _values, result); end
-
-  def _reduce_2(val, _values, result); end
-
-  def _reduce_20(val, _values, result); end
-
-  def _reduce_200(val, _values, result); end
-
-  def _reduce_201(val, _values, result); end
-
-  def _reduce_202(val, _values, result); end
-
-  def _reduce_203(val, _values, result); end
-
-  def _reduce_204(val, _values, result); end
-
-  def _reduce_205(val, _values, result); end
-
-  def _reduce_206(val, _values, result); end
-
-  def _reduce_207(val, _values, result); end
-
-  def _reduce_208(val, _values, result); end
-
-  def _reduce_209(val, _values, result); end
-
-  def _reduce_21(val, _values, result); end
-
-  def _reduce_210(val, _values, result); end
-
-  def _reduce_211(val, _values, result); end
-
-  def _reduce_212(val, _values, result); end
-
-  def _reduce_213(val, _values, result); end
-
-  def _reduce_214(val, _values, result); end
-
-  def _reduce_215(val, _values, result); end
-
-  def _reduce_216(val, _values, result); end
-
-  def _reduce_217(val, _values, result); end
-
-  def _reduce_218(val, _values, result); end
-
-  def _reduce_219(val, _values, result); end
-
-  def _reduce_22(val, _values, result); end
-
-  def _reduce_220(val, _values, result); end
-
-  def _reduce_221(val, _values, result); end
-
-  def _reduce_222(val, _values, result); end
-
-  def _reduce_223(val, _values, result); end
-
-  def _reduce_224(val, _values, result); end
-
-  def _reduce_226(val, _values, result); end
-
-  def _reduce_227(val, _values, result); end
-
-  def _reduce_228(val, _values, result); end
-
-  def _reduce_229(val, _values, result); end
-
-  def _reduce_23(val, _values, result); end
-
-  def _reduce_230(val, _values, result); end
-
-  def _reduce_231(val, _values, result); end
-
-  def _reduce_232(val, _values, result); end
-
-  def _reduce_233(val, _values, result); end
-
-  def _reduce_234(val, _values, result); end
-
-  def _reduce_235(val, _values, result); end
-
-  def _reduce_236(val, _values, result); end
-
-  def _reduce_237(val, _values, result); end
-
-  def _reduce_238(val, _values, result); end
-
-  def _reduce_24(val, _values, result); end
-
-  def _reduce_244(val, _values, result); end
-
-  def _reduce_245(val, _values, result); end
-
-  def _reduce_249(val, _values, result); end
-
-  def _reduce_25(val, _values, result); end
-
-  def _reduce_250(val, _values, result); end
-
-  def _reduce_252(val, _values, result); end
-
-  def _reduce_253(val, _values, result); end
-
-  def _reduce_254(val, _values, result); end
-
-  def _reduce_256(val, _values, result); end
-
-  def _reduce_259(val, _values, result); end
-
-  def _reduce_26(val, _values, result); end
-
-  def _reduce_260(val, _values, result); end
-
-  def _reduce_261(val, _values, result); end
-
-  def _reduce_262(val, _values, result); end
-
-  def _reduce_263(val, _values, result); end
-
-  def _reduce_264(val, _values, result); end
-
-  def _reduce_265(val, _values, result); end
-
-  def _reduce_266(val, _values, result); end
-
-  def _reduce_267(val, _values, result); end
-
-  def _reduce_268(val, _values, result); end
-
-  def _reduce_269(val, _values, result); end
-
-  def _reduce_27(val, _values, result); end
-
-  def _reduce_270(val, _values, result); end
-
-  def _reduce_271(val, _values, result); end
-
-  def _reduce_272(val, _values, result); end
-
-  def _reduce_273(val, _values, result); end
-
-  def _reduce_274(val, _values, result); end
-
-  def _reduce_275(val, _values, result); end
-
-  def _reduce_277(val, _values, result); end
-
-  def _reduce_278(val, _values, result); end
-
-  def _reduce_279(val, _values, result); end
-
-  def _reduce_28(val, _values, result); end
-
-  def _reduce_29(val, _values, result); end
-
-  def _reduce_290(val, _values, result); end
-
-  def _reduce_291(val, _values, result); end
-
-  def _reduce_292(val, _values, result); end
-
-  def _reduce_293(val, _values, result); end
-
-  def _reduce_294(val, _values, result); end
-
-  def _reduce_295(val, _values, result); end
-
-  def _reduce_296(val, _values, result); end
-
-  def _reduce_297(val, _values, result); end
-
-  def _reduce_298(val, _values, result); end
-
-  def _reduce_299(val, _values, result); end
-
-  def _reduce_3(val, _values, result); end
-
-  def _reduce_300(val, _values, result); end
-
-  def _reduce_301(val, _values, result); end
-
-  def _reduce_302(val, _values, result); end
-
-  def _reduce_303(val, _values, result); end
-
-  def _reduce_304(val, _values, result); end
-
-  def _reduce_305(val, _values, result); end
-
-  def _reduce_306(val, _values, result); end
-
-  def _reduce_307(val, _values, result); end
-
-  def _reduce_308(val, _values, result); end
-
-  def _reduce_309(val, _values, result); end
-
-  def _reduce_31(val, _values, result); end
-
-  def _reduce_311(val, _values, result); end
-
-  def _reduce_312(val, _values, result); end
-
-  def _reduce_313(val, _values, result); end
-
-  def _reduce_314(val, _values, result); end
-
-  def _reduce_315(val, _values, result); end
-
-  def _reduce_316(val, _values, result); end
-
-  def _reduce_317(val, _values, result); end
-
-  def _reduce_318(val, _values, result); end
-
-  def _reduce_319(val, _values, result); end
-
-  def _reduce_32(val, _values, result); end
-
-  def _reduce_320(val, _values, result); end
-
-  def _reduce_321(val, _values, result); end
-
-  def _reduce_322(val, _values, result); end
-
-  def _reduce_323(val, _values, result); end
-
-  def _reduce_324(val, _values, result); end
-
-  def _reduce_325(val, _values, result); end
-
-  def _reduce_326(val, _values, result); end
-
-  def _reduce_327(val, _values, result); end
-
-  def _reduce_328(val, _values, result); end
-
-  def _reduce_329(val, _values, result); end
-
-  def _reduce_33(val, _values, result); end
-
-  def _reduce_330(val, _values, result); end
-
-  def _reduce_331(val, _values, result); end
-
-  def _reduce_332(val, _values, result); end
-
-  def _reduce_333(val, _values, result); end
-
-  def _reduce_334(val, _values, result); end
-
-  def _reduce_336(val, _values, result); end
-
-  def _reduce_339(val, _values, result); end
-
-  def _reduce_343(val, _values, result); end
-
-  def _reduce_345(val, _values, result); end
-
-  def _reduce_348(val, _values, result); end
-
-  def _reduce_349(val, _values, result); end
-
-  def _reduce_35(val, _values, result); end
-
-  def _reduce_350(val, _values, result); end
-
-  def _reduce_351(val, _values, result); end
-
-  def _reduce_353(val, _values, result); end
-
-  def _reduce_354(val, _values, result); end
-
-  def _reduce_355(val, _values, result); end
-
-  def _reduce_356(val, _values, result); end
-
-  def _reduce_357(val, _values, result); end
-
-  def _reduce_358(val, _values, result); end
-
-  def _reduce_359(val, _values, result); end
-
-  def _reduce_36(val, _values, result); end
-
-  def _reduce_360(val, _values, result); end
-
-  def _reduce_361(val, _values, result); end
-
-  def _reduce_362(val, _values, result); end
-
-  def _reduce_363(val, _values, result); end
-
-  def _reduce_364(val, _values, result); end
-
-  def _reduce_365(val, _values, result); end
-
-  def _reduce_366(val, _values, result); end
-
-  def _reduce_367(val, _values, result); end
-
-  def _reduce_368(val, _values, result); end
-
-  def _reduce_369(val, _values, result); end
-
-  def _reduce_37(val, _values, result); end
-
-  def _reduce_370(val, _values, result); end
-
-  def _reduce_371(val, _values, result); end
-
-  def _reduce_373(val, _values, result); end
-
-  def _reduce_374(val, _values, result); end
-
-  def _reduce_375(val, _values, result); end
-
-  def _reduce_376(val, _values, result); end
-
-  def _reduce_377(val, _values, result); end
-
-  def _reduce_378(val, _values, result); end
-
-  def _reduce_379(val, _values, result); end
-
-  def _reduce_38(val, _values, result); end
-
-  def _reduce_380(val, _values, result); end
-
-  def _reduce_382(val, _values, result); end
-
-  def _reduce_383(val, _values, result); end
-
-  def _reduce_384(val, _values, result); end
-
-  def _reduce_385(val, _values, result); end
-
-  def _reduce_386(val, _values, result); end
-
-  def _reduce_387(val, _values, result); end
-
-  def _reduce_388(val, _values, result); end
-
-  def _reduce_389(val, _values, result); end
-
-  def _reduce_39(val, _values, result); end
-
-  def _reduce_390(val, _values, result); end
-
-  def _reduce_391(val, _values, result); end
-
-  def _reduce_393(val, _values, result); end
-
-  def _reduce_394(val, _values, result); end
-
-  def _reduce_395(val, _values, result); end
-
-  def _reduce_396(val, _values, result); end
-
-  def _reduce_397(val, _values, result); end
-
-  def _reduce_398(val, _values, result); end
-
-  def _reduce_399(val, _values, result); end
-
-  def _reduce_4(val, _values, result); end
-
-  def _reduce_40(val, _values, result); end
-
-  def _reduce_400(val, _values, result); end
-
-  def _reduce_401(val, _values, result); end
-
-  def _reduce_402(val, _values, result); end
-
-  def _reduce_403(val, _values, result); end
-
-  def _reduce_404(val, _values, result); end
-
-  def _reduce_405(val, _values, result); end
-
-  def _reduce_406(val, _values, result); end
-
-  def _reduce_407(val, _values, result); end
-
-  def _reduce_408(val, _values, result); end
-
-  def _reduce_409(val, _values, result); end
-
-  def _reduce_41(val, _values, result); end
-
-  def _reduce_410(val, _values, result); end
-
-  def _reduce_411(val, _values, result); end
-
-  def _reduce_412(val, _values, result); end
-
-  def _reduce_413(val, _values, result); end
-
-  def _reduce_414(val, _values, result); end
-
-  def _reduce_415(val, _values, result); end
-
-  def _reduce_416(val, _values, result); end
-
-  def _reduce_417(val, _values, result); end
-
-  def _reduce_418(val, _values, result); end
-
-  def _reduce_419(val, _values, result); end
-
-  def _reduce_42(val, _values, result); end
-
-  def _reduce_420(val, _values, result); end
-
-  def _reduce_421(val, _values, result); end
-
-  def _reduce_422(val, _values, result); end
-
-  def _reduce_423(val, _values, result); end
-
-  def _reduce_424(val, _values, result); end
-
-  def _reduce_425(val, _values, result); end
-
-  def _reduce_426(val, _values, result); end
-
-  def _reduce_427(val, _values, result); end
-
-  def _reduce_429(val, _values, result); end
-
-  def _reduce_430(val, _values, result); end
-
-  def _reduce_431(val, _values, result); end
-
-  def _reduce_434(val, _values, result); end
-
-  def _reduce_436(val, _values, result); end
-
-  def _reduce_44(val, _values, result); end
-
-  def _reduce_441(val, _values, result); end
-
-  def _reduce_442(val, _values, result); end
-
-  def _reduce_443(val, _values, result); end
-
-  def _reduce_444(val, _values, result); end
-
-  def _reduce_445(val, _values, result); end
-
-  def _reduce_446(val, _values, result); end
-
-  def _reduce_447(val, _values, result); end
-
-  def _reduce_448(val, _values, result); end
-
-  def _reduce_449(val, _values, result); end
-
-  def _reduce_450(val, _values, result); end
-
-  def _reduce_451(val, _values, result); end
-
-  def _reduce_452(val, _values, result); end
-
-  def _reduce_453(val, _values, result); end
-
-  def _reduce_454(val, _values, result); end
-
-  def _reduce_455(val, _values, result); end
-
-  def _reduce_456(val, _values, result); end
-
-  def _reduce_457(val, _values, result); end
-
-  def _reduce_458(val, _values, result); end
-
-  def _reduce_459(val, _values, result); end
-
-  def _reduce_460(val, _values, result); end
-
-  def _reduce_461(val, _values, result); end
-
-  def _reduce_462(val, _values, result); end
-
-  def _reduce_463(val, _values, result); end
-
-  def _reduce_464(val, _values, result); end
-
-  def _reduce_465(val, _values, result); end
-
-  def _reduce_466(val, _values, result); end
-
-  def _reduce_467(val, _values, result); end
-
-  def _reduce_468(val, _values, result); end
-
-  def _reduce_469(val, _values, result); end
-
-  def _reduce_47(val, _values, result); end
-
-  def _reduce_470(val, _values, result); end
-
-  def _reduce_471(val, _values, result); end
-
-  def _reduce_472(val, _values, result); end
-
-  def _reduce_473(val, _values, result); end
-
-  def _reduce_474(val, _values, result); end
-
-  def _reduce_475(val, _values, result); end
-
-  def _reduce_477(val, _values, result); end
-
-  def _reduce_478(val, _values, result); end
-
-  def _reduce_479(val, _values, result); end
-
-  def _reduce_48(val, _values, result); end
-
-  def _reduce_480(val, _values, result); end
-
-  def _reduce_481(val, _values, result); end
-
-  def _reduce_482(val, _values, result); end
-
-  def _reduce_483(val, _values, result); end
-
-  def _reduce_484(val, _values, result); end
-
-  def _reduce_485(val, _values, result); end
-
-  def _reduce_486(val, _values, result); end
-
-  def _reduce_487(val, _values, result); end
-
-  def _reduce_488(val, _values, result); end
-
-  def _reduce_489(val, _values, result); end
-
-  def _reduce_49(val, _values, result); end
-
-  def _reduce_490(val, _values, result); end
-
-  def _reduce_491(val, _values, result); end
-
-  def _reduce_492(val, _values, result); end
-
-  def _reduce_493(val, _values, result); end
-
-  def _reduce_494(val, _values, result); end
-
-  def _reduce_495(val, _values, result); end
-
-  def _reduce_496(val, _values, result); end
-
-  def _reduce_497(val, _values, result); end
-
-  def _reduce_498(val, _values, result); end
-
-  def _reduce_499(val, _values, result); end
-
-  def _reduce_5(val, _values, result); end
-
-  def _reduce_50(val, _values, result); end
-
-  def _reduce_500(val, _values, result); end
-
-  def _reduce_501(val, _values, result); end
-
-  def _reduce_502(val, _values, result); end
-
-  def _reduce_503(val, _values, result); end
-
-  def _reduce_504(val, _values, result); end
-
-  def _reduce_505(val, _values, result); end
-
-  def _reduce_506(val, _values, result); end
-
-  def _reduce_507(val, _values, result); end
-
-  def _reduce_508(val, _values, result); end
-
-  def _reduce_509(val, _values, result); end
-
-  def _reduce_510(val, _values, result); end
-
-  def _reduce_511(val, _values, result); end
-
-  def _reduce_512(val, _values, result); end
-
-  def _reduce_513(val, _values, result); end
-
-  def _reduce_514(val, _values, result); end
-
-  def _reduce_515(val, _values, result); end
-
-  def _reduce_516(val, _values, result); end
-
-  def _reduce_517(val, _values, result); end
-
-  def _reduce_518(val, _values, result); end
-
-  def _reduce_519(val, _values, result); end
-
-  def _reduce_520(val, _values, result); end
-
-  def _reduce_521(val, _values, result); end
-
-  def _reduce_522(val, _values, result); end
-
-  def _reduce_523(val, _values, result); end
-
-  def _reduce_524(val, _values, result); end
-
-  def _reduce_525(val, _values, result); end
-
-  def _reduce_526(val, _values, result); end
-
-  def _reduce_527(val, _values, result); end
-
-  def _reduce_528(val, _values, result); end
-
-  def _reduce_529(val, _values, result); end
-
-  def _reduce_53(val, _values, result); end
-
-  def _reduce_530(val, _values, result); end
-
-  def _reduce_531(val, _values, result); end
-
-  def _reduce_532(val, _values, result); end
-
-  def _reduce_533(val, _values, result); end
-
-  def _reduce_535(val, _values, result); end
-
-  def _reduce_536(val, _values, result); end
-
-  def _reduce_537(val, _values, result); end
-
-  def _reduce_538(val, _values, result); end
-
-  def _reduce_539(val, _values, result); end
-
-  def _reduce_54(val, _values, result); end
-
-  def _reduce_540(val, _values, result); end
-
-  def _reduce_541(val, _values, result); end
-
-  def _reduce_542(val, _values, result); end
-
-  def _reduce_543(val, _values, result); end
-
-  def _reduce_544(val, _values, result); end
-
-  def _reduce_545(val, _values, result); end
-
-  def _reduce_546(val, _values, result); end
-
-  def _reduce_547(val, _values, result); end
-
-  def _reduce_548(val, _values, result); end
-
-  def _reduce_549(val, _values, result); end
-
-  def _reduce_552(val, _values, result); end
-
-  def _reduce_553(val, _values, result); end
-
-  def _reduce_554(val, _values, result); end
-
-  def _reduce_555(val, _values, result); end
-
-  def _reduce_556(val, _values, result); end
-
-  def _reduce_557(val, _values, result); end
-
-  def _reduce_558(val, _values, result); end
-
-  def _reduce_559(val, _values, result); end
-
-  def _reduce_562(val, _values, result); end
-
-  def _reduce_563(val, _values, result); end
-
-  def _reduce_566(val, _values, result); end
-
-  def _reduce_567(val, _values, result); end
-
-  def _reduce_568(val, _values, result); end
-
-  def _reduce_570(val, _values, result); end
-
-  def _reduce_571(val, _values, result); end
-
-  def _reduce_573(val, _values, result); end
-
-  def _reduce_574(val, _values, result); end
-
-  def _reduce_575(val, _values, result); end
-
-  def _reduce_576(val, _values, result); end
-
-  def _reduce_577(val, _values, result); end
-
-  def _reduce_578(val, _values, result); end
-
-  def _reduce_58(val, _values, result); end
-
-  def _reduce_59(val, _values, result); end
-
-  def _reduce_591(val, _values, result); end
-
-  def _reduce_592(val, _values, result); end
-
-  def _reduce_597(val, _values, result); end
-
-  def _reduce_598(val, _values, result); end
-
-  def _reduce_6(val, _values, result); end
-
-  def _reduce_60(val, _values, result); end
-
-  def _reduce_602(val, _values, result); end
-
-  def _reduce_606(val, _values, result); end
-
-  def _reduce_62(val, _values, result); end
-
-  def _reduce_63(val, _values, result); end
-
-  def _reduce_64(val, _values, result); end
-
-  def _reduce_65(val, _values, result); end
-
-  def _reduce_66(val, _values, result); end
-
-  def _reduce_67(val, _values, result); end
-
-  def _reduce_68(val, _values, result); end
-
-  def _reduce_69(val, _values, result); end
-
-  def _reduce_70(val, _values, result); end
-
-  def _reduce_71(val, _values, result); end
-
-  def _reduce_72(val, _values, result); end
-
-  def _reduce_73(val, _values, result); end
-
-  def _reduce_74(val, _values, result); end
-
-  def _reduce_75(val, _values, result); end
-
-  def _reduce_76(val, _values, result); end
-
-  def _reduce_78(val, _values, result); end
-
-  def _reduce_79(val, _values, result); end
-
-  def _reduce_8(val, _values, result); end
-
-  def _reduce_80(val, _values, result); end
-
-  def _reduce_81(val, _values, result); end
-
-  def _reduce_82(val, _values, result); end
-
-  def _reduce_83(val, _values, result); end
-
-  def _reduce_84(val, _values, result); end
-
-  def _reduce_85(val, _values, result); end
-
-  def _reduce_86(val, _values, result); end
-
-  def _reduce_88(val, _values, result); end
-
-  def _reduce_89(val, _values, result); end
-
-  def _reduce_9(val, _values, result); end
-
-  def _reduce_90(val, _values, result); end
-
-  def _reduce_91(val, _values, result); end
-
-  def _reduce_92(val, _values, result); end
-
-  def _reduce_93(val, _values, result); end
-
-  def _reduce_94(val, _values, result); end
-
-  def _reduce_95(val, _values, result); end
-
-  def _reduce_96(val, _values, result); end
-
-  def _reduce_97(val, _values, result); end
-
-  def _reduce_98(val, _values, result); end
-
-  def _reduce_99(val, _values, result); end
-
-  def _reduce_none(val, _values, result); end
-
-  def default_encoding(); end
-
-  def version(); end
-  Racc_arg = ::T.let(nil, ::T.untyped)
-  Racc_debug_parser = ::T.let(nil, ::T.untyped)
-  Racc_token_to_s_table = ::T.let(nil, ::T.untyped)
-end
-
-class Parser::Ruby26
-end
-
 module Parser::Source
 end
 
@@ -76118,44 +73423,29 @@ module Parser
 end
 
 class PartAssociation
-  include ::PartAssociation::GeneratedAssociationMethods
   def autosave_associated_records_for_collection(*args); end
 
   def autosave_associated_records_for_part(*args); end
 
   def belongs_to_counter_cache_after_update(reflection); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class PartAssociation::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class PartAssociation::ActiveRecord_AssociationRelation
-end
-
 class PartAssociation::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class PartAssociation::ActiveRecord_Associations_CollectionProxy
-end
-
 class PartAssociation::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class PartAssociation::ActiveRecord_Relation
 end
 
 module PartAssociation::GeneratedAssociationMethods
   def build_collection(*args, &block); end
 
   def build_part(*args, &block); end
-
-  def collection(*args); end
-
-  def collection=(value); end
 
   def create_collection(*args, &block); end
 
@@ -76164,13 +73454,6 @@ module PartAssociation::GeneratedAssociationMethods
   def create_part(*args, &block); end
 
   def create_part!(*args, &block); end
-
-  def part(*args); end
-
-  def part=(value); end
-end
-
-module PartAssociation::GeneratedAssociationMethods
 end
 
 module Parts
@@ -76230,7 +73513,6 @@ class Pathname
 end
 
 class Plan
-  include ::Plan::GeneratedAssociationMethods
   def after_add_for_operations(); end
 
   def after_add_for_operations=(after_add_for_operations); end
@@ -76292,35 +73574,21 @@ class Plan
   def validate_associated_records_for_operations(*args); end
 
   def validate_associated_records_for_plan_associations(*args); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class Plan::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Plan::ActiveRecord_AssociationRelation
-end
-
 class Plan::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Plan::ActiveRecord_Associations_CollectionProxy
-end
-
 class Plan::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class Plan::ActiveRecord_Relation
 end
 
 module Plan::GeneratedAssociationMethods
-  def budget(*args); end
-
-  def budget=(value); end
-
   def build_budget(*args, &block); end
 
   def build_user(*args, &block); end
@@ -76337,24 +73605,9 @@ module Plan::GeneratedAssociationMethods
 
   def operation_ids=(ids); end
 
-  def operations(*args); end
-
-  def operations=(value); end
-
   def plan_association_ids(); end
 
   def plan_association_ids=(ids); end
-
-  def plan_associations(*args); end
-
-  def plan_associations=(value); end
-
-  def user(*args); end
-
-  def user=(value); end
-end
-
-module Plan::GeneratedAssociationMethods
 end
 
 class Plan
@@ -76408,34 +73661,23 @@ class Plan
 end
 
 class PlanAssociation
-  include ::PlanAssociation::GeneratedAssociationMethods
   def autosave_associated_records_for_operation(*args); end
 
   def autosave_associated_records_for_plan(*args); end
 
   def belongs_to_counter_cache_after_update(reflection); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class PlanAssociation::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class PlanAssociation::ActiveRecord_AssociationRelation
-end
-
 class PlanAssociation::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class PlanAssociation::ActiveRecord_Associations_CollectionProxy
-end
-
 class PlanAssociation::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class PlanAssociation::ActiveRecord_Relation
 end
 
 module PlanAssociation::GeneratedAssociationMethods
@@ -76450,757 +73692,9 @@ module PlanAssociation::GeneratedAssociationMethods
   def create_plan(*args, &block); end
 
   def create_plan!(*args, &block); end
-
-  def operation(*args); end
-
-  def operation=(value); end
-
-  def plan(*args); end
-
-  def plan=(value); end
-end
-
-module PlanAssociation::GeneratedAssociationMethods
-end
-
-class PlanModules
-end
-
-class Planner
-end
-
-class PlannerGui
-end
-
-class PlannerIi
-end
-
-module Polyfill
-  VERSION = ::T.let(nil, ::T.untyped)
-end
-
-module Polyfill::InternalUtils
-end
-
-module Polyfill::InternalUtils
-  def self.create_module(); end
-
-  def self.current_ruby_version(); end
-
-  def self.ignore_warnings(); end
-
-  def self.keep_only_these_methods!(mod, whitelist); end
-
-  def self.methods_to_keep(modules, methods, lead_symbol, module_name); end
-
-  def self.modules_to_use(module_name, versions); end
-
-  def self.polyfill_versions_to_use(desired_version=T.unsafe(nil)); end
-
-  def self.to_f(obj); end
-
-  def self.to_hash(obj); end
-
-  def self.to_int(obj); end
-
-  def self.to_str(obj); end
-end
-
-module Polyfill::Module
-end
-
-module Polyfill::Module::M47353136530900
-end
-
-module Polyfill::Module::M47353136530900
-end
-
-module Polyfill::Module::M47353136971260
-end
-
-module Polyfill::Module::M47353136971260
-end
-
-module Polyfill::Module::M47353137373640
-end
-
-module Polyfill::Module::M47353137373640
-end
-
-module Polyfill::Module::M47353145381840
-end
-
-module Polyfill::Module::M47353145381840
-end
-
-module Polyfill::Module::M47353145624680
-end
-
-module Polyfill::Module::M47353145624680
-end
-
-module Polyfill::Module::M47353145920680
-end
-
-module Polyfill::Module::M47353145920680
-end
-
-module Polyfill::Module
-end
-
-module Polyfill::V2_2
-end
-
-module Polyfill::V2_2::Enumerable
-  def max(n=T.unsafe(nil)); end
-
-  def max_by(n=T.unsafe(nil)); end
-
-  def min(n=T.unsafe(nil)); end
-
-  def min_by(n=T.unsafe(nil)); end
-
-  def slice_after(pattern=T.unsafe(nil)); end
-
-  def slice_when(); end
-end
-
-module Polyfill::V2_2::Enumerable
-end
-
-module Polyfill::V2_2::Kernel
-  def itself(); end
-end
-
-module Polyfill::V2_2::Kernel
-end
-
-module Polyfill::V2_2::Math
-end
-
-module Polyfill::V2_2::Math::ClassMethods
-  def log(*args); end
-end
-
-module Polyfill::V2_2::Math::ClassMethods
-end
-
-module Polyfill::V2_2::Math
-end
-
-module Polyfill::V2_2::Prime
-end
-
-module Polyfill::V2_2::Prime::ClassMethods
-  def prime?(*args); end
-end
-
-module Polyfill::V2_2::Prime::ClassMethods
-end
-
-module Polyfill::V2_2::Prime
-end
-
-module Polyfill::V2_2::Vector
-  def +@(); end
-end
-
-module Polyfill::V2_2::Vector
-end
-
-module Polyfill::V2_2
-end
-
-module Polyfill::V2_3
-end
-
-module Polyfill::V2_3::Array
-  def bsearch_index(); end
-
-  def dig(head, *rest); end
-end
-
-module Polyfill::V2_3::Array
-end
-
-module Polyfill::V2_3::Enumerable
-  def chunk_while(); end
-
-  def grep_v(pattern); end
-
-  def slice_before(*args); end
-end
-
-module Polyfill::V2_3::Enumerable
-end
-
-module Polyfill::V2_3::Enumerator
-end
-
-module Polyfill::V2_3::Enumerator::Lazy
-  def grep_v(pattern); end
-end
-
-module Polyfill::V2_3::Enumerator::Lazy
-end
-
-module Polyfill::V2_3::Enumerator
-end
-
-module Polyfill::V2_3::Hash
-  def <(other); end
-
-  def <=(other); end
-
-  def >(other); end
-
-  def >=(other); end
-
-  def dig(head, *rest); end
-
-  def fetch_values(*keys); end
-
-  def to_proc(); end
-end
-
-module Polyfill::V2_3::Hash
-end
-
-module Polyfill::V2_3::Kernel
-  def loop(); end
-end
-
-module Polyfill::V2_3::Kernel
-end
-
-module Polyfill::V2_3::Numeric
-  def negative?(); end
-
-  def positive?(); end
-end
-
-module Polyfill::V2_3::Numeric
-end
-
-module Polyfill::V2_3::Prime
-end
-
-module Polyfill::V2_3::Prime::ClassMethods
-  def prime?(*args); end
-end
-
-module Polyfill::V2_3::Prime::ClassMethods
-end
-
-module Polyfill::V2_3::Prime
-end
-
-module Polyfill::V2_3::String
-  def +@(); end
-
-  def -@(); end
-end
-
-module Polyfill::V2_3::String::ClassMethods
-  def new(*args); end
-end
-
-module Polyfill::V2_3::String::ClassMethods
-end
-
-module Polyfill::V2_3::String
-end
-
-module Polyfill::V2_3::Struct
-  def dig(head, *rest); end
-end
-
-module Polyfill::V2_3::Struct
-end
-
-module Polyfill::V2_3
-end
-
-module Polyfill::V2_4
-end
-
-module Polyfill::V2_4::Array
-  def concat(*others); end
-
-  def sum(init=T.unsafe(nil)); end
-end
-
-module Polyfill::V2_4::Array
-end
-
-module Polyfill::V2_4::Comparable
-  def clamp(min, max); end
-end
-
-module Polyfill::V2_4::Comparable
-end
-
-module Polyfill::V2_4::Dir
-end
-
-module Polyfill::V2_4::Dir::ClassMethods
-  def empty?(path_name); end
-end
-
-module Polyfill::V2_4::Dir::ClassMethods
-end
-
-module Polyfill::V2_4::Dir
-end
-
-module Polyfill::V2_4::Enumerable
-  def chunk(*_); end
-
-  def sum(init=T.unsafe(nil)); end
-
-  def uniq(); end
-end
-
-module Polyfill::V2_4::Enumerable
-end
-
-module Polyfill::V2_4::Enumerator
-end
-
-module Polyfill::V2_4::Enumerator::Lazy
-  def chunk_while(); end
-
-  def uniq(); end
-end
-
-module Polyfill::V2_4::Enumerator::Lazy
-end
-
-module Polyfill::V2_4::Enumerator
-end
-
-module Polyfill::V2_4::File
-end
-
-module Polyfill::V2_4::File::ClassMethods
-  def empty?(file_name); end
-end
-
-module Polyfill::V2_4::File::ClassMethods
-end
-
-module Polyfill::V2_4::File
-end
-
-module Polyfill::V2_4::Float
-  def ceil(ndigits=T.unsafe(nil)); end
-
-  def floor(ndigits=T.unsafe(nil)); end
-
-  def truncate(ndigits=T.unsafe(nil)); end
-end
-
-module Polyfill::V2_4::Float
-end
-
-module Polyfill::V2_4::Hash
-  def compact(); end
-
-  def compact!(); end
-
-  def transform_values(); end
-
-  def transform_values!(); end
-end
-
-module Polyfill::V2_4::Hash
-end
-
-module Polyfill::V2_4::IO
-  def each_line(*args); end
-
-  def gets(*args); end
-
-  def lines(*args); end
-
-  def readline(*args); end
-
-  def readlines(*args); end
-end
-
-module Polyfill::V2_4::IO::ClassMethods
-  def foreach(name, *args); end
-
-  def readlines(file_name, *args); end
-end
-
-module Polyfill::V2_4::IO::ClassMethods
-end
-
-module Polyfill::V2_4::IO
-end
-
-module Polyfill::V2_4::IPAddr
-  def ==(*_); end
-end
-
-module Polyfill::V2_4::IPAddr
-end
-
-module Polyfill::V2_4::Integer
-  def ceil(ndigits=T.unsafe(nil)); end
-
-  def digits(base=T.unsafe(nil)); end
-
-  def floor(ndigits=T.unsafe(nil)); end
-
-  def round(ndigits=T.unsafe(nil), half: T.unsafe(nil)); end
-
-  def truncate(ndigits=T.unsafe(nil)); end
-end
-
-module Polyfill::V2_4::Integer
-end
-
-module Polyfill::V2_4::MatchData
-  def named_captures(); end
-
-  def values_at(*indexes); end
-end
-
-module Polyfill::V2_4::MatchData
-end
-
-module Polyfill::V2_4::Numeric
-  def clone(freeze: T.unsafe(nil)); end
-
-  def dup(); end
-
-  def finite?(); end
-
-  def infinite?(); end
-end
-
-module Polyfill::V2_4::Numeric
-end
-
-module Polyfill::V2_4::Object
-  def clone(freeze: T.unsafe(nil)); end
-end
-
-module Polyfill::V2_4::Object
-end
-
-module Polyfill::V2_4::Pathname
-  def empty?(); end
-end
-
-module Polyfill::V2_4::Pathname
-end
-
-module Polyfill::V2_4::Regexp
-  def match?(string, position=T.unsafe(nil)); end
-end
-
-module Polyfill::V2_4::Regexp
-end
-
-module Polyfill::V2_4::String
-  def casecmp?(other); end
-
-  def concat(*others); end
-
-  def each_line(*args); end
-
-  def lines(*args); end
-
-  def match?(pattern, position=T.unsafe(nil)); end
-
-  def prepend(*others); end
-
-  def unpack1(*args); end
-end
-
-module Polyfill::V2_4::String::ClassMethods
-  def new(*args); end
-end
-
-module Polyfill::V2_4::String::ClassMethods
-end
-
-module Polyfill::V2_4::String
-end
-
-module Polyfill::V2_4::StringIO
-  def each_line(*args); end
-
-  def gets(*args); end
-
-  def lines(*args); end
-
-  def readline(*args); end
-
-  def readlines(*args); end
-end
-
-module Polyfill::V2_4::StringIO::ClassMethods
-  def foreach(name, *args); end
-
-  def readlines(file_name, *args); end
-end
-
-module Polyfill::V2_4::StringIO::ClassMethods
-end
-
-module Polyfill::V2_4::StringIO
-end
-
-module Polyfill::V2_4::Symbol
-  def casecmp?(other); end
-
-  def match(*args); end
-
-  def match?(pattern, position=T.unsafe(nil)); end
-end
-
-module Polyfill::V2_4::Symbol
-end
-
-module Polyfill::V2_4
-end
-
-module Polyfill::V2_5
-end
-
-module Polyfill::V2_5::Array
-  def append(*args); end
-
-  def prepend(*args); end
-end
-
-module Polyfill::V2_5::Array
-end
-
-module Polyfill::V2_5::BigDecimal
-  def clone(); end
-
-  def dup(); end
-end
-
-module Polyfill::V2_5::BigDecimal
-end
-
-module Polyfill::V2_5::Dir
-end
-
-module Polyfill::V2_5::Dir::ClassMethods
-  def children(dirname, encoding: T.unsafe(nil)); end
-
-  def each_child(dirname, encoding: T.unsafe(nil)); end
-end
-
-module Polyfill::V2_5::Dir::ClassMethods
-end
-
-module Polyfill::V2_5::Dir
-end
-
-module Polyfill::V2_5::Enumerable
-  def all?(*pattern); end
-
-  def any?(*pattern); end
-
-  def none?(*pattern); end
-
-  def one?(*pattern); end
-end
-
-module Polyfill::V2_5::Enumerable
-end
-
-module Polyfill::V2_5::Hash
-  def slice(*keys); end
-
-  def transform_keys(); end
-end
-
-module Polyfill::V2_5::Hash
-end
-
-module Polyfill::V2_5::Integer
-  def allbits?(mask); end
-
-  def anybits?(mask); end
-
-  def ceil(*_); end
-
-  def floor(*_); end
-
-  def nobits?(mask); end
-
-  def round(*_); end
-
-  def truncate(*_); end
-end
-
-module Polyfill::V2_5::Integer::ClassMethods
-  def sqrt(n); end
-end
-
-module Polyfill::V2_5::Integer::ClassMethods
-end
-
-module Polyfill::V2_5::Integer
-end
-
-module Polyfill::V2_5::Kernel
-  def yield_self(); end
-end
-
-module Polyfill::V2_5::Kernel
-end
-
-module Polyfill::V2_5::Set
-  def ===(other); end
-
-  def to_s(); end
-end
-
-module Polyfill::V2_5::Set
-end
-
-module Polyfill::V2_5::String
-  def casecmp(other_str); end
-
-  def casecmp?(other_str); end
-
-  def delete_prefix(prefix); end
-
-  def delete_prefix!(prefix); end
-
-  def delete_suffix(suffix); end
-
-  def delete_suffix!(suffix); end
-
-  def each_grapheme_cluster(); end
-
-  def grapheme_clusters(); end
-
-  def start_with?(*prefixes); end
-end
-
-module Polyfill::V2_5::String
-end
-
-module Polyfill::V2_5::Struct
-end
-
-module Polyfill::V2_5::Struct::ClassMethods
-  def new(*args, keyword_init: T.unsafe(nil)); end
-end
-
-module Polyfill::V2_5::Struct::ClassMethods
-end
-
-module Polyfill::V2_5::Struct
-end
-
-module Polyfill::V2_5::Time
-end
-
-module Polyfill::V2_5::Time::ClassMethods
-  def at(*args); end
-end
-
-module Polyfill::V2_5::Time::ClassMethods
-end
-
-module Polyfill::V2_5::Time
-end
-
-module Polyfill::V2_5
-end
-
-module Polyfill::V2_6
-end
-
-module Polyfill::V2_6::Array
-  def difference(*arrays); end
-
-  def to_h(); end
-
-  def union(*arrays); end
-end
-
-module Polyfill::V2_6::Array
-end
-
-module Polyfill::V2_6::Enumerable
-  def to_h(); end
-end
-
-module Polyfill::V2_6::Enumerable
-end
-
-module Polyfill::V2_6::Hash
-  def merge(*args); end
-
-  def merge!(*args); end
-
-  def to_h(); end
-
-  def update(*args); end
-end
-
-module Polyfill::V2_6::Hash
-end
-
-module Polyfill::V2_6::Kernel
-  def Complex(*args, exception: T.unsafe(nil)); end
-
-  def Float(arg, exception: T.unsafe(nil)); end
-
-  def Integer(arg, exception: T.unsafe(nil)); end
-
-  def Rational(*args, exception: T.unsafe(nil)); end
-
-  def then(); end
-end
-
-module Polyfill::V2_6::Kernel
-end
-
-module Polyfill::V2_6::OpenStruct
-  def to_h(); end
-end
-
-module Polyfill::V2_6::OpenStruct
-end
-
-module Polyfill::V2_6::String
-  def split(*_); end
-end
-
-module Polyfill::V2_6::String
-end
-
-module Polyfill::V2_6::Struct
-  def to_h(); end
-end
-
-module Polyfill::V2_6::Struct
-end
-
-module Polyfill::V2_6
-end
-
-module Polyfill
-  def self.get(module_name, methods, options=T.unsafe(nil)); end
 end
 
 class Proc
-  include ::MethodSource::SourceLocation::ProcExtensions
-  include ::MethodSource::MethodExtensions
   def <<(_); end
 
   def ===(*_); end
@@ -91845,27 +88339,6 @@ class Regexp
   def multiline?(); end
 end
 
-class RemoveAnotherDefaultValueFromObjectType
-end
-
-class RemoveDefaultValueFromObjectType
-end
-
-class RemoveInitialWorkflowAttempt
-end
-
-class RemoveParentChildAndAddFolderFromFolderContent
-end
-
-class RemovePrimersFromItems
-end
-
-class RenameAccountLogAssociation
-end
-
-class RenameToLatestStartTime
-end
-
 class Resolv::DNS
   def extract_resources(msg, name, typeclass); end
 
@@ -104623,182 +101096,7 @@ class RubyVM
   def self.stat(*_); end
 end
 
-class SafeType::Boolean
-  def initialize(type: T.unsafe(nil), **args); end
-end
-
-class SafeType::Boolean
-  def self.default(value=T.unsafe(nil)); end
-end
-
-module SafeType::BooleanMixin
-end
-
-module SafeType::BooleanMixin
-end
-
-class SafeType::CoercionError
-  def desired_type(); end
-
-  def initialize(value, desired_type, key=T.unsafe(nil)); end
-
-  def key(); end
-
-  def value(); end
-end
-
-class SafeType::Converter
-end
-
-class SafeType::Converter
-  def self.to_bool(input); end
-
-  def self.to_date(input); end
-
-  def self.to_date_time(input); end
-
-  def self.to_false(input); end
-
-  def self.to_float(input); end
-
-  def self.to_int(input); end
-
-  def self.to_time(input); end
-
-  def self.to_true(input); end
-
-  def self.to_type(input, type); end
-end
-
-class SafeType::Date
-  def initialize(type: T.unsafe(nil), from: T.unsafe(nil), to: T.unsafe(nil), **args); end
-end
-
-class SafeType::Date
-  def self.default(value=T.unsafe(nil), from: T.unsafe(nil), to: T.unsafe(nil)); end
-
-  def self.strict(from: T.unsafe(nil), to: T.unsafe(nil)); end
-end
-
-class SafeType::DateTime
-  def initialize(type: T.unsafe(nil), from: T.unsafe(nil), to: T.unsafe(nil), **args); end
-end
-
-class SafeType::DateTime
-  def self.default(value=T.unsafe(nil), from: T.unsafe(nil), to: T.unsafe(nil)); end
-
-  def self.strict(from: T.unsafe(nil), to: T.unsafe(nil)); end
-end
-
-class SafeType::EmptyValueError
-  def desired_type(); end
-
-  def initialize(desired_type, key=T.unsafe(nil)); end
-
-  def key(); end
-end
-
-class SafeType::EmptyValueError
-end
-
-class SafeType::Float
-  def initialize(type: T.unsafe(nil), min: T.unsafe(nil), max: T.unsafe(nil), **args); end
-end
-
-class SafeType::Float
-  def self.default(value=T.unsafe(nil), min: T.unsafe(nil), max: T.unsafe(nil)); end
-
-  def self.strict(min: T.unsafe(nil), max: T.unsafe(nil)); end
-end
-
-class SafeType::Integer
-  def initialize(type: T.unsafe(nil), min: T.unsafe(nil), max: T.unsafe(nil), **args); end
-end
-
-class SafeType::Integer
-  def self.default(value=T.unsafe(nil), min: T.unsafe(nil), max: T.unsafe(nil)); end
-
-  def self.strict(min: T.unsafe(nil), max: T.unsafe(nil)); end
-end
-
-class SafeType::InvalidRuleError
-  def initialize(); end
-end
-
-class SafeType::InvalidRuleError
-end
-
-class SafeType::Rule
-  def after(input); end
-
-  def before(input); end
-
-  def coerce(input, key=T.unsafe(nil)); end
-
-  def initialize(type:, default: T.unsafe(nil), required: T.unsafe(nil), **args); end
-
-  def is_valid?(input); end
-end
-
-class SafeType::Rule
-  def self.coerce(input); end
-
-  def self.default(); end
-
-  def self.strict(); end
-end
-
-class SafeType::String
-  def initialize(type: T.unsafe(nil), min_length: T.unsafe(nil), max_length: T.unsafe(nil), **args); end
-end
-
-class SafeType::String
-  def self.default(value=T.unsafe(nil), min_length: T.unsafe(nil), max_length: T.unsafe(nil)); end
-
-  def self.strict(min_length: T.unsafe(nil), max_length: T.unsafe(nil)); end
-end
-
-class SafeType::Symbol
-  def initialize(type: T.unsafe(nil), min_length: T.unsafe(nil), max_length: T.unsafe(nil), **args); end
-end
-
-class SafeType::Symbol
-  def self.default(value=T.unsafe(nil), min_length: T.unsafe(nil), max_length: T.unsafe(nil)); end
-
-  def self.strict(min_length: T.unsafe(nil), max_length: T.unsafe(nil)); end
-end
-
-class SafeType::Time
-  def initialize(type: T.unsafe(nil), from: T.unsafe(nil), to: T.unsafe(nil), **args); end
-end
-
-class SafeType::Time
-  def self.default(value=T.unsafe(nil), from: T.unsafe(nil), to: T.unsafe(nil)); end
-
-  def self.strict(from: T.unsafe(nil), to: T.unsafe(nil)); end
-end
-
-class SafeType::ValidationError
-  def desired_type(); end
-
-  def initialize(value, desired_type, key=T.unsafe(nil)); end
-
-  def key(); end
-
-  def value(); end
-end
-
-class SafeType::ValidationError
-end
-
-module SafeType
-  def self.coerce(input, rule, coerce_key=T.unsafe(nil)); end
-
-  def self.coerce!(input, rule); end
-end
-
 class Sample
-  include ::Sample::GeneratedAssociationMethods
   include ::ActionView::Helpers::DateHelper
   def after_add_for_items(); end
 
@@ -104861,28 +101159,18 @@ class Sample
   def validate_associated_records_for_items(*args); end
 
   def validate_associated_records_for_post_associations(*args); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class Sample::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Sample::ActiveRecord_AssociationRelation
-end
-
 class Sample::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Sample::ActiveRecord_Associations_CollectionProxy
-end
-
 class Sample::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class Sample::ActiveRecord_Relation
 end
 
 module Sample::GeneratedAssociationMethods
@@ -104902,10 +101190,6 @@ module Sample::GeneratedAssociationMethods
 
   def item_ids=(ids); end
 
-  def items(*args); end
-
-  def items=(value); end
-
   def post_association_ids(); end
 
   def post_association_ids=(ids); end
@@ -104921,9 +101205,6 @@ module Sample::GeneratedAssociationMethods
   def user(*args); end
 
   def user=(value); end
-end
-
-module Sample::GeneratedAssociationMethods
 end
 
 class Sample
@@ -104977,7 +101258,6 @@ class Sample
 end
 
 class SampleType
-  include ::SampleType::GeneratedAssociationMethods
   def after_add_for_object_types(); end
 
   def after_add_for_object_types=(after_add_for_object_types); end
@@ -105033,28 +101313,18 @@ class SampleType
   def validate_associated_records_for_object_types(*args); end
 
   def validate_associated_records_for_samples(*args); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class SampleType::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class SampleType::ActiveRecord_AssociationRelation
-end
-
 class SampleType::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class SampleType::ActiveRecord_Associations_CollectionProxy
-end
-
 class SampleType::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class SampleType::ActiveRecord_Relation
 end
 
 module SampleType::GeneratedAssociationMethods
@@ -105062,20 +101332,9 @@ module SampleType::GeneratedAssociationMethods
 
   def object_type_ids=(ids); end
 
-  def object_types(*args); end
-
-  def object_types=(value); end
-
   def sample_ids(); end
 
   def sample_ids=(ids); end
-
-  def samples(*args); end
-
-  def samples=(value); end
-end
-
-module SampleType::GeneratedAssociationMethods
 end
 
 class SampleType
@@ -107971,9 +104230,6 @@ module Singleton
   def self.__init__(klass); end
 end
 
-class SizeMatters
-end
-
 class Socket
   IFF_DORMANT = ::T.let(nil, ::T.untyped)
   IFF_ECHO = ::T.let(nil, ::T.untyped)
@@ -107996,10 +104252,6 @@ module Socket::Constants
   IPV6_PATHMTU = ::T.let(nil, ::T.untyped)
   IPV6_RECVPATHMTU = ::T.let(nil, ::T.untyped)
   SO_BPF_EXTENSIONS = ::T.let(nil, ::T.untyped)
-end
-
-module SorbetRails
-  TypeAssertDeprecation = ::T.let(nil, ::T.untyped)
 end
 
 class SorbetRails::Config
@@ -108043,13 +104295,9 @@ end
 
 module SorbetRails::CustomParamsMethods
   include ::Kernel
-  def fetch_typed(*args, &blk); end
-
-  def require_typed(*args, &blk); end
 end
 
 module SorbetRails::CustomParamsMethods
-  extend ::T::Sig
   extend ::T::Helpers
   extend ::T::Private::Methods::MethodHooks
   extend ::T::Private::Methods::SingletonMethodHooks
@@ -108086,34 +104334,11 @@ end
 class SorbetRails::ModelPlugins::ActiveRecordAttribute
   def active_record_type_to_sorbet_type(*args, &blk); end
 
-  def generate_enum_methods(*args, &blk); end
-
-  def nilable_column?(*args, &blk); end
-
   def time_zone_aware_column?(*args, &blk); end
 
   def type_for_column_def(*args, &blk); end
 
   def value_type_for_attr_writer(*args, &blk); end
-end
-
-class SorbetRails::ModelPlugins::ActiveRecordAttribute::ColumnType
-  def array_type(); end
-
-  def base_type(); end
-
-  def initialize(*args, &blk); end
-
-  def nilable(); end
-
-  def to_s(*args, &blk); end
-end
-
-class SorbetRails::ModelPlugins::ActiveRecordAttribute::ColumnType
-  extend ::T::Sig
-  extend ::T::Private::Methods::MethodHooks
-  extend ::T::Private::Methods::SingletonMethodHooks
-  def self.inherited(s); end
 end
 
 class SorbetRails::ModelPlugins::ActiveRecordAttribute
@@ -108123,6 +104348,22 @@ class SorbetRails::ModelPlugins::ActiveRecordEnum
 end
 
 class SorbetRails::ModelPlugins::ActiveRecordEnum
+end
+
+class SorbetRails::ModelPlugins::ActiveRecordFactoryMethods
+  def add_factory_method(*args, &blk); end
+end
+
+class SorbetRails::ModelPlugins::ActiveRecordFactoryMethods
+end
+
+class SorbetRails::ModelPlugins::ActiveRecordFinderMethods
+  def create_finder_method_pair(*args, &blk); end
+
+  def create_finder_methods_for(*args, &blk); end
+end
+
+class SorbetRails::ModelPlugins::ActiveRecordFinderMethods
 end
 
 class SorbetRails::ModelPlugins::ActiveRecordNamedScope
@@ -108154,8 +104395,6 @@ end
 
 class SorbetRails::ModelPlugins::Base
   include ::SorbetRails::ModelUtils
-  def attribute_has_unconditional_presence_validation?(*args, &blk); end
-
   def available_classes(*args, &blk); end
 end
 
@@ -108171,6 +104410,7 @@ class SorbetRails::ModelPlugins::CustomFinderMethods
 end
 
 class SorbetRails::ModelPlugins::EnumerableCollections
+  def create_enumerable_methods_for(*args, &blk); end
 end
 
 class SorbetRails::ModelPlugins::EnumerableCollections
@@ -108215,8 +104455,6 @@ module SorbetRails::ModelUtils
 
   def exists_instance_method?(*args, &blk); end
 
-  def habtm_class?(*args, &blk); end
-
   def model_assoc_proxy_class_name(*args, &blk); end
 
   def model_assoc_relation_class_name(*args, &blk); end
@@ -108227,15 +104465,7 @@ module SorbetRails::ModelUtils
 
   def model_module_name(*args, &blk); end
 
-  def model_query_methods_returning_assoc_relation_module_name(*args, &blk); end
-
-  def model_query_methods_returning_relation_module_name(*args, &blk); end
-
   def model_relation_class_name(*args, &blk); end
-
-  def model_relation_type_alias(*args, &blk); end
-
-  def model_relation_type_class_name(*args, &blk); end
 end
 
 module SorbetRails::ModelUtils
@@ -108247,32 +104477,10 @@ module SorbetRails::ModelUtils
   extend ::T::Private::Methods::SingletonMethodHooks
 end
 
-module SorbetRails::PluckToTStruct
-  def pluck_to_tstruct(*args, &blk); end
-end
-
-module SorbetRails::PluckToTStruct
-  extend ::T::Sig
-  extend ::T::Private::Methods::MethodHooks
-  extend ::T::Private::Methods::SingletonMethodHooks
-end
-
 class SorbetRails::Railtie
 end
 
 class SorbetRails::Railtie
-end
-
-class SorbetRails::TypedEnumConfig
-  def class_name(); end
-
-  def initialize(*args, &blk); end
-
-  def strict_mode(); end
-end
-
-class SorbetRails::TypedEnumConfig
-  def self.inherited(s); end
 end
 
 module SorbetRails::Utils
@@ -110333,14 +106541,6 @@ class SystemExit
 end
 
 class TA
-  include ::ITypeAssert
-  Elem = type_member
-end
-
-class TA
-  extend ::T::Sig
-  extend ::T::Generic
-  extend ::T::Helpers
   extend ::T::Private::Methods::MethodHooks
   extend ::T::Private::Methods::SingletonMethodHooks
 end
@@ -117464,28 +113664,18 @@ end
 
 class Timing
   include ::Timing::GeneratedAssociationMethods
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class Timing::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Timing::ActiveRecord_AssociationRelation
-end
-
 class Timing::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Timing::ActiveRecord_Associations_CollectionProxy
-end
-
 class Timing::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class Timing::ActiveRecord_Relation
 end
 
 module Timing::GeneratedAssociationMethods
@@ -117508,56 +113698,7 @@ end
 
 class TrueClass
   include ::JSON::Ext::Generator::GeneratorMethods::TrueClass
-  include ::SafeType::BooleanMixin
   def to_json(options=T.unsafe(nil)); end
-end
-
-class TwoNewFields
-end
-
-module TypeAssertImpl
-end
-
-module TypeAssertImpl
-end
-
-module TypeCoerce::Configuration
-end
-
-module TypeCoerce::Configuration
-  extend ::T::Private::Methods::SingletonMethodHooks
-  def self.raise_coercion_error(*args, &blk); end
-
-  def self.raise_coercion_error=(raise_coercion_error); end
-end
-
-module TypeCoerce::Private
-end
-
-class TypeCoerce::Private::Converter
-  def _build_args(*args, &blk); end
-
-  def _convert(*args, &blk); end
-
-  def _convert_simple(*args, &blk); end
-
-  def _convert_to_a(*args, &blk); end
-
-  def _nil_like?(*args, &blk); end
-  PRIMITIVE_TYPES = ::T.let(nil, ::T.untyped)
-end
-
-class TypeCoerce::Private::Converter
-  extend ::T::Sig
-  extend ::T::Private::Methods::MethodHooks
-  extend ::T::Private::Methods::SingletonMethodHooks
-end
-
-module TypeCoerce::Private
-end
-
-module TypeCoerce
-  def self.[](type); end
 end
 
 module URI
@@ -117747,8 +113888,6 @@ module URI
 end
 
 class UnboundMethod
-  include ::MethodSource::SourceLocation::UnboundMethodExtensions
-  include ::MethodSource::MethodExtensions
   def clone(); end
 
   def original_name(); end
@@ -117789,7 +113928,6 @@ module UnicodeNormalize
 end
 
 class Upload
-  include ::Upload::GeneratedAssociationMethods
   def _post_process_callbacks(); end
 
   def _post_process_callbacks?(); end
@@ -117839,28 +113977,18 @@ class Upload
   def upload?(); end
 
   def validate_associated_records_for_data_associations(*args); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class Upload::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Upload::ActiveRecord_AssociationRelation
-end
-
 class Upload::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Upload::ActiveRecord_Associations_CollectionProxy
-end
-
 class Upload::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class Upload::ActiveRecord_Relation
 end
 
 module Upload::GeneratedAssociationMethods
@@ -117879,21 +114007,6 @@ module Upload::GeneratedAssociationMethods
   def data_association_ids(); end
 
   def data_association_ids=(ids); end
-
-  def data_associations(*args); end
-
-  def data_associations=(value); end
-
-  def job(*args); end
-
-  def job=(value); end
-
-  def upload(*args); end
-
-  def upload=(value); end
-end
-
-module Upload::GeneratedAssociationMethods
 end
 
 class Upload
@@ -117958,7 +114071,6 @@ class UploadIO
 end
 
 class User
-  include ::User::GeneratedAssociationMethods
   include ::ActiveModel::SecurePassword::InstanceMethodsOnActivation
   def after_add_for_account(); end
 
@@ -118213,35 +114325,21 @@ class User
   def validate_associated_records_for_samples(*args); end
 
   def validate_associated_records_for_user_budget_associations(*args); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class User::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class User::ActiveRecord_AssociationRelation
-end
-
 class User::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class User::ActiveRecord_Associations_CollectionProxy
-end
-
 class User::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class User::ActiveRecord_Relation
 end
 
 module User::GeneratedAssociationMethods
-  def account(*args); end
-
-  def account=(value); end
-
   def account_ids(); end
 
   def account_ids=(ids); end
@@ -118250,68 +114348,33 @@ module User::GeneratedAssociationMethods
 
   def budget_ids=(ids); end
 
-  def budgets(*args); end
-
-  def budgets=(value); end
-
   def code_ids(); end
 
   def code_ids=(ids); end
-
-  def codes(*args); end
-
-  def codes=(value); end
 
   def job_ids(); end
 
   def job_ids=(ids); end
 
-  def jobs(*args); end
-
-  def jobs=(value); end
-
   def membership_ids(); end
 
   def membership_ids=(ids); end
-
-  def memberships(*args); end
-
-  def memberships=(value); end
 
   def parameter_ids(); end
 
   def parameter_ids=(ids); end
 
-  def parameters(*args); end
-
-  def parameters=(value); end
-
   def plan_ids(); end
 
   def plan_ids=(ids); end
-
-  def plans(*args); end
-
-  def plans=(value); end
 
   def sample_ids(); end
 
   def sample_ids=(ids); end
 
-  def samples(*args); end
-
-  def samples=(value); end
-
   def user_budget_association_ids(); end
 
   def user_budget_association_ids=(ids); end
-
-  def user_budget_associations(*args); end
-
-  def user_budget_associations=(value); end
-end
-
-module User::GeneratedAssociationMethods
 end
 
 class User
@@ -118533,41 +114596,26 @@ class User
 end
 
 class UserBudgetAssociation
-  include ::UserBudgetAssociation::GeneratedAssociationMethods
   def autosave_associated_records_for_budget(*args); end
 
   def autosave_associated_records_for_user(*args); end
 
   def belongs_to_counter_cache_after_update(reflection); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class UserBudgetAssociation::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class UserBudgetAssociation::ActiveRecord_AssociationRelation
-end
-
 class UserBudgetAssociation::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class UserBudgetAssociation::ActiveRecord_Associations_CollectionProxy
-end
-
 class UserBudgetAssociation::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class UserBudgetAssociation::ActiveRecord_Relation
 end
 
 module UserBudgetAssociation::GeneratedAssociationMethods
-  def budget(*args); end
-
-  def budget=(value); end
-
   def build_budget(*args, &block); end
 
   def build_user(*args, &block); end
@@ -118579,45 +114627,18 @@ module UserBudgetAssociation::GeneratedAssociationMethods
   def create_user(*args, &block); end
 
   def create_user!(*args, &block); end
-
-  def user(*args); end
-
-  def user=(value); end
-end
-
-module UserBudgetAssociation::GeneratedAssociationMethods
-end
-
-class VirtualOperation
-  include ::VirtualOperation::GeneratedAssociationMethods
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class VirtualOperation::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class VirtualOperation::ActiveRecord_AssociationRelation
-end
-
 class VirtualOperation::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class VirtualOperation::ActiveRecord_Associations_CollectionProxy
-end
-
 class VirtualOperation::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class VirtualOperation::ActiveRecord_Relation
-end
-
-module VirtualOperation::GeneratedAssociationMethods
-end
-
-module VirtualOperation::GeneratedAssociationMethods
 end
 
 Visitor = Psych::Visitors::Visitor
@@ -119145,34 +115166,23 @@ module WillPaginate
 end
 
 class Wire
-  include ::Wire::GeneratedAssociationMethods
   def autosave_associated_records_for_from(*args); end
 
   def autosave_associated_records_for_to(*args); end
 
   def belongs_to_counter_cache_after_update(reflection); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class Wire::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Wire::ActiveRecord_AssociationRelation
-end
-
 class Wire::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Wire::ActiveRecord_Associations_CollectionProxy
-end
-
 class Wire::ActiveRecord_Relation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class Wire::ActiveRecord_Relation
 end
 
 module Wire::GeneratedAssociationMethods
@@ -119187,21 +115197,9 @@ module Wire::GeneratedAssociationMethods
   def create_to(*args, &block); end
 
   def create_to!(*args, &block); end
-
-  def from(*args); end
-
-  def from=(value); end
-
-  def to(*args); end
-
-  def to=(value); end
-end
-
-module Wire::GeneratedAssociationMethods
 end
 
 class Wizard
-  include ::Wizard::GeneratedAssociationMethods
   def after_add_for_locators(); end
 
   def after_add_for_locators=(after_add_for_locators); end
@@ -119229,21 +115227,14 @@ class Wizard
   def before_remove_for_locators?(); end
 
   def validate_associated_records_for_locators(*args); end
-  RelationType = ::T.let(nil, ::T.untyped)
 end
 
 class Wizard::ActiveRecord_AssociationRelation
   include ::ActiveRecord::Delegation::ClassSpecificRelation
 end
 
-class Wizard::ActiveRecord_AssociationRelation
-end
-
 class Wizard::ActiveRecord_Associations_CollectionProxy
   include ::ActiveRecord::Delegation::ClassSpecificRelation
-end
-
-class Wizard::ActiveRecord_Associations_CollectionProxy
 end
 
 class Wizard::ActiveRecord_Relation
@@ -119251,20 +115242,10 @@ class Wizard::ActiveRecord_Relation
   def name(*args, &block); end
 end
 
-class Wizard::ActiveRecord_Relation
-end
-
 module Wizard::GeneratedAssociationMethods
   def locator_ids(); end
 
   def locator_ids=(ids); end
-
-  def locators(*args); end
-
-  def locators=(value); end
-end
-
-module Wizard::GeneratedAssociationMethods
 end
 
 class Wizard
