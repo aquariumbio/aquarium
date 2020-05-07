@@ -1,12 +1,13 @@
 # typed: false
 # frozen_string_literal: true
 
-extend T::Sig
+require 'sorbet-runtime'
 
 # Class that represents a physical object in the lab
 # Has an {ObjectType} that declares what kind of physical thing it is, and may have a {Sample} defining the specimen that resides within.
 # @api krill
 class Item < ActiveRecord::Base
+  extend T::Sig
 
   include DataAssociator
 
