@@ -1,6 +1,8 @@
 # typed: false
 # frozen_string_literal: true
 
+extend T::Sig
+
 # Class that represents a physical object in the lab
 # Has an {ObjectType} that declares what kind of physical thing it is, and may have a {Sample} defining the specimen that resides within.
 # @api krill
@@ -57,17 +59,20 @@ class Item < ActiveRecord::Base
 
   # location methods ###############################################################
 
+  sig { returns(String) }
   def primitive_location
     self[:location]
   end
 
   # @private
+  sig { returns(ObjectType) }
   def part_type
     @@part_type ||= ObjectType.part_type
   end
 
   # Returns true if the item is a part of a collection
   # @return [Bool]
+  sig { returns(T::Boolean) }
   def is_part
     object_type_id == part_type.id
   end
@@ -75,6 +80,7 @@ class Item < ActiveRecord::Base
   # Returns the location of the Item
   #
   # @return [String] the description of the Item's physical location in the lab as a string
+  sig { returns(String) }
   def location
     if is_part
       'Part of Collection'
@@ -116,31 +122,32 @@ class Item < ActiveRecord::Base
   #
   # @param locstr [String] the location string
   # @return [Item] self
-  def move_to(locstr)
+  sig { params(location_name: String).returns(Item) }
+  def move_to(location_name)
 
     wiz = Wizard.find_by(name: object_type.prefix) if object_type
 
-    if object_type && wiz && wiz.has_correct_form(locstr) # item and location managed by a wizard
+    if object_type && wiz && wiz.has_correct_form(location_name) # item and location managed by a wizard
 
-      unless wiz.has_correct_form locstr
-        errors.add(:wrong_form, "'#{locstr}'' is not in the form of a location for the #{wiz.name} wizard.")
+      unless wiz.has_correct_form location_name
+        errors.add(:wrong_form, "'#{location_name}'' is not in the form of a location for the #{wiz.name} wizard.")
         return
       end
 
-      locs = Locator.where(wizard_id: wiz.id, number: (wiz.location_to_int locstr))
+      locs = Locator.where(wizard_id: wiz.id, number: (wiz.location_to_int location_name))
 
       case locs.length
       when 0
-        newloc = wiz.addnew locstr
+        newloc = wiz.addnew location_name
       when 1
         newloc = locs.first
       else
-        errors.add(:too_many_locators, "There are multiple items at #{locstr}.")
+        errors.add(:too_many_locators, "There are multiple items at #{location_name}.")
         return
       end
 
       if newloc == locator
-        errors.add(:already_there, "Item is already at #{locstr}.")
+        errors.add(:already_there, "Item is already at #{location_name}.")
         return nil
       end
 
@@ -149,7 +156,7 @@ class Item < ActiveRecord::Base
         oldloc = Locator.find_by(id: locator_id)
         oldloc.item_id = nil if oldloc
         self.locator_id = newloc.id
-        self[:location] = locstr
+        self[:location] = location_name
         self.quantity = 1
         self.inuse = 0
         newloc.item_id = id
@@ -178,7 +185,7 @@ class Item < ActiveRecord::Base
       loc = Locator.find_by(id: locator_id)
       loc.item_id = nil if loc
 
-      self[:location] = locstr
+      self[:location] = location_name
       self.locator_id = nil
 
       transaction do
@@ -196,6 +203,7 @@ class Item < ActiveRecord::Base
 
   end
 
+  sig { returns(T::Boolean) }
   def non_wizard_location?
     wiz = Wizard.find_by(name: object_type.prefix)
 
@@ -264,6 +272,7 @@ class Item < ActiveRecord::Base
   # Delete the Item (sets item's location to "deleted").
   #
   # @return [Bool] true if the location is set to 'deleted', false otherwise
+  sig { returns(T::Boolean) }
   def mark_as_deleted
     self[:location] = 'deleted'
     self.quantity = -1
@@ -271,15 +280,15 @@ class Item < ActiveRecord::Base
     self.locator_id = nil
     locator.item_id = nil if locator
 
-    r1 = false
-    r2 = false
+    item_saved = false
+    locator_saved = false
 
     transaction do
-      r1 = save
-      r2 = locator.save if locator
+      item_saved = save
+      locator_saved = locator.save if locator
     end
 
-    r1 && r2
+    item_saved && locator_saved
   end
 
   # Indicates whether this Item is deleted.
