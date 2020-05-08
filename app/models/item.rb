@@ -60,20 +60,20 @@ class Item < ActiveRecord::Base
 
   # location methods ###############################################################
 
-  sig { returns(String) }
+  sig { returns(String).on_failure(:log) }
   def primitive_location
     self[:location]
   end
 
   # @private
-  sig { returns(ObjectType) }
+  sig { returns(ObjectType).on_failure(:log) }
   def part_type
     @@part_type ||= ObjectType.part_type
   end
 
   # Returns true if the item is a part of a collection
   # @return [Bool]
-  sig { returns(T::Boolean) }
+  sig { returns(T::Boolean).on_failure(:log) }
   def is_part
     object_type_id == part_type.id
   end
@@ -81,7 +81,7 @@ class Item < ActiveRecord::Base
   # Returns the location of the Item
   #
   # @return [String] the description of the Item's physical location in the lab as a string
-  sig { returns(String) }
+  sig { returns(String).on_failure(:log) }
   def location
     if is_part
       'Part of Collection'
@@ -123,7 +123,7 @@ class Item < ActiveRecord::Base
   #
   # @param locstr [String] the location string
   # @return [Item] self
-  sig { params(location_name: String).returns(Item) }
+  sig { params(location_name: String).returns(Item).on_failure(:log) }
   def move_to(location_name)
 
     wiz = Wizard.find_by(name: object_type.prefix) if object_type
@@ -204,7 +204,7 @@ class Item < ActiveRecord::Base
 
   end
 
-  sig { returns(T::Boolean) }
+  sig { returns(T::Boolean).on_failure(:log) }
   def non_wizard_location?
     wiz = Wizard.find_by(name: object_type.prefix)
 
@@ -273,7 +273,7 @@ class Item < ActiveRecord::Base
   # Delete the Item (sets item's location to "deleted").
   #
   # @return [Bool] true if the location is set to 'deleted', false otherwise
-  sig { returns(T::Boolean) }
+  sig { returns(T::Boolean).on_failure(:log) }
   def mark_as_deleted
     self[:location] = 'deleted'
     self.quantity = -1
