@@ -20,11 +20,11 @@ require 'sorbet-rails'
 
 # configure sorbet error handler
 T::Configuration.call_validation_error_handler = lambda do |signature, opts|
-  #                                                     ┌──┐
-  if signature.on_failure && signature.on_failure[0] == :log
-    puts opts[:pretty_message]
-  else
+  #
+  if ENV['ENABLE_SORBET_RUNTIME_ERRORS'].present?
     raise TypeError.new(opts[:pretty_message])
+  else
+    puts opts[:pretty_message]
   end
 end
 
