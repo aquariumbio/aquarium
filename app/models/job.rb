@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 # Defines a batch of executable {Operation}s of the same type that can be run together.

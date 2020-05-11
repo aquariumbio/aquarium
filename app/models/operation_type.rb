@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 # Defines a type of lab procedure, with the input-types, output-types, and the instructions for converting inputs into outputs.

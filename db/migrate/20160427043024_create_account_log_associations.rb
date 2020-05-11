@@ -1,3 +1,4 @@
+# typed: false
 class CreateAccountLogAssociations < ActiveRecord::Migration
   def change
     create_table :account_log_associations do |t|

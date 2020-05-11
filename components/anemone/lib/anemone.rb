@@ -1,3 +1,4 @@
+# typed: strong
 require "anemone/version"
 require "anemone/model"
 require "anemone/railtie" if defined?(Rails)

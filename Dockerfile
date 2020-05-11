@@ -4,8 +4,10 @@ ARG ALPINE_VERSION=3.11
 # A ruby-alpine image for development
 FROM ruby:${RUBY_VERSION}-alpine${ALPINE_VERSION} AS aquarium-development
 RUN apk add --update --no-cache \
+    bash \
     bind-tools \
     build-base \
+    ca-certificates \
     file \
     git \
     imagemagick \
@@ -22,7 +24,16 @@ RUN apk add --update --no-cache \
     openssl \
     sqlite-dev \
     tzdata \
+    wget \
     yarn
+
+# for sorbet: https://sorbet.org/docs/faq#what-platforms-does-sorbet-support
+ENV GLIBC_RELEASE_VERSION 2.30-r0
+RUN wget -nv -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub && \
+    wget -nv https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_RELEASE_VERSION}/glibc-${GLIBC_RELEASE_VERSION}.apk && \
+    apk add glibc-${GLIBC_RELEASE_VERSION}.apk && \
+    rm /etc/apk/keys/sgerrand.rsa.pub && \
+    rm glibc-${GLIBC_RELEASE_VERSION}.apk
 
 RUN mkdir /aquarium
 WORKDIR /aquarium

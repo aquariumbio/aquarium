@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 require File.expand_path('boot', __dir__)
@@ -13,6 +14,18 @@ if defined?(Bundler)
   # Bundler.require(*Rails.groups(assets: %w[development test]))
   # If you want your assets lazily compiled in production, use this line
   # Bundler.require(:default, :assets, Rails.env)
+end
+
+require 'sorbet-rails'
+
+# configure sorbet error handler
+T::Configuration.call_validation_error_handler = lambda do |signature, opts|
+  #
+  if ENV['ENABLE_SORBET_RUNTIME_ERRORS'].present?
+    raise TypeError.new(opts[:pretty_message])
+  else
+    puts opts[:pretty_message]
+  end
 end
 
 module Bioturk

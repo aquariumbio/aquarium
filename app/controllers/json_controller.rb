@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 class JsonController < ApplicationController
@@ -11,8 +12,7 @@ class JsonController < ApplicationController
     logger.info e.inspect
     logger.info e.backtrace
     render json: { errors: e.to_s }, status: :unprocessable_entity
-
-  end
+   end
 
   def upload
 

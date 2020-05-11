@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 # TODO: this seems to be dead code

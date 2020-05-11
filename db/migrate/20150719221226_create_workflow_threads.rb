@@ -1,3 +1,4 @@
+# typed: false
 class CreateWorkflowThreads < ActiveRecord::Migration
   def change
     create_table :workflow_threads do |t|

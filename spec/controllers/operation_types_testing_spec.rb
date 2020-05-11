@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 require 'rails_helper'
@@ -110,7 +111,8 @@ RSpec.describe OperationTypesController, type: :controller do
       post_data = nil_id_protocol.as_json
       post_data[:test_operations] = JSON.parse(@response.body)
       post :test, post_data
-
+      expect(response).to have_http_status(:unprocessable_entity)
+      
       response_hash = JSON.parse(@response.body, symbolize_names: true)
 
       expect(response_hash[:error]).to eq("undefined method `id' for nil:NilClass")
