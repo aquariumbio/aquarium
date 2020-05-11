@@ -24,7 +24,8 @@ RSpec.describe ProtocolTestEngine do
   end
 
   it 'io protocol test should pass' do
-    test = ProtocolTestEngine.run(operation_type: io_protocol, user: test_user)
+    test = nil
+    expect {test = ProtocolTestEngine.run(operation_type: io_protocol, user: test_user) }.not_to raise_error
     expect(test).not_to be_nil
     expect(test.methods).to include(:setup, :analyze, :run)
   end
