@@ -45,6 +45,10 @@ Naming/MethodName:
     - 'NOT\_STARTED'
     - 'COMPLETED'
 
+Sorbet/TrueSigil:
+  - 'app/**/*.rb'
+  - 'lib/**/*.rb'
+
 Style/AsciiComments:
   Enabled: false
 
