@@ -81,6 +81,7 @@ class KrillController < ApplicationController
         op.associate :aborted, "Operation was canceled when job #{@job.id} was aborted"
       end
 
+      # TODO: duplicate code with Job.abort_krill
       state = @job.job_state
       if state.length.odd? # backtrace ends with a 'next'
         @job.append_step operation: 'display', content: [
