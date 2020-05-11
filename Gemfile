@@ -59,8 +59,10 @@ gem 'will_paginate'
 gem 'factory_bot_rails', :group => :development
 gem 'ipaddress', :group => :development # used to determine subnet for docker containers for web-console
 gem 'rspec-rails', :group => :development
+gem 'rspec-sorbet', :group => :development
 gem 'rubocop', :group => :development
 gem 'rubocop-rails', :group => :development
+gem 'rubocop-sorbet', :group => :development
 gem 'simplecov', require: false, :group => :development
 gem 'sorbet', :group => [:development, :test]
 gem 'sorbet-rails', '0.5.6'
