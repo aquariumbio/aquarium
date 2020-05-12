@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 module Krill
-
+  
   # The ShowBlock class implements the methods inside show blocks, which are used to interact with the technician. When
   # a show block is encountered, it is used to construct a page of instructions for the technician. Execution is suspended
   # until the user clicks "OK" in the protocol. The show method returns a ShowResponse object that contains any information
@@ -53,10 +53,11 @@ module Krill
     end
 
     # Put the string s in a smaller font on the page. Often called several times.
-    # @param str [String]
+    # If an array of strings is passed, then a note is made for each element of the array.
+    # @param str [String, Array<String>]
     # @return [void]
     def note(str)
-      @parts.push(note: str)
+      [*str].each { |s| @parts.push(note: s) }
     end
 
     # This is deprecated
@@ -76,17 +77,19 @@ module Krill
 
     # Put the string s on the page, with a clickable checkbox in front of it. The user will need
     # to click all checkboxes on a given page before the "OK" button is enabled.
-    # @param str [String]
+    # If an array of strings is passed, then a checkbox is made for each element of the array.
+    # @param str [String, Array<String>]
     # @return [void]
     def check(str)
-      @parts.push(check: str)
+      [*str].each { |s| @parts.push(check: s) }
     end
 
     # Put the string s on the page, with a bullet in front of it, as in a bullet list.
-    # @param str [String]
+    # If an array of strings is passed, then a bullet is made for each element of the array.
+    # @param str [String, Array<String>]
     # @return [void]
     def bullet(str)
-      @parts.push(bullet: str)
+      [*str].each { |s| @parts.push(bullet: s) }
     end
 
     # Display a table represented by the matrix t. The method takes a 2x2 list of either numbers,
@@ -249,7 +252,7 @@ module Krill
     end
 
     # @api private
-    def is_proper_array(c)
+    def self.is_proper_array(c)
       return false unless c.is_a?(Array)
       return true if c.empty?
       return false unless c[0].is_a?(Integer) || c[0].is_a?(Float) || c[0].is_a?(String)
@@ -279,7 +282,7 @@ module Krill
     #   choice = data[:choice]
     def select(choices, opts = {})
       choices = choices.uniq
-      raise 'First argument to select should be an array of numbers or strings' unless is_proper_array choices
+      raise 'First argument to select should be an array of numbers or strings' unless ShowBlock.is_proper_array choices
 
       options = {
         var: "select_#{@@select_counter}",
