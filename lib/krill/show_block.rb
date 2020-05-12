@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Krill
-
+  
   # The ShowBlock class implements the methods inside show blocks, which are used to interact with the technician. When
   # a show block is encountered, it is used to construct a page of instructions for the technician. Execution is suspended
   # until the user clicks "OK" in the protocol. The show method returns a ShowResponse object that contains any information
@@ -251,7 +251,7 @@ module Krill
     end
 
     # @api private
-    def is_proper_array(c)
+    def self.is_proper_array(c)
       return false unless c.is_a?(Array)
       return true if c.empty?
       return false unless c[0].is_a?(Integer) || c[0].is_a?(Float) || c[0].is_a?(String)
@@ -281,7 +281,7 @@ module Krill
     #   choice = data[:choice]
     def select(choices, opts = {})
       choices = choices.uniq
-      raise 'First argument to select should be an array of numbers or strings' unless is_proper_array choices
+      raise 'First argument to select should be an array of numbers or strings' unless ShowBlock.is_proper_array choices
 
       options = {
         var: "select_#{@@select_counter}",
