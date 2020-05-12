@@ -63,10 +63,28 @@ RSpec.describe Krill::ShowBlock do
     expect(page_parts[1]).to eq({note: note_array[1]})
   end
 
+  it 'Inserting note array should give same result as consecutive note calls' do
+    block1 = Krill::ShowBlock.new(Krill::Base)
+    note_array = ['Text1', 'Text2']
+    note_array.each { |note| block1.note(note) }
+    page_parts1 = block1.run {}
+
+    block2 = Krill::ShowBlock.new(Krill::Base)
+    block2.note(note_array)
+    page_parts2 = block2.run {}
+
+    expect(page_parts1).to eq(page_parts2)
+  end
+
 
   it 'A show block has a warning after warning has been called'
+  it 'Order of warnings should be maintained'
   it 'A show block has a check after check has been called'
+  it 'Order of checks should be maintained'
+  it 'Inserting array of checks is the same as consecutive check calls'
   it 'A show block has a bullet after bullet has been called'
+  it 'Order of bullets should be maintained'
+  it 'Inserting array of bullets is the same as consecutive bullet calls'
   it 'A show block has a table after table has been called'
   it 'A show block has a take for an item after item has been called'
   it 'A show block has a separator after separator has been called'
