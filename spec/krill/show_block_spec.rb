@@ -63,7 +63,7 @@ RSpec.describe Krill::ShowBlock do
     expect(page_parts[1]).to eq({note: note_array[1]})
   end
 
-  it 'A show block has a log after log has been called'
+
   it 'A show block has a warning after warning has been called'
   it 'A show block has a check after check has been called'
   it 'A show block has a bullet after bullet has been called'
