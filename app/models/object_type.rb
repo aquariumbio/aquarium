@@ -1,4 +1,4 @@
-# typed: false
+# typed: true
 # frozen_string_literal: true
 
 # Defines the type of physical object that would be represented in an {Item}
@@ -69,12 +69,12 @@ class ObjectType < ActiveRecord::Base
 
   def min_and_max
     errors.add(:min, 'min must be greater than zero and less than or equal to max') unless
-      min && max && min >= 0 && min <= max
+      min && max && T.must(min) >= 0 && T.must(min) <= T.must(max)
   end
 
   def pos
     errors.add(:cost, 'must be at least $0.01') unless
-      cost && cost >= 0.01
+      cost && T.must(cost) >= 0.01
   end
 
   def proper_release_method
@@ -91,7 +91,7 @@ class ObjectType < ActiveRecord::Base
   def quantity
     q = 0
     items.each do |i|
-      q += i.quantity if i.quantity >= 0
+      q += T.must(i.quantity) if T.must(i.quantity) >= 0
     end
     q
   end
@@ -100,7 +100,7 @@ class ObjectType < ActiveRecord::Base
   def in_use
     q = 0
     items.each do |i|
-      q += i.inuse
+      q += T.must(i.inuse)
     end
     q
   end
@@ -139,7 +139,7 @@ class ObjectType < ActiveRecord::Base
     raise 'Tried to get dimensions of a container that is not a collection' unless collection_type?
 
     begin
-      h = JSON.parse(data, symbolize_names: true)
+      h = JSON.parse(T.must(data), symbolize_names: true)
     rescue JSON::ParserError
       raise "Could not parse data field '#{data}' of object type #{id}. Please go to " \
             "<a href='/object_types/#{id}/edit'>Object Type #{id}</a> and edit the data " \
@@ -160,7 +160,7 @@ class ObjectType < ActiveRecord::Base
   # used in object_type views
   def data_object
     begin
-      result = JSON.parse(data, symbolize_names: true)
+      result = JSON.parse(T.must(data), symbolize_names: true)
     rescue StandardError
       result = {}
     end
@@ -169,7 +169,7 @@ class ObjectType < ActiveRecord::Base
 
   # TODO: dead code
   def sample_type_name
-    sample_type ? sample_type.name : nil
+    sample_type&.name
   end
 
   # used by compare_and_upgrade
