@@ -50,12 +50,12 @@ class Item < ActiveRecord::Base
 
   def quantity_nonneg
     errors.add(:quantity, 'Must be non-negative.') unless
-      quantity && quantity >= -1
+      quantity && T.must(quantity) >= -1
   end
 
   def inuse_less_than_quantity
     errors.add(:inuse, 'must non-negative and not greater than the quantity.') unless
-      quantity && inuse && inuse >= -1 && inuse <= quantity
+      quantity && inuse && T.must(inuse) >= -1 && T.must(inuse) <= T.must(quantity)
   end
 
   # location methods ###############################################################
@@ -123,7 +123,7 @@ class Item < ActiveRecord::Base
   #
   # @param locstr [String] the location string
   # @return [Item] self
-  sig { params(location_name: String).returns(Item) }
+  sig { params(location_name: String).returns(T.nilable(Item)) }
   def move_to(location_name)
 
     wiz = Wizard.find_by(name: object_type.prefix) if object_type
@@ -132,7 +132,7 @@ class Item < ActiveRecord::Base
 
       unless wiz.has_correct_form location_name
         errors.add(:wrong_form, "'#{location_name}'' is not in the form of a location for the #{wiz.name} wizard.")
-        return
+        return nil
       end
 
       locs = Locator.where(wizard_id: wiz.id, number: (wiz.location_to_int location_name))
@@ -144,7 +144,7 @@ class Item < ActiveRecord::Base
         newloc = locs.first
       else
         errors.add(:too_many_locators, "There are multiple items at #{location_name}.")
-        return
+        return nil
       end
 
       if newloc == locator
@@ -279,14 +279,14 @@ class Item < ActiveRecord::Base
     self.quantity = -1
     self.inuse = -1
     self.locator_id = nil
-    locator.item_id = nil if locator
+    locator&.item_id = nil if locator
 
-    item_saved = false
-    locator_saved = false
+    item_saved = T.let(false, T.untyped)
+    locator_saved = T.let(false, T.untyped)
 
     transaction do
       item_saved = save
-      locator_saved = locator.save if locator
+      locator_saved = locator&.save if locator
     end
 
     item_saved && locator_saved
@@ -303,7 +303,7 @@ class Item < ActiveRecord::Base
   #
   # @return [Bool] true if this Item is a Collection, false otherwise
   def collection?
-    object_type && object_type.collection_type?
+    object_type&.collection_type?
   end
 
   # Returns the parent Collection of this item, if it is a part. Otherwise, returns nil
@@ -321,14 +321,14 @@ class Item < ActiveRecord::Base
   end
 
   def get_data
-    JSON.parse data, symbolize_names: true
+    JSON.parse T.must(data), symbolize_names: true
   rescue JSON::ParserError
     nil
   end
 
   # @deprecated Use {DataAssociator} methods instead of datum
   def datum
-    JSON.parse(data, symbolize_names: true)
+    JSON.parse(T.must(data), symbolize_names: true)
   rescue StandardError
     {}
   end
@@ -363,7 +363,7 @@ class Item < ActiveRecord::Base
   def upgrade(force = false) # upgrades data field to data association (if no data associations exist)
     if force || associations.empty?
       begin
-        obj = JSON.parse data
+        obj = JSON.parse T.must(data)
 
         obj.each do |k, v|
           associate k, v
@@ -389,7 +389,7 @@ class Item < ActiveRecord::Base
     olist = ObjectType.where('name = ?', name)
     raise "Could not find object type named '#{spec[:object_type]}'." if olist.empty?
 
-    Item.make({ quantity: 1, inuse: 0 }, object_type: olist[0])
+    Item.make({ quantity: 1, inuse: 0 }, object_type: olist.first)
 
   end
 
@@ -407,7 +407,7 @@ class Item < ActiveRecord::Base
     slist = Sample.where('name = ? AND sample_type_id = ?', name, sample_type_id)
     raise "Could not find sample named #{name}" if slist.empty?
 
-    Item.make({ quantity: 1, inuse: 0 }, sample: slist[0], object_type: olist[0])
+    Item.make({ quantity: 1, inuse: 0 }, sample: slist.first, object_type: olist.first)
 
   end
 
@@ -440,7 +440,7 @@ class Item < ActiveRecord::Base
 
       return sample.items.reject { |i| i.deleted? || i.object_type_id != ot.id }
     end
-    return ot.items.reject(&:deleted?) if ot.handler != 'sample_container'
+    return ot&.items&.reject(&:deleted?) if ot&.sample?
 
     []
   end
