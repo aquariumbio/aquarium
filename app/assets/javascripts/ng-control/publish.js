@@ -82,7 +82,8 @@
       github: {
         user: "",
         repo: "",
-        access_token: ""
+        access_token: "",
+        organization: ""
       },
       keywords: [],
       aquarium_version: "<%= Bioturk::Application.config.aquarium_version %>"

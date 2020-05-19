@@ -123,7 +123,7 @@
     <div class="update-note" ng-if="state.update">
     <p><b>Note:</b> Aquarium found an existing published workflow at 
       <a href="https://github.com/{{config.github.organization || config.github.user}}/{{config.github.repo}}" target=github>
-        https://github.com/{{config.github.user}}/{{config.github.repo}}
+        https://github.com/{{config.github.organization || config.github.user}}/{{config.github.repo}}
       </a> and has used it fill in this form and choose operation types. Please edit this
       information and continue only if you want to <u>update</u> this repository.</p>
     </div>
@@ -302,8 +302,8 @@
     <div ng-if="!state.building && state.error != null">
       <h2>Error publishing workflow</h2>
       <span class="publish-issue">{{state.error}}</span><br><br>
-      <p>Check <a href="https://github.com/{{config.github.user}}/{{config.github.repo}}" target=github>
-                        https://github.com/{{config.github.user}}/{{config.github.repo}}</a> to see if
+      <p>Check <a href="https://github.com/{{config.github.organization || config.github.user}}/{{config.github.repo}}" target=github>
+      https://github.com/{{config.github.organization || config.github.user}}/{{config.github.repo}}</a> to see if
         Aquarium published some of your workflow, but encountered the above error before it could complete.</p> 
     </div>    
 
