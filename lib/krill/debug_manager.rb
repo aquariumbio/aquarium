@@ -24,7 +24,7 @@ module Krill
 
     # Executes this manager's job.
     #
-    # @raise [KrillError, ProtocolError]
+    # @raise [KrillError]
     def start
       @sandbox.execute
     end
