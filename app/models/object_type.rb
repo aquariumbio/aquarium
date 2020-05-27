@@ -1,4 +1,4 @@
-# typed: true
+# typed: false
 # frozen_string_literal: true
 
 # Defines the type of physical object that would be represented in an {Item}
