@@ -5,7 +5,7 @@
 #
 #   https://github.com/sorbet/sorbet-typed/edit/master/lib/ruby/all/gem.rbi
 #
-# typed: strong
+# typed: false
 module Gem
   ConfigMap = T.let(nil, T.untyped)
   RbConfigPriorities = T.let(nil, T.untyped)
