@@ -6,7 +6,7 @@ services:
     build:
       context: .
       target: aquarium
-    image: aquariumbio/aquarium:2.7.3
+    image: aquariumbio/aquarium:2.8.0
     command: ["production"]
     volumes:
       - public:/aquarium/public
@@ -14,7 +14,7 @@ services:
       - shared:/aquarium/shared
 
   krill:
-    image: aquariumbio/aquarium:2.7.3
+    image: aquariumbio/aquarium:2.8.0
     command: ["krill", "production"]
 
   web:

@@ -1,12 +1,12 @@
-docker-deployment branch
+v2.8.0
 
 This release makes Docker configuration the default.
-It should no longer be necessary for non-developers to clone this repository,
+
+It is no longer necessary for non-developers to clone this repository,
 and instead users should be using the Docker image available on Docker hub from 
-BLAH-LINK:
+https://hub.docker.com/r/aquariumbio/aquarium:
 - For production deployment, see the deployment instructions at aquarium.bio.
-- For a local deployment, clone the https://github.com/klavinslab/aquarium-local
-repository.
+- For a local deployment, clone https://github.com/klavinslab/aquarium-local.
 
 Changes:
 - Rewrite entrypoint script so that provides more capabilities for configuring
@@ -26,6 +26,8 @@ Changes:
   instance details. Change S3 configuration to use either S3 or minio based on
   environment variables.
 - Starting Aquarium in production using Docker will print the license.
+- Add Sorbet type checking, and test coverage.
+
 
 v2.7.3
 - Changes system menu pages to be more consistent. Changes list pagination to
