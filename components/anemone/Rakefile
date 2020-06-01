@@ -27,4 +27,4 @@ end
 
 task default: :test
 
-import "./lib/tasks/anemone_tasks.rake"
+import './lib/tasks/anemone_tasks.rake'

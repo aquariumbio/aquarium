@@ -52,7 +52,7 @@ RSpec.describe Krill::ShowBlock do
 
   it 'Notes should be in the same order as inserted' do
     block = Krill::ShowBlock.new(Krill::Base)
-    note_array = ['Text1', 'Text2']
+    note_array = %w[Text1 Text2]
     note_array.each { |note| block.note(note) }
     page_parts = block.run {}
 
@@ -66,7 +66,7 @@ RSpec.describe Krill::ShowBlock do
 
   it 'Inserting note array should give same result as consecutive note calls' do
     block1 = Krill::ShowBlock.new(Krill::Base)
-    note_array = ['Text1', 'Text2']
+    note_array = %w[Text1 Text2]
     note_array.each { |note| block1.note(note) }
     page_parts1 = block1.run {}
 

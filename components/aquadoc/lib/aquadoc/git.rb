@@ -60,8 +60,8 @@ module Aquadoc
 
     def create(path:, message:, content:)
       @client.create_contents(@repo_info, path, message, content)
-    rescue StandardError => error
-      puts "Warning: Could not create #{path}: #{error}"
+    rescue StandardError => e
+      puts "Warning: Could not create #{path}: #{e}"
     end
 
     def authenticate

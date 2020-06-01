@@ -92,7 +92,7 @@ class Code < ActiveRecord::Base
   # @return [Array<String>] the list of referenced library names
   def referenced_libraries
     # TODO: check content type before scanning
-    content.scan(/\s*needs\s+[\"\'](.+)\/(.+)[\"\']/).map { |a, b| a + '/' + b }.uniq
+    content.scan(%r{\s*needs\s+[\"\'](.+)/(.+)[\"\']}).map { |a, b| a + '/' + b }.uniq
   end
 
   # Return list of referenced modules

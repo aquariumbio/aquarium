@@ -29,7 +29,7 @@ module Aquadoc
 
     def field_type_md(field_type)
       template = File.read(@assets_path + '/field_type.md.erb')
-      template_erb = ERB.new(template, 0, '%<>')
+      template_erb = ERB.new(template, trim_mode: '%<>')
       template_erb.result(binding)
     end
 
@@ -46,25 +46,25 @@ module Aquadoc
       end
 
       template = File.read(@assets_path + '/operation_type.md.erb')
-      template_erb = ERB.new(template, 0, '%<>')
+      template_erb = ERB.new(template, trim_mode: '%<>')
       template_erb.result(binding)
     end
 
     def sample_type_md(sample_type)
       template = File.read(@assets_path + '/sample_type.md.erb')
-      template_erb = ERB.new(template, 0, '%<>')
+      template_erb = ERB.new(template, trim_mode: '%<>')
       template_erb.result(binding)
     end
 
     def object_type_md(object_type)
       template = File.read(@assets_path + '/object_type.md.erb')
-      template_erb = ERB.new(template, 0, '%<>')
+      template_erb = ERB.new(template, trim_mode: '%<>')
       template_erb.result(binding)
     end
 
     def make_about_md
       template = File.read(@assets_path + '/ABOUT.md.erb')
-      template_erb = ERB.new(template, 0, '%<>')
+      template_erb = ERB.new(template, trim_mode: '%<>')
       @storage.write('ABOUT.md', template_erb.result(binding))
     end
 
@@ -76,7 +76,7 @@ module Aquadoc
     def make_js
       # definitions
       template = File.read(@assets_path + '/definitions.js.erb')
-      template_erb = ERB.new(template, 0, '%<>')
+      template_erb = ERB.new(template, trim_mode: '%<>')
       @storage.write('js/definitions.js', template_erb.result(binding))
     end
   end

@@ -46,8 +46,8 @@ end
 begin
   config = File.read('./config.json')
   config = JSON.parse(config, symbolize_names: true)
-rescue StandardError => error
-  raise "Could not find valid config file: #{error}"
+rescue StandardError => e
+  raise "Could not find valid config file: #{e}"
 end
 
 categories = []

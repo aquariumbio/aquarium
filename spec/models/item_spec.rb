@@ -16,7 +16,7 @@ RSpec.describe Item, type: :model do
   end
 
   it 'items_for returns a collection if object_type is collection' do
-    c = Collection.new_collection("stripwell")
+    c = Collection.new_collection('stripwell')
     expect(c).to be_collection
   end
 end

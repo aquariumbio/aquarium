@@ -9,7 +9,7 @@ class JsonController
     # @param parameters [Hash] the parameters object
     # @return JSON for the results of the query
     def self.create_from(parameters)
-      raise StandardError.new("Bad parameters: No model name given") unless parameters[:model]
+      raise StandardError.new('Bad parameters: No model name given') unless parameters[:model]
 
       model = get_model(model: parameters[:model], include: parameters[:include])
       result = apply_method(model: model, method: parameters[:method], arguments: parameters[:arguments], id: parameters[:id], options: parameters[:options])

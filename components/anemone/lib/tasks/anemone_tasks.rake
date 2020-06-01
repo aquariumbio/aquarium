@@ -11,8 +11,8 @@ namespace :anemone do
     end
   end
 
-  desc "Migrates the DB so it has the worker model"
-  task :setup => :environment do
+  desc 'Migrates the DB so it has the worker model'
+  task setup: :environment do
     unless ActiveRecord::Base.connection.table_exists? 'worker'
       m = CreateAnemoneWorker.new
       m.change

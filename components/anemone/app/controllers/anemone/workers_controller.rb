@@ -5,12 +5,10 @@ module Anemone
 
     def show
 
-      begin
-        worker = Worker.find(params[:id])
-        render json: worker
-      rescue Exception => e
-        render json: { error: e.to_s }
-      end
+      worker = Worker.find(params[:id])
+      render json: worker
+    rescue Exception => e
+      render json: { error: e.to_s }
 
     end
 
