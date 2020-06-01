@@ -89,6 +89,7 @@ module Aquadoc
       end
 
       return unless @options[:inventory]
+
       @sample_types.each do |st|
         @storage.write("sample_types/#{sanitize_filename st[:name]}.md",
                        sample_type_md(st))
@@ -133,7 +134,7 @@ module Aquadoc
                    ' --one-file --quiet'
         unless system yard_cmd
           Dir.chdir @base_path
-          system "rm -rf #{@temp_library_path}"    
+          system "rm -rf #{@temp_library_path}"
           raise "Could not run yardoc on #{lib}"
         end
         Dir.chdir @base_path

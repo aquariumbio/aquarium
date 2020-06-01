@@ -48,6 +48,7 @@ module Aquadoc
         begin
           file = @client.contents(@repo_info, path: path)
           return if Base64.decode64(file[:content]) == content
+
           @client.update_contents(
             @repo_info, path, 'Aquadoc update', file[:sha], content
           )

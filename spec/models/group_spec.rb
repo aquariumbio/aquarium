@@ -5,11 +5,11 @@ require 'rails_helper'
 
 RSpec.describe Group do
   let!(:dummy_group) { create(:group, name: 'dummy_group', description: 'a group for this test') }
-  let!(:dummy_user) { create(:user)}
+  let!(:dummy_user) { create(:user) }
 
   it 'group names should include defaults plus dummy user and group' do
     names = Group.list_names
-    expect(names[:groups]).to match_array(['admin','dummy_group','technicians'])
+    expect(names[:groups]).to match_array(['admin', 'dummy_group', 'technicians'])
     expect(names[:users]).to match_array([dummy_user.login, 'neptune'])
   end
 
@@ -24,5 +24,4 @@ RSpec.describe Group do
     expect(Group.non_user_groups).to match_array([Group.admin, Group.retired, Group.technicians, dummy_group])
   end
 
-  
 end

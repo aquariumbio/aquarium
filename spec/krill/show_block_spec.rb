@@ -4,7 +4,7 @@
 require 'rails_helper'
 
 RSpec.describe Krill::ShowBlock do
-  let!(:empty_block) {Krill::ShowBlock.new(Krill::Base)}
+  let!(:empty_block) { Krill::ShowBlock.new(Krill::Base) }
 
   it 'an integer is not a proper array' do
     expect(Krill::ShowBlock.is_proper_array(1)).to be false
@@ -38,7 +38,7 @@ RSpec.describe Krill::ShowBlock do
     block.title(page_title)
     page_parts = block.run {}
 
-    expect(page_parts).to include({title: page_title})
+    expect(page_parts).to include({ title: page_title })
   end
 
   it 'A show block has a note after note has been called' do
@@ -47,7 +47,7 @@ RSpec.describe Krill::ShowBlock do
     block.note(note_text)
     page_parts = block.run {}
 
-    expect(page_parts).to include({note: note_text})
+    expect(page_parts).to include({ note: note_text })
   end
 
   it 'Notes should be in the same order as inserted' do
@@ -60,8 +60,8 @@ RSpec.describe Krill::ShowBlock do
     expect(page_parts.length).to eq(2)
 
     # TODO: want to check order, but don't want to assume we have an array
-    expect(page_parts[0]).to eq({note: note_array[0]})
-    expect(page_parts[1]).to eq({note: note_array[1]})
+    expect(page_parts[0]).to eq({ note: note_array[0] })
+    expect(page_parts[1]).to eq({ note: note_array[1] })
   end
 
   it 'Inserting note array should give same result as consecutive note calls' do
@@ -76,7 +76,6 @@ RSpec.describe Krill::ShowBlock do
 
     expect(page_parts1).to eq(page_parts2)
   end
-
 
   it 'A show block has a warning after warning has been called'
   it 'Order of warnings should be maintained'

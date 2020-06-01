@@ -7,7 +7,7 @@ FactoryBot.define do
     login { 'neptunis' }
     password { 'thePassword' }
     password_confirmation { 'thePassword' }
-    
+
     # TODO: make sure agreement is set
   end
 end

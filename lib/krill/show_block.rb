@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 module Krill
-  
+
   # The ShowBlock class implements the methods inside show blocks, which are used to interact with the technician. When
   # a show block is encountered, it is used to construct a page of instructions for the technician. Execution is suspended
   # until the user clicks "OK" in the protocol. The show method returns a ShowResponse object that contains any information

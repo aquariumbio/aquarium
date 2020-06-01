@@ -209,7 +209,7 @@ class Operation < ActiveRecord::Base
   # @param name [String]
   # @return [Array<FieldValue>]
   def output_array(name)
-    outputs.select { |o| o.name == name } .extend(IOList)
+    outputs.select { |o| o.name == name }.extend(IOList)
   end
 
   # @param name [String]
