@@ -10,6 +10,9 @@ AllCops:
     - 'public/**/*'
   TargetRubyVersion: 2.6
 
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: true
+
 Layout/EmptyLinesAroundBlockBody:
   Enabled: false
 
@@ -23,6 +26,9 @@ Layout/EmptyLinesAroundModuleBody:
   Enabled: false
 
 Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
+
+Lint/DeprecatedOpenSSLConstant:
   Enabled: true
 
 Lint/RaiseException:
@@ -45,9 +51,9 @@ Naming/MethodName:
     - 'NOT\_STARTED'
     - 'COMPLETED'
 
-Sorbet/TrueSigil:
-  - 'app/**/*.rb'
-  - 'lib/**/*.rb'
+#Sorbet/TrueSigil:
+#  - 'app/**/*.rb'
+#  - 'lib/**/*.rb'
 
 Style/AsciiComments:
   Enabled: false
@@ -66,3 +72,6 @@ Style/HashTransformValues:
 
 Style/RaiseArgs:
   EnforcedStyle: compact
+
+Style/SlicingWithRange:
+  Enabled: true
