@@ -270,21 +270,29 @@ Keep it up-to-date if you change something that affects Aquarium development.
     git pull
     ```
 
-2.  Make sure Rails tests pass
+2.  Build image to make sure that dependencies are up-to-date
 
     ```bash
+    docker-compose build app
+    ```
+
+3.  Make sure Rails tests pass
+
+    ```bash
+    docker-compose up -d
     docker-compose exec app rspec
+    docker-compose down -v
     ```
 
     If there are any failures, fix them and start over.
 
-3.  Fix any layout problems 
+4.  Fix any layout problems 
 
     ```bash
     docker-compose run --rm app rubocop -x
     ```
 
-4.  Run `rubocop`
+5.  Run `rubocop`
 
     ```bash
     docker-compose run --rm app rubocop
