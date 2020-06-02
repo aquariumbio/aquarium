@@ -25,8 +25,14 @@ Changes:
   parameterized configuration using environment variables and a YAML file for 
   instance details. Change S3 configuration to use either S3 or minio based on
   environment variables.
+- Change biofab parameter key to "lab_agreement" and move agreement to YAML file.
+- Refactor models to use predicates instead of chained checks of attributes.
+- Pull source for aquadoc and anemone into components directory, and add
+  components directory to build.
+- Krill changes: add technician foot pedal interface, allow show block note, 
+  check, and bullet to take array of strings as arguments.
 - Starting Aquarium in production using Docker will print the license.
-- Add Sorbet type checking, and test coverage.
+- Add Sorbet type checking, and simplecov test coverage. 
 
 
 v2.7.3
