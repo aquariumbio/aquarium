@@ -10,11 +10,11 @@
   
 </title>
 
-  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
 
-  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
 
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
   pathId = "DataAssociator";
   relpath = '';
 </script>
@@ -419,7 +419,6 @@
       <pre class="lines">
 
 
-168
 169
 170
 171
@@ -429,10 +428,11 @@
 175
 176
 177
-178</pre>
+178
+179</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 168</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 169</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_append_notes'>append_notes</span><span class='lparen'>(</span><span class='id identifier rubyid_text'>text</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_da'>da</span> <span class='op'>=</span> <span class='id identifier rubyid_get_association'>get_association</span> <span class='symbol'>:notes</span>
@@ -541,7 +541,6 @@
       <pre class="lines">
 
 
-94
 95
 96
 97
@@ -558,10 +557,11 @@
 108
 109
 110
-111</pre>
+111
+112</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 94</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 95</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_associate'>associate</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='id identifier rubyid_upload'>upload</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='label'>duplicates:</span> <span class='kw'>false</span> <span class='rbrace'>}</span><span class='rparen'>)</span>
 
@@ -628,16 +628,16 @@
       <pre class="lines">
 
 
-32
 33
 34
 35
 36
 37
-38</pre>
+38
+39</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 32</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 33</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_associations'>associations</span>
   <span class='id identifier rubyid_h'>h</span> <span class='op'>=</span> <span class='const'>HashWithIndifferentAccess</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
@@ -716,7 +716,6 @@ Includes the upload object for the association if there is one.</p>
       <pre class="lines">
 
 
-18
 19
 20
 21
@@ -725,10 +724,11 @@ Includes the upload object for the association if there is one.</p>
 24
 25
 26
-27</pre>
+27
+28</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 18</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 19</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_data_associations'>data_associations</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_klass'>klass</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
@@ -806,13 +806,13 @@ Includes the upload object for the association if there is one.</p>
       <pre class="lines">
 
 
-53
 54
 55
-56</pre>
+56
+57</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 53</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 54</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get'>get</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_da'>da</span> <span class='op'>=</span> <span class='id identifier rubyid_get_association'>get_association</span> <span class='id identifier rubyid_key'>key</span>
@@ -884,13 +884,13 @@ Includes the upload object for the association if there is one.</p>
       <pre class="lines">
 
 
-44
 45
 46
-47</pre>
+47
+48</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 44</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 45</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_association'>get_association</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_das'>das</span> <span class='op'>=</span> <span class='id identifier rubyid_data_associations'>data_associations</span> <span class='id identifier rubyid_key'>key</span>
@@ -992,7 +992,6 @@ save them all at once.</p>
       <pre class="lines">
 
 
-124
 125
 126
 127
@@ -1000,10 +999,11 @@ save them all at once.</p>
 129
 130
 131
-132</pre>
+132
+133</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 124</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 125</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_lazy_associate'>lazy_associate</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='id identifier rubyid_upload'>upload</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="DataAssociation.html" title="DataAssociation (class)">DataAssociation</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span>
@@ -1102,7 +1102,6 @@ save them all at once.</p>
       <pre class="lines">
 
 
-140
 141
 142
 143
@@ -1112,10 +1111,11 @@ save them all at once.</p>
 147
 148
 149
-150</pre>
+150
+151</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 140</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 141</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_modify'>modify</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='id identifier rubyid_upload'>upload</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_da'>da</span> <span class='op'>=</span> <span class='id identifier rubyid_get_association'>get_association</span> <span class='id identifier rubyid_key'>key</span>
@@ -1175,7 +1175,6 @@ save them all at once.</p>
       <pre class="lines">
 
 
-70
 71
 72
 73
@@ -1183,10 +1182,11 @@ save them all at once.</p>
 75
 76
 77
-78</pre>
+78
+79</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 70</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 71</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_notes'>notes</span>
   <span class='id identifier rubyid_da'>da</span> <span class='op'>=</span> <span class='id identifier rubyid_get_association'>get_association</span> <span class='symbol'>:notes</span>
@@ -1246,7 +1246,6 @@ save them all at once.</p>
       <pre class="lines">
 
 
-155
 156
 157
 158
@@ -1254,10 +1253,11 @@ save them all at once.</p>
 160
 161
 162
-163</pre>
+163
+164</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 155</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 156</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_notes='>notes=</span><span class='lparen'>(</span><span class='id identifier rubyid_text'>text</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_da'>da</span> <span class='op'>=</span> <span class='id identifier rubyid_get_association'>get_association</span> <span class='symbol'>:notes</span>
@@ -1334,13 +1334,13 @@ save them all at once.</p>
       <pre class="lines">
 
 
-62
 63
 64
-65</pre>
+65
+66</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 62</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 63</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_upload'>upload</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_da'>da</span> <span class='op'>=</span> <span class='id identifier rubyid_get_association'>get_association</span> <span class='id identifier rubyid_key'>key</span>
@@ -1356,9 +1356,9 @@ save them all at once.</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Apr  7 07:22:06 2020 by
+  Generated on Mon Jun  1 17:36:21 2020 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.20 (ruby-2.6.5).
+  0.9.25 (ruby-2.6.5).
 </div>
 
     </div>

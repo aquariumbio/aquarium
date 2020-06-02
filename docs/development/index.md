@@ -286,13 +286,21 @@ Keep it up-to-date if you change something that affects Aquarium development.
 
     If there are any failures, fix them and start over.
 
-4.  Fix any layout problems 
+4.  Run type checks
+
+    ```bash
+    docker-compose run -rm app srb tc
+    ```
+
+    If there are any failures, fix them and start over.
+
+5.  Fix any layout problems 
 
     ```bash
     docker-compose run --rm app rubocop -x
     ```
 
-5.  Run `rubocop`
+6.  Run `rubocop`
 
     ```bash
     docker-compose run --rm app rubocop
@@ -300,25 +308,25 @@ Keep it up-to-date if you change something that affects Aquarium development.
 
     Fix any issues and start over.
 
-5.  Update RuboCop TODO file
+7.  Update RuboCop TODO file
 
     ```bash
     docker-compose run -rm app rubocop --auto-gen-config
     ```
 
-6.  (make sure JS tests pass)
+8.  (make sure JS tests pass)
 
-7.  (Make sure JS linting passes)
+9.  (Make sure JS linting passes)
 
-8.  Update the version number in `package.json` and `config/initializers/version.rb` to the new version number.
+10. Update the version number in `package.json` and `config/initializers/version.rb` to the new version number.
 
-9.  Update API documentation by running 
+11. Update API documentation by running 
 
     ```bash
-    docker-compose exec app yard
+    docker-compose run --rm app yard
     ```
 
-10. Update `CHANGE_LOG`
+12. Update `CHANGE_LOG`
 
     ```bash
     git log v$OLDVERSION..
