@@ -71,17 +71,17 @@ class Item < ActiveRecord::Base
     @@part_type ||= ObjectType.part_type
   end
 
+  sig { returns(T::Boolean) }
   # Returns true if the item is a part of a collection
   # @return [Bool]
-  sig { returns(T::Boolean) }
   def is_part
     object_type_id == part_type.id
   end
 
+  sig { returns(String) }
   # Returns the location of the Item
   #
   # @return [String] the description of the Item's physical location in the lab as a string
-  sig { returns(String) }
   def location
     if is_part
       'Part of Collection'
@@ -119,11 +119,11 @@ class Item < ActiveRecord::Base
     end
   end
 
+  sig { params(location_name: String).returns(T.nilable(Item)) }
   # Sets item location to provided string or to string's associated location {Wizard} if it exists.
   #
   # @param locstr [String] the location string
   # @return [Item] self
-  sig { params(location_name: String).returns(T.nilable(Item)) }
   def move_to(location_name)
 
     wiz = Wizard.find_by(name: object_type.prefix) if object_type
@@ -270,10 +270,10 @@ class Item < ActiveRecord::Base
     end
   end
 
+  sig { returns(T::Boolean) }
   # Delete the Item (sets item's location to "deleted").
   #
   # @return [Bool] true if the location is set to 'deleted', false otherwise
-  sig { returns(T::Boolean) }
   def mark_as_deleted
     self[:location] = 'deleted'
     self.quantity = -1
