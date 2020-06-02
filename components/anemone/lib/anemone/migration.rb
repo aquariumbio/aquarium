@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 # typed: false
+
 class CreateAnemoneWorker < ActiveRecord::Migration
   def change
     create_table :workers do |t|

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :anemone do
 
   class CreateAnemoneWorker < ActiveRecord::Migration

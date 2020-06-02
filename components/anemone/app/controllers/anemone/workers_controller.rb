@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # typed: true
 module Anemone
 
@@ -7,7 +9,7 @@ module Anemone
 
       worker = Worker.find(params[:id])
       render json: worker
-    rescue Exception => e
+    rescue StandardError => e
       render json: { error: e.to_s }
 
     end

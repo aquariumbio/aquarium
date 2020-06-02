@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # typed: false
 
 module Anemone
@@ -16,35 +18,29 @@ module Anemone
 
     def run
 
-      if self.status == 'uninitialized'
+      raise 'Error: Worker already has been run' unless self.status == 'uninitialized'
 
-        worker = self
-        worker.status = 'running'
-        worker.save
+      worker = self
+      worker.status = 'running'
+      worker.save
 
-        Thread.new do
+      Thread.new do
 
-          yield
-        rescue Exception => e
-          ActiveRecord::Base.transaction do
-            worker.reload
-            worker.status = 'error'
-            worker.message = (e.to_s + ': ' + e.backtrace[0..2].join(', '))[0..254]
-            worker.save
-          end
-          raise "Error: Could not save worker #{worker.id} status: #{worker.errors.full_messages.join(', ')}" if worker.errors.any?
-        else
-          ActiveRecord::Base.transaction do
-            worker.reload
-            worker.status = 'done'
-            worker.save
-          end
-
+        yield
+      rescue StandardError => e
+        ActiveRecord::Base.transaction do
+          worker.reload
+          worker.status = 'error'
+          worker.message = (e.to_s + ': ' + e.backtrace[0..2].join(', '))[0..254]
+          worker.save
         end
-
+        raise "Error: Could not save worker #{worker.id} status: #{worker.errors.full_messages.join(', ')}" if worker.errors.any?
       else
-
-        raise 'Error: Worker already has been run'
+        ActiveRecord::Base.transaction do
+          worker.reload
+          worker.status = 'done'
+          worker.save
+        end
 
       end
 
