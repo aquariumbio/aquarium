@@ -4,10 +4,10 @@
 # typed: strong
 module ::BetterErrors; end
 module ::Spring; end
-module ::TaskPrototype; end
 module ActionDispatch::PerformanceTest; end
 module ActiveModel::UnknownAttributeError; end
 module ActiveModel::Validations::NumericalityValidator; end
+module ActiveRecord::CollectionCacheKey; end
 module ActiveRecord::Migration::Current; end
 module ApplicationCable::ActionCable::Channel::Base; end
 module ApplicationCable::ActionCable::Connection::Base; end
