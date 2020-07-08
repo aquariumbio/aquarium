@@ -381,6 +381,10 @@ class Item < ActiveRecord::Base
     includes(:locator).includes(:object_type).where(sample_id: sample.id)
   end
 
+  def self.with_type(object_type:)
+    includes(:locator).includes(:object_type).where(object_type: object_type)
+  end
+
   ###########################################################################
   # OLD
   ###########################################################################
