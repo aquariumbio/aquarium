@@ -264,9 +264,31 @@ This file also limits the API to code used in Krill the protocol development lan
 ### Updating Dependencies
 
 ```bash
+# 1. Start the container
+#
 docker-compose up -d
+
+# 2. Open a shell in the Aquarium container
+#
 docker-compose exec app /bin/sh
+
+# 3. Upgrade gems
+#
 bundle upgrade
+
+#
+# 4. Commit the new Gemfile.lock
+
+# 5. Update interface files for Sorbet type checking
+#
+srb rbi update
+
+# 6. Commit updated rbi files
+
+# 7. Exit container shell
+
+# 8. Stop the container
+#
 docker-compose down -v
 ```
 
