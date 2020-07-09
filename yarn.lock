@@ -3,8 +3,8 @@
 
 
 "@bower_components/ace-builds@ajaxorg/ace-builds#*":
-  version "1.4.10"
-  resolved "https://codeload.github.com/ajaxorg/ace-builds/tar.gz/bb63e6495383f1731c297d1a6ef76f814d71c23b"
+  version "1.4.12"
+  resolved "https://codeload.github.com/ajaxorg/ace-builds/tar.gz/53be42342df216d2d25dc60a12dfcb263c6f0592"
 
 "@bower_components/angular-animate@angular/bower-angular-animate#1.4 - 1.7.0 || ^1.7.2":
   version "1.8.0"
@@ -25,8 +25,8 @@
     angular ">=1.3.0"
 
 "@bower_components/angular-material@angular/bower-material#~1.1.3":
-  version "1.1.23"
-  resolved "https://codeload.github.com/angular/bower-material/tar.gz/424144f835470723b4a45b780f5bda51859e1661"
+  version "1.1.24"
+  resolved "https://codeload.github.com/angular/bower-material/tar.gz/0a0ed6075dd5a9b2df4d933a7d5f5a5e316bc636"
 
 "@bower_components/angular-messages@angular/bower-angular-messages#1.4 - 1.7.0 || ^1.7.2":
   version "1.8.0"
@@ -45,8 +45,8 @@
   resolved "https://codeload.github.com/blueimp/JavaScript-Canvas-to-Blob/tar.gz/53743bc487ac5cf454cabe8cce7eb400ab4e4f80"
 
 "@bower_components/blueimp-load-image@blueimp/JavaScript-Load-Image#>=1.13.0":
-  version "5.12.0"
-  resolved "https://codeload.github.com/blueimp/JavaScript-Load-Image/tar.gz/af40950cd629651a249a6639033fe28c6b968ac7"
+  version "5.13.0"
+  resolved "https://codeload.github.com/blueimp/JavaScript-Load-Image/tar.gz/5dcae765fe7638328e22f7378f408160c4528247"
 
 "@bower_components/blueimp-tmpl@blueimp/JavaScript-Templates#>=2.5.4":
   version "3.17.0"
@@ -97,8 +97,8 @@
   resolved "https://codeload.github.com/jquery/jquery-dist/tar.gz/4c0e4becb8263bb5b3e6dadc448d8e7305ef8215"
 
 "@bower_components/lodash@lodash/lodash#*":
-  version "4.17.15"
-  resolved "https://codeload.github.com/lodash/lodash/tar.gz/ddfd9b11a0126db2302cb70ec9973b66baec0975"
+  version "4.17.19"
+  resolved "https://codeload.github.com/lodash/lodash/tar.gz/d7fbc52ee0466a6d248f047b5d5c3e6d1e099056"
 
 "@bower_components/markdown-it@markdown-it/markdown-it#*":
   version "11.0.0"
@@ -142,9 +142,9 @@ blueimp-canvas-to-blob@3:
   integrity sha512-AcIj+hCw6WquxzJuzC6KzgYmqxLFeTWe88KuY2BEIsW1zbEOfoinDAGlhyvFNGt+U3JElkVSK7anA1FaSdmmfA==
 
 blueimp-load-image@5:
-  version "5.12.0"
-  resolved "https://registry.yarnpkg.com/blueimp-load-image/-/blueimp-load-image-5.12.0.tgz#8de7130708575156434f0928dff56d679040e767"
-  integrity sha512-micpPEzy5UR84AehhXJEJhfsOEbapRNgxWBFVIrnG0WYRDwJOLXDbxmypFqeildZHa7MXDgZJe4niyxcgxXzJw==
+  version "5.13.0"
+  resolved "https://registry.yarnpkg.com/blueimp-load-image/-/blueimp-load-image-5.13.0.tgz#685d302a5adaf99d980fadf3d94f70a8e6ab7d30"
+  integrity sha512-CMmLihVqW0AtRGObKIRxYaVUj+2hw2MkeNHoD2JuobpKZFnCCUVCBIeyYkh8xiq3DHIfHfvsp9l0VpM30k3EXQ==
 
 blueimp-tmpl@3:
   version "3.17.0"
