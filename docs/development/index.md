@@ -281,7 +281,12 @@ bundle upgrade
 
 # 5. Update interface files for Sorbet type checking
 #
+bundle exec rake rails_rbi:all
 srb rbi update
+
+# 6. Make sure that the system type checks
+#
+srb tc
 
 # 6. Commit updated rbi files
 
