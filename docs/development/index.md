@@ -300,7 +300,7 @@ docker-compose down -v
 ```bash
 docker-compose up -d
 docker-compose exec app /bin/sh
-yarn update
+yarn upgrade
 docker-compose down -v
 ```
 
