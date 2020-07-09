@@ -33772,6 +33772,126 @@ module ActiveSupport
   def self.version(); end
 end
 
+class Add
+end
+
+class AddBudgetIdToPlan
+end
+
+class AddBudgetToTask
+end
+
+class AddCostToTaskPrototype
+end
+
+class AddDataToItem
+end
+
+class AddDataToSamples
+end
+
+class AddDescriptionToParameters
+end
+
+class AddDescriptionToWizard
+end
+
+class AddDescriptionsToBudgetAndAccount
+end
+
+class AddEmailAndPhoneToBudget
+end
+
+class AddFieldsAndDescriptionToSamples
+end
+
+class AddFolderToPlans
+end
+
+class AddJobIdToBlobs
+end
+
+class AddKeyToUsers
+end
+
+class AddLocatorIdToItem
+end
+
+class AddMessageToMetacols
+end
+
+class AddMetacolToTaskPrototype
+end
+
+class AddNameIndexToOperationType
+end
+
+class AddNotesAndStatusToInvoices
+end
+
+class AddParentIdToFolders
+end
+
+class AddPreferredToFieldType
+end
+
+class AddPrefixToObjectType
+end
+
+class AddRatesToAccount
+end
+
+class AddSampleTypeIdToObjectType
+end
+
+class AddScheduleingToJobs
+end
+
+class AddShaToPostAssocation
+end
+
+class AddStatusOptionsToTaskPrototype
+end
+
+class AddTableToItem
+end
+
+class AddTaskIdAndMetacolIdToTouch
+end
+
+class AddTaskPrototypeIdToTasks
+end
+
+class AddUserIdToFolders
+end
+
+class AddUserIdToParemeters
+end
+
+class AddUserIdToSamples
+end
+
+class AddUserIdToTasks
+end
+
+class AddUserIdToWorkflowThread
+end
+
+class AddUserToCode
+end
+
+class AddValidatorToTaskPrototype
+end
+
+class AddWorfklowIdToWorkflowThread
+end
+
+class AddWorkflowIdToFolderContent
+end
+
+class AddWorkflowProcessIdToJob
+end
+
 module Addressable
 end
 
@@ -34181,6 +34301,9 @@ class Addrinfo
   def connect_internal(local_addrinfo, timeout=T.unsafe(nil)); end
 end
 
+class AdjustAccounts
+end
+
 class AllowableFieldType
   def autosave_associated_records_for_field_type(*args); end
 
@@ -34281,6 +34404,9 @@ module AlphabeticalPaginate::ViewHelpers
 end
 
 module AlphabeticalPaginate
+end
+
+class AlterImageHandlingInObjectType
 end
 
 class Anemone::Engine
@@ -37341,6 +37467,7 @@ end
 
 class Aws::KMS::Types::AliasListEntry
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::AliasListEntry
@@ -37348,6 +37475,7 @@ end
 
 class Aws::KMS::Types::AlreadyExistsException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::AlreadyExistsException
@@ -37355,6 +37483,7 @@ end
 
 class Aws::KMS::Types::CancelKeyDeletionRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::CancelKeyDeletionRequest
@@ -37362,6 +37491,7 @@ end
 
 class Aws::KMS::Types::CancelKeyDeletionResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::CancelKeyDeletionResponse
@@ -37369,6 +37499,7 @@ end
 
 class Aws::KMS::Types::CloudHsmClusterInUseException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::CloudHsmClusterInUseException
@@ -37376,6 +37507,7 @@ end
 
 class Aws::KMS::Types::CloudHsmClusterInvalidConfigurationException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::CloudHsmClusterInvalidConfigurationException
@@ -37383,6 +37515,7 @@ end
 
 class Aws::KMS::Types::CloudHsmClusterNotActiveException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::CloudHsmClusterNotActiveException
@@ -37390,6 +37523,7 @@ end
 
 class Aws::KMS::Types::CloudHsmClusterNotFoundException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::CloudHsmClusterNotFoundException
@@ -37397,6 +37531,7 @@ end
 
 class Aws::KMS::Types::CloudHsmClusterNotRelatedException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::CloudHsmClusterNotRelatedException
@@ -37404,6 +37539,7 @@ end
 
 class Aws::KMS::Types::ConnectCustomKeyStoreRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::ConnectCustomKeyStoreRequest
@@ -37417,6 +37553,7 @@ end
 
 class Aws::KMS::Types::CreateAliasRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::CreateAliasRequest
@@ -37424,6 +37561,7 @@ end
 
 class Aws::KMS::Types::CreateCustomKeyStoreRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::CreateCustomKeyStoreRequest
@@ -37431,6 +37569,7 @@ end
 
 class Aws::KMS::Types::CreateCustomKeyStoreResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::CreateCustomKeyStoreResponse
@@ -37438,6 +37577,7 @@ end
 
 class Aws::KMS::Types::CreateGrantRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::CreateGrantRequest
@@ -37445,6 +37585,7 @@ end
 
 class Aws::KMS::Types::CreateGrantResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::CreateGrantResponse
@@ -37452,6 +37593,7 @@ end
 
 class Aws::KMS::Types::CreateKeyRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::CreateKeyRequest
@@ -37459,6 +37601,7 @@ end
 
 class Aws::KMS::Types::CreateKeyResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::CreateKeyResponse
@@ -37466,6 +37609,7 @@ end
 
 class Aws::KMS::Types::CustomKeyStoreHasCMKsException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::CustomKeyStoreHasCMKsException
@@ -37473,6 +37617,7 @@ end
 
 class Aws::KMS::Types::CustomKeyStoreInvalidStateException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::CustomKeyStoreInvalidStateException
@@ -37480,6 +37625,7 @@ end
 
 class Aws::KMS::Types::CustomKeyStoreNameInUseException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::CustomKeyStoreNameInUseException
@@ -37487,6 +37633,7 @@ end
 
 class Aws::KMS::Types::CustomKeyStoreNotFoundException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::CustomKeyStoreNotFoundException
@@ -37494,6 +37641,7 @@ end
 
 class Aws::KMS::Types::CustomKeyStoresListEntry
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::CustomKeyStoresListEntry
@@ -37501,6 +37649,7 @@ end
 
 class Aws::KMS::Types::DecryptRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::DecryptRequest
@@ -37508,6 +37657,7 @@ end
 
 class Aws::KMS::Types::DecryptResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::DecryptResponse
@@ -37515,6 +37665,7 @@ end
 
 class Aws::KMS::Types::DeleteAliasRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::DeleteAliasRequest
@@ -37522,6 +37673,7 @@ end
 
 class Aws::KMS::Types::DeleteCustomKeyStoreRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::DeleteCustomKeyStoreRequest
@@ -37535,6 +37687,7 @@ end
 
 class Aws::KMS::Types::DeleteImportedKeyMaterialRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::DeleteImportedKeyMaterialRequest
@@ -37542,6 +37695,7 @@ end
 
 class Aws::KMS::Types::DependencyTimeoutException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::DependencyTimeoutException
@@ -37549,6 +37703,7 @@ end
 
 class Aws::KMS::Types::DescribeCustomKeyStoresRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::DescribeCustomKeyStoresRequest
@@ -37556,6 +37711,7 @@ end
 
 class Aws::KMS::Types::DescribeCustomKeyStoresResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::DescribeCustomKeyStoresResponse
@@ -37563,6 +37719,7 @@ end
 
 class Aws::KMS::Types::DescribeKeyRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::DescribeKeyRequest
@@ -37570,6 +37727,7 @@ end
 
 class Aws::KMS::Types::DescribeKeyResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::DescribeKeyResponse
@@ -37577,6 +37735,7 @@ end
 
 class Aws::KMS::Types::DisableKeyRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::DisableKeyRequest
@@ -37584,6 +37743,7 @@ end
 
 class Aws::KMS::Types::DisableKeyRotationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::DisableKeyRotationRequest
@@ -37591,6 +37751,7 @@ end
 
 class Aws::KMS::Types::DisabledException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::DisabledException
@@ -37598,6 +37759,7 @@ end
 
 class Aws::KMS::Types::DisconnectCustomKeyStoreRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::DisconnectCustomKeyStoreRequest
@@ -37611,6 +37773,7 @@ end
 
 class Aws::KMS::Types::EnableKeyRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::EnableKeyRequest
@@ -37618,6 +37781,7 @@ end
 
 class Aws::KMS::Types::EnableKeyRotationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::EnableKeyRotationRequest
@@ -37625,6 +37789,7 @@ end
 
 class Aws::KMS::Types::EncryptRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::EncryptRequest
@@ -37632,6 +37797,7 @@ end
 
 class Aws::KMS::Types::EncryptResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::EncryptResponse
@@ -37639,6 +37805,7 @@ end
 
 class Aws::KMS::Types::ExpiredImportTokenException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::ExpiredImportTokenException
@@ -37646,6 +37813,7 @@ end
 
 class Aws::KMS::Types::GenerateDataKeyPairRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::GenerateDataKeyPairRequest
@@ -37653,6 +37821,7 @@ end
 
 class Aws::KMS::Types::GenerateDataKeyPairResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::GenerateDataKeyPairResponse
@@ -37660,6 +37829,7 @@ end
 
 class Aws::KMS::Types::GenerateDataKeyPairWithoutPlaintextRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::GenerateDataKeyPairWithoutPlaintextRequest
@@ -37667,6 +37837,7 @@ end
 
 class Aws::KMS::Types::GenerateDataKeyPairWithoutPlaintextResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::GenerateDataKeyPairWithoutPlaintextResponse
@@ -37674,6 +37845,7 @@ end
 
 class Aws::KMS::Types::GenerateDataKeyRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::GenerateDataKeyRequest
@@ -37681,6 +37853,7 @@ end
 
 class Aws::KMS::Types::GenerateDataKeyResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::GenerateDataKeyResponse
@@ -37688,6 +37861,7 @@ end
 
 class Aws::KMS::Types::GenerateDataKeyWithoutPlaintextRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::GenerateDataKeyWithoutPlaintextRequest
@@ -37695,6 +37869,7 @@ end
 
 class Aws::KMS::Types::GenerateDataKeyWithoutPlaintextResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::GenerateDataKeyWithoutPlaintextResponse
@@ -37702,6 +37877,7 @@ end
 
 class Aws::KMS::Types::GenerateRandomRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::GenerateRandomRequest
@@ -37709,6 +37885,7 @@ end
 
 class Aws::KMS::Types::GenerateRandomResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::GenerateRandomResponse
@@ -37716,6 +37893,7 @@ end
 
 class Aws::KMS::Types::GetKeyPolicyRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::GetKeyPolicyRequest
@@ -37723,6 +37901,7 @@ end
 
 class Aws::KMS::Types::GetKeyPolicyResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::GetKeyPolicyResponse
@@ -37730,6 +37909,7 @@ end
 
 class Aws::KMS::Types::GetKeyRotationStatusRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::GetKeyRotationStatusRequest
@@ -37737,6 +37917,7 @@ end
 
 class Aws::KMS::Types::GetKeyRotationStatusResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::GetKeyRotationStatusResponse
@@ -37744,6 +37925,7 @@ end
 
 class Aws::KMS::Types::GetParametersForImportRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::GetParametersForImportRequest
@@ -37751,6 +37933,7 @@ end
 
 class Aws::KMS::Types::GetParametersForImportResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::GetParametersForImportResponse
@@ -37758,6 +37941,7 @@ end
 
 class Aws::KMS::Types::GetPublicKeyRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::GetPublicKeyRequest
@@ -37765,6 +37949,7 @@ end
 
 class Aws::KMS::Types::GetPublicKeyResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::GetPublicKeyResponse
@@ -37772,6 +37957,7 @@ end
 
 class Aws::KMS::Types::GrantConstraints
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::GrantConstraints
@@ -37779,6 +37965,7 @@ end
 
 class Aws::KMS::Types::GrantListEntry
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::GrantListEntry
@@ -37786,6 +37973,7 @@ end
 
 class Aws::KMS::Types::ImportKeyMaterialRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::ImportKeyMaterialRequest
@@ -37799,6 +37987,7 @@ end
 
 class Aws::KMS::Types::IncorrectKeyException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::IncorrectKeyException
@@ -37806,6 +37995,7 @@ end
 
 class Aws::KMS::Types::IncorrectKeyMaterialException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::IncorrectKeyMaterialException
@@ -37813,6 +38003,7 @@ end
 
 class Aws::KMS::Types::IncorrectTrustAnchorException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::IncorrectTrustAnchorException
@@ -37820,6 +38011,7 @@ end
 
 class Aws::KMS::Types::InvalidAliasNameException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::InvalidAliasNameException
@@ -37827,6 +38019,7 @@ end
 
 class Aws::KMS::Types::InvalidArnException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::InvalidArnException
@@ -37834,6 +38027,7 @@ end
 
 class Aws::KMS::Types::InvalidCiphertextException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::InvalidCiphertextException
@@ -37841,6 +38035,7 @@ end
 
 class Aws::KMS::Types::InvalidGrantIdException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::InvalidGrantIdException
@@ -37848,6 +38043,7 @@ end
 
 class Aws::KMS::Types::InvalidGrantTokenException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::InvalidGrantTokenException
@@ -37855,6 +38051,7 @@ end
 
 class Aws::KMS::Types::InvalidImportTokenException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::InvalidImportTokenException
@@ -37862,6 +38059,7 @@ end
 
 class Aws::KMS::Types::InvalidKeyUsageException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::InvalidKeyUsageException
@@ -37869,6 +38067,7 @@ end
 
 class Aws::KMS::Types::InvalidMarkerException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::InvalidMarkerException
@@ -37876,6 +38075,7 @@ end
 
 class Aws::KMS::Types::KMSInternalException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::KMSInternalException
@@ -37883,6 +38083,7 @@ end
 
 class Aws::KMS::Types::KMSInvalidSignatureException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::KMSInvalidSignatureException
@@ -37890,6 +38091,7 @@ end
 
 class Aws::KMS::Types::KMSInvalidStateException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::KMSInvalidStateException
@@ -37897,6 +38099,7 @@ end
 
 class Aws::KMS::Types::KeyListEntry
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::KeyListEntry
@@ -37904,6 +38107,7 @@ end
 
 class Aws::KMS::Types::KeyMetadata
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::KeyMetadata
@@ -37911,6 +38115,7 @@ end
 
 class Aws::KMS::Types::KeyUnavailableException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::KeyUnavailableException
@@ -37918,6 +38123,7 @@ end
 
 class Aws::KMS::Types::LimitExceededException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::LimitExceededException
@@ -37925,6 +38131,7 @@ end
 
 class Aws::KMS::Types::ListAliasesRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::ListAliasesRequest
@@ -37932,6 +38139,7 @@ end
 
 class Aws::KMS::Types::ListAliasesResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::ListAliasesResponse
@@ -37939,6 +38147,7 @@ end
 
 class Aws::KMS::Types::ListGrantsRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::ListGrantsRequest
@@ -37946,6 +38155,7 @@ end
 
 class Aws::KMS::Types::ListGrantsResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::ListGrantsResponse
@@ -37953,6 +38163,7 @@ end
 
 class Aws::KMS::Types::ListKeyPoliciesRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::ListKeyPoliciesRequest
@@ -37960,6 +38171,7 @@ end
 
 class Aws::KMS::Types::ListKeyPoliciesResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::ListKeyPoliciesResponse
@@ -37967,6 +38179,7 @@ end
 
 class Aws::KMS::Types::ListKeysRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::ListKeysRequest
@@ -37974,6 +38187,7 @@ end
 
 class Aws::KMS::Types::ListKeysResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::ListKeysResponse
@@ -37981,6 +38195,7 @@ end
 
 class Aws::KMS::Types::ListResourceTagsRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::ListResourceTagsRequest
@@ -37988,6 +38203,7 @@ end
 
 class Aws::KMS::Types::ListResourceTagsResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::ListResourceTagsResponse
@@ -37995,6 +38211,7 @@ end
 
 class Aws::KMS::Types::ListRetirableGrantsRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::ListRetirableGrantsRequest
@@ -38002,6 +38219,7 @@ end
 
 class Aws::KMS::Types::MalformedPolicyDocumentException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::MalformedPolicyDocumentException
@@ -38009,6 +38227,7 @@ end
 
 class Aws::KMS::Types::NotFoundException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::NotFoundException
@@ -38016,6 +38235,7 @@ end
 
 class Aws::KMS::Types::PutKeyPolicyRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::PutKeyPolicyRequest
@@ -38023,6 +38243,7 @@ end
 
 class Aws::KMS::Types::ReEncryptRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::ReEncryptRequest
@@ -38030,6 +38251,7 @@ end
 
 class Aws::KMS::Types::ReEncryptResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::ReEncryptResponse
@@ -38037,6 +38259,7 @@ end
 
 class Aws::KMS::Types::RetireGrantRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::RetireGrantRequest
@@ -38044,6 +38267,7 @@ end
 
 class Aws::KMS::Types::RevokeGrantRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::RevokeGrantRequest
@@ -38051,6 +38275,7 @@ end
 
 class Aws::KMS::Types::ScheduleKeyDeletionRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::ScheduleKeyDeletionRequest
@@ -38058,6 +38283,7 @@ end
 
 class Aws::KMS::Types::ScheduleKeyDeletionResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::ScheduleKeyDeletionResponse
@@ -38065,6 +38291,7 @@ end
 
 class Aws::KMS::Types::SignRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::SignRequest
@@ -38072,6 +38299,7 @@ end
 
 class Aws::KMS::Types::SignResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::SignResponse
@@ -38079,6 +38307,7 @@ end
 
 class Aws::KMS::Types::Tag
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::Tag
@@ -38086,6 +38315,7 @@ end
 
 class Aws::KMS::Types::TagException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::TagException
@@ -38093,6 +38323,7 @@ end
 
 class Aws::KMS::Types::TagResourceRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::TagResourceRequest
@@ -38100,6 +38331,7 @@ end
 
 class Aws::KMS::Types::UnsupportedOperationException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::UnsupportedOperationException
@@ -38107,6 +38339,7 @@ end
 
 class Aws::KMS::Types::UntagResourceRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::UntagResourceRequest
@@ -38114,6 +38347,7 @@ end
 
 class Aws::KMS::Types::UpdateAliasRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::UpdateAliasRequest
@@ -38121,6 +38355,7 @@ end
 
 class Aws::KMS::Types::UpdateCustomKeyStoreRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::UpdateCustomKeyStoreRequest
@@ -38134,6 +38369,7 @@ end
 
 class Aws::KMS::Types::UpdateKeyDescriptionRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::UpdateKeyDescriptionRequest
@@ -38141,6 +38377,7 @@ end
 
 class Aws::KMS::Types::VerifyRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::VerifyRequest
@@ -38148,6 +38385,7 @@ end
 
 class Aws::KMS::Types::VerifyResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::KMS::Types::VerifyResponse
@@ -38181,7 +38419,7 @@ class Aws::Log::Formatter
 end
 
 class Aws::Log::ParamFilter
-  def filter(value); end
+  def filter(values, type); end
 
   def initialize(options=T.unsafe(nil)); end
   SENSITIVE = ::T.let(nil, ::T.untyped)
@@ -40597,9 +40835,9 @@ class Aws::S3::EncryptionV2::DecryptHandler
 end
 
 class Aws::S3::EncryptionV2::DefaultCipherProvider
-  def decryption_cipher(envelope); end
+  def decryption_cipher(envelope, options=T.unsafe(nil)); end
 
-  def encryption_cipher(); end
+  def encryption_cipher(options=T.unsafe(nil)); end
 
   def initialize(options=T.unsafe(nil)); end
 end
@@ -40691,9 +40929,9 @@ module Aws::S3::EncryptionV2::KeyProvider
 end
 
 class Aws::S3::EncryptionV2::KmsCipherProvider
-  def decryption_cipher(envelope); end
+  def decryption_cipher(envelope, options=T.unsafe(nil)); end
 
-  def encryption_cipher(); end
+  def encryption_cipher(options=T.unsafe(nil)); end
 
   def initialize(options=T.unsafe(nil)); end
 end
@@ -41633,6 +41871,46 @@ end
 class Aws::S3::Plugins::Redirects
 end
 
+class Aws::S3::Plugins::RetryableBlockIO
+  def initialize(block_io); end
+
+  def read(*args, &block); end
+
+  def rewind(); end
+
+  def size(*args, &block); end
+
+  def truncate(_integer); end
+
+  def write(*args, &block); end
+end
+
+class Aws::S3::Plugins::RetryableBlockIO
+  extend ::Forwardable
+end
+
+class Aws::S3::Plugins::RetryableManagedFile
+  def close(*args, &block); end
+
+  def initialize(managed_file); end
+
+  def open?(*args, &block); end
+
+  def read(*args, &block); end
+
+  def rewind(); end
+
+  def size(*args, &block); end
+
+  def truncate(_integer); end
+
+  def write(*args, &block); end
+end
+
+class Aws::S3::Plugins::RetryableManagedFile
+  extend ::Forwardable
+end
+
 class Aws::S3::Plugins::S3HostId
 end
 
@@ -41693,6 +41971,18 @@ class Aws::S3::Plugins::SseCpk::Handler
 end
 
 class Aws::S3::Plugins::SseCpk
+end
+
+class Aws::S3::Plugins::StreamingRetry
+end
+
+class Aws::S3::Plugins::StreamingRetry::Handler
+end
+
+class Aws::S3::Plugins::StreamingRetry::Handler
+end
+
+class Aws::S3::Plugins::StreamingRetry
 end
 
 class Aws::S3::Plugins::UrlEncodedKeys
@@ -41812,6 +42102,7 @@ end
 
 class Aws::S3::Types::AbortIncompleteMultipartUpload
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::AbortIncompleteMultipartUpload
@@ -41819,6 +42110,7 @@ end
 
 class Aws::S3::Types::AbortMultipartUploadOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::AbortMultipartUploadOutput
@@ -41826,6 +42118,7 @@ end
 
 class Aws::S3::Types::AbortMultipartUploadRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::AbortMultipartUploadRequest
@@ -41833,6 +42126,7 @@ end
 
 class Aws::S3::Types::AccelerateConfiguration
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::AccelerateConfiguration
@@ -41840,6 +42134,7 @@ end
 
 class Aws::S3::Types::AccessControlPolicy
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::AccessControlPolicy
@@ -41847,6 +42142,7 @@ end
 
 class Aws::S3::Types::AccessControlTranslation
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::AccessControlTranslation
@@ -41854,6 +42150,7 @@ end
 
 class Aws::S3::Types::AnalyticsAndOperator
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::AnalyticsAndOperator
@@ -41861,6 +42158,7 @@ end
 
 class Aws::S3::Types::AnalyticsConfiguration
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::AnalyticsConfiguration
@@ -41868,6 +42166,7 @@ end
 
 class Aws::S3::Types::AnalyticsExportDestination
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::AnalyticsExportDestination
@@ -41875,6 +42174,7 @@ end
 
 class Aws::S3::Types::AnalyticsFilter
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::AnalyticsFilter
@@ -41882,6 +42182,7 @@ end
 
 class Aws::S3::Types::AnalyticsS3BucketDestination
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::AnalyticsS3BucketDestination
@@ -41889,6 +42190,7 @@ end
 
 class Aws::S3::Types::Bucket
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::Bucket
@@ -41908,6 +42210,7 @@ end
 
 class Aws::S3::Types::BucketLifecycleConfiguration
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::BucketLifecycleConfiguration
@@ -41915,6 +42218,7 @@ end
 
 class Aws::S3::Types::BucketLoggingStatus
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::BucketLoggingStatus
@@ -41922,6 +42226,7 @@ end
 
 class Aws::S3::Types::CORSConfiguration
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::CORSConfiguration
@@ -41929,6 +42234,7 @@ end
 
 class Aws::S3::Types::CORSRule
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::CORSRule
@@ -41936,6 +42242,7 @@ end
 
 class Aws::S3::Types::CSVInput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::CSVInput
@@ -41943,6 +42250,7 @@ end
 
 class Aws::S3::Types::CSVOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::CSVOutput
@@ -41950,6 +42258,7 @@ end
 
 class Aws::S3::Types::CloudFunctionConfiguration
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::CloudFunctionConfiguration
@@ -41957,6 +42266,7 @@ end
 
 class Aws::S3::Types::CommonPrefix
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::CommonPrefix
@@ -41964,6 +42274,7 @@ end
 
 class Aws::S3::Types::CompleteMultipartUploadOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::CompleteMultipartUploadOutput
@@ -41971,6 +42282,7 @@ end
 
 class Aws::S3::Types::CompleteMultipartUploadRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::CompleteMultipartUploadRequest
@@ -41978,6 +42290,7 @@ end
 
 class Aws::S3::Types::CompletedMultipartUpload
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::CompletedMultipartUpload
@@ -41985,6 +42298,7 @@ end
 
 class Aws::S3::Types::CompletedPart
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::CompletedPart
@@ -41992,6 +42306,7 @@ end
 
 class Aws::S3::Types::Condition
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::Condition
@@ -41999,6 +42314,7 @@ end
 
 class Aws::S3::Types::ContinuationEvent
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ContinuationEvent
@@ -42006,6 +42322,7 @@ end
 
 class Aws::S3::Types::CopyObjectOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::CopyObjectOutput
@@ -42013,6 +42330,7 @@ end
 
 class Aws::S3::Types::CopyObjectRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::CopyObjectRequest
@@ -42020,6 +42338,7 @@ end
 
 class Aws::S3::Types::CopyObjectResult
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::CopyObjectResult
@@ -42027,6 +42346,7 @@ end
 
 class Aws::S3::Types::CopyPartResult
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::CopyPartResult
@@ -42034,6 +42354,7 @@ end
 
 class Aws::S3::Types::CreateBucketConfiguration
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::CreateBucketConfiguration
@@ -42041,6 +42362,7 @@ end
 
 class Aws::S3::Types::CreateBucketOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::CreateBucketOutput
@@ -42048,6 +42370,7 @@ end
 
 class Aws::S3::Types::CreateBucketRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::CreateBucketRequest
@@ -42055,6 +42378,7 @@ end
 
 class Aws::S3::Types::CreateMultipartUploadOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::CreateMultipartUploadOutput
@@ -42062,6 +42386,7 @@ end
 
 class Aws::S3::Types::CreateMultipartUploadRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::CreateMultipartUploadRequest
@@ -42069,6 +42394,7 @@ end
 
 class Aws::S3::Types::DefaultRetention
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::DefaultRetention
@@ -42076,6 +42402,7 @@ end
 
 class Aws::S3::Types::Delete
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::Delete
@@ -42083,6 +42410,7 @@ end
 
 class Aws::S3::Types::DeleteBucketAnalyticsConfigurationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::DeleteBucketAnalyticsConfigurationRequest
@@ -42090,6 +42418,7 @@ end
 
 class Aws::S3::Types::DeleteBucketCorsRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::DeleteBucketCorsRequest
@@ -42097,6 +42426,7 @@ end
 
 class Aws::S3::Types::DeleteBucketEncryptionRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::DeleteBucketEncryptionRequest
@@ -42104,6 +42434,7 @@ end
 
 class Aws::S3::Types::DeleteBucketInventoryConfigurationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::DeleteBucketInventoryConfigurationRequest
@@ -42111,6 +42442,7 @@ end
 
 class Aws::S3::Types::DeleteBucketLifecycleRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::DeleteBucketLifecycleRequest
@@ -42118,6 +42450,7 @@ end
 
 class Aws::S3::Types::DeleteBucketMetricsConfigurationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::DeleteBucketMetricsConfigurationRequest
@@ -42125,6 +42458,7 @@ end
 
 class Aws::S3::Types::DeleteBucketPolicyRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::DeleteBucketPolicyRequest
@@ -42132,6 +42466,7 @@ end
 
 class Aws::S3::Types::DeleteBucketReplicationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::DeleteBucketReplicationRequest
@@ -42139,6 +42474,7 @@ end
 
 class Aws::S3::Types::DeleteBucketRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::DeleteBucketRequest
@@ -42146,6 +42482,7 @@ end
 
 class Aws::S3::Types::DeleteBucketTaggingRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::DeleteBucketTaggingRequest
@@ -42153,6 +42490,7 @@ end
 
 class Aws::S3::Types::DeleteBucketWebsiteRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::DeleteBucketWebsiteRequest
@@ -42160,6 +42498,7 @@ end
 
 class Aws::S3::Types::DeleteMarkerEntry
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::DeleteMarkerEntry
@@ -42167,6 +42506,7 @@ end
 
 class Aws::S3::Types::DeleteMarkerReplication
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::DeleteMarkerReplication
@@ -42174,6 +42514,7 @@ end
 
 class Aws::S3::Types::DeleteObjectOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::DeleteObjectOutput
@@ -42181,6 +42522,7 @@ end
 
 class Aws::S3::Types::DeleteObjectRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::DeleteObjectRequest
@@ -42188,6 +42530,7 @@ end
 
 class Aws::S3::Types::DeleteObjectTaggingOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::DeleteObjectTaggingOutput
@@ -42195,6 +42538,7 @@ end
 
 class Aws::S3::Types::DeleteObjectTaggingRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::DeleteObjectTaggingRequest
@@ -42202,6 +42546,7 @@ end
 
 class Aws::S3::Types::DeleteObjectsOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::DeleteObjectsOutput
@@ -42209,6 +42554,7 @@ end
 
 class Aws::S3::Types::DeleteObjectsRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::DeleteObjectsRequest
@@ -42216,6 +42562,7 @@ end
 
 class Aws::S3::Types::DeletePublicAccessBlockRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::DeletePublicAccessBlockRequest
@@ -42223,6 +42570,7 @@ end
 
 class Aws::S3::Types::DeletedObject
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::DeletedObject
@@ -42230,6 +42578,7 @@ end
 
 class Aws::S3::Types::Destination
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::Destination
@@ -42237,6 +42586,7 @@ end
 
 class Aws::S3::Types::Encryption
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::Encryption
@@ -42244,6 +42594,7 @@ end
 
 class Aws::S3::Types::EncryptionConfiguration
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::EncryptionConfiguration
@@ -42251,6 +42602,7 @@ end
 
 class Aws::S3::Types::EndEvent
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::EndEvent
@@ -42258,6 +42610,7 @@ end
 
 class Aws::S3::Types::Error
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::Error
@@ -42265,6 +42618,7 @@ end
 
 class Aws::S3::Types::ErrorDocument
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ErrorDocument
@@ -42272,6 +42626,7 @@ end
 
 class Aws::S3::Types::ExistingObjectReplication
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ExistingObjectReplication
@@ -42279,6 +42634,7 @@ end
 
 class Aws::S3::Types::FilterRule
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::FilterRule
@@ -42286,6 +42642,7 @@ end
 
 class Aws::S3::Types::GetBucketAccelerateConfigurationOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketAccelerateConfigurationOutput
@@ -42293,6 +42650,7 @@ end
 
 class Aws::S3::Types::GetBucketAccelerateConfigurationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketAccelerateConfigurationRequest
@@ -42300,6 +42658,7 @@ end
 
 class Aws::S3::Types::GetBucketAclOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketAclOutput
@@ -42307,6 +42666,7 @@ end
 
 class Aws::S3::Types::GetBucketAclRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketAclRequest
@@ -42314,6 +42674,7 @@ end
 
 class Aws::S3::Types::GetBucketAnalyticsConfigurationOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketAnalyticsConfigurationOutput
@@ -42321,6 +42682,7 @@ end
 
 class Aws::S3::Types::GetBucketAnalyticsConfigurationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketAnalyticsConfigurationRequest
@@ -42328,6 +42690,7 @@ end
 
 class Aws::S3::Types::GetBucketCorsOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketCorsOutput
@@ -42335,6 +42698,7 @@ end
 
 class Aws::S3::Types::GetBucketCorsRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketCorsRequest
@@ -42342,6 +42706,7 @@ end
 
 class Aws::S3::Types::GetBucketEncryptionOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketEncryptionOutput
@@ -42349,6 +42714,7 @@ end
 
 class Aws::S3::Types::GetBucketEncryptionRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketEncryptionRequest
@@ -42356,6 +42722,7 @@ end
 
 class Aws::S3::Types::GetBucketInventoryConfigurationOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketInventoryConfigurationOutput
@@ -42363,6 +42730,7 @@ end
 
 class Aws::S3::Types::GetBucketInventoryConfigurationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketInventoryConfigurationRequest
@@ -42370,6 +42738,7 @@ end
 
 class Aws::S3::Types::GetBucketLifecycleConfigurationOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketLifecycleConfigurationOutput
@@ -42377,6 +42746,7 @@ end
 
 class Aws::S3::Types::GetBucketLifecycleConfigurationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketLifecycleConfigurationRequest
@@ -42384,6 +42754,7 @@ end
 
 class Aws::S3::Types::GetBucketLifecycleOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketLifecycleOutput
@@ -42391,6 +42762,7 @@ end
 
 class Aws::S3::Types::GetBucketLifecycleRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketLifecycleRequest
@@ -42398,6 +42770,7 @@ end
 
 class Aws::S3::Types::GetBucketLocationOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketLocationOutput
@@ -42405,6 +42778,7 @@ end
 
 class Aws::S3::Types::GetBucketLocationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketLocationRequest
@@ -42412,6 +42786,7 @@ end
 
 class Aws::S3::Types::GetBucketLoggingOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketLoggingOutput
@@ -42419,6 +42794,7 @@ end
 
 class Aws::S3::Types::GetBucketLoggingRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketLoggingRequest
@@ -42426,6 +42802,7 @@ end
 
 class Aws::S3::Types::GetBucketMetricsConfigurationOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketMetricsConfigurationOutput
@@ -42433,6 +42810,7 @@ end
 
 class Aws::S3::Types::GetBucketMetricsConfigurationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketMetricsConfigurationRequest
@@ -42440,6 +42818,7 @@ end
 
 class Aws::S3::Types::GetBucketNotificationConfigurationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketNotificationConfigurationRequest
@@ -42447,6 +42826,7 @@ end
 
 class Aws::S3::Types::GetBucketPolicyOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketPolicyOutput
@@ -42454,6 +42834,7 @@ end
 
 class Aws::S3::Types::GetBucketPolicyRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketPolicyRequest
@@ -42461,6 +42842,7 @@ end
 
 class Aws::S3::Types::GetBucketPolicyStatusOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketPolicyStatusOutput
@@ -42468,6 +42850,7 @@ end
 
 class Aws::S3::Types::GetBucketPolicyStatusRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketPolicyStatusRequest
@@ -42475,6 +42858,7 @@ end
 
 class Aws::S3::Types::GetBucketReplicationOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketReplicationOutput
@@ -42482,6 +42866,7 @@ end
 
 class Aws::S3::Types::GetBucketReplicationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketReplicationRequest
@@ -42489,6 +42874,7 @@ end
 
 class Aws::S3::Types::GetBucketRequestPaymentOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketRequestPaymentOutput
@@ -42496,6 +42882,7 @@ end
 
 class Aws::S3::Types::GetBucketRequestPaymentRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketRequestPaymentRequest
@@ -42503,6 +42890,7 @@ end
 
 class Aws::S3::Types::GetBucketTaggingOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketTaggingOutput
@@ -42510,6 +42898,7 @@ end
 
 class Aws::S3::Types::GetBucketTaggingRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketTaggingRequest
@@ -42517,6 +42906,7 @@ end
 
 class Aws::S3::Types::GetBucketVersioningOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketVersioningOutput
@@ -42524,6 +42914,7 @@ end
 
 class Aws::S3::Types::GetBucketVersioningRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketVersioningRequest
@@ -42531,6 +42922,7 @@ end
 
 class Aws::S3::Types::GetBucketWebsiteOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketWebsiteOutput
@@ -42538,6 +42930,7 @@ end
 
 class Aws::S3::Types::GetBucketWebsiteRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetBucketWebsiteRequest
@@ -42545,6 +42938,7 @@ end
 
 class Aws::S3::Types::GetObjectAclOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetObjectAclOutput
@@ -42552,6 +42946,7 @@ end
 
 class Aws::S3::Types::GetObjectAclRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetObjectAclRequest
@@ -42559,6 +42954,7 @@ end
 
 class Aws::S3::Types::GetObjectLegalHoldOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetObjectLegalHoldOutput
@@ -42566,6 +42962,7 @@ end
 
 class Aws::S3::Types::GetObjectLegalHoldRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetObjectLegalHoldRequest
@@ -42573,6 +42970,7 @@ end
 
 class Aws::S3::Types::GetObjectLockConfigurationOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetObjectLockConfigurationOutput
@@ -42580,6 +42978,7 @@ end
 
 class Aws::S3::Types::GetObjectLockConfigurationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetObjectLockConfigurationRequest
@@ -42587,6 +42986,7 @@ end
 
 class Aws::S3::Types::GetObjectOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetObjectOutput
@@ -42594,6 +42994,7 @@ end
 
 class Aws::S3::Types::GetObjectRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetObjectRequest
@@ -42601,6 +43002,7 @@ end
 
 class Aws::S3::Types::GetObjectRetentionOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetObjectRetentionOutput
@@ -42608,6 +43010,7 @@ end
 
 class Aws::S3::Types::GetObjectRetentionRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetObjectRetentionRequest
@@ -42615,6 +43018,7 @@ end
 
 class Aws::S3::Types::GetObjectTaggingOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetObjectTaggingOutput
@@ -42622,6 +43026,7 @@ end
 
 class Aws::S3::Types::GetObjectTaggingRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetObjectTaggingRequest
@@ -42629,6 +43034,7 @@ end
 
 class Aws::S3::Types::GetObjectTorrentOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetObjectTorrentOutput
@@ -42636,6 +43042,7 @@ end
 
 class Aws::S3::Types::GetObjectTorrentRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetObjectTorrentRequest
@@ -42643,6 +43050,7 @@ end
 
 class Aws::S3::Types::GetPublicAccessBlockOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetPublicAccessBlockOutput
@@ -42650,6 +43058,7 @@ end
 
 class Aws::S3::Types::GetPublicAccessBlockRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GetPublicAccessBlockRequest
@@ -42657,6 +43066,7 @@ end
 
 class Aws::S3::Types::GlacierJobParameters
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::GlacierJobParameters
@@ -42664,6 +43074,7 @@ end
 
 class Aws::S3::Types::Grant
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::Grant
@@ -42671,6 +43082,7 @@ end
 
 class Aws::S3::Types::Grantee
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::Grantee
@@ -42678,6 +43090,7 @@ end
 
 class Aws::S3::Types::HeadBucketRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::HeadBucketRequest
@@ -42685,6 +43098,7 @@ end
 
 class Aws::S3::Types::HeadObjectOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::HeadObjectOutput
@@ -42692,6 +43106,7 @@ end
 
 class Aws::S3::Types::HeadObjectRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::HeadObjectRequest
@@ -42699,6 +43114,7 @@ end
 
 class Aws::S3::Types::IndexDocument
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::IndexDocument
@@ -42706,6 +43122,7 @@ end
 
 class Aws::S3::Types::Initiator
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::Initiator
@@ -42713,6 +43130,7 @@ end
 
 class Aws::S3::Types::InputSerialization
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::InputSerialization
@@ -42720,6 +43138,7 @@ end
 
 class Aws::S3::Types::InventoryConfiguration
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::InventoryConfiguration
@@ -42727,6 +43146,7 @@ end
 
 class Aws::S3::Types::InventoryDestination
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::InventoryDestination
@@ -42734,6 +43154,7 @@ end
 
 class Aws::S3::Types::InventoryEncryption
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::InventoryEncryption
@@ -42741,6 +43162,7 @@ end
 
 class Aws::S3::Types::InventoryFilter
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::InventoryFilter
@@ -42748,6 +43170,7 @@ end
 
 class Aws::S3::Types::InventoryS3BucketDestination
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::InventoryS3BucketDestination
@@ -42755,6 +43178,7 @@ end
 
 class Aws::S3::Types::InventorySchedule
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::InventorySchedule
@@ -42762,6 +43186,7 @@ end
 
 class Aws::S3::Types::JSONInput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::JSONInput
@@ -42769,6 +43194,7 @@ end
 
 class Aws::S3::Types::JSONOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::JSONOutput
@@ -42776,6 +43202,7 @@ end
 
 class Aws::S3::Types::LambdaFunctionConfiguration
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::LambdaFunctionConfiguration
@@ -42783,6 +43210,7 @@ end
 
 class Aws::S3::Types::LifecycleConfiguration
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::LifecycleConfiguration
@@ -42790,6 +43218,7 @@ end
 
 class Aws::S3::Types::LifecycleExpiration
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::LifecycleExpiration
@@ -42797,6 +43226,7 @@ end
 
 class Aws::S3::Types::LifecycleRule
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::LifecycleRule
@@ -42804,6 +43234,7 @@ end
 
 class Aws::S3::Types::LifecycleRuleAndOperator
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::LifecycleRuleAndOperator
@@ -42811,6 +43242,7 @@ end
 
 class Aws::S3::Types::LifecycleRuleFilter
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::LifecycleRuleFilter
@@ -42818,6 +43250,7 @@ end
 
 class Aws::S3::Types::ListBucketAnalyticsConfigurationsOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ListBucketAnalyticsConfigurationsOutput
@@ -42825,6 +43258,7 @@ end
 
 class Aws::S3::Types::ListBucketAnalyticsConfigurationsRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ListBucketAnalyticsConfigurationsRequest
@@ -42832,6 +43266,7 @@ end
 
 class Aws::S3::Types::ListBucketInventoryConfigurationsOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ListBucketInventoryConfigurationsOutput
@@ -42839,6 +43274,7 @@ end
 
 class Aws::S3::Types::ListBucketInventoryConfigurationsRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ListBucketInventoryConfigurationsRequest
@@ -42846,6 +43282,7 @@ end
 
 class Aws::S3::Types::ListBucketMetricsConfigurationsOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ListBucketMetricsConfigurationsOutput
@@ -42853,6 +43290,7 @@ end
 
 class Aws::S3::Types::ListBucketMetricsConfigurationsRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ListBucketMetricsConfigurationsRequest
@@ -42860,6 +43298,7 @@ end
 
 class Aws::S3::Types::ListBucketsOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ListBucketsOutput
@@ -42867,6 +43306,7 @@ end
 
 class Aws::S3::Types::ListMultipartUploadsOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ListMultipartUploadsOutput
@@ -42874,6 +43314,7 @@ end
 
 class Aws::S3::Types::ListMultipartUploadsRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ListMultipartUploadsRequest
@@ -42882,6 +43323,7 @@ end
 class Aws::S3::Types::ListObjectVersionsOutput
   include ::Aws::Structure
   def versions_delete_markers(); end
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ListObjectVersionsOutput
@@ -42889,6 +43331,7 @@ end
 
 class Aws::S3::Types::ListObjectVersionsRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ListObjectVersionsRequest
@@ -42896,6 +43339,7 @@ end
 
 class Aws::S3::Types::ListObjectsOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ListObjectsOutput
@@ -42903,6 +43347,7 @@ end
 
 class Aws::S3::Types::ListObjectsRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ListObjectsRequest
@@ -42910,6 +43355,7 @@ end
 
 class Aws::S3::Types::ListObjectsV2Output
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ListObjectsV2Output
@@ -42917,6 +43363,7 @@ end
 
 class Aws::S3::Types::ListObjectsV2Request
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ListObjectsV2Request
@@ -42924,6 +43371,7 @@ end
 
 class Aws::S3::Types::ListPartsOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ListPartsOutput
@@ -42931,6 +43379,7 @@ end
 
 class Aws::S3::Types::ListPartsRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ListPartsRequest
@@ -42938,6 +43387,7 @@ end
 
 class Aws::S3::Types::LoggingEnabled
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::LoggingEnabled
@@ -42945,6 +43395,7 @@ end
 
 class Aws::S3::Types::MetadataEntry
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::MetadataEntry
@@ -42952,6 +43403,7 @@ end
 
 class Aws::S3::Types::Metrics
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::Metrics
@@ -42959,6 +43411,7 @@ end
 
 class Aws::S3::Types::MetricsAndOperator
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::MetricsAndOperator
@@ -42966,6 +43419,7 @@ end
 
 class Aws::S3::Types::MetricsConfiguration
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::MetricsConfiguration
@@ -42973,6 +43427,7 @@ end
 
 class Aws::S3::Types::MetricsFilter
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::MetricsFilter
@@ -42980,6 +43435,7 @@ end
 
 class Aws::S3::Types::MultipartUpload
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::MultipartUpload
@@ -43005,6 +43461,7 @@ end
 
 class Aws::S3::Types::NoncurrentVersionExpiration
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::NoncurrentVersionExpiration
@@ -43012,6 +43469,7 @@ end
 
 class Aws::S3::Types::NoncurrentVersionTransition
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::NoncurrentVersionTransition
@@ -43019,6 +43477,7 @@ end
 
 class Aws::S3::Types::NotificationConfiguration
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::NotificationConfiguration
@@ -43026,6 +43485,7 @@ end
 
 class Aws::S3::Types::NotificationConfigurationDeprecated
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::NotificationConfigurationDeprecated
@@ -43033,6 +43493,7 @@ end
 
 class Aws::S3::Types::NotificationConfigurationFilter
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::NotificationConfigurationFilter
@@ -43040,6 +43501,7 @@ end
 
 class Aws::S3::Types::Object
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::Object
@@ -43053,6 +43515,7 @@ end
 
 class Aws::S3::Types::ObjectIdentifier
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ObjectIdentifier
@@ -43060,6 +43523,7 @@ end
 
 class Aws::S3::Types::ObjectLockConfiguration
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ObjectLockConfiguration
@@ -43067,6 +43531,7 @@ end
 
 class Aws::S3::Types::ObjectLockLegalHold
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ObjectLockLegalHold
@@ -43074,6 +43539,7 @@ end
 
 class Aws::S3::Types::ObjectLockRetention
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ObjectLockRetention
@@ -43081,6 +43547,7 @@ end
 
 class Aws::S3::Types::ObjectLockRule
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ObjectLockRule
@@ -43094,6 +43561,7 @@ end
 
 class Aws::S3::Types::ObjectVersion
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ObjectVersion
@@ -43101,6 +43569,7 @@ end
 
 class Aws::S3::Types::OutputLocation
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::OutputLocation
@@ -43108,6 +43577,7 @@ end
 
 class Aws::S3::Types::OutputSerialization
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::OutputSerialization
@@ -43115,6 +43585,7 @@ end
 
 class Aws::S3::Types::Owner
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::Owner
@@ -43128,6 +43599,7 @@ end
 
 class Aws::S3::Types::Part
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::Part
@@ -43135,6 +43607,7 @@ end
 
 class Aws::S3::Types::PolicyStatus
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PolicyStatus
@@ -43142,6 +43615,7 @@ end
 
 class Aws::S3::Types::Progress
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::Progress
@@ -43149,6 +43623,7 @@ end
 
 class Aws::S3::Types::ProgressEvent
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ProgressEvent
@@ -43156,6 +43631,7 @@ end
 
 class Aws::S3::Types::PublicAccessBlockConfiguration
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PublicAccessBlockConfiguration
@@ -43163,6 +43639,7 @@ end
 
 class Aws::S3::Types::PutBucketAccelerateConfigurationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutBucketAccelerateConfigurationRequest
@@ -43170,6 +43647,7 @@ end
 
 class Aws::S3::Types::PutBucketAclRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutBucketAclRequest
@@ -43177,6 +43655,7 @@ end
 
 class Aws::S3::Types::PutBucketAnalyticsConfigurationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutBucketAnalyticsConfigurationRequest
@@ -43184,6 +43663,7 @@ end
 
 class Aws::S3::Types::PutBucketCorsRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutBucketCorsRequest
@@ -43191,6 +43671,7 @@ end
 
 class Aws::S3::Types::PutBucketEncryptionRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutBucketEncryptionRequest
@@ -43198,6 +43679,7 @@ end
 
 class Aws::S3::Types::PutBucketInventoryConfigurationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutBucketInventoryConfigurationRequest
@@ -43205,6 +43687,7 @@ end
 
 class Aws::S3::Types::PutBucketLifecycleConfigurationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutBucketLifecycleConfigurationRequest
@@ -43212,6 +43695,7 @@ end
 
 class Aws::S3::Types::PutBucketLifecycleRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutBucketLifecycleRequest
@@ -43219,6 +43703,7 @@ end
 
 class Aws::S3::Types::PutBucketLoggingRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutBucketLoggingRequest
@@ -43226,6 +43711,7 @@ end
 
 class Aws::S3::Types::PutBucketMetricsConfigurationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutBucketMetricsConfigurationRequest
@@ -43233,6 +43719,7 @@ end
 
 class Aws::S3::Types::PutBucketNotificationConfigurationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutBucketNotificationConfigurationRequest
@@ -43240,6 +43727,7 @@ end
 
 class Aws::S3::Types::PutBucketNotificationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutBucketNotificationRequest
@@ -43247,6 +43735,7 @@ end
 
 class Aws::S3::Types::PutBucketPolicyRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutBucketPolicyRequest
@@ -43254,6 +43743,7 @@ end
 
 class Aws::S3::Types::PutBucketReplicationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutBucketReplicationRequest
@@ -43261,6 +43751,7 @@ end
 
 class Aws::S3::Types::PutBucketRequestPaymentRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutBucketRequestPaymentRequest
@@ -43268,6 +43759,7 @@ end
 
 class Aws::S3::Types::PutBucketTaggingRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutBucketTaggingRequest
@@ -43275,6 +43767,7 @@ end
 
 class Aws::S3::Types::PutBucketVersioningRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutBucketVersioningRequest
@@ -43282,6 +43775,7 @@ end
 
 class Aws::S3::Types::PutBucketWebsiteRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutBucketWebsiteRequest
@@ -43289,6 +43783,7 @@ end
 
 class Aws::S3::Types::PutObjectAclOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutObjectAclOutput
@@ -43296,6 +43791,7 @@ end
 
 class Aws::S3::Types::PutObjectAclRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutObjectAclRequest
@@ -43303,6 +43799,7 @@ end
 
 class Aws::S3::Types::PutObjectLegalHoldOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutObjectLegalHoldOutput
@@ -43310,6 +43807,7 @@ end
 
 class Aws::S3::Types::PutObjectLegalHoldRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutObjectLegalHoldRequest
@@ -43317,6 +43815,7 @@ end
 
 class Aws::S3::Types::PutObjectLockConfigurationOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutObjectLockConfigurationOutput
@@ -43324,6 +43823,7 @@ end
 
 class Aws::S3::Types::PutObjectLockConfigurationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutObjectLockConfigurationRequest
@@ -43331,6 +43831,7 @@ end
 
 class Aws::S3::Types::PutObjectOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutObjectOutput
@@ -43338,6 +43839,7 @@ end
 
 class Aws::S3::Types::PutObjectRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutObjectRequest
@@ -43345,6 +43847,7 @@ end
 
 class Aws::S3::Types::PutObjectRetentionOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutObjectRetentionOutput
@@ -43352,6 +43855,7 @@ end
 
 class Aws::S3::Types::PutObjectRetentionRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutObjectRetentionRequest
@@ -43359,6 +43863,7 @@ end
 
 class Aws::S3::Types::PutObjectTaggingOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutObjectTaggingOutput
@@ -43366,6 +43871,7 @@ end
 
 class Aws::S3::Types::PutObjectTaggingRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutObjectTaggingRequest
@@ -43373,6 +43879,7 @@ end
 
 class Aws::S3::Types::PutPublicAccessBlockRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::PutPublicAccessBlockRequest
@@ -43380,6 +43887,7 @@ end
 
 class Aws::S3::Types::QueueConfiguration
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::QueueConfiguration
@@ -43387,6 +43895,7 @@ end
 
 class Aws::S3::Types::QueueConfigurationDeprecated
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::QueueConfigurationDeprecated
@@ -43394,6 +43903,7 @@ end
 
 class Aws::S3::Types::RecordsEvent
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::RecordsEvent
@@ -43401,6 +43911,7 @@ end
 
 class Aws::S3::Types::Redirect
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::Redirect
@@ -43408,6 +43919,7 @@ end
 
 class Aws::S3::Types::RedirectAllRequestsTo
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::RedirectAllRequestsTo
@@ -43415,6 +43927,7 @@ end
 
 class Aws::S3::Types::ReplicationConfiguration
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ReplicationConfiguration
@@ -43422,6 +43935,7 @@ end
 
 class Aws::S3::Types::ReplicationRule
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ReplicationRule
@@ -43429,6 +43943,7 @@ end
 
 class Aws::S3::Types::ReplicationRuleAndOperator
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ReplicationRuleAndOperator
@@ -43436,6 +43951,7 @@ end
 
 class Aws::S3::Types::ReplicationRuleFilter
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ReplicationRuleFilter
@@ -43443,6 +43959,7 @@ end
 
 class Aws::S3::Types::ReplicationTime
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ReplicationTime
@@ -43450,6 +43967,7 @@ end
 
 class Aws::S3::Types::ReplicationTimeValue
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ReplicationTimeValue
@@ -43457,6 +43975,7 @@ end
 
 class Aws::S3::Types::RequestPaymentConfiguration
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::RequestPaymentConfiguration
@@ -43464,6 +43983,7 @@ end
 
 class Aws::S3::Types::RequestProgress
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::RequestProgress
@@ -43471,6 +43991,7 @@ end
 
 class Aws::S3::Types::RestoreObjectOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::RestoreObjectOutput
@@ -43478,6 +43999,7 @@ end
 
 class Aws::S3::Types::RestoreObjectRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::RestoreObjectRequest
@@ -43485,6 +44007,7 @@ end
 
 class Aws::S3::Types::RestoreRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::RestoreRequest
@@ -43492,6 +44015,7 @@ end
 
 class Aws::S3::Types::RoutingRule
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::RoutingRule
@@ -43499,6 +44023,7 @@ end
 
 class Aws::S3::Types::Rule
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::Rule
@@ -43506,6 +44031,7 @@ end
 
 class Aws::S3::Types::S3KeyFilter
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::S3KeyFilter
@@ -43513,6 +44039,7 @@ end
 
 class Aws::S3::Types::S3Location
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::S3Location
@@ -43520,6 +44047,7 @@ end
 
 class Aws::S3::Types::SSEKMS
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::SSEKMS
@@ -43533,6 +44061,7 @@ end
 
 class Aws::S3::Types::ScanRange
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ScanRange
@@ -43547,6 +44076,7 @@ end
 
 class Aws::S3::Types::SelectObjectContentOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::SelectObjectContentOutput
@@ -43554,6 +44084,7 @@ end
 
 class Aws::S3::Types::SelectObjectContentRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::SelectObjectContentRequest
@@ -43561,6 +44092,7 @@ end
 
 class Aws::S3::Types::SelectParameters
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::SelectParameters
@@ -43568,6 +44100,7 @@ end
 
 class Aws::S3::Types::ServerSideEncryptionByDefault
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ServerSideEncryptionByDefault
@@ -43575,6 +44108,7 @@ end
 
 class Aws::S3::Types::ServerSideEncryptionConfiguration
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ServerSideEncryptionConfiguration
@@ -43582,6 +44116,7 @@ end
 
 class Aws::S3::Types::ServerSideEncryptionRule
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::ServerSideEncryptionRule
@@ -43589,6 +44124,7 @@ end
 
 class Aws::S3::Types::SourceSelectionCriteria
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::SourceSelectionCriteria
@@ -43596,6 +44132,7 @@ end
 
 class Aws::S3::Types::SseKmsEncryptedObjects
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::SseKmsEncryptedObjects
@@ -43603,6 +44140,7 @@ end
 
 class Aws::S3::Types::Stats
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::Stats
@@ -43610,6 +44148,7 @@ end
 
 class Aws::S3::Types::StatsEvent
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::StatsEvent
@@ -43617,6 +44156,7 @@ end
 
 class Aws::S3::Types::StorageClassAnalysis
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::StorageClassAnalysis
@@ -43624,6 +44164,7 @@ end
 
 class Aws::S3::Types::StorageClassAnalysisDataExport
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::StorageClassAnalysisDataExport
@@ -43631,6 +44172,7 @@ end
 
 class Aws::S3::Types::Tag
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::Tag
@@ -43638,6 +44180,7 @@ end
 
 class Aws::S3::Types::Tagging
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::Tagging
@@ -43645,6 +44188,7 @@ end
 
 class Aws::S3::Types::TargetGrant
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::TargetGrant
@@ -43652,6 +44196,7 @@ end
 
 class Aws::S3::Types::TopicConfiguration
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::TopicConfiguration
@@ -43659,6 +44204,7 @@ end
 
 class Aws::S3::Types::TopicConfigurationDeprecated
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::TopicConfigurationDeprecated
@@ -43666,6 +44212,7 @@ end
 
 class Aws::S3::Types::Transition
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::Transition
@@ -43673,6 +44220,7 @@ end
 
 class Aws::S3::Types::UploadPartCopyOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::UploadPartCopyOutput
@@ -43680,6 +44228,7 @@ end
 
 class Aws::S3::Types::UploadPartCopyRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::UploadPartCopyRequest
@@ -43687,6 +44236,7 @@ end
 
 class Aws::S3::Types::UploadPartOutput
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::UploadPartOutput
@@ -43694,6 +44244,7 @@ end
 
 class Aws::S3::Types::UploadPartRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::UploadPartRequest
@@ -43701,6 +44252,7 @@ end
 
 class Aws::S3::Types::VersioningConfiguration
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::VersioningConfiguration
@@ -43708,6 +44260,7 @@ end
 
 class Aws::S3::Types::WebsiteConfiguration
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::S3::Types::WebsiteConfiguration
@@ -44522,6 +45075,7 @@ end
 
 class Aws::SES::Types::AddHeaderAction
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::AddHeaderAction
@@ -44529,6 +45083,7 @@ end
 
 class Aws::SES::Types::AlreadyExistsException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::AlreadyExistsException
@@ -44536,6 +45091,7 @@ end
 
 class Aws::SES::Types::Body
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::Body
@@ -44543,6 +45099,7 @@ end
 
 class Aws::SES::Types::BounceAction
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::BounceAction
@@ -44550,6 +45107,7 @@ end
 
 class Aws::SES::Types::BouncedRecipientInfo
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::BouncedRecipientInfo
@@ -44557,6 +45115,7 @@ end
 
 class Aws::SES::Types::BulkEmailDestination
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::BulkEmailDestination
@@ -44564,6 +45123,7 @@ end
 
 class Aws::SES::Types::BulkEmailDestinationStatus
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::BulkEmailDestinationStatus
@@ -44571,6 +45131,7 @@ end
 
 class Aws::SES::Types::CannotDeleteException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::CannotDeleteException
@@ -44578,6 +45139,7 @@ end
 
 class Aws::SES::Types::CloneReceiptRuleSetRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::CloneReceiptRuleSetRequest
@@ -44591,6 +45153,7 @@ end
 
 class Aws::SES::Types::CloudWatchDestination
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::CloudWatchDestination
@@ -44598,6 +45161,7 @@ end
 
 class Aws::SES::Types::CloudWatchDimensionConfiguration
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::CloudWatchDimensionConfiguration
@@ -44605,6 +45169,7 @@ end
 
 class Aws::SES::Types::ConfigurationSet
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ConfigurationSet
@@ -44612,6 +45177,7 @@ end
 
 class Aws::SES::Types::ConfigurationSetAlreadyExistsException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ConfigurationSetAlreadyExistsException
@@ -44619,6 +45185,7 @@ end
 
 class Aws::SES::Types::ConfigurationSetDoesNotExistException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ConfigurationSetDoesNotExistException
@@ -44626,6 +45193,7 @@ end
 
 class Aws::SES::Types::ConfigurationSetSendingPausedException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ConfigurationSetSendingPausedException
@@ -44633,6 +45201,7 @@ end
 
 class Aws::SES::Types::Content
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::Content
@@ -44640,6 +45209,7 @@ end
 
 class Aws::SES::Types::CreateConfigurationSetEventDestinationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::CreateConfigurationSetEventDestinationRequest
@@ -44653,6 +45223,7 @@ end
 
 class Aws::SES::Types::CreateConfigurationSetRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::CreateConfigurationSetRequest
@@ -44666,6 +45237,7 @@ end
 
 class Aws::SES::Types::CreateConfigurationSetTrackingOptionsRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::CreateConfigurationSetTrackingOptionsRequest
@@ -44679,6 +45251,7 @@ end
 
 class Aws::SES::Types::CreateCustomVerificationEmailTemplateRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::CreateCustomVerificationEmailTemplateRequest
@@ -44686,6 +45259,7 @@ end
 
 class Aws::SES::Types::CreateReceiptFilterRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::CreateReceiptFilterRequest
@@ -44699,6 +45273,7 @@ end
 
 class Aws::SES::Types::CreateReceiptRuleRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::CreateReceiptRuleRequest
@@ -44712,6 +45287,7 @@ end
 
 class Aws::SES::Types::CreateReceiptRuleSetRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::CreateReceiptRuleSetRequest
@@ -44725,6 +45301,7 @@ end
 
 class Aws::SES::Types::CreateTemplateRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::CreateTemplateRequest
@@ -44744,6 +45321,7 @@ end
 
 class Aws::SES::Types::CustomVerificationEmailTemplate
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::CustomVerificationEmailTemplate
@@ -44751,6 +45329,7 @@ end
 
 class Aws::SES::Types::CustomVerificationEmailTemplateAlreadyExistsException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::CustomVerificationEmailTemplateAlreadyExistsException
@@ -44758,6 +45337,7 @@ end
 
 class Aws::SES::Types::CustomVerificationEmailTemplateDoesNotExistException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::CustomVerificationEmailTemplateDoesNotExistException
@@ -44765,6 +45345,7 @@ end
 
 class Aws::SES::Types::DeleteConfigurationSetEventDestinationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::DeleteConfigurationSetEventDestinationRequest
@@ -44778,6 +45359,7 @@ end
 
 class Aws::SES::Types::DeleteConfigurationSetRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::DeleteConfigurationSetRequest
@@ -44791,6 +45373,7 @@ end
 
 class Aws::SES::Types::DeleteConfigurationSetTrackingOptionsRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::DeleteConfigurationSetTrackingOptionsRequest
@@ -44804,6 +45387,7 @@ end
 
 class Aws::SES::Types::DeleteCustomVerificationEmailTemplateRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::DeleteCustomVerificationEmailTemplateRequest
@@ -44811,6 +45395,7 @@ end
 
 class Aws::SES::Types::DeleteIdentityPolicyRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::DeleteIdentityPolicyRequest
@@ -44824,6 +45409,7 @@ end
 
 class Aws::SES::Types::DeleteIdentityRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::DeleteIdentityRequest
@@ -44837,6 +45423,7 @@ end
 
 class Aws::SES::Types::DeleteReceiptFilterRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::DeleteReceiptFilterRequest
@@ -44850,6 +45437,7 @@ end
 
 class Aws::SES::Types::DeleteReceiptRuleRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::DeleteReceiptRuleRequest
@@ -44863,6 +45451,7 @@ end
 
 class Aws::SES::Types::DeleteReceiptRuleSetRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::DeleteReceiptRuleSetRequest
@@ -44876,6 +45465,7 @@ end
 
 class Aws::SES::Types::DeleteTemplateRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::DeleteTemplateRequest
@@ -44889,6 +45479,7 @@ end
 
 class Aws::SES::Types::DeleteVerifiedEmailAddressRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::DeleteVerifiedEmailAddressRequest
@@ -44896,6 +45487,7 @@ end
 
 class Aws::SES::Types::DeliveryOptions
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::DeliveryOptions
@@ -44909,6 +45501,7 @@ end
 
 class Aws::SES::Types::DescribeActiveReceiptRuleSetResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::DescribeActiveReceiptRuleSetResponse
@@ -44916,6 +45509,7 @@ end
 
 class Aws::SES::Types::DescribeConfigurationSetRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::DescribeConfigurationSetRequest
@@ -44923,6 +45517,7 @@ end
 
 class Aws::SES::Types::DescribeConfigurationSetResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::DescribeConfigurationSetResponse
@@ -44930,6 +45525,7 @@ end
 
 class Aws::SES::Types::DescribeReceiptRuleRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::DescribeReceiptRuleRequest
@@ -44937,6 +45533,7 @@ end
 
 class Aws::SES::Types::DescribeReceiptRuleResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::DescribeReceiptRuleResponse
@@ -44944,6 +45541,7 @@ end
 
 class Aws::SES::Types::DescribeReceiptRuleSetRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::DescribeReceiptRuleSetRequest
@@ -44951,6 +45549,7 @@ end
 
 class Aws::SES::Types::DescribeReceiptRuleSetResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::DescribeReceiptRuleSetResponse
@@ -44958,6 +45557,7 @@ end
 
 class Aws::SES::Types::Destination
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::Destination
@@ -44965,6 +45565,7 @@ end
 
 class Aws::SES::Types::EventDestination
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::EventDestination
@@ -44972,6 +45573,7 @@ end
 
 class Aws::SES::Types::EventDestinationAlreadyExistsException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::EventDestinationAlreadyExistsException
@@ -44979,6 +45581,7 @@ end
 
 class Aws::SES::Types::EventDestinationDoesNotExistException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::EventDestinationDoesNotExistException
@@ -44986,6 +45589,7 @@ end
 
 class Aws::SES::Types::ExtensionField
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ExtensionField
@@ -44993,6 +45597,7 @@ end
 
 class Aws::SES::Types::FromEmailAddressNotVerifiedException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::FromEmailAddressNotVerifiedException
@@ -45000,6 +45605,7 @@ end
 
 class Aws::SES::Types::GetAccountSendingEnabledResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::GetAccountSendingEnabledResponse
@@ -45007,6 +45613,7 @@ end
 
 class Aws::SES::Types::GetCustomVerificationEmailTemplateRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::GetCustomVerificationEmailTemplateRequest
@@ -45014,6 +45621,7 @@ end
 
 class Aws::SES::Types::GetCustomVerificationEmailTemplateResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::GetCustomVerificationEmailTemplateResponse
@@ -45021,6 +45629,7 @@ end
 
 class Aws::SES::Types::GetIdentityDkimAttributesRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::GetIdentityDkimAttributesRequest
@@ -45028,6 +45637,7 @@ end
 
 class Aws::SES::Types::GetIdentityDkimAttributesResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::GetIdentityDkimAttributesResponse
@@ -45035,6 +45645,7 @@ end
 
 class Aws::SES::Types::GetIdentityMailFromDomainAttributesRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::GetIdentityMailFromDomainAttributesRequest
@@ -45042,6 +45653,7 @@ end
 
 class Aws::SES::Types::GetIdentityMailFromDomainAttributesResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::GetIdentityMailFromDomainAttributesResponse
@@ -45049,6 +45661,7 @@ end
 
 class Aws::SES::Types::GetIdentityNotificationAttributesRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::GetIdentityNotificationAttributesRequest
@@ -45056,6 +45669,7 @@ end
 
 class Aws::SES::Types::GetIdentityNotificationAttributesResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::GetIdentityNotificationAttributesResponse
@@ -45063,6 +45677,7 @@ end
 
 class Aws::SES::Types::GetIdentityPoliciesRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::GetIdentityPoliciesRequest
@@ -45070,6 +45685,7 @@ end
 
 class Aws::SES::Types::GetIdentityPoliciesResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::GetIdentityPoliciesResponse
@@ -45077,6 +45693,7 @@ end
 
 class Aws::SES::Types::GetIdentityVerificationAttributesRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::GetIdentityVerificationAttributesRequest
@@ -45084,6 +45701,7 @@ end
 
 class Aws::SES::Types::GetIdentityVerificationAttributesResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::GetIdentityVerificationAttributesResponse
@@ -45091,6 +45709,7 @@ end
 
 class Aws::SES::Types::GetSendQuotaResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::GetSendQuotaResponse
@@ -45098,6 +45717,7 @@ end
 
 class Aws::SES::Types::GetSendStatisticsResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::GetSendStatisticsResponse
@@ -45105,6 +45725,7 @@ end
 
 class Aws::SES::Types::GetTemplateRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::GetTemplateRequest
@@ -45112,6 +45733,7 @@ end
 
 class Aws::SES::Types::GetTemplateResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::GetTemplateResponse
@@ -45119,6 +45741,7 @@ end
 
 class Aws::SES::Types::IdentityDkimAttributes
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::IdentityDkimAttributes
@@ -45126,6 +45749,7 @@ end
 
 class Aws::SES::Types::IdentityMailFromDomainAttributes
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::IdentityMailFromDomainAttributes
@@ -45133,6 +45757,7 @@ end
 
 class Aws::SES::Types::IdentityNotificationAttributes
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::IdentityNotificationAttributes
@@ -45140,6 +45765,7 @@ end
 
 class Aws::SES::Types::IdentityVerificationAttributes
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::IdentityVerificationAttributes
@@ -45147,6 +45773,7 @@ end
 
 class Aws::SES::Types::InvalidCloudWatchDestinationException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::InvalidCloudWatchDestinationException
@@ -45166,6 +45793,7 @@ end
 
 class Aws::SES::Types::InvalidFirehoseDestinationException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::InvalidFirehoseDestinationException
@@ -45173,6 +45801,7 @@ end
 
 class Aws::SES::Types::InvalidLambdaFunctionException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::InvalidLambdaFunctionException
@@ -45186,6 +45815,7 @@ end
 
 class Aws::SES::Types::InvalidRenderingParameterException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::InvalidRenderingParameterException
@@ -45193,6 +45823,7 @@ end
 
 class Aws::SES::Types::InvalidS3ConfigurationException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::InvalidS3ConfigurationException
@@ -45200,6 +45831,7 @@ end
 
 class Aws::SES::Types::InvalidSNSDestinationException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::InvalidSNSDestinationException
@@ -45207,6 +45839,7 @@ end
 
 class Aws::SES::Types::InvalidSnsTopicException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::InvalidSnsTopicException
@@ -45214,6 +45847,7 @@ end
 
 class Aws::SES::Types::InvalidTemplateException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::InvalidTemplateException
@@ -45227,6 +45861,7 @@ end
 
 class Aws::SES::Types::KinesisFirehoseDestination
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::KinesisFirehoseDestination
@@ -45234,6 +45869,7 @@ end
 
 class Aws::SES::Types::LambdaAction
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::LambdaAction
@@ -45247,6 +45883,7 @@ end
 
 class Aws::SES::Types::ListConfigurationSetsRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ListConfigurationSetsRequest
@@ -45254,6 +45891,7 @@ end
 
 class Aws::SES::Types::ListConfigurationSetsResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ListConfigurationSetsResponse
@@ -45261,6 +45899,7 @@ end
 
 class Aws::SES::Types::ListCustomVerificationEmailTemplatesRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ListCustomVerificationEmailTemplatesRequest
@@ -45268,6 +45907,7 @@ end
 
 class Aws::SES::Types::ListCustomVerificationEmailTemplatesResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ListCustomVerificationEmailTemplatesResponse
@@ -45275,6 +45915,7 @@ end
 
 class Aws::SES::Types::ListIdentitiesRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ListIdentitiesRequest
@@ -45282,6 +45923,7 @@ end
 
 class Aws::SES::Types::ListIdentitiesResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ListIdentitiesResponse
@@ -45289,6 +45931,7 @@ end
 
 class Aws::SES::Types::ListIdentityPoliciesRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ListIdentityPoliciesRequest
@@ -45296,6 +45939,7 @@ end
 
 class Aws::SES::Types::ListIdentityPoliciesResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ListIdentityPoliciesResponse
@@ -45309,6 +45953,7 @@ end
 
 class Aws::SES::Types::ListReceiptFiltersResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ListReceiptFiltersResponse
@@ -45316,6 +45961,7 @@ end
 
 class Aws::SES::Types::ListReceiptRuleSetsRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ListReceiptRuleSetsRequest
@@ -45323,6 +45969,7 @@ end
 
 class Aws::SES::Types::ListReceiptRuleSetsResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ListReceiptRuleSetsResponse
@@ -45330,6 +45977,7 @@ end
 
 class Aws::SES::Types::ListTemplatesRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ListTemplatesRequest
@@ -45337,6 +45985,7 @@ end
 
 class Aws::SES::Types::ListTemplatesResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ListTemplatesResponse
@@ -45344,6 +45993,7 @@ end
 
 class Aws::SES::Types::ListVerifiedEmailAddressesResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ListVerifiedEmailAddressesResponse
@@ -45357,6 +46007,7 @@ end
 
 class Aws::SES::Types::Message
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::Message
@@ -45364,6 +46015,7 @@ end
 
 class Aws::SES::Types::MessageDsn
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::MessageDsn
@@ -45377,6 +46029,7 @@ end
 
 class Aws::SES::Types::MessageTag
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::MessageTag
@@ -45384,6 +46037,7 @@ end
 
 class Aws::SES::Types::MissingRenderingAttributeException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::MissingRenderingAttributeException
@@ -45397,6 +46051,7 @@ end
 
 class Aws::SES::Types::PutConfigurationSetDeliveryOptionsRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::PutConfigurationSetDeliveryOptionsRequest
@@ -45410,6 +46065,7 @@ end
 
 class Aws::SES::Types::PutIdentityPolicyRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::PutIdentityPolicyRequest
@@ -45423,6 +46079,7 @@ end
 
 class Aws::SES::Types::RawMessage
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::RawMessage
@@ -45430,6 +46087,7 @@ end
 
 class Aws::SES::Types::ReceiptAction
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ReceiptAction
@@ -45437,6 +46095,7 @@ end
 
 class Aws::SES::Types::ReceiptFilter
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ReceiptFilter
@@ -45444,6 +46103,7 @@ end
 
 class Aws::SES::Types::ReceiptIpFilter
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ReceiptIpFilter
@@ -45451,6 +46111,7 @@ end
 
 class Aws::SES::Types::ReceiptRule
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ReceiptRule
@@ -45458,6 +46119,7 @@ end
 
 class Aws::SES::Types::ReceiptRuleSetMetadata
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ReceiptRuleSetMetadata
@@ -45465,6 +46127,7 @@ end
 
 class Aws::SES::Types::RecipientDsnFields
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::RecipientDsnFields
@@ -45472,6 +46135,7 @@ end
 
 class Aws::SES::Types::ReorderReceiptRuleSetRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ReorderReceiptRuleSetRequest
@@ -45485,6 +46149,7 @@ end
 
 class Aws::SES::Types::ReputationOptions
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::ReputationOptions
@@ -45492,6 +46157,7 @@ end
 
 class Aws::SES::Types::RuleDoesNotExistException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::RuleDoesNotExistException
@@ -45499,6 +46165,7 @@ end
 
 class Aws::SES::Types::RuleSetDoesNotExistException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::RuleSetDoesNotExistException
@@ -45506,6 +46173,7 @@ end
 
 class Aws::SES::Types::S3Action
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::S3Action
@@ -45513,6 +46181,7 @@ end
 
 class Aws::SES::Types::SNSAction
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::SNSAction
@@ -45520,6 +46189,7 @@ end
 
 class Aws::SES::Types::SNSDestination
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::SNSDestination
@@ -45527,6 +46197,7 @@ end
 
 class Aws::SES::Types::SendBounceRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::SendBounceRequest
@@ -45534,6 +46205,7 @@ end
 
 class Aws::SES::Types::SendBounceResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::SendBounceResponse
@@ -45541,6 +46213,7 @@ end
 
 class Aws::SES::Types::SendBulkTemplatedEmailRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::SendBulkTemplatedEmailRequest
@@ -45548,6 +46221,7 @@ end
 
 class Aws::SES::Types::SendBulkTemplatedEmailResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::SendBulkTemplatedEmailResponse
@@ -45555,6 +46229,7 @@ end
 
 class Aws::SES::Types::SendCustomVerificationEmailRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::SendCustomVerificationEmailRequest
@@ -45562,6 +46237,7 @@ end
 
 class Aws::SES::Types::SendCustomVerificationEmailResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::SendCustomVerificationEmailResponse
@@ -45569,6 +46245,7 @@ end
 
 class Aws::SES::Types::SendDataPoint
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::SendDataPoint
@@ -45576,6 +46253,7 @@ end
 
 class Aws::SES::Types::SendEmailRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::SendEmailRequest
@@ -45583,6 +46261,7 @@ end
 
 class Aws::SES::Types::SendEmailResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::SendEmailResponse
@@ -45590,6 +46269,7 @@ end
 
 class Aws::SES::Types::SendRawEmailRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::SendRawEmailRequest
@@ -45597,6 +46277,7 @@ end
 
 class Aws::SES::Types::SendRawEmailResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::SendRawEmailResponse
@@ -45604,6 +46285,7 @@ end
 
 class Aws::SES::Types::SendTemplatedEmailRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::SendTemplatedEmailRequest
@@ -45611,6 +46293,7 @@ end
 
 class Aws::SES::Types::SendTemplatedEmailResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::SendTemplatedEmailResponse
@@ -45618,6 +46301,7 @@ end
 
 class Aws::SES::Types::SetActiveReceiptRuleSetRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::SetActiveReceiptRuleSetRequest
@@ -45631,6 +46315,7 @@ end
 
 class Aws::SES::Types::SetIdentityDkimEnabledRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::SetIdentityDkimEnabledRequest
@@ -45644,6 +46329,7 @@ end
 
 class Aws::SES::Types::SetIdentityFeedbackForwardingEnabledRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::SetIdentityFeedbackForwardingEnabledRequest
@@ -45657,6 +46343,7 @@ end
 
 class Aws::SES::Types::SetIdentityHeadersInNotificationsEnabledRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::SetIdentityHeadersInNotificationsEnabledRequest
@@ -45670,6 +46357,7 @@ end
 
 class Aws::SES::Types::SetIdentityMailFromDomainRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::SetIdentityMailFromDomainRequest
@@ -45683,6 +46371,7 @@ end
 
 class Aws::SES::Types::SetIdentityNotificationTopicRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::SetIdentityNotificationTopicRequest
@@ -45696,6 +46385,7 @@ end
 
 class Aws::SES::Types::SetReceiptRulePositionRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::SetReceiptRulePositionRequest
@@ -45709,6 +46399,7 @@ end
 
 class Aws::SES::Types::StopAction
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::StopAction
@@ -45716,6 +46407,7 @@ end
 
 class Aws::SES::Types::Template
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::Template
@@ -45723,6 +46415,7 @@ end
 
 class Aws::SES::Types::TemplateDoesNotExistException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::TemplateDoesNotExistException
@@ -45730,6 +46423,7 @@ end
 
 class Aws::SES::Types::TemplateMetadata
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::TemplateMetadata
@@ -45737,6 +46431,7 @@ end
 
 class Aws::SES::Types::TestRenderTemplateRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::TestRenderTemplateRequest
@@ -45744,6 +46439,7 @@ end
 
 class Aws::SES::Types::TestRenderTemplateResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::TestRenderTemplateResponse
@@ -45751,6 +46447,7 @@ end
 
 class Aws::SES::Types::TrackingOptions
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::TrackingOptions
@@ -45758,6 +46455,7 @@ end
 
 class Aws::SES::Types::TrackingOptionsAlreadyExistsException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::TrackingOptionsAlreadyExistsException
@@ -45765,6 +46463,7 @@ end
 
 class Aws::SES::Types::TrackingOptionsDoesNotExistException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::TrackingOptionsDoesNotExistException
@@ -45772,6 +46471,7 @@ end
 
 class Aws::SES::Types::UpdateAccountSendingEnabledRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::UpdateAccountSendingEnabledRequest
@@ -45779,6 +46479,7 @@ end
 
 class Aws::SES::Types::UpdateConfigurationSetEventDestinationRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::UpdateConfigurationSetEventDestinationRequest
@@ -45792,6 +46493,7 @@ end
 
 class Aws::SES::Types::UpdateConfigurationSetReputationMetricsEnabledRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::UpdateConfigurationSetReputationMetricsEnabledRequest
@@ -45799,6 +46501,7 @@ end
 
 class Aws::SES::Types::UpdateConfigurationSetSendingEnabledRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::UpdateConfigurationSetSendingEnabledRequest
@@ -45806,6 +46509,7 @@ end
 
 class Aws::SES::Types::UpdateConfigurationSetTrackingOptionsRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::UpdateConfigurationSetTrackingOptionsRequest
@@ -45819,6 +46523,7 @@ end
 
 class Aws::SES::Types::UpdateCustomVerificationEmailTemplateRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::UpdateCustomVerificationEmailTemplateRequest
@@ -45826,6 +46531,7 @@ end
 
 class Aws::SES::Types::UpdateReceiptRuleRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::UpdateReceiptRuleRequest
@@ -45839,6 +46545,7 @@ end
 
 class Aws::SES::Types::UpdateTemplateRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::UpdateTemplateRequest
@@ -45852,6 +46559,7 @@ end
 
 class Aws::SES::Types::VerifyDomainDkimRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::VerifyDomainDkimRequest
@@ -45859,6 +46567,7 @@ end
 
 class Aws::SES::Types::VerifyDomainDkimResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::VerifyDomainDkimResponse
@@ -45866,6 +46575,7 @@ end
 
 class Aws::SES::Types::VerifyDomainIdentityRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::VerifyDomainIdentityRequest
@@ -45873,6 +46583,7 @@ end
 
 class Aws::SES::Types::VerifyDomainIdentityResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::VerifyDomainIdentityResponse
@@ -45880,6 +46591,7 @@ end
 
 class Aws::SES::Types::VerifyEmailAddressRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::VerifyEmailAddressRequest
@@ -45887,6 +46599,7 @@ end
 
 class Aws::SES::Types::VerifyEmailIdentityRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::VerifyEmailIdentityRequest
@@ -45900,6 +46613,7 @@ end
 
 class Aws::SES::Types::WorkmailAction
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::SES::Types::WorkmailAction
@@ -46101,6 +46815,7 @@ end
 
 class Aws::STS::Types::AssumeRoleRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::AssumeRoleRequest
@@ -46108,6 +46823,7 @@ end
 
 class Aws::STS::Types::AssumeRoleResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::AssumeRoleResponse
@@ -46115,6 +46831,7 @@ end
 
 class Aws::STS::Types::AssumeRoleWithSAMLRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::AssumeRoleWithSAMLRequest
@@ -46122,6 +46839,7 @@ end
 
 class Aws::STS::Types::AssumeRoleWithSAMLResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::AssumeRoleWithSAMLResponse
@@ -46129,6 +46847,7 @@ end
 
 class Aws::STS::Types::AssumeRoleWithWebIdentityRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::AssumeRoleWithWebIdentityRequest
@@ -46136,6 +46855,7 @@ end
 
 class Aws::STS::Types::AssumeRoleWithWebIdentityResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::AssumeRoleWithWebIdentityResponse
@@ -46143,6 +46863,7 @@ end
 
 class Aws::STS::Types::AssumedRoleUser
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::AssumedRoleUser
@@ -46150,6 +46871,7 @@ end
 
 class Aws::STS::Types::Credentials
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::Credentials
@@ -46157,6 +46879,7 @@ end
 
 class Aws::STS::Types::DecodeAuthorizationMessageRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::DecodeAuthorizationMessageRequest
@@ -46164,6 +46887,7 @@ end
 
 class Aws::STS::Types::DecodeAuthorizationMessageResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::DecodeAuthorizationMessageResponse
@@ -46171,6 +46895,7 @@ end
 
 class Aws::STS::Types::ExpiredTokenException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::ExpiredTokenException
@@ -46178,6 +46903,7 @@ end
 
 class Aws::STS::Types::FederatedUser
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::FederatedUser
@@ -46185,6 +46911,7 @@ end
 
 class Aws::STS::Types::GetAccessKeyInfoRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::GetAccessKeyInfoRequest
@@ -46192,6 +46919,7 @@ end
 
 class Aws::STS::Types::GetAccessKeyInfoResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::GetAccessKeyInfoResponse
@@ -46205,6 +46933,7 @@ end
 
 class Aws::STS::Types::GetCallerIdentityResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::GetCallerIdentityResponse
@@ -46212,6 +46941,7 @@ end
 
 class Aws::STS::Types::GetFederationTokenRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::GetFederationTokenRequest
@@ -46219,6 +46949,7 @@ end
 
 class Aws::STS::Types::GetFederationTokenResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::GetFederationTokenResponse
@@ -46226,6 +46957,7 @@ end
 
 class Aws::STS::Types::GetSessionTokenRequest
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::GetSessionTokenRequest
@@ -46233,6 +46965,7 @@ end
 
 class Aws::STS::Types::GetSessionTokenResponse
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::GetSessionTokenResponse
@@ -46240,6 +46973,7 @@ end
 
 class Aws::STS::Types::IDPCommunicationErrorException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::IDPCommunicationErrorException
@@ -46247,6 +46981,7 @@ end
 
 class Aws::STS::Types::IDPRejectedClaimException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::IDPRejectedClaimException
@@ -46254,6 +46989,7 @@ end
 
 class Aws::STS::Types::InvalidAuthorizationMessageException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::InvalidAuthorizationMessageException
@@ -46261,6 +46997,7 @@ end
 
 class Aws::STS::Types::InvalidIdentityTokenException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::InvalidIdentityTokenException
@@ -46268,6 +47005,7 @@ end
 
 class Aws::STS::Types::MalformedPolicyDocumentException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::MalformedPolicyDocumentException
@@ -46275,6 +47013,7 @@ end
 
 class Aws::STS::Types::PackedPolicyTooLargeException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::PackedPolicyTooLargeException
@@ -46282,6 +47021,7 @@ end
 
 class Aws::STS::Types::PolicyDescriptorType
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::PolicyDescriptorType
@@ -46289,6 +47029,7 @@ end
 
 class Aws::STS::Types::RegionDisabledException
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::RegionDisabledException
@@ -46296,6 +47037,7 @@ end
 
 class Aws::STS::Types::Tag
   include ::Aws::Structure
+  SENSITIVE = ::T.let(nil, ::T.untyped)
 end
 
 class Aws::STS::Types::Tag
@@ -47956,6 +48698,27 @@ module CGI::HtmlExtension
 end
 
 module CGI::HtmlExtension
+end
+
+class ChangeFieldTypeIdToName
+end
+
+class ChangeOwnerToUserId
+end
+
+class ChangeSpecToState
+end
+
+class ChangeTaskJsonToText
+end
+
+class ChangeTypeNameInAccount
+end
+
+class ChangeTypeToFtype
+end
+
+class ChangeUserIdTypeInSamples
 end
 
 class Class
@@ -50601,6 +51364,126 @@ module Crass
   def self.parse_properties(input, options=T.unsafe(nil)); end
 end
 
+class CreateAccountLogAssociations
+end
+
+class CreateAccounts
+end
+
+class CreateAllowableFieldTypes
+end
+
+class CreateAnemoneWorker
+end
+
+class CreateAnnouncements
+end
+
+class CreateBudgets
+end
+
+class CreateCartItems
+end
+
+class CreateCollections
+end
+
+class CreateDataAssociations
+end
+
+class CreateFieldTypes
+end
+
+class CreateFieldValues
+end
+
+class CreateFolderContents
+end
+
+class CreateFolders
+end
+
+class CreateGroups
+end
+
+class CreateInvoices
+end
+
+class CreateJobAssociations
+end
+
+class CreateLibrary
+end
+
+class CreateLocators
+end
+
+class CreateMemberships
+end
+
+class CreateMetacols
+end
+
+class CreateOperations
+end
+
+class CreateParameters
+end
+
+class CreateParts
+end
+
+class CreatePostAssociations
+end
+
+class CreatePosts
+end
+
+class CreatePrimers
+end
+
+class CreateSampleTypes
+end
+
+class CreateSamples
+end
+
+class CreateTakes
+end
+
+class CreateTaskNotifications
+end
+
+class CreateTaskPrototypes
+end
+
+class CreateTasks
+end
+
+class CreateTouches
+end
+
+class CreateUploads
+end
+
+class CreateUserBudgetAssociations
+end
+
+class CreateWizards
+end
+
+class CreateWorkflowAssociations
+end
+
+class CreateWorkflowProcesses
+end
+
+class CreateWorkflowThreads
+end
+
+class CreateWorkflows
+end
+
 class DRb::DRbArray
   def _dump(lv); end
 end
@@ -51071,6 +51954,9 @@ class DateTime
   def self.civil_from_format(utc_or_local, year, month=T.unsafe(nil), day=T.unsafe(nil), hour=T.unsafe(nil), min=T.unsafe(nil), sec=T.unsafe(nil)); end
 end
 
+class DeadCodeRemoval
+end
+
 class Delegator
   RUBYGEMS_ACTIVATION_MONITOR = ::T.let(nil, ::T.untyped)
 end
@@ -51236,9 +52122,13 @@ class Diff::LCS::Change
 
   def initialize(*args); end
 
+  def inspect(*_args); end
+
   def position(); end
 
   def to_a(); end
+
+  def to_ary(); end
 
   def unchanged?(); end
   VALID_ACTIONS = ::T.let(nil, ::T.untyped)
@@ -51253,8 +52143,6 @@ class Diff::LCS::Change
 end
 
 class Diff::LCS::ContextChange
-  def inspect(*args); end
-
   def new_element(); end
 
   def new_position(); end
@@ -51297,7 +52185,7 @@ class Diff::LCS::DiffCallbacks
 
   def finish(); end
 
-  def match(event); end
+  def match(_event); end
 end
 
 class Diff::LCS::DiffCallbacks
@@ -51306,7 +52194,7 @@ end
 class Diff::LCS::Hunk
   def blocks(); end
 
-  def diff(format); end
+  def diff(format, last=T.unsafe(nil)); end
 
   def end_new(); end
 
@@ -51321,6 +52209,8 @@ class Diff::LCS::Hunk
   def initialize(data_old, data_new, piece, flag_context, file_length_difference); end
 
   def merge(hunk); end
+
+  def missing_last_newline?(data); end
 
   def overlaps?(hunk); end
 
@@ -51379,7 +52269,7 @@ module Diff::LCS
 
   def self.traverse_balanced(seq1, seq2, callbacks=T.unsafe(nil)); end
 
-  def self.traverse_sequences(seq1, seq2, callbacks=T.unsafe(nil), &block); end
+  def self.traverse_sequences(seq1, seq2, callbacks=T.unsafe(nil)); end
 
   def self.unpatch!(src, patchset); end
 end
@@ -51451,6 +52341,21 @@ module Docile
   def self.dsl_eval_immutable(dsl, *args, &block); end
 
   def self.dsl_eval_with_block_return(dsl, *args, &block); end
+end
+
+class DropCollection
+end
+
+class DropCreditFromAccount
+end
+
+class DropJobFromOperation
+end
+
+class DropPrimers
+end
+
+class DropStaticFields
 end
 
 class ERB
@@ -55725,6 +56630,9 @@ class Fiber
   def self.current(); end
 end
 
+class FieldAreAgnosticAboutParents
+end
+
 class FieldType
   def after_add_for_allowable_field_types(); end
 
@@ -58627,6 +59535,12 @@ module ITypeAssert
   extend ::T::InterfaceWrapper::Helpers
   extend ::T::Private::Methods::MethodHooks
   extend ::T::Private::Methods::SingletonMethodHooks
+end
+
+class Improvecollections
+end
+
+class IncreaseFieldValueSize
 end
 
 class Insertion
@@ -70776,7 +71690,11 @@ class Parser::AST::Processor
 
   def on_erange(node); end
 
+  def on_find_pattern(node); end
+
   def on_for(node); end
+
+  def on_forward_arg(node); end
 
   def on_gvar(node); end
 
@@ -71079,11 +71997,15 @@ class Parser::Builders::Default
 
   def false(false_t); end
 
+  def find_pattern(lbrack_t, elements, rbrack_t); end
+
   def float(float_t); end
 
   def for(for_t, iterator, in_t, iteratee, do_t, body, end_t); end
 
-  def forward_args(begin_t, dots_t, end_t); end
+  def forward_arg(dots_t); end
+
+  def forward_only_args(begin_t, dots_t, end_t); end
 
   def forwarded_args(dots_t); end
 
@@ -71258,6 +72180,10 @@ class Parser::Builders::Default
   def self.emit_encoding(); end
 
   def self.emit_encoding=(emit_encoding); end
+
+  def self.emit_forward_arg(); end
+
+  def self.emit_forward_arg=(emit_forward_arg); end
 
   def self.emit_index(); end
 
@@ -72065,15 +72991,15 @@ class Parser::Ruby24
 
   def _reduce_332(val, _values, result); end
 
-  def _reduce_336(val, _values, result); end
+  def _reduce_333(val, _values, result); end
+
+  def _reduce_337(val, _values, result); end
 
   def _reduce_34(val, _values, result); end
 
-  def _reduce_340(val, _values, result); end
+  def _reduce_341(val, _values, result); end
 
-  def _reduce_342(val, _values, result); end
-
-  def _reduce_345(val, _values, result); end
+  def _reduce_343(val, _values, result); end
 
   def _reduce_346(val, _values, result); end
 
@@ -72081,9 +73007,9 @@ class Parser::Ruby24
 
   def _reduce_348(val, _values, result); end
 
-  def _reduce_35(val, _values, result); end
+  def _reduce_349(val, _values, result); end
 
-  def _reduce_350(val, _values, result); end
+  def _reduce_35(val, _values, result); end
 
   def _reduce_351(val, _values, result); end
 
@@ -72123,9 +73049,9 @@ class Parser::Ruby24
 
   def _reduce_368(val, _values, result); end
 
-  def _reduce_37(val, _values, result); end
+  def _reduce_369(val, _values, result); end
 
-  def _reduce_370(val, _values, result); end
+  def _reduce_37(val, _values, result); end
 
   def _reduce_371(val, _values, result); end
 
@@ -72141,7 +73067,7 @@ class Parser::Ruby24
 
   def _reduce_377(val, _values, result); end
 
-  def _reduce_379(val, _values, result); end
+  def _reduce_378(val, _values, result); end
 
   def _reduce_38(val, _values, result); end
 
@@ -72163,9 +73089,9 @@ class Parser::Ruby24
 
   def _reduce_388(val, _values, result); end
 
-  def _reduce_39(val, _values, result); end
+  def _reduce_389(val, _values, result); end
 
-  def _reduce_390(val, _values, result); end
+  def _reduce_39(val, _values, result); end
 
   def _reduce_391(val, _values, result); end
 
@@ -72241,19 +73167,19 @@ class Parser::Ruby24
 
   def _reduce_424(val, _values, result); end
 
-  def _reduce_426(val, _values, result); end
+  def _reduce_425(val, _values, result); end
 
   def _reduce_427(val, _values, result); end
 
   def _reduce_428(val, _values, result); end
 
+  def _reduce_429(val, _values, result); end
+
   def _reduce_43(val, _values, result); end
 
-  def _reduce_431(val, _values, result); end
+  def _reduce_432(val, _values, result); end
 
-  def _reduce_433(val, _values, result); end
-
-  def _reduce_438(val, _values, result); end
+  def _reduce_434(val, _values, result); end
 
   def _reduce_439(val, _values, result); end
 
@@ -72327,7 +73253,7 @@ class Parser::Ruby24
 
   def _reduce_472(val, _values, result); end
 
-  def _reduce_474(val, _values, result); end
+  def _reduce_473(val, _values, result); end
 
   def _reduce_475(val, _values, result); end
 
@@ -72447,7 +73373,7 @@ class Parser::Ruby24
 
   def _reduce_530(val, _values, result); end
 
-  def _reduce_532(val, _values, result); end
+  def _reduce_531(val, _values, result); end
 
   def _reduce_533(val, _values, result); end
 
@@ -72477,7 +73403,7 @@ class Parser::Ruby24
 
   def _reduce_546(val, _values, result); end
 
-  def _reduce_549(val, _values, result); end
+  def _reduce_547(val, _values, result); end
 
   def _reduce_55(val, _values, result); end
 
@@ -72495,25 +73421,25 @@ class Parser::Ruby24
 
   def _reduce_556(val, _values, result); end
 
-  def _reduce_559(val, _values, result); end
+  def _reduce_557(val, _values, result); end
 
   def _reduce_56(val, _values, result); end
 
   def _reduce_560(val, _values, result); end
 
-  def _reduce_563(val, _values, result); end
+  def _reduce_561(val, _values, result); end
 
   def _reduce_564(val, _values, result); end
 
   def _reduce_565(val, _values, result); end
 
-  def _reduce_567(val, _values, result); end
+  def _reduce_566(val, _values, result); end
 
   def _reduce_568(val, _values, result); end
 
-  def _reduce_57(val, _values, result); end
+  def _reduce_569(val, _values, result); end
 
-  def _reduce_570(val, _values, result); end
+  def _reduce_57(val, _values, result); end
 
   def _reduce_571(val, _values, result); end
 
@@ -72525,23 +73451,25 @@ class Parser::Ruby24
 
   def _reduce_575(val, _values, result); end
 
-  def _reduce_588(val, _values, result); end
+  def _reduce_576(val, _values, result); end
 
   def _reduce_589(val, _values, result); end
 
   def _reduce_59(val, _values, result); end
 
-  def _reduce_594(val, _values, result); end
+  def _reduce_590(val, _values, result); end
 
   def _reduce_595(val, _values, result); end
 
-  def _reduce_599(val, _values, result); end
+  def _reduce_596(val, _values, result); end
 
   def _reduce_6(val, _values, result); end
 
   def _reduce_60(val, _values, result); end
 
-  def _reduce_603(val, _values, result); end
+  def _reduce_600(val, _values, result); end
+
+  def _reduce_604(val, _values, result); end
 
   def _reduce_61(val, _values, result); end
 
@@ -73081,9 +74009,15 @@ end
 class Parser::Source::TreeRewriter
   def action_root(); end
 
+  def as_nested_actions(); end
+
+  def as_replacements(); end
+
   def diagnostics(); end
 
   def empty?(); end
+
+  def import!(foreign_rewriter, offset: T.unsafe(nil)); end
 
   def in_transaction?(); end
 
@@ -73132,6 +74066,8 @@ class Parser::Source::TreeRewriter::Action
 
   def combine_children(more_children); end
 
+  def contract(); end
+
   def do_combine(action); end
 
   def empty?(); end
@@ -73147,6 +74083,10 @@ class Parser::Source::TreeRewriter::Action
   def insertion?(); end
 
   def merge(action); end
+
+  def moved(source_buffer, offset); end
+
+  def nested_actions(); end
 
   def ordered_replacements(); end
 
@@ -73507,6 +74447,18 @@ module PlanAssociation::GeneratedAssociationMethods
   def create_plan(*args, &block); end
 
   def create_plan!(*args, &block); end
+end
+
+class PlanModules
+end
+
+class Planner
+end
+
+class PlannerGui
+end
+
+class PlannerIi
 end
 
 class Proc
@@ -88249,6 +89201,27 @@ class Regexp::Token
   def self.members(); end
 end
 
+class RemoveAnotherDefaultValueFromObjectType
+end
+
+class RemoveDefaultValueFromObjectType
+end
+
+class RemoveInitialWorkflowAttempt
+end
+
+class RemoveParentChildAndAddFolderFromFolderContent
+end
+
+class RemovePrimersFromItems
+end
+
+class RenameAccountLogAssociation
+end
+
+class RenameToLatestStartTime
+end
+
 class Resolv::DNS
   def extract_resources(msg, name, typeclass); end
 
@@ -88854,6 +89827,9 @@ class Ripper
   def self.token_match(src, pattern); end
 end
 
+module RuboCop::AST
+end
+
 class RuboCop::AST::AliasNode
   def new_identifier(); end
 
@@ -88892,6 +89868,10 @@ class RuboCop::AST::ArrayNode
   def square_brackets?(); end
 
   def values(); end
+  PERCENT_LITERAL_TYPES = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::AST::ArrayNode
 end
 
 module RuboCop::AST::BasicLiteralNode
@@ -88937,6 +89917,10 @@ class RuboCop::AST::BlockNode
   def send_node(); end
 
   def void_context?(); end
+  VOID_CONTEXT_METHODS = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::AST::BlockNode
 end
 
 class RuboCop::AST::BreakNode
@@ -88946,6 +89930,13 @@ class RuboCop::AST::BreakNode
 end
 
 class RuboCop::AST::BreakNode
+end
+
+class RuboCop::AST::Builder
+  NODE_MAP = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::AST::Builder
 end
 
 class RuboCop::AST::CaseMatchNode
@@ -89287,6 +90278,7 @@ module RuboCop::AST::CollectionNode
   def zip(*args, &block); end
 
   def |(*args, &block); end
+  ARRAY_METHODS = ::T.let(nil, ::T.untyped)
 end
 
 module RuboCop::AST::CollectionNode
@@ -89447,6 +90439,26 @@ end
 class RuboCop::AST::IfNode
 end
 
+class RuboCop::AST::IndexNode
+  include ::RuboCop::AST::ParameterizedNode
+  include ::RuboCop::AST::MethodDispatchNode
+  include ::RuboCop::AST::MethodIdentifierPredicates
+  def attribute_accessor?(); end
+end
+
+class RuboCop::AST::IndexNode
+end
+
+class RuboCop::AST::IndexasgnNode
+  include ::RuboCop::AST::ParameterizedNode
+  include ::RuboCop::AST::MethodDispatchNode
+  include ::RuboCop::AST::MethodIdentifierPredicates
+  def attribute_accessor?(); end
+end
+
+class RuboCop::AST::IndexasgnNode
+end
+
 class RuboCop::AST::IntNode
   include ::RuboCop::AST::NumericNode
 end
@@ -89461,6 +90473,20 @@ class RuboCop::AST::KeywordSplatNode
   def hash_rocket?(); end
 
   def operator(); end
+  DOUBLE_SPLAT = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::AST::KeywordSplatNode
+end
+
+class RuboCop::AST::LambdaNode
+  include ::RuboCop::AST::ParameterizedNode
+  include ::RuboCop::AST::MethodDispatchNode
+  include ::RuboCop::AST::MethodIdentifierPredicates
+  def attribute_accessor?(); end
+end
+
+class RuboCop::AST::LambdaNode
 end
 
 module RuboCop::AST::MethodDispatchNode
@@ -89522,6 +90548,8 @@ module RuboCop::AST::MethodDispatchNode
   def special_modifier?(); end
 
   def unary_operation?(); end
+  ARITHMETIC_OPERATORS = ::T.let(nil, ::T.untyped)
+  SPECIAL_MODIFIERS = ::T.let(nil, ::T.untyped)
 end
 
 module RuboCop::AST::MethodDispatchNode
@@ -89539,11 +90567,25 @@ module RuboCop::AST::MethodIdentifierPredicates
 
   def const_receiver?(); end
 
+  def enumerable_method?(); end
+
   def enumerator_method?(); end
 
   def method?(name); end
 
   def negation_method?(); end
+
+  def nonmutating_array_method?(); end
+
+  def nonmutating_binary_operator_method?(); end
+
+  def nonmutating_hash_method?(); end
+
+  def nonmutating_operator_method?(); end
+
+  def nonmutating_string_method?(); end
+
+  def nonmutating_unary_operator_method?(); end
 
   def operator_method?(); end
 
@@ -89554,6 +90596,18 @@ module RuboCop::AST::MethodIdentifierPredicates
   def prefix_not?(); end
 
   def self_receiver?(); end
+  ENUMERABLE_METHODS = ::T.let(nil, ::T.untyped)
+  ENUMERATOR_METHODS = ::T.let(nil, ::T.untyped)
+  NONMUTATING_ARRAY_METHODS = ::T.let(nil, ::T.untyped)
+  NONMUTATING_BINARY_OPERATOR_METHODS = ::T.let(nil, ::T.untyped)
+  NONMUTATING_HASH_METHODS = ::T.let(nil, ::T.untyped)
+  NONMUTATING_OPERATOR_METHODS = ::T.let(nil, ::T.untyped)
+  NONMUTATING_STRING_METHODS = ::T.let(nil, ::T.untyped)
+  NONMUTATING_UNARY_OPERATOR_METHODS = ::T.let(nil, ::T.untyped)
+  OPERATOR_METHODS = ::T.let(nil, ::T.untyped)
+end
+
+module RuboCop::AST::MethodIdentifierPredicates
 end
 
 module RuboCop::AST::ModifierNode
@@ -89595,6 +90649,8 @@ class RuboCop::AST::Node
   def args_type?(); end
 
   def argument?(); end
+
+  def argument_type?(); end
 
   def array_pattern_type?(); end
 
@@ -89708,11 +90764,15 @@ class RuboCop::AST::Node
 
   def falsey_literal?(); end
 
+  def find_pattern_type?(); end
+
   def first_line(); end
 
   def float_type?(); end
 
   def for_type?(); end
+
+  def forward_arg_type?(); end
 
   def forward_args_type?(); end
 
@@ -89779,6 +90839,8 @@ class RuboCop::AST::Node
   def line_count(); end
 
   def literal?(); end
+
+  def loop_keyword?(); end
 
   def lvar_type?(); end
 
@@ -89861,6 +90923,8 @@ class RuboCop::AST::Node
   def parenthesized_call?(); end
 
   def pin_type?(); end
+
+  def post_condition_loop?(); end
 
   def postexe_type?(); end
 
@@ -89967,6 +91031,27 @@ class RuboCop::AST::Node
   def yield_type?(); end
 
   def zsuper_type?(); end
+  ARGUMENT_TYPES = ::T.let(nil, ::T.untyped)
+  ASSIGNMENTS = ::T.let(nil, ::T.untyped)
+  BASIC_CONDITIONALS = ::T.let(nil, ::T.untyped)
+  BASIC_LITERALS = ::T.let(nil, ::T.untyped)
+  COMPARISON_OPERATORS = ::T.let(nil, ::T.untyped)
+  COMPOSITE_LITERALS = ::T.let(nil, ::T.untyped)
+  CONDITIONALS = ::T.let(nil, ::T.untyped)
+  EQUALS_ASSIGNMENTS = ::T.let(nil, ::T.untyped)
+  FALSEY_LITERALS = ::T.let(nil, ::T.untyped)
+  IMMUTABLE_LITERALS = ::T.let(nil, ::T.untyped)
+  KEYWORDS = ::T.let(nil, ::T.untyped)
+  LITERALS = ::T.let(nil, ::T.untyped)
+  LOOP_TYPES = ::T.let(nil, ::T.untyped)
+  MUTABLE_LITERALS = ::T.let(nil, ::T.untyped)
+  OPERATOR_KEYWORDS = ::T.let(nil, ::T.untyped)
+  POST_CONDITION_LOOP_TYPES = ::T.let(nil, ::T.untyped)
+  REFERENCES = ::T.let(nil, ::T.untyped)
+  SHORTHAND_ASSIGNMENTS = ::T.let(nil, ::T.untyped)
+  SPECIAL_KEYWORDS = ::T.let(nil, ::T.untyped)
+  TRUTHY_LITERALS = ::T.let(nil, ::T.untyped)
+  VARIABLES = ::T.let(nil, ::T.untyped)
 end
 
 class RuboCop::AST::Node
@@ -89984,7 +91069,7 @@ class RuboCop::AST::NodePattern
 
   def marshal_load(pattern); end
 
-  def match(*args); end
+  def match(*args, **rest); end
 
   def pattern(); end
 end
@@ -89996,17 +91081,9 @@ class RuboCop::AST::NodePattern::Invalid
 end
 
 module RuboCop::AST::NodePattern::Macros
-  def def_node_matcher(method_name, pattern_str); end
+  def def_node_matcher(method_name, pattern_str, **keyword_defaults); end
 
-  def def_node_search(method_name, pattern_str); end
-
-  def node_search(method_name, compiler, on_match, prelude, called_from); end
-
-  def node_search_all(method_name, compiler, called_from); end
-
-  def node_search_body(method_name, trailing_params, prelude, match_code, on_match); end
-
-  def node_search_first(method_name, compiler, called_from); end
+  def def_node_search(method_name, pattern_str, **keyword_defaults); end
 end
 
 module RuboCop::AST::NodePattern::Macros
@@ -90018,6 +91095,10 @@ end
 
 module RuboCop::AST::NumericNode
   def sign?(); end
+  SIGN_REGEX = ::T.let(nil, ::T.untyped)
+end
+
+module RuboCop::AST::NumericNode
 end
 
 class RuboCop::AST::OrNode
@@ -90042,6 +91123,13 @@ class RuboCop::AST::PairNode
   def inverse_delimiter(with_spacing=T.unsafe(nil)); end
 
   def value_on_new_line?(); end
+  COLON = ::T.let(nil, ::T.untyped)
+  HASH_ROCKET = ::T.let(nil, ::T.untyped)
+  SPACED_COLON = ::T.let(nil, ::T.untyped)
+  SPACED_HASH_ROCKET = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::AST::PairNode
 end
 
 module RuboCop::AST::ParameterizedNode
@@ -90069,6 +91157,13 @@ module RuboCop::AST::PredicateOperatorNode
   def operator(); end
 
   def semantic_operator?(); end
+  LOGICAL_AND = ::T.let(nil, ::T.untyped)
+  LOGICAL_OR = ::T.let(nil, ::T.untyped)
+  SEMANTIC_AND = ::T.let(nil, ::T.untyped)
+  SEMANTIC_OR = ::T.let(nil, ::T.untyped)
+end
+
+module RuboCop::AST::PredicateOperatorNode
 end
 
 class RuboCop::AST::ProcessedSource
@@ -90126,6 +91221,7 @@ class RuboCop::AST::ProcessedSource
   def tokens(); end
 
   def valid_syntax?(); end
+  STRING_SOURCE_NAME = ::T.let(nil, ::T.untyped)
 end
 
 class RuboCop::AST::ProcessedSource
@@ -90144,9 +91240,33 @@ end
 class RuboCop::AST::RegexpNode
   def content(); end
 
+  def delimiter?(char); end
+
+  def delimiters(); end
+
+  def extended?(); end
+
+  def ignore_case?(); end
+
+  def interpolation?(); end
+
+  def multiline_mode?(); end
+
+  def no_encoding?(); end
+
+  def percent_r_literal?(); end
+
   def regopt(); end
 
+  def single_interpolation?(); end
+
+  def slash_literal?(); end
+
   def to_regexp(); end
+  OPTIONS = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::AST::RegexpNode
 end
 
 class RuboCop::AST::ResbodyNode
@@ -90283,6 +91403,8 @@ class RuboCop::AST::Token
 end
 
 module RuboCop::AST::Traversal
+  def on___ENCODING__(node); end
+
   def on_alias(node); end
 
   def on_and(node); end
@@ -90359,6 +91481,8 @@ module RuboCop::AST::Traversal
 
   def on_for(node); end
 
+  def on_forward_arg(node); end
+
   def on_forward_args(node); end
 
   def on_forwarded_args(node); end
@@ -90380,6 +91504,10 @@ module RuboCop::AST::Traversal
   def on_in_match(node); end
 
   def on_in_pattern(node); end
+
+  def on_index(node); end
+
+  def on_indexasgn(node); end
 
   def on_int(node); end
 
@@ -90453,6 +91581,8 @@ module RuboCop::AST::Traversal
 
   def on_preexe(node); end
 
+  def on_procarg0(node); end
+
   def on_rational(node); end
 
   def on_redo(node); end
@@ -90510,6 +91640,13 @@ module RuboCop::AST::Traversal
   def on_zsuper(node); end
 
   def walk(node); end
+  MANY_CHILD_NODES = ::T.let(nil, ::T.untyped)
+  NO_CHILD_NODES = ::T.let(nil, ::T.untyped)
+  ONE_CHILD_NODE = ::T.let(nil, ::T.untyped)
+  SECOND_CHILD_ONLY = ::T.let(nil, ::T.untyped)
+end
+
+module RuboCop::AST::Traversal
 end
 
 class RuboCop::AST::UntilNode
@@ -90523,6 +91660,13 @@ class RuboCop::AST::UntilNode
 end
 
 class RuboCop::AST::UntilNode
+end
+
+module RuboCop::AST::Version
+  STRING = ::T.let(nil, ::T.untyped)
+end
+
+module RuboCop::AST::Version
 end
 
 class RuboCop::AST::WhenNode
@@ -90562,6 +91706,9 @@ end
 class RuboCop::AST::YieldNode
 end
 
+module RuboCop::AST
+end
+
 class RuboCop::CLI
   def config_store(); end
 
@@ -90572,6 +91719,7 @@ end
 
 class RuboCop::CLI::Command::AutoGenerateConfig
   def run(); end
+  AUTO_GENERATED_FILE = ::T.let(nil, ::T.untyped)
 end
 
 class RuboCop::CLI::Command::Base
@@ -90787,15 +91935,7 @@ class RuboCop::ConfigLoader
   extend ::RuboCop::FileFinder
   def self.add_excludes_from_files(config, config_file); end
 
-  def self.add_inheritance_from_auto_generated_file(); end
-
   def self.add_missing_namespaces(path, hash); end
-
-  def self.auto_gen_config(); end
-
-  def self.auto_gen_config=(auto_gen_config); end
-
-  def self.auto_gen_config?(); end
 
   def self.clear_options(); end
 
@@ -90829,13 +91969,11 @@ class RuboCop::ConfigLoader
 
   def self.load_file(file); end
 
+  def self.load_yaml_configuration(absolute_path); end
+
   def self.merge(base_hash, derived_hash); end
 
   def self.merge_with_default(config, config_file, unset_nil: T.unsafe(nil)); end
-
-  def self.options_config(); end
-
-  def self.options_config=(options_config); end
 
   def self.possible_new_cops?(config); end
 
@@ -90937,6 +92075,12 @@ class RuboCop::Cop::AlignmentCorrector
   def self.processed_source(); end
 end
 
+module RuboCop::Cop::AllowedMethods
+end
+
+module RuboCop::Cop::AllowedMethods
+end
+
 class RuboCop::Cop::AmbiguousCopName
   def initialize(name, origin, badges); end
 end
@@ -90953,6 +92097,13 @@ end
 module RuboCop::Cop::ArraySyntax
 end
 
+module RuboCop::Cop::AutoCorrector
+  def support_autocorrect?(); end
+end
+
+module RuboCop::Cop::AutoCorrector
+end
+
 module RuboCop::Cop::AutocorrectLogic
   def autocorrect?(); end
 
@@ -90962,13 +92113,9 @@ module RuboCop::Cop::AutocorrectLogic
 
   def correctable?(); end
 
-  def disable_offense(node); end
-
   def disable_uncorrectable?(); end
 
   def safe_autocorrect?(); end
-
-  def support_autocorrect?(); end
 end
 
 module RuboCop::Cop::AutocorrectLogic
@@ -91002,6 +92149,105 @@ class RuboCop::Cop::Badge
   def self.parse(identifier); end
 end
 
+class RuboCop::Cop::Base
+  include ::RuboCop::AST::Sexp
+  include ::RuboCop::Cop::Util
+  include ::RuboCop::PathUtil
+  include ::RuboCop::Cop::IgnoredNode
+  include ::RuboCop::Cop::AutocorrectLogic
+  def add_global_offense(message=T.unsafe(nil), severity: T.unsafe(nil)); end
+
+  def add_offense(node_or_range, message: T.unsafe(nil), severity: T.unsafe(nil), &block); end
+
+  def config(); end
+
+  def config_to_allow_offenses(); end
+
+  def config_to_allow_offenses=(hash); end
+
+  def cop_config(); end
+
+  def cop_name(); end
+
+  def excluded_file?(file); end
+
+  def external_dependency_checksum(); end
+
+  def initialize(config=T.unsafe(nil), options=T.unsafe(nil)); end
+
+  def message(_range=T.unsafe(nil)); end
+
+  def name(); end
+
+  def offenses(); end
+
+  def on_investigation_end(); end
+
+  def on_new_investigation(); end
+
+  def on_other_file(); end
+
+  def processed_source(); end
+
+  def ready(); end
+
+  def relevant_file?(file); end
+
+  def target_rails_version(); end
+
+  def target_ruby_version(); end
+end
+
+class RuboCop::Cop::Base::InvestigationReport
+  def cop(); end
+
+  def cop=(_); end
+
+  def corrector(); end
+
+  def corrector=(_); end
+
+  def offenses(); end
+
+  def offenses=(_); end
+
+  def processed_source(); end
+
+  def processed_source=(_); end
+end
+
+class RuboCop::Cop::Base::InvestigationReport
+  def self.[](*_); end
+
+  def self.members(); end
+end
+
+class RuboCop::Cop::Base
+  extend ::RuboCop::AST::Sexp
+  extend ::RuboCop::AST::NodePattern::Macros
+  def self.autocorrect_incompatible_with(); end
+
+  def self.badge(); end
+
+  def self.cop_name(); end
+
+  def self.department(); end
+
+  def self.exclude_from_registry(); end
+
+  def self.inherited(subclass); end
+
+  def self.joining_forces(); end
+
+  def self.lint?(); end
+
+  def self.match?(given_names); end
+
+  def self.support_autocorrect?(); end
+
+  def self.support_multiple_source?(); end
+end
+
 class RuboCop::Cop::Bundler::DuplicatedGem
   include ::RuboCop::Cop::RangeHelp
   def gem_declarations(node0); end
@@ -91018,11 +92264,13 @@ end
 
 class RuboCop::Cop::Bundler::InsecureProtocolSource
   include ::RuboCop::Cop::RangeHelp
-  def autocorrect(node); end
-
   def insecure_protocol_source?(node=T.unsafe(nil)); end
 
   def on_send(node); end
+end
+
+class RuboCop::Cop::Bundler::InsecureProtocolSource
+  extend ::RuboCop::Cop::AutoCorrector
 end
 
 class RuboCop::Cop::Bundler::OrderedGems
@@ -91068,14 +92316,6 @@ end
 module RuboCop::Cop::CheckLineBreakable
 end
 
-module RuboCop::Cop::ClassishLength
-  include ::RuboCop::Cop::CodeLength
-  include ::RuboCop::Cop::ConfigurableMax
-end
-
-module RuboCop::Cop::ClassishLength
-end
-
 module RuboCop::Cop::CodeLength
   include ::RuboCop::Cop::ConfigurableMax
 end
@@ -91090,6 +92330,36 @@ class RuboCop::Cop::Commissioner
   def initialize(cops, forces=T.unsafe(nil), options=T.unsafe(nil)); end
 
   def investigate(processed_source); end
+end
+
+class RuboCop::Cop::Commissioner::InvestigationReport
+  def cop_reports(); end
+
+  def cop_reports=(_); end
+
+  def cops(); end
+
+  def correctors(); end
+
+  def errors(); end
+
+  def errors=(_); end
+
+  def merge(investigation); end
+
+  def offenses(); end
+
+  def offenses_per_cop(); end
+
+  def processed_source(); end
+
+  def processed_source=(_); end
+end
+
+class RuboCop::Cop::Commissioner::InvestigationReport
+  def self.[](*_); end
+
+  def self.members(); end
 end
 
 class RuboCop::Cop::Commissioner
@@ -91172,60 +92442,15 @@ module RuboCop::Cop::ConfigurableNumbering
 end
 
 class RuboCop::Cop::Cop
-  include ::RuboCop::AST::Sexp
-  include ::RuboCop::Cop::Util
-  include ::RuboCop::PathUtil
-  include ::RuboCop::Cop::IgnoredNode
-  include ::RuboCop::Cop::AutocorrectLogic
-  def add_offense(node, location: T.unsafe(nil), message: T.unsafe(nil), severity: T.unsafe(nil)); end
-
-  def config(); end
-
-  def config_to_allow_offenses(); end
-
-  def config_to_allow_offenses=(hash); end
-
-  def cop_config(); end
-
-  def cop_name(); end
-
-  def correct(node); end
+  def add_offense(node_or_range, location: T.unsafe(nil), message: T.unsafe(nil), severity: T.unsafe(nil), &block); end
 
   def corrections(); end
 
-  def disable_uncorrectable(node); end
-
-  def duplicate_location?(location); end
-
-  def excluded_file?(file); end
-
-  def external_dependency_checksum(); end
-
   def find_location(node, loc); end
-
-  def initialize(config=T.unsafe(nil), options=T.unsafe(nil)); end
-
-  def join_force?(_force_class); end
-
-  def message(_node=T.unsafe(nil)); end
-
-  def name(); end
-
-  def offenses(); end
 
   def parse(source, path=T.unsafe(nil)); end
 
-  def processed_source(); end
-
-  def processed_source=(processed_source); end
-
-  def reason_to_not_correct(node); end
-
-  def relevant_file?(file); end
-
-  def target_rails_version(); end
-
-  def target_ruby_version(); end
+  def support_autocorrect?(); end
 end
 
 class RuboCop::Cop::Cop::Correction
@@ -91249,25 +92474,7 @@ class RuboCop::Cop::Cop::Correction
 end
 
 class RuboCop::Cop::Cop
-  extend ::RuboCop::AST::Sexp
-  extend ::RuboCop::AST::NodePattern::Macros
   def self.all(); end
-
-  def self.autocorrect_incompatible_with(); end
-
-  def self.badge(); end
-
-  def self.cop_name(); end
-
-  def self.department(); end
-
-  def self.exclude_from_registry(); end
-
-  def self.inherited(subclass); end
-
-  def self.lint?(); end
-
-  def self.match?(given_names); end
 
   def self.qualified_cop_name(name, origin); end
 
@@ -91275,17 +92482,7 @@ class RuboCop::Cop::Cop
 end
 
 class RuboCop::Cop::Corrector
-  def corrections(); end
-
-  def diagnostics(); end
-
-  def initialize(source_buffer, corrections=T.unsafe(nil)); end
-
-  def insert_after(node_or_range, content); end
-
-  def insert_before(node_or_range, content); end
-
-  def remove(node_or_range); end
+  def initialize(source); end
 
   def remove_leading(node_or_range, size); end
 
@@ -91293,14 +92490,11 @@ class RuboCop::Cop::Corrector
 
   def remove_trailing(node_or_range, size); end
 
-  def replace(node_or_range, content); end
-
   def rewrite(); end
-
-  def wrap(node_or_range, before, after); end
 end
 
 class RuboCop::Cop::Corrector
+  def self.source_buffer(source); end
 end
 
 module RuboCop::Cop::DefNode
@@ -91777,17 +92971,18 @@ class RuboCop::Cop::Layout::CaseIndentation
   include ::RuboCop::Cop::Alignment
   include ::RuboCop::Cop::ConfigurableEnforcedStyle
   include ::RuboCop::Cop::RangeHelp
-  def autocorrect(node); end
-
   def on_case(case_node); end
 end
 
+class RuboCop::Cop::Layout::CaseIndentation
+  extend ::RuboCop::Cop::AutoCorrector
+end
+
 class RuboCop::Cop::Layout::ClassStructure
+  include ::RuboCop::Cop::VisibilityHelp
   def autocorrect(node); end
 
   def on_class(class_node); end
-
-  def visibility_block?(node=T.unsafe(nil)); end
 end
 
 class RuboCop::Cop::Layout::ClosingHeredocIndentation
@@ -91936,6 +93131,7 @@ end
 
 class RuboCop::Cop::Layout::EmptyLinesAroundAttributeAccessor
   include ::RuboCop::Cop::RangeHelp
+  include ::RuboCop::Cop::AllowedMethods
   def autocorrect(node); end
 
   def on_send(node); end
@@ -92460,12 +93656,11 @@ end
 class RuboCop::Cop::Layout::SpaceAroundBlockParameters
   include ::RuboCop::Cop::ConfigurableEnforcedStyle
   include ::RuboCop::Cop::RangeHelp
-  def autocorrect(target); end
-
   def on_block(node); end
 end
 
 class RuboCop::Cop::Layout::SpaceAroundBlockParameters
+  extend ::RuboCop::Cop::AutoCorrector
 end
 
 class RuboCop::Cop::Layout::SpaceAroundEqualsInParameterDefault
@@ -92746,6 +93941,27 @@ class RuboCop::Cop::Layout::TrailingWhitespace
   def investigate(processed_source); end
 end
 
+module RuboCop::Cop::Legacy
+end
+
+class RuboCop::Cop::Legacy::CorrectionsProxy
+  def <<(callable); end
+
+  def concat(corrections); end
+
+  def corrector(); end
+
+  def empty?(); end
+
+  def initialize(corrector); end
+end
+
+class RuboCop::Cop::Legacy::CorrectionsProxy
+end
+
+module RuboCop::Cop::Legacy
+end
+
 class RuboCop::Cop::LineBreakCorrector
 end
 
@@ -92814,6 +94030,16 @@ class RuboCop::Cop::Lint::CircularArgumentReference
   def on_kwoptarg(node); end
 
   def on_optarg(node); end
+end
+
+class RuboCop::Cop::Lint::ConstantResolution
+  def on_const(node); end
+
+  def unqualified_const?(node=T.unsafe(nil)); end
+  MSG = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::Cop::Lint::ConstantResolution
 end
 
 class RuboCop::Cop::Lint::Debugger
@@ -92989,6 +94215,8 @@ class RuboCop::Cop::Lint::InheritException
 end
 
 class RuboCop::Cop::Lint::InterpolationCheck
+  def autocorrect(node); end
+
   def heredoc?(node); end
 
   def on_str(node); end
@@ -93139,6 +94367,8 @@ class RuboCop::Cop::Lint::PercentSymbolArray
 end
 
 class RuboCop::Cop::Lint::RaiseException
+  def autocorrect(node); end
+
   def exception?(node=T.unsafe(nil)); end
 
   def exception_new_with_message?(node=T.unsafe(nil)); end
@@ -93154,9 +94384,15 @@ end
 
 class RuboCop::Cop::Lint::RedundantCopDisableDirective
   include ::RuboCop::Cop::RangeHelp
-  def autocorrect(args); end
+  def initialize(config=T.unsafe(nil), options=T.unsafe(nil), offenses=T.unsafe(nil)); end
 
-  def check(offenses, cop_disabled_line_ranges, comments); end
+  def offenses_to_check(); end
+
+  def offenses_to_check=(offenses_to_check); end
+end
+
+class RuboCop::Cop::Lint::RedundantCopDisableDirective
+  extend ::RuboCop::Cop::AutoCorrector
 end
 
 class RuboCop::Cop::Lint::RedundantCopEnableDirective
@@ -93214,6 +94450,8 @@ class RuboCop::Cop::Lint::RedundantWithObject
 end
 
 class RuboCop::Cop::Lint::RegexpAsCondition
+  def autocorrect(node); end
+
   def on_match_current_line(node); end
 end
 
@@ -93243,6 +94481,7 @@ end
 
 class RuboCop::Cop::Lint::SafeNavigationChain
   include ::RuboCop::Cop::NilMethods
+  include ::RuboCop::Cop::AllowedMethods
   def bad_method?(node=T.unsafe(nil)); end
 
   def on_send(node); end
@@ -93250,6 +94489,7 @@ end
 
 class RuboCop::Cop::Lint::SafeNavigationConsistency
   include ::RuboCop::Cop::NilMethods
+  include ::RuboCop::Cop::AllowedMethods
   def autocorrect(node); end
 
   def check(node); end
@@ -93258,6 +94498,8 @@ class RuboCop::Cop::Lint::SafeNavigationConsistency
 end
 
 class RuboCop::Cop::Lint::SafeNavigationWithEmpty
+  def autocorrect(node); end
+
   def on_if(node); end
 
   def safe_navigation_empty_in_conditional?(node=T.unsafe(nil)); end
@@ -93306,44 +94548,6 @@ end
 
 class RuboCop::Cop::Lint::SuppressedException
   def on_resbody(node); end
-end
-
-class RuboCop::Cop::Lint::Syntax
-  def add_offense_from_diagnostic(diagnostic, ruby_version); end
-
-  def add_offense_from_error(error); end
-end
-
-class RuboCop::Cop::Lint::Syntax::PseudoSourceRange
-  def begin_pos(); end
-
-  def begin_pos=(_); end
-
-  def column(); end
-
-  def column=(_); end
-
-  def end_pos(); end
-
-  def end_pos=(_); end
-
-  def line(); end
-
-  def line=(_); end
-
-  def source_line(); end
-
-  def source_line=(_); end
-end
-
-class RuboCop::Cop::Lint::Syntax::PseudoSourceRange
-  def self.[](*_); end
-
-  def self.members(); end
-end
-
-class RuboCop::Cop::Lint::Syntax
-  def self.offenses_from_processed_source(processed_source, config, options); end
 end
 
 class RuboCop::Cop::Lint::ToJSON
@@ -93582,7 +94786,7 @@ class RuboCop::Cop::Metrics::BlockNesting
 end
 
 class RuboCop::Cop::Metrics::ClassLength
-  include ::RuboCop::Cop::ClassishLength
+  include ::RuboCop::Cop::TooManyLines
   include ::RuboCop::Cop::CodeLength
   include ::RuboCop::Cop::ConfigurableMax
   def class_definition?(node=T.unsafe(nil)); end
@@ -93599,6 +94803,7 @@ class RuboCop::Cop::Metrics::CyclomaticComplexity
   include ::RuboCop::Cop::MethodComplexity
   include ::RuboCop::Cop::ConfigurableMax
   include ::RuboCop::Cop::IgnoredMethods
+  include ::RuboCop::Cop::Metrics::Utils::IteratingBlock
 end
 
 class RuboCop::Cop::Metrics::MethodLength
@@ -93613,7 +94818,7 @@ class RuboCop::Cop::Metrics::MethodLength
 end
 
 class RuboCop::Cop::Metrics::ModuleLength
-  include ::RuboCop::Cop::ClassishLength
+  include ::RuboCop::Cop::TooManyLines
   include ::RuboCop::Cop::CodeLength
   include ::RuboCop::Cop::ConfigurableMax
   def module_definition?(node=T.unsafe(nil)); end
@@ -93653,6 +94858,36 @@ end
 
 class RuboCop::Cop::Metrics::Utils::AbcSizeCalculator
   def self.calculate(node); end
+end
+
+class RuboCop::Cop::Metrics::Utils::CodeLengthCalculator
+  include ::RuboCop::Cop::Util
+  include ::RuboCop::PathUtil
+  def calculate(); end
+
+  def class_definition?(node=T.unsafe(nil)); end
+
+  def initialize(node, count_comments: T.unsafe(nil), foldable_types: T.unsafe(nil)); end
+
+  def module_definition?(node=T.unsafe(nil)); end
+  CLASSISH_TYPES = ::T.let(nil, ::T.untyped)
+  FOLDABLE_TYPES = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::Cop::Metrics::Utils::CodeLengthCalculator
+  extend ::RuboCop::AST::NodePattern::Macros
+end
+
+module RuboCop::Cop::Metrics::Utils::IteratingBlock
+  def block_method_name(node); end
+
+  def iterating_block?(node); end
+
+  def iterating_method?(name); end
+  KNOWN_ITERATING_METHODS = ::T.let(nil, ::T.untyped)
+end
+
+module RuboCop::Cop::Metrics::Utils::IteratingBlock
 end
 
 class RuboCop::Cop::Migration::DepartmentName
@@ -93712,12 +94947,15 @@ end
 class RuboCop::Cop::Naming::AsciiIdentifiers
   include ::RuboCop::Cop::RangeHelp
   def investigate(processed_source); end
+  CONSTANT_MSG = ::T.let(nil, ::T.untyped)
+  IDENTIFIER_MSG = ::T.let(nil, ::T.untyped)
 end
 
 class RuboCop::Cop::Naming::BinaryOperatorParameterName
   def on_def(node); end
 
   def op_method_candidate?(node=T.unsafe(nil)); end
+  EXCLUDED = ::T.let(nil, ::T.untyped)
 end
 
 class RuboCop::Cop::Naming::BlockParameterName
@@ -93795,6 +95033,7 @@ class RuboCop::Cop::Naming::MethodParameterName
 end
 
 class RuboCop::Cop::Naming::PredicateName
+  include ::RuboCop::Cop::AllowedMethods
   def dynamic_method_define(node=T.unsafe(nil)); end
 
   def on_def(node); end
@@ -93864,6 +95103,7 @@ module RuboCop::Cop::NegativeConditional
 end
 
 module RuboCop::Cop::NilMethods
+  include ::RuboCop::Cop::AllowedMethods
 end
 
 module RuboCop::Cop::NilMethods
@@ -93887,6 +95127,8 @@ class RuboCop::Cop::Offense
 
   def corrected_with_todo?(); end
 
+  def corrector(); end
+
   def disabled?(); end
 
   def eql?(other); end
@@ -93895,7 +95137,7 @@ class RuboCop::Cop::Offense
 
   def highlighted_area(); end
 
-  def initialize(severity, location, message, cop_name, status=T.unsafe(nil)); end
+  def initialize(severity, location, message, cop_name, status=T.unsafe(nil), corrector=T.unsafe(nil)); end
 
   def last_column(); end
 
@@ -93914,6 +95156,35 @@ class RuboCop::Cop::Offense
   def source_line(); end
 
   def status(); end
+  NO_LOCATION = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::Cop::Offense::PseudoSourceRange
+  def begin_pos(); end
+
+  def begin_pos=(_); end
+
+  def column(); end
+
+  def column=(_); end
+
+  def end_pos(); end
+
+  def end_pos=(_); end
+
+  def line(); end
+
+  def line=(_); end
+
+  def source_line(); end
+
+  def source_line=(_); end
+end
+
+class RuboCop::Cop::Offense::PseudoSourceRange
+  def self.[](*_); end
+
+  def self.members(); end
 end
 
 module RuboCop::Cop::OnNormalIfUnless
@@ -95179,6 +96450,24 @@ class RuboCop::Cop::Style::AccessModifierDeclarations
   def on_send(node); end
 end
 
+class RuboCop::Cop::Style::AccessorGrouping
+  include ::RuboCop::Cop::ConfigurableEnforcedStyle
+  include ::RuboCop::Cop::VisibilityHelp
+  def autocorrect(node); end
+
+  def on_class(node); end
+
+  def on_module(node); end
+
+  def on_sclass(node); end
+  ACCESSOR_METHODS = ::T.let(nil, ::T.untyped)
+  GROUPED_MSG = ::T.let(nil, ::T.untyped)
+  SEPARATED_MSG = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::Cop::Style::AccessorGrouping
+end
+
 class RuboCop::Cop::Style::Alias
   include ::RuboCop::Cop::ConfigurableEnforcedStyle
   def autocorrect(node); end
@@ -95255,6 +96544,21 @@ class RuboCop::Cop::Style::BeginBlock
   def on_preexe(node); end
 end
 
+class RuboCop::Cop::Style::BisectedAttrAccessor
+  include ::RuboCop::Cop::VisibilityHelp
+  def autocorrect(node); end
+
+  def on_class(class_node); end
+
+  def on_module(class_node); end
+
+  def on_sclass(class_node); end
+  MSG = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::Cop::Style::BisectedAttrAccessor
+end
+
 class RuboCop::Cop::Style::BlockComments
   include ::RuboCop::Cop::RangeHelp
   def autocorrect(comment); end
@@ -95329,6 +96633,8 @@ class RuboCop::Cop::Style::ClassVars
   def message(node); end
 
   def on_cvasgn(node); end
+
+  def on_send(node); end
 end
 
 class RuboCop::Cop::Style::CollectionMethods
@@ -95815,6 +97121,8 @@ end
 class RuboCop::Cop::Style::IfUnlessModifierOfIfUnless
   include ::RuboCop::Cop::StatementModifier
   include ::RuboCop::Cop::LineLengthHelp
+  def autocorrect(node); end
+
   def on_if(node); end
 end
 
@@ -96067,6 +97375,8 @@ class RuboCop::Cop::Style::MultilineMethodSignature
 end
 
 class RuboCop::Cop::Style::MultilineTernaryOperator
+  def autocorrect(node); end
+
   def on_if(node); end
 end
 
@@ -96168,6 +97478,7 @@ end
 
 class RuboCop::Cop::Style::NestedParenthesizedCalls
   include ::RuboCop::Cop::RangeHelp
+  include ::RuboCop::Cop::AllowedMethods
   def autocorrect(nested); end
 
   def on_csend(node); end
@@ -96176,6 +97487,8 @@ class RuboCop::Cop::Style::NestedParenthesizedCalls
 end
 
 class RuboCop::Cop::Style::NestedTernaryOperator
+  def autocorrect(node); end
+
   def on_if(node); end
 end
 
@@ -96445,8 +97758,6 @@ class RuboCop::Cop::Style::RandomWithOffset
 
   def integer_op_rand?(node=T.unsafe(nil)); end
 
-  def namespace(node=T.unsafe(nil)); end
-
   def on_send(node); end
 
   def rand_modified?(node=T.unsafe(nil)); end
@@ -96456,6 +97767,20 @@ class RuboCop::Cop::Style::RandomWithOffset
   def random_call(node=T.unsafe(nil)); end
 
   def to_int(node=T.unsafe(nil)); end
+end
+
+class RuboCop::Cop::Style::RedundantAssignment
+  def autocorrect(node); end
+
+  def on_def(node); end
+
+  def on_defs(node); end
+
+  def redundant_assignment?(node=T.unsafe(nil)); end
+  MSG = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::Cop::Style::RedundantAssignment
 end
 
 class RuboCop::Cop::Style::RedundantBegin
@@ -96496,13 +97821,35 @@ class RuboCop::Cop::Style::RedundantConditional
 end
 
 class RuboCop::Cop::Style::RedundantException
-  def autocorrect(node); end
-
   def compact?(node=T.unsafe(nil)); end
 
   def exploded?(node=T.unsafe(nil)); end
 
+  def fix_compact(node); end
+
+  def fix_exploded(node); end
+
   def on_send(node); end
+end
+
+class RuboCop::Cop::Style::RedundantException
+  extend ::RuboCop::Cop::AutoCorrector
+end
+
+class RuboCop::Cop::Style::RedundantFetchBlock
+  include ::RuboCop::Cop::FrozenStringLiteral
+  include ::RuboCop::Cop::RangeHelp
+  def autocorrect(node); end
+
+  def on_block(node); end
+
+  def rails_cache?(node=T.unsafe(nil)); end
+
+  def redundant_fetch_block_candidate?(node=T.unsafe(nil)); end
+  MSG = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::Cop::Style::RedundantFetchBlock
 end
 
 class RuboCop::Cop::Style::RedundantFreeze
@@ -96531,6 +97878,8 @@ class RuboCop::Cop::Style::RedundantParentheses
   def first_send_argument?(node=T.unsafe(nil)); end
 
   def first_super_argument?(node=T.unsafe(nil)); end
+
+  def first_yield_argument?(node=T.unsafe(nil)); end
 
   def method_node_and_args(node=T.unsafe(nil)); end
 
@@ -96606,6 +97955,7 @@ class RuboCop::Cop::Style::RedundantSelf
   def on_or_asgn(node); end
 
   def on_send(node); end
+  KEYWORDS = ::T.let(nil, ::T.untyped)
 end
 
 class RuboCop::Cop::Style::RedundantSort
@@ -96672,6 +98022,7 @@ end
 
 class RuboCop::Cop::Style::SafeNavigation
   include ::RuboCop::Cop::NilMethods
+  include ::RuboCop::Cop::AllowedMethods
   include ::RuboCop::Cop::RangeHelp
   def autocorrect(node); end
 
@@ -96836,6 +98187,9 @@ class RuboCop::Cop::Style::Strip
 end
 
 class RuboCop::Cop::Style::StructInheritance
+  include ::RuboCop::Cop::RangeHelp
+  def autocorrect(node); end
+
   def on_class(node); end
 
   def struct_constructor?(node=T.unsafe(nil)); end
@@ -96984,6 +98338,7 @@ class RuboCop::Cop::Style::TrailingUnderscoreVariable
 end
 
 class RuboCop::Cop::Style::TrivialAccessors
+  include ::RuboCop::Cop::AllowedMethods
   def autocorrect(node); end
 
   def looks_like_trivial_writer?(node=T.unsafe(nil)); end
@@ -97110,8 +98465,6 @@ module RuboCop::Cop::TargetRubyVersion
 end
 
 class RuboCop::Cop::Team
-  def autocorrect(buffer, cops); end
-
   def autocorrect?(); end
 
   def cops(); end
@@ -97124,11 +98477,11 @@ class RuboCop::Cop::Team
 
   def forces(); end
 
-  def forces_for(cops); end
-
   def initialize(cops, config=T.unsafe(nil), options=T.unsafe(nil)); end
 
   def inspect_file(processed_source); end
+
+  def investigate(processed_source); end
 
   def updated_source_file(); end
 
@@ -97137,23 +98490,9 @@ class RuboCop::Cop::Team
   def warnings(); end
 end
 
-class RuboCop::Cop::Team::Investigation
-  def errors(); end
-
-  def errors=(_); end
-
-  def offenses(); end
-
-  def offenses=(_); end
-end
-
-class RuboCop::Cop::Team::Investigation
-  def self.[](*_); end
-
-  def self.members(); end
-end
-
 class RuboCop::Cop::Team
+  def self.forces_for(cops); end
+
   def self.mobilize(cop_classes, config, options=T.unsafe(nil)); end
 
   def self.mobilize_cops(cop_classes, config, options=T.unsafe(nil)); end
@@ -97650,6 +98989,15 @@ end
 class RuboCop::Cop::VariableForce::VariableTable
 end
 
+module RuboCop::Cop::VisibilityHelp
+  def visibility_block?(node=T.unsafe(nil)); end
+  VISIBILITY_SCOPES = ::T.let(nil, ::T.untyped)
+end
+
+module RuboCop::Cop::VisibilityHelp
+  extend ::RuboCop::AST::NodePattern::Macros
+end
+
 class RuboCop::Error
 end
 
@@ -98046,6 +99394,8 @@ module RuboCop::NameSimilarity
   def self.find_similar_names(target_name, names); end
 end
 
+RuboCop::NodePattern = RuboCop::AST::NodePattern
+
 class RuboCop::OptionArgumentError
 end
 
@@ -98119,6 +99469,8 @@ end
 module RuboCop::Platform
   def self.windows?(); end
 end
+
+RuboCop::ProcessedSource = RuboCop::AST::ProcessedSource
 
 module RuboCop::Rails::Inject
 end
@@ -98381,6 +99733,8 @@ end
 class RuboCop::TargetRuby
   def self.supported_versions(); end
 end
+
+RuboCop::Token = RuboCop::AST::Token
 
 class RuboCop::ValidationError
 end
@@ -101546,6 +102900,9 @@ end
 
 module Singleton
   def self.__init__(klass); end
+end
+
+class SizeMatters
 end
 
 class Socket
@@ -110863,12 +112220,14 @@ class TrueClass
   def to_json(options=T.unsafe(nil)); end
 end
 
+class TwoNewFields
+end
+
 module URI
   include ::URI::RFC2396_REGEXP
 end
 
 class URI::FTP
-  include ::OpenURI::OpenRead
   def buffer_open(buf, proxy, options); end
 end
 
@@ -110926,7 +112285,6 @@ class URI::GID
 end
 
 class URI::HTTP
-  include ::OpenURI::OpenRead
   def buffer_open(buf, proxy, options); end
 end
 

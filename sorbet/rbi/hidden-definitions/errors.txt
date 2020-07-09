@@ -2225,8 +2225,8 @@
 # wrong constant name <Class:InstanceMethods>
 # wrong constant name apply
 # wrong constant name <static-init>
-# undefined method `request_params<defaultArg>1' for module `#<Module:0x000055e28a6e20b8>'
-# undefined method `validate<defaultArg>1' for module `#<Module:0x000055e28a6e20b8>'
+# undefined method `request_params<defaultArg>1' for module `#<Module:0x000055fa812713f8>'
+# undefined method `validate<defaultArg>1' for module `#<Module:0x000055fa812713f8>'
 # wrong constant name hash_format
 # wrong constant name join
 # wrong constant name request_params<defaultArg>1
@@ -14290,7 +14290,7 @@
 # wrong constant name <Class:RadioButtonBuilder>
 # uninitialized constant ActionView::Helpers::Tags::CollectionRadioButtons::TAG_PREFIXES
 # wrong constant name render
-# undefined method `radio_button<defaultArg>1' for class `#<Class:0x000055e2a1247668>'
+# undefined method `radio_button<defaultArg>1' for class `#<Class:0x000055fa94d05478>'
 # wrong constant name radio_button<defaultArg>1
 # wrong constant name radio_button
 # wrong constant name <static-init>
@@ -15483,6 +15483,7 @@
 # wrong constant name <Class:LegacyYamlAdapter>
 # wrong constant name <Class:LogSubscriber>
 # wrong constant name <Class:MassAssignmentSecurity>
+# wrong constant name <Class:Migration>
 # wrong constant name <Class:MigrationProxy>
 # wrong constant name <Class:Migrator>
 # wrong constant name <Class:NoTouching>
@@ -18126,7 +18127,7 @@
 # A copy of ActiveRecord::SchemaMigration::ActiveRecord_Relation has been removed from the module tree but is still active!
 # A copy of ActiveRecord::SchemaMigration::ActiveRecord_Relation has been removed from the module tree but is still active!
 # wrong constant name <static-init>
-# undefined singleton method `create_table<defaultArg>1' for `#<Class:0x000055e28752e058>'
+# undefined singleton method `create_table<defaultArg>1' for `#<Class:0x000055fa7fd54f38>'
 # wrong constant name create_table<defaultArg>1
 # wrong constant name create_table
 # wrong constant name drop_table
@@ -23539,9 +23540,13 @@
 # wrong constant name put_object
 # wrong constant name <static-init>
 # wrong constant name <static-init>
+# undefined method `decryption_cipher<defaultArg>1' for class `Aws::S3::EncryptionV2::DefaultCipherProvider'
+# undefined method `encryption_cipher<defaultArg>1' for class `Aws::S3::EncryptionV2::DefaultCipherProvider'
 # undefined method `initialize<defaultArg>1' for class `Aws::S3::EncryptionV2::DefaultCipherProvider'
 # Did you mean?  initialize_dup
+# wrong constant name decryption_cipher<defaultArg>1
 # wrong constant name decryption_cipher
+# wrong constant name encryption_cipher<defaultArg>1
 # wrong constant name encryption_cipher
 # wrong constant name initialize<defaultArg>1
 # wrong constant name initialize
@@ -23583,9 +23588,13 @@
 # wrong constant name encryption_materials
 # wrong constant name key_for
 # wrong constant name <static-init>
+# undefined method `decryption_cipher<defaultArg>1' for class `Aws::S3::EncryptionV2::KmsCipherProvider'
+# undefined method `encryption_cipher<defaultArg>1' for class `Aws::S3::EncryptionV2::KmsCipherProvider'
 # undefined method `initialize<defaultArg>1' for class `Aws::S3::EncryptionV2::KmsCipherProvider'
 # Did you mean?  initialize_dup
+# wrong constant name decryption_cipher<defaultArg>1
 # wrong constant name decryption_cipher
+# wrong constant name encryption_cipher<defaultArg>1
 # wrong constant name encryption_cipher
 # wrong constant name initialize<defaultArg>1
 # wrong constant name initialize
@@ -24099,9 +24108,12 @@
 # wrong constant name <Class:LocationConstraint>
 # wrong constant name <Class:Md5s>
 # wrong constant name <Class:Redirects>
+# wrong constant name <Class:RetryableBlockIO>
+# wrong constant name <Class:RetryableManagedFile>
 # wrong constant name <Class:S3HostId>
 # wrong constant name <Class:S3Signer>
 # wrong constant name <Class:SseCpk>
+# wrong constant name <Class:StreamingRetry>
 # wrong constant name <Class:UrlEncodedKeys>
 # wrong constant name <Class:AccelerateHandler>
 # wrong constant name <Class:OptionHandler>
@@ -24153,6 +24165,22 @@
 # wrong constant name <Class:Handler>
 # wrong constant name <static-init>
 # wrong constant name <static-init>
+# wrong constant name initialize
+# wrong constant name read
+# wrong constant name rewind
+# wrong constant name size
+# wrong constant name truncate
+# wrong constant name write
+# wrong constant name <static-init>
+# wrong constant name close
+# wrong constant name initialize
+# wrong constant name open?
+# wrong constant name read
+# wrong constant name rewind
+# wrong constant name size
+# wrong constant name truncate
+# wrong constant name write
+# wrong constant name <static-init>
 # wrong constant name <Class:Handler>
 # wrong constant name <static-init>
 # wrong constant name <static-init>
@@ -24172,6 +24200,9 @@
 # wrong constant name build_v4_signer<defaultArg>1
 # wrong constant name build_v4_signer
 # wrong constant name new_hostname
+# wrong constant name <Class:Handler>
+# wrong constant name <static-init>
+# wrong constant name <static-init>
 # wrong constant name <Class:Handler>
 # wrong constant name <static-init>
 # wrong constant name <static-init>
@@ -29277,14 +29308,15 @@
 # wrong constant name finished_a?
 # wrong constant name finished_b?
 # wrong constant name initialize
+# wrong constant name inspect
 # wrong constant name position
 # wrong constant name to_a
+# wrong constant name to_ary
 # wrong constant name unchanged?
 # wrong constant name <static-init>
 # wrong constant name from_a
 # wrong constant name valid_action?
 # uninitialized constant Diff::LCS::ContextChange::VALID_ACTIONS
-# wrong constant name inspect
 # wrong constant name new_element
 # wrong constant name new_position
 # wrong constant name old_element
@@ -29304,7 +29336,9 @@
 # wrong constant name finish
 # wrong constant name match
 # wrong constant name <static-init>
+# undefined method `diff<defaultArg>1' for class `Diff::LCS::Hunk'
 # wrong constant name blocks
+# wrong constant name diff<defaultArg>1
 # wrong constant name diff
 # wrong constant name end_new
 # wrong constant name end_old
@@ -29313,6 +29347,7 @@
 # wrong constant name flag_context=
 # wrong constant name initialize
 # wrong constant name merge
+# wrong constant name missing_last_newline?
 # wrong constant name overlaps?
 # wrong constant name start_new
 # wrong constant name start_old
@@ -43675,7 +43710,9 @@
 # wrong constant name on_empty_else
 # wrong constant name on_ensure
 # wrong constant name on_erange
+# wrong constant name on_find_pattern
 # wrong constant name on_for
+# wrong constant name on_forward_arg
 # wrong constant name on_gvar
 # wrong constant name on_gvasgn
 # wrong constant name on_hash
@@ -43878,9 +43915,11 @@
 # wrong constant name emit_file_line_as_literals
 # wrong constant name emit_file_line_as_literals=
 # wrong constant name false
+# wrong constant name find_pattern
 # wrong constant name float
 # wrong constant name for
-# wrong constant name forward_args
+# wrong constant name forward_arg
+# wrong constant name forward_only_args
 # wrong constant name forwarded_args
 # wrong constant name gvar
 # wrong constant name hash_pattern
@@ -43980,6 +44019,8 @@
 # wrong constant name emit_arg_inside_procarg0=
 # wrong constant name emit_encoding
 # wrong constant name emit_encoding=
+# wrong constant name emit_forward_arg
+# wrong constant name emit_forward_arg=
 # wrong constant name emit_index
 # wrong constant name emit_index=
 # wrong constant name emit_lambda
@@ -44421,16 +44462,16 @@
 # wrong constant name _reduce_330
 # wrong constant name _reduce_331
 # wrong constant name _reduce_332
-# wrong constant name _reduce_336
+# wrong constant name _reduce_333
+# wrong constant name _reduce_337
 # wrong constant name _reduce_34
-# wrong constant name _reduce_340
-# wrong constant name _reduce_342
-# wrong constant name _reduce_345
+# wrong constant name _reduce_341
+# wrong constant name _reduce_343
 # wrong constant name _reduce_346
 # wrong constant name _reduce_347
 # wrong constant name _reduce_348
+# wrong constant name _reduce_349
 # wrong constant name _reduce_35
-# wrong constant name _reduce_350
 # wrong constant name _reduce_351
 # wrong constant name _reduce_352
 # wrong constant name _reduce_353
@@ -44450,8 +44491,8 @@
 # wrong constant name _reduce_366
 # wrong constant name _reduce_367
 # wrong constant name _reduce_368
+# wrong constant name _reduce_369
 # wrong constant name _reduce_37
-# wrong constant name _reduce_370
 # wrong constant name _reduce_371
 # wrong constant name _reduce_372
 # wrong constant name _reduce_373
@@ -44459,7 +44500,7 @@
 # wrong constant name _reduce_375
 # wrong constant name _reduce_376
 # wrong constant name _reduce_377
-# wrong constant name _reduce_379
+# wrong constant name _reduce_378
 # wrong constant name _reduce_38
 # wrong constant name _reduce_380
 # wrong constant name _reduce_381
@@ -44470,8 +44511,8 @@
 # wrong constant name _reduce_386
 # wrong constant name _reduce_387
 # wrong constant name _reduce_388
+# wrong constant name _reduce_389
 # wrong constant name _reduce_39
-# wrong constant name _reduce_390
 # wrong constant name _reduce_391
 # wrong constant name _reduce_392
 # wrong constant name _reduce_393
@@ -44509,13 +44550,13 @@
 # wrong constant name _reduce_422
 # wrong constant name _reduce_423
 # wrong constant name _reduce_424
-# wrong constant name _reduce_426
+# wrong constant name _reduce_425
 # wrong constant name _reduce_427
 # wrong constant name _reduce_428
+# wrong constant name _reduce_429
 # wrong constant name _reduce_43
-# wrong constant name _reduce_431
-# wrong constant name _reduce_433
-# wrong constant name _reduce_438
+# wrong constant name _reduce_432
+# wrong constant name _reduce_434
 # wrong constant name _reduce_439
 # wrong constant name _reduce_440
 # wrong constant name _reduce_441
@@ -44552,7 +44593,7 @@
 # wrong constant name _reduce_470
 # wrong constant name _reduce_471
 # wrong constant name _reduce_472
-# wrong constant name _reduce_474
+# wrong constant name _reduce_473
 # wrong constant name _reduce_475
 # wrong constant name _reduce_476
 # wrong constant name _reduce_477
@@ -44612,7 +44653,7 @@
 # wrong constant name _reduce_528
 # wrong constant name _reduce_529
 # wrong constant name _reduce_530
-# wrong constant name _reduce_532
+# wrong constant name _reduce_531
 # wrong constant name _reduce_533
 # wrong constant name _reduce_534
 # wrong constant name _reduce_535
@@ -44627,7 +44668,7 @@
 # wrong constant name _reduce_544
 # wrong constant name _reduce_545
 # wrong constant name _reduce_546
-# wrong constant name _reduce_549
+# wrong constant name _reduce_547
 # wrong constant name _reduce_55
 # wrong constant name _reduce_550
 # wrong constant name _reduce_551
@@ -44636,30 +44677,31 @@
 # wrong constant name _reduce_554
 # wrong constant name _reduce_555
 # wrong constant name _reduce_556
-# wrong constant name _reduce_559
+# wrong constant name _reduce_557
 # wrong constant name _reduce_56
 # wrong constant name _reduce_560
-# wrong constant name _reduce_563
+# wrong constant name _reduce_561
 # wrong constant name _reduce_564
 # wrong constant name _reduce_565
-# wrong constant name _reduce_567
+# wrong constant name _reduce_566
 # wrong constant name _reduce_568
+# wrong constant name _reduce_569
 # wrong constant name _reduce_57
-# wrong constant name _reduce_570
 # wrong constant name _reduce_571
 # wrong constant name _reduce_572
 # wrong constant name _reduce_573
 # wrong constant name _reduce_574
 # wrong constant name _reduce_575
-# wrong constant name _reduce_588
+# wrong constant name _reduce_576
 # wrong constant name _reduce_589
 # wrong constant name _reduce_59
-# wrong constant name _reduce_594
+# wrong constant name _reduce_590
 # wrong constant name _reduce_595
-# wrong constant name _reduce_599
+# wrong constant name _reduce_596
 # wrong constant name _reduce_6
 # wrong constant name _reduce_60
-# wrong constant name _reduce_603
+# wrong constant name _reduce_600
+# wrong constant name _reduce_604
 # wrong constant name _reduce_61
 # wrong constant name _reduce_62
 # wrong constant name _reduce_63
@@ -44939,6 +44981,7 @@
 # wrong constant name replacement
 # wrong constant name <static-init>
 # wrong constant name <static-init>
+# undefined method `import!<defaultArg>1' for class `Parser::Source::TreeRewriter'
 # undefined method `initialize<defaultArg>1' for class `Parser::Source::TreeRewriter'
 # Did you mean?  initialize_dup
 # undefined method `initialize<defaultArg>2' for class `Parser::Source::TreeRewriter'
@@ -44947,8 +44990,12 @@
 # Did you mean?  initialize_dup
 # wrong constant name <Class:Action>
 # wrong constant name action_root
+# wrong constant name as_nested_actions
+# wrong constant name as_replacements
 # wrong constant name diagnostics
 # wrong constant name empty?
+# wrong constant name import!<defaultArg>1
+# wrong constant name import!
 # wrong constant name in_transaction?
 # wrong constant name initialize<defaultArg>1
 # wrong constant name initialize<defaultArg>2
@@ -44989,6 +45036,7 @@
 # wrong constant name children
 # wrong constant name combine
 # wrong constant name combine_children
+# wrong constant name contract
 # wrong constant name do_combine
 # wrong constant name empty?
 # wrong constant name fuse_deletions
@@ -45001,6 +45049,8 @@
 # wrong constant name insert_before
 # wrong constant name insertion?
 # wrong constant name merge
+# wrong constant name moved
+# wrong constant name nested_actions
 # wrong constant name ordered_replacements
 # wrong constant name place_in_hierarchy
 # wrong constant name range
@@ -52457,7 +52507,7 @@
 # wrong constant name <static-init>
 # wrong constant name properties
 # wrong constant name properties=
-# undefined singleton method `property<defaultArg>1' for `#<Module:0x000055e2a2861c50>'
+# undefined singleton method `property<defaultArg>1' for `#<Module:0x000055fa95aeeff8>'
 # wrong constant name <static-init>
 # wrong constant name properties
 # wrong constant name properties=
@@ -54090,6 +54140,65 @@
 # wrong constant name dedent_string
 # wrong constant name lex_state_name
 # wrong constant name token_match
+# wrong constant name <Class:AliasNode>
+# wrong constant name <Class:AndNode>
+# wrong constant name <Class:ArgsNode>
+# wrong constant name <Class:ArrayNode>
+# wrong constant name <Class:BasicLiteralNode>
+# wrong constant name <Class:BinaryOperatorNode>
+# wrong constant name <Class:BlockNode>
+# wrong constant name <Class:BreakNode>
+# wrong constant name <Class:Builder>
+# wrong constant name <Class:CaseMatchNode>
+# wrong constant name <Class:CaseNode>
+# wrong constant name <Class:ClassNode>
+# wrong constant name <Class:CollectionNode>
+# wrong constant name <Class:ConditionalNode>
+# wrong constant name <Class:DefNode>
+# wrong constant name <Class:DefinedNode>
+# wrong constant name <Class:EnsureNode>
+# wrong constant name <Class:FloatNode>
+# wrong constant name <Class:ForNode>
+# wrong constant name <Class:ForwardArgsNode>
+# wrong constant name <Class:HashElementNode>
+# wrong constant name <Class:HashNode>
+# wrong constant name <Class:IfNode>
+# wrong constant name <Class:IndexNode>
+# wrong constant name <Class:IndexasgnNode>
+# wrong constant name <Class:IntNode>
+# wrong constant name <Class:KeywordSplatNode>
+# wrong constant name <Class:LambdaNode>
+# wrong constant name <Class:MethodDispatchNode>
+# wrong constant name <Class:MethodIdentifierPredicates>
+# wrong constant name <Class:ModifierNode>
+# wrong constant name <Class:ModuleNode>
+# wrong constant name <Class:Node>
+# wrong constant name <Class:NodePattern>
+# wrong constant name <Class:NumericNode>
+# wrong constant name <Class:OrNode>
+# wrong constant name <Class:PairNode>
+# wrong constant name <Class:ParameterizedNode>
+# wrong constant name <Class:PredicateOperatorNode>
+# wrong constant name <Class:ProcessedSource>
+# wrong constant name <Class:RangeNode>
+# wrong constant name <Class:RegexpNode>
+# wrong constant name <Class:ResbodyNode>
+# wrong constant name <Class:RetryNode>
+# wrong constant name <Class:ReturnNode>
+# wrong constant name <Class:SelfClassNode>
+# wrong constant name <Class:SendNode>
+# wrong constant name <Class:Sexp>
+# wrong constant name <Class:StrNode>
+# wrong constant name <Class:SuperNode>
+# wrong constant name <Class:SymbolNode>
+# wrong constant name <Class:Token>
+# wrong constant name <Class:Traversal>
+# wrong constant name <Class:UntilNode>
+# wrong constant name <Class:Version>
+# wrong constant name <Class:WhenNode>
+# wrong constant name <Class:WhileNode>
+# wrong constant name <Class:YieldNode>
+# uninitialized constant RuboCop::AST::AliasNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::AliasNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::AliasNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::AliasNode::BASIC_LITERALS
@@ -54101,8 +54210,10 @@
 # uninitialized constant RuboCop::AST::AliasNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::AliasNode::KEYWORDS
 # uninitialized constant RuboCop::AST::AliasNode::LITERALS
+# uninitialized constant RuboCop::AST::AliasNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::AliasNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::AliasNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::AliasNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::AliasNode::REFERENCES
 # uninitialized constant RuboCop::AST::AliasNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::AliasNode::SPECIAL_KEYWORDS
@@ -54111,6 +54222,7 @@
 # wrong constant name new_identifier
 # wrong constant name old_identifier
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::AndNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::AndNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::AndNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::AndNode::BASIC_LITERALS
@@ -54124,8 +54236,10 @@
 # uninitialized constant RuboCop::AST::AndNode::LITERALS
 # uninitialized constant RuboCop::AST::AndNode::LOGICAL_AND
 # uninitialized constant RuboCop::AST::AndNode::LOGICAL_OR
+# uninitialized constant RuboCop::AST::AndNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::AndNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::AndNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::AndNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::AndNode::REFERENCES
 # uninitialized constant RuboCop::AST::AndNode::SEMANTIC_AND
 # uninitialized constant RuboCop::AST::AndNode::SEMANTIC_OR
@@ -54136,6 +54250,7 @@
 # wrong constant name alternate_operator
 # wrong constant name inverse_operator
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::ArgsNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::ArgsNode::ARRAY_METHODS
 # uninitialized constant RuboCop::AST::ArgsNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::ArgsNode::BASIC_CONDITIONALS
@@ -54148,8 +54263,10 @@
 # uninitialized constant RuboCop::AST::ArgsNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::ArgsNode::KEYWORDS
 # uninitialized constant RuboCop::AST::ArgsNode::LITERALS
+# uninitialized constant RuboCop::AST::ArgsNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::ArgsNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::ArgsNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::ArgsNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::ArgsNode::REFERENCES
 # uninitialized constant RuboCop::AST::ArgsNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::ArgsNode::SPECIAL_KEYWORDS
@@ -54158,6 +54275,7 @@
 # wrong constant name empty_and_without_delimiters?
 # wrong constant name <static-init>
 # undefined method `percent_literal?<defaultArg>1' for class `RuboCop::AST::ArrayNode'
+# uninitialized constant RuboCop::AST::ArrayNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::ArrayNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::ArrayNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::ArrayNode::BASIC_LITERALS
@@ -54169,8 +54287,10 @@
 # uninitialized constant RuboCop::AST::ArrayNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::ArrayNode::KEYWORDS
 # uninitialized constant RuboCop::AST::ArrayNode::LITERALS
+# uninitialized constant RuboCop::AST::ArrayNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::ArrayNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::ArrayNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::ArrayNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::ArrayNode::REFERENCES
 # uninitialized constant RuboCop::AST::ArrayNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::ArrayNode::SPECIAL_KEYWORDS
@@ -54182,27 +54302,38 @@
 # wrong constant name percent_literal?
 # wrong constant name square_brackets?
 # wrong constant name values
+# wrong constant name <static-init>
 # wrong constant name value
 # wrong constant name <static-init>
 # wrong constant name conditions
 # wrong constant name lhs
 # wrong constant name rhs
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::BlockNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::BlockNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::BlockNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::BlockNode::BASIC_LITERALS
 # uninitialized constant RuboCop::AST::BlockNode::COMPARISON_OPERATORS
 # uninitialized constant RuboCop::AST::BlockNode::COMPOSITE_LITERALS
 # uninitialized constant RuboCop::AST::BlockNode::CONDITIONALS
+# uninitialized constant RuboCop::AST::BlockNode::ENUMERABLE_METHODS
 # uninitialized constant RuboCop::AST::BlockNode::ENUMERATOR_METHODS
 # uninitialized constant RuboCop::AST::BlockNode::EQUALS_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::BlockNode::FALSEY_LITERALS
 # uninitialized constant RuboCop::AST::BlockNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::BlockNode::KEYWORDS
 # uninitialized constant RuboCop::AST::BlockNode::LITERALS
+# uninitialized constant RuboCop::AST::BlockNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::BlockNode::MUTABLE_LITERALS
+# uninitialized constant RuboCop::AST::BlockNode::NONMUTATING_ARRAY_METHODS
+# uninitialized constant RuboCop::AST::BlockNode::NONMUTATING_BINARY_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::BlockNode::NONMUTATING_HASH_METHODS
+# uninitialized constant RuboCop::AST::BlockNode::NONMUTATING_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::BlockNode::NONMUTATING_STRING_METHODS
+# uninitialized constant RuboCop::AST::BlockNode::NONMUTATING_UNARY_OPERATOR_METHODS
 # uninitialized constant RuboCop::AST::BlockNode::OPERATOR_KEYWORDS
 # uninitialized constant RuboCop::AST::BlockNode::OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::BlockNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::BlockNode::REFERENCES
 # uninitialized constant RuboCop::AST::BlockNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::BlockNode::SPECIAL_KEYWORDS
@@ -54220,6 +54351,8 @@
 # wrong constant name opening_delimiter
 # wrong constant name send_node
 # wrong constant name void_context?
+# wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::BreakNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::BreakNode::ARITHMETIC_OPERATORS
 # uninitialized constant RuboCop::AST::BreakNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::BreakNode::BASIC_CONDITIONALS
@@ -54227,15 +54360,24 @@
 # uninitialized constant RuboCop::AST::BreakNode::COMPARISON_OPERATORS
 # uninitialized constant RuboCop::AST::BreakNode::COMPOSITE_LITERALS
 # uninitialized constant RuboCop::AST::BreakNode::CONDITIONALS
+# uninitialized constant RuboCop::AST::BreakNode::ENUMERABLE_METHODS
 # uninitialized constant RuboCop::AST::BreakNode::ENUMERATOR_METHODS
 # uninitialized constant RuboCop::AST::BreakNode::EQUALS_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::BreakNode::FALSEY_LITERALS
 # uninitialized constant RuboCop::AST::BreakNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::BreakNode::KEYWORDS
 # uninitialized constant RuboCop::AST::BreakNode::LITERALS
+# uninitialized constant RuboCop::AST::BreakNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::BreakNode::MUTABLE_LITERALS
+# uninitialized constant RuboCop::AST::BreakNode::NONMUTATING_ARRAY_METHODS
+# uninitialized constant RuboCop::AST::BreakNode::NONMUTATING_BINARY_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::BreakNode::NONMUTATING_HASH_METHODS
+# uninitialized constant RuboCop::AST::BreakNode::NONMUTATING_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::BreakNode::NONMUTATING_STRING_METHODS
+# uninitialized constant RuboCop::AST::BreakNode::NONMUTATING_UNARY_OPERATOR_METHODS
 # uninitialized constant RuboCop::AST::BreakNode::OPERATOR_KEYWORDS
 # uninitialized constant RuboCop::AST::BreakNode::OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::BreakNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::BreakNode::REFERENCES
 # uninitialized constant RuboCop::AST::BreakNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::BreakNode::SPECIAL_KEYWORDS
@@ -54243,6 +54385,8 @@
 # uninitialized constant RuboCop::AST::BreakNode::TRUTHY_LITERALS
 # uninitialized constant RuboCop::AST::BreakNode::VARIABLES
 # wrong constant name <static-init>
+# wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::CaseMatchNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::CaseMatchNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::CaseMatchNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::CaseMatchNode::BASIC_LITERALS
@@ -54254,8 +54398,10 @@
 # uninitialized constant RuboCop::AST::CaseMatchNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::CaseMatchNode::KEYWORDS
 # uninitialized constant RuboCop::AST::CaseMatchNode::LITERALS
+# uninitialized constant RuboCop::AST::CaseMatchNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::CaseMatchNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::CaseMatchNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::CaseMatchNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::CaseMatchNode::REFERENCES
 # uninitialized constant RuboCop::AST::CaseMatchNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::CaseMatchNode::SPECIAL_KEYWORDS
@@ -54267,6 +54413,7 @@
 # wrong constant name in_pattern_branches
 # wrong constant name keyword
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::CaseNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::CaseNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::CaseNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::CaseNode::BASIC_LITERALS
@@ -54278,8 +54425,10 @@
 # uninitialized constant RuboCop::AST::CaseNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::CaseNode::KEYWORDS
 # uninitialized constant RuboCop::AST::CaseNode::LITERALS
+# uninitialized constant RuboCop::AST::CaseNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::CaseNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::CaseNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::CaseNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::CaseNode::REFERENCES
 # uninitialized constant RuboCop::AST::CaseNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::CaseNode::SPECIAL_KEYWORDS
@@ -54291,6 +54440,7 @@
 # wrong constant name keyword
 # wrong constant name when_branches
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::ClassNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::ClassNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::ClassNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::ClassNode::BASIC_LITERALS
@@ -54302,8 +54452,10 @@
 # uninitialized constant RuboCop::AST::ClassNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::ClassNode::KEYWORDS
 # uninitialized constant RuboCop::AST::ClassNode::LITERALS
+# uninitialized constant RuboCop::AST::ClassNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::ClassNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::ClassNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::ClassNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::ClassNode::REFERENCES
 # uninitialized constant RuboCop::AST::ClassNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::ClassNode::SPECIAL_KEYWORDS
@@ -54461,26 +54613,37 @@
 # wrong constant name values_at
 # wrong constant name zip
 # wrong constant name |
+# wrong constant name <static-init>
 # wrong constant name body
 # wrong constant name condition
 # wrong constant name multiline_condition?
 # wrong constant name single_line_condition?
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::DefNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::DefNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::DefNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::DefNode::BASIC_LITERALS
 # uninitialized constant RuboCop::AST::DefNode::COMPARISON_OPERATORS
 # uninitialized constant RuboCop::AST::DefNode::COMPOSITE_LITERALS
 # uninitialized constant RuboCop::AST::DefNode::CONDITIONALS
+# uninitialized constant RuboCop::AST::DefNode::ENUMERABLE_METHODS
 # uninitialized constant RuboCop::AST::DefNode::ENUMERATOR_METHODS
 # uninitialized constant RuboCop::AST::DefNode::EQUALS_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::DefNode::FALSEY_LITERALS
 # uninitialized constant RuboCop::AST::DefNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::DefNode::KEYWORDS
 # uninitialized constant RuboCop::AST::DefNode::LITERALS
+# uninitialized constant RuboCop::AST::DefNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::DefNode::MUTABLE_LITERALS
+# uninitialized constant RuboCop::AST::DefNode::NONMUTATING_ARRAY_METHODS
+# uninitialized constant RuboCop::AST::DefNode::NONMUTATING_BINARY_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::DefNode::NONMUTATING_HASH_METHODS
+# uninitialized constant RuboCop::AST::DefNode::NONMUTATING_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::DefNode::NONMUTATING_STRING_METHODS
+# uninitialized constant RuboCop::AST::DefNode::NONMUTATING_UNARY_OPERATOR_METHODS
 # uninitialized constant RuboCop::AST::DefNode::OPERATOR_KEYWORDS
 # uninitialized constant RuboCop::AST::DefNode::OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::DefNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::DefNode::REFERENCES
 # uninitialized constant RuboCop::AST::DefNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::DefNode::SPECIAL_KEYWORDS
@@ -54493,6 +54656,7 @@
 # wrong constant name receiver
 # wrong constant name void_context?
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::DefinedNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::DefinedNode::ARITHMETIC_OPERATORS
 # uninitialized constant RuboCop::AST::DefinedNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::DefinedNode::BASIC_CONDITIONALS
@@ -54500,15 +54664,24 @@
 # uninitialized constant RuboCop::AST::DefinedNode::COMPARISON_OPERATORS
 # uninitialized constant RuboCop::AST::DefinedNode::COMPOSITE_LITERALS
 # uninitialized constant RuboCop::AST::DefinedNode::CONDITIONALS
+# uninitialized constant RuboCop::AST::DefinedNode::ENUMERABLE_METHODS
 # uninitialized constant RuboCop::AST::DefinedNode::ENUMERATOR_METHODS
 # uninitialized constant RuboCop::AST::DefinedNode::EQUALS_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::DefinedNode::FALSEY_LITERALS
 # uninitialized constant RuboCop::AST::DefinedNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::DefinedNode::KEYWORDS
 # uninitialized constant RuboCop::AST::DefinedNode::LITERALS
+# uninitialized constant RuboCop::AST::DefinedNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::DefinedNode::MUTABLE_LITERALS
+# uninitialized constant RuboCop::AST::DefinedNode::NONMUTATING_ARRAY_METHODS
+# uninitialized constant RuboCop::AST::DefinedNode::NONMUTATING_BINARY_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::DefinedNode::NONMUTATING_HASH_METHODS
+# uninitialized constant RuboCop::AST::DefinedNode::NONMUTATING_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::DefinedNode::NONMUTATING_STRING_METHODS
+# uninitialized constant RuboCop::AST::DefinedNode::NONMUTATING_UNARY_OPERATOR_METHODS
 # uninitialized constant RuboCop::AST::DefinedNode::OPERATOR_KEYWORDS
 # uninitialized constant RuboCop::AST::DefinedNode::OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::DefinedNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::DefinedNode::REFERENCES
 # uninitialized constant RuboCop::AST::DefinedNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::DefinedNode::SPECIAL_KEYWORDS
@@ -54516,6 +54689,7 @@
 # uninitialized constant RuboCop::AST::DefinedNode::TRUTHY_LITERALS
 # uninitialized constant RuboCop::AST::DefinedNode::VARIABLES
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::EnsureNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::EnsureNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::EnsureNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::EnsureNode::BASIC_LITERALS
@@ -54527,8 +54701,10 @@
 # uninitialized constant RuboCop::AST::EnsureNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::EnsureNode::KEYWORDS
 # uninitialized constant RuboCop::AST::EnsureNode::LITERALS
+# uninitialized constant RuboCop::AST::EnsureNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::EnsureNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::EnsureNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::EnsureNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::EnsureNode::REFERENCES
 # uninitialized constant RuboCop::AST::EnsureNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::EnsureNode::SPECIAL_KEYWORDS
@@ -54536,6 +54712,7 @@
 # uninitialized constant RuboCop::AST::EnsureNode::VARIABLES
 # wrong constant name body
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::FloatNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::FloatNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::FloatNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::FloatNode::BASIC_LITERALS
@@ -54547,8 +54724,10 @@
 # uninitialized constant RuboCop::AST::FloatNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::FloatNode::KEYWORDS
 # uninitialized constant RuboCop::AST::FloatNode::LITERALS
+# uninitialized constant RuboCop::AST::FloatNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::FloatNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::FloatNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::FloatNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::FloatNode::REFERENCES
 # uninitialized constant RuboCop::AST::FloatNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::FloatNode::SIGN_REGEX
@@ -54556,6 +54735,7 @@
 # uninitialized constant RuboCop::AST::FloatNode::TRUTHY_LITERALS
 # uninitialized constant RuboCop::AST::FloatNode::VARIABLES
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::ForNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::ForNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::ForNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::ForNode::BASIC_LITERALS
@@ -54567,8 +54747,10 @@
 # uninitialized constant RuboCop::AST::ForNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::ForNode::KEYWORDS
 # uninitialized constant RuboCop::AST::ForNode::LITERALS
+# uninitialized constant RuboCop::AST::ForNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::ForNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::ForNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::ForNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::ForNode::REFERENCES
 # uninitialized constant RuboCop::AST::ForNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::ForNode::SPECIAL_KEYWORDS
@@ -54581,6 +54763,7 @@
 # wrong constant name variable
 # wrong constant name void_context?
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::ForwardArgsNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::ForwardArgsNode::ARRAY_METHODS
 # uninitialized constant RuboCop::AST::ForwardArgsNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::ForwardArgsNode::BASIC_CONDITIONALS
@@ -54593,8 +54776,10 @@
 # uninitialized constant RuboCop::AST::ForwardArgsNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::ForwardArgsNode::KEYWORDS
 # uninitialized constant RuboCop::AST::ForwardArgsNode::LITERALS
+# uninitialized constant RuboCop::AST::ForwardArgsNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::ForwardArgsNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::ForwardArgsNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::ForwardArgsNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::ForwardArgsNode::REFERENCES
 # uninitialized constant RuboCop::AST::ForwardArgsNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::ForwardArgsNode::SPECIAL_KEYWORDS
@@ -54610,6 +54795,7 @@
 # wrong constant name value
 # wrong constant name value_delta
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::HashNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::HashNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::HashNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::HashNode::BASIC_LITERALS
@@ -54621,8 +54807,10 @@
 # uninitialized constant RuboCop::AST::HashNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::HashNode::KEYWORDS
 # uninitialized constant RuboCop::AST::HashNode::LITERALS
+# uninitialized constant RuboCop::AST::HashNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::HashNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::HashNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::HashNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::HashNode::REFERENCES
 # uninitialized constant RuboCop::AST::HashNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::HashNode::SPECIAL_KEYWORDS
@@ -54639,6 +54827,7 @@
 # wrong constant name pairs_on_same_line?
 # wrong constant name values
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::IfNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::IfNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::IfNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::IfNode::BASIC_LITERALS
@@ -54650,8 +54839,10 @@
 # uninitialized constant RuboCop::AST::IfNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::IfNode::KEYWORDS
 # uninitialized constant RuboCop::AST::IfNode::LITERALS
+# uninitialized constant RuboCop::AST::IfNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::IfNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::IfNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::IfNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::IfNode::REFERENCES
 # uninitialized constant RuboCop::AST::IfNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::IfNode::SPECIAL_KEYWORDS
@@ -54671,6 +54862,75 @@
 # wrong constant name ternary?
 # wrong constant name unless?
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::IndexNode::ARGUMENT_TYPES
+# uninitialized constant RuboCop::AST::IndexNode::ARITHMETIC_OPERATORS
+# uninitialized constant RuboCop::AST::IndexNode::ASSIGNMENTS
+# uninitialized constant RuboCop::AST::IndexNode::BASIC_CONDITIONALS
+# uninitialized constant RuboCop::AST::IndexNode::BASIC_LITERALS
+# uninitialized constant RuboCop::AST::IndexNode::COMPARISON_OPERATORS
+# uninitialized constant RuboCop::AST::IndexNode::COMPOSITE_LITERALS
+# uninitialized constant RuboCop::AST::IndexNode::CONDITIONALS
+# uninitialized constant RuboCop::AST::IndexNode::ENUMERABLE_METHODS
+# uninitialized constant RuboCop::AST::IndexNode::ENUMERATOR_METHODS
+# uninitialized constant RuboCop::AST::IndexNode::EQUALS_ASSIGNMENTS
+# uninitialized constant RuboCop::AST::IndexNode::FALSEY_LITERALS
+# uninitialized constant RuboCop::AST::IndexNode::IMMUTABLE_LITERALS
+# uninitialized constant RuboCop::AST::IndexNode::KEYWORDS
+# uninitialized constant RuboCop::AST::IndexNode::LITERALS
+# uninitialized constant RuboCop::AST::IndexNode::LOOP_TYPES
+# uninitialized constant RuboCop::AST::IndexNode::MUTABLE_LITERALS
+# uninitialized constant RuboCop::AST::IndexNode::NONMUTATING_ARRAY_METHODS
+# uninitialized constant RuboCop::AST::IndexNode::NONMUTATING_BINARY_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::IndexNode::NONMUTATING_HASH_METHODS
+# uninitialized constant RuboCop::AST::IndexNode::NONMUTATING_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::IndexNode::NONMUTATING_STRING_METHODS
+# uninitialized constant RuboCop::AST::IndexNode::NONMUTATING_UNARY_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::IndexNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::IndexNode::OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::IndexNode::POST_CONDITION_LOOP_TYPES
+# uninitialized constant RuboCop::AST::IndexNode::REFERENCES
+# uninitialized constant RuboCop::AST::IndexNode::SHORTHAND_ASSIGNMENTS
+# uninitialized constant RuboCop::AST::IndexNode::SPECIAL_KEYWORDS
+# uninitialized constant RuboCop::AST::IndexNode::SPECIAL_MODIFIERS
+# uninitialized constant RuboCop::AST::IndexNode::TRUTHY_LITERALS
+# uninitialized constant RuboCop::AST::IndexNode::VARIABLES
+# wrong constant name attribute_accessor?
+# wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::IndexasgnNode::ARGUMENT_TYPES
+# uninitialized constant RuboCop::AST::IndexasgnNode::ARITHMETIC_OPERATORS
+# uninitialized constant RuboCop::AST::IndexasgnNode::ASSIGNMENTS
+# uninitialized constant RuboCop::AST::IndexasgnNode::BASIC_CONDITIONALS
+# uninitialized constant RuboCop::AST::IndexasgnNode::BASIC_LITERALS
+# uninitialized constant RuboCop::AST::IndexasgnNode::COMPARISON_OPERATORS
+# uninitialized constant RuboCop::AST::IndexasgnNode::COMPOSITE_LITERALS
+# uninitialized constant RuboCop::AST::IndexasgnNode::CONDITIONALS
+# uninitialized constant RuboCop::AST::IndexasgnNode::ENUMERABLE_METHODS
+# uninitialized constant RuboCop::AST::IndexasgnNode::ENUMERATOR_METHODS
+# uninitialized constant RuboCop::AST::IndexasgnNode::EQUALS_ASSIGNMENTS
+# uninitialized constant RuboCop::AST::IndexasgnNode::FALSEY_LITERALS
+# uninitialized constant RuboCop::AST::IndexasgnNode::IMMUTABLE_LITERALS
+# uninitialized constant RuboCop::AST::IndexasgnNode::KEYWORDS
+# uninitialized constant RuboCop::AST::IndexasgnNode::LITERALS
+# uninitialized constant RuboCop::AST::IndexasgnNode::LOOP_TYPES
+# uninitialized constant RuboCop::AST::IndexasgnNode::MUTABLE_LITERALS
+# uninitialized constant RuboCop::AST::IndexasgnNode::NONMUTATING_ARRAY_METHODS
+# uninitialized constant RuboCop::AST::IndexasgnNode::NONMUTATING_BINARY_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::IndexasgnNode::NONMUTATING_HASH_METHODS
+# uninitialized constant RuboCop::AST::IndexasgnNode::NONMUTATING_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::IndexasgnNode::NONMUTATING_STRING_METHODS
+# uninitialized constant RuboCop::AST::IndexasgnNode::NONMUTATING_UNARY_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::IndexasgnNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::IndexasgnNode::OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::IndexasgnNode::POST_CONDITION_LOOP_TYPES
+# uninitialized constant RuboCop::AST::IndexasgnNode::REFERENCES
+# uninitialized constant RuboCop::AST::IndexasgnNode::SHORTHAND_ASSIGNMENTS
+# uninitialized constant RuboCop::AST::IndexasgnNode::SPECIAL_KEYWORDS
+# uninitialized constant RuboCop::AST::IndexasgnNode::SPECIAL_MODIFIERS
+# uninitialized constant RuboCop::AST::IndexasgnNode::TRUTHY_LITERALS
+# uninitialized constant RuboCop::AST::IndexasgnNode::VARIABLES
+# wrong constant name attribute_accessor?
+# wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::IntNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::IntNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::IntNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::IntNode::BASIC_LITERALS
@@ -54682,8 +54942,10 @@
 # uninitialized constant RuboCop::AST::IntNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::IntNode::KEYWORDS
 # uninitialized constant RuboCop::AST::IntNode::LITERALS
+# uninitialized constant RuboCop::AST::IntNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::IntNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::IntNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::IntNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::IntNode::REFERENCES
 # uninitialized constant RuboCop::AST::IntNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::IntNode::SIGN_REGEX
@@ -54691,6 +54953,7 @@
 # uninitialized constant RuboCop::AST::IntNode::TRUTHY_LITERALS
 # uninitialized constant RuboCop::AST::IntNode::VARIABLES
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::KeywordSplatNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::KeywordSplatNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::KeywordSplatNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::KeywordSplatNode::BASIC_LITERALS
@@ -54702,8 +54965,10 @@
 # uninitialized constant RuboCop::AST::KeywordSplatNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::KeywordSplatNode::KEYWORDS
 # uninitialized constant RuboCop::AST::KeywordSplatNode::LITERALS
+# uninitialized constant RuboCop::AST::KeywordSplatNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::KeywordSplatNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::KeywordSplatNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::KeywordSplatNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::KeywordSplatNode::REFERENCES
 # uninitialized constant RuboCop::AST::KeywordSplatNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::KeywordSplatNode::SPECIAL_KEYWORDS
@@ -54712,11 +54977,53 @@
 # wrong constant name colon?
 # wrong constant name hash_rocket?
 # wrong constant name operator
+# wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::LambdaNode::ARGUMENT_TYPES
+# uninitialized constant RuboCop::AST::LambdaNode::ARITHMETIC_OPERATORS
+# uninitialized constant RuboCop::AST::LambdaNode::ASSIGNMENTS
+# uninitialized constant RuboCop::AST::LambdaNode::BASIC_CONDITIONALS
+# uninitialized constant RuboCop::AST::LambdaNode::BASIC_LITERALS
+# uninitialized constant RuboCop::AST::LambdaNode::COMPARISON_OPERATORS
+# uninitialized constant RuboCop::AST::LambdaNode::COMPOSITE_LITERALS
+# uninitialized constant RuboCop::AST::LambdaNode::CONDITIONALS
+# uninitialized constant RuboCop::AST::LambdaNode::ENUMERABLE_METHODS
+# uninitialized constant RuboCop::AST::LambdaNode::ENUMERATOR_METHODS
+# uninitialized constant RuboCop::AST::LambdaNode::EQUALS_ASSIGNMENTS
+# uninitialized constant RuboCop::AST::LambdaNode::FALSEY_LITERALS
+# uninitialized constant RuboCop::AST::LambdaNode::IMMUTABLE_LITERALS
+# uninitialized constant RuboCop::AST::LambdaNode::KEYWORDS
+# uninitialized constant RuboCop::AST::LambdaNode::LITERALS
+# uninitialized constant RuboCop::AST::LambdaNode::LOOP_TYPES
+# uninitialized constant RuboCop::AST::LambdaNode::MUTABLE_LITERALS
+# uninitialized constant RuboCop::AST::LambdaNode::NONMUTATING_ARRAY_METHODS
+# uninitialized constant RuboCop::AST::LambdaNode::NONMUTATING_BINARY_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::LambdaNode::NONMUTATING_HASH_METHODS
+# uninitialized constant RuboCop::AST::LambdaNode::NONMUTATING_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::LambdaNode::NONMUTATING_STRING_METHODS
+# uninitialized constant RuboCop::AST::LambdaNode::NONMUTATING_UNARY_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::LambdaNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::LambdaNode::OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::LambdaNode::POST_CONDITION_LOOP_TYPES
+# uninitialized constant RuboCop::AST::LambdaNode::REFERENCES
+# uninitialized constant RuboCop::AST::LambdaNode::SHORTHAND_ASSIGNMENTS
+# uninitialized constant RuboCop::AST::LambdaNode::SPECIAL_KEYWORDS
+# uninitialized constant RuboCop::AST::LambdaNode::SPECIAL_MODIFIERS
+# uninitialized constant RuboCop::AST::LambdaNode::TRUTHY_LITERALS
+# uninitialized constant RuboCop::AST::LambdaNode::VARIABLES
+# wrong constant name attribute_accessor?
+# wrong constant name <static-init>
 # undefined method `adjacent_def_modifier?<defaultArg>1' for module `RuboCop::AST::MethodDispatchNode'
 # undefined method `bare_access_modifier_declaration?<defaultArg>1' for module `RuboCop::AST::MethodDispatchNode'
 # undefined method `macro_scope?<defaultArg>1' for module `RuboCop::AST::MethodDispatchNode'
 # undefined method `non_bare_access_modifier_declaration?<defaultArg>1' for module `RuboCop::AST::MethodDispatchNode'
+# uninitialized constant RuboCop::AST::MethodDispatchNode::ENUMERABLE_METHODS
 # uninitialized constant RuboCop::AST::MethodDispatchNode::ENUMERATOR_METHODS
+# uninitialized constant RuboCop::AST::MethodDispatchNode::NONMUTATING_ARRAY_METHODS
+# uninitialized constant RuboCop::AST::MethodDispatchNode::NONMUTATING_BINARY_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::MethodDispatchNode::NONMUTATING_HASH_METHODS
+# uninitialized constant RuboCop::AST::MethodDispatchNode::NONMUTATING_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::MethodDispatchNode::NONMUTATING_STRING_METHODS
+# uninitialized constant RuboCop::AST::MethodDispatchNode::NONMUTATING_UNARY_OPERATOR_METHODS
 # uninitialized constant RuboCop::AST::MethodDispatchNode::OPERATOR_METHODS
 # wrong constant name access_modifier?
 # wrong constant name adjacent_def_modifier?<defaultArg>1
@@ -54751,21 +55058,31 @@
 # wrong constant name setter_method?
 # wrong constant name special_modifier?
 # wrong constant name unary_operation?
+# wrong constant name <static-init>
 # wrong constant name assignment_method?
 # wrong constant name bang_method?
 # wrong constant name camel_case_method?
 # wrong constant name comparison_method?
 # wrong constant name const_receiver?
+# wrong constant name enumerable_method?
 # wrong constant name enumerator_method?
 # wrong constant name method?
 # wrong constant name negation_method?
+# wrong constant name nonmutating_array_method?
+# wrong constant name nonmutating_binary_operator_method?
+# wrong constant name nonmutating_hash_method?
+# wrong constant name nonmutating_operator_method?
+# wrong constant name nonmutating_string_method?
+# wrong constant name nonmutating_unary_operator_method?
 # wrong constant name operator_method?
 # wrong constant name predicate_method?
 # wrong constant name prefix_bang?
 # wrong constant name prefix_not?
 # wrong constant name self_receiver?
+# wrong constant name <static-init>
 # wrong constant name modifier_form?
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::ModuleNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::ModuleNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::ModuleNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::ModuleNode::BASIC_LITERALS
@@ -54777,8 +55094,10 @@
 # uninitialized constant RuboCop::AST::ModuleNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::ModuleNode::KEYWORDS
 # uninitialized constant RuboCop::AST::ModuleNode::LITERALS
+# uninitialized constant RuboCop::AST::ModuleNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::ModuleNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::ModuleNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::ModuleNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::ModuleNode::REFERENCES
 # uninitialized constant RuboCop::AST::ModuleNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::ModuleNode::SPECIAL_KEYWORDS
@@ -54808,6 +55127,7 @@
 # wrong constant name arg_type?
 # wrong constant name args_type?
 # wrong constant name argument?
+# wrong constant name argument_type?
 # wrong constant name array_pattern_type?
 # wrong constant name array_pattern_with_tail_type?
 # wrong constant name array_type?
@@ -54866,9 +55186,11 @@
 # wrong constant name erange_type?
 # wrong constant name false_type?
 # wrong constant name falsey_literal?
+# wrong constant name find_pattern_type?
 # wrong constant name first_line
 # wrong constant name float_type?
 # wrong constant name for_type?
+# wrong constant name forward_arg_type?
 # wrong constant name forward_args_type?
 # wrong constant name forwarded_args_type?
 # wrong constant name guard_clause?
@@ -54904,6 +55226,7 @@
 # wrong constant name last_line
 # wrong constant name line_count
 # wrong constant name literal?
+# wrong constant name loop_keyword?
 # wrong constant name lvar_type?
 # wrong constant name lvasgn_type?
 # wrong constant name masgn_type?
@@ -54947,6 +55270,7 @@
 # wrong constant name parent_module_name
 # wrong constant name parenthesized_call?
 # wrong constant name pin_type?
+# wrong constant name post_condition_loop?
 # wrong constant name postexe_type?
 # wrong constant name preexe_type?
 # wrong constant name proc?<defaultArg>1
@@ -55003,6 +55327,7 @@
 # wrong constant name xstr_type?
 # wrong constant name yield_type?
 # wrong constant name zsuper_type?
+# wrong constant name <static-init>
 # wrong constant name ==
 # wrong constant name <Class:Invalid>
 # wrong constant name <Class:Macros>
@@ -55015,14 +55340,12 @@
 # wrong constant name <static-init>
 # wrong constant name def_node_matcher
 # wrong constant name def_node_search
-# wrong constant name node_search
-# wrong constant name node_search_all
-# wrong constant name node_search_body
-# wrong constant name node_search_first
 # wrong constant name <static-init>
 # wrong constant name <static-init>
 # wrong constant name descend
 # wrong constant name sign?
+# wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::OrNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::OrNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::OrNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::OrNode::BASIC_LITERALS
@@ -55036,8 +55359,10 @@
 # uninitialized constant RuboCop::AST::OrNode::LITERALS
 # uninitialized constant RuboCop::AST::OrNode::LOGICAL_AND
 # uninitialized constant RuboCop::AST::OrNode::LOGICAL_OR
+# uninitialized constant RuboCop::AST::OrNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::OrNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::OrNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::OrNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::OrNode::REFERENCES
 # uninitialized constant RuboCop::AST::OrNode::SEMANTIC_AND
 # uninitialized constant RuboCop::AST::OrNode::SEMANTIC_OR
@@ -55050,6 +55375,7 @@
 # wrong constant name <static-init>
 # undefined method `delimiter<defaultArg>1' for class `RuboCop::AST::PairNode'
 # undefined method `inverse_delimiter<defaultArg>1' for class `RuboCop::AST::PairNode'
+# uninitialized constant RuboCop::AST::PairNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::PairNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::PairNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::PairNode::BASIC_LITERALS
@@ -55061,8 +55387,10 @@
 # uninitialized constant RuboCop::AST::PairNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::PairNode::KEYWORDS
 # uninitialized constant RuboCop::AST::PairNode::LITERALS
+# uninitialized constant RuboCop::AST::PairNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::PairNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::PairNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::PairNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::PairNode::REFERENCES
 # uninitialized constant RuboCop::AST::PairNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::PairNode::SPECIAL_KEYWORDS
@@ -55075,6 +55403,7 @@
 # wrong constant name inverse_delimiter<defaultArg>1
 # wrong constant name inverse_delimiter
 # wrong constant name value_on_new_line?
+# wrong constant name <static-init>
 # wrong constant name arguments?
 # wrong constant name block_argument?
 # wrong constant name first_argument
@@ -55086,6 +55415,7 @@
 # wrong constant name logical_operator?
 # wrong constant name operator
 # wrong constant name semantic_operator?
+# wrong constant name <static-init>
 # undefined method `initialize<defaultArg>1' for class `RuboCop::AST::ProcessedSource'
 # Did you mean?  initialize_dup
 # wrong constant name []
@@ -55116,7 +55446,9 @@
 # wrong constant name start_with?
 # wrong constant name tokens
 # wrong constant name valid_syntax?
+# wrong constant name <static-init>
 # wrong constant name from_file
+# uninitialized constant RuboCop::AST::RangeNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::RangeNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::RangeNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::RangeNode::BASIC_LITERALS
@@ -55128,8 +55460,10 @@
 # uninitialized constant RuboCop::AST::RangeNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::RangeNode::KEYWORDS
 # uninitialized constant RuboCop::AST::RangeNode::LITERALS
+# uninitialized constant RuboCop::AST::RangeNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::RangeNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::RangeNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::RangeNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::RangeNode::REFERENCES
 # uninitialized constant RuboCop::AST::RangeNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::RangeNode::SPECIAL_KEYWORDS
@@ -55138,6 +55472,7 @@
 # wrong constant name begin
 # wrong constant name end
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::RegexpNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::RegexpNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::RegexpNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::RegexpNode::BASIC_LITERALS
@@ -55149,16 +55484,30 @@
 # uninitialized constant RuboCop::AST::RegexpNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::RegexpNode::KEYWORDS
 # uninitialized constant RuboCop::AST::RegexpNode::LITERALS
+# uninitialized constant RuboCop::AST::RegexpNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::RegexpNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::RegexpNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::RegexpNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::RegexpNode::REFERENCES
 # uninitialized constant RuboCop::AST::RegexpNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::RegexpNode::SPECIAL_KEYWORDS
 # uninitialized constant RuboCop::AST::RegexpNode::TRUTHY_LITERALS
 # uninitialized constant RuboCop::AST::RegexpNode::VARIABLES
 # wrong constant name content
+# wrong constant name delimiter?
+# wrong constant name delimiters
+# wrong constant name extended?
+# wrong constant name ignore_case?
+# wrong constant name interpolation?
+# wrong constant name multiline_mode?
+# wrong constant name no_encoding?
+# wrong constant name percent_r_literal?
 # wrong constant name regopt
+# wrong constant name single_interpolation?
+# wrong constant name slash_literal?
 # wrong constant name to_regexp
+# wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::ResbodyNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::ResbodyNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::ResbodyNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::ResbodyNode::BASIC_LITERALS
@@ -55170,8 +55519,10 @@
 # uninitialized constant RuboCop::AST::ResbodyNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::ResbodyNode::KEYWORDS
 # uninitialized constant RuboCop::AST::ResbodyNode::LITERALS
+# uninitialized constant RuboCop::AST::ResbodyNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::ResbodyNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::ResbodyNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::ResbodyNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::ResbodyNode::REFERENCES
 # uninitialized constant RuboCop::AST::ResbodyNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::ResbodyNode::SPECIAL_KEYWORDS
@@ -55180,6 +55531,7 @@
 # wrong constant name body
 # wrong constant name exception_variable
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::RetryNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::RetryNode::ARITHMETIC_OPERATORS
 # uninitialized constant RuboCop::AST::RetryNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::RetryNode::BASIC_CONDITIONALS
@@ -55187,15 +55539,24 @@
 # uninitialized constant RuboCop::AST::RetryNode::COMPARISON_OPERATORS
 # uninitialized constant RuboCop::AST::RetryNode::COMPOSITE_LITERALS
 # uninitialized constant RuboCop::AST::RetryNode::CONDITIONALS
+# uninitialized constant RuboCop::AST::RetryNode::ENUMERABLE_METHODS
 # uninitialized constant RuboCop::AST::RetryNode::ENUMERATOR_METHODS
 # uninitialized constant RuboCop::AST::RetryNode::EQUALS_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::RetryNode::FALSEY_LITERALS
 # uninitialized constant RuboCop::AST::RetryNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::RetryNode::KEYWORDS
 # uninitialized constant RuboCop::AST::RetryNode::LITERALS
+# uninitialized constant RuboCop::AST::RetryNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::RetryNode::MUTABLE_LITERALS
+# uninitialized constant RuboCop::AST::RetryNode::NONMUTATING_ARRAY_METHODS
+# uninitialized constant RuboCop::AST::RetryNode::NONMUTATING_BINARY_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::RetryNode::NONMUTATING_HASH_METHODS
+# uninitialized constant RuboCop::AST::RetryNode::NONMUTATING_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::RetryNode::NONMUTATING_STRING_METHODS
+# uninitialized constant RuboCop::AST::RetryNode::NONMUTATING_UNARY_OPERATOR_METHODS
 # uninitialized constant RuboCop::AST::RetryNode::OPERATOR_KEYWORDS
 # uninitialized constant RuboCop::AST::RetryNode::OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::RetryNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::RetryNode::REFERENCES
 # uninitialized constant RuboCop::AST::RetryNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::RetryNode::SPECIAL_KEYWORDS
@@ -55203,6 +55564,7 @@
 # uninitialized constant RuboCop::AST::RetryNode::TRUTHY_LITERALS
 # uninitialized constant RuboCop::AST::RetryNode::VARIABLES
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::ReturnNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::ReturnNode::ARITHMETIC_OPERATORS
 # uninitialized constant RuboCop::AST::ReturnNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::ReturnNode::BASIC_CONDITIONALS
@@ -55210,15 +55572,24 @@
 # uninitialized constant RuboCop::AST::ReturnNode::COMPARISON_OPERATORS
 # uninitialized constant RuboCop::AST::ReturnNode::COMPOSITE_LITERALS
 # uninitialized constant RuboCop::AST::ReturnNode::CONDITIONALS
+# uninitialized constant RuboCop::AST::ReturnNode::ENUMERABLE_METHODS
 # uninitialized constant RuboCop::AST::ReturnNode::ENUMERATOR_METHODS
 # uninitialized constant RuboCop::AST::ReturnNode::EQUALS_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::ReturnNode::FALSEY_LITERALS
 # uninitialized constant RuboCop::AST::ReturnNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::ReturnNode::KEYWORDS
 # uninitialized constant RuboCop::AST::ReturnNode::LITERALS
+# uninitialized constant RuboCop::AST::ReturnNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::ReturnNode::MUTABLE_LITERALS
+# uninitialized constant RuboCop::AST::ReturnNode::NONMUTATING_ARRAY_METHODS
+# uninitialized constant RuboCop::AST::ReturnNode::NONMUTATING_BINARY_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::ReturnNode::NONMUTATING_HASH_METHODS
+# uninitialized constant RuboCop::AST::ReturnNode::NONMUTATING_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::ReturnNode::NONMUTATING_STRING_METHODS
+# uninitialized constant RuboCop::AST::ReturnNode::NONMUTATING_UNARY_OPERATOR_METHODS
 # uninitialized constant RuboCop::AST::ReturnNode::OPERATOR_KEYWORDS
 # uninitialized constant RuboCop::AST::ReturnNode::OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::ReturnNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::ReturnNode::REFERENCES
 # uninitialized constant RuboCop::AST::ReturnNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::ReturnNode::SPECIAL_KEYWORDS
@@ -55226,6 +55597,7 @@
 # uninitialized constant RuboCop::AST::ReturnNode::TRUTHY_LITERALS
 # uninitialized constant RuboCop::AST::ReturnNode::VARIABLES
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::SelfClassNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::SelfClassNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::SelfClassNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::SelfClassNode::BASIC_LITERALS
@@ -55237,8 +55609,10 @@
 # uninitialized constant RuboCop::AST::SelfClassNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::SelfClassNode::KEYWORDS
 # uninitialized constant RuboCop::AST::SelfClassNode::LITERALS
+# uninitialized constant RuboCop::AST::SelfClassNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::SelfClassNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::SelfClassNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::SelfClassNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::SelfClassNode::REFERENCES
 # uninitialized constant RuboCop::AST::SelfClassNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::SelfClassNode::SPECIAL_KEYWORDS
@@ -55248,6 +55622,7 @@
 # wrong constant name identifier
 # wrong constant name <static-init>
 # undefined method `attribute_accessor?<defaultArg>1' for class `RuboCop::AST::SendNode'
+# uninitialized constant RuboCop::AST::SendNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::SendNode::ARITHMETIC_OPERATORS
 # uninitialized constant RuboCop::AST::SendNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::SendNode::BASIC_CONDITIONALS
@@ -55255,15 +55630,24 @@
 # uninitialized constant RuboCop::AST::SendNode::COMPARISON_OPERATORS
 # uninitialized constant RuboCop::AST::SendNode::COMPOSITE_LITERALS
 # uninitialized constant RuboCop::AST::SendNode::CONDITIONALS
+# uninitialized constant RuboCop::AST::SendNode::ENUMERABLE_METHODS
 # uninitialized constant RuboCop::AST::SendNode::ENUMERATOR_METHODS
 # uninitialized constant RuboCop::AST::SendNode::EQUALS_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::SendNode::FALSEY_LITERALS
 # uninitialized constant RuboCop::AST::SendNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::SendNode::KEYWORDS
 # uninitialized constant RuboCop::AST::SendNode::LITERALS
+# uninitialized constant RuboCop::AST::SendNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::SendNode::MUTABLE_LITERALS
+# uninitialized constant RuboCop::AST::SendNode::NONMUTATING_ARRAY_METHODS
+# uninitialized constant RuboCop::AST::SendNode::NONMUTATING_BINARY_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::SendNode::NONMUTATING_HASH_METHODS
+# uninitialized constant RuboCop::AST::SendNode::NONMUTATING_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::SendNode::NONMUTATING_STRING_METHODS
+# uninitialized constant RuboCop::AST::SendNode::NONMUTATING_UNARY_OPERATOR_METHODS
 # uninitialized constant RuboCop::AST::SendNode::OPERATOR_KEYWORDS
 # uninitialized constant RuboCop::AST::SendNode::OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::SendNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::SendNode::REFERENCES
 # uninitialized constant RuboCop::AST::SendNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::SendNode::SPECIAL_KEYWORDS
@@ -55275,6 +55659,7 @@
 # wrong constant name <static-init>
 # wrong constant name s
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::StrNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::StrNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::StrNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::StrNode::BASIC_LITERALS
@@ -55286,8 +55671,10 @@
 # uninitialized constant RuboCop::AST::StrNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::StrNode::KEYWORDS
 # uninitialized constant RuboCop::AST::StrNode::LITERALS
+# uninitialized constant RuboCop::AST::StrNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::StrNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::StrNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::StrNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::StrNode::REFERENCES
 # uninitialized constant RuboCop::AST::StrNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::StrNode::SPECIAL_KEYWORDS
@@ -55295,6 +55682,7 @@
 # uninitialized constant RuboCop::AST::StrNode::VARIABLES
 # wrong constant name heredoc?
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::SuperNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::SuperNode::ARITHMETIC_OPERATORS
 # uninitialized constant RuboCop::AST::SuperNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::SuperNode::BASIC_CONDITIONALS
@@ -55302,15 +55690,24 @@
 # uninitialized constant RuboCop::AST::SuperNode::COMPARISON_OPERATORS
 # uninitialized constant RuboCop::AST::SuperNode::COMPOSITE_LITERALS
 # uninitialized constant RuboCop::AST::SuperNode::CONDITIONALS
+# uninitialized constant RuboCop::AST::SuperNode::ENUMERABLE_METHODS
 # uninitialized constant RuboCop::AST::SuperNode::ENUMERATOR_METHODS
 # uninitialized constant RuboCop::AST::SuperNode::EQUALS_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::SuperNode::FALSEY_LITERALS
 # uninitialized constant RuboCop::AST::SuperNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::SuperNode::KEYWORDS
 # uninitialized constant RuboCop::AST::SuperNode::LITERALS
+# uninitialized constant RuboCop::AST::SuperNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::SuperNode::MUTABLE_LITERALS
+# uninitialized constant RuboCop::AST::SuperNode::NONMUTATING_ARRAY_METHODS
+# uninitialized constant RuboCop::AST::SuperNode::NONMUTATING_BINARY_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::SuperNode::NONMUTATING_HASH_METHODS
+# uninitialized constant RuboCop::AST::SuperNode::NONMUTATING_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::SuperNode::NONMUTATING_STRING_METHODS
+# uninitialized constant RuboCop::AST::SuperNode::NONMUTATING_UNARY_OPERATOR_METHODS
 # uninitialized constant RuboCop::AST::SuperNode::OPERATOR_KEYWORDS
 # uninitialized constant RuboCop::AST::SuperNode::OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::SuperNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::SuperNode::REFERENCES
 # uninitialized constant RuboCop::AST::SuperNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::SuperNode::SPECIAL_KEYWORDS
@@ -55318,6 +55715,7 @@
 # uninitialized constant RuboCop::AST::SuperNode::TRUTHY_LITERALS
 # uninitialized constant RuboCop::AST::SuperNode::VARIABLES
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::SymbolNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::SymbolNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::SymbolNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::SymbolNode::BASIC_LITERALS
@@ -55329,8 +55727,10 @@
 # uninitialized constant RuboCop::AST::SymbolNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::SymbolNode::KEYWORDS
 # uninitialized constant RuboCop::AST::SymbolNode::LITERALS
+# uninitialized constant RuboCop::AST::SymbolNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::SymbolNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::SymbolNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::SymbolNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::SymbolNode::REFERENCES
 # uninitialized constant RuboCop::AST::SymbolNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::SymbolNode::SPECIAL_KEYWORDS
@@ -55364,6 +55764,7 @@
 # wrong constant name type
 # wrong constant name <static-init>
 # wrong constant name from_parser_token
+# wrong constant name on___ENCODING__
 # wrong constant name on_alias
 # wrong constant name on_and
 # wrong constant name on_and_asgn
@@ -55402,6 +55803,7 @@
 # wrong constant name on_false
 # wrong constant name on_float
 # wrong constant name on_for
+# wrong constant name on_forward_arg
 # wrong constant name on_forward_args
 # wrong constant name on_forwarded_args
 # wrong constant name on_gvar
@@ -55413,6 +55815,8 @@
 # wrong constant name on_iflipflop
 # wrong constant name on_in_match
 # wrong constant name on_in_pattern
+# wrong constant name on_index
+# wrong constant name on_indexasgn
 # wrong constant name on_int
 # wrong constant name on_irange
 # wrong constant name on_ivar
@@ -55449,6 +55853,7 @@
 # wrong constant name on_pin
 # wrong constant name on_postexe
 # wrong constant name on_preexe
+# wrong constant name on_procarg0
 # wrong constant name on_rational
 # wrong constant name on_redo
 # wrong constant name on_regexp
@@ -55478,6 +55883,8 @@
 # wrong constant name on_yield
 # wrong constant name on_zsuper
 # wrong constant name walk
+# wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::UntilNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::UntilNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::UntilNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::UntilNode::BASIC_LITERALS
@@ -55489,8 +55896,10 @@
 # uninitialized constant RuboCop::AST::UntilNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::UntilNode::KEYWORDS
 # uninitialized constant RuboCop::AST::UntilNode::LITERALS
+# uninitialized constant RuboCop::AST::UntilNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::UntilNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::UntilNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::UntilNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::UntilNode::REFERENCES
 # uninitialized constant RuboCop::AST::UntilNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::UntilNode::SPECIAL_KEYWORDS
@@ -55500,6 +55909,8 @@
 # wrong constant name inverse_keyword
 # wrong constant name keyword
 # wrong constant name <static-init>
+# wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::WhenNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::WhenNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::WhenNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::WhenNode::BASIC_LITERALS
@@ -55511,8 +55922,10 @@
 # uninitialized constant RuboCop::AST::WhenNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::WhenNode::KEYWORDS
 # uninitialized constant RuboCop::AST::WhenNode::LITERALS
+# uninitialized constant RuboCop::AST::WhenNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::WhenNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::WhenNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::WhenNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::WhenNode::REFERENCES
 # uninitialized constant RuboCop::AST::WhenNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::WhenNode::SPECIAL_KEYWORDS
@@ -55524,6 +55937,7 @@
 # wrong constant name each_condition
 # wrong constant name then?
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::WhileNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::WhileNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::WhileNode::BASIC_CONDITIONALS
 # uninitialized constant RuboCop::AST::WhileNode::BASIC_LITERALS
@@ -55535,8 +55949,10 @@
 # uninitialized constant RuboCop::AST::WhileNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::WhileNode::KEYWORDS
 # uninitialized constant RuboCop::AST::WhileNode::LITERALS
+# uninitialized constant RuboCop::AST::WhileNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::WhileNode::MUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::WhileNode::OPERATOR_KEYWORDS
+# uninitialized constant RuboCop::AST::WhileNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::WhileNode::REFERENCES
 # uninitialized constant RuboCop::AST::WhileNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::WhileNode::SPECIAL_KEYWORDS
@@ -55546,6 +55962,7 @@
 # wrong constant name inverse_keyword
 # wrong constant name keyword
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::AST::YieldNode::ARGUMENT_TYPES
 # uninitialized constant RuboCop::AST::YieldNode::ARITHMETIC_OPERATORS
 # uninitialized constant RuboCop::AST::YieldNode::ASSIGNMENTS
 # uninitialized constant RuboCop::AST::YieldNode::BASIC_CONDITIONALS
@@ -55553,21 +55970,31 @@
 # uninitialized constant RuboCop::AST::YieldNode::COMPARISON_OPERATORS
 # uninitialized constant RuboCop::AST::YieldNode::COMPOSITE_LITERALS
 # uninitialized constant RuboCop::AST::YieldNode::CONDITIONALS
+# uninitialized constant RuboCop::AST::YieldNode::ENUMERABLE_METHODS
 # uninitialized constant RuboCop::AST::YieldNode::ENUMERATOR_METHODS
 # uninitialized constant RuboCop::AST::YieldNode::EQUALS_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::YieldNode::FALSEY_LITERALS
 # uninitialized constant RuboCop::AST::YieldNode::IMMUTABLE_LITERALS
 # uninitialized constant RuboCop::AST::YieldNode::KEYWORDS
 # uninitialized constant RuboCop::AST::YieldNode::LITERALS
+# uninitialized constant RuboCop::AST::YieldNode::LOOP_TYPES
 # uninitialized constant RuboCop::AST::YieldNode::MUTABLE_LITERALS
+# uninitialized constant RuboCop::AST::YieldNode::NONMUTATING_ARRAY_METHODS
+# uninitialized constant RuboCop::AST::YieldNode::NONMUTATING_BINARY_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::YieldNode::NONMUTATING_HASH_METHODS
+# uninitialized constant RuboCop::AST::YieldNode::NONMUTATING_OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::YieldNode::NONMUTATING_STRING_METHODS
+# uninitialized constant RuboCop::AST::YieldNode::NONMUTATING_UNARY_OPERATOR_METHODS
 # uninitialized constant RuboCop::AST::YieldNode::OPERATOR_KEYWORDS
 # uninitialized constant RuboCop::AST::YieldNode::OPERATOR_METHODS
+# uninitialized constant RuboCop::AST::YieldNode::POST_CONDITION_LOOP_TYPES
 # uninitialized constant RuboCop::AST::YieldNode::REFERENCES
 # uninitialized constant RuboCop::AST::YieldNode::SHORTHAND_ASSIGNMENTS
 # uninitialized constant RuboCop::AST::YieldNode::SPECIAL_KEYWORDS
 # uninitialized constant RuboCop::AST::YieldNode::SPECIAL_MODIFIERS
 # uninitialized constant RuboCop::AST::YieldNode::TRUTHY_LITERALS
 # uninitialized constant RuboCop::AST::YieldNode::VARIABLES
+# wrong constant name <static-init>
 # wrong constant name <static-init>
 # undefined method `run<defaultArg>1' for class `RuboCop::CLI'
 # wrong constant name <Class:Environment>
@@ -55675,11 +56102,7 @@
 # wrong constant name create
 # undefined singleton method `merge_with_default<defaultArg>1' for `RuboCop::ConfigLoader'
 # wrong constant name add_excludes_from_files
-# wrong constant name add_inheritance_from_auto_generated_file
 # wrong constant name add_missing_namespaces
-# wrong constant name auto_gen_config
-# wrong constant name auto_gen_config=
-# wrong constant name auto_gen_config?
 # wrong constant name clear_options
 # wrong constant name configuration_file_for
 # wrong constant name configuration_from_file
@@ -55696,11 +56119,10 @@
 # wrong constant name ignore_parent_exclusion=
 # wrong constant name ignore_parent_exclusion?
 # wrong constant name load_file
+# wrong constant name load_yaml_configuration
 # wrong constant name merge
 # wrong constant name merge_with_default<defaultArg>1
 # wrong constant name merge_with_default
-# wrong constant name options_config
-# wrong constant name options_config=
 # wrong constant name possible_new_cops?
 # wrong constant name warn_on_pending_cops
 # wrong constant name merge
@@ -55737,17 +56159,18 @@
 # wrong constant name align_end
 # wrong constant name correct
 # wrong constant name processed_source
+# wrong constant name <static-init>
 # wrong constant name initialize
 # wrong constant name <static-init>
+# wrong constant name <static-init>
+# wrong constant name support_autocorrect?
 # wrong constant name <static-init>
 # wrong constant name autocorrect?
 # wrong constant name autocorrect_enabled?
 # wrong constant name autocorrect_requested?
 # wrong constant name correctable?
-# wrong constant name disable_offense
 # wrong constant name disable_uncorrectable?
 # wrong constant name safe_autocorrect?
-# wrong constant name support_autocorrect?
 # wrong constant name <static-init>
 # wrong constant name ==
 # wrong constant name cop_name
@@ -55761,6 +56184,69 @@
 # wrong constant name <static-init>
 # wrong constant name for
 # wrong constant name parse
+# undefined method `add_global_offense<defaultArg>1' for class `RuboCop::Cop::Base'
+# undefined method `add_global_offense<defaultArg>2' for class `RuboCop::Cop::Base'
+# undefined method `add_offense<defaultArg>1' for class `RuboCop::Cop::Base'
+# undefined method `add_offense<defaultArg>2' for class `RuboCop::Cop::Base'
+# undefined method `initialize<defaultArg>1' for class `RuboCop::Cop::Base'
+# Did you mean?  initialize_dup
+# undefined method `initialize<defaultArg>2' for class `RuboCop::Cop::Base'
+# Did you mean?  initialize_dup
+# undefined method `message<defaultArg>1' for class `RuboCop::Cop::Base'
+# wrong constant name <Class:InvestigationReport>
+# uninitialized constant RuboCop::Cop::Base::LITERAL_REGEX
+# wrong constant name add_global_offense<defaultArg>1
+# wrong constant name add_global_offense<defaultArg>2
+# wrong constant name add_global_offense
+# wrong constant name add_offense<defaultArg>1
+# wrong constant name add_offense<defaultArg>2
+# wrong constant name add_offense
+# wrong constant name config
+# wrong constant name config_to_allow_offenses
+# wrong constant name config_to_allow_offenses=
+# wrong constant name cop_config
+# wrong constant name cop_name
+# wrong constant name excluded_file?
+# wrong constant name external_dependency_checksum
+# wrong constant name initialize<defaultArg>1
+# wrong constant name initialize<defaultArg>2
+# wrong constant name initialize
+# wrong constant name message<defaultArg>1
+# wrong constant name message
+# wrong constant name name
+# wrong constant name offenses
+# wrong constant name on_investigation_end
+# wrong constant name on_new_investigation
+# wrong constant name on_other_file
+# wrong constant name processed_source
+# wrong constant name ready
+# wrong constant name relevant_file?
+# wrong constant name target_rails_version
+# wrong constant name target_ruby_version
+# uninitialized constant RuboCop::Cop::Base::InvestigationReport::Elem
+# wrong constant name cop
+# wrong constant name cop=
+# wrong constant name corrector
+# wrong constant name corrector=
+# wrong constant name offenses
+# wrong constant name offenses=
+# wrong constant name processed_source
+# wrong constant name processed_source=
+# wrong constant name <static-init>
+# wrong constant name []
+# wrong constant name members
+# wrong constant name <static-init>
+# wrong constant name autocorrect_incompatible_with
+# wrong constant name badge
+# wrong constant name cop_name
+# wrong constant name department
+# wrong constant name exclude_from_registry
+# wrong constant name inherited
+# wrong constant name joining_forces
+# wrong constant name lint?
+# wrong constant name match?
+# wrong constant name support_autocorrect?
+# wrong constant name support_multiple_source?
 # uninitialized constant RuboCop::Cop::Bundler::DuplicatedGem::BYTE_ORDER_MARK
 # uninitialized constant RuboCop::Cop::Bundler::DuplicatedGem::LITERAL_REGEX
 # wrong constant name gem_declarations
@@ -55774,7 +56260,6 @@
 # undefined method `insecure_protocol_source?<defaultArg>1' for class `RuboCop::Cop::Bundler::InsecureProtocolSource'
 # uninitialized constant RuboCop::Cop::Bundler::InsecureProtocolSource::BYTE_ORDER_MARK
 # uninitialized constant RuboCop::Cop::Bundler::InsecureProtocolSource::LITERAL_REGEX
-# wrong constant name autocorrect
 # wrong constant name insecure_protocol_source?<defaultArg>1
 # wrong constant name insecure_protocol_source?
 # wrong constant name on_send
@@ -55797,11 +56282,11 @@
 # wrong constant name extract_breakable_node
 # wrong constant name <static-init>
 # wrong constant name <static-init>
-# wrong constant name <static-init>
 # undefined method `initialize<defaultArg>1' for class `RuboCop::Cop::Commissioner'
 # Did you mean?  initialize_dup
 # undefined method `initialize<defaultArg>2' for class `RuboCop::Cop::Commissioner'
 # Did you mean?  initialize_dup
+# wrong constant name <Class:InvestigationReport>
 # uninitialized constant RuboCop::Cop::Commissioner::MANY_CHILD_NODES
 # uninitialized constant RuboCop::Cop::Commissioner::NO_CHILD_NODES
 # uninitialized constant RuboCop::Cop::Commissioner::ONE_CHILD_NODE
@@ -55811,6 +56296,21 @@
 # wrong constant name initialize<defaultArg>2
 # wrong constant name initialize
 # wrong constant name investigate
+# uninitialized constant RuboCop::Cop::Commissioner::InvestigationReport::Elem
+# wrong constant name cop_reports
+# wrong constant name cop_reports=
+# wrong constant name cops
+# wrong constant name correctors
+# wrong constant name errors
+# wrong constant name errors=
+# wrong constant name merge
+# wrong constant name offenses
+# wrong constant name offenses_per_cop
+# wrong constant name processed_source
+# wrong constant name processed_source=
+# wrong constant name <static-init>
+# wrong constant name []
+# wrong constant name members
 # wrong constant name <static-init>
 # wrong constant name <static-init>
 # wrong constant name correct_negative_condition
@@ -55843,11 +56343,6 @@
 # undefined method `add_offense<defaultArg>1' for class `RuboCop::Cop::Cop'
 # undefined method `add_offense<defaultArg>2' for class `RuboCop::Cop::Cop'
 # undefined method `add_offense<defaultArg>3' for class `RuboCop::Cop::Cop'
-# undefined method `initialize<defaultArg>1' for class `RuboCop::Cop::Cop'
-# Did you mean?  initialize_dup
-# undefined method `initialize<defaultArg>2' for class `RuboCop::Cop::Cop'
-# Did you mean?  initialize_dup
-# undefined method `message<defaultArg>1' for class `RuboCop::Cop::Cop'
 # undefined method `parse<defaultArg>1' for class `RuboCop::Cop::Cop'
 # wrong constant name <Class:Correction>
 # uninitialized constant RuboCop::Cop::Cop::LITERAL_REGEX
@@ -55855,34 +56350,11 @@
 # wrong constant name add_offense<defaultArg>2
 # wrong constant name add_offense<defaultArg>3
 # wrong constant name add_offense
-# wrong constant name config
-# wrong constant name config_to_allow_offenses
-# wrong constant name config_to_allow_offenses=
-# wrong constant name cop_config
-# wrong constant name cop_name
-# wrong constant name correct
 # wrong constant name corrections
-# wrong constant name disable_uncorrectable
-# wrong constant name duplicate_location?
-# wrong constant name excluded_file?
-# wrong constant name external_dependency_checksum
 # wrong constant name find_location
-# wrong constant name initialize<defaultArg>1
-# wrong constant name initialize<defaultArg>2
-# wrong constant name initialize
-# wrong constant name join_force?
-# wrong constant name message<defaultArg>1
-# wrong constant name message
-# wrong constant name name
-# wrong constant name offenses
 # wrong constant name parse<defaultArg>1
 # wrong constant name parse
-# wrong constant name processed_source
-# wrong constant name processed_source=
-# wrong constant name reason_to_not_correct
-# wrong constant name relevant_file?
-# wrong constant name target_rails_version
-# wrong constant name target_ruby_version
+# wrong constant name support_autocorrect?
 # uninitialized constant RuboCop::Cop::Cop::Correction::Elem
 # wrong constant name call
 # wrong constant name cop
@@ -55895,32 +56367,18 @@
 # wrong constant name members
 # wrong constant name <static-init>
 # wrong constant name all
-# wrong constant name autocorrect_incompatible_with
-# wrong constant name badge
-# wrong constant name cop_name
-# wrong constant name department
-# wrong constant name exclude_from_registry
-# wrong constant name inherited
-# wrong constant name lint?
-# wrong constant name match?
 # wrong constant name qualified_cop_name
 # wrong constant name registry
-# undefined method `initialize<defaultArg>1' for class `RuboCop::Cop::Corrector'
-# Did you mean?  initialize_dup
-# wrong constant name corrections
-# wrong constant name diagnostics
-# wrong constant name initialize<defaultArg>1
+# uninitialized constant RuboCop::Cop::Corrector::ACTIONS
+# uninitialized constant RuboCop::Cop::Corrector::DEPRECATION_WARNING
+# uninitialized constant RuboCop::Cop::Corrector::POLICY_TO_LEVEL
 # wrong constant name initialize
-# wrong constant name insert_after
-# wrong constant name insert_before
-# wrong constant name remove
 # wrong constant name remove_leading
 # wrong constant name remove_preceding
 # wrong constant name remove_trailing
-# wrong constant name replace
 # wrong constant name rewrite
-# wrong constant name wrap
 # wrong constant name <static-init>
+# wrong constant name source_buffer
 # undefined method `non_public_modifier?<defaultArg>1' for module `RuboCop::Cop::DefNode'
 # wrong constant name non_public_modifier?<defaultArg>1
 # wrong constant name non_public_modifier?
@@ -56138,14 +56596,10 @@
 # uninitialized constant RuboCop::Cop::Layout::CaseIndentation::BYTE_ORDER_MARK
 # uninitialized constant RuboCop::Cop::Layout::CaseIndentation::LITERAL_REGEX
 # uninitialized constant RuboCop::Cop::Layout::CaseIndentation::SPACE
-# wrong constant name autocorrect
 # wrong constant name on_case
-# undefined method `visibility_block?<defaultArg>1' for class `RuboCop::Cop::Layout::ClassStructure'
 # uninitialized constant RuboCop::Cop::Layout::ClassStructure::LITERAL_REGEX
 # wrong constant name autocorrect
 # wrong constant name on_class
-# wrong constant name visibility_block?<defaultArg>1
-# wrong constant name visibility_block?
 # uninitialized constant RuboCop::Cop::Layout::ClosingHeredocIndentation::LITERAL_REGEX
 # uninitialized constant RuboCop::Cop::Layout::ClosingHeredocIndentation::OPENING_DELIMITER
 # wrong constant name autocorrect
@@ -56514,7 +56968,6 @@
 # wrong constant name <static-init>
 # uninitialized constant RuboCop::Cop::Layout::SpaceAroundBlockParameters::BYTE_ORDER_MARK
 # uninitialized constant RuboCop::Cop::Layout::SpaceAroundBlockParameters::LITERAL_REGEX
-# wrong constant name autocorrect
 # wrong constant name on_block
 # wrong constant name <static-init>
 # uninitialized constant RuboCop::Cop::Layout::SpaceAroundEqualsInParameterDefault::BYTE_ORDER_MARK
@@ -56675,6 +57128,14 @@
 # uninitialized constant RuboCop::Cop::Layout::TrailingWhitespace::LITERAL_REGEX
 # wrong constant name autocorrect
 # wrong constant name investigate
+# wrong constant name <Class:CorrectionsProxy>
+# wrong constant name <<
+# wrong constant name concat
+# wrong constant name corrector
+# wrong constant name empty?
+# wrong constant name initialize
+# wrong constant name <static-init>
+# wrong constant name <static-init>
 # undefined singleton method `break_line_before<defaultArg>1' for `RuboCop::Cop::LineBreakCorrector'
 # wrong constant name <static-init>
 # wrong constant name break_line_before<defaultArg>1
@@ -56709,6 +57170,12 @@
 # uninitialized constant RuboCop::Cop::Lint::CircularArgumentReference::LITERAL_REGEX
 # wrong constant name on_kwoptarg
 # wrong constant name on_optarg
+# undefined method `unqualified_const?<defaultArg>1' for class `RuboCop::Cop::Lint::ConstantResolution'
+# uninitialized constant RuboCop::Cop::Lint::ConstantResolution::LITERAL_REGEX
+# wrong constant name on_const
+# wrong constant name unqualified_const?<defaultArg>1
+# wrong constant name unqualified_const?
+# wrong constant name <static-init>
 # undefined method `binding_irb_call?<defaultArg>1' for class `RuboCop::Cop::Lint::Debugger'
 # undefined method `debugger_call?<defaultArg>1' for class `RuboCop::Cop::Lint::Debugger'
 # undefined method `kernel?<defaultArg>1' for class `RuboCop::Cop::Lint::Debugger'
@@ -56819,6 +57286,7 @@
 # wrong constant name on_class
 # wrong constant name on_send
 # uninitialized constant RuboCop::Cop::Lint::InterpolationCheck::LITERAL_REGEX
+# wrong constant name autocorrect
 # wrong constant name heredoc?
 # wrong constant name on_str
 # uninitialized constant RuboCop::Cop::Lint::LiteralAsCondition::LITERAL_REGEX
@@ -56923,6 +57391,7 @@
 # undefined method `exception?<defaultArg>1' for class `RuboCop::Cop::Lint::RaiseException'
 # undefined method `exception_new_with_message?<defaultArg>1' for class `RuboCop::Cop::Lint::RaiseException'
 # uninitialized constant RuboCop::Cop::Lint::RaiseException::LITERAL_REGEX
+# wrong constant name autocorrect
 # wrong constant name exception?<defaultArg>1
 # wrong constant name exception?
 # wrong constant name exception_new_with_message?<defaultArg>1
@@ -56933,10 +57402,20 @@
 # wrong constant name on_send
 # wrong constant name rand_one?<defaultArg>1
 # wrong constant name rand_one?
+# undefined method `initialize<defaultArg>1' for class `RuboCop::Cop::Lint::RedundantCopDisableDirective'
+# Did you mean?  initialize_dup
+# undefined method `initialize<defaultArg>2' for class `RuboCop::Cop::Lint::RedundantCopDisableDirective'
+# Did you mean?  initialize_dup
+# undefined method `initialize<defaultArg>3' for class `RuboCop::Cop::Lint::RedundantCopDisableDirective'
+# Did you mean?  initialize_dup
 # uninitialized constant RuboCop::Cop::Lint::RedundantCopDisableDirective::BYTE_ORDER_MARK
 # uninitialized constant RuboCop::Cop::Lint::RedundantCopDisableDirective::LITERAL_REGEX
-# wrong constant name autocorrect
-# wrong constant name check
+# wrong constant name initialize<defaultArg>1
+# wrong constant name initialize<defaultArg>2
+# wrong constant name initialize<defaultArg>3
+# wrong constant name initialize
+# wrong constant name offenses_to_check
+# wrong constant name offenses_to_check=
 # uninitialized constant RuboCop::Cop::Lint::RedundantCopEnableDirective::BYTE_ORDER_MARK
 # uninitialized constant RuboCop::Cop::Lint::RedundantCopEnableDirective::LITERAL_REGEX
 # uninitialized constant RuboCop::Cop::Lint::RedundantCopEnableDirective::NO_SPACE_COMMAND
@@ -56981,6 +57460,7 @@
 # wrong constant name redundant_with_object?<defaultArg>1
 # wrong constant name redundant_with_object?
 # uninitialized constant RuboCop::Cop::Lint::RegexpAsCondition::LITERAL_REGEX
+# wrong constant name autocorrect
 # wrong constant name on_match_current_line
 # uninitialized constant RuboCop::Cop::Lint::RequireParentheses::BYTE_ORDER_MARK
 # uninitialized constant RuboCop::Cop::Lint::RequireParentheses::LITERAL_REGEX
@@ -57005,6 +57485,7 @@
 # wrong constant name on_csend
 # undefined method `safe_navigation_empty_in_conditional?<defaultArg>1' for class `RuboCop::Cop::Lint::SafeNavigationWithEmpty'
 # uninitialized constant RuboCop::Cop::Lint::SafeNavigationWithEmpty::LITERAL_REGEX
+# wrong constant name autocorrect
 # wrong constant name on_if
 # wrong constant name safe_navigation_empty_in_conditional?<defaultArg>1
 # wrong constant name safe_navigation_empty_in_conditional?
@@ -57035,25 +57516,6 @@
 # wrong constant name struct_new
 # uninitialized constant RuboCop::Cop::Lint::SuppressedException::LITERAL_REGEX
 # wrong constant name on_resbody
-# uninitialized constant RuboCop::Cop::Lint::Syntax::LITERAL_REGEX
-# wrong constant name <Class:PseudoSourceRange>
-# wrong constant name add_offense_from_diagnostic
-# wrong constant name add_offense_from_error
-# uninitialized constant RuboCop::Cop::Lint::Syntax::PseudoSourceRange::Elem
-# wrong constant name begin_pos
-# wrong constant name begin_pos=
-# wrong constant name column
-# wrong constant name column=
-# wrong constant name end_pos
-# wrong constant name end_pos=
-# wrong constant name line
-# wrong constant name line=
-# wrong constant name source_line
-# wrong constant name source_line=
-# wrong constant name <static-init>
-# wrong constant name []
-# wrong constant name members
-# wrong constant name offenses_from_processed_source
 # uninitialized constant RuboCop::Cop::Lint::ToJSON::LITERAL_REGEX
 # wrong constant name autocorrect
 # wrong constant name on_def
@@ -57185,11 +57647,13 @@
 # wrong constant name investigate
 # undefined method `class_definition?<defaultArg>1' for class `RuboCop::Cop::Metrics::ClassLength'
 # uninitialized constant RuboCop::Cop::Metrics::ClassLength::LITERAL_REGEX
+# uninitialized constant RuboCop::Cop::Metrics::ClassLength::MSG
 # wrong constant name class_definition?<defaultArg>1
 # wrong constant name class_definition?
 # wrong constant name on_casgn
 # wrong constant name on_class
 # wrong constant name <static-init>
+# uninitialized constant RuboCop::Cop::Metrics::CyclomaticComplexity::KNOWN_ITERATING_METHODS
 # uninitialized constant RuboCop::Cop::Metrics::CyclomaticComplexity::LITERAL_REGEX
 # uninitialized constant RuboCop::Cop::Metrics::MethodLength::LITERAL_REGEX
 # uninitialized constant RuboCop::Cop::Metrics::MethodLength::MSG
@@ -57198,6 +57662,7 @@
 # wrong constant name on_defs
 # undefined method `module_definition?<defaultArg>1' for class `RuboCop::Cop::Metrics::ModuleLength'
 # uninitialized constant RuboCop::Cop::Metrics::ModuleLength::LITERAL_REGEX
+# uninitialized constant RuboCop::Cop::Metrics::ModuleLength::MSG
 # wrong constant name module_definition?<defaultArg>1
 # wrong constant name module_definition?
 # wrong constant name on_casgn
@@ -57215,6 +57680,26 @@
 # wrong constant name evaluate_condition_node
 # wrong constant name initialize
 # wrong constant name calculate
+# undefined method `class_definition?<defaultArg>1' for class `RuboCop::Cop::Metrics::Utils::CodeLengthCalculator'
+# undefined method `initialize<defaultArg>1' for class `RuboCop::Cop::Metrics::Utils::CodeLengthCalculator'
+# Did you mean?  initialize_dup
+# undefined method `initialize<defaultArg>2' for class `RuboCop::Cop::Metrics::Utils::CodeLengthCalculator'
+# Did you mean?  initialize_dup
+# undefined method `module_definition?<defaultArg>1' for class `RuboCop::Cop::Metrics::Utils::CodeLengthCalculator'
+# uninitialized constant RuboCop::Cop::Metrics::Utils::CodeLengthCalculator::LITERAL_REGEX
+# wrong constant name calculate
+# wrong constant name class_definition?<defaultArg>1
+# wrong constant name class_definition?
+# wrong constant name initialize<defaultArg>1
+# wrong constant name initialize<defaultArg>2
+# wrong constant name initialize
+# wrong constant name module_definition?<defaultArg>1
+# wrong constant name module_definition?
+# wrong constant name <static-init>
+# wrong constant name block_method_name
+# wrong constant name iterating_block?
+# wrong constant name iterating_method?
+# wrong constant name <static-init>
 # uninitialized constant RuboCop::Cop::Migration::DepartmentName::BYTE_ORDER_MARK
 # uninitialized constant RuboCop::Cop::Migration::DepartmentName::LITERAL_REGEX
 # wrong constant name autocorrect
@@ -57331,8 +57816,11 @@
 # wrong constant name <static-init>
 # undefined method `initialize<defaultArg>1' for class `RuboCop::Cop::Offense'
 # Did you mean?  initialize_dup
+# undefined method `initialize<defaultArg>2' for class `RuboCop::Cop::Offense'
+# Did you mean?  initialize_dup
 # wrong constant name <=>
 # wrong constant name ==
+# wrong constant name <Class:PseudoSourceRange>
 # wrong constant name column
 # wrong constant name column_length
 # wrong constant name column_range
@@ -57340,11 +57828,13 @@
 # wrong constant name correctable?
 # wrong constant name corrected?
 # wrong constant name corrected_with_todo?
+# wrong constant name corrector
 # wrong constant name disabled?
 # wrong constant name eql?
 # wrong constant name first_line
 # wrong constant name highlighted_area
 # wrong constant name initialize<defaultArg>1
+# wrong constant name initialize<defaultArg>2
 # wrong constant name initialize
 # wrong constant name last_column
 # wrong constant name last_line
@@ -57355,6 +57845,20 @@
 # wrong constant name severity
 # wrong constant name source_line
 # wrong constant name status
+# uninitialized constant RuboCop::Cop::Offense::PseudoSourceRange::Elem
+# wrong constant name begin_pos
+# wrong constant name begin_pos=
+# wrong constant name column
+# wrong constant name column=
+# wrong constant name end_pos
+# wrong constant name end_pos=
+# wrong constant name line
+# wrong constant name line=
+# wrong constant name source_line
+# wrong constant name source_line=
+# wrong constant name <static-init>
+# wrong constant name []
+# wrong constant name members
 # wrong constant name on_if
 # wrong constant name <static-init>
 # wrong constant name <static-init>
@@ -58196,6 +58700,13 @@
 # wrong constant name access_modifier_with_symbol?<defaultArg>1
 # wrong constant name access_modifier_with_symbol?
 # wrong constant name on_send
+# uninitialized constant RuboCop::Cop::Style::AccessorGrouping::LITERAL_REGEX
+# uninitialized constant RuboCop::Cop::Style::AccessorGrouping::VISIBILITY_SCOPES
+# wrong constant name autocorrect
+# wrong constant name on_class
+# wrong constant name on_module
+# wrong constant name on_sclass
+# wrong constant name <static-init>
 # undefined method `identifier<defaultArg>1' for class `RuboCop::Cop::Style::Alias'
 # uninitialized constant RuboCop::Cop::Style::Alias::LITERAL_REGEX
 # wrong constant name autocorrect
@@ -58239,6 +58750,13 @@
 # wrong constant name on_str
 # uninitialized constant RuboCop::Cop::Style::BeginBlock::LITERAL_REGEX
 # wrong constant name on_preexe
+# uninitialized constant RuboCop::Cop::Style::BisectedAttrAccessor::LITERAL_REGEX
+# uninitialized constant RuboCop::Cop::Style::BisectedAttrAccessor::VISIBILITY_SCOPES
+# wrong constant name autocorrect
+# wrong constant name on_class
+# wrong constant name on_module
+# wrong constant name on_sclass
+# wrong constant name <static-init>
 # uninitialized constant RuboCop::Cop::Style::BlockComments::BYTE_ORDER_MARK
 # uninitialized constant RuboCop::Cop::Style::BlockComments::LITERAL_REGEX
 # wrong constant name autocorrect
@@ -58278,6 +58796,7 @@
 # uninitialized constant RuboCop::Cop::Style::ClassVars::LITERAL_REGEX
 # wrong constant name message
 # wrong constant name on_cvasgn
+# wrong constant name on_send
 # uninitialized constant RuboCop::Cop::Style::CollectionMethods::LITERAL_REGEX
 # wrong constant name autocorrect
 # wrong constant name on_block
@@ -58589,6 +59108,7 @@
 # wrong constant name autocorrect
 # wrong constant name on_if
 # uninitialized constant RuboCop::Cop::Style::IfUnlessModifierOfIfUnless::LITERAL_REGEX
+# wrong constant name autocorrect
 # wrong constant name on_if
 # uninitialized constant RuboCop::Cop::Style::IfWithSemicolon::LITERAL_REGEX
 # wrong constant name autocorrect
@@ -58642,7 +59162,7 @@
 # wrong constant name <Class:RequireParentheses>
 # wrong constant name autocorrect
 # wrong constant name initialize
-# undefined method `message<defaultArg>1' for module `#<Module:0x000055e287dc2c28>'
+# undefined method `message<defaultArg>1' for module `#<Module:0x000055fa814b1a50>'
 # wrong constant name autocorrect
 # wrong constant name message<defaultArg>1
 # wrong constant name message
@@ -58650,7 +59170,7 @@
 # wrong constant name on_send
 # wrong constant name on_super
 # wrong constant name on_yield
-# undefined method `message<defaultArg>1' for module `#<Module:0x000055e287dd6660>'
+# undefined method `message<defaultArg>1' for module `#<Module:0x000055fa814c35e8>'
 # wrong constant name autocorrect
 # wrong constant name message<defaultArg>1
 # wrong constant name message
@@ -58730,6 +59250,7 @@
 # wrong constant name on_def
 # wrong constant name on_defs
 # uninitialized constant RuboCop::Cop::Style::MultilineTernaryOperator::LITERAL_REGEX
+# wrong constant name autocorrect
 # wrong constant name on_if
 # uninitialized constant RuboCop::Cop::Style::MultilineWhenThen::BYTE_ORDER_MARK
 # uninitialized constant RuboCop::Cop::Style::MultilineWhenThen::LITERAL_REGEX
@@ -58797,6 +59318,7 @@
 # wrong constant name on_csend
 # wrong constant name on_send
 # uninitialized constant RuboCop::Cop::Style::NestedTernaryOperator::LITERAL_REGEX
+# wrong constant name autocorrect
 # wrong constant name on_if
 # uninitialized constant RuboCop::Cop::Style::Next::BYTE_ORDER_MARK
 # uninitialized constant RuboCop::Cop::Style::Next::LITERAL_REGEX
@@ -58952,7 +59474,6 @@
 # wrong constant name autocorrect
 # wrong constant name on_send
 # undefined method `integer_op_rand?<defaultArg>1' for class `RuboCop::Cop::Style::RandomWithOffset'
-# undefined method `namespace<defaultArg>1' for class `RuboCop::Cop::Style::RandomWithOffset'
 # undefined method `rand_modified?<defaultArg>1' for class `RuboCop::Cop::Style::RandomWithOffset'
 # undefined method `rand_op_integer?<defaultArg>1' for class `RuboCop::Cop::Style::RandomWithOffset'
 # undefined method `random_call<defaultArg>1' for class `RuboCop::Cop::Style::RandomWithOffset'
@@ -58961,8 +59482,6 @@
 # wrong constant name autocorrect
 # wrong constant name integer_op_rand?<defaultArg>1
 # wrong constant name integer_op_rand?
-# wrong constant name namespace<defaultArg>1
-# wrong constant name namespace
 # wrong constant name on_send
 # wrong constant name rand_modified?<defaultArg>1
 # wrong constant name rand_modified?
@@ -58972,6 +59491,14 @@
 # wrong constant name random_call
 # wrong constant name to_int<defaultArg>1
 # wrong constant name to_int
+# undefined method `redundant_assignment?<defaultArg>1' for class `RuboCop::Cop::Style::RedundantAssignment'
+# uninitialized constant RuboCop::Cop::Style::RedundantAssignment::LITERAL_REGEX
+# wrong constant name autocorrect
+# wrong constant name on_def
+# wrong constant name on_defs
+# wrong constant name redundant_assignment?<defaultArg>1
+# wrong constant name redundant_assignment?
+# wrong constant name <static-init>
 # uninitialized constant RuboCop::Cop::Style::RedundantBegin::LITERAL_REGEX
 # wrong constant name autocorrect
 # wrong constant name on_block
@@ -58998,12 +59525,27 @@
 # undefined method `compact?<defaultArg>1' for class `RuboCop::Cop::Style::RedundantException'
 # undefined method `exploded?<defaultArg>1' for class `RuboCop::Cop::Style::RedundantException'
 # uninitialized constant RuboCop::Cop::Style::RedundantException::LITERAL_REGEX
-# wrong constant name autocorrect
 # wrong constant name compact?<defaultArg>1
 # wrong constant name compact?
 # wrong constant name exploded?<defaultArg>1
 # wrong constant name exploded?
+# wrong constant name fix_compact
+# wrong constant name fix_exploded
 # wrong constant name on_send
+# undefined method `rails_cache?<defaultArg>1' for class `RuboCop::Cop::Style::RedundantFetchBlock'
+# undefined method `redundant_fetch_block_candidate?<defaultArg>1' for class `RuboCop::Cop::Style::RedundantFetchBlock'
+# uninitialized constant RuboCop::Cop::Style::RedundantFetchBlock::BYTE_ORDER_MARK
+# uninitialized constant RuboCop::Cop::Style::RedundantFetchBlock::FROZEN_STRING_LITERAL
+# uninitialized constant RuboCop::Cop::Style::RedundantFetchBlock::FROZEN_STRING_LITERAL_ENABLED
+# uninitialized constant RuboCop::Cop::Style::RedundantFetchBlock::FROZEN_STRING_LITERAL_TYPES
+# uninitialized constant RuboCop::Cop::Style::RedundantFetchBlock::LITERAL_REGEX
+# wrong constant name autocorrect
+# wrong constant name on_block
+# wrong constant name rails_cache?<defaultArg>1
+# wrong constant name rails_cache?
+# wrong constant name redundant_fetch_block_candidate?<defaultArg>1
+# wrong constant name redundant_fetch_block_candidate?
+# wrong constant name <static-init>
 # undefined method `operation_produces_immutable_object?<defaultArg>1' for class `RuboCop::Cop::Style::RedundantFreeze'
 # uninitialized constant RuboCop::Cop::Style::RedundantFreeze::FROZEN_STRING_LITERAL
 # uninitialized constant RuboCop::Cop::Style::RedundantFreeze::FROZEN_STRING_LITERAL_ENABLED
@@ -59020,6 +59562,7 @@
 # undefined method `arg_in_call_with_block?<defaultArg>1' for class `RuboCop::Cop::Style::RedundantParentheses'
 # undefined method `first_send_argument?<defaultArg>1' for class `RuboCop::Cop::Style::RedundantParentheses'
 # undefined method `first_super_argument?<defaultArg>1' for class `RuboCop::Cop::Style::RedundantParentheses'
+# undefined method `first_yield_argument?<defaultArg>1' for class `RuboCop::Cop::Style::RedundantParentheses'
 # undefined method `method_node_and_args<defaultArg>1' for class `RuboCop::Cop::Style::RedundantParentheses'
 # undefined method `range_end?<defaultArg>1' for class `RuboCop::Cop::Style::RedundantParentheses'
 # undefined method `rescue?<defaultArg>1' for class `RuboCop::Cop::Style::RedundantParentheses'
@@ -59032,6 +59575,8 @@
 # wrong constant name first_send_argument?
 # wrong constant name first_super_argument?<defaultArg>1
 # wrong constant name first_super_argument?
+# wrong constant name first_yield_argument?<defaultArg>1
+# wrong constant name first_yield_argument?
 # wrong constant name method_node_and_args<defaultArg>1
 # wrong constant name method_node_and_args
 # wrong constant name on_begin
@@ -59218,7 +59763,9 @@
 # wrong constant name lstrip_rstrip
 # wrong constant name on_send
 # undefined method `struct_constructor?<defaultArg>1' for class `RuboCop::Cop::Style::StructInheritance'
+# uninitialized constant RuboCop::Cop::Style::StructInheritance::BYTE_ORDER_MARK
 # uninitialized constant RuboCop::Cop::Style::StructInheritance::LITERAL_REGEX
+# wrong constant name autocorrect
 # wrong constant name on_class
 # wrong constant name struct_constructor?<defaultArg>1
 # wrong constant name struct_constructor?
@@ -59376,33 +59923,24 @@
 # Did you mean?  initialize_dup
 # undefined method `initialize<defaultArg>2' for class `RuboCop::Cop::Team'
 # Did you mean?  initialize_dup
-# wrong constant name <Class:Investigation>
-# wrong constant name autocorrect
 # wrong constant name autocorrect?
 # wrong constant name cops
 # wrong constant name debug?
 # wrong constant name errors
 # wrong constant name external_dependency_checksum
 # wrong constant name forces
-# wrong constant name forces_for
 # wrong constant name initialize<defaultArg>1
 # wrong constant name initialize<defaultArg>2
 # wrong constant name initialize
 # wrong constant name inspect_file
+# wrong constant name investigate
 # wrong constant name updated_source_file
 # wrong constant name updated_source_file?
 # wrong constant name warnings
-# uninitialized constant RuboCop::Cop::Team::Investigation::Elem
-# wrong constant name errors
-# wrong constant name errors=
-# wrong constant name offenses
-# wrong constant name offenses=
-# wrong constant name <static-init>
-# wrong constant name []
-# wrong constant name members
 # undefined singleton method `mobilize<defaultArg>1' for `RuboCop::Cop::Team'
 # undefined singleton method `mobilize_cops<defaultArg>1' for `RuboCop::Cop::Team'
 # undefined singleton method `new<defaultArg>1' for `RuboCop::Cop::Team'
+# wrong constant name forces_for
 # wrong constant name mobilize<defaultArg>1
 # wrong constant name mobilize
 # wrong constant name mobilize_cops<defaultArg>1
@@ -59630,6 +60168,10 @@
 # wrong constant name reference_variable
 # wrong constant name scope_stack
 # wrong constant name variable_exist?
+# wrong constant name <static-init>
+# undefined method `visibility_block?<defaultArg>1' for module `RuboCop::Cop::VisibilityHelp'
+# wrong constant name visibility_block?<defaultArg>1
+# wrong constant name visibility_block?
 # wrong constant name <static-init>
 # wrong constant name <static-init>
 # wrong constant name column
