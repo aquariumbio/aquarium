@@ -16,6 +16,13 @@ Everyone else should visit the installation page on [Aquarium.bio](aquarium.bio)
    git clone https://github.com/klavinslab/aquarium.git
    ```
 
+3. Initialize the environment
+
+   ```bash
+   cd aquarium
+   bash ./setup.sh
+   ```
+
 ## Running Aquarium
 
 The following commands will allow you to run Aquarium in Rails development mode in a Unix&trade;-like environment.
@@ -305,6 +312,8 @@ Keep it up-to-date if you change something that affects Aquarium development.
     ```
 
     If there are any failures, fix them and start over.
+
+    > Note: you can do all all of the following steps with Aquarium still running by using `docker-compose exec` instead of `docker-compose run --rm`. Just postpone running `down` until after the last step.
 
 4.  Run type checks
 
