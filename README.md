@@ -17,4 +17,4 @@ Users should start at [Aquarium.bio](http://www.aquarium.bio).
 
 ## Developers
 
-Developers should start with the [developer documentation](http://klavinslab.org/aquarium/development/).
+Developers should start with the [developer documentation](http://aquariumbio.github.io/aquarium/development/).
