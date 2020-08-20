@@ -1,4 +1,3 @@
-# typed: false
 # encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
@@ -12,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181221174622) do
+ActiveRecord::Schema.define(version: 20200810000001) do
 
   create_table "account_logs", force: :cascade do |t|
     t.integer  "row1",       limit: 4
@@ -114,8 +113,6 @@ ActiveRecord::Schema.define(version: 20181221174622) do
     t.integer  "preferred_field_type_id",     limit: 4
   end
 
-  add_index "field_types", ["parent_id"], name: "index_field_types_on_sample_type_id", using: :btree
-
   create_table "field_values", force: :cascade do |t|
     t.integer  "parent_id",               limit: 4
     t.text     "value",                   limit: 65535
@@ -134,7 +131,6 @@ ActiveRecord::Schema.define(version: 20181221174622) do
 
   add_index "field_values", ["allowable_field_type_id"], name: "index_field_values_on_allowable_field_type_id", using: :btree
   add_index "field_values", ["field_type_id"], name: "index_field_values_on_field_type_id", using: :btree
-  add_index "field_values", ["parent_id"], name: "index_field_values_on_sample_id", using: :btree
 
   create_table "groups", force: :cascade do |t|
     t.string   "name",        limit: 255
