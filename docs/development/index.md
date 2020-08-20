@@ -137,7 +137,7 @@ rm -rf docker/db/*
 
 ```bash
 docker-compose up -d
-docker-compose exec app RAILS_ENV=production rake db:migrate
+docker-compose exec app env RAILS_ENV=production rake db:migrate
 docker-compose down -v
 ```
 
