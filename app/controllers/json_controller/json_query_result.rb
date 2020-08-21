@@ -13,6 +13,7 @@ class JsonController
 
       model = get_model(model: parameters[:model], include: parameters[:include])
       result = apply_method(model: model, method: parameters[:method], arguments: parameters[:arguments], id: parameters[:id], options: parameters[:options])
+      result = filter_associations(result) if parameters[:model] == 'DataAssociation'
 
       return result.as_json(include: parameters[:include], methods: parameters[:methods]) if parameters[:methods] && parameters[:include]
       return result.as_json(methods: parameters[:methods]) if parameters[:methods] && !parameters[:include]
@@ -110,6 +111,18 @@ class JsonController
       true
     end
 
-    private_class_method :apply_method, :gather_includes, :association?, :method_ok?
+    # Filters data associations by key.
+    # Selects the most recently updated record, and in case of ties selects by largest id.
+    #
+    # @param associations [ActiveRecord<DataAssociation>] the data associations
+    # @return [Array<DataAssociation]
+    def self.filter_associations(associations)
+      associations
+        .order(:key, :updated_at, :id)
+        .group_by(&:key)
+        .map { |_, group| group.last }
+    end
+
+    private_class_method :apply_method, :gather_includes, :association?, :method_ok?, :filter_associations
   end
 end
