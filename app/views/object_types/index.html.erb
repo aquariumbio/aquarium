@@ -38,6 +38,9 @@
 
       <% @object_types.each do |object_type| %>
 
+        <%-# Do not show internal object_type rows, assumes '__' is the standard identifier-%>
+        <% next if object_type.name.start_with?('__') %>
+
         <tr ng-if="status.handler == '<%= object_type.handler %>'">
 
           <td><a href="#" ng-click="status['ot<%= object_type.id %>'] = !status['ot<%= object_type.id %>']"><%= object_type.name %></a></td>
