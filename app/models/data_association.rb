@@ -38,4 +38,10 @@ class DataAssociation < ActiveRecord::Base
     return true if parent_class == 'OperationType' # operation types don't have owners yet either
   end
 
+  # Scope method to order data associations by key and then duplicates by
+  # the most recent update.
+  def self.most_recent
+    order(:key, updated_at: :desc, id: :desc)
+  end
+
 end
