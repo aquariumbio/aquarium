@@ -57,21 +57,21 @@ class DataAssociation < ActiveRecord::Base
   # If key is non-nil, returns the current value for the key, otherwise returns
   # all values ordered by key and last update.
   #
-  # @param parent_id [integer] the record id for the owner object
   # @param parent_class [string] the name of the class of the owner object
+  # @param parent_id [integer] the record id for the owner object
   # @param key [string] the key value, may be nil
   # @return [ActiveRecord<DataAssociation>] the associations for the object
-  def self.associations_for(parent_id:, parent_class:, key: nil)
+  def self.associations_for(parent_class:, parent_id:, key: nil)
     if key
       DataAssociation
         .includes(:upload)
         .where(parent_id: parent_id, parent_class: parent_class, key: key.to_s)
         .most_recent
-        .limit(1)
     else
       DataAssociation
         .includes(:upload)
         .where(parent_id: parent_id, parent_class: parent_class)
+        .most_recent
     end
   end
 
