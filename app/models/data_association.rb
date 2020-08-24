@@ -38,6 +38,43 @@ class DataAssociation < ActiveRecord::Base
     return true if parent_class == 'OperationType' # operation types don't have owners yet either
   end
 
+  # Creates new association for the object identified by parent class and id
+  #
+  def self.create_from(parent_id:, parent_class:, key:, value:, upload: nil)
+    upload_id = nil
+    upload_id = upload.id if upload
+
+    DataAssociation.new(
+      parent_id: parent_id,
+      parent_class: parent_class,
+      key: key.to_s,
+      object: { key => value }.to_json,
+      upload_id: upload_id
+    )
+  end
+
+  # Returns associations for the object identified by parent class and id.
+  # If key is non-nil, returns the current value for the key, otherwise returns
+  # all values ordered by key and last update.
+  #
+  # @param parent_id [integer] the record id for the owner object
+  # @param parent_class [string] the name of the class of the owner object
+  # @param key [string] the key value, may be nil
+  # @return [ActiveRecord<DataAssociation>] the associations for the object
+  def self.associations_for(parent_id:, parent_class:, key: nil)
+    if key
+      DataAssociation
+        .includes(:upload)
+        .where(parent_id: parent_id, parent_class: parent_class, key: key.to_s)
+        .most_recent
+        .limit(1)
+    else
+      DataAssociation
+        .includes(:upload)
+        .where(parent_id: parent_id, parent_class: parent_class)
+    end
+  end
+
   # Scope method to order data associations by key and then duplicates by
   # the most recent update.
   def self.most_recent
