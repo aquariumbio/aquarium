@@ -38,8 +38,8 @@
 
       <% @object_types.each do |object_type| %>
 
-        <%-# Do not show internal object_type rows, assumes '__' is the standard identifier-%>
-        <% next if object_type.name.start_with?('__') %>
+        <%-# '__Part' is an internal object_type that should not be exposed to users-%>
+        <% next if object_type.name == '__Part' %>
 
         <tr ng-if="status.handler == '<%= object_type.handler %>'">
 
