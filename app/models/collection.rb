@@ -448,7 +448,6 @@ class Collection < Item
     end.select(&:any?).flatten(1)
   end
 
-
   # Finds parts with sample id corresponding to val.
   #
   # @param val [Fixnum, Sample, Item]
