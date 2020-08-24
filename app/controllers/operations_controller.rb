@@ -143,7 +143,7 @@ class OperationsController < ApplicationController
     jas = JobAssociation.includes(:job).where(operation_id: op_ids).as_json(include: 'job')
     users = User.where(id: user_ids).collect { |u| { name: u.name, id: u.id, login: u.login } }.as_json
     pas = PlanAssociation.includes(:plan).where(operation_id: op_ids).as_json(include: 'plan')
-    das = DataAssociation.where(parent_class: 'Operation', parent_id: op_ids).as_json
+    das = DataAssociation.associations_for(parent_class: 'Operation', parent_id: op_ids).as_json
     fvs = FieldValue.where(parent_class: 'Operation', parent_id: op_ids).as_json
 
     item_ids = fvs.collect { |fv| fv['child_item_id'] }

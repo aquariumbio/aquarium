@@ -198,21 +198,18 @@ class Collection < Item
   # @param key [String]
   # @return [Array] an array of array of {DataAssociation}s
   def data_matrix(key)
-
     pas = part_association_list
-    part_ids = pas.collect { |p| p.part_id }.uniq
 
-    das = DataAssociation.where(parent_class: 'Item', parent_id: part_ids, key: key)
+    part_ids = pas.collect { |p| p.part_id }.uniq
+    das = DataAssociation.associations_for(parent_class: 'Item', parent_id: part_ids, key: key)
 
     r, c = dimensions
     m = Array.new(r) { Array.new(c) }
-
     pas.each do |pa|
       m[pa.row][pa.column] = das.find { |da| da.parent_id == pa.part_id }
     end
 
     m
-
   end
 
   # Return the matrix of data association values associated with the given key
@@ -451,7 +448,8 @@ class Collection < Item
     end.select(&:any?).flatten(1)
   end
 
-  # Finds parts that equal val.
+
+  # Finds parts with sample id corresponding to val.
   #
   # @param val [Fixnum, Sample, Item]
   # @return [Array<Array<Fixnum>>] selected parts in the form [[r1, c1], [r2, c2]]
