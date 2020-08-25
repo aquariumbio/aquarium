@@ -2,7 +2,7 @@
 
 Please use these instructions to add indexes and foreign keys to your Aquarium database.
 
-We suggest you back up your database before you proceeding.  Be aware that adding foreign keys requires removing any orphan records in the database, so you risk losing data that if you do not back up your database before you begin.
+We suggest you back up your database before you proceeding.  Be aware that adding foreign keys requires removing any orphan records in the database, so you risk losing data if you do not back up your database before you begin.
 
 ---
 
@@ -40,7 +40,7 @@ We suggest you back up your database before you proceeding.  Be aware that addin
     ```
 
 
-2. **Run** the following mysql script to remove orphan records
+3. **Run** the following mysql script to remove orphan records
 
     ```bash
     remove_orphans.sql
@@ -50,7 +50,7 @@ We suggest you back up your database before you proceeding.  Be aware that addin
     docker-compose exec app mysql -h 127.0.0.1 -u aquarium -p production < docs/development/remove_orphans.sql
 
 
-3. **Run** the database migration file to add the foreign keys
+4. **Run** the following database migration file to add the foreign keys
 
     ```bash
     docker-compose up -d
@@ -59,7 +59,7 @@ We suggest you back up your database before you proceeding.  Be aware that addin
     ```
 
 
-4. **Restart** Aquarium
+5. **Restart** Aquarium
 
     ```bash
     docker-compose up
