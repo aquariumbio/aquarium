@@ -28,9 +28,11 @@ module DataAssociator
   # @return [Hash] the hash map of all associations for this object
   def associations
     h = HashWithIndifferentAccess.new
-    data_associations.each do |da|
-      h[da.key] = da.value
+    associations = DataAssociation.select_most_recent(data_associations)
+    associations.each do |association|
+      h[association.key] = association.value
     end
+
     h
   end
 
