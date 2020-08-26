@@ -75,8 +75,8 @@ class AddIndexesAndForeignKeys < ActiveRecord::Migration
     ### TODO: WHAT IS SUCCESSOR ID
     add_index       :jobs, :user_id
     add_index       :jobs, :group_id
-    add_foreign_key :jobs, :users
-    add_foreign_key :jobs, :groups
+    add_foreign_key :jobs, :users, on_delete: :cascade
+    add_foreign_key :jobs, :groups, on_delete: :cascade
 
     # locators
     add_index       :locators, :item_id
@@ -103,8 +103,8 @@ class AddIndexesAndForeignKeys < ActiveRecord::Migration
     ### TODO: WHAT IS PARENT_ID
     # already indexed on operation_type_id
     # already indexed on user_id
-    add_foreign_key :operations, :operation_types
-    add_foreign_key :operations, :users
+    add_foreign_key :operations, :operation_types, on_delete: :cascade
+    add_foreign_key :operations, :users, on_delete: :cascade
 
     # part_associations
     # already indexed on [ :collection_id, :row, :column ]

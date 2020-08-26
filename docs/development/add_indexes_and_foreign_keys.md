@@ -13,7 +13,7 @@ We suggest you back up your database before you proceeding.  Be aware that addin
     ```bash
     MYSQL_USER=<username>
     MYSQL_PASSWORD=<password>
-    docker-compose up -d
+    docker-compose up -d db
     docker-compose exec db mysqldump -u $MYSQL_USER -p$MYSQL_PASSWORD production > production_dump.sql
     docker-compose down -v
     ```
@@ -28,34 +28,30 @@ We suggest you back up your database before you proceeding.  Be aware that addin
 1. **Stop** Aquarium
 
    ```bash
-   docker-compose down
+   docker-compose down -v
    ```
 
 2. **Run** the following database migration file to update field types
 
     ```bash
-    docker-compose up -d
-    docker-compose exec app rake db:migrate VERSION=20200810000000
-    docker-compose down -v
+    docker-compose run --rm app rake db:migrate VERSION=20200810000000
     ```
 
 
-3. **Run** the following mysql script to remove orphan records
+3. **Run** the following mysql script to remove orphan records from the database
 
     ```bash
-    remove_orphans.sql
+    docker-compose up -d db
+    docker-compose exec -T db mysql -u aquarium -p<password> -P 3307 -D production < docs/development/remove_orphans.sql
+    docker-compose down
     ```
 
-    *TODO: add instructions to run this file through docker. Perhaps something similar to*<br/>
-    docker-compose exec app mysql -h 127.0.0.1 -u aquarium -p production < docs/development/remove_orphans.sql
-
+    *NOTE: The remove_orphans.sql script does not show any status and may take a few minutes to complete.*
 
 4. **Run** the following database migration file to add the foreign keys
 
     ```bash
-    docker-compose up -d
-    docker-compose exec app rake db:migrate VERSION=20200810000001
-    docker-compose down -v
+    docker-compose run --rm app rake db:migrate VERSION=20200810000001
     ```
 
 
