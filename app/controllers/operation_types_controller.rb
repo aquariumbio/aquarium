@@ -56,9 +56,9 @@ class OperationTypesController < ApplicationController
         ot.add_new_field_type(ft)
       end
     end
-
+ # TODO: Add test here and in line 64 once bug is fixed
     %w[protocol precondition cost_model documentation].each do |name|
-      ot.new_code(name, params[name]['content'], current_user)
+      ot.new_code(name, params[name]['content'], current_user) if params[name]['content']
     end
 
     j = ot.as_json(methods: %i[field_types protocol precondition cost_model documentation])
@@ -90,7 +90,13 @@ class OperationTypesController < ApplicationController
       return
     end
 
-    ot = OperationType.find(params[:id])
+    begin
+      ot = OperationType.find(params[:id])
+    rescue
+      render json: { error: 'invalid operation type' },
+               status: :unprocessable_entity
+      return
+    end
     code_object = ot.code(params[:name])
     code_object = if code_object
                     code_object.commit(params[:content], current_user)
