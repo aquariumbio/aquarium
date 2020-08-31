@@ -1,4 +1,3 @@
-# typed: false
 # encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
@@ -12,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181221174622) do
+ActiveRecord::Schema.define(version: 20200810000001) do
 
   create_table "account_logs", force: :cascade do |t|
     t.integer  "row1",       limit: 4
@@ -23,6 +22,8 @@ ActiveRecord::Schema.define(version: 20181221174622) do
     t.datetime "updated_at",               null: false
   end
 
+  add_index "account_logs", ["row1"], name: "index_account_logs_on_row1", using: :btree
+  add_index "account_logs", ["row2"], name: "index_account_logs_on_row2", using: :btree
   add_index "account_logs", ["user_id"], name: "index_account_log_associations_on_user_id", using: :btree
 
   create_table "accounts", force: :cascade do |t|
@@ -42,6 +43,7 @@ ActiveRecord::Schema.define(version: 20181221174622) do
 
   add_index "accounts", ["budget_id"], name: "index_accounts_on_budget_id", using: :btree
   add_index "accounts", ["job_id"], name: "index_accounts_on_job_id", using: :btree
+  add_index "accounts", ["operation_id"], name: "index_accounts_on_operation_id", using: :btree
   add_index "accounts", ["user_id"], name: "index_accounts_on_user_id", using: :btree
 
   create_table "allowable_field_types", force: :cascade do |t|
@@ -95,6 +97,7 @@ ActiveRecord::Schema.define(version: 20181221174622) do
     t.datetime "updated_at",                 null: false
   end
 
+  add_index "data_associations", ["parent_class", "parent_id"], name: "index_data_associations_on_parent_class_and_parent_id", using: :btree
   add_index "data_associations", ["upload_id"], name: "index_data_associations_on_upload_id", using: :btree
 
   create_table "field_types", force: :cascade do |t|
@@ -114,7 +117,7 @@ ActiveRecord::Schema.define(version: 20181221174622) do
     t.integer  "preferred_field_type_id",     limit: 4
   end
 
-  add_index "field_types", ["parent_id"], name: "index_field_types_on_sample_type_id", using: :btree
+  add_index "field_types", ["parent_class", "parent_id"], name: "index_field_types_on_parent_class_and_parent_id", using: :btree
 
   create_table "field_values", force: :cascade do |t|
     t.integer  "parent_id",               limit: 4
@@ -133,8 +136,10 @@ ActiveRecord::Schema.define(version: 20181221174622) do
   end
 
   add_index "field_values", ["allowable_field_type_id"], name: "index_field_values_on_allowable_field_type_id", using: :btree
+  add_index "field_values", ["child_item_id"], name: "fk_rails_319b222007", using: :btree
+  add_index "field_values", ["child_sample_id"], name: "fk_rails_e04e5b0273", using: :btree
   add_index "field_values", ["field_type_id"], name: "index_field_values_on_field_type_id", using: :btree
-  add_index "field_values", ["parent_id"], name: "index_field_values_on_sample_id", using: :btree
+  add_index "field_values", ["parent_class", "parent_id"], name: "index_field_values_on_parent_class_and_parent_id", using: :btree
 
   create_table "groups", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -154,6 +159,9 @@ ActiveRecord::Schema.define(version: 20181221174622) do
     t.text     "notes",      limit: 65535
   end
 
+  add_index "invoices", ["budget_id"], name: "index_invoices_on_budget_id", using: :btree
+  add_index "invoices", ["user_id"], name: "index_invoices_on_user_id", using: :btree
+
   create_table "items", force: :cascade do |t|
     t.string   "location",       limit: 255
     t.integer  "quantity",       limit: 4
@@ -166,7 +174,9 @@ ActiveRecord::Schema.define(version: 20181221174622) do
     t.integer  "locator_id",     limit: 4
   end
 
+  add_index "items", ["locator_id"], name: "index_items_on_locator_id", using: :btree
   add_index "items", ["object_type_id"], name: "index_items_on_object_type_id", using: :btree
+  add_index "items", ["sample_id"], name: "index_items_on_sample_id", using: :btree
 
   create_table "job_associations", force: :cascade do |t|
     t.integer  "job_id",       limit: 4
@@ -175,8 +185,11 @@ ActiveRecord::Schema.define(version: 20181221174622) do
     t.datetime "updated_at",             null: false
   end
 
+  add_index "job_associations", ["job_id"], name: "index_job_associations_on_job_id", using: :btree
+  add_index "job_associations", ["operation_id"], name: "index_job_associations_on_operation_id", using: :btree
+
   create_table "jobs", force: :cascade do |t|
-    t.string   "user_id",            limit: 255
+    t.integer  "user_id",            limit: 4
     t.text     "arguments",          limit: 65535
     t.text     "state",              limit: 4294967295
     t.datetime "created_at",                            null: false
@@ -190,6 +203,9 @@ ActiveRecord::Schema.define(version: 20181221174622) do
     t.integer  "metacol_id",         limit: 4
     t.integer  "successor_id",       limit: 4
   end
+
+  add_index "jobs", ["group_id"], name: "index_jobs_on_group_id", using: :btree
+  add_index "jobs", ["user_id"], name: "index_jobs_on_user_id", using: :btree
 
   create_table "libraries", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -206,14 +222,20 @@ ActiveRecord::Schema.define(version: 20181221174622) do
     t.datetime "updated_at",           null: false
   end
 
+  add_index "locators", ["item_id"], name: "index_locators_on_item_id", using: :btree
+  add_index "locators", ["wizard_id"], name: "index_locators_on_wizard_id", using: :btree
+
   create_table "logs", force: :cascade do |t|
     t.integer  "job_id",     limit: 4
-    t.string   "user_id",    limit: 255
+    t.integer  "user_id",    limit: 4
     t.string   "entry_type", limit: 255
     t.text     "data",       limit: 65535
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
   end
+
+  add_index "logs", ["job_id"], name: "index_logs_on_job_id", using: :btree
+  add_index "logs", ["user_id"], name: "index_logs_on_user_id", using: :btree
 
   create_table "memberships", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
@@ -221,6 +243,9 @@ ActiveRecord::Schema.define(version: 20181221174622) do
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
   end
+
+  add_index "memberships", ["group_id"], name: "index_memberships_on_group_id", using: :btree
+  add_index "memberships", ["user_id"], name: "index_memberships_on_user_id", using: :btree
 
   create_table "object_types", force: :cascade do |t|
     t.string   "name",                limit: 255
@@ -289,6 +314,7 @@ ActiveRecord::Schema.define(version: 20181221174622) do
   end
 
   add_index "part_associations", ["collection_id", "row", "column"], name: "index_part_associations_on_collection_id_and_row_and_column", unique: true, using: :btree
+  add_index "part_associations", ["part_id"], name: "index_part_associations_on_part_id", using: :btree
 
   create_table "plan_associations", force: :cascade do |t|
     t.integer  "plan_id",      limit: 4
@@ -312,6 +338,7 @@ ActiveRecord::Schema.define(version: 20181221174622) do
     t.text     "layout",     limit: 65535
   end
 
+  add_index "plans", ["budget_id"], name: "index_plans_on_budget_id", using: :btree
   add_index "plans", ["user_id"], name: "index_plans_on_user_id", using: :btree
 
   create_table "sample_types", force: :cascade do |t|
@@ -332,6 +359,9 @@ ActiveRecord::Schema.define(version: 20181221174622) do
     t.text     "data",           limit: 65535
   end
 
+  add_index "samples", ["sample_type_id"], name: "index_samples_on_sample_type_id", using: :btree
+  add_index "samples", ["user_id"], name: "index_samples_on_user_id", using: :btree
+
   create_table "timings", force: :cascade do |t|
     t.integer  "parent_id",    limit: 4
     t.string   "parent_class", limit: 255
@@ -343,6 +373,8 @@ ActiveRecord::Schema.define(version: 20181221174622) do
     t.datetime "updated_at",               null: false
   end
 
+  add_index "timings", ["parent_class", "parent_id"], name: "index_timings_on_parent_class_and_parent_id", using: :btree
+
   create_table "uploads", force: :cascade do |t|
     t.integer  "job_id",              limit: 4
     t.string   "upload_file_name",    limit: 255
@@ -353,6 +385,8 @@ ActiveRecord::Schema.define(version: 20181221174622) do
     t.datetime "updated_at",                      null: false
   end
 
+  add_index "uploads", ["job_id"], name: "index_uploads_on_job_id", using: :btree
+
   create_table "user_budget_associations", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
     t.integer  "budget_id",  limit: 4
@@ -361,6 +395,9 @@ ActiveRecord::Schema.define(version: 20181221174622) do
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
   end
+
+  add_index "user_budget_associations", ["budget_id"], name: "index_user_budget_associations_on_budget_id", using: :btree
+  add_index "user_budget_associations", ["user_id"], name: "index_user_budget_associations_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "name",            limit: 255
@@ -384,6 +421,9 @@ ActiveRecord::Schema.define(version: 20181221174622) do
     t.datetime "updated_at",           null: false
   end
 
+  add_index "wires", ["from_id"], name: "index_wires_on_from_id", using: :btree
+  add_index "wires", ["to_id"], name: "index_wires_on_to_id", using: :btree
+
   create_table "wizards", force: :cascade do |t|
     t.string   "name",          limit: 255
     t.string   "specification", limit: 255
@@ -400,4 +440,49 @@ ActiveRecord::Schema.define(version: 20181221174622) do
     t.datetime "updated_at"
   end
 
+  add_foreign_key "account_logs", "accounts", column: "row1", on_delete: :cascade
+  add_foreign_key "account_logs", "accounts", column: "row2", on_delete: :cascade
+  add_foreign_key "account_logs", "users", on_delete: :cascade
+  add_foreign_key "accounts", "budgets", on_delete: :cascade
+  add_foreign_key "accounts", "jobs", on_delete: :cascade
+  add_foreign_key "accounts", "operations", on_delete: :cascade
+  add_foreign_key "accounts", "users", on_delete: :cascade
+  add_foreign_key "allowable_field_types", "field_types", on_delete: :cascade
+  add_foreign_key "allowable_field_types", "object_types", on_delete: :cascade
+  add_foreign_key "allowable_field_types", "sample_types", on_delete: :cascade
+  add_foreign_key "data_associations", "uploads", on_delete: :cascade
+  add_foreign_key "field_values", "allowable_field_types", on_delete: :cascade
+  add_foreign_key "field_values", "field_types", on_delete: :cascade
+  add_foreign_key "field_values", "items", column: "child_item_id", on_delete: :cascade
+  add_foreign_key "field_values", "samples", column: "child_sample_id", on_delete: :cascade
+  add_foreign_key "invoices", "budgets", on_delete: :cascade
+  add_foreign_key "invoices", "users", on_delete: :cascade
+  add_foreign_key "items", "locators", on_delete: :cascade
+  add_foreign_key "items", "object_types", on_delete: :cascade
+  add_foreign_key "items", "samples", on_delete: :cascade
+  add_foreign_key "job_associations", "jobs", on_delete: :cascade
+  add_foreign_key "job_associations", "operations", on_delete: :cascade
+  add_foreign_key "jobs", "groups"
+  add_foreign_key "jobs", "users"
+  add_foreign_key "locators", "items", on_delete: :cascade
+  add_foreign_key "locators", "wizards", on_delete: :cascade
+  add_foreign_key "logs", "jobs", on_delete: :cascade
+  add_foreign_key "logs", "users", on_delete: :cascade
+  add_foreign_key "memberships", "groups", on_delete: :cascade
+  add_foreign_key "memberships", "users", on_delete: :cascade
+  add_foreign_key "operations", "operation_types"
+  add_foreign_key "operations", "users"
+  add_foreign_key "part_associations", "items", column: "collection_id", on_delete: :cascade
+  add_foreign_key "part_associations", "items", column: "part_id", on_delete: :cascade
+  add_foreign_key "plan_associations", "operations", on_delete: :cascade
+  add_foreign_key "plan_associations", "plans", on_delete: :cascade
+  add_foreign_key "plans", "budgets", on_delete: :cascade
+  add_foreign_key "plans", "users", on_delete: :cascade
+  add_foreign_key "samples", "sample_types", on_delete: :cascade
+  add_foreign_key "samples", "users", on_delete: :cascade
+  add_foreign_key "uploads", "jobs", on_delete: :cascade
+  add_foreign_key "user_budget_associations", "budgets", on_delete: :cascade
+  add_foreign_key "user_budget_associations", "users", on_delete: :cascade
+  add_foreign_key "wires", "field_values", column: "from_id", on_delete: :cascade
+  add_foreign_key "wires", "field_values", column: "to_id", on_delete: :cascade
 end
