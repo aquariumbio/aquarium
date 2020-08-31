@@ -44,6 +44,16 @@ _fix_local_minio_ip() {
     fi
 }
 
+# Add AWS ECS local domain to container resolv.conf
+# See https://github.com/docker/ecs-plugin
+#
+_add_ecs_namespace() {
+    if [ "${LOCALDOMAIN}" != ""  ]; then
+        echo "Adding ECS local domain to resolv.conf"
+        echo "search ${LOCALDOMAIN}" >> /etc/resolv.conf
+    fi
+}
+
 # Wait for database to start.
 _wait_for_database() {
     echo "waiting for database to respond"
