@@ -19,11 +19,13 @@ class LibrariesController < ApplicationController
 
   def create
     redirect_to root_path, notice: 'Administrative privileges required to access library code.' unless current_user.admin?
-
     lib = Library.new(name: params[:name], category: params[:category])
     lib.save
     lib.add_source(content: params[:source][:content], user: current_user)
 
+    unless lib.valid?
+      return
+    end
     render json: lib
   end
 
