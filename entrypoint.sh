@@ -84,6 +84,7 @@ _show_license() {
 # First fixes the local IP address for minio if needed, and shows the license.
 _start_production_server() {
     _fix_local_minio_ip
+    _add_ecs_namespace()
     echo "Starting production Rails server"
     _show_license
     exec puma -C config/production_puma.rb -e production
@@ -99,6 +100,7 @@ _start_development_server() {
 
 # Starts the krill server using the rails environment passed as an argument.
 _start_krill_server() {
+    _add_ecs_namespace()
     echo "Starting $1 Krill runner"
     exec rails runner -e $1 'Krill::Server.new.run(3500)'
 }
