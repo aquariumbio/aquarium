@@ -283,7 +283,6 @@ docker-compose exec app /bin/sh
 #
 bundle update
 
-#
 # 4. Commit the new Gemfile.lock
 
 # 5. Update interface files for Sorbet type checking
@@ -298,16 +297,17 @@ srb tc
 # 6. Commit updated rbi files
 
 # 7. Exit container shell
-
-# 8. Stop the container
 #
-docker-compose down -v
-```
+exit
 
-```bash
-docker-compose up -d
-docker-compose exec app /bin/sh
+# 8. Update Javascript dependencies
+#
 yarn upgrade
+
+# 9. Commit the new yarn.lock
+
+# 10. Stop the container
+#
 docker-compose down -v
 ```
 
