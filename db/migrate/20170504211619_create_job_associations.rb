@@ -1,3 +1,4 @@
+# typed: false
 class CreateJobAssociations < ActiveRecord::Migration
   def change
    create_table :job_associations do |t|

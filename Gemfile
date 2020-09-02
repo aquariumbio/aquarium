@@ -2,78 +2,81 @@
 
 source 'https://rubygems.org'
 
-# Rails version
-gem 'rails', '4.2.11.1'
+# For bulk inserts (e.g. for loading a collection from a matrix)
+gem 'activerecord-import'
 
-# SQL adapter
-gem 'mysql2', '~> 0.5.2'
+# Used to fake db during asset compilation in Dockerfile
+gem 'activerecord-nulldb-adapter'
 
-# Needed for rails 3.2 => 4.0 upgrade
-gem 'protected_attributes_continued'
-gem 'tzinfo-data'
-
-# Json helpers
-gem 'oj'
+gem 'alphabetical_paginate'
 
 # Authentication and cross origin
 gem 'angular_rails_csrf', '2.1.1'
-gem 'rack-cors', '~> 1.0.5', require: 'rack/cors'
 
-# Style enforcer and linter
-gem 'rubocop'
-gem 'rubocop-rails'
-
-# For documentation
-gem 'yard', '>= 0.9.20'
-gem 'yard-activerecord'
-
-# Various style related gems
-gem 'github-markup'
-gem 'redcarpet'
-gem 'sassc-rails'
-gem 'will_paginate'
-gem 'alphabetical_paginate'
+gem 'anemone', path: 'components/anemone'
+gem 'aquadoc', path: 'components/aquadoc'
 
 # For uploads and cloud storage
 gem 'aws-sdk', '< 2.0'
 gem 'aws-sdk-s3'
-gem 'paperclip', '~> 6.1'
 
 # For email
 gem 'aws-sdk-ses'
 
-# For bulk inserts (e.g. for loading a collection from a matrix)
-gem 'activerecord-import'
+gem 'bcrypt', '~> 3.1'
 
-# Factories for testing of aquarium and protocols
-gem 'factory_bot_rails'
+gem 'closure-compiler'
+
+# gem 'github-markup'
+
+# SQL adapter
+gem 'mysql2', '~> 0.5.2'
+
+# JSON
+gem 'oj'
+
+# For uploads
+gem 'paperclip', '~> 6.1'
+
+# Needed for rails 3.2 => 4.0 upgrade
+gem 'protected_attributes_continued'
+
+gem 'rack-cors', '~> 1.0.5', require: 'rack/cors'
+
+gem 'rails', '4.2.11.1'
+
+gem 'redcarpet'
+
+gem 'sassc-rails'
+
+gem 'tzinfo-data'
 
 # allows rails 5 style where().or() queries
 gem 'where-or'
 
-group :test do
-  gem 'sqlite3'
-end
+gem 'will_paginate'
 
 group :development do
+  gem 'factory_bot_rails'
+  gem 'ipaddress' # used to determine subnet for docker containers for web-console
   gem 'rspec-rails'
+  gem 'rspec-sorbet'
+  gem 'rubocop'
+  gem 'rubocop-rails'
+  gem 'rubocop-sorbet'
+  gem 'simplecov', require: false
   gem 'web-console', '~> 3.0'
-
-  # used to determine subnet for docker containers for web-console
-  gem 'ipaddress'
+  gem 'yard', '>= 0.9.20'
+  gem 'yard-activerecord'
 end
+
+group :development, :test do
+  gem 'sorbet'
+end
+
+gem 'sorbet-rails', '0.5.6'
+gem 'sorbet-runtime'
 
 group :production do
   gem 'puma'
 end
-
-# Gems used only for assets and not required
-# in production environments by default.
-group :assets do
-  gem 'bcrypt', '~> 3.1'
-  gem 'closure-compiler'
-end
-
-# Klavins lab gems
-gem 'anemone', git: 'https://github.com/klavinslab/anemone', tag: 'v1.0.1'
-gem 'aquadoc', git: 'https://github.com/klavinslab/aquadoc', tag: 'v1.0.2'

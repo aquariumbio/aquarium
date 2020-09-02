@@ -1,3 +1,4 @@
+# typed: true
 # frozen_string_literal: true
 
 module Krill
@@ -23,7 +24,7 @@ module Krill
 
     # Executes this manager's job.
     #
-    # @raise [KrillError, ProtocolError]
+    # @raise [KrillError]
     def start
       @sandbox.execute
     end

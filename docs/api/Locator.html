@@ -10,11 +10,11 @@
   
 </title>
 
-  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
 
-  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
 
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
   pathId = "Locator";
   relpath = '';
 </script>
@@ -366,7 +366,6 @@
       <pre class="lines">
 
 
-38
 39
 40
 41
@@ -378,10 +377,11 @@
 47
 48
 49
-50</pre>
+50
+51</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/locator.rb', line 38</span>
+      <pre class="code"><span class="info file"># File 'app/models/locator.rb', line 39</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_first_empty'>first_empty</span><span class='lparen'>(</span><span class='id identifier rubyid_wizard'>wizard</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='kw'>unless</span> <span class='id identifier rubyid_wizard'>wizard</span>
@@ -425,13 +425,13 @@
       <pre class="lines">
 
 
-56
 57
 58
-59</pre>
+59
+60</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/locator.rb', line 56</span>
+      <pre class="code"><span class="info file"># File 'app/models/locator.rb', line 57</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_largest'>largest</span><span class='lparen'>(</span><span class='id identifier rubyid_wizard'>wizard</span><span class='rparen'>)</span>
   <span class='comment'># find greatest locator for this wizard, should always be the most recent
@@ -466,7 +466,6 @@
       <pre class="lines">
 
 
-61
 62
 63
 64
@@ -504,10 +503,11 @@
 96
 97
 98
-99</pre>
+99
+100</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/locator.rb', line 61</span>
+      <pre class="code"><span class="info file"># File 'app/models/locator.rb', line 62</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_port'>port</span><span class='lparen'>(</span><span class='id identifier rubyid_wizard'>wizard</span><span class='rparen'>)</span>
 
@@ -577,17 +577,17 @@
       <pre class="lines">
 
 
-101
 102
 103
 104
 105
 106
 107
-108</pre>
+108
+109</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/locator.rb', line 101</span>
+      <pre class="code"><span class="info file"># File 'app/models/locator.rb', line 102</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_port_all'>port_all</span>
 
@@ -632,7 +632,6 @@
       <pre class="lines">
 
 
-110
 111
 112
 113
@@ -642,10 +641,11 @@
 117
 118
 119
-120</pre>
+120
+121</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/locator.rb', line 110</span>
+      <pre class="code"><span class="info file"># File 'app/models/locator.rb', line 111</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_clear'>clear</span>
   <span class='id identifier rubyid_r1'>r1</span> <span class='op'>=</span> <span class='kw'>false</span>
@@ -700,12 +700,12 @@
       <pre class="lines">
 
 
-52
 53
-54</pre>
+54
+55</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/locator.rb', line 52</span>
+      <pre class="code"><span class="info file"># File 'app/models/locator.rb', line 53</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_empty?'>empty?</span>
   <span class='id identifier rubyid_item_id'>item_id</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
@@ -739,13 +739,13 @@
       <pre class="lines">
 
 
-15
 16
 17
-18</pre>
+18
+19</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/locator.rb', line 15</span>
+      <pre class="code"><span class="info file"># File 'app/models/locator.rb', line 16</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_has_wizard'>has_wizard</span>
   <span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span><span class='lparen'>(</span><span class='symbol'>:no_wizard</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>no wizard</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='kw'>unless</span>
@@ -780,7 +780,6 @@
       <pre class="lines">
 
 
-20
 21
 22
 23
@@ -788,10 +787,11 @@
 25
 26
 27
-28</pre>
+28
+29</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/locator.rb', line 20</span>
+      <pre class="code"><span class="info file"># File 'app/models/locator.rb', line 21</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_no_collisions'>no_collisions</span>
   <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Checking for collisions for </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
@@ -831,16 +831,16 @@
       <pre class="lines">
 
 
-30
 31
 32
 33
 34
 35
-36</pre>
+36
+37</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/locator.rb', line 30</span>
+      <pre class="code"><span class="info file"># File 'app/models/locator.rb', line 31</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_s'>to_s</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_wizard'>wizard</span>
@@ -859,9 +859,9 @@
 </div>
 
       <div id="footer">
-  Generated on Tue Apr  7 07:22:07 2020 by
+  Generated on Mon Jun  1 17:36:23 2020 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.20 (ruby-2.6.5).
+  0.9.25 (ruby-2.6.5).
 </div>
 
     </div>

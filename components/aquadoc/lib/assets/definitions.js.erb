@@ -1,0 +1,89 @@
+var config = {
+
+  tagline: "The Laboratory</br>Operating System",
+  documentation_url: "http://localhost:4000/aquarium",
+  title: "<%= @config[:title] %>",
+  navigation: [
+
+    {
+      category: "Overview",
+      contents: [
+        { name: "Introduction", type: "local-md", path: "README.md" },
+        { name: "About this Workflow", type: "local-md", path: "ABOUT.md" },
+        { name: "License", type: "local-md", path: "LICENSE.md" },
+        { name: "Issues", type: "external-link", path: '<%= aq_repo_path %>/issues' }
+      ]
+    },
+
+    <% if @options[:workflows] %>
+
+      {
+
+        category: "Operation Types",
+
+        contents: [
+
+          <% @operation_type_specs.each do |ots| %>
+            {
+              name: '<%= ots[:operation_type][:name] %>',
+              path: 'operation_types/<%= sanitize_filename ots[:operation_type][:name] %>' + '.md',
+              type: "local-md"
+            },
+          <% end %>
+
+        ]
+
+      },
+
+    <% end %>
+
+    <% if @options[:libraries] && @libraries.length > 0 %>
+
+      {
+
+        category: "Libraries",
+
+        contents: [
+
+          <% @libraries.each do |lib| %>
+            {
+              name: '<%= lib[:name] %>',
+              path: 'libraries/<%= sanitize_filename lib[:name] %>' + '.html',
+              type: "local-webpage"
+            },
+          <% end %>
+
+        ]
+
+    },
+
+    <% end %>
+
+    <% if @options[:inventory] %>
+      { category: "Sample Types",
+        contents: [
+          <% @sample_types.each do |st| %>
+            {
+              name: '<%= st[:name] %>',
+              path: 'sample_types/<%= sanitize_filename st[:name] %>'  + '.md',
+              type: "local-md"
+            },
+          <% end %>
+        ]
+      },
+      { category: "Containers",
+        contents: [
+          <% @object_types.each do |ot| %>
+            {
+              name: '<%= ot[:name] %>',
+              path: 'object_types/<%= sanitize_filename ot[:name] %>'  + '.md',
+              type: "local-md"
+            },
+          <% end %>
+        ]
+      }
+    <% end %>
+
+  ]
+
+};

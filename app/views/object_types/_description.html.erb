@@ -1,4 +1,4 @@
-<% if  @object_type.handler == 'sample_container' %>
+<% if  @object_type.sample? %>
   <div class='alert alert-info'>
     <p>Objects of this type contain samples of type
        <b><%= link_to @sample_type.name, @sample_type %></b>. <br />
@@ -12,9 +12,9 @@
 <li><b>Min/Max:</b>     <%= @object_type.min %>/<%= @object_type.max %></li>
 <li><b>Unit: </b>       <%= @object_type.unit %>(<%= number_to_currency(@object_type.cost)%> each)</li>
 
-<% unless  @object_type.handler == 'sample_container' %>
+<% unless  @object_type.sample? %>
   <li><b>Handler: </b>
-    <% if @object_type.handler == 'collection' %>
+    <% if @object_type.collection_type? %>
       <%= @object_type.rows %>&times;<%= @object_type.columns %>
     <% end %>
     <%= @object_type.handler %>

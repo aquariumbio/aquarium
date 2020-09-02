@@ -1,3 +1,4 @@
+# typed: false
 class AddRatesToAccount < ActiveRecord::Migration
   def change
     add_column :accounts, :labor_rate, :float

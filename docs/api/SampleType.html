@@ -10,11 +10,11 @@
   
 </title>
 
-  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
 
-  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
 
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
   pathId = "SampleType";
   relpath = '';
 </script>
@@ -312,7 +312,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'><p>used in operation_type_export.</p>
+</div></span>
   
 </li>
 
@@ -352,8 +353,6 @@
       <pre class="lines">
 
 
-185
-186
 187
 188
 189
@@ -383,10 +382,12 @@
 213
 214
 215
-216</pre>
+216
+217
+218</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/sample_type.rb', line 185</span>
+      <pre class="code"><span class="info file"># File 'app/models/sample_type.rb', line 187</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_clean_up_allowable_field_types'>clean_up_allowable_field_types</span><span class='lparen'>(</span><span class='id identifier rubyid_raw_sample_types'>raw_sample_types</span><span class='rparen'>)</span>
 
@@ -449,8 +450,6 @@
       <pre class="lines">
 
 
-73
-74
 75
 76
 77
@@ -505,10 +504,12 @@
 126
 127
 128
-129</pre>
+129
+130
+131</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/sample_type.rb', line 73</span>
+      <pre class="code"><span class="info file"># File 'app/models/sample_type.rb', line 75</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_compare_and_upgrade'>compare_and_upgrade</span><span class='lparen'>(</span><span class='id identifier rubyid_raw_sample_types'>raw_sample_types</span><span class='rparen'>)</span>
 
@@ -596,8 +597,6 @@
       <pre class="lines">
 
 
-131
-132
 133
 134
 135
@@ -626,10 +625,12 @@
 158
 159
 160
-161</pre>
+161
+162
+163</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/sample_type.rb', line 131</span>
+      <pre class="code"><span class="info file"># File 'app/models/sample_type.rb', line 133</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_create_from_raw'>create_from_raw</span><span class='lparen'>(</span><span class='id identifier rubyid_raw_sample_type'>raw_sample_type</span><span class='rparen'>)</span>
 
@@ -697,8 +698,6 @@
       <pre class="lines">
 
 
-163
-164
 165
 166
 167
@@ -717,10 +716,12 @@
 180
 181
 182
-183</pre>
+183
+184
+185</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/sample_type.rb', line 163</span>
+      <pre class="code"><span class="info file"># File 'app/models/sample_type.rb', line 165</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_create_afts_from_raw'>create_afts_from_raw</span><span class='lparen'>(</span><span class='id identifier rubyid_raw_sample_type'>raw_sample_type</span><span class='rparen'>)</span>
 
@@ -772,12 +773,12 @@
       <pre class="lines">
 
 
-24
 25
-26</pre>
+26
+27</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/sample_type.rb', line 24</span>
+      <pre class="code"><span class="info file"># File 'app/models/sample_type.rb', line 25</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_export'>export</span>
   <span class='id identifier rubyid_attributes'>attributes</span>
@@ -811,8 +812,6 @@
       <pre class="lines">
 
 
-47
-48
 49
 50
 51
@@ -835,10 +834,12 @@
 68
 69
 70
-71</pre>
+71
+72
+73</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/sample_type.rb', line 47</span>
+      <pre class="code"><span class="info file"># File 'app/models/sample_type.rb', line 49</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_inconsistencies'>inconsistencies</span><span class='lparen'>(</span><span class='id identifier rubyid_raw_sample_type'>raw_sample_type</span><span class='rparen'>)</span>
 
@@ -912,10 +913,10 @@
       <pre class="lines">
 
 
-16</pre>
+17</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/sample_type.rb', line 16</span>
+      <pre class="code"><span class="info file"># File 'app/models/sample_type.rb', line 17</span>
 
 <span class='id identifier rubyid_attr_accessible'>attr_accessible</span> <span class='symbol'>:name</span></pre>
     </td>
@@ -934,7 +935,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p>used in operation_type_export</p>
+
 
   </div>
 </div>
@@ -947,8 +949,6 @@
       <pre class="lines">
 
 
-28
-29
 30
 31
 32
@@ -964,10 +964,12 @@
 42
 43
 44
-45</pre>
+45
+46
+47</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/sample_type.rb', line 28</span>
+      <pre class="code"><span class="info file"># File 'app/models/sample_type.rb', line 30</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_required_sample_types'>required_sample_types</span><span class='lparen'>(</span><span class='id identifier rubyid_st_list'>st_list</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
 
@@ -997,9 +999,9 @@
 </div>
 
       <div id="footer">
-  Generated on Tue Apr  7 07:22:09 2020 by
+  Generated on Mon Jun  1 17:36:24 2020 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.20 (ruby-2.6.5).
+  0.9.25 (ruby-2.6.5).
 </div>
 
     </div>

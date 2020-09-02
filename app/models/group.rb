@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 class Group < ActiveRecord::Base
@@ -7,8 +8,12 @@ class Group < ActiveRecord::Base
 
   validates :name, presence: true, uniqueness: { case_sensitive: false }
 
-  def member?(uid)
-    memberships.where(user_id: uid).present?
+  def add(user)
+    memberships.create!(user_id: user.id)
+  end
+
+  def member?(user)
+    memberships.where(user_id: user.id).present?
   end
 
   def self.list_names

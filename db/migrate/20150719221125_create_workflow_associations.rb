@@ -1,3 +1,4 @@
+# typed: false
 class CreateWorkflowAssociations < ActiveRecord::Migration
   def change
     create_table :workflow_associations do |t|

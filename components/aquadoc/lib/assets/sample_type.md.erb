@@ -1,0 +1,18 @@
+# Sample Type: <%= sample_type[:name] %>
+
+<%= sample_type[:description] %>
+
+<% if sample_type[:field_types] %>
+  <% sample_type[:field_types].each do |ft| %>
+    <% if ft[:ftype] == 'sample' %>
+- **<%= ft[:name] %>:**
+<%=
+  ft[:allowable_field_types].collect { |aft|
+    x = aft[:sample_type] ? sample_type_link(aft[:sample_type][:name]) : "?"
+  }.join(", ")
+%>
+    <% else %>
+- **<%= ft[:name] %>:** <%= ft[:ftype] %>
+    <% end %>
+  <% end %>
+<% end %>

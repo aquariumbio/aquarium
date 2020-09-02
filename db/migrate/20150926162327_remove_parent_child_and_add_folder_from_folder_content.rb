@@ -1,3 +1,4 @@
+# typed: false
 class RemoveParentChildAndAddFolderFromFolderContent < ActiveRecord::Migration
   def change
     begin

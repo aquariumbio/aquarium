@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 # Simply put: a representation of an input, output, or parameter of an Operation.
@@ -14,8 +15,8 @@ class FieldValue < ActiveRecord::Base
 
   # belongs_to :sample # Not sure if this is used anywhere
 
-  belongs_to :child_sample, class_name: 'Sample', foreign_key: :child_sample_id
-  belongs_to :child_item, class_name: 'Item', foreign_key: :child_item_id
+  belongs_to :child_sample, class_name: 'Sample'
+  belongs_to :child_item, class_name: 'Item'
   belongs_to :allowable_field_type
 
   # Gets the {FieldType} which defines this field value.
