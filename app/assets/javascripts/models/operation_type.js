@@ -274,6 +274,8 @@ AQ.OperationType.record_getters.precondition = function() {
   return this.code("precondition");
 }
 
+// Add entry for Test?
+
 AQ.OperationType.record_getters.field_types = function() {
   
   var ot = this;

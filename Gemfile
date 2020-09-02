@@ -56,20 +56,27 @@ gem 'where-or'
 
 gem 'will_paginate'
 
-gem 'factory_bot_rails', :group => :development
-gem 'ipaddress', :group => :development # used to determine subnet for docker containers for web-console
-gem 'rspec-rails', :group => :development
-gem 'rspec-sorbet', :group => :development
-gem 'rubocop', :group => :development
-gem 'rubocop-rails', :group => :development
-gem 'rubocop-sorbet', :group => :development
-gem 'simplecov', require: false, :group => :development
-gem 'sorbet', :group => [:development, :test]
+group :development do
+  gem 'factory_bot_rails'
+  gem 'ipaddress' # used to determine subnet for docker containers for web-console
+  gem 'rspec-rails'
+  gem 'rspec-sorbet'
+  gem 'rubocop'
+  gem 'rubocop-rails'
+  gem 'rubocop-sorbet'
+  gem 'simplecov', require: false
+  gem 'web-console', '~> 3.0'
+  gem 'yard', '>= 0.9.20'
+  gem 'yard-activerecord'
+end
+
+group :development, :test do
+  gem 'sorbet'
+end
+
 gem 'sorbet-rails', '0.5.6'
 gem 'sorbet-runtime'
-gem 'web-console', '~> 3.0', :group => :development
-gem 'yard', '>= 0.9.20', :group => :development
-gem 'yard-activerecord', :group => :development
 
-gem 'puma', :group => :production
-
+group :production do
+  gem 'puma'
+end

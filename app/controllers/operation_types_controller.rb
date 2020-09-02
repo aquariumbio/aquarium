@@ -35,7 +35,6 @@ class OperationTypesController < ApplicationController
       deployed: params[:deployed],
       on_the_fly: params[:on_the_fly]
     )
-
     unless ot.valid?
       if ot.errors.messages.key?(:name)
         message = "An operation type named #{ot.name} already exists."
@@ -57,11 +56,11 @@ class OperationTypesController < ApplicationController
       end
     end
 
-    %w[protocol precondition cost_model documentation].each do |name|
-      ot.new_code(name, params[name]['content'], current_user)
+    %w[protocol precondition cost_model documentation test].each do |name|
+      ot.new_code(name, params[name]['content'], current_user) if params[name]['content'] 
     end
 
-    j = ot.as_json(methods: %i[field_types protocol precondition cost_model documentation])
+    j = ot.as_json(methods: %i[field_types protocol precondition cost_model documentation test])
 
     render json: j, status: :ok
   end
@@ -90,7 +89,14 @@ class OperationTypesController < ApplicationController
       return
     end
 
-    ot = OperationType.find(params[:id])
+    begin
+      ot = OperationType.find(params[:id])
+    rescue
+      render json: { error: 'invalid operation type' },
+               status: :unprocessable_entity
+      return
+    end
+
     code_object = ot.code(params[:name])
     code_object = if code_object
                     code_object.commit(params[:content], current_user)
@@ -103,7 +109,6 @@ class OperationTypesController < ApplicationController
   # TODO: resolve duplicate code with OperationType::simple_import in OperationTypeExport
   def update_from_ui(data, update_fields = true)
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.admin?
-
     ot = OperationType.find(data[:id])
     update_errors = []
 
@@ -136,7 +141,6 @@ class OperationTypesController < ApplicationController
 
   def update
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.admin?
-
     ot = update_from_ui(params)
     if ot[:update_errors].empty?
       operation_type = ot[:op_type]
