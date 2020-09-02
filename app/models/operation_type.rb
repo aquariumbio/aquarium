@@ -82,7 +82,7 @@ class OperationType < ActiveRecord::Base
   # @param name [String] the name of the input
   # @return [FieldType] the named output
   def output(name)
-    outputs.select { |field_type| field_type[:name] == name }.name
+    outputs.select { |field_type| field_type[:name] == name }.first
   end
 
   def waiting

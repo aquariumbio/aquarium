@@ -150,7 +150,7 @@ class Sample < ActiveRecord::Base
     end
   end
 
-  # @deprecated use {Item} query 
+  # @deprecated use {Item} query
   # Return all items of this {Sample} in the provided {ObjectType}.
   # @param container [String] {ObjectType} name
   # @example find a 1 kb ladder for gel electrophoresis

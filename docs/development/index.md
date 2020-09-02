@@ -1,8 +1,8 @@
 # Aquarium Development Guide
 
-These guidelines are intended for those working directly on [Aquarium](aquarium.bio).
+These guidelines are intended for those working directly on the [Aquarium software](https://github.com/aquariumbio/aquarium).
 
-Everyone else should visit the installation page on [Aquarium.bio](aquarium.bio).
+Everyone else should visit the installation page on [Aquarium.bio](https://www.aquarium.bio/?category=Getting%20Started&content=Installation).
 
 ---
 
@@ -14,6 +14,13 @@ Everyone else should visit the installation page on [Aquarium.bio](aquarium.bio)
 
    ```bash
    git clone https://github.com/klavinslab/aquarium.git
+   ```
+
+3. Initialize the environment
+
+   ```bash
+   cd aquarium
+   bash ./setup.sh
    ```
 
 ## Running Aquarium
@@ -130,7 +137,7 @@ rm -rf docker/db/*
 
 ```bash
 docker-compose up -d
-docker-compose exec app RAILS_ENV=production rake db:migrate
+docker-compose exec app env RAILS_ENV=production rake db:migrate
 docker-compose down -v
 ```
 
@@ -332,6 +339,8 @@ Keep it up-to-date if you change something that affects Aquarium development.
     ```
 
     If there are any failures, fix them and start over.
+
+    > Note: you can do all all of the following steps with Aquarium still running by using `docker-compose exec` instead of `docker-compose run --rm`. Just postpone running `down` until after the last step.
 
 4.  Run type checks
 

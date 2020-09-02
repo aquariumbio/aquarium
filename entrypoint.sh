@@ -44,6 +44,16 @@ _fix_local_minio_ip() {
     fi
 }
 
+# Add AWS ECS local domain to container resolv.conf
+# See https://github.com/docker/ecs-plugin
+#
+_add_ecs_namespace() {
+    if [ "${LOCALDOMAIN}" != ""  ]; then
+        echo "Adding ECS local domain to resolv.conf"
+        echo "search ${LOCALDOMAIN}" >> /etc/resolv.conf
+    fi
+}
+
 # Wait for database to start.
 _wait_for_database() {
     echo "waiting for database to respond"
@@ -74,6 +84,7 @@ _show_license() {
 # First fixes the local IP address for minio if needed, and shows the license.
 _start_production_server() {
     _fix_local_minio_ip
+    _add_ecs_namespace()
     echo "Starting production Rails server"
     _show_license
     exec puma -C config/production_puma.rb -e production
@@ -89,6 +100,7 @@ _start_development_server() {
 
 # Starts the krill server using the rails environment passed as an argument.
 _start_krill_server() {
+    _add_ecs_namespace()
     echo "Starting $1 Krill runner"
     exec rails runner -e $1 'Krill::Server.new.run(3500)'
 }

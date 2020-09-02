@@ -13,8 +13,8 @@ Aquarium is the operating system of the [UW BIOFAB](http://www.uwbiofab.org), a 
 
 ## Users
 
-Users should start at [Aquarium.bio](http://www.aquarium.bio).
+Users should start at the [Getting Started](https://www.aquarium.bio/?category=Getting%20Started&content=Installation) page of [Aquarium.bio](http://www.aquarium.bio).
 
 ## Developers
 
-Developers should start with the [developer documentation](http://klavinslab.org/aquarium/development/).
+Developers should start with the [developer documentation](http://aquariumbio.github.io/aquarium/development/).
