@@ -1,3 +1,4 @@
+# typed: false
 class CreateAllowableFieldTypes < ActiveRecord::Migration
   def change
     create_table :allowable_field_types do |t|

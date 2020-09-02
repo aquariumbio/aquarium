@@ -1,3 +1,4 @@
+# typed: false
 class Improvecollections < ActiveRecord::Migration
   def change
     remove_column :parts, :item_id

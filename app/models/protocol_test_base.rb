@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 class ProtocolTestBase
@@ -71,8 +72,7 @@ class ProtocolTestBase
     @plan = build_plans(operations: @operations, user: @current_user)
     @job = Job.schedule(
       operations: @operations,
-      user: @current_user,
-      group: Group.find_by(name: 'technicians')
+      user: @current_user
     )
     execute(job: @job)
     @backtrace = @job.reload.backtrace

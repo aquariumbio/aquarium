@@ -1,5 +1,7 @@
+# typed: false
 # frozen_string_literal: true
 
+# TODO: this seems to be dead code
 class FinderController < ApplicationController
 
   before_filter :signed_in_user
@@ -71,7 +73,7 @@ class FinderController < ApplicationController
 
     ot = ObjectType.where(name: spec[:container])[0]
 
-    if ot.handler == 'collection'
+    if ot.collection_type?
 
       sample = Sample.find_by(name: spec[:sample])
 

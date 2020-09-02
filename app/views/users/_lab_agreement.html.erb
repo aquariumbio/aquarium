@@ -1,0 +1,12 @@
+<md-content class='md-white'>
+  <h3 class='md-title'>
+    <%= @lab_agreement.title %>:
+    <%= @lab_agreement.update_date %>
+  </h3>
+  <br/>
+
+  <% @lab_agreement.clauses.each do |clause| %>
+    <h4 class='md-subtitle'><%= clause['title'] %></h4>
+    <p><%= clause['text'] %></p>
+  <% end %>
+</md-content>

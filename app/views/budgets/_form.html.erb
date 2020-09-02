@@ -1,9 +1,12 @@
+<div layout-padding flex=50>
+
 <%= form_for(@budget) do |f| %>
 
   <% if @budget.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@budget.errors.count, "error") %> prohibited this budget from being saved:</h2>
-
+      <div class="alert alert-error">
+        The form contains <%= pluralize(@budget.errors.count, "error") %>.
+      </div>
       <ul>
       <% @budget.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
@@ -12,30 +15,20 @@
     </div>
   <% end %>
 
-  <div class="field">
     <%= f.label "Budget Number / short name" %>
-    <%= f.text_field :name %>
-  </div>
+    <%= f.text_field :name, placeholder: "Your budget number/name"%>
 
-  <div class="field">
     <%= f.label :description %>
-    <%= f.text_field :description %>
-  </div>
+    <%= f.text_field :description, placeholder: "Budget description" %>
 
-  <div class="field">
     <%= f.label "Contact" %>
-    <%= f.text_field :contact %>
-  </div>      
+    <%= f.text_field :contact, placeholder: "Contact name" %>
 
-  <div class="field">
     <%= f.label "Contact's email" %>
-    <%= f.text_field :email %>
-  </div>
+    <%= f.text_field :email, placeholder: "Contact email"%>
 
-  <div class="field">
     <%= f.label "Contact's phone" %>
-    <%= f.text_field :phone %>
-  </div>
+    <%= f.text_field :phone, placeholder: "Contact phone"%>
 
   <div class="actions">
     <br />
@@ -43,7 +36,10 @@
       <%= f.submit 'Save', class: 'md-button md-raised md-primary' %>
     <% else %>
       <%= f.submit 'New Budget', class: 'md-button md-raised md-primary' %>
+      <%= link_to 'Back', budgets_path, class: 'md-button md-raised md-primary' %>
     <% end %>
   </div>
        
 <% end %>
+
+</div>

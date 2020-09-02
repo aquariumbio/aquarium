@@ -1,20 +1,20 @@
+# typed: false
 # frozen_string_literal: true
 
 Bioturk::Application.configure do
+  # Settings specified here will take precedence over those in config/application.rb
 
   config.eager_load = true
 
-  # Settings specified here will take precedence over those in config/application.rb
-
-  # Code is not reloaded between requests
+  # Do not reload code -- for production
   config.cache_classes = true
 
   # Full error reports are disabled and caching is turned on
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
 
-  # Disable Rails's static asset server (Apache or nginx will already do this)
-  config.serve_static_files = true
+  # Disable Rails static asset server (Apache or nginx will already do this)
+  config.serve_static_files = false
 
   # Compress JavaScripts and CSS
   config.assets.compress = true
@@ -25,48 +25,23 @@ Bioturk::Application.configure do
     language_out: 'ES5'
   )
 
-  # Don't fallback to assets pipeline if a precompiled asset is missed
+  # Don't fallback to assets pipeline if a pre-compiled asset is missed
   config.assets.compile = false
+
+  # Specifies the header that your server uses for sending files
+  config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
 
   # Generate digests for assets URLs
   config.assets.digest = true
 
-  # Defaults to nil and saved in location specified by config.assets.prefix
-  # config.assets.manifest = YOUR_PATH
-
-  # Specifies the header that your server uses for sending files
-  # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for apache
-  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
-
-  # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
-
   # See everything in the log (default is :info)
   config.log_level = :error
 
-  # Limit the size of log files
+  # TODO: decide how to deal with logging
+  # Writes logs to disk
   config.logger = Logger.new(config.paths['log'].first, 1, 1024 * 1024)
-
-  # Prepend all log lines with the following tags
-  # config.log_tags = [ :subdomain, :uuid ]
-
-  # Use a different logger for distributed setups
-  # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
-
-  # Use a different cache store in production
-  # config.cache_store = :mem_cache_store
-
-  # Enable serving of images, stylesheets, and JavaScripts from an asset server
-  # config.action_controller.asset_host = "http://assets.example.com"
-
-  # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
-  # config.assets.precompile += %w( search.js )
-
-  # Disable delivery errors, bad email addresses will be ignored
-  # config.action_mailer.raise_delivery_errors = false
-
-  # Enable threaded mode
-  # config.threadsafe!
+  # logs to STDOUT for standard Docker configuration
+  # config.logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation can not be found)
@@ -75,33 +50,54 @@ Bioturk::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 
-  # Log the query plan for queries taking more than this (works
-  # with SQLite, MySQL, and PostgreSQL)
-  # config.active_record.auto_explain_threshold_in_seconds = 0.5
+  
+  # By default use minio for S3, but set to AWS if S3_SERVICE is set to 'AWS'
+  config.paperclip_defaults = if ENV['S3_SERVICE'] && ENV['S3_SERVICE'].casecmp('AWS').zero?
+                              {
+                                # TODO: change usage of AWS environment variables to instead use S3_
+                                storage: :s3,
+                                s3_host_name: "s3-#{ENV['S3_REGION']}.amazonaws.com",
+                                s3_permissions: :private,
+                                s3_credentials: {
+                                  bucket: ENV['S3_BUCKET_NAME'],
+                                  access_key_id: ENV['S3_ACCESS_KEY_ID'],
+                                  secret_access_key: ENV['S3_SECRET_ACCESS_KEY'],
+                                  s3_region: ENV['S3_REGION']
+                                }
+                              }
+                            else
+                              s3_host = ENV['S3_HOST'] || 'localhost:9000'
+                              s3_protocol = ENV['S3_PROTOCOL'] || 'http'
+                              {
+                                storage: :s3,
+                                s3_protocol: s3_protocol,
+                                s3_permissions: 'private',
+                                s3_region: ENV['S3_REGION'] || 'us-west-1',
+                                s3_credentials: {
+                                  bucket: ENV['S3_BUCKET_NAME'] || 'development',
+                                  access_key_id: ENV['S3_ACCESS_KEY_ID'],
+                                  secret_access_key: ENV['S3_SECRET_ACCESS_KEY']
+                                },
+                                s3_host_name: s3_host,
+                                s3_options: {
+                                  endpoint: "#{s3_protocol}://#{s3_host}", # for aws-sdk
+                                  force_path_style: true # for aws-sdk (required for minio)
+                                }
+                              }
+                            end
+  
 
-  # Paperclip => S3
 
-  config.paperclip_defaults = {
-    storage: :s3,
-    s3_host_name: "s3-#{ENV['AWS_REGION']}.amazonaws.com",
-    s3_permissions: :private,
-    s3_credentials: {
-      bucket: ENV.fetch('S3_BUCKET_NAME'),
-      access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
-      secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY'),
-      s3_region: ENV.fetch('AWS_REGION')
-    }
-  }
-
-  # AWS Simple Email Service Config
-
-  AWS.config(
-    region: ENV.fetch('AWS_REGION'),
-    simple_email_service_endpoint: "email.#{ENV.fetch('AWS_REGION')}.amazonaws.com",
-    simple_email_service_region: ENV.fetch('AWS_REGION'),
-    ses: { region: ENV.fetch('AWS_REGION') },
-    access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
-    secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY')
-  )
-
+  # Email notifications in Aquarium assume you ae using the AWS simple email service.
+  # To enable, uncomment the following code and set the corresponding environment variables in the docker-compose.override.yml file
+  if ENV['EMAIL_SERVICE']&.casecmp('AWS')&.zero?
+    AWS.config(
+      region: ENV['AWS_REGION'],
+      simple_email_service_endpoint: "email.#{ENV['AWS_REGION']}.amazonaws.com",
+      simple_email_service_region: ENV['AWS_REGION'],
+      ses: { region: ENV['AWS_REGION'] },
+      access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+      secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
+    )
+  end
 end

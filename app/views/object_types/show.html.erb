@@ -12,7 +12,7 @@
 
 <% content_for :action2 do %>
 
-  <% if @object_type.handler == 'sample_container' %>
+  <% if @object_type.sample? %>
     <%= link_to 'Done', @object_type.sample_type, class: "md-button md-raised" %>
   <% else %>
     <%= link_to 'Done', object_types_path, class: "md-button md-raised" %>

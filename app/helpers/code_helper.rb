@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 # Mixin for managing code objects associated with an object.
@@ -20,13 +21,11 @@ module CodeHelper
   def new_code(name, content, user)
     msg = "Could not save code: #{name} already exists for #{self.class} #{id}"
     raise msg if code(name)
-
     code_object = Code.create_from(
       name: name, parent: self, content: content, user: user
     )
     code_object.save
     raise code_object.errors.full_messages.to_s unless code_object.errors.empty?
-
     code_object
   end
 end

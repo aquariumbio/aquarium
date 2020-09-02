@@ -1,6 +1,9 @@
+# typed: false
 # frozen_string_literal: true
 
 require 'rails_helper'
+
+# see spec/models/json_query_result_spec.rb
 
 # TODO: write tests for all of the following:
 # all:
@@ -40,4 +43,6 @@ RSpec.describe JsonController, type: :controller do
       expect(response.status).to eq(422)
     end
   end
+
+  it 'returns parts of collection if object_type is collection'
 end

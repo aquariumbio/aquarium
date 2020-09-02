@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 require 'minitest'
@@ -14,7 +15,7 @@ class OperationTypesController < ApplicationController
   end
 
   def index
-    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
+    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.admin?
 
     respond_to do |format|
       format.json do
@@ -26,13 +27,14 @@ class OperationTypesController < ApplicationController
   end
 
   def create
-    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
+    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.admin?
 
     ot = OperationType.new(
-      name: params[:name], category: params[:category],
-      deployed: params[:deployed], on_the_fly: params[:on_the_fly]
+      name: params[:name],
+      category: params[:category],
+      deployed: params[:deployed],
+      on_the_fly: params[:on_the_fly]
     )
-
     unless ot.valid?
       if ot.errors.messages.key?(:name)
         message = "An operation type named #{ot.name} already exists."
@@ -50,21 +52,21 @@ class OperationTypesController < ApplicationController
 
     if params[:field_types]
       params[:field_types].each do |ft|
-        ot.add_new_field_type ft
+        ot.add_new_field_type(ft)
       end
     end
 
-    %w[protocol precondition cost_model documentation].each do |name|
-      ot.new_code(name, params[name]['content'], current_user)
+    %w[protocol precondition cost_model documentation test].each do |name|
+      ot.new_code(name, params[name]['content'], current_user) if params[name]['content'] 
     end
 
-    j = ot.as_json(methods: %i[field_types protocol precondition cost_model documentation])
+    j = ot.as_json(methods: %i[field_types protocol precondition cost_model documentation test])
 
     render json: j, status: :ok
   end
 
   def destroy
-    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
+    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.admin?
 
     ot = OperationType.find(params[:id])
     if ot.operations.count != 0
@@ -87,7 +89,14 @@ class OperationTypesController < ApplicationController
       return
     end
 
-    ot = OperationType.find(params[:id])
+    begin
+      ot = OperationType.find(params[:id])
+    rescue
+      render json: { error: 'invalid operation type' },
+               status: :unprocessable_entity
+      return
+    end
+
     code_object = ot.code(params[:name])
     code_object = if code_object
                     code_object.commit(params[:content], current_user)
@@ -99,8 +108,7 @@ class OperationTypesController < ApplicationController
 
   # TODO: resolve duplicate code with OperationType::simple_import in OperationTypeExport
   def update_from_ui(data, update_fields = true)
-    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
-
+    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.admin?
     ot = OperationType.find(data[:id])
     update_errors = []
 
@@ -132,8 +140,7 @@ class OperationTypesController < ApplicationController
   end
 
   def update
-    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
-
+    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.admin?
     ot = update_from_ui(params)
     if ot[:update_errors].empty?
       operation_type = ot[:op_type]
@@ -146,14 +153,14 @@ class OperationTypesController < ApplicationController
   end
 
   def default
-    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
+    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.admin?
     render json: { content: File.open('lib/tasks/default.rb', 'r').read },
            status: :ok
   end
 
   # returns serialized output from operation_type.random
   def random
-    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
+    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.admin?
 
     ActiveRecord::Base.transaction do
       begin
@@ -191,7 +198,7 @@ class OperationTypesController < ApplicationController
   # @param tops [Array<Hash>] test details
   # TODO: rewrite so this deserializes output from random
   def make_test_ops(ot, tops)
-    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
+    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.admin?
     return [] if tops.blank?
 
     tops.collect do |test_op|
@@ -230,7 +237,7 @@ class OperationTypesController < ApplicationController
   end
 
   def test
-    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
+    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.admin?
 
     # save the operation
     ot = update_from_ui params, false
@@ -324,7 +331,7 @@ class OperationTypesController < ApplicationController
   end
 
   def export
-    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
+    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.admin?
 
     begin
       render json: [OperationType.find(params[:id]).export], status: :ok
@@ -336,7 +343,7 @@ class OperationTypesController < ApplicationController
   end
 
   def export_category
-    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
+    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.admin?
 
     begin
       ots = OperationType.where(category: params[:category]).collect(&:export)
@@ -351,7 +358,7 @@ class OperationTypesController < ApplicationController
   end
 
   def import
-    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
+    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.admin?
 
     ots = []
     error = false
@@ -466,7 +473,7 @@ class OperationTypesController < ApplicationController
 
   def copy
 
-    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
+    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.admin?
 
     begin
       ot = OperationType.find(params[:id]).copy current_user
@@ -482,7 +489,7 @@ class OperationTypesController < ApplicationController
 
   def numbers
 
-    if current_user.is_admin
+    if current_user.admin?
       if params[:user_id] && params[:filter] == 'true'
         render json: OperationType.numbers(User.find(params[:user_id])),
                status: :ok

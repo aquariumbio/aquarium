@@ -12,6 +12,7 @@ vendor/
 
 .bowerrc
 .dockerignore
+.env
 .gitignore
 .ruby-gemset
 .ruby-version

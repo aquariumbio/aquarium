@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 # A named, biologically unique definition for an instance of a {SampleType}, such as a specific Primer, Fragment, Plasmid, or Yeast Strain
@@ -149,6 +150,7 @@ class Sample < ActiveRecord::Base
     end
   end
 
+  # @deprecated use {Item} query
   # Return all items of this {Sample} in the provided {ObjectType}.
   # @param container [String] {ObjectType} name
   # @example find a 1 kb ladder for gel electrophoresis
@@ -158,7 +160,7 @@ class Sample < ActiveRecord::Base
 
     c = ObjectType.find_by name: container
     if c
-      Item.where("sample_id = ? AND object_type_id = ? AND NOT ( location = 'deleted' )", id, c.id)
+      Item.with_sample(sample: this).where(object_type: c).reject(&:deleted?)
     else
       []
     end

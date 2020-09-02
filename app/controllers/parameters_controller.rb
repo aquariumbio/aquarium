@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 class ParametersController < ApplicationController
@@ -5,7 +6,7 @@ class ParametersController < ApplicationController
   before_filter :up_to_date_user
 
   before_filter do
-    redirect_to root_path, notice: 'Administrative privileges required to access parameters.' unless current_user && current_user.is_admin
+    redirect_to root_path, notice: 'Administrative privileges required to access parameters.' unless current_user && current_user.admin?
   end
 
   # GET /parameters

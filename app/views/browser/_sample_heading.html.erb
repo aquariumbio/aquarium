@@ -28,6 +28,12 @@
 
       <div ng-if="sample.open" class='pull-right'>
 
+        <a ng-if="sample.open && sample.inventory && views.search.item_id"
+           class="btn btn-mini dropdown-toggle"
+           ng-click="get_all_inventory(sample)">
+        Show All Items
+        </a>
+
         <a ng-if="sample.open && sample.inventory" 
            class="btn btn-mini dropdown-toggle" 
            ng-click="toggle_show_deleted(sample)">

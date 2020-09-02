@@ -1,3 +1,4 @@
+# typed: false
 class ChangeTaskJsonToText < ActiveRecord::Migration
   def up
     change_column :task_prototypes, :prototype, :text, limit: nil

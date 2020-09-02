@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 class JsonController < ApplicationController
@@ -11,7 +12,6 @@ class JsonController < ApplicationController
     logger.info e.inspect
     logger.info e.backtrace
     render json: { errors: e.to_s }, status: :unprocessable_entity
-
   end
 
   def upload
@@ -99,7 +99,7 @@ class JsonController < ApplicationController
         return
       end
 
-      if ot.handler == 'collection'
+      if ot.collection_type?
         render json: Collection.parts(sample, ot).as_json(methods: :matrix)
       else
         render json: sample.items

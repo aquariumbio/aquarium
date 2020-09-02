@@ -1,3 +1,4 @@
+# typed: false
 class AddTaskIdAndMetacolIdToTouch < ActiveRecord::Migration
   def change
     add_column :touches, :task_id, :integer

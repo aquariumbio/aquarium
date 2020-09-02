@@ -1,0 +1,30 @@
+# production docker-compose
+
+version: "3.5"
+services:
+  app:
+    build:
+      context: .
+      target: aquarium
+    image: aquariumbio/aquarium:${AQUARIUM_VERSION}
+    command: ["production"]
+    volumes:
+      - public:/aquarium/public
+      - logs:/aquarium/log
+      - shared:/aquarium/shared
+
+  krill:
+    image: aquariumbio/aquarium:${AQUARIUM_VERSION}
+    command: ["krill", "production"]
+
+  web:
+    volumes:
+      - public:/aquarium/public
+      - logs:/aquarium/log
+      - shared:/aquarium/shared
+      - ./docker/nginx.production.conf:/etc/nginx/conf.d/default.conf:ro
+
+volumes:
+  public:
+  logs:
+  shared:

@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
@@ -8,6 +9,11 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
+
+    respond_to do |format|
+      format.html { render layout: 'aq2' } # new.html.erb
+      format.json { render json: @user }
+    end
   end
 
   def password
@@ -25,8 +31,9 @@ class UsersController < ApplicationController
       return
     end
 
-    render layout: 'aq2'
+    @lab_agreement = Bioturk::Application.config.user_agreement
 
+    render layout: 'aq2'
   end
 
   def create
@@ -36,18 +43,11 @@ class UsersController < ApplicationController
       @user = User.new(params[:user])
 
       if @user.save
-        @group = Group.new
-        @group.name = @user.login
-        @group.description = "A group containing only user #{@user.name}"
-        @group.save
-        m = Membership.new
-        m.group_id = @group.id
-        m.user_id = @user.id
-        m.save
-        flash[:success] = "#{params[:user][:name]} has been assimilated."
+        @group = @user.create_user_group
+        flash[:success] = "#{params[:user][:name]} has been added."
         redirect_to @user
       else
-        render 'new'
+        render layout: 'aq2', action: 'new'
       end
 
     else
@@ -72,7 +72,7 @@ class UsersController < ApplicationController
   def update
     user = User.find(params[:id])
 
-    unless user.id == current_user.id || current_user.is_admin
+    unless user.id == current_user.id || current_user.admin?
       render json: { error: "User #{current_user.login} is not authorized to update user #{user.login}'s profile." }, status: :unprocessable_entity
       return
     end
@@ -114,7 +114,7 @@ class UsersController < ApplicationController
 
     user = User.find(params[:id])
 
-    unless user.id == current_user.id || current_user.is_admin
+    unless user.id == current_user.id || current_user.admin?
       render json: { error: "User #{current_user.login} is not authorized to change #{user.login}'s password." }, status: :unprocessable_entity
       return
     end
@@ -132,63 +132,39 @@ class UsersController < ApplicationController
   end
 
   def index
-
     @user = User.new
 
     respond_to do |format|
-
       format.html do
-
-        retired = Group.find_by(name: 'retired')
-        rid = retired ? retired.id : -1
-
-        @users = User.includes(memberships: :group)
-                     .reject { |u| u.member? rid }
-                     .sort { |a, b| a[:login] <=> b[:login] }
-                     .paginate(page: params[:page], per_page: 15)
-
+        @users, @alpha_params = User.all.alpha_paginate(params[:letter], { db_mode: true, db_field: 'name' })
         render layout: 'aq2'
-
       end
       format.json { render json: User.includes(memberships: :group).all.sort { |a, b| a[:login] <=> b[:login] } }
-
     end
-
   end
 
   def current
     u = current_user.as_json
-    u[:memberships] = current_user.groups
+    u[:memberships] = current_user.groups.as_json
     render json: u
   end
 
   def active
-
-    users = User.includes(memberships: :group)
-                .all
-                .reject { |u| u.groups.collect(&:name).member? 'retired' }
-
+    users = User.select_active
     render json: users.collect { |u| { id: u.id, name: u.name, login: u.login } }
-
   end
 
   def destroy
+    user = User.find(params[:id])
 
-    u = User.find(params[:id])
-    ret = Group.find_by(name: 'retired')
-
-    if ret
-      m = Membership.new
-      m.user_id = u.id
-      m.group_id = ret.id
-      m.save
+    if user
+      user.retire
       flash[:success] = 'The user has been disconnected. Why did they resist? We only wish to raise quality of life for all species.'
     else
-      flash[:error] = "Could not retire user because the 'retired' group does not exist. Go make it and try again."
+      flash[:error] = 'Cannot retire user that does not exist.'
     end
 
     redirect_to users_url
-
   end
 
   def stats
@@ -203,8 +179,8 @@ class UsersController < ApplicationController
   end
 
   def admin_user
-    flash[:error] = 'You do not have admin privileges' unless current_user.is_admin
-    redirect_to(root_path) unless current_user.is_admin
+    flash[:error] = 'You do not have admin privileges' unless current_user.admin?
+    redirect_to(root_path) unless current_user.admin?
   end
 
 end

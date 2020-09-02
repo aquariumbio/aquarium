@@ -1,7 +1,12 @@
-<h1>Define New Budget</h1>
+<% provide(:title, 'Add New Budget') %>
 
-<br />
+<% content_for :class do %>budgets<% end %>
 
-<%= render 'form' %>
+<%= content_for :controller do %>noCtrl<% end %>
+
+<%= content_for :main do %>
+    <%= render 'form' %>
+<% end %>
+
 
 

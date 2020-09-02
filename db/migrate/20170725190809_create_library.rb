@@ -1,3 +1,4 @@
+# typed: false
 class CreateLibrary < ActiveRecord::Migration
   def change
     create_table :libraries do |t|

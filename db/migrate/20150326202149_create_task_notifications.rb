@@ -1,3 +1,4 @@
+# typed: false
 class CreateTaskNotifications < ActiveRecord::Migration
   def change
     create_table :task_notifications do |t|

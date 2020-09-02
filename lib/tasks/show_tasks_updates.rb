@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 generic = 'lambda { |spec| { materials: 0, labor: 0 } }'

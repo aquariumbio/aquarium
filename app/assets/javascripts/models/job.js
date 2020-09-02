@@ -7,6 +7,7 @@ AQ.Job.record_methods.upgrade = function(raw_data) {
   }
 
   try {
+    // TODO: why do the replace? creates malformed JSON in case where attempt to do math with Infinity in protocol
     job.state = JSON.parse(job.state.replace(/Infinity/g, '"Inf"'));
     job.state.index = job.backtrace.length - 1;
   } catch(e) {

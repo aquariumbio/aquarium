@@ -1,3 +1,4 @@
+# typed: false
 class RemoveInitialWorkflowAttempt < ActiveRecord::Migration
   def change
     drop_table :operations

@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 class PlansController < ApplicationController
@@ -15,7 +16,7 @@ class PlansController < ApplicationController
 
   def create
 
-    Marshall.user = if current_user.is_admin && params[:user_id] && params[:user_id] != current_user.id
+    Marshall.user = if current_user.admin? && params[:user_id] && params[:user_id] != current_user.id
                       User.find(params[:user_id])
                     else
                       current_user
@@ -23,8 +24,9 @@ class PlansController < ApplicationController
 
     ActiveRecord::Base.transaction do
       begin
-        @plan = Marshall.plan params
+        @plan = Marshall.plan(params)
       rescue Exception => e
+        Rails.logger.error("Plan creation failed: #{e}")
         @plan = Plan.new
         @plan.errors.add :error, 'Mashall failed'
         @plan.errors.add :error, e.to_s + e.backtrace[0].to_s
@@ -43,7 +45,7 @@ class PlansController < ApplicationController
 
   def update
 
-    Marshall.user = if current_user.is_admin && params[:user_id] && params[:user_id] != current_user.id
+    Marshall.user = if current_user.admin? && params[:user_id] && params[:user_id] != current_user.id
                       User.find(params[:user_id])
                     else
                       current_user
@@ -182,7 +184,7 @@ class PlansController < ApplicationController
 
   def debug
     plan = Plan.find(params[:id])
-    errors = ProtocolDebugEngine.debug_plan(plan)
+    errors = ProtocolDebugEngine.debug_plan(plan: plan, current_user: current_user)
     render json: { errors: errors }
   rescue ActiveRecord::RecordNotFound => e
     # raise "Error: plan #{params[:id]} not found"
@@ -202,7 +204,7 @@ class PlansController < ApplicationController
   end
 
   def folders
-    uid = if current_user && current_user.is_admin && params[:user_id]
+    uid = if current_user && current_user.admin? && params[:user_id]
             params[:user_id]
           else
             current_user.id
