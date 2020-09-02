@@ -281,7 +281,7 @@ docker-compose exec app /bin/sh
 
 # 3. Upgrade gems
 #
-bundle upgrade
+bundle update
 
 #
 # 4. Commit the new Gemfile.lock
