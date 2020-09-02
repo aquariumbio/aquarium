@@ -49,6 +49,7 @@ if [[ ! -f "$ENV_FILE" ]]; then
     touch $ENV_FILE
 fi
 
+_set_variable 'AQUARIUM_VERSION' '2.8.0'
 _set_variable 'APP_PUBLIC_PORT' '80'
 _set_variable 'S3_PUBLIC_PORT' '9000'
 _set_variable 'DB_NAME' 'production'
@@ -67,6 +68,6 @@ if [[ ! -f "$DB_FILE" ]]; then
     cp $DB_INIT_DIR/default.sql $DB_INIT_DIR/dump.sql
 fi
 
-
+# TODO: is it possible to pull the version from elsewhere?
 # TODO: allow user to set other values
 # TODO: make this a git post-checkout hook, though don't replace secret_key_base
