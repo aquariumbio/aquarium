@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 class ObjectTypesController < ApplicationController
@@ -30,7 +31,7 @@ class ObjectTypesController < ApplicationController
     @object_type = ObjectType.includes(items: [{ locator: :wizard }, :sample]).find(params[:id])
     @handler = view_context.make_handler @object_type
 
-    @sample_type = SampleType.find(@object_type.sample_type_id) if @object_type.handler == 'sample_container'
+    @sample_type = SampleType.find(@object_type.sample_type_id) if @object_type.sample?
 
     @image_url = "#{Bioturk::Application.config.image_server_interface}#{@object_type.image}"
 

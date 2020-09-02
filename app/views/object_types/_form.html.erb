@@ -77,7 +77,7 @@
 
   </div>
 
-   <% if @object_type.handler == 'collection' || !@object_type.id %>
+   <% if @object_type.collection_type? || !@object_type.id %>
 
      <%= f.label 'Rows' %>
      <%= f.number_field :rows %>

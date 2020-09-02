@@ -38,6 +38,9 @@
 
       <% @object_types.each do |object_type| %>
 
+        <%-# '__Part' is an internal object_type that should not be exposed to users-%>
+        <% next if object_type.name == '__Part' %>
+
         <tr ng-if="status.handler == '<%= object_type.handler %>'">
 
           <td><a href="#" ng-click="status['ot<%= object_type.id %>'] = !status['ot<%= object_type.id %>']"><%= object_type.name %></a></td>
@@ -48,7 +51,7 @@
 
             <div ng-if="status['ot<%= object_type.id %>']">
 
-              <% if  object_type.handler == 'sample_container' %>
+              <% if  object_type.sample? %>
                 <div>
                   <p>Objects of this type contain samples of type
                      <b><%= object_type.sample_type ? object_type.sample_type.name : '?' %></b>:
@@ -61,9 +64,9 @@
                 <li><b>Min/Max:</b>     <%= object_type.min %>/<%= object_type.max %></li>
                 <li><b>Unit: </b>       <%= object_type.unit %>(<%= number_to_currency(object_type.cost)%> each)</li>
 
-                <% unless  object_type.handler == 'sample_container' %>
+                <% unless  object_type.sample? %>
                   <li><b>Handler: </b>
-                    <% if object_type.handler == 'collection' %>
+                    <% if object_type.collection_type? %>
                       <%= object_type.rows %>&times;<%= object_type.columns %>
                     <% end %>
                     <%= object_type.handler %>

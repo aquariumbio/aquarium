@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 class PlansController < ApplicationController
@@ -23,8 +24,9 @@ class PlansController < ApplicationController
 
     ActiveRecord::Base.transaction do
       begin
-        @plan = Marshall.plan params
+        @plan = Marshall.plan(params)
       rescue Exception => e
+        Rails.logger.error("Plan creation failed: #{e}")
         @plan = Plan.new
         @plan.errors.add :error, 'Mashall failed'
         @plan.errors.add :error, e.to_s + e.backtrace[0].to_s

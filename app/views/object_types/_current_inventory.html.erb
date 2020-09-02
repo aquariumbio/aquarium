@@ -4,7 +4,7 @@
 
       <tr>
         <th>ID</th>
-        <% if @object_type.handler == 'sample_container' %>
+        <% if @object_type.sample? %>
           <th>Sample Name</th>
         <% end %>
         <th>Location</th>
@@ -20,7 +20,7 @@
       <tr>
         <td><%= link_to "%05d" % i.id, i %></td>
 
-        <% if @object_type.handler == 'sample_container' %>
+        <% if @object_type.sample? %>
           <% if i.sample %>
             <td><%= link_to i.sample.name, i.sample %></td>
           <% else %>

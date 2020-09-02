@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
@@ -30,8 +31,9 @@ class UsersController < ApplicationController
       return
     end
 
-    render layout: 'aq2'
+    @lab_agreement = Bioturk::Application.config.user_agreement
 
+    render layout: 'aq2'
   end
 
   def create
@@ -41,15 +43,8 @@ class UsersController < ApplicationController
       @user = User.new(params[:user])
 
       if @user.save
-        @group = Group.new
-        @group.name = @user.login
-        @group.description = "A group containing only user #{@user.name}"
-        @group.save
-        m = Membership.new
-        m.group_id = @group.id
-        m.user_id = @user.id
-        m.save
-        flash[:success] = "#{params[:user][:name]} has been assimilated."
+        @group = @user.create_user_group
+        flash[:success] = "#{params[:user][:name]} has been added."
         redirect_to @user
       else
         render layout: 'aq2', action: 'new'
@@ -150,7 +145,7 @@ class UsersController < ApplicationController
 
   def current
     u = current_user.as_json
-    u[:memberships] = current_user.groups
+    u[:memberships] = current_user.groups.as_json
     render json: u
   end
 

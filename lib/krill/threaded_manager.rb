@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 module Krill
@@ -43,11 +44,8 @@ module Krill
         raise e
       ensure
         @mutex.synchronize { @thread_status.running = false }
-
-        if ActiveRecord::Base.connection && ActiveRecord::Base.connection.active?
-          ActiveRecord::Base.connection.close
-          puts "#{@sandbox.job.id}: Closing ActiveRecord connection"
-        end
+        ActiveRecord::Base.clear_active_connections!
+        puts "#{@sandbox.job.id}: Closing ActiveRecord connection"
       end
     end
 

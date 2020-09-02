@@ -1,0 +1,10 @@
+.bundle/
+log/*.log
+pkg/
+test/dummy/db/*.sqlite3
+test/dummy/db/*.sqlite3-journal
+test/dummy/log/*.log
+test/dummy/tmp/
+
+# ignore lock file of gem since gemspec serves this purpose
+Gemfile.lock

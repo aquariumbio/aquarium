@@ -1,3 +1,4 @@
+# typed: false
 class ChangeFieldTypeIdToName < ActiveRecord::Migration
   def change
     remove_column :field_values, :field_type_id

@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 class User < ActiveRecord::Base
@@ -25,21 +26,31 @@ class User < ActiveRecord::Base
   validates :password, presence: true, length: { minimum: 6 }, on: :create
   validates :password_confirmation, presence: true, on: :create
 
+  def create_user_group
+    group = Group.create!(name: login, description: "A group containing only user #{name}")
+    group.add(self)
+
+    group
+  end
+
+  def member?(group_id)
+    memberships.where(group_id: group_id).present?
+  end
+
   # deprecated
+  # TODO: eliminate need for this
+  # keep because it is used by json_controller.current
+  # otherwise should not be used
   def is_admin
     admin?
   end
 
   def admin?
-    Group.admin&.member?(id)
-  end
-
-  def member?(group_id)
-    !Membership.where(group_id: group_id, user_id: id).empty?
+    Group.admin&.member?(self)
   end
 
   def retired?
-    Group.retired&.member?(id)
+    Group.retired&.member?(self)
   end
 
   def retire
@@ -77,6 +88,11 @@ class User < ActiveRecord::Base
     memberships.collect(&:group)
   end
 
+  def make_admin
+    admin_group = Group.find_by(name: 'admin')
+    admin_group.add(self)
+  end
+
   def as_json(opts = {})
     j = super opts
     j[:groups] = groups.as_json
@@ -98,22 +114,26 @@ class User < ActiveRecord::Base
 
     email  = parameters.find { |p| p.key == 'email' && p.value && !p.value.empty? }
     phone  = parameters.find { |p| p.key == 'phone' && p.value && !p.value.empty? }
-    biofab = parameters.find { |p| p.key == 'biofab' && p.value && p.value == 'true' }
-    aq     = parameters.find { |p| p.key == 'aquarium' && p.value && p.value == 'true' }
+    # TODO: remove lab name specific variables and parameter
+    lab = parameters.find { |p| p.key == 'lab_agreement' && p.value && p.value == 'true' }
+    aq = parameters.find { |p| p.key == 'aquarium' && p.value && p.value == 'true' }
 
-    !email.nil? && !phone.nil? && !biofab.nil? && !aq.nil?
+    !email.nil? && !phone.nil? && !lab.nil? && !aq.nil?
 
+  end
+
+  def email_address
+    email_parameters = Parameter.where(user_id: id, key: 'email')
+    raise "Email address not defined for user {id}: #{name}" if email_parameters.empty?
+
+    email_parameters[0].value
   end
 
   # Send an email to the user
   # @param subject [String] The subject of the email
   # @param message [String] The body of the email, in html
   def send_email(subject, message)
-
-    email_parameters = Parameter.where(user_id: id, key: 'email')
-    raise "Email address not defined for user {id}: #{name}" if email_parameters.empty?
-
-    to_address = email_parameters[0].value
+    to_address = email_address
 
     sleep 0.1 # Throttle email sending rate in case this method is called from within a loop
 

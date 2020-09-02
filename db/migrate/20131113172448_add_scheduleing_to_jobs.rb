@@ -1,3 +1,4 @@
+# typed: false
 class AddScheduleingToJobs < ActiveRecord::Migration
   def change
     add_column :jobs, :group_id, :integer

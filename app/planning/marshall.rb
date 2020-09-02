@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 module Marshall
@@ -146,9 +147,12 @@ module Marshall
       field_value.update_attributes(atts)
 
     else
+      # TODO: fail gracefully if no value is given
+      unless atts[:value]
+        atts[:value] = {}.to_json if ft.json? && atts[:name].casecmp?('Options')
+      end
 
       field_value = op.field_values.create(atts)
-
     end
 
     map_id fv[:rid], field_value.id

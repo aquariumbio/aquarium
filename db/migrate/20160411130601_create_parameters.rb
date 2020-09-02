@@ -1,3 +1,4 @@
+# typed: false
 class CreateParameters < ActiveRecord::Migration
   def change
     create_table :parameters do |t|

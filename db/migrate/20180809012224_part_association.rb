@@ -1,3 +1,4 @@
+# typed: ignore
 class PartAssociation < ActiveRecord::Migration
   def change
     create_table :part_associations do |t|

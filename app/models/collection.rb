@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 # A subclass of {Item} that has associated parts via the {PartAssociation} model.
@@ -9,7 +10,7 @@
 # @api krill
 class Collection < Item
 
-  has_many :part_associations, foreign_key: :collection_id
+  has_many :part_associations
 
   def part_association_list
     # this works but rails generated part_associations seems not to

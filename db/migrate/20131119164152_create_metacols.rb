@@ -1,3 +1,4 @@
+# typed: false
 class CreateMetacols < ActiveRecord::Migration
   def change
     create_table :metacols do |t|

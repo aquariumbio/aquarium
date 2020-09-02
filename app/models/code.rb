@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 # Represents a code object for an operation type.
@@ -56,8 +57,9 @@ class Code < ActiveRecord::Base
     eval(content, binding, source_name)
   end
 
-  # Returns the list of method definitions.
-  # Note: unaware of nesting in classes or modules
+  # Returns the list of method definitions
+  #
+  # Note: this method is unaware of nesting in classes or modules.
   #
   # @return [Array<String>] the list of method names
   def defined_methods
@@ -66,6 +68,7 @@ class Code < ActiveRecord::Base
   end
 
   # Returns the list of defined classes
+  #
   # Note: this method is unaware of nesting in classes or modules.
   #
   # @return [Array<String>] the list of class names
@@ -75,6 +78,7 @@ class Code < ActiveRecord::Base
   end
 
   # Returns the list of defined modules.
+  #
   # Note: this method is unaware of nesting in classes or modules.
   #
   # @return [Array<String>] the list of module names
@@ -88,7 +92,7 @@ class Code < ActiveRecord::Base
   # @return [Array<String>] the list of referenced library names
   def referenced_libraries
     # TODO: check content type before scanning
-    content.scan(/\s*needs\s+[\"\'](.+)\/(.+)[\"\']/).map { |a, b| a + '/' + b }.uniq
+    content.scan(%r{\s*needs\s+[\"\'](.+)/(.+)[\"\']}).map { |a, b| a + '/' + b }.uniq
   end
 
   # Return list of referenced modules

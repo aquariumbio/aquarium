@@ -1,3 +1,4 @@
+# typed: false
 class AdjustAccounts < ActiveRecord::Migration
   def change
     add_column :accounts, :operation_id, :integer    

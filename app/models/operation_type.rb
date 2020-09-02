@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 # Defines a type of lab procedure, with the input-types, output-types, and the instructions for converting inputs into outputs.
@@ -81,7 +82,7 @@ class OperationType < ActiveRecord::Base
   # @param name [String] the name of the input
   # @return [FieldType] the named output
   def output(name)
-    outputs.select { |field_type| field_type[:name] == name }.name
+    outputs.select { |field_type| field_type[:name] == name }.first
   end
 
   def waiting

@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 # Defines the type of physical object that would be represented in an {Item}
@@ -38,14 +39,22 @@ class ObjectType < ActiveRecord::Base
   validate :proper_release_method
   validates :name, uniqueness: true
 
+  def collection_type?
+    handler == 'collection'
+  end
+
+  def sample?
+    handler == 'sample_container'
+  end
+
   def rows
-    return unless handler == 'collection'
+    return unless collection_type?
 
     self[:rows] || 1
   end
 
   def columns
-    return unless handler == 'collection'
+    return unless collection_type?
 
     self[:columns] || 12
   end
@@ -60,12 +69,12 @@ class ObjectType < ActiveRecord::Base
 
   def min_and_max
     errors.add(:min, 'min must be greater than zero and less than or equal to max') unless
-      min && max && min >= 0 && min <= max
+      min && max && T.must(min) >= 0 && T.must(min) <= T.must(max)
   end
 
   def pos
     errors.add(:cost, 'must be at least $0.01') unless
-      cost && cost >= 0.01
+      cost && T.must(cost) >= 0.01
   end
 
   def proper_release_method
@@ -78,22 +87,25 @@ class ObjectType < ActiveRecord::Base
   has_many :items, dependent: :destroy
   belongs_to :sample_type
 
+  # used in views/search/search.html.erb
   def quantity
     q = 0
     items.each do |i|
-      q += i.quantity if i.quantity >= 0
+      q += T.must(i.quantity) if T.must(i.quantity) >= 0
     end
     q
   end
 
+  # TODO: dead code
   def in_use
     q = 0
     items.each do |i|
-      q += i.inuse
+      q += T.must(i.inuse)
     end
     q
   end
 
+  # TODO: dead code
   def save_as_test_type(name)
 
     self.name = name
@@ -117,15 +129,17 @@ class ObjectType < ActiveRecord::Base
 
   end
 
+  # used by item.export
   def export
     attributes
   end
 
+  # TODO: dead code?
   def default_dimensions # for collections
-    raise 'Tried to get dimensions of a container that is not a collection' unless handler == 'collection'
+    raise 'Tried to get dimensions of a container that is not a collection' unless collection_type?
 
     begin
-      h = JSON.parse(data, symbolize_names: true)
+      h = JSON.parse(T.must(data), symbolize_names: true)
     rescue JSON::ParserError
       raise "Could not parse data field '#{data}' of object type #{id}. Please go to " \
             "<a href='/object_types/#{id}/edit'>Object Type #{id}</a> and edit the data " \
@@ -138,23 +152,27 @@ class ObjectType < ActiveRecord::Base
     end
   end
 
+  # TODO: this shouldn't have view details, probably dead code
   def to_s
     "<a href='/object_types/#{id}' class='aquarium-item' id='#{id}'>#{id}</a>"
   end
 
+  # used in object_type views
   def data_object
     begin
-      result = JSON.parse(data, symbolize_names: true)
+      result = JSON.parse(T.must(data), symbolize_names: true)
     rescue StandardError
       result = {}
     end
     result
   end
 
+  # TODO: dead code
   def sample_type_name
-    sample_type ? sample_type.name : nil
+    sample_type&.name
   end
 
+  # used by compare_and_upgrade
   def self.create_from(raw_type)
     attributes = %i[cleanup data description handler max min name safety
                     vendor unit cost release_method release_description prefix]
@@ -163,7 +181,7 @@ class ObjectType < ActiveRecord::Base
       ot[attribute] = raw_type[attribute]
     end
 
-    if ot.handler == 'collection'
+    if ot.collection_type?
       ot[:rows] = raw_type[:rows]
       ot[:columns] = raw_type[:columns]
     end
@@ -171,6 +189,7 @@ class ObjectType < ActiveRecord::Base
     ot
   end
 
+  # used in app/planner/operation_type_export
   def self.compare_and_upgrade(raw_types)
     parts = %i[cleanup data description handler max min name safety
                vendor unit cost release_method release_description prefix]
@@ -204,6 +223,7 @@ class ObjectType < ActiveRecord::Base
     { notes: notes, inconsistencies: inconsistencies }
   end
 
+  # used in app/planner/operation_type_export
   def self.clean_up_sample_type_links(raw_object_types)
     raw_object_types.each do |rot|
       ot = ObjectType.find_by(name: rot[:name])

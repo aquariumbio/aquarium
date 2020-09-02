@@ -1,3 +1,4 @@
+# typed: false
 class RenameAccountLogAssociation < ActiveRecord::Migration
   def up
     rename_table :account_log_associations, :account_logs

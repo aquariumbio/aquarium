@@ -1,0 +1,30 @@
+# <%= @config[:title] %>, version <%= @config[:version] %>
+
+<%= @config[:description] %> [[Download](<%= aq_file_name %>)] [[Github Repo](<%= aq_repo_path %>)]
+
+&copy; <%= @config[:copyright] %>
+
+<% if @config[:keywords] %>
+### Keywords
+<%= @config[:keywords].join ", " %>
+<% end %>
+
+### Maintainer
+- <%= @config[:maintainer][:name] %>, <<%= @config[:maintainer][:email] %>>
+
+### Authors
+<% if @config[:authors] %><% @config[:authors].each do |a| %>
+  - <%= a[:name] %>, <%= a[:affiliation] %>
+<% end %><% end %>
+
+### Acknowledgements
+<% if @config[:acknowledgements] %><% @config[:acknowledgements].each do |a| %>
+  - <%= a[:name] %>, <%= a[:affiliation] %>
+<% end %><% end %>
+
+### Details
+This workflow and these documents were automatically generated from
+[Aquarium](http://www.aquarium.bio) version <%= @config[:aquarium_version] %> and
+[aquadoc](https://github.com/klavinslab/aquadoc) version <%= @config[:aquadoc_version] %>.
+Make sure that you are running the same or a newer version of Aquarium before you attempt to
+import workflow.

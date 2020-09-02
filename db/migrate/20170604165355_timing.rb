@@ -1,3 +1,4 @@
+# typed: ignore
 class Timing < ActiveRecord::Migration
   def change
     create_table :timings do |t|
