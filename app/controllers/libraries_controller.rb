@@ -22,10 +22,8 @@ class LibrariesController < ApplicationController
     lib = Library.new(name: params[:name], category: params[:category])
     lib.save
     lib.add_source(content: params[:source][:content], user: current_user)
+    return unless lib.valid?
 
-    unless lib.valid?
-      return
-    end
     render json: lib
   end
 
