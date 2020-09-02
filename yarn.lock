@@ -25,8 +25,8 @@
     angular ">=1.3.0"
 
 "@bower_components/angular-material@angular/bower-material#~1.1.3":
-  version "1.1.24"
-  resolved "https://codeload.github.com/angular/bower-material/tar.gz/0a0ed6075dd5a9b2df4d933a7d5f5a5e316bc636"
+  version "1.1.26"
+  resolved "https://codeload.github.com/angular/bower-material/tar.gz/df1bacec41ea69d9c9ad082005a3fbfae049d70b"
 
 "@bower_components/angular-messages@angular/bower-angular-messages#1.4 - 1.7.0 || ^1.7.2":
   version "1.8.0"
@@ -41,16 +41,16 @@
   resolved "https://codeload.github.com/angular/bower-angular/tar.gz/b333e148cf509428fd54f53c41710c4e8cf1ac2b"
 
 "@bower_components/blueimp-canvas-to-blob@blueimp/JavaScript-Canvas-to-Blob#>=2.1.1":
-  version "3.27.0"
-  resolved "https://codeload.github.com/blueimp/JavaScript-Canvas-to-Blob/tar.gz/53743bc487ac5cf454cabe8cce7eb400ab4e4f80"
+  version "3.28.0"
+  resolved "https://codeload.github.com/blueimp/JavaScript-Canvas-to-Blob/tar.gz/e618f54e5be896042e5155b9126ebc90bbc55455"
 
 "@bower_components/blueimp-load-image@blueimp/JavaScript-Load-Image#>=1.13.0":
-  version "5.13.0"
-  resolved "https://codeload.github.com/blueimp/JavaScript-Load-Image/tar.gz/5dcae765fe7638328e22f7378f408160c4528247"
+  version "5.14.0"
+  resolved "https://codeload.github.com/blueimp/JavaScript-Load-Image/tar.gz/cb5e5d0736101894d22ab1094f2fede402a89be0"
 
 "@bower_components/blueimp-tmpl@blueimp/JavaScript-Templates#>=2.5.4":
-  version "3.17.0"
-  resolved "https://codeload.github.com/blueimp/JavaScript-Templates/tar.gz/c9a02bbbb00a0fba6e9963b4e1e3eebe1642c22f"
+  version "3.18.0"
+  resolved "https://codeload.github.com/blueimp/JavaScript-Templates/tar.gz/3f23f552846fa14d3fd67147fa9d9004d41c2a4d"
 
 "@bower_components/bootstrap-css@jozefizso/bower-bootstrap-css#2.3.2":
   version "0.0.0"
@@ -75,8 +75,8 @@
   resolved "https://codeload.github.com/carhartl/jquery-cookie/tar.gz/7f88a4e631aba8a8c688fd8999ce6b9bcfd50718"
 
 "@bower_components/jquery-file-upload@blueimp/jQuery-File-Upload#*":
-  version "10.30.1"
-  resolved "https://codeload.github.com/blueimp/jQuery-File-Upload/tar.gz/67d3f5bae532df367d6301970ce369969c7592a0"
+  version "10.31.0"
+  resolved "https://codeload.github.com/blueimp/jQuery-File-Upload/tar.gz/7e655a866677184412fe16a512c61c547a1e875c"
   optionalDependencies:
     blueimp-canvas-to-blob "3"
     blueimp-load-image "5"
@@ -97,8 +97,8 @@
   resolved "https://codeload.github.com/jquery/jquery-dist/tar.gz/4c0e4becb8263bb5b3e6dadc448d8e7305ef8215"
 
 "@bower_components/lodash@lodash/lodash#*":
-  version "4.17.19"
-  resolved "https://codeload.github.com/lodash/lodash/tar.gz/d7fbc52ee0466a6d248f047b5d5c3e6d1e099056"
+  version "4.17.20"
+  resolved "https://codeload.github.com/lodash/lodash/tar.gz/ded9bc66583ed0b4e3b7dc906206d40757b4a90a"
 
 "@bower_components/markdown-it@markdown-it/markdown-it#*":
   version "11.0.0"
@@ -121,8 +121,8 @@
     should-util "^1.0.0"
 
 "@bower_components/underscore@jashkenas/underscore#*":
-  version "1.10.2"
-  resolved "https://codeload.github.com/jashkenas/underscore/tar.gz/2a932470303157072015d5ab7f26d40b9deb4634"
+  version "1.11.0"
+  resolved "https://codeload.github.com/jashkenas/underscore/tar.gz/7ee13c8a470e1a1c6bd6d5f3fee29e92d40b6c17"
 
 angular@>=1.3.0:
   version "1.8.0"
@@ -137,19 +137,19 @@ argparse@^1.0.7:
     sprintf-js "~1.0.2"
 
 blueimp-canvas-to-blob@3:
-  version "3.27.0"
-  resolved "https://registry.yarnpkg.com/blueimp-canvas-to-blob/-/blueimp-canvas-to-blob-3.27.0.tgz#a2bd5c43587b95dedf0f6998603452d1bfcc9b9e"
-  integrity sha512-AcIj+hCw6WquxzJuzC6KzgYmqxLFeTWe88KuY2BEIsW1zbEOfoinDAGlhyvFNGt+U3JElkVSK7anA1FaSdmmfA==
+  version "3.28.0"
+  resolved "https://registry.yarnpkg.com/blueimp-canvas-to-blob/-/blueimp-canvas-to-blob-3.28.0.tgz#c8ab4dc6bb08774a7f273798cdf94b0776adf6c8"
+  integrity sha512-5q+YHzgGsuHQ01iouGgJaPJXod2AzTxJXmVv90PpGrRxU7G7IqgPqWXz+PBmt3520jKKi6irWbNV87DicEa7wg==
 
 blueimp-load-image@5:
-  version "5.13.0"
-  resolved "https://registry.yarnpkg.com/blueimp-load-image/-/blueimp-load-image-5.13.0.tgz#685d302a5adaf99d980fadf3d94f70a8e6ab7d30"
-  integrity sha512-CMmLihVqW0AtRGObKIRxYaVUj+2hw2MkeNHoD2JuobpKZFnCCUVCBIeyYkh8xiq3DHIfHfvsp9l0VpM30k3EXQ==
+  version "5.14.0"
+  resolved "https://registry.yarnpkg.com/blueimp-load-image/-/blueimp-load-image-5.14.0.tgz#e8086415e580df802c33ff0da6b37a8d20205cc6"
+  integrity sha512-g5l+4dCOESBG8HkPLdGnBx8dhEwpQHaOZ0en623sl54o3bGhGMLYGc54L5cWfGmPvfKUjbsY7LOAmcW/xlkBSA==
 
 blueimp-tmpl@3:
-  version "3.17.0"
-  resolved "https://registry.yarnpkg.com/blueimp-tmpl/-/blueimp-tmpl-3.17.0.tgz#0179fb2a475b3891a9745f12818f10d76ff0df51"
-  integrity sha512-rqj27a+sA+HFMK+96MXSnhoFhQ+sbI7/6ktcEZ1Z0wXQ6Z9Tr2NJm6W1OUQs20CBxuGeMhWtcHIHS/bHeE0B3Q==
+  version "3.18.0"
+  resolved "https://registry.yarnpkg.com/blueimp-tmpl/-/blueimp-tmpl-3.18.0.tgz#f778046f131d0e5858a839069bfc6519f027985e"
+  integrity sha512-1DFtiOm/IRzHZtemQ6X3z7VXDcZ39xyq/inCE4r8lZSlT99TTIQ4SHmKTWX1DoBxL+e///qaB+ZD90my500jVQ==
 
 entities@~2.0.0:
   version "2.0.3"
