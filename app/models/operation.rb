@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 # Class that represents an operation in the lab
@@ -208,7 +209,7 @@ class Operation < ApplicationRecord
   # @param name [String]
   # @return [Array<FieldValue>]
   def output_array(name)
-    outputs.select { |o| o.name == name } .extend(IOList)
+    outputs.select { |o| o.name == name }.extend(IOList)
   end
 
   # @param name [String]

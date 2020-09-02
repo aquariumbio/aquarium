@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 require File.expand_path('boot', __dir__)
@@ -6,15 +7,31 @@ require 'rails/all'
 require './lib/krill/krill'
 
 if defined?(Bundler)
-  # If you precompile assets before deploying to production, use this line
-  Bundler.require(*Rails.groups(assets: %w[development test]))
+  # If you pre-compile assets before deploying to production, use this line
+  Bundler.require(*Rails.groups)
+
+  # This appears to be pre-rails 4
+  # Bundler.require(*Rails.groups(assets: %w[development test]))
   # If you want your assets lazily compiled in production, use this line
   # Bundler.require(:default, :assets, Rails.env)
+end
+
+require 'sorbet-rails'
+
+# configure sorbet error handler
+T::Configuration.call_validation_error_handler = lambda do |signature, opts|
+  #
+  if ENV['ENABLE_SORBET_RUNTIME_ERRORS'].present?
+    raise TypeError.new(opts[:pretty_message])
+  else
+    puts opts[:pretty_message]
+  end
 end
 
 module Bioturk
 
   class Application < Rails::Application
+    config.assets.initialize_on_precompile = false
 
     config.active_record.raise_in_transactional_callbacks = true
 

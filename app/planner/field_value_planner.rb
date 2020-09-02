@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 module FieldValuePlanner
@@ -41,6 +42,10 @@ module FieldValuePlanner
     end
   end
 
+  def collection?
+    object_type.collection_type?
+  end
+
   def operation
     Operation.find_by(id: parent_id)
   end
@@ -53,7 +58,7 @@ module FieldValuePlanner
 
       if object_type
 
-        if object_type.handler == 'collection' && field_type.part
+        if collection? && field_type.part
 
           collections = Collection.containing(val, object_type).reject(&:deleted?)
 

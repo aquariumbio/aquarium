@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 class Library < ApplicationRecord
@@ -26,6 +27,12 @@ class Library < ApplicationRecord
       new_code('source', content, user)
     end
   end
+
+  delegate :defined_methods, to: :source
+  delegate :defined_classes, to: :source
+  delegate :defined_modules, to: :source
+  delegate :referenced_libraries, to: :source
+  delegate :referenced_modules, to: :source
 
   def export
     {

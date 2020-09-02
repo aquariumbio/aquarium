@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 module Krill
@@ -74,7 +75,6 @@ module Krill
         @job.append_step(operation: 'error', message: e.to_s, backtrace: e.backtrace[0, 10])
         @job.append_step(operation: 'next', time: Time.zone.now, inputs: {})
         @job.append_step(operation: 'aborted', rval: {})
-        raise e if e.is_a?(ProtocolError)
 
         raise KrillError.new(job: @job, error: e, namespace: @namespace_name)
       ensure
@@ -86,7 +86,7 @@ module Krill
     #
     # @return [TrueClass, FalseClass] true if the job is complete, otherwise false
     def done?
-      @job.pc == Job.COMPLETED
+      @job.done?
     end
 
     private

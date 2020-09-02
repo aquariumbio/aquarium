@@ -1,3 +1,4 @@
+# typed: false
 class CreateFieldValues < ActiveRecord::Migration
   def change
     create_table :field_values do |t|

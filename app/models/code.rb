@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 # Represents a code object for an operation type.
@@ -54,6 +55,52 @@ class Code < ApplicationRecord
   def load(binding:, source_name: '(eval)')
     # TODO: check content type is krill before evaluating
     eval(content, binding, source_name)
+  end
+
+  # Returns the list of method definitions
+  #
+  # Note: this method is unaware of nesting in classes or modules.
+  #
+  # @return [Array<String>] the list of method names
+  def defined_methods
+    # TODO: check content type before scanning
+    content.scan(/\s*def\s+([A-Za-z0-9_\.]*)/).flatten
+  end
+
+  # Returns the list of defined classes
+  #
+  # Note: this method is unaware of nesting in classes or modules.
+  #
+  # @return [Array<String>] the list of class names
+  def defined_classes
+    # TODO: check content type before scanning
+    content.scan(/\s*class\s+([A-Za-z0-9_\.]*)/).flatten
+  end
+
+  # Returns the list of defined modules.
+  #
+  # Note: this method is unaware of nesting in classes or modules.
+  #
+  # @return [Array<String>] the list of module names
+  def defined_modules
+    # TODO: check content type before scanning
+    content.scan(/\s*module\s+([A-Za-z0-9_\.]*)/).flatten
+  end
+
+  # Returns list of referenced libraries.
+  #
+  # @return [Array<String>] the list of referenced library names
+  def referenced_libraries
+    # TODO: check content type before scanning
+    content.scan(%r{\s*needs\s+[\"\'](.+)/(.+)[\"\']}).map { |a, b| a + '/' + b }.uniq
+  end
+
+  # Return list of referenced modules
+  #
+  # @return [Array<String>] the list of reference module names
+  def referenced_modules
+    # TODO: check content type before scanning
+    content.scan(/\s*(include|extend)\s+([A-Za-z0-9_\.]*)/).map { |_, m| m }.uniq
   end
 
 end

@@ -1,3 +1,4 @@
+# typed: false
 class SizeMatters < ActiveRecord::Migration
   def change
     change_column :items, :data, :text, limit: 65536

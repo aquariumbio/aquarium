@@ -1,3 +1,4 @@
+# typed: false
 class DropStaticFields < ActiveRecord::Migration
   def change
     (1..8).each do |i|

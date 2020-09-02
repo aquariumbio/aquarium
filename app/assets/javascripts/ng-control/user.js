@@ -14,7 +14,7 @@
 
     $scope.views = [  "Information", "Statistics", "Preferences", 
                       "Memberships", "Change Password", "Budgets",
-                      "BIOFAB Agreement", "Aquarium Agreement" ];    
+                      "Lab Agreement", "Aquarium Agreement" ];    
 
     $scope.preferences = [
       {
@@ -46,7 +46,7 @@
 
       AQ.User.find(user_id).then(user => {
         $scope.user = user;
-        $scope.user.init_params(['email', 'phone', 'biofab', 'aquarium']);
+        $scope.user.init_params(['email', 'phone', 'lab_agreement', 'aquarium']);
         $scope.user.init_params(aq.collect($scope.preferences, p => p.name));
         $scope.user.recompute_getter('parameters');
         AQ.User.current().then(user => {

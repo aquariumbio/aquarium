@@ -1,13 +1,12 @@
+<% provide(:title, 'Edit Announcement') %>
+
 <% content_for :controller do %>noCtrl<% end %>
 
 <% content_for :main do %>
 
   <div layout-padding layout="row">
 
-    <div flex="25"></div>
-
     <div flex="50">
-      <h1>Edit Announcement <%= @announcement.id %></h1>
 
       <%= render 'form' %>
 

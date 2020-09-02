@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 class KrillController < ApplicationController
@@ -9,7 +10,7 @@ class KrillController < ApplicationController
     @job = Job.find(params[:job])
 
     # if not running, then start
-    if @job.pc == Job.NOT_STARTED
+    if @job.not_started?
 
       @job.user_id = current_user.id
       @job.save
@@ -41,7 +42,7 @@ class KrillController < ApplicationController
 
   def debug
     @job = Job.find(params[:id])
-    errors = ProtocolDebugEngine.debug_job(@job)
+    errors = ProtocolDebugEngine.debug_job(job: @job, user_id: current_user.id)
     render json: { errors: errors, operations: @job.reload.operations, job: @job }
   rescue ActiveRecord::RecordNotFound => e
     # raise "Error: Job #{jid} not found"
@@ -81,6 +82,7 @@ class KrillController < ApplicationController
         op.associate :aborted, "Operation was canceled when job #{@job.id} was aborted"
       end
 
+      # TODO: duplicate code with Job.abort_krill
       state = @job.job_state
       if state.length.odd? # backtrace ends with a 'next'
         @job.append_step operation: 'display', content: [
@@ -116,7 +118,7 @@ class KrillController < ApplicationController
 
     @job = Job.find(params[:job])
 
-    if @job.pc >= 0
+    if @job.active?
       state = @job.job_state
       unless state.last[:operation] == 'next' || params[:command] == 'check_again'
         inputs = params[:inputs]

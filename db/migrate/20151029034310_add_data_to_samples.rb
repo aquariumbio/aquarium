@@ -1,3 +1,4 @@
+# typed: false
 class AddDataToSamples < ActiveRecord::Migration
   def change
     add_column :samples, :data, :text 

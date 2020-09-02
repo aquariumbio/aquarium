@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 # Meta-type of {Sample}. Many {Sample}s may exist of this Type.
@@ -25,6 +26,7 @@ class SampleType < ApplicationRecord
     attributes
   end
 
+  # used in operation_type_export
   def required_sample_types(st_list = [])
 
     field_types.select(&:sample?).each do |ft|

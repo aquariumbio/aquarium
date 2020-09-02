@@ -1,10 +1,10 @@
 <h3>Add to inventory</h3>
 
-  <% if @object_type.handler == 'sample_container' %>
+  <% if @object_type.sample? %>
 
     <p>Use the sample interface to add inventory for this object type.</p>
 
-  <% elsif @object_type.handler == 'collection' %>
+  <% elsif @object_type.collection_type? %>
 
     <%= form_for([@object_type, @object_type.items.build]) do |f| %>
 

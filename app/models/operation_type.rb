@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 # Defines a type of lab procedure, with the input-types, output-types, and the instructions for converting inputs into outputs.
@@ -81,7 +82,7 @@ class OperationType < ApplicationRecord
   # @param name [String] the name of the input
   # @return [FieldType] the named output
   def output(name)
-    outputs.select { |field_type| field_type[:name] == name }.name
+    outputs.select { |field_type| field_type[:name] == name }.first
   end
 
   def waiting
@@ -107,6 +108,12 @@ class OperationType < ApplicationRecord
       new_code('protocol', content, user)
     end
   end
+
+  delegate :defined_methods, to: :protocol
+  delegate :defined_classes, to: :protocol
+  delegate :defined_modules, to: :protocol
+  delegate :referenced_libraries, to: :protocol
+  delegate :referenced_modules, to: :protocol
 
   def cost_model
     code('cost_model')
@@ -181,6 +188,8 @@ class OperationType < ApplicationRecord
   end
 
   def add_new_field_type(new_type)
+    sample_type_names = []
+    container_names = []
     if new_type[:allowable_field_types]
 
       sample_type_names = new_type[:allowable_field_types].collect do |aft|
@@ -195,8 +204,8 @@ class OperationType < ApplicationRecord
         aft[:object_type][:name]
       end
     else
-      sample_type_names = []
-      container_names = []
+      sample_type_names = new_type[:sample_types] if new_type[:sample_types]
+      container_names = new_type[:object_types] if new_type[:object_types]
     end
 
     add_io(

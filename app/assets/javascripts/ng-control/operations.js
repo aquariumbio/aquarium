@@ -217,7 +217,7 @@
           operation_type_id: operation_type.id,
           status: actual_status
         };
-
+        
         if ($scope.current.filter_user && $scope.current.selected_user) {
           criteria.user_id = $scope.current.selected_user.id
         } else if (!$scope.current_user.is_admin) {

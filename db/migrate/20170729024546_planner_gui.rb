@@ -1,3 +1,4 @@
+# typed: false
 class PlannerGui < ActiveRecord::Migration
 
   def change

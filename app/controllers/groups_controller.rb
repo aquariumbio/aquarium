@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 class GroupsController < ApplicationController
@@ -8,16 +9,17 @@ class GroupsController < ApplicationController
   # GET /groups
   # GET /groups.json
   def index
-    @groups = Group.all
-
     respond_to do |format|
-      format.html { render layout: 'aq2' } # index.html.erb
-      format.json { render json: @groups }
+      format.html do
+        @groups, @alpha_params = Group.non_user_groups.alpha_paginate(params[:letter], { db_mode: true, db_field: 'name' })
+        render layout: 'aq2'
+      end
+      format.json { render json: Group.non_user_groups.includes(memberships: :group).sort { |a, b| a[:name] <=> b[:name] } }
     end
   end
 
   def names
-    render json: Group.list
+    render json: Group.list_names
   end
 
   # GET /groups/1
@@ -32,12 +34,9 @@ class GroupsController < ApplicationController
       m = Membership.find_by(user_id: params[:user_id], group_id: @group.id)
 
       unless m
-
+        # TODO: decide whether show should be adding user to group
         u = User.find(params[:user_id])
-        m = Membership.new
-        m.user_id = u.id
-        m.group_id = @group.id
-        m.save
+        @group.add(u)
         # flash[:notice] = "Added #{u.login} to #{@group.name}."
 
       end
@@ -89,7 +88,7 @@ class GroupsController < ApplicationController
         format.html { redirect_to @group, notice: 'Group was successfully created.' }
         format.json { render json: @group, status: :created, location: @group }
       else
-        format.html { render action: 'new' }
+        format.html { render layout: 'aq2', action: 'new' }
         format.json { render json: @group.errors, status: :unprocessable_entity }
       end
     end

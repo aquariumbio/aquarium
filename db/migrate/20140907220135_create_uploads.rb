@@ -1,3 +1,4 @@
+# typed: false
 class CreateUploads < ActiveRecord::Migration
   def change
     create_table :uploads do |t|

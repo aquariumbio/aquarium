@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 class LibrariesController < ApplicationController
@@ -17,17 +18,19 @@ class LibrariesController < ApplicationController
   end
 
   def create
-    redirect_to root_path, notice: 'Administrative privileges required to access library code.' unless current_user.is_admin
-
+    redirect_to root_path, notice: 'Administrative privileges required to access library code.' unless current_user.admin?
     lib = Library.new(name: params[:name], category: params[:category])
     lib.save
     lib.add_source(content: params[:source][:content], user: current_user)
 
+    unless lib.valid?
+      return
+    end
     render json: lib
   end
 
   def destroy
-    redirect_to root_path, notice: 'Administrative privileges required to access library code.' unless current_user.is_admin
+    redirect_to root_path, notice: 'Administrative privileges required to access library code.' unless current_user.admin?
 
     lib = Library.find(params[:id])
     lib.destroy
@@ -37,7 +40,7 @@ class LibrariesController < ApplicationController
   end
 
   def update
-    redirect_to root_path, notice: 'Administrative privileges required to access library code' unless current_user.is_admin
+    redirect_to root_path, notice: 'Administrative privileges required to access library code' unless current_user.admin?
 
     lib = Library.find(params[:id])
     if lib.update_attributes(name: params[:name], category: params[:category])

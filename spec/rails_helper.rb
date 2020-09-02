@@ -1,4 +1,14 @@
+# typed: false
 # frozen_string_literal: true
+
+require 'simplecov'
+SimpleCov.start do
+  add_group 'Models', ['app/models', 'app/helpers']
+  add_group 'Controllers', 'app/controllers'
+  add_group 'Krill', ['app/krill', 'lib/krill']
+  add_group 'Planner', 'app/planner'
+  add_group 'Planning', 'app/planning'
+end
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV['RAILS_ENV'] ||= 'development'

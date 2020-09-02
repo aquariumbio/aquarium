@@ -1,3 +1,4 @@
+# typed: false
 class CreateDataAssociations < ActiveRecord::Migration
   def change
     create_table :data_associations do |t|

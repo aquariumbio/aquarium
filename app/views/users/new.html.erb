@@ -1,26 +1,9 @@
-<% provide(:title, 'New User') %>
+<% provide(:title, 'Add New User') %>
 
-<h1>Add New User</h1>
+<% content_for :class do %>users<% end %>
 
-<div class="row">
-  <div class="span6 offset3">
-    <%= form_for(@user) do |f| %>
+<%= content_for :controller do %>noCtrl<% end %>
 
-      <%= render 'shared/error_messages' %>
-
-      <%= f.label :name %>
-      <%= f.text_field :name %>
-
-      <%= f.label :login %>
-      <%= f.text_field :login %>
-
-      <%= f.label :password %>
-      <%= f.password_field :password %>
-
-      <%= f.label :password_confirmation, "Confirmation" %>
-      <%= f.password_field :password_confirmation %>
-
-      <%= f.submit "Create account", class: "btn btn-large btn-primary" %>
-    <% end %>
-  </div>
-</div>
+<%= content_for :main do %>
+    <%= render 'form' %>
+<% end %>

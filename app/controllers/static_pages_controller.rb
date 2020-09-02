@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 class StaticPagesController < ApplicationController
@@ -73,11 +74,7 @@ class StaticPagesController < ApplicationController
 
     compute_widths @biggest_plans, :ops
 
-    retired_group_id = Group.find_by(name: 'retired')
-    retired_count = User.joins(:memberships)
-                        .where('users.id = memberships.user_id AND memberships.group_id = ?', retired_group_id)
-                        .count
-    @user_count = User.count - retired_count
+    @user_count = User.select_active.count
 
     @sample_count = Sample.count
     @item_count = Item.where("location != 'deleted'").count

@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 require 'rails_helper'
@@ -50,7 +51,7 @@ RSpec.describe JsonController::JsonQueryResult do
   it 'all should return the dummy_job' do
     jobs = JsonController::JsonQueryResult.create_from(model: 'Job', method: 'all')
     expect(jobs).not_to be_empty
-    expect(jobs.first['id']).to eq(dummy_job.id)
+    expect(jobs.last['id']).to eq(dummy_job.id)
   end
 
   it 'including bad association should raise error' do

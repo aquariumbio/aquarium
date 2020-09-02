@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 # Defines the type of physical object that would be represented in an {Item}
@@ -38,14 +39,22 @@ class ObjectType < ApplicationRecord
   validate :proper_release_method
   validates :name, uniqueness: true
 
+  def collection_type?
+    handler == 'collection'
+  end
+
+  def sample?
+    handler == 'sample_container'
+  end
+
   def rows
-    return unless handler == 'collection'
+    return unless collection_type?
 
     self[:rows] || 1
   end
 
   def columns
-    return unless handler == 'collection'
+    return unless collection_type?
 
     self[:columns] || 12
   end
@@ -60,12 +69,12 @@ class ObjectType < ApplicationRecord
 
   def min_and_max
     errors.add(:min, 'min must be greater than zero and less than or equal to max') unless
-      min && max && min >= 0 && min <= max
+      min && max && T.must(min) >= 0 && T.must(min) <= T.must(max)
   end
 
   def pos
     errors.add(:cost, 'must be at least $0.01') unless
-      cost && cost >= 0.01
+      cost && T.must(cost) >= 0.01
   end
 
   def proper_release_method
@@ -78,22 +87,25 @@ class ObjectType < ApplicationRecord
   has_many :items, dependent: :destroy
   belongs_to :sample_type
 
+  # used in views/search/search.html.erb
   def quantity
     q = 0
     items.each do |i|
-      q += i.quantity if i.quantity >= 0
+      q += T.must(i.quantity) if T.must(i.quantity) >= 0
     end
     q
   end
 
+  # TODO: dead code
   def in_use
     q = 0
     items.each do |i|
-      q += i.inuse
+      q += T.must(i.inuse)
     end
     q
   end
 
+  # TODO: dead code
   def save_as_test_type(name)
 
     self.name = name
@@ -117,15 +129,17 @@ class ObjectType < ApplicationRecord
 
   end
 
+  # used by item.export
   def export
     attributes
   end
 
+  # TODO: dead code?
   def default_dimensions # for collections
-    raise 'Tried to get dimensions of a container that is not a collection' unless handler == 'collection'
+    raise 'Tried to get dimensions of a container that is not a collection' unless collection_type?
 
     begin
-      h = JSON.parse(data, symbolize_names: true)
+      h = JSON.parse(T.must(data), symbolize_names: true)
     rescue JSON::ParserError
       raise "Could not parse data field '#{data}' of object type #{id}. Please go to " \
             "<a href='/object_types/#{id}/edit'>Object Type #{id}</a> and edit the data " \
@@ -138,76 +152,96 @@ class ObjectType < ApplicationRecord
     end
   end
 
+  # TODO: this shouldn't have view details, probably dead code
   def to_s
     "<a href='/object_types/#{id}' class='aquarium-item' id='#{id}'>#{id}</a>"
   end
 
+  # used in object_type views
   def data_object
     begin
-      result = JSON.parse(data, symbolize_names: true)
+      result = JSON.parse(T.must(data), symbolize_names: true)
     rescue StandardError
       result = {}
     end
     result
   end
 
+  # TODO: dead code
   def sample_type_name
-    sample_type ? sample_type.name : nil
+    sample_type&.name
   end
 
-  def self.compare_and_upgrade(raw_ots)
+  # used by compare_and_upgrade
+  def self.create_from(raw_type)
+    attributes = %i[cleanup data description handler max min name safety
+                    vendor unit cost release_method release_description prefix]
+    ot = ObjectType.new
+    attributes.each do |attribute|
+      ot[attribute] = raw_type[attribute]
+    end
 
+    if ot.collection_type?
+      ot[:rows] = raw_type[:rows]
+      ot[:columns] = raw_type[:columns]
+    end
+
+    ot
+  end
+
+  # used in app/planner/operation_type_export
+  def self.compare_and_upgrade(raw_types)
     parts = %i[cleanup data description handler max min name safety
                vendor unit cost release_method release_description prefix]
-    icons = []
+    inconsistencies = []
     notes = []
-    make = []
 
-    raw_ots.each do |raw_ot|
+    raw_types.each do |raw_type|
+      type = ObjectType.find_by(name: raw_type[:name])
 
-      ot = ObjectType.find_by name: raw_ot[:name]
-
-      if ot
+      if type
         parts.each do |part|
-          icons << "Container '#{raw_ot[:name]}': field #{part} differs from imported container's corresponding field." unless ot[part] == raw_ot[part]
+          inconsistencies << "Container '#{raw_type[:name]}': field #{part} differs from imported object type's corresponding field." unless type[part] == raw_type[part]
         end
-        notes << "Container '#{raw_ot[:name]}' matches existing container type." unless icons.any?
+        notes << "Container '#{raw_type[:name]}' matches existing object type." unless inconsistencies.any?
+        next
+      end
+
+      next if inconsistencies.any?
+
+      type = ObjectType.create_from(raw_type)
+      type.save
+      if type.errors.any?
+        inconsistencies << "Could not create '#{raw_type[:name]}': #{type.errors.full_messages.join(', ')}"
       else
-        make << raw_ot
+        notes << "Created new object type '#{raw_type[:name]}' with id #{type.id}"
       end
-
     end
 
-    if icons.none?
-      make.each do |raw_ot|
-        ot = ObjectType.new
-        parts.each do |part|
-          ot[part] = raw_ot[part]
-        end
-        ot.save
-        if ot.errors.any?
-          icons << "Could not create '#{raw_ot[:name]}': #{ot.errors.full_messages.join(', ')}"
-        else
-          notes << "Created new container '#{raw_ot[:name]}' with id #{ot.id}"
-        end
-      end
-    else
-      notes << 'Could not create required container(s) due to type definition inconsistencies.'
-    end
+    notes << 'Could not create required object type(s) due to type definition inconsistencies.' if inconsistencies.any?
 
-    { notes: notes, inconsistencies: icons }
-
+    { notes: notes, inconsistencies: inconsistencies }
   end
 
+  # used in app/planner/operation_type_export
   def self.clean_up_sample_type_links(raw_object_types)
     raw_object_types.each do |rot|
-      ot = ObjectType.find_by name: rot[:name]
-      st = SampleType.find_by name: rot[:sample_type_name]
+      ot = ObjectType.find_by(name: rot[:name])
+      st = SampleType.find_by(name: rot[:sample_type_name])
       if st && ot
         ot.sample_type_id = st.id
         ot.save
       end
     end
+  end
+
+  # scopes for searching ObjectTypes
+  def self.container_types(sample_type:)
+    where(sample_type_id: sample_type.id).where.not(name: '__Part')
+  end
+
+  def self.part_type
+    find_by(name: '__Part')
   end
 
 end

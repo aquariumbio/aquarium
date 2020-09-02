@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 class LauncherController < ApplicationController
@@ -179,7 +180,7 @@ class LauncherController < ApplicationController
         raise ActiveRecord::Rollback
       end
 
-      unless current_user.is_admin || (@user.id == uba.user_id && uba.budget.spent_this_month(@user.id) < uba.quota)
+      unless current_user.admin? || (@user.id == uba.user_id && uba.budget.spent_this_month(@user.id) < uba.quota)
         render json: { errors: "User #{current_user.login} not authorized or overspent for budget #{uba.budget.name}" }, status: :unprocessable_entity
         raise ActiveRecord::Rollback
       end
@@ -226,7 +227,7 @@ class LauncherController < ApplicationController
 
     plans = if params[:plan_id]
 
-              if current_user.id == user.id || current_user.is_admin
+              if current_user.id == user.id || current_user.admin?
 
                 Plan
                   .includes(operations: :operation_type)

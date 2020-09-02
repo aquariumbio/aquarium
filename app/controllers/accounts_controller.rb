@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 class AccountsController < ApplicationController
@@ -16,7 +17,7 @@ class AccountsController < ApplicationController
     @next_month = @start_date.next_month
     @prev_month = @start_date.prev_month
 
-    if @user == current_user || current_user.is_admin
+    if @user == current_user || current_user.admin?
       @all_rows = Account.where(
         'user_id = ?',
         @user.id
@@ -66,7 +67,7 @@ class AccountsController < ApplicationController
   end
 
   def deposit
-    unless current_user.is_admin
+    unless current_user.admin?
       flash[:error] = 'Not admin'
       redirect_to :accounts
       return

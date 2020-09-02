@@ -1,3 +1,4 @@
+# typed: false
 class AddDescriptionsToBudgetAndAccount < ActiveRecord::Migration
   def change
     add_column :budgets, :description, :text

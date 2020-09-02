@@ -1,7 +1,6 @@
 <tr>
-
-   <td><%= user.login %></td>
    <td><%= link_to user.name, user %></td>
+   <td><%= user.login %></td>
    <td><%= user.created_at.strftime("%m/%d/%Y") %></td>
    <% if current_user.is_admin && !current_user?(user) %>
      <td>
@@ -10,5 +9,4 @@
    <% else %>
      <td></td>
    <% end %>
-
 </tr>

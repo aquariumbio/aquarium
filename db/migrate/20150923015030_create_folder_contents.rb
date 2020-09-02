@@ -1,3 +1,4 @@
+# typed: false
 class CreateFolderContents < ActiveRecord::Migration
   def change
     create_table :folder_contents do |t|

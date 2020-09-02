@@ -10,6 +10,9 @@ AllCops:
     - 'public/**/*'
   TargetRubyVersion: 2.6
 
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: true
+
 Layout/EmptyLinesAroundBlockBody:
   Enabled: false
 
@@ -22,6 +25,18 @@ Layout/EmptyLinesAroundMethodBody:
 Layout/EmptyLinesAroundModuleBody:
   Enabled: false
 
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
+
+Lint/DeprecatedOpenSSLConstant:
+  Enabled: true
+
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
+
 Metrics/AbcSize:
   Enabled: false
 
@@ -31,8 +46,32 @@ Metrics/CyclomaticComplexity:
 Metrics/PerceivedComplexity:
   Enabled: false
 
+Naming/MethodName:
+  IgnoredPatterns:
+    - 'NOT\_STARTED'
+    - 'COMPLETED'
+
+#Sorbet/TrueSigil:
+#  - 'app/**/*.rb'
+#  - 'lib/**/*.rb'
+
 Style/AsciiComments:
+  Enabled: false
+
+Style/ExponentialNotation:
+  Enabled: true
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: false
+
+Style/HashTransformValues:
   Enabled: false
 
 Style/RaiseArgs:
   EnforcedStyle: compact
+
+Style/SlicingWithRange:
+  Enabled: true

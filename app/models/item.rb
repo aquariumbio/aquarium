@@ -1,9 +1,13 @@
+# typed: false
 # frozen_string_literal: true
+
+require 'sorbet-runtime'
 
 # Class that represents a physical object in the lab
 # Has an {ObjectType} that declares what kind of physical thing it is, and may have a {Sample} defining the specimen that resides within.
 # @api krill
 class Item < ApplicationRecord
+  extend T::Sig
 
   include DataAssociator
 
@@ -46,31 +50,35 @@ class Item < ApplicationRecord
 
   def quantity_nonneg
     errors.add(:quantity, 'Must be non-negative.') unless
-      quantity && quantity >= -1
+      quantity && T.must(quantity) >= -1
   end
 
   def inuse_less_than_quantity
     errors.add(:inuse, 'must non-negative and not greater than the quantity.') unless
-      quantity && inuse && inuse >= -1 && inuse <= quantity
+      quantity && inuse && T.must(inuse) >= -1 && T.must(inuse) <= T.must(quantity)
   end
 
   # location methods ###############################################################
 
+  sig { returns(T.nilable(String)) }
   def primitive_location
     self[:location]
   end
 
   # @private
+  sig { returns(ObjectType) }
   def part_type
-    @@part_type ||= ObjectType.find_by(name: '__Part')
+    @@part_type ||= ObjectType.part_type
   end
 
+  sig { returns(T::Boolean) }
   # Returns true if the item is a part of a collection
   # @return [Bool]
   def is_part
     object_type_id == part_type.id
   end
 
+  sig { returns(String) }
   # Returns the location of the Item
   #
   # @return [String] the description of the Item's physical location in the lab as a string
@@ -111,35 +119,36 @@ class Item < ApplicationRecord
     end
   end
 
+  sig { params(location_name: String).returns(T.nilable(Item)) }
   # Sets item location to provided string or to string's associated location {Wizard} if it exists.
   #
   # @param locstr [String] the location string
   # @return [Item] self
-  def move_to(locstr)
+  def move_to(location_name)
 
     wiz = Wizard.find_by(name: object_type.prefix) if object_type
 
-    if object_type && wiz && wiz.has_correct_form(locstr) # item and location managed by a wizard
+    if object_type && wiz && wiz.has_correct_form(location_name) # item and location managed by a wizard
 
-      unless wiz.has_correct_form locstr
-        errors.add(:wrong_form, "'#{locstr}'' is not in the form of a location for the #{wiz.name} wizard.")
-        return
+      unless wiz.has_correct_form location_name
+        errors.add(:wrong_form, "'#{location_name}'' is not in the form of a location for the #{wiz.name} wizard.")
+        return nil
       end
 
-      locs = Locator.where(wizard_id: wiz.id, number: (wiz.location_to_int locstr))
+      locs = Locator.where(wizard_id: wiz.id, number: (wiz.location_to_int location_name))
 
       case locs.length
       when 0
-        newloc = wiz.addnew locstr
+        newloc = wiz.addnew location_name
       when 1
         newloc = locs.first
       else
-        errors.add(:too_many_locators, "There are multiple items at #{locstr}.")
-        return
+        errors.add(:too_many_locators, "There are multiple items at #{location_name}.")
+        return nil
       end
 
       if newloc == locator
-        errors.add(:already_there, "Item is already at #{locstr}.")
+        errors.add(:already_there, "Item is already at #{location_name}.")
         return nil
       end
 
@@ -148,7 +157,7 @@ class Item < ApplicationRecord
         oldloc = Locator.find_by(id: locator_id)
         oldloc.item_id = nil if oldloc
         self.locator_id = newloc.id
-        self[:location] = locstr
+        self[:location] = location_name
         self.quantity = 1
         self.inuse = 0
         newloc.item_id = id
@@ -177,7 +186,7 @@ class Item < ApplicationRecord
       loc = Locator.find_by(id: locator_id)
       loc.item_id = nil if loc
 
-      self[:location] = locstr
+      self[:location] = location_name
       self.locator_id = nil
 
       transaction do
@@ -195,6 +204,7 @@ class Item < ApplicationRecord
 
   end
 
+  sig { returns(T::Boolean) }
   def non_wizard_location?
     wiz = Wizard.find_by(name: object_type.prefix)
 
@@ -260,6 +270,7 @@ class Item < ApplicationRecord
     end
   end
 
+  sig { returns(T::Boolean) }
   # Delete the Item (sets item's location to "deleted").
   #
   # @return [Bool] true if the location is set to 'deleted', false otherwise
@@ -268,17 +279,17 @@ class Item < ApplicationRecord
     self.quantity = -1
     self.inuse = -1
     self.locator_id = nil
-    locator.item_id = nil if locator
+    locator&.item_id = nil if locator
 
-    r1 = false
-    r2 = false
+    item_saved = T.let(false, T.untyped)
+    locator_saved = T.let(false, T.untyped)
 
     transaction do
-      r1 = save
-      r2 = locator.save if locator
+      item_saved = save
+      locator_saved = locator&.save if locator
     end
 
-    r1 && r2
+    item_saved && locator_saved
   end
 
   # Indicates whether this Item is deleted.
@@ -292,7 +303,7 @@ class Item < ApplicationRecord
   #
   # @return [Bool] true if this Item is a Collection, false otherwise
   def collection?
-    object_type && object_type.handler == 'collection'
+    object_type&.collection_type?
   end
 
   # Returns the parent Collection of this item, if it is a part. Otherwise, returns nil
@@ -310,14 +321,14 @@ class Item < ApplicationRecord
   end
 
   def get_data
-    JSON.parse data, symbolize_names: true
+    JSON.parse T.must(data), symbolize_names: true
   rescue JSON::ParserError
     nil
   end
 
   # @deprecated Use {DataAssociator} methods instead of datum
   def datum
-    JSON.parse(data, symbolize_names: true)
+    JSON.parse(T.must(data), symbolize_names: true)
   rescue StandardError
     {}
   end
@@ -352,7 +363,7 @@ class Item < ApplicationRecord
   def upgrade(force = false) # upgrades data field to data association (if no data associations exist)
     if force || associations.empty?
       begin
-        obj = JSON.parse data
+        obj = JSON.parse T.must(data)
 
         obj.each do |k, v|
           associate k, v
@@ -365,6 +376,15 @@ class Item < ApplicationRecord
     end
   end
 
+  # scopes for searching Items
+  def self.with_sample(sample:)
+    includes(:locator).includes(:object_type).where(sample_id: sample.id)
+  end
+
+  def self.with_type(object_type:)
+    includes(:locator).includes(:object_type).where(object_type: object_type)
+  end
+
   ###########################################################################
   # OLD
   ###########################################################################
@@ -373,7 +393,7 @@ class Item < ApplicationRecord
     olist = ObjectType.where('name = ?', name)
     raise "Could not find object type named '#{spec[:object_type]}'." if olist.empty?
 
-    Item.make({ quantity: 1, inuse: 0 }, object_type: olist[0])
+    Item.make({ quantity: 1, inuse: 0 }, object_type: olist.first)
 
   end
 
@@ -391,7 +411,7 @@ class Item < ApplicationRecord
     slist = Sample.where('name = ? AND sample_type_id = ?', name, sample_type_id)
     raise "Could not find sample named #{name}" if slist.empty?
 
-    Item.make({ quantity: 1, inuse: 0 }, sample: slist[0], object_type: olist[0])
+    Item.make({ quantity: 1, inuse: 0 }, sample: slist.first, object_type: olist.first)
 
   end
 
@@ -420,11 +440,11 @@ class Item < ApplicationRecord
 
     if sample
       return [] unless ot
-      return Collection.parts(sample, ot) if ot.handler == 'collection'
+      return Collection.parts(sample, ot) if ot.collection_type?
 
       return sample.items.reject { |i| i.deleted? || i.object_type_id != ot.id }
     end
-    return ot.items.reject(&:deleted?) if ot.handler != 'sample_container'
+    return ot&.items&.reject(&:deleted?) if ot&.sample?
 
     []
   end

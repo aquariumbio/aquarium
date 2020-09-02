@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 # Meta type of {FieldValue}.
@@ -149,8 +150,8 @@ class FieldType < ApplicationRecord
       a = raw_field_type[:sample_types] || []
       b = raw_field_type[:object_types] || []
       l2 = a.zip b
-
-      results << "#{parent_name}: Field '#{name}'' has different associated sample and object types than does the imported field by the same name." unless l1.conjoin { |x| l2.member? x } && l2.conjoin { |x| l1.member? x }
+      msg = "#{parent_name}: Field '#{name}'' has different associated sample and object types than does the imported field by the same name."
+      results << msg unless (l1.difference(l2) + l2.difference(l1)).empty?
 
     end
 
