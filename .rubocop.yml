@@ -8,6 +8,7 @@ AllCops:
     - 'config/**/*'
     - 'script/**/*'
     - 'public/**/*'
+  NewCops: enable
   TargetRubyVersion: 2.6
 
 Layout/EmptyLinesAroundAttributeAccessor:
