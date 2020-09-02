@@ -271,16 +271,43 @@ This file also limits the API to code used in Krill the protocol development lan
 ### Updating Dependencies
 
 ```bash
+# 1. Start the container
+#
 docker-compose up -d
-docker-compose exec app /bin/sh
-bundle upgrade
-docker-compose down -v
-```
 
-```bash
-docker-compose up -d
+# 2. Open a shell in the Aquarium container
+#
 docker-compose exec app /bin/sh
-yarn update
+
+# 3. Upgrade gems
+#
+bundle update
+
+# 4. Commit the new Gemfile.lock
+
+# 5. Update interface files for Sorbet type checking
+#
+bundle exec rake rails_rbi:all
+srb rbi update
+
+# 6. Make sure that the system type checks
+#
+srb tc
+
+# 6. Commit updated rbi files
+
+# 7. Exit container shell
+#
+exit
+
+# 8. Update Javascript dependencies
+#
+yarn upgrade
+
+# 9. Commit the new yarn.lock
+
+# 10. Stop the container
+#
 docker-compose down -v
 ```
 
