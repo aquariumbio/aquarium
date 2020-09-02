@@ -1,6 +1,6 @@
 # Aquarium Development Guide
 
-These guidelines are intended for those working directly on [Aquarium](http://aquarium.bio).
+These guidelines are intended for those working directly on the [Aquarium software](https://github.com/aquariumbio/aquarium).
 
 Everyone else should visit the installation page on [Aquarium.bio](https://www.aquarium.bio/?category=Getting%20Started&content=Installation).
 
