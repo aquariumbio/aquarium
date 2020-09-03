@@ -57,7 +57,7 @@ class OperationTypesController < ApplicationController
     end
 
     %w[protocol precondition cost_model documentation test].each do |name|
-      ot.new_code(name, params[name]['content'], current_user) if params[name]['content']
+      ot.new_code(name, params[name]['content'], current_user) if params[name] && params[name]['content']
     end
 
     j = ot.as_json(methods: %i[field_types protocol precondition cost_model documentation test])
