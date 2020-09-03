@@ -20,11 +20,7 @@ module DataAssociator
     klass = self.class.to_s
     klass = %w[Item Collection] if is_a?(Item) || is_a?(Collection)
 
-    if key
-      DataAssociation.includes(:upload).where(parent_id: id, parent_class: klass, key: key.to_s)
-    else
-      DataAssociation.includes(:upload).where(parent_id: id, parent_class: klass)
-    end
+    DataAssociation.associations_for(parent_id: id, parent_class: klass, key: key)
   end
 
   # Return the Hash of all {DataAssociation}s for this object.
@@ -32,9 +28,11 @@ module DataAssociator
   # @return [Hash] the hash map of all associations for this object
   def associations
     h = HashWithIndifferentAccess.new
-    data_associations.each do |da|
-      h[da.key] = da.value
+    associations = DataAssociation.select_most_recent(data_associations)
+    associations.each do |association|
+      h[association.key] = association.value
     end
+
     h
   end
 
@@ -95,12 +93,12 @@ module DataAssociator
   def associate(key, value, upload = nil, options = { duplicates: false })
 
     if options[:duplicates] || data_associations(key).empty?
-      da = DataAssociation.new(
+      da = DataAssociation.create_from(
         parent_id: id,
         parent_class: self.class.to_s,
-        key: key.to_s,
-        object: { key => value }.to_json,
-        upload_id: upload ? upload.id : nil
+        key: key,
+        value: value,
+        upload: upload
       )
       da.save
       errors.add :data_association_error, "Could not save data association named '#{key}': #{da.errors.full_messages.join(', ')}" unless da.errors.empty?
@@ -123,12 +121,12 @@ module DataAssociator
   # @example Associate concentration with an operation's input
   #   da = op.input("Fragment").item.lazy_associate :concentration, 42
   def lazy_associate(key, value, upload = nil)
-    DataAssociation.new(
+    DataAssociation.create_from(
       parent_id: id,
       parent_class: self.class.to_s,
-      key: key.to_s,
-      object: { key => value }.to_json,
-      upload_id: upload ? upload.id : nil
+      key: key,
+      value: value,
+      upload: upload
     )
   end
 

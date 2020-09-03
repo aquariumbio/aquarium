@@ -268,53 +268,67 @@ will generate the documentation and write it to the directory `docs/api`.
 This location is determined by the file `.yardopts` in the project repository.
 This file also limits the API to code used in Krill the protocol development language.
 
-### Updating Dependencies
-
-```bash
-# 1. Start the container
-#
-docker-compose up -d
-
-# 2. Open a shell in the Aquarium container
-#
-docker-compose exec app /bin/sh
-
-# 3. Upgrade gems
-#
-bundle update
-
-# 4. Commit the new Gemfile.lock
-
-# 5. Update interface files for Sorbet type checking
-#
-bundle exec rake rails_rbi:all
-srb rbi update
-
-# 6. Make sure that the system type checks
-#
-srb tc
-
-# 6. Commit updated rbi files
-
-# 7. Exit container shell
-#
-exit
-
-# 8. Update Javascript dependencies
-#
-yarn upgrade
-
-# 9. Commit the new yarn.lock
-
-# 10. Stop the container
-#
-docker-compose down -v
-```
-
 ### Modifying this Document
 
 This document is `docs/development/index.md` in the `aquarium` repository.
 Keep it up-to-date if you change something that affects Aquarium development.
+
+## Updating Dependencies
+
+1. Start the container
+
+   ```bash
+   docker-compose up -d
+   ```
+
+2. Open a shell in the Aquarium container
+
+   ```bash
+   docker-compose exec app /bin/sh
+   ```
+
+3. Upgrade gems
+
+   ```bash
+   bundle update
+   ```
+
+4. Commit the new `Gemfile.lock`
+
+5. Update interface files for Sorbet type checking
+
+   ```bash
+   bundle exec rake rails_rbi:all
+   srb rbi update
+   ```
+
+6. Make sure that the system type checks
+
+   ```bash
+   srb tc
+   ```
+
+7. Commit updated rbi files
+
+8. Update Javascript dependencies
+
+   ```bash
+   yarn upgrade
+   ```
+
+9. Commit the new `yarn.lock`
+
+10. Exit container shell
+
+    ```bash
+    exit
+    ```
+
+11. Stop the container
+
+    ```bash
+    docker-compose down -v
+    ```
 
 ## Making an Aquarium Release
 

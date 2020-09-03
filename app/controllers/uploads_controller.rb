@@ -9,7 +9,7 @@ class UploadsController < ApplicationController
   def show
     raise ActionController::RoutingError.new('Upload parent type not found') unless params[:type] == 'operation' || params[:type] == 'item' || params[:type] == 'plan'
 
-    das = DataAssociation.where(parent_class: params[:type].capitalize, parent_id: params[:id], key: params[:key])
+    das = DataAssociation.associations_for(parent_id: params[:id], parent_class: params[:type].capitalize, key: params[:key])
     raise ActionController::RoutingError.new('Upload Not Found') unless !das.empty? && das[0].upload_id
 
     viewable_types = ['image/jpeg', 'image/tiff', 'image/png']
