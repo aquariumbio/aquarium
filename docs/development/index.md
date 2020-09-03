@@ -568,12 +568,13 @@ the aquarium service:
 
 The following values can be set using this file or environment variables:
 
-| Config key        | Environment Variable | Default                               |
-| ----------------- | -------------------- | ------------------------------------- |
-| lab_name          | LAB_NAME             | `Your Lab`                            |
-| lab_email_address | LAB_EMAIL_ADDRESS    | –                                     |
-| logo_path         | LOGO_PATH            | `aquarium-logo.png`                   |
-| image_uri         | IMAGE_URI            | _S3_PROTOCOL_`://`_S3_HOST_`/images/` |
+| Config key           | Environment Variable | Default                               |
+| -----------------    | -------------------- | ------------------------------------- |
+| lab_name             | LAB_NAME             | `Your Lab`                            |
+| lab_email_address    | LAB_EMAIL_ADDRESS    | –                                     |
+| logo_path            | LOGO_PATH            | `aquarium-logo.png`                   |
+| image_uri            | IMAGE_URI            | _S3_PROTOCOL_`://`_S3_HOST_`/images/` |
+| technician_dashboard | TECH_DASHBOARD       | `false`                               |
 
 In addition to the instance details, the user agreement for the lab can be set by creating a YAML file containing the agreement.
 The YAML must include the keys `title` with the title of the agreement, `updated` with the date last updated, and `clauses`, which is a list of pairs of `title` and `text` pairs.

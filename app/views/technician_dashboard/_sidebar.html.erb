@@ -1,0 +1,13 @@
+<div layout="row">
+  <div layout="column" class="category-container-full">
+
+      <div ng-repeat="cat in categories track by $index"
+          ng-click="current.switch_user = false;
+                    current.active_jobs = false;
+                    select_category($index, 'scheduled', [])"
+           ng-class="category_class($index)"
+           ng-attr-data-category-choice="{{cat}}">
+          {{cat}}
+      </div>           
+  </div>
+</div>

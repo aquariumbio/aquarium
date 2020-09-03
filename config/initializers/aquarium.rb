@@ -12,7 +12,8 @@ s3_protocol = ENV['S3_PROTOCOL'] || 'http'
 default_config = {
   instance_name: 'Your Lab',
   logo_path: 'aquarium-logo.png',
-  image_uri: "#{s3_protocol}://#{s3_host}/images/"
+  image_uri: "#{s3_protocol}://#{s3_host}/images/",
+  technician_dashboard: false
 }
 begin
   instance_config = Bioturk::Application.config_for(:instance).symbolize_keys
@@ -50,6 +51,7 @@ Bioturk::Application.config.krill_port = ENV['KRILL_PORT'] || 3500
 Bioturk::Application.config.krill_hostname = ENV['KRILL_HOST'] || 'krill' # for docker NAT
 
 Bioturk::Application.config.debug_tools = true # false will hide debug buttons in planner and manager
+Bioturk::Application.config.technician_dashboard = ENV['TECH_DASHBOARD']&.casecmp('true')&.zero? || instance_config[:technician_dashboard] # show or hide the technician view dashboard from the top nav menu
 
 # TODO: move this elsewhere
 #
