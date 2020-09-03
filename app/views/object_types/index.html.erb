@@ -38,6 +38,9 @@
 
       <% @object_types.each do |object_type| %>
 
+        <%-# '__Part' is an internal object_type that should not be exposed to users-%>
+        <% next if object_type.name == '__Part' %>
+
         <tr ng-if="status.handler == '<%= object_type.handler %>'">
 
           <td><a href="#" ng-click="status['ot<%= object_type.id %>'] = !status['ot<%= object_type.id %>']"><%= object_type.name %></a></td>
