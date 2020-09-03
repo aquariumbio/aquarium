@@ -1,0 +1,143 @@
+<script type="text/ng-template" id="operation-list">
+
+  <div class='oplist'>
+
+    <table class='table table-condensed oplist'
+           ng-show="operations.length > 0">
+
+      <tr>
+        <th class='selector'></th>
+        <th class='id'>Op Id</th>
+        <th>User</th>
+        <th class="output">Data</th>
+        <th>Job(s)</th>
+        <th>Plan</th>
+        <th>Last Update</th>
+      </tr>
+
+      <tr ng-repeat="op in operations"
+          ng-if="!jobid || op.last_job.id == jobid">
+
+        <td>
+        </td>
+
+        <td>{{op.id}}</td>
+
+        <td>{{op.user.name}}</td>
+
+        <td>
+          <ul class='input-list'>
+            <li ng-repeat="fv in op.field_values | filter: { role: 'output' } track by $index">
+              <span ng-if="$first"  style="width: 26px; display: inline-block"><b>out:</b></span>
+              <span ng-if="!$first" style="width: 26px; display: inline-block">&nbsp;</span>
+              {{fv.name}}
+              <span ng-if="fv.sample">: 
+                <a href="/browser?sid={{fv.sample.id}}" target="samples">{{fv.sample.id}}: {{fv.sample.name}}</a>
+                <span ng-if="fv.item.object_type"> as {{fv.item.object_type.name}}</span>
+                <span ng-if="fv.child_item_id">
+                  ( 
+                    <div ng-if="fv.child_item_id && !fv.is_part"
+                         item="fv.item" 
+                         container="fv.item.object_type" 
+                         sample="fv.sample"></div>
+                    <div ng-if="fv.child_item_id && fv.is_part"
+                         item="fv.part" 
+                         container="fv.part.object_type" 
+                         sample="fv.part.sample"
+                         collection="fv.item"
+                         row="fv.row"
+                         column=fv.column></div>
+                  )
+                </span>                
+              </span>
+            </li>
+            <li ng-repeat="fv in op.field_values | filter: { role: 'input' } track by $index">
+              <span ng-if="$first"  style="width: 18px; display: inline-block"><b>in:</b></span>
+              <span ng-if="!$first" style="width: 18px; display: inline-block">&nbsp;</span>
+              {{fv.name}}
+              <span ng-if="fv.sample">: 
+                <a href="/browser?sid={{fv.sample.id}}" target="samples">{{fv.sample.id}}: {{fv.sample.name}}</a>
+                <span ng-if="fv.child_item_id">
+                  ( 
+                    <div ng-if="fv.child_item_id && !fv.is_part"
+                         item="fv.item" 
+                         container="fv.item.object_type" 
+                         sample="fv.sample"></div>
+                    <div ng-if="fv.child_item_id && fv.is_part"
+                         item="fv.part" 
+                         container="fv.part.object_type" 
+                         sample="fv.part.sample"
+                         collection="fv.item"
+                         row="fv.row"
+                         column=fv.column></div>
+                  )
+                </span>
+              </span>
+              <span ng-if="fv.value">{{fv.value}}</span>
+            </li>      
+            <li ng-repeat="da in op.data_associations">
+                <b>{{da.key}}:</b> {{da.value}}
+            </li>
+          </ul>
+        </td>
+
+        <td>
+          <div ng-if="op.jobs.length > 0" ng-repeat="job in op.jobs">
+            <a href="/jobs/{{job.id}}">{{job.id}}</a> (<span>{{job.status}}</span>)
+          </div>
+          <div ng-if="op.jobs.length == 0">--</div>          
+        </td>
+
+        <td>
+          <a ng-repeat="plan in op.plans" href="/plans?plan_id={{plan.id}}" target="designer">{{plan.id}}{{$last ? '' : ', '}}</a>
+          <span ng-if="op.plans.length == 0">n/a</span>
+        </td>
+
+        <td>{{op.updated_at|date}}</td>
+
+        <% if current_user && current_user.is_admin %>
+
+          <td ng-if="op.status != 'scheduled' && op.status != 'running'">
+
+            <md-menu layout="row">
+
+              <span ng-click="$mdMenu.open($event)"
+                    style="color: #333; font-size: 9pt; cursor: pointer"
+                    class="no-highlight">
+                <md-tooltip md-direction="bottom" md-delay="2500">Force operation to a different status.</md-tooltip>
+                {{op.status}}&#9660;
+              </span>
+
+              <md-menu-content width="4">
+                <md-menu-item ng-repeat="s in ['waiting', 'pending', 'deferred', 'primed', 'delayed', 'done', 'error']" ng-if="op.status != s">
+                  <md-button ng-click="change_status(op,s)" aria-label="Change to {{s}}">
+                    {{s}}
+                  </md-button>
+                </md-menu-item>           
+              </md-menu-content>
+
+            </md-menu>
+
+          </td>
+
+        <% end %>
+
+      </tr>
+
+      <tr ng-if="( status == 'error' || status == 'done' ) && operations.length < $parent.$parent.numbers[operationtype.id][status]">
+        <td></td>
+        <td colspan=5 style='padding-top: 16px'>
+          <md-button class='md-raised md-primary md-small' 
+                     ng-click="$parent.$parent.more(status)">More</md-button>
+        </td>
+      </tr>
+
+    </table>
+
+    <h1 ng-if="operations.length == 0" class='md-title'>No operations</h1>
+
+    <h1 ng-if="!operations" class='md-title'>Checking for operations...</h1>
+
+  </div>
+
+</script>
