@@ -50,6 +50,7 @@ Bioturk::Application.config.krill_port = ENV['KRILL_PORT'] || 3500
 Bioturk::Application.config.krill_hostname = ENV['KRILL_HOST'] || 'krill' # for docker NAT
 
 Bioturk::Application.config.debug_tools = true # false will hide debug buttons in planner and manager
+Bioturk::Application.config.technician_dashboard = false # false will hide the technician view dashboard from the top nav menu
 
 # TODO: move this elsewhere
 #

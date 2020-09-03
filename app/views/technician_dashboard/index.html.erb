@@ -1,0 +1,80 @@
+<%= render partial: "/items/template" %>
+<%= render partial: 'operation_list' %> 
+
+<% provide(:title, 'Technician') %>
+
+<%= content_for :class do %>operations<% end %>
+
+<%= content_for :controller do %>technicianDashboard<% end %>
+
+<%= content_for :sidebar do %>
+
+  <div layout='column'>
+    <%= render partial: 'sidebar' %> 
+  </div>
+
+<% end %>
+
+<%= content_for :specific_title do %>
+
+  <span class='capitalize'>
+    &rang; {{categories[current.category_index]}} &rang; {{current.status}} 
+  </span>
+
+<% end %>
+
+<%= content_for :main do %>
+
+   <%= render partial: '/data_associations/template' %> 
+
+   <div ng-if="!current.activity_report.selected">
+
+     <div class='timing md-subhead timing-info'
+          ng-if="current.operation_type.timing && current.operation_type.timing.active">
+          Usually Scheduled {{current.operation_type.timing.as_string}}
+     </div>
+
+    <div ng-if="current.status == 'scheduled' || current.status == 'running'">
+
+      <div ng-if="jobs.length > 0" ng-repeat="job in jobs" class='job'  style='margin: 16px'>
+
+        <md-toolbar class="job-toolbar">
+
+          <div class='md-toolbar-tools'>
+
+            <h2 flex md-truncate>
+              Job <a href="/jobs/{{job.id}}">{{job.id}}</a>
+              <span ng-if="debugging_job_id == job.id">
+                <md-progress-circular class="md-hue-2" md-diameter="20px" style="display: inline-block">
+                </md-progress-circular> 
+              </span>
+              <span style="padding: 15%">{{job.type}}</span>
+            </h2>
+          
+            <% if current_user %>
+              <md-button ng-if="current.status != 'running'"
+                         class='md-small'
+                         ng-href="/krill/start?job={{job.id}}"
+                         aria-lable="Run"
+                         data-manager-job-action="run">Run</md-button>
+            <% end %>
+          </div>
+
+        </md-toolbar>
+
+        <oplist operations="current.operations"
+                status="current.status" 
+                jobid="job.id">
+        </oplist>
+
+      </div>
+
+      <h1 class="md-title" ng-if="jobs.length == 0">No Jobs</h1>
+
+      <h1 class="md-title" ng-if="!jobs">Loading Jobs ...</h1>    
+
+    </div>
+
+  </div>
+
+<% end %>
