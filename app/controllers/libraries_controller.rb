@@ -27,6 +27,7 @@ class LibrariesController < ApplicationController
     unless lib.valid?
       return
     end
+
     render json: lib
   end
 
