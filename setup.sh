@@ -49,7 +49,7 @@ if [[ ! -f "$ENV_FILE" ]]; then
     touch $ENV_FILE
 fi
 
-_set_variable 'AQUARIUM_VERSION' '2.8.0'
+_set_variable 'AQUARIUM_VERSION' '2.8.1'
 _set_variable 'APP_PUBLIC_PORT' '80'
 _set_variable 'S3_PUBLIC_PORT' '9000'
 _set_variable 'DB_NAME' 'production'
