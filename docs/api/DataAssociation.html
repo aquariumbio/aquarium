@@ -128,6 +128,75 @@
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#associations_for-class_method" title="associations_for (class method)">.<strong>associations_for</strong>(parent_class:, parent_id:, key: nil)  &#x21d2; ActiveRecord&lt;DataAssociation&gt; </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Returns associations for the object identified by parent class and id.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#create_from-class_method" title="create_from (class method)">.<strong>create_from</strong>(parent_id:, parent_class:, key:, value:, upload: nil)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Creates new association for the object identified by parent class and id.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#descending_by_recent_update-class_method" title="descending_by_recent_update (class method)">.<strong>descending_by_recent_update</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Scope method to order data associations by key and then duplicates by descending order on update and ID.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#find_parent-class_method" title="find_parent (class method)">.<strong>find_parent</strong>(parent_class, parent_id)  &#x21d2; Object </a>
     
 
@@ -143,6 +212,29 @@
 
   
     <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#select_most_recent-class_method" title="select_most_recent (class method)">.<strong>select_most_recent</strong>(associations)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Filters data associations to keep most recent update for a key.</p>
+</div></span>
   
 </li>
 
@@ -255,7 +347,237 @@
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="find_parent-class_method">
+  <h3 class="signature first" id="associations_for-class_method">
+  
+    .<strong>associations_for</strong>(parent_class:, parent_id:, key: nil)  &#x21d2; <tt>ActiveRecord&lt;<span class='object_link'><a href="" title="DataAssociation (class)">DataAssociation</a></span>&gt;</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Returns associations for the object identified by parent class and id.
+If key is non-nil, returns the current value for the key, otherwise returns
+all values ordered by key and last update.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>parent_class</span>
+      
+      
+        <span class='type'>(<tt>string</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>the name of the class of the owner object</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>parent_id</span>
+      
+      
+        <span class='type'>(<tt>integer</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>the record id for the owner object</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>key</span>
+      
+      
+        <span class='type'>(<tt>string</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>the key value, may be nil</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>ActiveRecord&lt;<span class='object_link'><a href="" title="DataAssociation (class)">DataAssociation</a></span>&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>the associations for the object</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/data_association.rb', line 64</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_associations_for'>associations_for</span><span class='lparen'>(</span><span class='label'>parent_class:</span><span class='comma'>,</span> <span class='label'>parent_id:</span><span class='comma'>,</span> <span class='label'>key:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_key'>key</span>
+    <span class='const'><span class='object_link'><a href="" title="DataAssociation (class)">DataAssociation</a></span></span>
+      <span class='period'>.</span><span class='id identifier rubyid_includes'>includes</span><span class='lparen'>(</span><span class='symbol'>:upload</span><span class='rparen'>)</span>
+      <span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>parent_id:</span> <span class='id identifier rubyid_parent_id'>parent_id</span><span class='comma'>,</span> <span class='label'>parent_class:</span> <span class='id identifier rubyid_parent_class'>parent_class</span><span class='comma'>,</span> <span class='label'>key:</span> <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
+      <span class='period'>.</span><span class='id identifier rubyid_descending_by_recent_update'>descending_by_recent_update</span>
+  <span class='kw'>else</span>
+    <span class='const'><span class='object_link'><a href="" title="DataAssociation (class)">DataAssociation</a></span></span>
+      <span class='period'>.</span><span class='id identifier rubyid_includes'>includes</span><span class='lparen'>(</span><span class='symbol'>:upload</span><span class='rparen'>)</span>
+      <span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>parent_id:</span> <span class='id identifier rubyid_parent_id'>parent_id</span><span class='comma'>,</span> <span class='label'>parent_class:</span> <span class='id identifier rubyid_parent_class'>parent_class</span><span class='rparen'>)</span>
+      <span class='period'>.</span><span class='id identifier rubyid_descending_by_recent_update'>descending_by_recent_update</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="create_from-class_method">
+  
+    .<strong>create_from</strong>(parent_id:, parent_class:, key:, value:, upload: nil)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Creates new association for the object identified by parent class and id</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/data_association.rb', line 43</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_create_from'>create_from</span><span class='lparen'>(</span><span class='label'>parent_id:</span><span class='comma'>,</span> <span class='label'>parent_class:</span><span class='comma'>,</span> <span class='label'>key:</span><span class='comma'>,</span> <span class='label'>value:</span><span class='comma'>,</span> <span class='label'>upload:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_upload_id'>upload_id</span> <span class='op'>=</span> <span class='kw'>nil</span>
+  <span class='id identifier rubyid_upload_id'>upload_id</span> <span class='op'>=</span> <span class='id identifier rubyid_upload'>upload</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span> <span class='kw'>if</span> <span class='id identifier rubyid_upload'>upload</span>
+
+  <span class='const'><span class='object_link'><a href="" title="DataAssociation (class)">DataAssociation</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span>
+    <span class='label'>parent_id:</span> <span class='id identifier rubyid_parent_id'>parent_id</span><span class='comma'>,</span>
+    <span class='label'>parent_class:</span> <span class='id identifier rubyid_parent_class'>parent_class</span><span class='comma'>,</span>
+    <span class='label'>key:</span> <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='comma'>,</span>
+    <span class='label'>object:</span> <span class='lbrace'>{</span> <span class='id identifier rubyid_key'>key</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_value'>value</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_to_json'>to_json</span><span class='comma'>,</span>
+    <span class='label'>upload_id:</span> <span class='id identifier rubyid_upload_id'>upload_id</span>
+  <span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="descending_by_recent_update-class_method">
+  
+    .<strong>descending_by_recent_update</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Scope method to order data associations by key and then duplicates
+by descending order on update and ID.
+So, the first key-value pair, is the most recent update.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+81
+82
+83</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/data_association.rb', line 81</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_descending_by_recent_update'>descending_by_recent_update</span>
+  <span class='id identifier rubyid_order'>order</span><span class='lparen'>(</span><span class='symbol'>:key</span><span class='comma'>,</span> <span class='label'>updated_at:</span> <span class='symbol'>:desc</span><span class='comma'>,</span> <span class='label'>id:</span> <span class='symbol'>:desc</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="find_parent-class_method">
   
     .<strong>find_parent</strong>(parent_class, parent_id)  &#x21d2; <tt>Object</tt> 
   
@@ -287,6 +609,89 @@
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_find_parent'>find_parent</span><span class='lparen'>(</span><span class='id identifier rubyid_parent_class'>parent_class</span><span class='comma'>,</span> <span class='id identifier rubyid_parent_id'>parent_id</span><span class='rparen'>)</span>
   <span class='const'>Object</span><span class='period'>.</span><span class='id identifier rubyid_const_get'>const_get</span><span class='lparen'>(</span><span class='id identifier rubyid_parent_class'>parent_class</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_parent_id'>parent_id</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="select_most_recent-class_method">
+  
+    .<strong>select_most_recent</strong>(associations)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Filters data associations to keep most recent update for a key.
+In case of ties, selects largest ID.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>associations</span>
+      
+      
+        <span class='type'>(<tt>ActiveRecord&lt;<span class='object_link'><a href="" title="DataAssociation (class)">DataAssociation</a></span>&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>the data associations</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        
+        <div class='inline'><p>associations filtered to include the most recently updated values</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+90
+91
+92
+93
+94
+95</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/data_association.rb', line 90</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_select_most_recent'>select_most_recent</span><span class='lparen'>(</span><span class='id identifier rubyid_associations'>associations</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_associations'>associations</span>
+    <span class='period'>.</span><span class='id identifier rubyid_descending_by_recent_update'>descending_by_recent_update</span>
+    <span class='period'>.</span><span class='id identifier rubyid_group_by'>group_by</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:key</span><span class='rparen'>)</span>
+    <span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid__'>_</span><span class='comma'>,</span> <span class='id identifier rubyid_group'>group</span><span class='op'>|</span> <span class='id identifier rubyid_group'>group</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span> <span class='rbrace'>}</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -482,7 +887,7 @@
 </div>
 
       <div id="footer">
-  Generated on Mon Jun  1 17:36:25 2020 by
+  Generated on Fri Sep  4 12:32:33 2020 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.25 (ruby-2.6.5).
 </div>
