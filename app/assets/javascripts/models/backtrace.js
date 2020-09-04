@@ -28,8 +28,11 @@ class Step {
         step.response = step.marshall_response();
       }
 
-    }    
-
+      //Keeping track of which substep user is focused on
+      step.substep_index = -1;
+      step.substeps = step.display.content.filter(line => line.check || line.input || line.table || line.select)
+      step.substeps = step.substeps.map(line => (line.table ? line.table.flat().filter(cell => cell.check || cell.type) : line)).flat()
+    }
   }
 
   get next_line_id() {
@@ -99,6 +102,65 @@ class Step {
     return true;    
   }
 
+  // Checks the next checkable substep and sets focus to next input box if applicable
+  check_next() {
+    let step = this;
+    if (!step.substeps || (step.substep_index == step.substeps.length - 1)) {
+      return false;
+    }
+
+    let prev_substep = step.substeps[step.substep_index];
+    let substep = step.substeps[step.substep_index + 1];
+    let next_substep = step.substeps[step.substep_index + 2];
+
+    if (prev_substep && !prev_substep.check) {
+      prev_substep.focused = false;
+    }
+
+    if (substep) {
+      if (substep.check) {
+        substep.checked = true;
+      } else {
+        substep.focused = true;
+      }
+    }
+
+    step.substep_index ++;
+    if(substep && next_substep && substep.check && !next_substep.check) {
+      step.check_next();
+    }
+    return true;
+  }
+
+  // unchecks current checkbox and sets focus to previous input box if applicable
+  uncheck_prev() {
+    let step = this;
+    if (!step.substeps || (step.substep_index == -1)) {
+      return false;
+    }
+
+    let prev_substep = step.substeps[step.substep_index - 1];
+    let substep = step.substeps[step.substep_index];
+
+    if (prev_substep && !prev_substep.check) {
+        prev_substep.focused = true;
+    }
+
+    if (substep) {
+      if (substep.check) {
+        substep.checked = false;
+      } else {
+        substep.focused = false;
+      }
+    }
+
+    step.substep_index --;
+    if (substep && prev_substep && !substep.check && prev_substep.check) {
+      step.uncheck_prev();
+    }
+    return true;
+  }
+
   new_response() {
 
     let step = this;
@@ -126,7 +188,6 @@ class Step {
     }
 
     return step.response;
-
   }
 
   new_table_inputs(line) {
