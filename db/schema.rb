@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200810000001) do
+ActiveRecord::Schema.define(version: 20200910000000) do
 
   create_table "account_logs", force: :cascade do |t|
     t.integer  "row1",       limit: 4
@@ -178,6 +178,18 @@ ActiveRecord::Schema.define(version: 20200810000001) do
   add_index "items", ["object_type_id"], name: "index_items_on_object_type_id", using: :btree
   add_index "items", ["sample_id"], name: "index_items_on_sample_id", using: :btree
 
+  create_table "job_assignment_logs", force: :cascade do |t|
+    t.integer  "job_id",      limit: 4
+    t.integer  "assigned_by", limit: 4
+    t.integer  "assigned_to", limit: 4
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+  end
+
+  add_index "job_assignment_logs", ["assigned_by"], name: "index_job_assignment_logs_on_assigned_by", using: :btree
+  add_index "job_assignment_logs", ["assigned_to"], name: "index_job_assignment_logs_on_assigned_to", using: :btree
+  add_index "job_assignment_logs", ["job_id"], name: "index_job_assignment_logs_on_job_id", using: :btree
+
   create_table "job_associations", force: :cascade do |t|
     t.integer  "job_id",       limit: 4
     t.integer  "operation_id", limit: 4
@@ -341,6 +353,15 @@ ActiveRecord::Schema.define(version: 20200810000001) do
   add_index "plans", ["budget_id"], name: "index_plans_on_budget_id", using: :btree
   add_index "plans", ["user_id"], name: "index_plans_on_user_id", using: :btree
 
+  create_table "roles", force: :cascade do |t|
+    t.string   "name",         limit: 255
+    t.string   "display_name", limit: 255
+    t.string   "description",  limit: 255
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.integer  "sort",         limit: 4
+  end
+
   create_table "sample_types", force: :cascade do |t|
     t.string   "name",        limit: 255
     t.string   "description", limit: 255
@@ -408,10 +429,24 @@ ActiveRecord::Schema.define(version: 20200810000001) do
     t.string   "remember_token",  limit: 255
     t.boolean  "admin",                       default: false
     t.string   "key",             limit: 255
+    t.string   "roles",           limit: 255, default: "."
   end
 
   add_index "users", ["login"], name: "index_users_on_login", unique: true, using: :btree
   add_index "users", ["remember_token"], name: "index_users_on_remember_token", using: :btree
+
+  create_table "view_job_assignments", id: false, force: :cascade do |t|
+    t.integer  "id",          limit: 4,   default: 0, null: false
+    t.integer  "job_id",      limit: 4
+    t.integer  "assigned_by", limit: 4
+    t.integer  "assigned_to", limit: 4
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.string   "by_name",     limit: 255
+    t.string   "by_login",    limit: 255
+    t.string   "to_name",     limit: 255
+    t.string   "to_login",    limit: 255
+  end
 
   create_table "wires", force: :cascade do |t|
     t.integer  "from_id",    limit: 4
@@ -460,18 +495,21 @@ ActiveRecord::Schema.define(version: 20200810000001) do
   add_foreign_key "items", "locators", on_delete: :cascade
   add_foreign_key "items", "object_types", on_delete: :cascade
   add_foreign_key "items", "samples", on_delete: :cascade
+  add_foreign_key "job_assignment_logs", "jobs", on_delete: :cascade
+  add_foreign_key "job_assignment_logs", "users", column: "assigned_by", on_delete: :cascade
+  add_foreign_key "job_assignment_logs", "users", column: "assigned_to", on_delete: :cascade
   add_foreign_key "job_associations", "jobs", on_delete: :cascade
   add_foreign_key "job_associations", "operations", on_delete: :cascade
-  add_foreign_key "jobs", "groups"
-  add_foreign_key "jobs", "users"
+  add_foreign_key "jobs", "groups", on_delete: :cascade
+  add_foreign_key "jobs", "users", on_delete: :cascade
   add_foreign_key "locators", "items", on_delete: :cascade
   add_foreign_key "locators", "wizards", on_delete: :cascade
   add_foreign_key "logs", "jobs", on_delete: :cascade
   add_foreign_key "logs", "users", on_delete: :cascade
   add_foreign_key "memberships", "groups", on_delete: :cascade
   add_foreign_key "memberships", "users", on_delete: :cascade
-  add_foreign_key "operations", "operation_types"
-  add_foreign_key "operations", "users"
+  add_foreign_key "operations", "operation_types", on_delete: :cascade
+  add_foreign_key "operations", "users", on_delete: :cascade
   add_foreign_key "part_associations", "items", column: "collection_id", on_delete: :cascade
   add_foreign_key "part_associations", "items", column: "part_id", on_delete: :cascade
   add_foreign_key "plan_associations", "operations", on_delete: :cascade

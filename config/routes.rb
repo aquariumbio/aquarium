@@ -234,4 +234,8 @@ Bioturk::Application.routes.draw do
   get '/logout', to: 'sessions#destroy'
   get '/item', to: 'items#update'
 
+  if Rails.env == "development"
+    get 'dev_only',      to: 'dev_only#index'
+  end
+
 end
