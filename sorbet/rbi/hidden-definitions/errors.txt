@@ -12,80 +12,12 @@
 # wrong constant name <PackageRegistry>
 # wrong constant name <PackageRegistry>
 # wrong constant name <RESERVED_0>
-# wrong constant name <RESERVED_10>
-# wrong constant name <RESERVED_11>
-# wrong constant name <RESERVED_12>
-# wrong constant name <RESERVED_13>
-# wrong constant name <RESERVED_14>
-# wrong constant name <RESERVED_15>
-# wrong constant name <RESERVED_16>
-# wrong constant name <RESERVED_17>
-# wrong constant name <RESERVED_18>
-# wrong constant name <RESERVED_19>
 # wrong constant name <RESERVED_1>
-# wrong constant name <RESERVED_20>
-# wrong constant name <RESERVED_21>
-# wrong constant name <RESERVED_22>
-# wrong constant name <RESERVED_23>
-# wrong constant name <RESERVED_24>
-# wrong constant name <RESERVED_25>
-# wrong constant name <RESERVED_26>
-# wrong constant name <RESERVED_27>
-# wrong constant name <RESERVED_28>
-# wrong constant name <RESERVED_29>
 # wrong constant name <RESERVED_2>
-# wrong constant name <RESERVED_30>
-# wrong constant name <RESERVED_31>
-# wrong constant name <RESERVED_32>
-# wrong constant name <RESERVED_33>
-# wrong constant name <RESERVED_34>
-# wrong constant name <RESERVED_35>
-# wrong constant name <RESERVED_36>
-# wrong constant name <RESERVED_37>
-# wrong constant name <RESERVED_38>
-# wrong constant name <RESERVED_39>
 # wrong constant name <RESERVED_3>
-# wrong constant name <RESERVED_40>
-# wrong constant name <RESERVED_41>
-# wrong constant name <RESERVED_42>
-# wrong constant name <RESERVED_43>
-# wrong constant name <RESERVED_44>
-# wrong constant name <RESERVED_45>
-# wrong constant name <RESERVED_46>
-# wrong constant name <RESERVED_47>
-# wrong constant name <RESERVED_48>
-# wrong constant name <RESERVED_49>
 # wrong constant name <RESERVED_4>
-# wrong constant name <RESERVED_50>
-# wrong constant name <RESERVED_51>
-# wrong constant name <RESERVED_52>
-# wrong constant name <RESERVED_53>
-# wrong constant name <RESERVED_54>
-# wrong constant name <RESERVED_55>
-# wrong constant name <RESERVED_56>
-# wrong constant name <RESERVED_57>
-# wrong constant name <RESERVED_58>
-# wrong constant name <RESERVED_59>
 # wrong constant name <RESERVED_5>
-# wrong constant name <RESERVED_60>
-# wrong constant name <RESERVED_61>
-# wrong constant name <RESERVED_62>
-# wrong constant name <RESERVED_63>
-# wrong constant name <RESERVED_64>
-# wrong constant name <RESERVED_65>
-# wrong constant name <RESERVED_66>
-# wrong constant name <RESERVED_67>
-# wrong constant name <RESERVED_68>
-# wrong constant name <RESERVED_69>
 # wrong constant name <RESERVED_6>
-# wrong constant name <RESERVED_70>
-# wrong constant name <RESERVED_71>
-# wrong constant name <RESERVED_72>
-# wrong constant name <RESERVED_73>
-# wrong constant name <RESERVED_74>
-# wrong constant name <RESERVED_7>
-# wrong constant name <RESERVED_8>
-# wrong constant name <RESERVED_9>
 # wrong constant name <TypeAlias>
 # wrong constant name <TypeAlias>
 # wrong constant name <any>
@@ -45214,6 +45146,7 @@
 # wrong constant name from_each_with_object
 # wrong constant name from_hash_brackets_map
 # wrong constant name from_map_to_h
+# wrong constant name from_to_h
 # wrong constant name members
 # uninitialized constant RuboCop::Cop::IndexMethod::Captures::Elem
 # wrong constant name noop_transformation?
@@ -46536,6 +46469,10 @@
 # wrong constant name on_send
 # wrong constant name prepend
 # wrong constant name starts_with?
+# uninitialized constant RuboCop::Cop::Rails::AfterCommitOverride::LITERAL_REGEX
+# uninitialized constant RuboCop::Cop::Rails::AfterCommitOverride::RESTRICT_ON_SEND
+# wrong constant name on_class
+# wrong constant name <static-init>
 # uninitialized constant RuboCop::Cop::Rails::ApplicationController::LITERAL_REGEX
 # uninitialized constant RuboCop::Cop::Rails::ApplicationController::RESTRICT_ON_SEND
 # wrong constant name autocorrect
@@ -46723,12 +46660,14 @@
 # wrong constant name on_bad_each_with_object
 # wrong constant name on_bad_hash_brackets_map
 # wrong constant name on_bad_map_to_h
+# wrong constant name on_bad_to_h
 # wrong constant name <static-init>
 # uninitialized constant RuboCop::Cop::Rails::IndexWith::LITERAL_REGEX
 # uninitialized constant RuboCop::Cop::Rails::IndexWith::RESTRICT_ON_SEND
 # wrong constant name on_bad_each_with_object
 # wrong constant name on_bad_hash_brackets_map
 # wrong constant name on_bad_map_to_h
+# wrong constant name on_bad_to_h
 # wrong constant name <static-init>
 # uninitialized constant RuboCop::Cop::Rails::Inquiry::LITERAL_REGEX
 # uninitialized constant RuboCop::Cop::Rails::Inquiry::RESTRICT_ON_SEND
@@ -46792,6 +46731,12 @@
 # wrong constant name default_option?
 # wrong constant name null_false?
 # wrong constant name on_send
+# uninitialized constant RuboCop::Cop::Rails::OrderById::BYTE_ORDER_MARK
+# uninitialized constant RuboCop::Cop::Rails::OrderById::LITERAL_REGEX
+# uninitialized constant RuboCop::Cop::Rails::OrderById::RESTRICT_ON_SEND
+# wrong constant name on_send
+# wrong constant name order_by_id?
+# wrong constant name <static-init>
 # uninitialized constant RuboCop::Cop::Rails::Output::LITERAL_REGEX
 # uninitialized constant RuboCop::Cop::Rails::Output::RESTRICT_ON_SEND
 # wrong constant name io_output?
@@ -46922,7 +46867,9 @@
 # wrong constant name on_block
 # wrong constant name on_send
 # wrong constant name remove_column_call
+# wrong constant name remove_columns_call
 # wrong constant name remove_foreign_key_call
+# wrong constant name remove_index_call
 # uninitialized constant RuboCop::Cop::Rails::SafeNavigation::BYTE_ORDER_MARK
 # uninitialized constant RuboCop::Cop::Rails::SafeNavigation::LITERAL_REGEX
 # uninitialized constant RuboCop::Cop::Rails::SafeNavigation::RESTRICT_ON_SEND
@@ -46959,6 +46906,12 @@
 # wrong constant name initialize
 # wrong constant name on_csend
 # wrong constant name on_send
+# uninitialized constant RuboCop::Cop::Rails::SquishedSQLHeredocs::LITERAL_REGEX
+# uninitialized constant RuboCop::Cop::Rails::SquishedSQLHeredocs::OPENING_DELIMITER
+# uninitialized constant RuboCop::Cop::Rails::SquishedSQLHeredocs::RESTRICT_ON_SEND
+# wrong constant name autocorrect
+# wrong constant name on_heredoc
+# wrong constant name <static-init>
 # uninitialized constant RuboCop::Cop::Rails::TimeZone::LITERAL_REGEX
 # uninitialized constant RuboCop::Cop::Rails::TimeZone::RESTRICT_ON_SEND
 # wrong constant name autocorrect
@@ -46987,8 +46940,16 @@
 # uninitialized constant RuboCop::Cop::Rails::WhereExists::LITERAL_REGEX
 # uninitialized constant RuboCop::Cop::Rails::WhereExists::RESTRICT_ON_SEND
 # wrong constant name autocorrect
+# wrong constant name exists_with_args?
 # wrong constant name on_send
 # wrong constant name where_exists_call?
+# wrong constant name <static-init>
+# uninitialized constant RuboCop::Cop::Rails::WhereNot::BYTE_ORDER_MARK
+# uninitialized constant RuboCop::Cop::Rails::WhereNot::LITERAL_REGEX
+# uninitialized constant RuboCop::Cop::Rails::WhereNot::RESTRICT_ON_SEND
+# wrong constant name autocorrect
+# wrong constant name on_send
+# wrong constant name where_method_call?
 # wrong constant name <static-init>
 # wrong constant name rational_literal?
 # wrong constant name <static-init>

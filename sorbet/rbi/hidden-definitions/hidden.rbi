@@ -91282,6 +91282,8 @@ class RuboCop::Cop::IndexMethod::Autocorrection
 
   def self.from_map_to_h(node, match); end
 
+  def self.from_to_h(node, match); end
+
   def self.members(); end
 end
 
@@ -94076,6 +94078,15 @@ class RuboCop::Cop::Rails::ActiveSupportAliases
   def starts_with?(node=T.unsafe(nil)); end
 end
 
+class RuboCop::Cop::Rails::AfterCommitOverride
+  def on_class(class_node); end
+  AFTER_COMMIT_CALLBACKS = ::T.let(nil, ::T.untyped)
+  MSG = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::Cop::Rails::AfterCommitOverride
+end
+
 class RuboCop::Cop::Rails::ApplicationController
   include ::RuboCop::Cop::EnforceSuperclass
   def autocorrect(node); end
@@ -94426,6 +94437,8 @@ class RuboCop::Cop::Rails::IndexBy
   def on_bad_hash_brackets_map(node=T.unsafe(nil)); end
 
   def on_bad_map_to_h(node=T.unsafe(nil)); end
+
+  def on_bad_to_h(node=T.unsafe(nil)); end
 end
 
 class RuboCop::Cop::Rails::IndexBy
@@ -94438,6 +94451,8 @@ class RuboCop::Cop::Rails::IndexWith
   def on_bad_hash_brackets_map(node=T.unsafe(nil)); end
 
   def on_bad_map_to_h(node=T.unsafe(nil)); end
+
+  def on_bad_to_h(node=T.unsafe(nil)); end
 end
 
 class RuboCop::Cop::Rails::IndexWith
@@ -94561,6 +94576,17 @@ class RuboCop::Cop::Rails::NotNullColumn
   def on_send(node); end
 end
 
+class RuboCop::Cop::Rails::OrderById
+  include ::RuboCop::Cop::RangeHelp
+  def on_send(node); end
+
+  def order_by_id?(node=T.unsafe(nil)); end
+  MSG = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::Cop::Rails::OrderById
+end
+
 class RuboCop::Cop::Rails::Output
   def io_output?(node=T.unsafe(nil)); end
 
@@ -94617,6 +94643,7 @@ end
 
 class RuboCop::Cop::Rails::PluckInWhere
   include ::RuboCop::Cop::ActiveRecordHelper
+  include ::RuboCop::Cop::ConfigurableEnforcedStyle
   def autocorrect(node); end
 
   def on_send(node); end
@@ -94788,7 +94815,11 @@ class RuboCop::Cop::Rails::ReversibleMigration
 
   def remove_column_call(node=T.unsafe(nil)); end
 
+  def remove_columns_call(node=T.unsafe(nil)); end
+
   def remove_foreign_key_call(node=T.unsafe(nil)); end
+
+  def remove_index_call(node=T.unsafe(nil)); end
 end
 
 class RuboCop::Cop::Rails::SafeNavigation
@@ -94855,6 +94886,19 @@ class RuboCop::Cop::Rails::SkipsModelValidations
   def on_send(node); end
 end
 
+class RuboCop::Cop::Rails::SquishedSQLHeredocs
+  include ::RuboCop::Cop::Heredoc
+  def autocorrect(node); end
+
+  def on_heredoc(node); end
+  MSG = ::T.let(nil, ::T.untyped)
+  SQL = ::T.let(nil, ::T.untyped)
+  SQUISH = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::Cop::Rails::SquishedSQLHeredocs
+end
+
 class RuboCop::Cop::Rails::TimeZone
   include ::RuboCop::Cop::ConfigurableEnforcedStyle
   def autocorrect(node); end
@@ -94896,7 +94940,10 @@ class RuboCop::Cop::Rails::Validation
 end
 
 class RuboCop::Cop::Rails::WhereExists
+  include ::RuboCop::Cop::ConfigurableEnforcedStyle
   def autocorrect(node); end
+
+  def exists_with_args?(node=T.unsafe(nil)); end
 
   def on_send(node); end
 
@@ -94905,6 +94952,24 @@ class RuboCop::Cop::Rails::WhereExists
 end
 
 class RuboCop::Cop::Rails::WhereExists
+end
+
+class RuboCop::Cop::Rails::WhereNot
+  include ::RuboCop::Cop::RangeHelp
+  def autocorrect(node); end
+
+  def on_send(node); end
+
+  def where_method_call?(node=T.unsafe(nil)); end
+  IS_NOT_NULL_RE = ::T.let(nil, ::T.untyped)
+  MSG = ::T.let(nil, ::T.untyped)
+  NOT_EQ_ANONYMOUS_RE = ::T.let(nil, ::T.untyped)
+  NOT_EQ_NAMED_RE = ::T.let(nil, ::T.untyped)
+  NOT_IN_ANONYMOUS_RE = ::T.let(nil, ::T.untyped)
+  NOT_IN_NAMED_RE = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::Cop::Rails::WhereNot
 end
 
 module RuboCop::Cop::RationalLiteral

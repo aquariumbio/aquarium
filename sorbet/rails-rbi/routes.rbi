@@ -255,6 +255,13 @@ module GeneratedUrlHelpers
   sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
   def operation_url(*args, **kwargs); end
 
+  # Sigs for route /technician_dashboard(.:format)
+  sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
+  def technician_dashboard_index_path(*args, **kwargs); end
+
+  sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
+  def technician_dashboard_index_url(*args, **kwargs); end
+
   # Sigs for route /operation_types/test_all(.:format)
   sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
   def operation_types_test_all_path(*args, **kwargs); end
