@@ -353,15 +353,6 @@ ActiveRecord::Schema.define(version: 20200910000000) do
   add_index "plans", ["budget_id"], name: "index_plans_on_budget_id", using: :btree
   add_index "plans", ["user_id"], name: "index_plans_on_user_id", using: :btree
 
-  create_table "roles", force: :cascade do |t|
-    t.string   "name",         limit: 255
-    t.string   "display_name", limit: 255
-    t.string   "description",  limit: 255
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-    t.integer  "sort",         limit: 4
-  end
-
   create_table "sample_types", force: :cascade do |t|
     t.string   "name",        limit: 255
     t.string   "description", limit: 255
@@ -429,7 +420,6 @@ ActiveRecord::Schema.define(version: 20200910000000) do
     t.string   "remember_token",  limit: 255
     t.boolean  "admin",                       default: false
     t.string   "key",             limit: 255
-    t.string   "roles",           limit: 255, default: "."
   end
 
   add_index "users", ["login"], name: "index_users_on_login", unique: true, using: :btree
