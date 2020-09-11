@@ -462,16 +462,16 @@ ActiveRecord::Schema.define(version: 20200810000001) do
   add_foreign_key "items", "samples", on_delete: :cascade
   add_foreign_key "job_associations", "jobs", on_delete: :cascade
   add_foreign_key "job_associations", "operations", on_delete: :cascade
-  add_foreign_key "jobs", "groups"
-  add_foreign_key "jobs", "users"
+  add_foreign_key "jobs", "groups", on_delete: :cascade
+  add_foreign_key "jobs", "users", on_delete: :cascade
   add_foreign_key "locators", "items", on_delete: :cascade
   add_foreign_key "locators", "wizards", on_delete: :cascade
   add_foreign_key "logs", "jobs", on_delete: :cascade
   add_foreign_key "logs", "users", on_delete: :cascade
   add_foreign_key "memberships", "groups", on_delete: :cascade
   add_foreign_key "memberships", "users", on_delete: :cascade
-  add_foreign_key "operations", "operation_types"
-  add_foreign_key "operations", "users"
+  add_foreign_key "operations", "operation_types", on_delete: :cascade
+  add_foreign_key "operations", "users", on_delete: :cascade
   add_foreign_key "part_associations", "items", column: "collection_id", on_delete: :cascade
   add_foreign_key "part_associations", "items", column: "part_id", on_delete: :cascade
   add_foreign_key "plan_associations", "operations", on_delete: :cascade
