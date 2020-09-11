@@ -1,8 +1,8 @@
 # Aquarium Development Guide
 
-These guidelines are intended for those working directly on [Aquarium](aquarium.bio).
+These guidelines are intended for those working directly on the [Aquarium software](https://github.com/aquariumbio/aquarium).
 
-Everyone else should visit the installation page on [Aquarium.bio](aquarium.bio).
+Everyone else should visit the installation page on [Aquarium.bio](https://www.aquarium.bio/?category=Getting%20Started&content=Installation).
 
 ---
 
@@ -268,26 +268,67 @@ will generate the documentation and write it to the directory `docs/api`.
 This location is determined by the file `.yardopts` in the project repository.
 This file also limits the API to code used in Krill the protocol development language.
 
-### Updating Dependencies
-
-```bash
-docker-compose up -d
-docker-compose exec app /bin/sh
-bundle upgrade
-docker-compose down -v
-```
-
-```bash
-docker-compose up -d
-docker-compose exec app /bin/sh
-yarn update
-docker-compose down -v
-```
-
 ### Modifying this Document
 
 This document is `docs/development/index.md` in the `aquarium` repository.
 Keep it up-to-date if you change something that affects Aquarium development.
+
+## Updating Dependencies
+
+1. Start the container
+
+   ```bash
+   docker-compose up -d
+   ```
+
+2. Open a shell in the Aquarium container
+
+   ```bash
+   docker-compose exec app /bin/sh
+   ```
+
+3. Upgrade gems
+
+   ```bash
+   bundle update
+   ```
+
+4. Commit the new `Gemfile.lock`
+
+5. Update interface files for Sorbet type checking
+
+   ```bash
+   bundle exec rake rails_rbi:all
+   srb rbi update
+   ```
+
+6. Make sure that the system type checks
+
+   ```bash
+   srb tc
+   ```
+
+7. Commit updated rbi files
+
+8. Update Javascript dependencies
+
+   ```bash
+   yarn upgrade
+   ```
+
+9. Commit the new `yarn.lock`
+
+10. Exit container shell
+
+    ```bash
+    exit
+    ```
+
+11. Stop the container
+
+    ```bash
+    docker-compose down -v
+    ```
 
 ## Making an Aquarium Release
 
@@ -527,12 +568,13 @@ the aquarium service:
 
 The following values can be set using this file or environment variables:
 
-| Config key        | Environment Variable | Default                               |
-| ----------------- | -------------------- | ------------------------------------- |
-| lab_name          | LAB_NAME             | `Your Lab`                            |
-| lab_email_address | LAB_EMAIL_ADDRESS    | –                                     |
-| logo_path         | LOGO_PATH            | `aquarium-logo.png`                   |
-| image_uri         | IMAGE_URI            | _S3_PROTOCOL_`://`_S3_HOST_`/images/` |
+| Config key           | Environment Variable | Default                               |
+| -----------------    | -------------------- | ------------------------------------- |
+| lab_name             | LAB_NAME             | `Your Lab`                            |
+| lab_email_address    | LAB_EMAIL_ADDRESS    | –                                     |
+| logo_path            | LOGO_PATH            | `aquarium-logo.png`                   |
+| image_uri            | IMAGE_URI            | _S3_PROTOCOL_`://`_S3_HOST_`/images/` |
+| technician_dashboard | TECH_DASHBOARD       | `false`                               |
 
 In addition to the instance details, the user agreement for the lab can be set by creating a YAML file containing the agreement.
 The YAML must include the keys `title` with the title of the agreement, `updated` with the date last updated, and `clauses`, which is a list of pairs of `title` and `text` pairs.

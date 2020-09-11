@@ -104,6 +104,14 @@
         <%= link_to "Plans", launcher_path %>
       </md-button>
 
+
+      <% if Bioturk::Application.config.technician_dashboard %>
+        <md-button href="/technician_dashboard" aria-label="Technician"
+                   class="main-button <%= yield(:title) == 'Technician' ? 'underlined' : '' %>">
+          <%= link_to "Technician", '/technician_dashboard' %>
+        </md-button>
+      <% end %>
+
       <md-button href="/operations" aria-label="Manager"
                  class="main-button <%= yield(:title) == 'Manager' ? 'underlined' : '' %>">
         <%= link_to "Manager", operations_path %>

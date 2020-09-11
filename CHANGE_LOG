@@ -1,3 +1,16 @@
+v2.8.1
+
+- Krill changes: add technician foot pedal interface (thanks to Abe Miller)
+- Add configurable OLA Simple technician page (Abe Miller)
+- Change handling of data associations so that only the most recent value of
+  a duplicate key will be displayed. (thanks to Gene Nomicos)
+- Change library controller to allow creating library externally with pfish.
+- Update entrypoint script to use AWS CloudMap namespace when run on ECS.
+- Change object type list to hide internal types.
+
+Contributions from Mariko Anderson, Amy Cash, Abe Miller, Gene Nomicos, and 
+Ben Keller
+
 v2.8.0
 
 This release makes Docker configuration the default.
@@ -29,8 +42,7 @@ Changes:
 - Refactor models to use predicates instead of chained checks of attributes.
 - Pull source for aquadoc and anemone into components directory, and add
   components directory to build.
-- Krill changes: add technician foot pedal interface, allow show block note, 
-  check, and bullet to take array of strings as arguments.
+- Krill changes: allow show block note, check, and bullet to take array of strings as arguments.
 - Starting Aquarium in production using Docker will print the license.
 - Add Sorbet type checking, and simplecov test coverage. 
 

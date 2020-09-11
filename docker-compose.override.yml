@@ -16,7 +16,7 @@ services:
     image: aquarium-development
     command: ["development"]
     environment:
-      ENABLE_SORBET_RUNTIME_ERRORS: 'true'
+      ENABLE_SORBET_RUNTIME_ERRORS: "true"
     volumes:
       - ./app:/aquarium/app
       - ./components:/aquarium/components

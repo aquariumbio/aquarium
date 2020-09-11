@@ -13,6 +13,7 @@ class JsonController
 
       model = get_model(model: parameters[:model], include: parameters[:include])
       result = apply_method(model: model, method: parameters[:method], arguments: parameters[:arguments], id: parameters[:id], options: parameters[:options])
+      result = DataAssociation.select_most_recent(result) if parameters[:model] == 'DataAssociation'
 
       return result.as_json(include: parameters[:include], methods: parameters[:methods]) if parameters[:methods] && parameters[:include]
       return result.as_json(methods: parameters[:methods]) if parameters[:methods] && !parameters[:include]

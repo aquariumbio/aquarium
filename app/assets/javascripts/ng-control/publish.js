@@ -135,6 +135,7 @@
     function set_config(config) {
 
       let access_token = $scope.config.github.access_token;
+      let organization = $scope.config.github.organization;
       $scope.config = config;
 
       if ( ! $scope.config.keywords ) {
@@ -150,6 +151,7 @@
       $scope.config.aquarium_version = "<%= Bioturk::Application.config.aquarium_version %>";
 
       $scope.config.github.access_token = access_token;
+      $scope.config.github.organization = organization;
 
     }
 

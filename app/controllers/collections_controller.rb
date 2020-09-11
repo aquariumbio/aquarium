@@ -1,4 +1,4 @@
-# typed: false
+# typed: true
 # frozen_string_literal: true
 
 class CollectionsController < ApplicationController
@@ -16,7 +16,7 @@ class CollectionsController < ApplicationController
         part_ids << part['id'] if part
       end
     end
-    das = DataAssociation.where(parent_class: 'Item', parent_id: part_ids)
+    das = DataAssociation.associations_for(parent_class: 'Item', parent_id: part_ids)
     raw[:part_matrix].each do |row|
       row.each do |part|
         part[:data_associations] = das.select { |da| da.parent_id == part['id'] } if part
