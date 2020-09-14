@@ -68,17 +68,17 @@
       date_begin = new Date( date.getFullYear(), date.getMonth() , date.getDate())
 
       // GET DAYS (0 = TODAY)
-      var days = Math.floor((today - date_begin)/86400000);
+      var days = Math.floor((today - date_begin)/86400000)
 
       switch(true) {
         case (days == 0):
-          return "today"
+          return "Today"
           break;
         case (days == 1):
-          return "yesterday"
+          return "Yesterday"
           break;
         case (days > 1 && days < 8):
-          return ["two days","three days","four days","five days","six days","one week"][days-2]+" ago"
+          return days + " days ago"
           break;
         default:
           // TODO: DECLARE THIS A CONSTANT
