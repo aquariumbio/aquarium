@@ -20,7 +20,7 @@ RSpec.describe Collection, type: :model do
   end
 
   def make_96_well_pcr_collection
-    ot = ObjectType.find_by name: '96 qPCR collection'
+    ot = ObjectType.find_by(name: '96 qPCR collection')
     return ot if ot
 
     ObjectType.new(
@@ -123,19 +123,21 @@ RSpec.describe Collection, type: :model do
     end
 
     it 'makes an empty data matrix' do
-
-      make_96_well_pcr_collection
+      expect(make_96_well_pcr_collection).not_to be_nil
       d = example_collection '96 qPCR collection'
+      expect(d).not_to be_nil
+
       d.new_data_matrix 'x'
       m = d.data_matrix 'x'
+      expect(m).not_to be_nil
+
       nz = m.collect { |row| row.collect { |da| da.value } }.flatten.reject { |x| x == 0.0 }
-      raise 'did not make empty data matrix' unless nz.empty?
+      expect(nz).to be_empty
 
       d.drop_data_matrix 'x'
       m = d.data_matrix 'x'
       nn = m.collect { |row| row.collect { |da| da } }.flatten.compact
-      raise 'did not drop data matrix' unless nn.empty?
-
+      expect(nn).to be_empty
     end
 
   end

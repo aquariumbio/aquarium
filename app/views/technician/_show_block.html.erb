@@ -44,7 +44,8 @@
       <md-input-container class="select-container">
         <md-select ng-model="step.response.inputs[line.select.var]"
                    aria-label="Select"
-                   ng-disabled="!step.response.in_progress">
+                   ng-disabled="!step.response.in_progress"
+                   focused-when="line.focused">
           <md-option ng-repeat="c in content_value(line).choices" ng-value="c">
             {{c}}
           </md-option>
@@ -64,11 +65,13 @@
                ng-if="content_value(line).type == 'number'"
                type = 'number'
                ng-model="step.response.inputs[line.input.var]"
-               ng-disabled="!step.response.in_progress">
+               ng-disabled="!step.response.in_progress"
+               focused-when="line.focused">
         <input class="md-subhead"
                ng-if="content_value(line).type != 'number'"
                ng-model="step.response.inputs[line.input.var]"
-               ng-disabled="!step.response.in_progress">
+               ng-disabled="!step.response.in_progress"
+               focused-when="line.focused">
       </div>
       {{content_value(line).type}}
     </md-input-container>
@@ -160,7 +163,8 @@
                  ng-model="step.response.inputs.table_inputs[cell.key][cell.operation_id].value"
                  data-opid="{{cell.operation.id}}"
                  class="krill-table-input"
-                 ng-disabled="!step.response.in_progress">
+                 ng-disabled="!step.response.in_progress"
+                 focused-when="cell.focused">
           <span ng-if="!cell.type && cell.content == undefined"><span ng-bind-html="sce(cell)"></span></span>
           <span ng-if="!cell.type && cell.content != undefined && ( !cell.check || !step.response.in_progress )">
             <span ng-bind-html="sce(cell.content)"></span>
