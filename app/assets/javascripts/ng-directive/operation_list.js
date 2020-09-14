@@ -72,12 +72,12 @@
 
       switch(true) {
         case (days == 0):
-          return "Today"
+          return "today"
           break;
         case (days == 1):
-          return "Yesterday"
+          return "yesterday"
           break;
-        case (days > 1 && days < 8):
+        case (days > 1 && days < 4):
           return days + " days ago"
           break;
         default:
