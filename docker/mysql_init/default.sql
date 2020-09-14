@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.17, for osx10.10 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.31, for Linux (x86_64)
 --
--- Host: localhost    Database: biofab
+-- Host: localhost    Database: production
 -- ------------------------------------------------------
--- Server version	5.7.17
+-- Server version	5.7.31
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -31,7 +31,12 @@ CREATE TABLE `account_logs` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_account_log_associations_on_user_id` (`user_id`)
+  KEY `index_account_log_associations_on_user_id` (`user_id`),
+  KEY `index_account_logs_on_row1` (`row1`),
+  KEY `index_account_logs_on_row2` (`row2`),
+  CONSTRAINT `fk_rails_0fc0d85f00` FOREIGN KEY (`row1`) REFERENCES `accounts` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_rails_8e6656e8a4` FOREIGN KEY (`row2`) REFERENCES `accounts` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_rails_c91e200913` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -68,7 +73,12 @@ CREATE TABLE `accounts` (
   PRIMARY KEY (`id`),
   KEY `index_accounts_on_budget_id` (`budget_id`),
   KEY `index_accounts_on_job_id` (`job_id`),
-  KEY `index_accounts_on_user_id` (`user_id`)
+  KEY `index_accounts_on_user_id` (`user_id`),
+  KEY `index_accounts_on_operation_id` (`operation_id`),
+  CONSTRAINT `fk_rails_17f7ad8fd1` FOREIGN KEY (`budget_id`) REFERENCES `budgets` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_rails_9910875b16` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_rails_b1e30bebc8` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_rails_ba2f9f474f` FOREIGN KEY (`operation_id`) REFERENCES `operations` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -98,7 +108,10 @@ CREATE TABLE `allowable_field_types` (
   PRIMARY KEY (`id`),
   KEY `index_allowable_field_types_on_field_type_id` (`field_type_id`),
   KEY `index_allowable_field_types_on_object_type_id` (`object_type_id`),
-  KEY `index_allowable_field_types_on_sample_type_id` (`sample_type_id`)
+  KEY `index_allowable_field_types_on_sample_type_id` (`sample_type_id`),
+  CONSTRAINT `fk_rails_1d47761735` FOREIGN KEY (`field_type_id`) REFERENCES `field_types` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_rails_2bc0f30ee5` FOREIGN KEY (`sample_type_id`) REFERENCES `sample_types` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_rails_a968b4a54c` FOREIGN KEY (`object_type_id`) REFERENCES `object_types` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -187,7 +200,7 @@ CREATE TABLE `codes` (
   `updated_at` datetime NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -196,6 +209,7 @@ CREATE TABLE `codes` (
 
 LOCK TABLES `codes` WRITE;
 /*!40000 ALTER TABLE `codes` DISABLE KEYS */;
+INSERT INTO `codes` VALUES (1,'protocol','# Title: Inventory Purchase Protocol\n# Author: Eric Klavins\n# Date: May 31, 2016 \n\nneeds \"Standard Libs/Debug\"\n\nclass Protocol\n\n  include Debug\n\n  def labor_rate\n    Parameter.get_float(\'labor rate\')\n  end\n  \n  def main\n    if !operations.one?\n      show do\n        title \"Too many batched!\"\n        \n        note \"Right now, this protocol only supports one Direct Purchase at a time. Please re-batch in jobs of one.\"\n      end\n      \n      return {}\n    end\n    \n    \n    @object_types = ObjectType.all\n    @user = operations.first.user\n    user = @user # Can\'t put @user in show, because it would refer to the wrong object\n\n    result = show do\n      title \"Choose a budget\"\n      note \"User: #{user.name} (#{user.login})\"\n      select user.budget_info.collect { |bi| bi[:budget].name }, var: \"choice\", label: \"Choose a budget\", default: 0\n    end\n    \n    @budget = Budget.find_by_name(result[:choice])\n    @overhead = Parameter.get_float(\"markup rate\")\n    @transactions = []\n    \n    operations.first.plan.budget_id = @budget.id\n    operations.first.plan.save \n    \n    again = true\n    \n    while again \n    \n      result = show do\n        title \"Select Category\"\n        note \"Basics: tubes, tip boxes, ...\"\n        note \"Samples: media, ...\"\n        note \"Batched: Gibson Aliquots, plates, ...\"\n        select [ \"Basics\", \"Samples\", \"Batched\" ], var: \"choice\", label: \"Choose something\", default: 1\n      end\n      \n      case result[:choice]\n        when \"Basics\"then basic_chooser\n        when \"Samples\" then sample_chooser \n        when \"Batched\" then batched_chooser\n      end\n      \n      tab = [ [ \"Description\", \"Amount\" ] ]\n      tab += @transactions.collect do |t| \n        [\n          t[:description],\n          currency((1 + @overhead) * t[:amount])\n        ]\n      end\n      \n      result = show do\n        title  \"Summary\"\n        table tab if tab.length > 1 \n        note \"No purchases made\" unless tab.length > 1\n        select [ \"No\", \"Yes\" ], var: \"again\", label: \"Would you like to make another purchase?\", default: 0\n      end\n    \n      again = ( result[:again] == \"Yes\" )\n      \n    end\n    \n    operations.first.associate :transactions, @transactions\n    \n    return {}\n   end\n\n  def choose_object_from objects, number=false\n    result = show do\n      title \"Choose Object\"\n      select objects.collect { |ot| ot.name }, var: \"choice\", label: \"Choose object:\", default: 0\n      get \"number\", var: \"n\", label: \"How many?\", default: 5 if number\n    end\n\n    return objects.find { |b| b.name == result[:choice] } unless number\n    return [ objects.find { |b| b.name == result[:choice] }, result[:n] ] if number\n  end\n  \n  ###############################################################################################################\n  def basic_chooser \n    \n    basics = @object_types.select { |ot| basic? ot }      \n    ot = choose_object_from basics\n\n    error \"There seems to be a problem with the object you\'ve chosen.\" if ot.nil?\n\n    vol = {}\n  \n    m = ot.data_object[:materials]\n    l = ot.data_object[:labor]\n    u = ot.data_object[:unit] \n    vol[:n] = 1\n \n    vol = show do\n      title \"Choose Amount\"\n      get \"number\", var: \"n\", label: \"How many #{u.pluralize} of #{ot.name}?\", default: 5\n    end\n\n    message = \"Purchase #{vol[:n]} #{ot.name.pluralize}\"\n    if confirm message, currency((1+@overhead) * ((m* vol[:n])+(l * labor_rate* vol[:n])) ) \n      transaction = make_purchase message, m*vol[:n], l*vol[:n]\n    end        \n    \n  end\n\n  ###############################################################################################################\n  def sample_chooser \n   \n    samples = @object_types.select { |ot| sample? ot }   \n    ot = choose_object_from samples\n\n    error \"There seems to be a problem with the object you\'ve chosen.\" if ot.nil?\n\n    result = show do\n      title \"Choose Sample\"\n      select ot.data_object[:samples].collect { |s| s[:name] }, var: \"choice\", label: \"Choose sample\", default: 2\n    end\n    \n    descriptor = ot.data_object[:samples].find { |d| d[:name] == result[:choice] }\n    m = descriptor[:materials]\n    l = descriptor[:labor] \n    u = descriptor[:unit]\n    s = descriptor[:name] \n    vol = {}\n\n    items = Sample.find_by_name(s).items.reject { |i| i.deleted? }.reject {|i| i.object_type.name != ot.name }\n    \n    if items.length > 0\n      item = choose_item items, \"Choose #{ot.name} of #{s}\"\n\n      if ot.name.include?(\"Agar\")\n        vol[:n] = descriptor[:total_volume]\n      else\n        vol = show do\n          title \"Choose Volume\"\n          get \"number\", var: \"n\", label: \"How many #{u.pluralize} of #{s}?\", default: 5 \n          select [\"No\", \"Yes\"], var: \"delete\", label: \"Are you purchasing the whole container or is the container now empty?\", default: 0\n        end\n      end\n\n\n      cost = currency((1+@overhead)*((m* vol[:n])+(l * labor_rate* vol[:n]))) \n      message = \"Purchase #{ot.name} of #{s}, item #{item.id}\"\n      if confirm message, cost\n        take [item]\n        transaction = make_purchase message, m*vol[:n], l*vol[:n]\n        release [item]\n        if (descriptor[:delete] || vol[:delete] == \"Yes\")\n          item.mark_as_deleted\n        end\n      end\n    else\n      error \"There are no items of #{ot.name}/#{s} in stock\"\n    end \n  end    \n  ###############################################################################################################\n  def batched_chooser \n\n    collections = @object_types.select { |ot| batched? ot }\n    ot = choose_object_from collections\n\n    error \"There seems to be a problem with the object you\'ve chosen.\" if ot.nil?\n  \n    result = show do\n      title \"Choose sample type\" \n      select ot.data_object[:samples].collect { |s| s[:name] }, var: \"choice\", label: \"Choose sample\", default: 0\n    end\n  \n    descriptor = ot.data_object[:samples].find { |d| d[:name] == result[:choice] }\n    m = descriptor[:materials]\n    l = descriptor[:labor] \n    cost = currency((1+@overhead)*(m+(l*labor_rate)))\n  \n    s = Sample.find_by_name(descriptor[:name])\n    collections = ot.items.reject { |i| i.deleted? }.collect { |i| collection_from i }\n    # filter out collections based on user\'s sample input\n    collections.reject! { |c| c.matrix[0][0] != s.id }\n    cids = collections.collect { |c| c.id.to_s }\n  \n    if cids.length > 0\n  \n      result = show do \n        title \"Choose #{ot.name} and number of #{s.name.pluralize} (#{cost} each)\"\n        table [ [ \"id\", \"Location\", \"Number of Samples\" ] ] + (collections.collect { |i| [ \"#{i}\", i.location, i.num_samples ] } )\n        select cids, var: \"id\", label: \"Choose collection\", default: 0\n        get \"number\", var: \"n\", label: \"How many #{s.name.pluralize}?\", default: 2\n      end\n      \n      collection = collections.find { |c| c.id == result[:id].to_i }\n      \n      n = [ collection.num_samples, [ 1, result[:n]].max ].min\n      total_cost = currency((1+@overhead)*(n*m+(n*l* labor_rate)))\n      message = \"Purchase #{n} #{s.name.pluralize} from #{ot.name} #{collection.id}\"\n      \n      if confirm message, total_cost \n        take_samples collection, n\n        transaction = make_purchase message, n*m, n*l\n        release [collection]\n        if collection.num_samples == 0\n          collection.mark_as_deleted\n        end\n      end    \n    else\n      error \"There are no #{ot.name} in stock\"\n    end\n  end\n\n  def take_samples collection, n\n   \n    m = collection.matrix\n    x = 0\n  \n    (0..m.length-1).reverse_each do |i|\n      (0..m[i].length-1).reverse_each do |j|\n        if m[i][j] != -1 && x < n\n          m[i][j] = -1\n          x += 1\n        end\n      end\n    end\n  \n    collection.matrix = m\n    collection.save\n    take [collection]\n    \n  end\n\n  def error msg, details=nil\n    show do \n      title msg\n      note details if details\n      note \"Please report this problem to a BIOFAB lab manager.\"\n    end      \n  end\n\n  def confirm message, cost\n    result = show do \n      title message\n      note \"Cost: #{cost}\"\n      select [ \"Ok\", \"Cancel\" ], var: \"choice\", label: \"Ok to purchase?\", default: 0\n    end\n    return (result[:choice] == \"Ok\")\n  end\n\n  def choose_item items, message\n    options = (items.collect { |i| i.id.to_s })\n    result = show do \n      title message\n      note \"Please choose which item you would like to use: \"\n      select options, var: \"choice\", label: \"Choose item\", default: 0\n    end\n    Item.find(result[:choice])          \n  end\n\n\n  def make_purchase description, mat, lab\n    transaction = {\n      description: description,\n      amount: mat + lab * labor_rate,\n    }\n    \n    @transactions << transaction\n    \n    transaction\n  end\n\n  def valid_sample_descriptor s\n    val = s[:name]      && s[:name].class == String &&\n          s[:materials] && ( s[:materials].class == Float || s[:materials].class == Fixnum ) &&\n          s[:labor]     && ( s[:labor].class == Float     || s[:labor].class == Fixnum ) && \n          s[:unit]      && s[:unit].class == String &&\n          s[:total_volume] && (s[:total_volume].is_a?(Integer))\n    #error(\"Bad descriptor\", s.to_s) unless val #comment this out so user doesn\'t see it\n    val\n  end\n\n  def basic? ot\n    ot.handler != \"sample_container\" && ot.handler != \"collection\"  &&\n    ot.data_object[:materials] && ot.data_object[:labor] && ot.data_object[:unit]     \n  end\n\n  def sample? ot\n    ot.handler == \"sample_container\" && ot.data_object[:samples] && \n    ot.data_object[:samples].each { |s| return nil unless valid_sample_descriptor s }\n  end\n\n  def batched? ot\n    ot.handler == \"collection\" && ot.data_object[:samples] && \n    ot.data_object[:samples].each { |s| return nil unless (s[:materials] && s[:labor] && s[:unit]) }\n  end\n\n  def currency num\n    ActionController::Base.helpers.number_to_currency num\n  end  \n\nend\n',1,'OperationType','2020-01-24 16:50:00','2020-01-24 16:50:00',1),(2,'precondition','def precondition(op)\n  true\nend',1,'OperationType','2020-01-24 16:50:00','2020-01-24 16:50:00',1),(3,'cost_model','def cost(op)\n  trans = op.get(:transactions) || [{ amount: 0.1 }]\n  total_cost = trans.map { |t| t[:amount] }.sum\n  \n  { labor: 0, materials: total_cost }\nend',1,'OperationType','2020-01-24 16:50:00','2020-01-24 16:50:00',1),(4,'documentation','Documentation here. Start with a paragraph, not a heading or title, as in most views, the title will be supplied by the view.',1,'OperationType','2020-01-24 16:50:00','2020-01-24 16:50:00',1),(5,'test','',1,'OperationType','2020-01-24 16:50:00','2020-01-24 16:50:00',1),(6,'source','module Debug\n  def print_object obj\n    if [Numeric, String].any? { |c| obj.is_a? c }\n      obj\n    elsif [Array].any? { |c| obj.is_a? c }\n      obj.map { |item| print_object item }\n    elsif [Hash].any? { |c| obj.is_a? c }\n      Hash[obj.map { |k, v| [k, print_object(v)] }]\n    else\n      s = obj ? obj.id.to_s : \"\"\n      s += \" #{obj.name}\" if obj.class.method_defined? :name\n      s\n    end\n  end\n\n  def log_info *args\n    if debug\n      show do\n        title \"Debug slide (#{args.length} #{\"arg\".pluralize args.length})\"\n\n        args.each do |arg|\n          note \"#{arg.class}: #{print_object arg}\"\n        end\n      end\n    end\n  end\n\n    def inspect(object, ident=nil)\n        show do\n            title \"<span style=\\\"background-color:yellow\\\">INSPECTING #{ident} (#{object.class})</span>\"\n            if object.kind_of?(Array)\n              table object\n            else\n              note object.to_json\n            end\n        end\n    end\nend\n',1,'Library','2020-01-24 16:50:00','2020-01-24 16:50:00',1);
 /*!40000 ALTER TABLE `codes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -216,7 +230,9 @@ CREATE TABLE `data_associations` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_data_associations_on_upload_id` (`upload_id`)
+  KEY `index_data_associations_on_upload_id` (`upload_id`),
+  KEY `index_data_associations_on_parent_class_and_parent_id` (`parent_class`,`parent_id`),
+  CONSTRAINT `fk_rails_26226b25a9` FOREIGN KEY (`upload_id`) REFERENCES `uploads` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -253,7 +269,7 @@ CREATE TABLE `field_types` (
   `preferred_operation_type_id` int(11) DEFAULT NULL,
   `preferred_field_type_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_field_types_on_sample_type_id` (`parent_id`)
+  KEY `index_field_types_on_parent_class_and_parent_id` (`parent_class`,`parent_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -291,7 +307,13 @@ CREATE TABLE `field_values` (
   PRIMARY KEY (`id`),
   KEY `index_field_values_on_allowable_field_type_id` (`allowable_field_type_id`),
   KEY `index_field_values_on_field_type_id` (`field_type_id`),
-  KEY `index_field_values_on_sample_id` (`parent_id`)
+  KEY `index_field_values_on_parent_class_and_parent_id` (`parent_class`,`parent_id`),
+  KEY `fk_rails_319b222007` (`child_item_id`),
+  KEY `fk_rails_e04e5b0273` (`child_sample_id`),
+  CONSTRAINT `fk_rails_212ef5a639` FOREIGN KEY (`field_type_id`) REFERENCES `field_types` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_rails_319b222007` FOREIGN KEY (`child_item_id`) REFERENCES `items` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_rails_50fa557e81` FOREIGN KEY (`allowable_field_type_id`) REFERENCES `allowable_field_types` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_rails_e04e5b0273` FOREIGN KEY (`child_sample_id`) REFERENCES `samples` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -348,7 +370,11 @@ CREATE TABLE `invoices` (
   `updated_at` datetime NOT NULL,
   `status` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `notes` text COLLATE utf8_unicode_ci,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `index_invoices_on_user_id` (`user_id`),
+  KEY `index_invoices_on_budget_id` (`budget_id`),
+  CONSTRAINT `fk_rails_3d1522a0d8` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_rails_3dd4c64f3b` FOREIGN KEY (`budget_id`) REFERENCES `budgets` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -380,7 +406,12 @@ CREATE TABLE `items` (
   `data` mediumtext COLLATE utf8_unicode_ci,
   `locator_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_items_on_object_type_id` (`object_type_id`)
+  KEY `index_items_on_object_type_id` (`object_type_id`),
+  KEY `index_items_on_sample_id` (`sample_id`),
+  KEY `index_items_on_locator_id` (`locator_id`),
+  CONSTRAINT `fk_rails_6b7d1f696e` FOREIGN KEY (`sample_id`) REFERENCES `samples` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_rails_a6ef7e6462` FOREIGN KEY (`object_type_id`) REFERENCES `object_types` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_rails_d02c2a2df1` FOREIGN KEY (`locator_id`) REFERENCES `locators` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -406,7 +437,11 @@ CREATE TABLE `job_associations` (
   `operation_id` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `index_job_associations_on_job_id` (`job_id`),
+  KEY `index_job_associations_on_operation_id` (`operation_id`),
+  CONSTRAINT `fk_rails_25efd65a81` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_rails_8f590b1e09` FOREIGN KEY (`operation_id`) REFERENCES `operations` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -428,7 +463,7 @@ DROP TABLE IF EXISTS `jobs`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `jobs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
   `arguments` text COLLATE utf8_unicode_ci,
   `state` longtext COLLATE utf8_unicode_ci,
   `created_at` datetime NOT NULL,
@@ -441,7 +476,11 @@ CREATE TABLE `jobs` (
   `latest_start_time` datetime DEFAULT NULL,
   `metacol_id` int(11) DEFAULT NULL,
   `successor_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `index_jobs_on_user_id` (`user_id`),
+  KEY `index_jobs_on_group_id` (`group_id`),
+  CONSTRAINT `fk_rails_4928288085` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_rails_df6238c8a6` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -468,7 +507,7 @@ CREATE TABLE `libraries` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -477,6 +516,7 @@ CREATE TABLE `libraries` (
 
 LOCK TABLES `libraries` WRITE;
 /*!40000 ALTER TABLE `libraries` DISABLE KEYS */;
+INSERT INTO `libraries` VALUES (1,'Debug','Standard Libs','2020-01-24 16:50:00','2020-01-24 16:50:00');
 /*!40000 ALTER TABLE `libraries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -494,7 +534,11 @@ CREATE TABLE `locators` (
   `number` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `index_locators_on_item_id` (`item_id`),
+  KEY `index_locators_on_wizard_id` (`wizard_id`),
+  CONSTRAINT `fk_rails_64c3d29cac` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_rails_bb120b6235` FOREIGN KEY (`wizard_id`) REFERENCES `wizards` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -517,12 +561,16 @@ DROP TABLE IF EXISTS `logs`;
 CREATE TABLE `logs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `job_id` int(11) DEFAULT NULL,
-  `user_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
   `entry_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `data` text COLLATE utf8_unicode_ci,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `index_logs_on_job_id` (`job_id`),
+  KEY `index_logs_on_user_id` (`user_id`),
+  CONSTRAINT `fk_rails_81ff90ed92` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_rails_8fc980bf44` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -548,7 +596,11 @@ CREATE TABLE `memberships` (
   `group_id` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `index_memberships_on_group_id` (`group_id`),
+  KEY `index_memberships_on_user_id` (`user_id`),
+  CONSTRAINT `fk_rails_99326fb65d` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_rails_aaf389f138` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=543 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -622,7 +674,7 @@ CREATE TABLE `operation_types` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_operation_types_on_category_and_name` (`category`,`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -631,6 +683,7 @@ CREATE TABLE `operation_types` (
 
 LOCK TABLES `operation_types` WRITE;
 /*!40000 ALTER TABLE `operation_types` DISABLE KEYS */;
+INSERT INTO `operation_types` VALUES (1,'Direct Purchase','Misc.',1,1,'2020-01-24 16:50:00','2020-01-24 16:50:00');
 /*!40000 ALTER TABLE `operation_types` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -653,7 +706,9 @@ CREATE TABLE `operations` (
   `parent_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_operations_on_operation_type_id` (`operation_type_id`),
-  KEY `index_operations_on_user_id` (`user_id`)
+  KEY `index_operations_on_user_id` (`user_id`),
+  CONSTRAINT `fk_rails_10e3ccbd52` FOREIGN KEY (`operation_type_id`) REFERENCES `operation_types` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_rails_63fbf4e94e` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -711,7 +766,10 @@ CREATE TABLE `part_associations` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `index_part_associations_on_collection_id_and_row_and_column` (`collection_id`,`row`,`column`)
+  UNIQUE KEY `index_part_associations_on_collection_id_and_row_and_column` (`collection_id`,`row`,`column`),
+  KEY `index_part_associations_on_part_id` (`part_id`),
+  CONSTRAINT `fk_rails_39a9c3d5bb` FOREIGN KEY (`part_id`) REFERENCES `items` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_rails_f889cf647d` FOREIGN KEY (`collection_id`) REFERENCES `items` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -739,7 +797,9 @@ CREATE TABLE `plan_associations` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `index_plan_associations_on_operation_id` (`operation_id`),
-  KEY `index_plan_associations_on_plan_id` (`plan_id`)
+  KEY `index_plan_associations_on_plan_id` (`plan_id`),
+  CONSTRAINT `fk_rails_5ca5742cd9` FOREIGN KEY (`plan_id`) REFERENCES `plans` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_rails_c36597dd79` FOREIGN KEY (`operation_id`) REFERENCES `operations` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -771,7 +831,10 @@ CREATE TABLE `plans` (
   `folder` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `layout` text COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`),
-  KEY `index_plans_on_user_id` (`user_id`)
+  KEY `index_plans_on_user_id` (`user_id`),
+  KEY `index_plans_on_budget_id` (`budget_id`),
+  CONSTRAINT `fk_rails_45da853770` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_rails_55f7cff6c3` FOREIGN KEY (`budget_id`) REFERENCES `budgets` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -827,7 +890,11 @@ CREATE TABLE `samples` (
   `user_id` int(11) DEFAULT NULL,
   `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `data` text COLLATE utf8_unicode_ci,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `index_samples_on_sample_type_id` (`sample_type_id`),
+  KEY `index_samples_on_user_id` (`user_id`),
+  CONSTRAINT `fk_rails_8e0800c2e2` FOREIGN KEY (`sample_type_id`) REFERENCES `sample_types` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_rails_d699eb2564` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -859,7 +926,7 @@ CREATE TABLE `schema_migrations` (
 
 LOCK TABLES `schema_migrations` WRITE;
 /*!40000 ALTER TABLE `schema_migrations` DISABLE KEYS */;
-INSERT INTO `schema_migrations` VALUES ('20131029153603'),('20131029153634'),('20131111143554'),('20131111143621'),('20131113172448'),('20131113181345'),('20131119164152'),('20131119164208'),('20131122032927'),('20131223192901'),('20140131235419'),('20140404201838'),('20140404201900'),('20140404204258'),('20140408224245'),('20140428213241'),('20140507230919'),('20140508203643'),('20140513225335'),('20140616190537'),('20140714220057'),('20140907220135'),('20150124195318'),('20150124201744'),('20150129213358'),('20150129221830'),('20150212051010'),('20150212051027'),('20150213173621'),('20150222153442'),('20150326202149'),('20150405154727'),('20150515160553'),('20150515160619'),('20150719221125'),('20150719221226'),('20150719221253'),('20150719223053'),('20150720044538'),('20150828232337'),('20150923014954'),('20150923015030'),('20150923184243'),('20150924044044'),('20150926162327'),('20151027164741'),('20151029034310'),('20151118210640'),('20151203054202'),('20160128203950'),('20160128205317'),('20160128205943'),('20160129021809'),('20160129164244'),('20160129165100'),('20160330023703'),('20160330033810'),('20160330185947'),('20160330190634'),('20160411130601'),('20160411131711'),('20160412010529'),('20160427043024'),('20160427043546'),('20160429232330'),('20160429232408'),('20160429232434'),('20160430000308'),('20160430152749'),('20160514044605'),('20160526204339'),('20160607162741'),('20160615161649'),('20160720211005'),('20161113203042'),('20161219172133'),('20170330173426'),('20170421231924'),('20170426225719'),('20170504211619'),('20170504212208'),('20170604165355'),('20170627173019'),('20170725190809'),('20170729024546'),('20170806145525'),('20170813203843'),('20171103151518'),('20180509200425'),('20180529204642'),('20180809012224'),('20181221174622');
+INSERT INTO `schema_migrations` VALUES ('20131029153603'),('20131029153634'),('20131111143554'),('20131111143621'),('20131113172448'),('20131113181345'),('20131119164152'),('20131119164208'),('20131122032927'),('20131223192901'),('20140131235419'),('20140404201838'),('20140404201900'),('20140404204258'),('20140408224245'),('20140428213241'),('20140507230919'),('20140508203643'),('20140513225335'),('20140616190537'),('20140714220057'),('20140907220135'),('20150124195318'),('20150124201744'),('20150129213358'),('20150129221830'),('20150212051010'),('20150212051027'),('20150213173621'),('20150222153442'),('20150326202149'),('20150405154727'),('20150515160553'),('20150515160619'),('20150719221125'),('20150719221226'),('20150719221253'),('20150719223053'),('20150720044538'),('20150828232337'),('20150923014954'),('20150923015030'),('20150923184243'),('20150924044044'),('20150926162327'),('20151027164741'),('20151029034310'),('20151118210640'),('20151203054202'),('20160128203950'),('20160128205317'),('20160128205943'),('20160129021809'),('20160129164244'),('20160129165100'),('20160330023703'),('20160330033810'),('20160330185947'),('20160330190634'),('20160411130601'),('20160411131711'),('20160412010529'),('20160427043024'),('20160427043546'),('20160429232330'),('20160429232408'),('20160429232434'),('20160430000308'),('20160430152749'),('20160514044605'),('20160526204339'),('20160607162741'),('20160615161649'),('20160720211005'),('20161113203042'),('20161219172133'),('20170330173426'),('20170421231924'),('20170426225719'),('20170504211619'),('20170504212208'),('20170604165355'),('20170627173019'),('20170725190809'),('20170729024546'),('20170806145525'),('20170813203843'),('20171103151518'),('20180509200425'),('20180529204642'),('20180809012224'),('20181221174622'),('20200810000000'),('20200810000001');
 /*!40000 ALTER TABLE `schema_migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -880,7 +947,8 @@ CREATE TABLE `timings` (
   `active` tinyint(1) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `index_timings_on_parent_class_and_parent_id` (`parent_class`,`parent_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -909,7 +977,9 @@ CREATE TABLE `uploads` (
   `upload_updated_at` datetime DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `index_uploads_on_job_id` (`job_id`),
+  CONSTRAINT `fk_rails_76093eb5d3` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -937,7 +1007,11 @@ CREATE TABLE `user_budget_associations` (
   `disabled` tinyint(1) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `index_user_budget_associations_on_budget_id` (`budget_id`),
+  KEY `index_user_budget_associations_on_user_id` (`user_id`),
+  CONSTRAINT `fk_rails_a2966bc54b` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_rails_f1322363b9` FOREIGN KEY (`budget_id`) REFERENCES `budgets` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -998,7 +1072,11 @@ CREATE TABLE `wires` (
   `active` tinyint(1) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `index_wires_on_from_id` (`from_id`),
+  KEY `index_wires_on_to_id` (`to_id`),
+  CONSTRAINT `fk_rails_1073ab769d` FOREIGN KEY (`to_id`) REFERENCES `field_values` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_rails_684cde68aa` FOREIGN KEY (`from_id`) REFERENCES `field_values` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1075,4 +1153,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-21 10:02:56
+-- Dump completed on 2020-09-14 15:07:51
