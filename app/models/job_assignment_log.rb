@@ -6,18 +6,6 @@ class JobAssignmentLog < ActiveRecord::Base
   belongs_to :assigned_by_user, class_name: "User", foreign_key: "assigned_by"
   belongs_to :assigned_to_user, class_name: "User", foreign_key: "assigned_to"
 
-  # GET CURRENT ASSIGNMENT FROM THE VIEW
-  # NOTE: THE VIEW GETS THE LATEST ASSIGNMENT FOR EACH JOB_ID (AS DEFINED BY UPDATED_AT)
-  def self.get_assignment(job_id)
-    sql = "
-      select id, job_id, created_at, by_name, by_login, to_name, to_login
-      from view_job_assignments
-      where job_id = #{job_id}
-      limit 1
-    "
-    (JobAssignmentLog.find_by_sql sql)[0]
-  end
-
   ### VALIDATIONS
 
   # VALIDATE FOREIGN KEYS ON SAVE
