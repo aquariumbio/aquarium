@@ -12,6 +12,7 @@ class Job < ActiveRecord::Base
                   :desired_start_time, :latest_start_time, :metacol_id, :successor
 
   has_many :job_associations
+  has_many :job_assignment_logs
   # has_many :operations, through: :jobs_associations # not working for some reason
 
   # A list of all {Operation}s in this Job.
