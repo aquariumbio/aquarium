@@ -57,6 +57,7 @@
 
   });
 
+  // TOTO: MAKE THIS A GLOBAL FILTER AVAILABLE ANYWHERE IN THE CODE
   w.filter('naturalDate', function(){
     return function(date){
 
@@ -65,9 +66,10 @@
 
       // TIMESTAMP FOR INPUT DATE AT 00:00:00
       date = new Date(date)
-      date_begin = new Date( date.getFullYear(), date.getMonth() , date.getDate())
+      date_begin = new Date( date.getFullYear(), date.getMonth(), date.getDate() )
 
       // GET DAYS (0 = TODAY)
+      // NOTE: 86400000 = 1000 * 60 * 60 * 24 = MILLISECONDS IN A DAY
       var days = Math.floor((today - date_begin)/86400000)
 
       switch(true) {
