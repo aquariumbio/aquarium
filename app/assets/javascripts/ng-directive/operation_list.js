@@ -23,8 +23,18 @@
             operation.set_status(status);
             window.location = '/operations'
           });
-
         }
+
+        $scope.checkAll = function (operations, checkAllOperations, jobid) {
+          let ops = operations;
+          if (jobid) {
+            ops = operations.filter(operation => operation.jobs[0].id === jobid)
+          }
+          debugger;
+          aq.each(ops, op => {
+            op.selected = !checkAllOperations;
+          });
+        };
       }
     }
 
@@ -57,7 +67,7 @@
 
   });
 
-  // TOTO: MAKE THIS A GLOBAL FILTER AVAILABLE ANYWHERE IN THE CODE
+  // TODO: MAKE THIS A GLOBAL FILTER AVAILABLE ANYWHERE IN THE CODE
   w.filter('naturalDate', function(){
     return function(date){
 

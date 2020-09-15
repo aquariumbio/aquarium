@@ -7,7 +7,10 @@
 
       <tr>
         <th class='selector'>
-          <input type='checkbox' ng-model='selectAllOerations' aria-label='select all operations'>
+          <input type='checkbox' 
+                 ng-model='selectAllOperations' 
+                 aria-label='select all operations'
+                 ng-click="checkAll(operations, selectAllOperations, jobid)">
         </th>
         <th class="output">Input/Output</th>
         <th>Plan</th>
@@ -114,6 +117,8 @@
             </md-menu>
 
           </td>
+
+          <td ng-if="op.status === 'scheduled' || op.status === 'running'">{{op.status}}</td>
 
         <% end %>
 
