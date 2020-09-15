@@ -16,8 +16,10 @@ class User < ActiveRecord::Base
   has_many :plans
   has_many :parameters
   has_many :codes
-  has_many :jobs_assigned_by, class_name: "JobAssignmentLog", foreign_key: "assigned_by"
-  has_many :jobs_assigned_to, class_name: "JobAssignmentLog", foreign_key: "assigned_to"
+  has_many :job_logs_assigned_by, class_name: "JobAssignmentLog", foreign_key: "assigned_by"
+  has_many :job_logs_assigned_to, class_name: "JobAssignmentLog", foreign_key: "assigned_to"
+  has_many :jobs_assigned_by, class_name: "ViewJobAssignment", foreign_key: "assigned_by"
+  has_many :jobs_assigned_to, class_name: "ViewJobAssignment", foreign_key: "assigned_to"
 
   before_create { |user| user.login = login.downcase }
   before_create :create_remember_token
