@@ -40,6 +40,7 @@
 <%= content_for :action1 do %>
   <% if current_user && current_user.is_admin %>
 
+<!-- TODO: Disable if no operations are selected -->
     <div ng-if=" !current.activity_report.selected">
       <md-button aria-label="Schedule"  class='md-raised'
         ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
@@ -70,6 +71,8 @@
 
 <% end %>
 
+<!-- TODO: Change location on page -->
+<!-- TODO: Replace 'Step All' with icon -->
 <%= content_for :action4 do %>
   <% if current_user && current_user.is_admin %>
     <div ng-if=" !current.activity_report.selected">  

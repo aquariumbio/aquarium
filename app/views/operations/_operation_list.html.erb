@@ -6,22 +6,21 @@
            ng-show="operations.length > 0">
 
       <tr>
-        <th class='selector'></th>
-        <th class='id'>Op Id</th>
-        <th>User</th>
-        <th class="output">Data</th>
-        <th>Job(s)</th>
+        <th class='selector'>
+          <input type='checkbox' ng-model='selectAllOerations' aria-label='select all operations'>
+        </th>
+        <th class="output">Input/Output</th>
         <th>Plan</th>
+        <th>Status</th>
+        <th>Client</th>
+        <th class='id'>Op Id</th>
         <th>Last Update</th>
-        <% if current_user && current_user.is_admin %>
-          <th ng-if="status != 'scheduled' && status != 'running'"></th>
-        <% end %>
       </tr>
 
       <tr ng-repeat="op in operations"
           ng-if="!jobid || op.last_job.id == jobid">
 
-        <td>
+        <td> <!-- Selector -->
           <% if current_user && current_user.is_admin %>
             <input type='checkbox'
                    ng-model='op.selected'
@@ -30,11 +29,7 @@
           <% end %>
         </td>
 
-        <td>{{op.id}}</td>
-
-        <td>{{op.user.name}}</td>
-
-        <td>
+        <td> <!-- Input/Output -->
           <ul class='input-list'>
             <li ng-repeat="fv in op.field_values | filter: { role: 'output' } track by $index">
               <span ng-if="$first"  style="width: 26px; display: inline-block"><b>out:</b></span>
@@ -90,21 +85,12 @@
           </ul>
         </td>
 
-        <td>
-          <div ng-if="op.jobs.length > 0" ng-repeat="job in op.jobs">
-            <a href="/jobs/{{job.id}}">{{job.id}}</a> (<span>{{job.status}}</span>)
-          </div>
-          <div ng-if="op.jobs.length == 0">--</div>
-        </td>
-
-        <td>
+        <td> <!-- Plan -->
           <a ng-repeat="plan in op.plans" href="/plans?plan_id={{plan.id}}" target="designer">{{plan.id}}{{$last ? '' : ', '}}</a>
           <span ng-if="op.plans.length == 0">n/a</span>
         </td>
 
-        <td>{{ op.updated_at | naturalDate }}</td>
-
-        <% if current_user && current_user.is_admin %>
+        <% if current_user && current_user.is_admin %> <!-- Status w/ update -->
 
           <td ng-if="op.status != 'scheduled' && op.status != 'running'">
 
@@ -130,6 +116,14 @@
           </td>
 
         <% end %>
+
+        <td>{{op.user.name}}</td> <!-- Client -->
+
+        <td>{{op.id}}</td> <!-- Op ID -->
+        
+        <td>{{ op.updated_at | naturalDate }}</td> <!-- Last Updated -->
+
+
 
       </tr>
 
