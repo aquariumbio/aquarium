@@ -2,8 +2,6 @@
 <%= render partial: 'operation_list' %> 
 <%= render partial: '/operations/operation_list_report' %>
 
-<% provide(:title, 'Manager') %>
-
 <%= content_for :class do %>operations<% end %>
 
 <%= content_for :controller do %>operationsCtrl<% end %>
@@ -27,7 +25,7 @@
   </span>
 
   <span ng-if="current.operation_type && !current.activity_report.selected">
-    &rang; {{current.operation_type.category}} &rang; {{current.operation_type.name}} &rang;
+    {{current.operation_type.name}} &rang;
     <span class='capitalize'>
       {{current.status}}
     </span>
