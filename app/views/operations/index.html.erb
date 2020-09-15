@@ -45,7 +45,7 @@
         ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
         ng-click="batch(current.operation_type)"
         data-manager-action="schedule">
-        Schedule
+        Create Job
       </md-button>
 
       <md-button aria-label="Retry" class='md-raised'
@@ -64,46 +64,10 @@
 <% end %>
 
 <%= content_for :action2 do %>
-  <% if current_user && current_user.is_admin %>
-    <div ng-if=" !current.activity_report.selected">  
-      <md-button aria-label="Click"  class='md-raised'
-        ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
-        ng-click="choose(current.operation_type,'pending',true)"
-        data-manager-action="all">
-        All
-      </md-button>
-      <md-button aria-label="Click"  class='md-raised'
-        ng-if="!current.operation_type.on_the_fly && current.status == 'error'"
-        ng-click="choose(current.operation_type,'error',true)"
-        data-manager-action="all">
-        All
-      </md-button>  
-    </div>
-  <% end %>
-
   <md-button ng-if="current.activity_report.selected"
              ng-click="increment_date()"
              data-manager-action="next">NEXT</md-button> 
 
-<% end %>
-
-<%= content_for :action3 do %>
-  <% if current_user && current_user.is_admin %>
-    <div ng-if=" !current.activity_report.selected">  
-      <md-button aria-label="Click" class='md-raised'
-        ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
-        ng-click="choose(current.operation_type,'pending',false)"
-        data-manager-action="none">
-        None
-      </md-button>
-      <md-button aria-label="Click"  class='md-raised'
-        ng-if="!current.operation_type.on_the_fly && current.status == 'error'"
-        ng-click="choose(current.operation_type,'error',false)"
-        data-manager-action="none">
-        None
-      </md-button> 
-    </div> 
-  <% end %>
 <% end %>
 
 <%= content_for :action4 do %>
