@@ -30,11 +30,11 @@
           if (jobid) {
             ops = operations.filter(operation => operation.jobs[0].id === jobid)
           }
-          debugger;
           aq.each(ops, op => {
             op.selected = !checkAllOperations;
           });
         };
+
       }
     }
 
