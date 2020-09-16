@@ -12,6 +12,8 @@ class Job < ActiveRecord::Base
                   :desired_start_time, :latest_start_time, :metacol_id, :successor
 
   has_many :job_associations
+  has_many :job_assignment_logs
+  has_one :job_assignment, class_name: "ViewJobAssignment" # there is only one assignment as defined by the view
   # has_many :operations, through: :jobs_associations # not working for some reason
 
   # A list of all {Operation}s in this Job.

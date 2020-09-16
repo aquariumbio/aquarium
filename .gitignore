@@ -72,4 +72,7 @@ ui/node_modules
 coverage
 
 # please do not ignore Gemfile.lock !!!
-coverage
+
+# custom controller and views for development
+/app/controllers/dev_only_controller.rb
+/app/views/dev_only/*
