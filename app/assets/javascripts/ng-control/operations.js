@@ -428,8 +428,13 @@
           $scope.current.activity_report.selected = true;
           store_cookie();
         })
-      }   
+      }
 
+// Get technician list 
+      $http.get("/api/v2/group/17")
+      .then(response => {
+          $scope.technicians = response.data;
+      });                                
     }]);
 
 })();
