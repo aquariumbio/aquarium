@@ -237,7 +237,7 @@ Bioturk::Application.routes.draw do
   get '/item', to: 'items#update'
 
   if Rails.env == "development"
-    get 'dev_only',      to: 'dev_only#index'
+    get 'dev_only(/:action(:id))',      to: 'dev_only#:action'
   end
 
 end
