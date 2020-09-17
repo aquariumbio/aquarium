@@ -9,8 +9,10 @@
         <th class='selector'>
           <input type='checkbox' 
                  ng-model='selectAllOperations' 
+                 ng-if="!operation_type.on_the_fly && ( status == 'pending' || status == 'scheduled' || status == 'error' )"
                  aria-label='select all operations'
-                 ng-click="checkAll(operations, selectAllOperations, jobid)">
+                 ng-click="checkAll(operations, selectAllOperations, jobid)"
+                 style="margin: 0">
         </th>
         <th class="output">Input/Output</th>
         <th>Plan</th>
@@ -35,13 +37,15 @@
         <td> <!-- Input/Output -->
           <ul class='input-list'>
             <li ng-repeat="fv in op.field_values | filter: { role: 'output' } track by $index">
-              <span ng-if="$first"  style="width: 26px; display: inline-block"><b>out:</b></span>
-              <span ng-if="!$first" style="width: 26px; display: inline-block">&nbsp;</span>
-              {{fv.name}}
-              <span ng-if="fv.sample">:
+              <span ng-if="$first"  class="data-col-1"><b>out:</b></span>
+              <span ng-if="!$first" class="data-col-1">&nbsp;</span>
+
+              <span class="data-col-2">{{fv.name}}:</span>
+
+              <span ng-if="fv.sample" class="data-col-3">
                 <a href="/browser?sid={{fv.sample.id}}" target="samples">{{fv.sample.id}}: {{fv.sample.name}}</a>
                 <span ng-if="fv.item.object_type"> as {{fv.item.object_type.name}}</span>
-                <span ng-if="fv.child_item_id">
+                <span ng-if="fv.child_item_id" >
                   (
                     <div ng-if="fv.child_item_id && !fv.is_part"
                          item="fv.item"
@@ -58,13 +62,16 @@
                 </span>
               </span>
             </li>
+
             <li ng-repeat="fv in op.field_values | filter: { role: 'input' } track by $index">
-              <span ng-if="$first"  style="width: 18px; display: inline-block"><b>in:</b></span>
-              <span ng-if="!$first" style="width: 18px; display: inline-block">&nbsp;</span>
-              {{fv.name}}
-              <span ng-if="fv.sample">:
+              <span ng-if="$first"  class="data-col-1"><b>in:</b></span>
+              <span ng-if="!$first" class="data-col-1">&nbsp;</span>
+
+              <span class="data-col-2">{{fv.name}}:</span>
+
+              <span ng-if="fv.sample" class="data-col-3"> 
                 <a href="/browser?sid={{fv.sample.id}}" target="samples">{{fv.sample.id}}: {{fv.sample.name}}</a>
-                <span ng-if="fv.child_item_id">
+                <span ng-if="fv.child_item_id" >
                   (
                     <div ng-if="fv.child_item_id && !fv.is_part"
                          item="fv.item"
@@ -80,10 +87,12 @@
                   )
                 </span>
               </span>
-              <span ng-if="fv.value">{{fv.value}}</span>
+              <span ng-if="fv.value" class="data-col-3" style="color: black !important">{{fv.value}}</span>
             </li>
             <li ng-repeat="da in op.data_associations">
-                <b>{{da.key}}:</b> {{da.value}}
+              <span class="data-col-1">&nbsp;</span>
+              <span ng-if="da.key" class="data-col-2">{{da.key}}:</span>
+              <span ng-if="da.value" class="data-col-3">{{da.value}}</span>
             </li>
           </ul>
         </td>

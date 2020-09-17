@@ -9,11 +9,15 @@
       border-right: none !important;
       text-align: left !important;
     }
+    td {
+      font-size: 12px;
+      line-height: 18px;
+    }
     .selector {
       width: 20px;
     }
     .output {
-      width: 60%;
+      width: 50%;
     }
     .id {
       width: 50px;
@@ -23,5 +27,52 @@
       font-weight: bold;
     }
   }
+
+  .data-col-1 {
+    width: 22px;
+    left: 652px;
+    top: 367px;
+    
+    font-style: normal;
+    font-weight: bold;
+    /* or 150% */
+    
+    display: inline-block;
+    text-align: right;
+    letter-spacing: 0.25px;
+    
+    color: #000000; 
+  }
+
+  .data-col-2 {
+    width: 140px;
+    left: 683px;
+    top: 367px;
+    white-space: nowrap;
+    font-style: normal;
+    font-weight: normal;
+    
+    display: inline-block;
+    align-items: center;
+    letter-spacing: 0.25px;
+    
+    color: #000000;
+  }
+  .data-col-3 {
+    width: 275px;
+    left: 783px;
+    top: 367px;
+    white-space: nowrap;
+
+    font-style: normal;
+    font-weight: normal;
+
+    display: inline-block;
+    align-items: center;
+    letter-spacing: 0.25px;
+
+    color: #2196F3;
+  }
+
 }
 

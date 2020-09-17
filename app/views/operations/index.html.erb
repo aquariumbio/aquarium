@@ -44,7 +44,7 @@
   <%= content_for :specific_title do %>
 
 <!-- TODO: Disable if no operations are selected -->
-    <div ng-if=" !current.activity_report.selected">
+    <div ng-if="!current.activity_report.selected">
       <md-button aria-label="Schedule"
                  class='md-raised md-primary'
                  ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
