@@ -20,7 +20,7 @@ development:
   pool: 5
 
 test:
-  adapter: sqlite3
-  database: db/test.sqlite3
+  <<: *default
+  database: <%= ENV['DB_NAME'] %>_test
   pool: 5
   timeout: 5000

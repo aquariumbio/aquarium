@@ -225,6 +225,12 @@ Bioturk::Application.routes.draw do
   put 'users/password',       to: 'users#update_password'
   get 'users/stats/:id',      to: 'users#stats'
 
+  get '/api/v2/jobs(/:id(/:option))',   to: 'api/v2#job'
+  get '/api/v2/users(/:id(/:option))',  to: 'api/v2#user'
+  get '/api/v2/groups(/:id(/:option))', to: 'api/v2#group'
+
+  post '/api/v2/jobs/:id(/:option)',     to: 'api/v2#job_post'
+
   resources :users do
     get 'change_password'
   end
