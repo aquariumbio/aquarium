@@ -23,7 +23,8 @@
       </tr>
 
       <tr ng-repeat="op in operations"
-          ng-if="!jobid || op.last_job.id == jobid">
+          ng-if="!jobid || op.last_job.id == jobid"
+          ng-class="{'selected-row': true == op.selected}">
 
         <td> <!-- Selector -->
           <% if current_user && current_user.is_admin %>
@@ -131,13 +132,11 @@
 
         <% end %>
 
-        <td>{{op.user.name}}</td> <!-- Client -->
+        <td style="word-wrap:break-word">{{op.user.name}}</td> <!-- Client -->
 
         <td>{{op.id}}</td> <!-- Op ID -->
         
         <td>{{ op.updated_at | naturalDate }}</td> <!-- Last Updated -->
-
-
 
       </tr>
 
