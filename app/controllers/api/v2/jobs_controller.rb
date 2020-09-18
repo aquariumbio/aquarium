@@ -1,47 +1,47 @@
 class Api::V2::JobsController < ApplicationController
+  include ApiHelper
 
   def job
     # GET JOB
     id = params[:id].to_i
     job = Job.find(id) rescue nil
-    render json: { "error" => "invalid job" } and return if !job
+    render json: api_error( { "job_id" => ["invalid job"] } ) and return if !job
 
-    render json: job
+    render json: api_ok(job)
   end
 
   def assignment
     # GET JOB
     id = params[:id].to_i
     job = Job.find(id) rescue nil
-    render json: { "error" => "invalid job" } and return if !job
+    render json: api_error( { "job_id" => ["invalid job"] } ) and return if !job
 
     result = job.job_assignment
 
-    render json: result
+    render json: api_ok(result)
   end
 
   def assign
     @id = params[:id].to_i
     job = Job.find(@id) rescue nil
-    render json: { "status" => "invalid job" } and return if !job
+    render json: api_error( { "job_id" => ["invalid job"] } ) and return if !job
 
-    # @by = 331
-    @by = current_user.id rescue nil
+    @by = 331 #current_user.id rescue nil
     @to = params[:to].to_i
 
-    job_post_assignment
+    api_ok(job_post_assignment)
     return
   end
 
   def unassign
     @id = params[:id].to_i
     job = Job.find(@id) rescue nil
-    render json: { "status" => "invalid job" } and return if !job
+    render json: api_error( { "job_id" => ["invalid job"] } ) and return if !job
 
-    @by = 331 #current_user.id
+    @by = 331 #current_user.id rescue nil
     @to = nil
 
-    job_post_assignment
+    api_ok(job_post_assignment)
     return
   end
 
@@ -56,9 +56,9 @@ private
     jal.save!
 
     if jal.id
-      result = jal
+      result = api_ok(jal)
     else
-      result = jal.errors
+      result = api_error(jal.errors)
     end
 
     render json: result

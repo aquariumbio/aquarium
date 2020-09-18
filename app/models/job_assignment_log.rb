@@ -34,7 +34,7 @@ class JobAssignmentLog < ActiveRecord::Base
     if Job.exists?(self.job_id)
       return true
     else
-      self.errors[:job_id] << "Job does not exist"
+      self.errors[:job_id] << "invalid job"
       return false
     end
   end
@@ -43,7 +43,7 @@ class JobAssignmentLog < ActiveRecord::Base
     if User.exists?(self.assigned_by)
       return true
     else
-      self.errors[:assigned_by] << "Assigned_By user does not exist"
+      self.errors[:by_id] << "invalid user"
       return false
     end
   end
@@ -54,7 +54,7 @@ class JobAssignmentLog < ActiveRecord::Base
     elsif User.exists?(self.assigned_to)
       return true
     else
-      self.errors[:assigned_to] << "Assigned_To user does not exist"
+      self.errors[:to_id] << "invalid user"
       return false
     end
   end
