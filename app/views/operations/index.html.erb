@@ -72,7 +72,8 @@
       <md-button class="md-icon-button"
                  ng-click="step_all()"
                  ng-disabled="current.stepping"
-                 data-manager-action="step all">
+                 data-manager-action="step all"
+                 aria-label="Step All">
         <ng-md-icon icon="youtube_searched_for" size="20" aria-label="Step All" style="fill: #444" ng-if="!current.stepping"></ng-md-icon>
         <span ng-if="current.stepping">
           <md-progress-linear class="md-hue-2" md-diameter="20px" style="display: inline-block">
@@ -148,25 +149,25 @@
                   <ng-md-icon icon="assignment_ind" size="20" aria-label="Open assignment menu" style="fill: #444"></ng-md-icon>
                 </md-button>
                 <md-menu-content width="4" class="scrollable flex">
-                  <h1 class="md-title" style="text-align: left, margin-left: 26px">Assign Job</h1>
+                  <h1 class="md-title" style="text-align: left; margin-left: 26px";>Assign Job</h1>
                   
                   <md-radio-group ng-model="selectedTech" class="md-primary">
-                      <md-radio-button ng-repeat="tech in ['Sarah', 'Nathan', 'Kai', 'Maggie']"
+                      <md-radio-button ng-repeat="tech in current.technicians"
                                         ng-value="tech" 
                                         style="margin-left: 26px">
-                          {{ tech }} (# jobs)<br/>
+                          {{ tech['name'] }} (# jobs)<br/>
                       </md-radio-button>
                   </md-radio-group>
 
-                  <div>
+                  <div style="display: flex; justify-content: flex-end;">
                     <md-button ng-click="$mdMenu.close($event)" 
-                            md-no-ink class="md-primary"
-                            aria-label="Close assignment menu">
+                               class="md-primary"
+                               aria-label="Close assignment menu">
                       Cancel
                     </md-button>
                     <md-button ng-click="$mdMenu.close($event)" 
-                            md-no-ink class="md-primary"
-                            aria-label="Close assignment menu">
+                               class="md-primary"
+                               aria-label="Close assignment menu">
                       OK
                     </md-button>
                   </div>

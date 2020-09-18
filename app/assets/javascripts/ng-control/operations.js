@@ -74,6 +74,8 @@
 
       init1();
 
+      get_tech_list();
+
       $scope.status = 'Loading Operation Types ...';
 
       AQ.OperationType.deployed_with_timing().then(operation_types => {
@@ -429,12 +431,24 @@
           store_cookie();
         })
       }
+      
+      function get_tech_list() {
+        // 
+        // "status": 200,
+        // "data": [
+        //     {
+        //         "id": 249,
+        //         "name": "Aidan Cowles",
+        //         "login": "aidopotato"
+        //     } ... ]
+        AQ.get('/api/v2/groups/55/users')
+          .then(response => {
+            console.log(response.data['data']);
 
-// Get technician list 
-      $http.get("/api/v2/group/17")
-      .then(response => {
-          $scope.technicians = response.data;
-      });                                
+            $scope.current.technicians = response.data['data'];
+          });
+      }
+                                
     }]);
 
 })();
