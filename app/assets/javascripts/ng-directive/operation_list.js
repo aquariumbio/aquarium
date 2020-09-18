@@ -27,14 +27,11 @@
 
         $scope.checkAll = function (operations, checkAllOperations, jobid) {
           let ops = operations;
-          console.log(ops)
-          debugger;
 
           if (jobid) {
             ops = operations.filter(operation => operation.last_job.id === jobid)
           }
           aq.each(ops, op => {
-            console.log(op.jobs);
             op.selected = !checkAllOperations;
           });
         };

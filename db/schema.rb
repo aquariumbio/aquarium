@@ -137,7 +137,6 @@ ActiveRecord::Schema.define(version: 20200910000000) do
 
   add_index "field_values", ["allowable_field_type_id"], name: "index_field_values_on_allowable_field_type_id", using: :btree
   add_index "field_values", ["child_item_id"], name: "fk_rails_319b222007", using: :btree
-  add_index "field_values", ["child_sample_id"], name: "fk_rails_e04e5b0273", using: :btree
   add_index "field_values", ["field_type_id"], name: "index_field_values_on_field_type_id", using: :btree
   add_index "field_values", ["parent_class", "parent_id"], name: "index_field_values_on_parent_class_and_parent_id", using: :btree
 
@@ -470,31 +469,19 @@ ActiveRecord::Schema.define(version: 20200910000000) do
   add_foreign_key "account_logs", "users", on_delete: :cascade
   add_foreign_key "accounts", "budgets", on_delete: :cascade
   add_foreign_key "accounts", "jobs", on_delete: :cascade
-  add_foreign_key "accounts", "operations", on_delete: :cascade
   add_foreign_key "accounts", "users", on_delete: :cascade
   add_foreign_key "allowable_field_types", "field_types", on_delete: :cascade
-  add_foreign_key "allowable_field_types", "object_types", on_delete: :cascade
-  add_foreign_key "allowable_field_types", "sample_types", on_delete: :cascade
   add_foreign_key "data_associations", "uploads", on_delete: :cascade
-  add_foreign_key "field_values", "allowable_field_types", on_delete: :cascade
-  add_foreign_key "field_values", "field_types", on_delete: :cascade
   add_foreign_key "field_values", "items", column: "child_item_id", on_delete: :cascade
-  add_foreign_key "field_values", "samples", column: "child_sample_id", on_delete: :cascade
   add_foreign_key "invoices", "budgets", on_delete: :cascade
   add_foreign_key "invoices", "users", on_delete: :cascade
   add_foreign_key "items", "locators", on_delete: :cascade
   add_foreign_key "items", "object_types", on_delete: :cascade
-  add_foreign_key "items", "samples", on_delete: :cascade
   add_foreign_key "job_assignment_logs", "jobs", on_delete: :cascade
   add_foreign_key "job_assignment_logs", "users", column: "assigned_by", on_delete: :cascade
   add_foreign_key "job_assignment_logs", "users", column: "assigned_to", on_delete: :cascade
   add_foreign_key "job_associations", "jobs", on_delete: :cascade
-  add_foreign_key "job_associations", "operations", on_delete: :cascade
-  add_foreign_key "jobs", "groups", on_delete: :cascade
-  add_foreign_key "jobs", "users", on_delete: :cascade
   add_foreign_key "locators", "items", on_delete: :cascade
-  add_foreign_key "locators", "wizards", on_delete: :cascade
-  add_foreign_key "logs", "jobs", on_delete: :cascade
   add_foreign_key "logs", "users", on_delete: :cascade
   add_foreign_key "memberships", "groups", on_delete: :cascade
   add_foreign_key "memberships", "users", on_delete: :cascade
@@ -502,15 +489,10 @@ ActiveRecord::Schema.define(version: 20200910000000) do
   add_foreign_key "operations", "users", on_delete: :cascade
   add_foreign_key "part_associations", "items", column: "collection_id", on_delete: :cascade
   add_foreign_key "part_associations", "items", column: "part_id", on_delete: :cascade
-  add_foreign_key "plan_associations", "operations", on_delete: :cascade
-  add_foreign_key "plan_associations", "plans", on_delete: :cascade
   add_foreign_key "plans", "budgets", on_delete: :cascade
   add_foreign_key "plans", "users", on_delete: :cascade
   add_foreign_key "samples", "sample_types", on_delete: :cascade
   add_foreign_key "samples", "users", on_delete: :cascade
-  add_foreign_key "uploads", "jobs", on_delete: :cascade
   add_foreign_key "user_budget_associations", "budgets", on_delete: :cascade
   add_foreign_key "user_budget_associations", "users", on_delete: :cascade
-  add_foreign_key "wires", "field_values", column: "from_id", on_delete: :cascade
-  add_foreign_key "wires", "field_values", column: "to_id", on_delete: :cascade
 end

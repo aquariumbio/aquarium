@@ -25,7 +25,8 @@ class Api::V2::JobsController < ApplicationController
     job = Job.find(@id) rescue nil
     render json: { "status" => "invalid job" } and return if !job
 
-    @by = current_user.id
+    # @by = 331
+    @by = current_user.id rescue nil
     @to = params[:to].to_i
 
     job_post_assignment
@@ -37,7 +38,7 @@ class Api::V2::JobsController < ApplicationController
     job = Job.find(@id) rescue nil
     render json: { "status" => "invalid job" } and return if !job
 
-    @by = current_user.id
+    @by = 331 #current_user.id
     @to = nil
 
     job_post_assignment
