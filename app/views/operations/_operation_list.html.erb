@@ -8,10 +8,10 @@
       <tr>
         <th class='selector'>
           <input type='checkbox' 
-                 ng-model='selectAllOperations' 
+                 ng-model='selectAllOperations[jobid]' 
                  ng-if="!operation_type.on_the_fly && ( status == 'pending' || status == 'scheduled' || status == 'error' )"
                  aria-label='select all operations'
-                 ng-click="checkAll(operations, selectAllOperations, jobid)"
+                 ng-click="checkAll(operations, selectAllOperations[jobid], jobid)"
                  style="margin: 0">
         </th>
         <th class="output">Input/Output</th>
