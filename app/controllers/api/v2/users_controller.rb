@@ -1,4 +1,5 @@
 class Api::V2::UsersController < ApplicationController
+  include ApiHelper
 
   def index
     # TODO: ADD PERMISSIONS
@@ -12,7 +13,7 @@ class Api::V2::UsersController < ApplicationController
       result << { :id => r.id, :name => r.name, :login => r.login }
     end
 
-    render json: result and return
+    render json: api_ok(result) and return
   end
 
   def user
@@ -21,13 +22,13 @@ class Api::V2::UsersController < ApplicationController
     # GET USER
     id = params[:id].to_i
     user = User.find(id) rescue nil
-    render json: { "error" => "invalid user" } and return if !user
+    render json: api_error( { "user_id" => ["invalid user"] } ) and return if !user
 
     # HACK TO PREVENT AS_JSON OVERRIDE (WHICH IS REALLY INEFFICENT BY THE WAY)
     result = []
     result << { :id => user.id, :name => user.name, :login => user.login }
 
-    render json: result
+    render json: api_ok(result)
   end
 
   def jobs
@@ -36,9 +37,9 @@ class Api::V2::UsersController < ApplicationController
     # GET USER
     id = params[:id].to_i
     user = User.find(id) rescue nil
-    render json: { "error" => "invalid user" } and return if !user
+    render json: api_error( { "user_id" => ["invalid user"] } ) and return if !user
 
-    render json: user.jobs
+    render json: api_ok(user.jobs)
   end
 
   def assigned_jobs
@@ -47,7 +48,7 @@ class Api::V2::UsersController < ApplicationController
     # GET USER
     id = params[:id].to_i
     user = User.find(id) rescue nil
-    render json: { "error" => "invalid user" } and return if !user
+    render json: api_error( { "user_id" => ["invalid user"] } ) and return if !user
 
     # GET RESULTS
     # TODO: FILTER FOR "OPEN" JOBS
@@ -68,7 +69,7 @@ class Api::V2::UsersController < ApplicationController
       }
     end
 
-    render json: result
+    render json: api_ok(result)
   end
 
 end
