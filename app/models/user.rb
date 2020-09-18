@@ -97,6 +97,7 @@ class User < ActiveRecord::Base
     admin_group.add(self)
   end
 
+  # TODO: REMOVE GROUPS TO AVOID N+1 CALLS WHEN FINDING USERS, IMPLEMENT GROUPS AS A DEFINED METHOD.
   def as_json(opts = {})
     j = super opts
     j[:groups] = groups.as_json

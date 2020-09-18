@@ -81,6 +81,5 @@ coverage
 /docker/db_test
 
 # custom controller and views for development
-/app/assets/stylesheets/dev_only.css.scss
 /app/controllers/dev_only_controller.rb
 /app/views/dev_only/*

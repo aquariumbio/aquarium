@@ -49,7 +49,9 @@ class JobAssignmentLog < ActiveRecord::Base
   end
 
   def assigned_to_exists
-    if User.exists?(self.assigned_to)
+    if !self.assigned_to
+      return true
+    elsif User.exists?(self.assigned_to)
       return true
     else
       self.errors[:assigned_to] << "Assigned_To user does not exist"

@@ -225,11 +225,23 @@ Bioturk::Application.routes.draw do
   put 'users/password',       to: 'users#update_password'
   get 'users/stats/:id',      to: 'users#stats'
 
-  get '/api/v2/jobs(/:id(/:option))',   to: 'api/v2#job'
-  get '/api/v2/users(/:id(/:option))',  to: 'api/v2#user'
-  get '/api/v2/groups(/:id(/:option))', to: 'api/v2#group'
+  # API V2
+  get '/api/v2/users',                   to: 'api/v2/users#index'
+  get '/api/v2/users/:id',               to: 'api/v2/users#user'
+  get '/api/v2/users/:id/jobs',          to: 'api/v2/users#jobs'
+  get '/api/v2/users/:id/assigned_jobs', to: 'api/v2/users#assigned_jobs'
 
-  post '/api/v2/jobs/:id(/:option)',     to: 'api/v2#job_post'
+  get '/api/v2/jobs/:id',                to: 'api/v2/jobs#job'
+  get '/api/v2/jobs/:id/assignment',    to: 'api/v2/jobs#assignment'
+
+  get '/api/v2/groups',                  to: 'api/v2/groups#index'
+  get '/api/v2/groups/:id',              to: 'api/v2/groups#group'
+  get '/api/v2/groups/:id/users',        to: 'api/v2/groups#users'
+
+  get '/api/v2/roles/10/users',          to: 'api/v2/groups#users', :defaults => { :id => 55 }
+
+  post '/api/v2/jobs/:id/assign',        to: 'api/v2/jobs#assign'
+  post '/api/v2/jobs/:id/unassign',      to: 'api/v2/jobs#unassign'
 
   resources :users do
     get 'change_password'
