@@ -108,12 +108,30 @@ class Job < ActiveRecord::Base
                                p['dt(5i)'].to_i).to_time
   end
 
+  # NOTES
+  #
+  # job.pc
+  #   >0: active / runnning (CANNOT GET PC > 0, IS THAT POSSIBLE?)
+  #    0: active / runnning
+  #   -1: not started
+  #   -2: completed (could be error/abort/cancel)
+  #
+  # job.status
+  #   checks if >=0 or -1
+  #   calculates value if -2 (I think we should track "error"  <vs> "abort" <vs> "cancel" <vs> "completed" as separate pc values)
+  #
+  # UX flow
+  #   job created   => user_id = nil,       pc = -1
+  #   job started   => user_id = <user_id>, pc = 0
+  #   job completed => user_id = <user_id>, pc = -2
+  #   pc cannot be > 0 (the finish_show method in lib/krill/base.rb has a line that increments jobs.pc but it is commented out)
+
   def done?
-    pc == Job.COMPLETED
+    pc == Job.COMPLETED # -2
   end
 
   def not_started?
-    pc == Job.NOT_STARTED
+    pc == Job.NOT_STARTED # -1
   end
 
   def pending?
