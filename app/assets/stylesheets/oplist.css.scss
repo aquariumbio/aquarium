@@ -12,6 +12,10 @@
     td {
       font-size: 12px;
       line-height: 18px;
+      span {
+        vertical-align: top;
+        text-align: left;
+      }
     }
     .selector {
       width: 20px;
@@ -35,15 +39,11 @@
     width: 22px;
     left: 652px;
     top: 367px;
-    
     font-style: normal;
     font-weight: bold;
-    /* or 150% */
-    
     display: inline-block;
     text-align: right;
     letter-spacing: 0.25px;
-    
     color: #000000; 
   }
 
@@ -54,26 +54,21 @@
     white-space: nowrap;
     font-style: normal;
     font-weight: normal;
-    
     display: inline-block;
     align-items: center;
     letter-spacing: 0.25px;
-    
     color: #000000;
   }
   .data-col-3 {
-    width: 275px;
+    width: 400px;
     left: 783px;
     top: 367px;
-    white-space: nowrap;
-
+    white-space: inherit;
     font-style: normal;
     font-weight: normal;
-
     display: inline-block;
     align-items: center;
     letter-spacing: 0.25px;
-
     color: #2196F3;
   }
 

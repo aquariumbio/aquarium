@@ -151,7 +151,6 @@
             date: $scope.current.activity_report.date
           }
         });
-        console.log(aqCookieManager.get_object("managerState"));
       }
 
       function highlight_categories(numbers) {
@@ -226,19 +225,6 @@
           criteria.user_id = $scope.current_user.id;
         }
 
-        function get_job_assignment(job_id) {
-        	let assignment = {};
-
-          AQ.get('/api/v2/jobs/' + job_id + '/assignment')
-          .then(response => {
-            if (response.data.status === 200) {
-              assignment[job_id] = response.data.data
-            }
-          });
-          console.log("Assignment: " + JSON.stringify(assignment, null, '\t'));
-          return assignment;
-        }
-
         AQ.Operation.manager_list(criteria, options).then(operations => {
           aq.each(operations, op => {
             op.jobs = aq.collect(op.jobs, job => AQ.Job.record(job));
@@ -266,14 +252,6 @@
             return op.jobs.length > 0 ? op.last_job.id : null
           }));
           
-          $scope.job_assignments = {};
-          if ($scope.jobs.length > 0) {
-            $scope.jobs.forEach((job_id) => {
-              $scope.job_assignments[job_id] = get_job_assignment(job_id);
-            })
-            return $scope.job_assignments
-          };
-
           $scope.applying_user_filter = false;
           $scope.$apply();
         })
@@ -353,15 +331,16 @@
 
       };
 
-      $scope.unschedule = function (operation_type, jid) {
+      $scope.unschedule = function (operation_type) {
 
-        var ops = aq.where(operation_type.operations, op => op.selected && op.last_job.id === jid);
+        var ops = aq.where(operation_type.operations, op => op.selected);
 
         if (ops.length > 0) {
           operation_type.unschedule(ops).then(() => {
             get_numbers().then(numbers => {
               $scope.numbers = numbers;
-              $scope.select(operation_type, 'pending_true', ops);
+// TODO: if no jobs remain after removing operations navigate to pending page
+              $scope.select(operation_type, 'scheduled', ops);
               $scope.$apply();
             });
           });
@@ -455,14 +434,7 @@
       }
       
       function get_tech_list() {
-        // 
-        // "status": 200,
-        // "data": [
-        //     {
-        //         "id": 249,
-        //         "name": "Aidan Cowles",
-        //         "login": "aidopotato"
-        //     } ... ]
+
         AQ.get('/api/v2/groups/55/users')
           .then(response => {
             $scope.current.technicians = response.data.data;
@@ -470,8 +442,6 @@
           // TODO: error handling
 
       }
-
-      
 
       $scope.assign_job = function (assign_to_id, job_id) {
         debugger;
@@ -487,6 +457,23 @@
           }
 
         });
+      }
+
+      function get_job_assignment(job_id) {
+        const assignemtns = $scope.current.jobs.reduce((a,b)=> (a[b]=null,a),{});
+        console.log(assignemtns)
+
+        $scope.current.jobs.forEach(job => {
+          
+        });
+
+        AQ.get('/api/v2/jobs/' + job_id + '/assignment')
+        .then(response => {
+          if (response.data.status === 200) {
+            return response.data.data
+          }
+        });
+        
       }
                                 
     }]);
