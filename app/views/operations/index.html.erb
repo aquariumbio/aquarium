@@ -121,12 +121,12 @@
 
       <div ng-if="jobs.length > 0" ng-repeat="job_id in jobs" class='job'  style='margin: 16px'>
 
-        <md-toolbar class="job-toolbar">
+        <md-toolbar class='job-toolbar'>
 
           <div class='md-toolbar-tools'>
 
-            <h2 flex md-truncate>
-              Job <a href="/jobs/{{job_id}}">{{job_id}}</a>
+            <h2 flex md-truncate style="color: #eee;">
+              {{current.operation_type.name}} - Job <a href="/jobs/{{job_id}}">{{job_id}}</a>
               <span ng-if="debugging_job_id == job_id">
                 <md-progress-circular class="md-hue-2" md-diameter="20px" style="display: inline-block">
                 </md-progress-circular> 
@@ -135,23 +135,25 @@
           
             <% if current_user && current_user.is_admin %>
               <md-button ng-if="current.status != 'running'"
-                         class='md-icon-button'
+                         class='md-icon-button md-light'
                          ng-href="/krill/start?job={{job_id}}"
                          aria-lable="Run"
                          data-manager-job-action="run">
-                        <ng-md-icon icon="play_circle_outline" size="20" aria-label="run" style="fill: #444"></ng-md-icon>
+                <ng-md-icon class="md-light" icon="play_circle_outline" size="24" aria-label="run"></ng-md-icon>
               </md-button>
 
               <md-menu >
                 <md-button ng-click="$mdMenu.open($event)" 
                            class='md-icon-button'
                            aria-label="Open assignment menu">
-                  <ng-md-icon icon="assignment_ind" size="20" aria-label="Open assignment menu" style="fill: #444"></ng-md-icon>
+                  <ng-md-icon class="md-light" icon="assignment_ind" size="24" aria-label="Open assignment menu"></ng-md-icon>
                 </md-button>
-                <md-menu-content width="4" class="scrollable flex">
-                  <h1 class="md-title" style="text-align: left; margin-left: 26px";>Assign Job</h1>
+                <md-menu-content  class="scrollable flex" style="padding-top: 0;">
+                  <div style="background-color: #fff; position: absolute; z-index: 1; width: 100%">
+                    <h1 class="md-title" style="text-align: left; margin-left: 26px";>Assign Job</h1>
+                  </div>
                   
-                  <md-radio-group ng-model="selectedTech" class="md-primary">
+                  <md-radio-group ng-model="selectedTech" class="md-primary" style="z-index: 0; margin-top: 62px; margin-bottom: 50px;">
                       <md-radio-button ng-repeat="tech in current.technicians"
                                         ng-value="tech" 
                                         style="margin-left: 26px">
@@ -159,13 +161,13 @@
                       </md-radio-button>
                   </md-radio-group>
 
-                  <div style="display: flex; justify-content: flex-end;">
+                  <div style="position: absolute; right: 0px; top: 256px; display: flex; justify-content: flex-end; z-index:1; width:100%; background-color: #fff;">
                     <md-button ng-click="$mdMenu.close($event)" 
                                class="md-primary"
                                aria-label="Close assignment menu">
                       Cancel
                     </md-button>
-                    <md-button ng-click="$mdMenu.close($event)" 
+                    <md-button ng-click="assign_job(selectedTech['id'], job_id)" 
                                class="md-primary"
                                aria-label="Close assignment menu">
                       OK
@@ -181,7 +183,7 @@
                            ng-click="debug(current.operation_type,job_id)"
                            aria-lable="Debug"
                            data-manager-job-action="debug">
-                  <ng-md-icon icon="bug_report" size="20" aria-label="Debug" style="fill: #444"></ng-md-icon>
+                  <ng-md-icon class="md-light" icon="bug_report" size="24" aria-label="Debug"></ng-md-icon>
                 </md-button>
               <% end %>
             <% end %>

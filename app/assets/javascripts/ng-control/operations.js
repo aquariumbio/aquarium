@@ -226,6 +226,19 @@
           criteria.user_id = $scope.current_user.id;
         }
 
+        function get_job_assignment(job_id) {
+        	let assignment = {};
+
+          AQ.get('/api/v2/jobs/' + job_id + '/assignment')
+          .then(response => {
+            if (response.data.status === 200) {
+              assignment[job_id] = response.data.data
+            }
+          });
+          console.log("Assignment: " + JSON.stringify(assignment, null, '\t'));
+          return assignment;
+        }
+
         AQ.Operation.manager_list(criteria, options).then(operations => {
           aq.each(operations, op => {
             op.jobs = aq.collect(op.jobs, job => AQ.Job.record(job));
@@ -252,6 +265,15 @@
           $scope.jobs = aq.uniq(aq.collect(operation_type.operations, op => {
             return op.jobs.length > 0 ? op.last_job.id : null
           }));
+          
+          $scope.job_assignments = {};
+          if ($scope.jobs.length > 0) {
+            $scope.jobs.forEach((job_id) => {
+              $scope.job_assignments[job_id] = get_job_assignment(job_id);
+            })
+            return $scope.job_assignments
+          };
+
           $scope.applying_user_filter = false;
           $scope.$apply();
         })
@@ -443,10 +465,28 @@
         //     } ... ]
         AQ.get('/api/v2/groups/55/users')
           .then(response => {
-            console.log(response.data['data']);
-
-            $scope.current.technicians = response.data['data'];
+            $scope.current.technicians = response.data.data;
           });
+          // TODO: error handling
+
+      }
+
+      
+
+      $scope.assign_job = function (assign_to_id, job_id) {
+        debugger;
+        $http.post('/api/v2/jobs/' + job_id + '/assign?to=' + assign_to_id)
+        .then(response =>  {
+          if (response.data.status === 200) {
+            
+            $scope.job_assignments.job_id = $scope.current.technicians.filter(tech => {
+              return tech.id === response.data.data.assign_to_id
+            });
+          } else {
+            console.log("Error during job assignment: " + JSON.stringify(response.data.data))
+          }
+
+        });
       }
                                 
     }]);

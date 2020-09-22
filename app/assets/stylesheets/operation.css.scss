@@ -100,15 +100,24 @@
   }  
 
   .job {
-    border: 1pt solid #bbb;
+    // border: 1pt solid #bbb;
     .job-toolbar {
-      background: #80d8ff;
-      color: black;
-      min-height: 34px;
-      max-height: 34px;         
+      background: #2196F3;
+      color: #eee;
+      filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.24));
+      // min-height: 34px;
+      // max-height: 34px;
+      
+      .md-toolbar-tools {
+        color: #eee;
+        .md-button.md-icon-button {
+          fill: #eee;
+        }
+      }
     }
     margin-bottom: 10px;
   }
+
 
   .oplist {
     padding: 10px 10px 0 10px;
