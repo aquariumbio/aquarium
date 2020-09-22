@@ -118,13 +118,29 @@ class Job < ActiveRecord::Base
   #
   # job.status
   #   checks if >=0 or -1
-  #   calculates value if -2 (I think we should track "error"  <vs> "abort" <vs> "cancel" <vs> "completed" as separate pc values)
+  #   calculates value if -2
   #
   # UX flow
   #   job created   => user_id = nil,       pc = -1
   #   job started   => user_id = <user_id>, pc = 0
   #   job completed => user_id = <user_id>, pc = -2
   #   pc cannot be > 0 (the finish_show method in lib/krill/base.rb has a line that increments jobs.pc but it is commented out)
+  #
+  # TODO: WE SHOULD CREATE A JOB_STATUSES TABLE IN THE DB TO TRACK STATUSES
+  #       THE TABLE SHOULD HAVE <ID>, <STATUS>, <DONE> FIELDS, WHERE <STATUS> = ACTUAL STATUS AND <DONE> = A DONE FLAG
+  #
+  #       ACTUAL STATUSES
+  #         - pending
+  #         - running
+  #         - completed
+  #         - errored
+  #         - aborted
+  #         - canceled
+  #
+  #        DONE FLAG
+  #          0 = not done
+  #         -1 = done with error
+  #          1 = done without error
 
   def done?
     pc == Job.COMPLETED # -2
