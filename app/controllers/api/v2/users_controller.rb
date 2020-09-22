@@ -39,7 +39,19 @@ class Api::V2::UsersController < ApplicationController
     user = User.find(id) rescue nil
     render json: api_error( { "user_id" => ["invalid user"] } ) and return if !user
 
-    render json: api_ok(user.jobs)
+    # HARDCODED JOB STATUSES
+    job_statuses = { "pending" => -1, "running" => 0, "done" => -2 }
+
+    pcs = [ ]
+    params[:status].to_a.each do |s|
+      pcs << job_statuses[s] if job_statuses[s]
+    end
+
+    if pcs == [ ]
+      render json: api_ok(user.jobs)
+    else
+      render json: api_ok(user.jobs.where("pc in (#{pcs.join(',')})"))
+    end
   end
 
   def assigned_jobs
@@ -50,15 +62,27 @@ class Api::V2::UsersController < ApplicationController
     user = User.find(id) rescue nil
     render json: api_error( { "user_id" => ["invalid user"] } ) and return if !user
 
+    # HARDCODED JOB STATUSES
+    job_statuses = { "pending" => -1, "running" => 0, "done" => -2 }
+
+    pcs = [ ]
+    params[:status].to_a.each do |s|
+      pcs << job_statuses[s] if job_statuses[s]
+    end
+
     # GET RESULTS
-    # TODO: FILTER FOR "OPEN" JOBS
-    res = user.jobs_assigned_to
+    if pcs == [ ]
+      res = user.jobs_assigned_to
+    else
+      res = user.jobs_assigned_to.where("pc in (#{pcs.join(',')})")
+    end
 
     # CUSTOMIZE RESULTS
     result = []
     res.each do |r|
       result << {
         :job_id       => r.job_id,
+        :pc           => r.pc,
         :assigned_by  => r.assigned_by,
         :by_name      => r.by_name,
         :by_login     => r.by_login,
