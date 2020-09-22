@@ -45,12 +45,57 @@ This document describes the current API v2
 3. Get Jobs run by User &lt;user_id>
     ```bash
     GET /api/v2/users/<user_id>/jobs
+    DATA: { status = [ one-or-more <job status> ] }
     ```
+
+    <div>
+      where
+      <ul><li>
+        Valid &lt;job status> values are 'pending', 'running', and 'done'
+      </li><li>
+         DATA can be passed as key-value pairs or as formdata in an AJAX request
+      </li><li>
+         If there are no (valid) status[] parameters, the API returns all jobs run by &lt;user_id>
+      </li><li>
+         If there are one-or-more (valid) status[] paremeters, the API returns those jobs that have any of the statuses (i.e., uses OR logic)
+      </li></ul>
+    </div>
+    <br>
+
+    <div>
+      Example: To get jobs that are still running
+      <ul><li>
+        GET /api/v2/users/1/jobs?status[]=running
+      </li></ul>
+    </div>
+
 
 4. Get Jobs assigned to User &lt;user_id>
     ```bash
     GET /api/v2/users/<user_id>/assigned_jobs
+    DATA: { status = [ one-or-more <job status> ] }
     ```
+
+    <div>
+      where
+      <ul><li>
+        Valid &lt;job status> values are 'pending', 'running', and 'done'
+      </li><li>
+         DATA can be passed as key-value pairs or as formdata in an AJAX request
+      </li><li>
+         If there are no (valid) status[] parameters, the API returns all jobs run by &lt;user_id>
+      </li><li>
+         If there are one-or-more (valid) status[] paremeters, the API returns those jobs that have any of the statuses (i.e., uses OR logic)
+      </li></ul>
+    </div>
+    <br>
+
+    <div>
+      Example: To get assigned jobs that are not done
+      <ul><li>
+        GET /api/v2/users/1/assigned_jobs?status[]=pending&status[]=running
+      </li></ul>
+    </div>
 
 5. Get Job &lt;job_id>
     ```bash
