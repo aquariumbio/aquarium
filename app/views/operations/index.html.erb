@@ -129,7 +129,7 @@
 
             <h2 flex md-truncate style="color: #eee;">
               {{current.operation_type.name}} - Job <a href="/jobs/{{job_id}}">{{job_id}}</a>
-              <span ng-if="current.operation_type.operations[0].jobs[0].assignment != undefined"> - Assigned to <b>{{current.operation_type.operations[0].jobs[0].assignment.to_name}}</b> </span>
+              <span ng-if="job_assignments[job_id] != undefined"> - Assigned to {{job_assignments[job_id].to_name}} </span>
               <span ng-if="debugging_job_id == job_id">
                 <md-progress-circular class="md-hue-2" md-diameter="20px" style="display: inline-block">
                 </md-progress-circular> 
@@ -172,7 +172,7 @@
                                aria-label="Close assignment menu">
                       Cancel
                     </md-button>
-                    <md-button ng-click="assign_job(selectedTech['id'], job_id)" 
+                    <md-button ng-click="assign_job(selectedTech['id'], selectedTech['name'], job_id)" 
                                class="md-primary"
                                aria-label="Close assignment menu"
                                ng-disabled="disable_assign(selectedTech)">

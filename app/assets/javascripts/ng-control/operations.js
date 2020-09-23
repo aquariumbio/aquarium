@@ -248,27 +248,26 @@
               }
             })
           });
+          
           $scope.jobs = aq.uniq(aq.collect(operation_type.operations, op => {
-            // let job_assignment;
-            // if (op.jobs.length > 0) {
-            //   let job_id = op.last_job.id;
-            //   let details = op.jobs[job_id].assignment;
-            //   job_assignment = { job_id: details };
-            //   return job_assignment
-            // } else {
-            //   null;
-            // }
-            //$scope.current.operation_type.operations[0].jobs[0].assignment
             return op.jobs.length > 0 ? op.last_job.id : null
           }));
 
-      
+          let job_assignments = new Object;
+          aq.each(operation_type.operations, op => {
+            if (op.jobs.length > 0) {
 
+              const assignment = { 
+                assigned_to: op.last_job.assignment.assigned_to,
+                to_name: op.last_job.assignment.to_name
+              }
+             job_assignments[op.last_job.id] == undefined ? job_assignments[op.last_job.id] = assignment : null
+            }
+          });
+          $scope.job_assignments = job_assignments;
 
           $scope.applying_user_filter = false;
           $scope.$apply();
-          console.log($scope.jobs);
-
         })
 
       };
@@ -458,24 +457,24 @@
 
       }
 
-      $scope.assign_job = function (assign_to_id, job_id) {
+      $scope.assign_job = function (assign_to_id, to_name, job_id) {
 
         AQ.post(`/api/v2/jobs/${job_id}/assign?to=${assign_to_id}`, {})
-        .then(response => {
-          if (response.data.status === 200) {
-            console.log(response.data);
-          } else {
-            console.log("Error during job assignment: " + JSON.stringify(response.data.data))
-          }
-        });
+          .then(function(response){
+            $scope.job_assignments[job_id] = {
+                assigned_to: assign_to_id,
+                to_name: to_name
+              }
+            }, function(response){
+              console.log("Error during job assignment: " + JSON.stringify(response.data.data))
+            }
+          );
       }
 
       function unassign_job(job_id) {
-
         AQ.post(`/api/v2/jobs/${job_id}/unassign`, {})
         .then(function(response){
           console.log(response.data);
-           
         },
           function(response){
             console.log("Error during job assignment: " + JSON.stringify(response.data.data))
@@ -483,14 +482,12 @@
       }
 
       function get_job_assignment(job_id) {
-
         AQ.get(`/api/v2/jobs/${job_id}/assignment`)
         .then(response => {
           if (response.data.status === 200) {
             return response.data.data
           }
         });
-        
       }
 
       $scope.disable_batch_button = function() {
