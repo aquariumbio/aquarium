@@ -14,12 +14,12 @@
                  ng-click="checkAll(operations, selectAllOperations[jobid], jobid)"
                  style="margin: 0">
         </th>
-        <th class="output">Input/Output</th>
         <th>Plan</th>
-        <th>Status</th>
+        <th class="output">Input/Output</th>
+        <th>Last Updated</th>
         <th>Client</th>
-        <th class='id'>Op Id</th>
-        <th>Last Update</th>
+        <th>Op ID</th>
+        <th>Status</th>
       </tr>
 
       <tr ng-repeat="op in operations"
@@ -31,8 +31,14 @@
             <input type='checkbox'
                    ng-model='op.selected'
                    ng-if="!operation_type.on_the_fly && ( status == 'pending' || status == 'scheduled' || status == 'error' )"
-                   ng-attr-data-operation-checkbox="{{op.id}}">
+                   ng-attr-data-operation-checkbox="{{op.id}}"
+                   style="margin: 0">
           <% end %>
+        </td>
+        
+        <td> <!-- Plan -->
+          <a ng-repeat="plan in op.plans" href="/plans?plan_id={{plan.id}}" target="designer">{{plan.id}}{{$last ? '' : ', '}}</a>
+          <span ng-if="op.plans.length == 0">n/a</span>
         </td>
 
         <td> <!-- Input/Output -->
@@ -98,10 +104,11 @@
           </ul>
         </td>
 
-        <td> <!-- Plan -->
-          <a ng-repeat="plan in op.plans" href="/plans?plan_id={{plan.id}}" target="designer">{{plan.id}}{{$last ? '' : ', '}}</a>
-          <span ng-if="op.plans.length == 0">n/a</span>
-        </td>
+        <td>{{ op.updated_at | naturalDate }}</td> <!-- Last Updated -->
+
+        <td style="word-wrap:break-word">{{op.user.name}}</td> <!-- Client -->
+
+        <td>{{op.id}}</td> <!-- Operation ID -->
 
         <% if current_user && current_user.is_admin %> <!-- Status w/ update -->
 
@@ -132,12 +139,6 @@
 
         <% end %>
 
-        <td style="word-wrap:break-word">{{op.user.name}}</td> <!-- Client -->
-
-        <td>{{op.id}}</td> <!-- Operation ID -->
-        
-        <td>{{ op.updated_at | naturalDate }}</td> <!-- Last Updated -->
-
       </tr>
 
       <tr ng-if="( status == 'error' || status == 'done' ) && operations.length < $parent.$parent.numbers[operationtype.id][status]">
@@ -150,7 +151,7 @@
 
     </table>
 
-    <h1 ng-if="operations.length == 0" class='md-title'>No operations</h1>
+    <h1 ng-if="operations.length == 0" class='md-title'>No {{status}} operations</h1>
 
     <h1 ng-if="!operations" class='md-title'>Checking for operations...</h1>
 

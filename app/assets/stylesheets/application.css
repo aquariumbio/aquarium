@@ -11,6 +11,7 @@
  *= require_self
  *= require_tree .
 */
+@import url('https://fonts.googleapis.com/css?family=Roboto');
 
 @media print
 {
@@ -21,6 +22,7 @@
 }
 
 body {
+  font-family: Roboto, sans-serif;
   padding-top: 48px !important;
   padding-bottom: 0px;
 }
