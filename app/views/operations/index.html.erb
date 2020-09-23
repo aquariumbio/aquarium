@@ -43,7 +43,6 @@
 
   <%= content_for :specific_title do %>
 
-<!-- TODO: Disable if no operations are selected -->
     <div ng-if="!current.activity_report.selected">
       <md-button aria-label="Schedule"
                  class='md-raised md-primary'
@@ -76,6 +75,7 @@
                  ng-disabled="current.stepping"
                  data-manager-action="step all"
                  aria-label="Step All">
+        <md-tooltip md-direction="bottom">Step All</md-tooltip>
         <ng-md-icon icon="youtube_searched_for" size="20" aria-label="Step All" style="fill: #444" ng-if="!current.stepping"></ng-md-icon>
         <span ng-if="current.stepping">
           <md-progress-linear class="md-hue-2" md-diameter="20px" style="display: inline-block">
@@ -142,6 +142,7 @@
                          ng-href="/krill/start?job={{job_id}}"
                          aria-lable="Run"
                          data-manager-job-action="run">
+                <md-tooltip md-direction="bottom">Run</md-tooltip>
                 <ng-md-icon class="md-light" icon="play_circle_outline" size="24" aria-label="run"></ng-md-icon>
               </md-button>
 
@@ -149,6 +150,7 @@
                 <md-button ng-click="$mdMenu.open($event)" 
                            class='md-icon-button'
                            aria-label="Open assignment menu">
+                  <md-tooltip md-direction="bottom">Assign</md-tooltip>
                   <ng-md-icon class="md-light" icon="assignment_ind" size="24" aria-label="Open assignment menu"></ng-md-icon>
                 </md-button>
                 <md-menu-content  class="scrollable flex" style="padding-top: 0;">
@@ -187,6 +189,7 @@
                            ng-click="debug(current.operation_type,job_id)"
                            aria-lable="Debug"
                            data-manager-job-action="debug">
+                  <md-tooltip md-direction="bottom">Debug</md-tooltip>
                   <ng-md-icon class="md-light" icon="bug_report" size="24" aria-label="Debug"></ng-md-icon>
                 </md-button>
               <% end %>
