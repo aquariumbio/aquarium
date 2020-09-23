@@ -249,11 +249,26 @@
             })
           });
           $scope.jobs = aq.uniq(aq.collect(operation_type.operations, op => {
+            // let job_assignment;
+            // if (op.jobs.length > 0) {
+            //   let job_id = op.last_job.id;
+            //   let details = op.jobs[job_id].assignment;
+            //   job_assignment = { job_id: details };
+            //   return job_assignment
+            // } else {
+            //   null;
+            // }
+            //$scope.current.operation_type.operations[0].jobs[0].assignment
             return op.jobs.length > 0 ? op.last_job.id : null
           }));
-          
+
+      
+
+
           $scope.applying_user_filter = false;
           $scope.$apply();
+          console.log($scope.jobs);
+
         })
 
       };
@@ -444,30 +459,32 @@
       }
 
       $scope.assign_job = function (assign_to_id, job_id) {
-        debugger;
-        $http.post('/api/v2/jobs/' + job_id + '/assign?to=' + assign_to_id)
-        .then(response =>  {
+
+        AQ.post(`/api/v2/jobs/${job_id}/assign?to=${assign_to_id}`, {})
+        .then(response => {
           if (response.data.status === 200) {
-            
-            $scope.job_assignments.job_id = $scope.current.technicians.filter(tech => {
-              return tech.id === response.data.data.assign_to_id
-            });
+            console.log(response.data);
           } else {
             console.log("Error during job assignment: " + JSON.stringify(response.data.data))
           }
-
         });
       }
 
+      function unassign_job(job_id) {
+
+        AQ.post(`/api/v2/jobs/${job_id}/unassign`, {})
+        .then(function(response){
+          console.log(response.data);
+           
+        },
+          function(response){
+            console.log("Error during job assignment: " + JSON.stringify(response.data.data))
+        }); 
+      }
+
       function get_job_assignment(job_id) {
-        const assignemtns = $scope.current.jobs.reduce((a,b)=> (a[b]=null,a),{});
-        console.log(assignemtns)
 
-        $scope.current.jobs.forEach(job => {
-          
-        });
-
-        AQ.get('/api/v2/jobs/' + job_id + '/assignment')
+        AQ.get(`/api/v2/jobs/${job_id}/assignment`)
         .then(response => {
           if (response.data.status === 200) {
             return response.data.data
@@ -475,7 +492,23 @@
         });
         
       }
-                                
+
+      $scope.disable_batch_button = function() {
+        if ($scope.current.operation_type.operations) {
+          // Enable button if a single operation has been selected
+          return !$scope.current.operation_type.operations.some(operation => operation.selected == true)
+        } else {
+          return true
+        }
+      }
+
+      $scope.disable_assign = function(techAssignment) {
+        if (techAssignment == undefined) {
+          return true;
+        } else {
+          return false;
+        }
+      }
     }]);
 
 })();

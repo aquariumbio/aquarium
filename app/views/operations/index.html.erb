@@ -48,6 +48,7 @@
       <md-button aria-label="Schedule"
                  class='md-raised md-primary'
                  ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
+                 ng-disabled="disable_batch_button()"
                  ng-click="batch(current.operation_type)"
                  data-manager-action="schedule">
         Create Job
@@ -56,6 +57,7 @@
       <md-button ng-if="current.status === 'scheduled'"
                  class='md-raised md-primary'
                  ng-click="unschedule(current.operation_type)"
+                 ng-disabled="disable_batch_button()"
                  aria-lable="Unschedule"
                  data-manager-job-action="remove">
         Remove Operation(s)
@@ -127,6 +129,7 @@
 
             <h2 flex md-truncate style="color: #eee;">
               {{current.operation_type.name}} - Job <a href="/jobs/{{job_id}}">{{job_id}}</a>
+              <span ng-if="current.operation_type.operations[0].jobs[0].assignment != undefined"> - Assigned to <b>{{current.operation_type.operations[0].jobs[0].assignment.to_name}}</b> </span>
               <span ng-if="debugging_job_id == job_id">
                 <md-progress-circular class="md-hue-2" md-diameter="20px" style="display: inline-block">
                 </md-progress-circular> 
@@ -142,7 +145,7 @@
                 <ng-md-icon class="md-light" icon="play_circle_outline" size="24" aria-label="run"></ng-md-icon>
               </md-button>
 
-              <md-menu >
+              <md-menu > <!-- Technician assignment menu -->
                 <md-button ng-click="$mdMenu.open($event)" 
                            class='md-icon-button'
                            aria-label="Open assignment menu">
@@ -169,7 +172,8 @@
                     </md-button>
                     <md-button ng-click="assign_job(selectedTech['id'], job_id)" 
                                class="md-primary"
-                               aria-label="Close assignment menu">
+                               aria-label="Close assignment menu"
+                               ng-disabled="disable_assign(selectedTech)">
                       OK
                     </md-button>
                   </div>
