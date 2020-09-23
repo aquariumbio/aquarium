@@ -255,7 +255,7 @@
 
           let job_assignments = new Object;
           aq.each(operation_type.operations, op => {
-            if (op.jobs.length > 0) {
+            if (op.jobs.length > 0 && op.last_job.assignment != null) {
 
               const assignment = { 
                 assigned_to: op.last_job.assignment.assigned_to,
