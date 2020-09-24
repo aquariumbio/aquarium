@@ -37,7 +37,7 @@ This document describes the current API v2
     GET /api/v2/users
     ```
 
-2. Get User &ltuser_id>
+2. Get User &lt;user_id>
     ```bash
     GET /api/v2/users/<user_id>
     ```
