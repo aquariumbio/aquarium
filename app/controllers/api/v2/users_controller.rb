@@ -25,8 +25,7 @@ class Api::V2::UsersController < ApplicationController
     render json: api_error( { "user_id" => ["invalid user"] } ) and return if !user
 
     # HACK TO PREVENT AS_JSON OVERRIDE (WHICH IS REALLY INEFFICENT BY THE WAY)
-    result = []
-    result << { :id => user.id, :name => user.name, :login => user.login }
+    result = { :id => user.id, :name => user.name, :login => user.login }
 
     render json: api_ok(result)
   end
