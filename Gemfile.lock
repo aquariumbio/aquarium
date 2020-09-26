@@ -11,6 +11,12 @@ PATH
       octokit (~> 4.15)
       yard (~> 0.9.20)
 
+PATH
+  remote: components/dev_only
+  specs:
+    dev_only (0.0.1)
+      rails (~> 4.2.11.3)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -281,6 +287,7 @@ DEPENDENCIES
   aws-sdk-ses
   bcrypt (~> 3.1)
   closure-compiler
+  dev_only!
   factory_bot_rails
   ipaddress
   mysql2 (~> 0.5.2)
