@@ -79,7 +79,3 @@ coverage
 /docker/db_prod
 /docker/db_dev
 /docker/db_test
-
-# custom controller and views for development
-/app/controllers/dev_only_controller.rb
-/app/views/dev_only/*

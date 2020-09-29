@@ -68,6 +68,7 @@ group :development do
   gem 'web-console', '~> 3.0'
   gem 'yard', '>= 0.9.20'
   gem 'yard-activerecord'
+  gem 'dev_only', path: 'components/dev_only'
 end
 
 group :development, :test do
