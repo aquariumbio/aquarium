@@ -93,15 +93,17 @@ body {
 
 .fflex_title {
   padding:8px 0;
-  background-color:#065683;
+  background-color:#2196f3;
+  font-size: 18px;
   color:white;
 }
 
 .fflex_row {
   padding:8px 0;
   align-items: center;
-  border-bottom: 1px dotted #d0d0d0;
+  border-bottom: 1px solid #c0c0c0;
 }
+
 
 @media screen and (max-width: 767px) {
   .fflex_768 .fflex_resp {
@@ -110,6 +112,10 @@ body {
 
   .fflex_768 .fflex_title {
     display:none;
+  }
+
+  .fflex_768 .first_row {
+    border-top: 1px solid #c0c0c0;
   }
 
   .none_768 {
@@ -165,8 +171,9 @@ body {
       Started
     </div>
   </div>
+  <% first_row = "first_row" %>
   <% @jobs.each do |job| %>
-    <div class="fflex_resp fflex_row">
+    <div class="fflex_resp fflex_row <%= first_row %>">
       <div fflex_content="Technician" class="fflex_col">
         <%= job.to_name || "-" %>
       </div>
@@ -189,6 +196,7 @@ body {
         <%= job.pc == 0 ? ( raw "&lt;time>" ) : "-" %>
       </div>
     </div>
+    <% first_row = "" %>
   <% end %>
 </div>
 </body>
