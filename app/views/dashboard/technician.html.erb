@@ -1,3 +1,6 @@
+<html>
+
+<head>
 <style>
 /*  GENE'S FFLEX STUFF
 ---------------------------------------- */
@@ -10,38 +13,81 @@
 
 .fflex_col {
   flex: 1 1 0;
-  margin: 6px 12px;
+  margin: 0 8px;
   min-width:0;
 }
 
 .fflex_col2 {
   flex: 2 1 0;
-  margin: 6px 12px;
+  margin: 0 8px;
   min-width:0;
 }
 
 .fflex_col3 {
   flex: 3 1 0;
-  margin: 6px 12px;
+  margin: 0 8px;
   min-width:0;
 }
 
 .fflex_col4 {
   flex: 4 1 0;
-  margin: 6px 12px;
+  margin: 0 8px;
   min-width:0;
 }
 
 .fflex_col_auto  {
   width: auto;
-  margin: 6px 12px;
+  margin: 0 8px;
   min-width:0;
 }
 
-// BREAKPOINT 768
+/* BREAKPOINT 768 */
 @media (max-width:767px) {
   .fflex_768 .fflex_resp {
-    display: block ;
+    display: block;
+  }
+
+  .fflex_768 .fflex_title {
+    display:none;
+  }
+
+  .none_768 {
+    display:block;
+  }
+
+  .show_768 {
+    display:none;
+  }
+
+  div[fflex_content] {
+    line-height:22px;
+    padding:0 0 0 150px;
+    position:relative;
+  }
+
+  div[fflex_content]:before {
+    content: attr(fflex_content);
+    position: absolute;
+    font-weight: 600;
+    left: 0;
+  }
+}
+
+.fflex_title {
+  padding:8px 0;
+  background-color:#065683;
+  color:white;
+}
+
+.fflex_row {
+  padding:8px 0;
+  align-items: center;
+  border-bottom: 1px dotted #d0d0d0;
+}
+
+@media screen and (max-width: 767px) {
+  .fflex_768 .fflex_resp {
+    display: block;
   }
 
   .fflex_768 .fflex_title {
@@ -69,32 +115,11 @@
     left: 0;
   }
 
-  div[fflex_content_button] {
-    line-height:22px;
-    padding:0 0 0 150px;
-    position:relative;
-  }
-
-  div[fflex_content_button]:before {
-    content: attr(fflex_content_button);
-    position: absolute;
-    font-weight: 600;
-    left: 0;
-    padding-top: 4px;
-  }
-}
-
-.fflex_title {
-  background-color:#065683;
-  color:white;
-}
-
-.fflex_row {
-  padding:8px 0;
-  align-items: center;
-  border-bottom: 1px dotted #d0d0d0;
 }
 </style>
+</head>
+
+<body>
 <div class="title">
   Technician ( <%= @jobs.length %> Jobs )
 </div>
@@ -123,28 +148,31 @@
     </div>
   </div>
   <% @jobs.each do |job| %>
-    <div class="fflex_resp flex_row">
-      <div class="fflex_col">
+    <div class="fflex_resp fflex_row">
+      <div fflex_content="Technician" class="fflex_col">
         <%= job.to_name || "-" %>
       </div>
-      <div class="fflex_col">
+      <div fflex_content="Job" class="fflex_col">
         <%= job.id %>
       </div>
-      <div class="fflex_col2">
+      <div fflex_content="Protocol" class="fflex_col2">
         <%= job.operation_type_name %>
       </div>
-      <div class="fflex_col">
+      <div fflex_content="Status" class="fflex_col">
         <%= job.pc == 0 ? "Running" : "Ready" %>
       </div>
-      <div class="fflex_col">
+      <div fflex_content="Operations" class="fflex_col">
         <%= job.operation_count %>
       </div>
-      <div class="fflex_col">
+      <div fflex_content="Assigned" class="fflex_col">
         <%= job.assigend_at.strftime('%m-%d-%y') || "-" %>
       </div>
-      <div class="fflex_col">
+      <div fflex_content="Started" class="fflex_col">
         <%= job.pc == 0 ? ( raw "&lt;time>" ) : "-" %>
       </div>
     </div>
   <% end %>
 </div>
+</body>
+
+</html>
