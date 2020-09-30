@@ -43,7 +43,8 @@
 
         <td> <!-- Input/Output -->
           <ul class='input-list'>
-            <li ng-repeat="fv in op.field_values | filter: { role: 'output' } track by $index">
+            <li ng-repeat="fv in op.field_values | filter: { role: 'output' } track by $index"
+                style="display: inline-flex; flex-direction: row; align-items: flex-start;">
               <span ng-if="$first"  class="data-col-1"><b>out:</b></span>
               <span ng-if="!$first" class="data-col-1">&nbsp;</span>
 
@@ -70,7 +71,8 @@
               </span>
             </li>
 
-            <li ng-repeat="fv in op.field_values | filter: { role: 'input' } track by $index">
+            <li ng-repeat="fv in op.field_values | filter: { role: 'input' } track by $index"
+                style="display: inline-flex; flex-direction: row; align-items: flex-start;">
               <span ng-if="$first"  class="data-col-1"><b>in:</b></span>
               <span ng-if="!$first" class="data-col-1">&nbsp;</span>
 
@@ -94,9 +96,11 @@
                   )
                 </span>
               </span>
+              <!-- TODO: BREAK TO NEW LINE -->
               <span ng-if="fv.value" class="data-col-3" style="color: black !important">{{fv.value}}</span>
             </li>
-            <li ng-repeat="da in op.data_associations">
+            <li ng-repeat="da in op.data_associations"
+                style="display: inline-flex; flex-direction: row; align-items: flex-start;">
               <span class="data-col-1">&nbsp;</span>
               <span ng-if="da.key" class="data-col-2">{{da.key}}:</span>
               <span ng-if="da.value" class="data-col-3">{{da.value}}</span>
