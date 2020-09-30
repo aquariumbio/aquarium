@@ -1,0 +1,35 @@
+<div class="title">
+  Manager ( <%= @jobs.length %> Jobs )
+</div>
+  <div>
+    Technician
+    ::
+    Job
+    ::
+    Protocol
+    ::
+    Status
+    ::
+    Operations
+    ::
+    Assigned
+    ::
+    Started
+  </div>
+<% @jobs.each do |job| %>
+  <div>
+    <%= job.to_name || "-" %>
+    ::
+    <%= job.id %>
+    ::
+    <%= job.operation_type_name %>
+    ::
+    <%= job.pc == 0 ? "Running" : "Ready" %>
+    ::
+    <%= job.operation_count %>
+    ::
+    <%= job.assigend_at || "-" %>
+    ::
+    <%= job.pc == 0 ? ( raw "&lt;time>" ) : "-" %>
+  </div>
+<% end %>

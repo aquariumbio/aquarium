@@ -225,14 +225,22 @@ Bioturk::Application.routes.draw do
   put 'users/password',       to: 'users#update_password'
   get 'users/stats/:id',      to: 'users#stats'
 
+  # DASHBOARD
+  get '/dashboard/manager',              to: 'dashboard#manager'
+  get '/dashboard/technician',           to: 'dashboard#technician'
+
   # API V2
   get '/api/v2/users',                   to: 'api/v2/users#index'
   get '/api/v2/users/:id',               to: 'api/v2/users#user'
   get '/api/v2/users/:id/jobs',          to: 'api/v2/users#jobs'
   get '/api/v2/users/:id/assigned_jobs', to: 'api/v2/users#assigned_jobs'
 
+  get '/api/v2/jobs',                    to: 'api/v2/jobs#index'
   get '/api/v2/jobs/:id',                to: 'api/v2/jobs#job'
-  get '/api/v2/jobs/:id/assignment',    to: 'api/v2/jobs#assignment'
+  get '/api/v2/jobs/:id/assignment',     to: 'api/v2/jobs#assignment'
+
+  get '/api/v2/dashboard',               to: 'api/v2/jobs#dashboard_manager'
+  get '/api/v2/dashboard/:id',           to: 'api/v2/jobs#dashboard_technician'
 
   get '/api/v2/groups',                  to: 'api/v2/groups#index'
   get '/api/v2/groups/:id',              to: 'api/v2/groups#group'
