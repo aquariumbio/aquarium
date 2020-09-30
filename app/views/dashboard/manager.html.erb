@@ -22,7 +22,6 @@ body {
 
 /*  GENE'S FFLEX STUFF
 ---------------------------------------- */
-
 .fflex_resp, .fflex_bang {
   display: -ms-flexbox;
   display: flex;
@@ -59,38 +58,6 @@ body {
   min-width:0;
 }
 
-/* BREAKPOINT 768 */
-@media (max-width:767px) {
-  .fflex_768 .fflex_resp {
-    display: block;
-  }
-
-  .fflex_768 .fflex_title {
-    display:none;
-  }
-
-  .none_768 {
-    display:block;
-  }
-
-  .show_768 {
-    display:none;
-  }
-
-  div[fflex_content] {
-    line-height:22px;
-    padding:0 0 0 150px;
-    position:relative;
-  }
-
-  div[fflex_content]:before {
-    content: attr(fflex_content);
-    position: absolute;
-    font-weight: 600;
-    left: 0;
-  }
-}
-
 .fflex_title {
   padding:8px 0;
   background-color:#2196f3;
@@ -103,7 +70,6 @@ body {
   align-items: center;
   border-bottom: 1px solid #c0c0c0;
 }
-
 
 @media screen and (max-width: 767px) {
   .fflex_768 .fflex_resp {
@@ -128,7 +94,7 @@ body {
 
   div[fflex_content] {
     line-height:22px;
-    padding:4px 0 4px 150px;
+    padding:4px 0 4px 100px;
     position:relative;
   }
 
