@@ -66,6 +66,12 @@
 
     <div class="left bold" style="width:200px">Get Jobs</div>
     <div class="left">
+      /api/v2/jobs
+      &nbsp;&bull;&nbsp;
+      Limit &nbsp;<input id="a8-limit" value="200" disabled style="width:50px;">
+      &nbsp;&bull;&nbsp;
+      <a class="link" href="#" onclick="$('#api').val('/api/v2/jobs');go_api('GET');return false;">GET</a>
+      <div class="plus16"></div>
       /api/v2/jobs/ <input id="a4-job_id" value=1 style="width:50px;">
       &nbsp;&bull;&nbsp;
       <a class="link" href="#" onclick="$('#api').val('/api/v2/jobs/'+parseInt($('#a4-job_id').val() || 0));go_api('GET');return false;">GET</a>
@@ -73,6 +79,25 @@
       /api/v2/jobs/ <input id="a5-job_id" value=1 style="width:50px;"> / assignment
       &nbsp;&bull;&nbsp;
       <a class="link" href="#" onclick="$('#api').val('/api/v2/jobs/'+parseInt($('#a5-job_id').val() || 0)+'/assignment');go_api('GET');return false;">GET</a>
+    </div>
+    <div class="clear"></div>
+
+    <div class="plus16 border_bottom"></div>
+    <div class="plus16"></div>
+
+    <div class="left bold" style="width:200px">Get Dashboard</div>
+    <div class="left">
+      /api/v2/dashboard
+      &nbsp;&bull;&nbsp;
+      Limit &nbsp;<input id="a9-limit" value="200" disabled style="width:50px;">
+      &nbsp;&bull;&nbsp;
+      <a class="link" href="#" onclick="$('#api').val('/api/v2/dashboard');go_api('GET');return false;">GET</a>
+      <div class="plus16"></div>
+      /api/v2/dashboard/ <input id="a10-to_id" value=1 style="width:50px;">
+      &nbsp;&bull;&nbsp;
+      Limit &nbsp;<input id="a10-limit" value="200" disabled style="width:50px;">
+      &nbsp;&bull;&nbsp;
+      <a class="link" href="#" onclick="$('#api').val('/api/v2/dashboard/'+$('#a10-to_id').val());go_api('GET');return false">GET</a>
     </div>
     <div class="clear"></div>
 
