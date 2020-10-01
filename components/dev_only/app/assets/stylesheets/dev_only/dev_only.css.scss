@@ -130,6 +130,12 @@ div.box_black {
   padding:16px;
 }
 
+div.box_loading {
+  background-color:$lightgray;
+  border:1px solid black;
+  padding:16px;
+}
+
 button.blue {
   background-color:$blue;
   color:white;

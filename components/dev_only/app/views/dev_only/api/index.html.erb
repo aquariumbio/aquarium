@@ -4,7 +4,7 @@
   <div class="bold center pxl">Defined API Calls</div>
   <div class="plus16"></div>
 
-  <div class="box_black">
+  <div id="api_box" class="box_black">
     <div class="left bold" style="width:200px">Get Users</div>
     <div class="left">
       /api/v2/users
@@ -190,6 +190,7 @@
     function go_api(tt) {
       var ok = false
       $('#results').attr('class','loading')
+      $('#api_box').attr('class','box_loading')
       if (tt == "GET" ) {
         $('#get_post_get').attr('class','button_blue')
         $('#get_post_post').attr('class','button_alt')
@@ -209,6 +210,7 @@
         complete: function(response) {
           if ( !ok ) $('#results').html('Invalid API Call')
           $('#results').attr('class','results')
+          $('#api_box').attr('class','box_black')
           $(window).scrollTop($('#api_call').offset().top)
         }
       })
