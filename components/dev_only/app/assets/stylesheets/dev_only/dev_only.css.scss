@@ -31,6 +31,9 @@ body {
 
 .p_16   { padding:16px; }
 
+.absolute {position:absolute;}
+.rright {text-align:right;}
+
 .left  {float:left;}
 .right {float:right;}
 .clear {clear:both;}
@@ -123,6 +126,12 @@ div.box {
 
 div.box_black {
   background-color:white;
+  border:1px solid black;
+  padding:16px;
+}
+
+div.box_loading {
+  background-color:$lightgray;
   border:1px solid black;
   padding:16px;
 }
