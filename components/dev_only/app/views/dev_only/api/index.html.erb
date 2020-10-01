@@ -4,7 +4,7 @@
   <div class="bold center pxl">Defined API Calls</div>
   <div class="plus16"></div>
 
-  <div class="box_black" style="height:256px;overflow-y:scroll">
+  <div class="box_black">
     <div class="left bold" style="width:200px">Get Users</div>
     <div class="left">
       /api/v2/users
@@ -158,7 +158,10 @@
     </div>
     <div class="clear"></div>
   </div>
-  <div class="plus16"></div>
+  <div id="api_call" class="plus16"></div>
+
+  <div class="right"><div class="absolute" style="width:100px;margin-left:-100px;text-align:right;"><span class="pxl">&nbsp;</span><a class="link" href="#" onclick="$(window).scrollTop(0);return false;">TOP</a></div></div>
+  <div class="clear"></div>
 
   <div class="bold center pxl">API Call</div>
   <div class="plus16"></div>
@@ -206,6 +209,7 @@
         complete: function(response) {
           if ( !ok ) $('#results').html('Invalid API Call')
           $('#results').attr('class','results')
+          $(window).scrollTop($('#api_call').offset().top)
         }
       })
     }
