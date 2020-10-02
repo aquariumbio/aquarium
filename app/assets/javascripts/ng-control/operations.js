@@ -146,7 +146,7 @@
           selected_user: $scope.current.selected_user,
           filter_user: $scope.current.filter_user,
           active_jobs: $scope.current.active_jobs,
-          activity_report: { 
+          activity_report: {
             selected: $scope.current.activity_report.selected,
             date: $scope.current.activity_report.date
           }
@@ -169,16 +169,19 @@
       $scope.toggle_show_completed = function() {
         // This is a hack. When you click the toggle switch, the ng-click method is called first.
         // After that, the md-switch directive changes the value of show_completed to reflect the
-        // new switch state. 
+        // new switch state.
         $scope.current.show_completed = !$scope.current.show_completed;
         store_cookie();
         $scope.current.show_completed = !$scope.current.show_completed;
       }
 
       $scope.select_first_operation_type = function(cat_index) {
+        $('#dashboard-container').hide()
+        $('#content-container').show()
+
         $scope.category_index = cat_index;
         $scope.current.activity_report.selected = false;
-        store_cookie();        
+        store_cookie();
         let ots = aq.where($scope.operation_types, ot => ot.category == $scope.categories[$scope.category_index]);
         if ( ots.length > 0 ) {
           $scope.select(ots[0],"waiting", [])
@@ -218,7 +221,7 @@
           operation_type_id: operation_type.id,
           status: actual_status
         };
-        
+
         if ($scope.current.filter_user && $scope.current.selected_user) {
           criteria.user_id = $scope.current.selected_user.id
         } else if (!$scope.current_user.is_admin) {
@@ -297,7 +300,7 @@
           $scope.$apply();
         });
 
-        get_running_jobs();        
+        get_running_jobs();
 
       }
 
@@ -334,7 +337,7 @@
             for (var i = 0; i < op.outputs.length; i++) {
               op.outputs[i].item.mark_as_deleted()
               op.outputs[i].clear_item().save();
-            }            
+            }
             get_numbers().then(numbers => {
               $scope.numbers = numbers;
               $scope.select(operation_type, 'pending', ops);
@@ -412,7 +415,7 @@
           c += ' unselected-category';
         }
 
-        if ( $scope.current.active[$scope.categories[index]] ) {          
+        if ( $scope.current.active[$scope.categories[index]] ) {
           c += " active-category";
         }
 
@@ -421,6 +424,24 @@
       }
 
       $scope.select_active_jobs = function() {
+        $('#dashboard-container').show()
+        $('#content-container').hide()
+        if ( $('#dashboard-container').html().length == 0 ) {
+          // BUILD FROM SCRATCH
+          $.ajax({
+            type: "GET",
+            url: "/react",
+            dataType: "html",
+
+            success: function(response) {
+              $('#dashboard-container').html(response)
+            }
+          })
+        } else{
+          // SOME REACT METHOD TO UPDATE / RE-DISPLAY THE TABLE
+          alert('update me!')
+        }
+
         $scope.current.active_jobs = true;
         $scope.current.activity_report.selected = false;
         store_cookie();
@@ -430,7 +451,7 @@
         $scope.current.activity_report.date = new Date($scope.current.activity_report.date);
         $scope.current.activity_report.date.setDate($scope.current.activity_report.date.getDate()-1);
         $scope.get_job_report();
-      }      
+      }
 
       $scope.increment_date = function() {
         $scope.current.activity_report.date = new Date($scope.current.activity_report.date);
@@ -439,6 +460,9 @@
       }
 
       $scope.get_job_report = function() {
+        $('#dashboard-container').hide()
+        $('#content-container').show()
+
         $scope.current.activity_report.data = new JobReport([], "waiting");
         AQ.get(`/jobs/report?date=${$scope.current.activity_report.date.toString()}`).then(reponse => {
           $scope.current.activity_report.data = new JobReport(reponse.data, "ready", $scope.current.activity_report.date);

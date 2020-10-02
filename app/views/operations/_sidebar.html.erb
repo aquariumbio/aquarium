@@ -4,37 +4,37 @@
 
       <% if current_user && current_user.is_admin %>
 
-        <div ng-click="current.category_index = -1; 
-                       current.switch_user = true; 
-                       current.active_jobs = false; 
+        <div ng-click="current.category_index = -1;
+                       current.switch_user = true;
+                       current.active_jobs = false;
                        current.activity_report.selected = false"
-             ng-class="current.switch_user ? 
-                      'no-highlight selected-category alt-category' : 
+             ng-class="current.switch_user ?
+                      'no-highlight selected-category alt-category' :
                       'no-highlight unselected-category alt-category'">
             Switch User
         </div>
 
-        <div ng-click="current.category_index = -1; 
-                       current.switch_user = false; 
-                       current.active_jobs = true; 
+        <div ng-click="current.category_index = -1;
+                       current.switch_user = false;
+                       current.active_jobs = true;
                        select_active_jobs()"
-             ng-class="current.active_jobs ? 
-                      'no-highlight selected-category alt-category' : 
+             ng-class="current.active_jobs ?
+                      'no-highlight selected-category alt-category' :
                       'no-highlight unselected-category alt-category'">
             Active Jobs
-        </div>     
+        </div>
 
-        <div ng-click="current.category_index = -1; 
-                       current.switch_user = false; 
-                       current.active_jobs = false; 
+        <div ng-click="current.category_index = -1;
+                       current.switch_user = false;
+                       current.active_jobs = false;
                        get_job_report()"
-             ng-class="current.activity_report.selected ? 
-                      'no-highlight selected-category alt-category' : 
+             ng-class="current.activity_report.selected ?
+                      'no-highlight selected-category alt-category' :
                       'no-highlight unselected-category alt-category'">
             Activity Reports
-        </div>               
+        </div>
 
-      <% end %>   
+      <% end %>
 
       <br>
 
@@ -45,7 +45,7 @@
            ng-class="category_class($index)"
            ng-attr-data-category-choice="{{cat}}">
           {{cat}}
-      </div>           
+      </div>
 
   </div>
 
@@ -54,8 +54,8 @@
 
     <tr>
       <th class='operation-name'>
-        <md-switch ng-model="current.show_completed" 
-                   aria-label="Show completed" 
+        <md-switch ng-model="current.show_completed"
+                   aria-label="Show completed"
                    ng-click="toggle_show_completed()"
                    style="padding-left: 16px; padding-top: 16px">
           Completed
@@ -68,7 +68,7 @@
       </th>
     </tr>
 
-    <tr ng-repeat="operation_type in operation_types | filter: { category: categories[current.category_index] }: true" 
+    <tr ng-repeat="operation_type in operation_types | filter: { category: categories[current.category_index] }: true"
         ng-click="choose(operation_type)">
       <td class="operation-name">
         <span ng-class="timing_bullet(operation_type)">&#9679;</span>
@@ -100,15 +100,15 @@
         <div layout="row" layout-fill>
 
           <div flex="60">
-            <md-switch ng-model="current.filter_user" 
+            <md-switch ng-model="current.filter_user"
                        aria-label="Filter User"
                        style="margin: 8px 0 0 32px">
-              Filter by User 
-            </md-switch>    
+              Filter by User
+            </md-switch>
           </div>
 
           <div flex="40">
-            <md-button class='md-raised' 
+            <md-button class='md-raised'
                        ng-click="select_user()">
               Apply
             </md-button>
@@ -117,9 +117,9 @@
         </div>
 
         <md-input-container layout-margin layout="column">
-          <md-select ng-model="current.selected_user" 
+          <md-select ng-model="current.selected_user"
                      class="md-plain-select">
-            <md-option ng-repeat="user in users" 
+            <md-option ng-repeat="user in users"
                        ng-value="user"
                        ng-selected="user.id == current.selected_user.id">
               {{user.login}} ( {{user.name}} )
@@ -135,7 +135,9 @@
 
     </div>
 
-    <table ng-if="current.active_jobs" 
+    <!-- REMOVE THIS TABLE -->
+
+    <!-- table ng-if="current.active_jobs"
            class='table table-condensed active-jobs-table'>
 
       <tr>
@@ -156,18 +158,18 @@
         </td>
       </tr>
 
-    </table>
+    </table -->
 
     <div ng-if="current.activity_report.selected" flex="75">
       <h2 class="md-title">&nbsp; Choose Report Date</h2>
-      <md-datepicker ng-model="current.activity_report.date" 
+      <md-datepicker ng-model="current.activity_report.date"
                      ng-change="get_job_report()"
                      md-placeholder="Enter date"></md-datepicker>
 
       <div ng-if="current.activity_report.data.selection">
          <h2 class="md-title">
-           &nbsp; 
-           Job 
+           &nbsp;
+           Job
            <a href="/jobs/{{current.activity_report.data.selection.id}}" target="job">
              {{current.activity_report.data.selection.id}}</a>
            <br>
@@ -181,7 +183,7 @@
               operations="current.activity_report.data.selection.operations"
               status="done"
               short="true"
-              jobid="job.id"></oplist-report>        
+              jobid="job.id"></oplist-report>
       </div>
 
     </div>

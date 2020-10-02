@@ -1,7 +1,8 @@
+<div id="react-content"></div>
 <script>
       'use strict';
 
-      const e = React.createElement;
+      var e = React.createElement;
 
       class LikeButton extends React.Component {
         constructor(props) {
@@ -9,7 +10,9 @@
           this.state = { liked: false };
         }
 
+
         render() {
+
           if (this.state.liked) {
             return 'You liked this.';
           }
@@ -22,6 +25,6 @@
         }
       }
 
-      const domContainer = document.querySelector('#like_button_container');
+      const domContainer = document.querySelector('#react-content');
       ReactDOM.render(e(LikeButton), domContainer);
 </script>

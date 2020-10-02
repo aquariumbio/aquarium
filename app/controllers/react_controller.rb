@@ -7,7 +7,8 @@ class ReactController < ApplicationController
 
   def index
 
-    render :layout => "react"
+    # render :layout => "react"
+    render :layout => false
   end
 
 end
