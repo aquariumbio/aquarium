@@ -243,6 +243,8 @@ Bioturk::Application.routes.draw do
   post '/api/v2/jobs/:id/assign',        to: 'api/v2/jobs#assign'
   post '/api/v2/jobs/:id/unassign',      to: 'api/v2/jobs#unassign'
 
+  get '/react',                          to: 'react#index'
+
   resources :users do
     get 'change_password'
   end
