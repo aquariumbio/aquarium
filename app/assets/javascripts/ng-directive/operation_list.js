@@ -25,15 +25,31 @@
           });
         }
 
-        $scope.checkAll = function (operations, checkAllOperations, jobid) {
+        $scope.checkAll = function (operations, jobid) {
+          let checked = document.getElementById('select_all_'+(jobid || "")).checked
           let ops = operations;
-
           if (jobid) {
             ops = operations.filter(operation => operation.last_job.id === jobid)
           }
+
           aq.each(ops, op => {
-            op.selected = !checkAllOperations;
+            op.selected = checked;
           });
+        };
+
+
+        $scope.checkParent = function (operations, jobid) {
+          let ops = operations;
+          if (jobid) {
+            ops = operations.filter(operation => operation.last_job.id === jobid)
+          }
+          let selected = true
+          aq.each(ops, op => {
+            if (!op.selected) selected = false;
+          });
+
+          // SET THE SELECT ALL CHECKBOX
+          document.getElementById('select_all_'+(jobid || "")).checked = selected
         };
 
       }

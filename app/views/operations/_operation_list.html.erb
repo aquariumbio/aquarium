@@ -7,11 +7,12 @@
 
       <tr>
         <th class='selector'>
-          <input type='checkbox' 
-                 ng-model='selectAllOperations[jobid]' 
-                 ng-if="!operation_type.on_the_fly && ( status == 'pending' || status == 'scheduled' || status == 'error' )"
+          <!-- NOT USING AN NG-MODEL AND EVALUATING JAVASCRIPT DIRECTLY INSTEAD -->
+          <input type="checkbox"
+                 id="select_all_{{jobid}}"
+                 ng-show="!operation_type.on_the_fly && ( status == 'pending' || status == 'scheduled' || status == 'error' )"
+                 ng-click="checkAll(operations, jobid)"
                  aria-label='select all operations'
-                 ng-click="checkAll(operations, selectAllOperations[jobid], jobid)"
                  style="margin: 0">
         </th>
         <th>Plan</th>
@@ -28,14 +29,17 @@
 
         <td> <!-- Selector -->
           <% if current_user && current_user.is_admin %>
-            <input type='checkbox'
+            <!-- COULD POTENTIALLY USE NG-CHECKED BUT THIS WORKS -->
+            <input type="checkbox"
                    ng-model='op.selected'
-                   ng-if="!operation_type.on_the_fly && ( status == 'pending' || status == 'scheduled' || status == 'error' )"
+                   ng-init="checked=false"
+                   ng-show="!operation_type.on_the_fly && ( status == 'pending' || status == 'scheduled' || status == 'error' )"
                    ng-attr-data-operation-checkbox="{{op.id}}"
+                   ng-change="checkParent(operations, jobid)"
                    style="margin: 0">
           <% end %>
         </td>
-        
+
         <td> <!-- Plan -->
           <a ng-repeat="plan in op.plans" href="/plans?plan_id={{plan.id}}" target="designer">{{plan.id}}{{$last ? '' : ', '}}</a>
           <span ng-if="op.plans.length == 0">n/a</span>
@@ -78,7 +82,7 @@
 
               <span class="data-col-2">{{fv.name}}:</span>
 
-              <span ng-if="fv.sample" class="data-col-3"> 
+              <span ng-if="fv.sample" class="data-col-3">
                 <a href="/browser?sid={{fv.sample.id}}" target="samples">{{fv.sample.id}}: {{fv.sample.name}}</a>
                 <span ng-if="fv.child_item_id" >
                   (
