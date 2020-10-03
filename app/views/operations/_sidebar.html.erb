@@ -4,7 +4,7 @@
 
       <% if current_user && current_user.is_admin %>
 
-        <div ng-click="clear_category_nav();
+        <div ng-click="clear_category_nav('switch');
                        current.switch_user = true;
                        current.active_jobs = false;
                        current.activity_report.selected = false"
@@ -14,7 +14,7 @@
             Switch User
         </div>
 
-        <div ng-click="clear_category_nav();
+        <div ng-click="clear_category_nav('jobs');
                        current.switch_user = false;
                        current.active_jobs = true;
                        select_active_jobs()"
@@ -24,7 +24,7 @@
             Active Jobs
         </div>
 
-        <div ng-click="clear_category_nav();
+        <div ng-click="clear_category_nav('reports');
                        current.switch_user = false;
                        current.active_jobs = false;
                        get_job_report()"
