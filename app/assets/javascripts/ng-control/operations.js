@@ -453,6 +453,13 @@
           store_cookie();
         })
       }
+
+      // CLEAR THE CATEGORY NAV TO AVOID THE SCREEN FLASH WHEN CLICK { SOMETHING ELSE } > { ACTIVITY REPORTS }
+      // USE INSTEAD OF current.category_index = -1; IN app/views/operations/_sidebar.html.erb
+      // TODO: STILL HAVE RACE CONDITION WHEN CLICK { ACTIVITY REPORTS } > { SOMETHING ELSE }, BUT THIS IS AT LEAST A LITTLE BETTER
+      $scope.clear_category_nav = function() {
+        $('#cat_'+$scope.current.category_index).attr("class","- no-highlight unselected-category active-category")
+      }
     }]);
 
 })();

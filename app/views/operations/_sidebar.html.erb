@@ -4,7 +4,7 @@
 
       <% if current_user && current_user.is_admin %>
 
-        <div ng-click="current.category_index = -1;
+        <div ng-click="clear_category_nav();
                        current.switch_user = true;
                        current.active_jobs = false;
                        current.activity_report.selected = false"
@@ -14,7 +14,7 @@
             Switch User
         </div>
 
-        <div ng-click="current.category_index = -1;
+        <div ng-click="clear_category_nav();
                        current.switch_user = false;
                        current.active_jobs = true;
                        select_active_jobs()"
@@ -24,7 +24,7 @@
             Active Jobs
         </div>
 
-        <div ng-click="current.category_index = -1;
+        <div ng-click="clear_category_nav();
                        current.switch_user = false;
                        current.active_jobs = false;
                        get_job_report()"
@@ -38,10 +38,11 @@
 
       <br>
 
-      <div ng-repeat="cat in categories track by $index"
-          ng-click="current.switch_user = false;
-                    current.active_jobs = false;
-                    select_first_operation_type($index)"
+      <div id="cat_{{$index}}"
+           ng-repeat="cat in categories track by $index"
+           ng-click="current.switch_user = false;
+                     current.active_jobs = false;
+                     select_first_operation_type($index)"
            ng-class="category_class($index)"
            ng-attr-data-category-choice="{{cat}}">
           {{cat}}
