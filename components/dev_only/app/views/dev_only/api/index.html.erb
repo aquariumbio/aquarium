@@ -96,6 +96,12 @@
       &nbsp;&bull;&nbsp;
       <a class="link" href="#" onclick="$('#api').val('/api/v2/dashboard');go_api('GET');return false;">GET</a>
       <div class="plus16"></div>
+      /api/v2/dashboard/my
+      &nbsp;&bull;&nbsp;
+      Limit &nbsp;<input id="a10-limit" value="200" disabled style="width:50px;">
+      &nbsp;&bull;&nbsp;
+      <a class="link" href="#" onclick="$('#api').val('/api/v2/dashboard/my');go_api('GET');return false">GET</a>
+      <div class="plus16"></div>
       /api/v2/dashboard/ <input id="a10-to_id" value=1 style="width:50px;">
       &nbsp;&bull;&nbsp;
       Limit &nbsp;<input id="a10-limit" value="200" disabled style="width:50px;">
@@ -103,6 +109,7 @@
       <a class="link" href="#" onclick="$('#api').val('/api/v2/dashboard/'+$('#a10-to_id').val());go_api('GET');return false">GET</a>
     </div>
     <div class="clear"></div>
+
 
     <div class="plus16 border_bottom"></div>
     <div class="plus16"></div>

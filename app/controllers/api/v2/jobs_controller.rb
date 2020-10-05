@@ -2,12 +2,16 @@ class Api::V2::JobsController < ApplicationController
   include ApiHelper
 
   def index
+    # TODO: ADD PERMISSIONS
+
     # ARTIFICIAL LIMIT 200
     render json: api_ok(Job.all.limit(200))
 
   end
 
   def dashboard_manager
+    # TODO: ADD PERMISSIONS
+
     # TODO: MOVE SQL TO MODEL
     sql = "
       select
@@ -28,9 +32,16 @@ class Api::V2::JobsController < ApplicationController
   end
 
   def dashboard_technician
-    to_id = params[:id].to_i
-    to_user = User.find(to_id) rescue nil
-    render json: api_error( { "to_id" => ["invalid user"] } ) and return if !to_user
+    # TODO: ADD PERMISSIONS
+
+    to_id = params[:id]
+    if to_id == "my"
+      to_id = current_user.id
+    else
+      to_id = to_id.to_i
+      to_user = User.find(to_id) rescue nil
+      render json: api_error( { "to_id" => ["invalid user"] } ) and return if !to_user
+    end
 
     # TODO: MOVE SQL TO MODEL
     sql = "
@@ -52,6 +63,8 @@ class Api::V2::JobsController < ApplicationController
   end
 
   def job
+    # TODO: ADD PERMISSIONS
+
     # GET JOB
     id = params[:id].to_i
     job = Job.find(id) rescue nil
@@ -61,6 +74,8 @@ class Api::V2::JobsController < ApplicationController
   end
 
   def assignment
+    # TODO: ADD PERMISSIONS
+
     # GET JOB
     id = params[:id].to_i
     job = Job.find(id) rescue nil
@@ -72,6 +87,8 @@ class Api::V2::JobsController < ApplicationController
   end
 
   def assign
+    # TODO: ADD PERMISSIONS
+
     @id = params[:id].to_i
     job = Job.find(@id) rescue nil
     render json: api_error( { "job_id" => ["invalid job"] } ) and return if !job
@@ -84,6 +101,8 @@ class Api::V2::JobsController < ApplicationController
   end
 
   def unassign
+    # TODO: ADD PERMISSIONS
+
     @id = params[:id].to_i
     job = Job.find(@id) rescue nil
     render json: api_error( { "job_id" => ["invalid job"] } ) and return if !job
