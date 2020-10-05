@@ -1,9 +1,3 @@
-<script>
-  // NOTE: REDISPLAY REPORT IF RACE CONDITION - DOES NOT RESET THE LEFT NAV BAR
-  $('#dashboard-container').hide()
-  $('#content-container').show()
-</script>
-
 <div style="position: relative; margin: 20px; width: 150%"
      ng-if="current.activity_report.data.status == 'ready' && current.activity_report.data.jobs.length == 0">
   <p>No jobs performed on {{current.activity_report.date|date}}.</p>

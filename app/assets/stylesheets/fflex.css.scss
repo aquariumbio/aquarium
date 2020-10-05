@@ -1,0 +1,98 @@
+    a.google_blue, a.google_blue:visited {
+      color: #1a0dab;
+    }
+    /*  GENE'S FFLEX STUFF
+    ---------------------------------------- */
+    .fflex_resp, .fflex_bang {
+      display: -ms-flexbox;
+      display: flex;
+      position:relative;
+    }
+
+    .fflex_col {
+      flex: 1 1 0;
+      margin: 0 8px;
+      min-width:0;
+    }
+
+    .fflex_col2 {
+      flex: 2 1 0;
+      margin: 0 8px;
+      min-width:0;
+    }
+
+    .fflex_col3 {
+      flex: 3 1 0;
+      margin: 0 8px;
+      min-width:0;
+    }
+
+    .fflex_col4 {
+      flex: 4 1 0;
+      margin: 0 8px;
+      min-width:0;
+    }
+
+    .fflex_col_auto  {
+      width: auto;
+      margin: 0 8px;
+      min-width:0;
+    }
+
+    .fflex_title {
+      padding:8px 0;
+      /* background-color:#2196f3; */
+      font-size: 16px;
+      color: rgba(0, 0, 0, 1);
+      border-bottom: 2px solid #c0c0c0;
+    }
+
+    .fflex_row {
+      padding:8px 0;
+      align-items: center;
+      border-bottom: 1px solid #c0c0c0;
+    }
+
+    .fflex_right {
+      justify-content: right;
+    }
+
+    .fflex_center_text {
+        text-align: center;
+    }
+
+    @media screen and (max-width: 767px) {
+      .fflex_768 .fflex_resp {
+        display: block;
+      }
+
+      .fflex_768 .fflex_title {
+        display:none;
+      }
+
+      .fflex_768 .first_row {
+        border-top: 1px solid #c0c0c0;
+      }
+
+      .none_768 {
+        display:block;
+      }
+
+      .show_768 {
+        display:none;
+      }
+
+      div[fflex_content] {
+        line-height:22px;
+        padding:4px 0 4px 100px;
+        position:relative;
+      }
+
+      div[fflex_content]:before {
+        content: attr(fflex_content);
+        position: absolute;
+        font-weight: 600;
+        left: 0;
+      }
+
+    }

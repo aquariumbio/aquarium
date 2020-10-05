@@ -2,29 +2,134 @@
 <script>
       'use strict';
 
-      var e = React.createElement;
-
-      class LikeButton extends React.Component {
-        constructor(props) {
-          super(props);
-          this.state = { liked: false };
-        }
+      const createElement = React.createElement;
 
 
-        render() {
-
-          if (this.state.liked) {
-            return 'You liked this.';
-          }
-
-          return e(
-            'button',
-            { onClick: () => this.setState({ liked: true }) },
-            'Like'
-          );
-        }
+      function AssignedJobTitle(props) {
+        return (
+          createElement('div', { className: 'assigned_job_table_title fflex_resp fflex_title' },
+            createElement('div', { className: 'job-tecnician-name fflex_col' },'Technician'),
+            createElement('div', { className: 'job-id fflex_col' }, 'Job'),
+            createElement('div', { className: 'job-protocol fflex_col2' },'Protocol'),
+            createElement('div', { className: 'job-status fflex_col' }, 'Status'),
+            createElement('div', { className: 'job-operations fflex_col fflex_center_text' }, 'Operations'),
+            createElement('div', { className: 'job-assigned-time fflex_col fflex_center_text' }, 'Assigned'),
+            createElement('div', { className: 'job-start-time fflex_col fflex_center_text' }, 'Started'),
+          )
+        )
       }
 
+      function AssignedJobRow(props) {
+        return (
+          createElement('div', { className: 'job fflex_resp fflex_row' },
+            createElement('div', { className: 'job-tecnician-name fflex_col' }, props.job.to_name || '-'),
+            createElement('div', { className: 'job-id fflex_col' },
+              createElement('a', { href: `/jobs/${props.job.id}` }, props.job.id)
+            ),
+            createElement('div', { className: 'job-protocol fflex_col2' },
+              createElement('a', { className: 'google_blue', href: `/jobs/${props.job.id}` }, props.job.operation_type_name)
+            ),
+            createElement('div', { className: 'job-status fflex_col' }, props.job.pc == 0 ? 'Running' : 'Ready'),
+            createElement('div', { className: 'job-operations fflex_col fflex_center_text' }, props.job.operation_count),
+            createElement('div', { className: 'job-assigned-time fflex_col fflex_center_text' }, props.job.assigend_at ? new Date(props.job.assigend_at).toLocaleDateString('en-US') : '-'),
+            createElement('div', { className: 'job-start-time fflex_col fflex_center_text' }, props.job.pc == 0 ? 'TODO parse start' : '-'),
+          )
+        )
+      }
+    
+
+// 
+      class AssignedJobsTable extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = { 
+            isLoading: true,
+            hasError: false,
+            liked: false 
+          };
+
+          this.getManagerDashboard = this.getManagerDashboard.bind(this)
+
+        }
+
+        componentDidMount() {
+            this.getManagerDashboard()
+
+            let interval = 300000 // 5 minutes
+
+            this.fetch = setInterval(() => {
+              this.getManagerDashboard()
+            }, 10000); 
+        }
+
+        componentWillUnmount() {
+          clearInterval(this.fetch);
+        }
+
+        static getDerivedStateFromError(error) {
+          // Update state so the next render will show the fallback UI.
+          return { hasError: true };
+        }
+
+        componentDidCatch(error, errorInfo) {
+          // You can also log the error to an error reporting service
+          console.log(error, errorInfo);
+        }
+
+        render() {
+          if (this.state.hasError) {
+            // You can render any custom fallback UI
+            return createElement('div', {}, "Something went wrong.")
+          }
+
+          let content
+          if (this.state.isLoading) {
+            content = createElement(
+              'p',
+              {},
+              'Loading...',
+            )
+          }
+          
+          if (!this.state.isLoading && !this.state.hasError){      
+
+            content = this.state.jobs.map(function(job, i) {
+                return createElement( AssignedJobRow, {key: i + 1, job: job})
+              }
+            )
+
+            content.unshift(createElement(AssignedJobTitle, {key: 0}))
+          }
+
+          return createElement('div', {className: 'fflex_768'}, content);
+        }
+      
+        getManagerDashboard() {
+          fetch('/api/v2/dashboard')
+          .then(result => result.json())
+          .then(
+            (result) => {
+              this.setState({
+                isLoading: false,
+                jobs: result.data
+              });
+              console.log("response");
+              console.log(result.data);
+            },
+            (error) => {
+              console.log("error:" + JSON.stringify(error));
+              this.setState({
+                isLoading: false,
+                error
+              });
+            }
+          )
+        }
+        
+      }
+
+          
+
       const domContainer = document.querySelector('#react-content');
-      ReactDOM.render(e(LikeButton), domContainer);
+      ReactDOM.render(createElement(AssignedJobsTable), domContainer);
 </script>

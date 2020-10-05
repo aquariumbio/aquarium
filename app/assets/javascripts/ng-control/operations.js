@@ -1,3 +1,5 @@
+var no_race;
+
 (function () {
 
   let w = angular.module('aquarium');
@@ -189,6 +191,7 @@
       }
 
       $scope.select = function (operation_type, status, selected_ops, append = false) {
+        no_race = "select"
 
         if (!append) {
           $scope.current.operation_type = operation_type;
@@ -229,6 +232,11 @@
         }
 
         AQ.Operation.manager_list(criteria, options).then(operations => {
+          // MANUALLY SET THE CATEGORY NAV
+          // NOTE: NOT SETTING current.category_index = -1; IN app/views/operations/_sidebar.html.erb TO AVOID SCREEN FLASH
+          //       AND WILL NOT SET CORRECLTY IF GOING BACK TO SAME VALUE
+          $('#cat_'+$scope.current.category_index).removeClass("unselected-category").addClass("selected-category");
+
           aq.each(operations, op => {
             op.jobs = aq.collect(op.jobs, job => AQ.Job.record(job));
             op.field_values = aq.collect(op.field_values, fv => AQ.FieldValue.record(fv))
@@ -462,12 +470,13 @@
       $scope.get_job_report = function() {
         $('#dashboard-container').hide()
         $('#content-container').show()
-
         $scope.current.activity_report.data = new JobReport([], "waiting");
         AQ.get(`/jobs/report?date=${$scope.current.activity_report.date.toString()}`).then(reponse => {
-          $scope.current.activity_report.data = new JobReport(reponse.data, "ready", $scope.current.activity_report.date);
-          $scope.current.activity_report.selected = true;
-          store_cookie();
+          if (no_race == 'reports') {
+            $scope.current.activity_report.data = new JobReport(reponse.data, "ready", $scope.current.activity_report.date);
+            $scope.current.activity_report.selected = true;
+            store_cookie();
+          }
         })
       }
       
@@ -529,6 +538,12 @@
         } else {
           return false;
         }
+
+      // MANUALLY CLEAR THE CATEGORY NAV TO AVOID THE SCREEN FLASH WHEN CLICK { SOMETHING ELSE } > { ACTIVITY REPORTS }
+      // USE INSTEAD OF current.category_index = -1; IN app/views/operations/_sidebar.html.erb
+      $scope.clear_category_nav = function(nr) {
+        no_race = nr;
+        $('#cat_'+$scope.current.category_index).removeClass("selected-category").addClass("unselected-category");
       }
     }]);
 
