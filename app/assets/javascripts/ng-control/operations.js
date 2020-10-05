@@ -448,31 +448,6 @@ var no_race = "init";
               $('#dashboard-container').html(response)
             }
           })
-        } else{
-          // SOME REACT METHOD TO UPDATE / RE-DISPLAY THE TABLE
-          alert('update me!')
-        
-          fetch('/api/v2/dashboard/my')
-          .then(result => result.json())
-          .then(
-            (result) => {
-              this.setState({
-                isLoading: false,
-                jobs: result.data
-              });
-              console.log("response");
-              console.log(result.data);
-            },
-            (error) => {
-              console.log("error:" + JSON.stringify(error));
-              this.setState({
-                isLoading: false,
-                error
-              });
-            }
-          )
-          alert('get dashboard called')
-        
         }
 
         $scope.current.active_jobs = true;
@@ -507,7 +482,7 @@ var no_race = "init";
       
       function get_tech_list() {
 
-        AQ.get('/api/v2/groups/55/users')
+        AQ.get('/api/v2/groups/55/users?options[]=job_count')
           .then(response => {
             $scope.current.technicians = response.data.data;
           });

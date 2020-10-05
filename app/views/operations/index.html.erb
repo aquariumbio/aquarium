@@ -6,6 +6,7 @@
 <%= content_for :class do %>operations<% end %>
 
 <%= content_for :controller do %>operationsCtrl<% end %>
+<% content_for :no_title do %>true<% end %>
 <% content_for :much_wider_sidebar do %>true<% end %>
 
 <%= content_for :sidebar do %>
@@ -148,7 +149,7 @@
                       <md-radio-button ng-repeat="tech in current.technicians"
                                         ng-value="tech" 
                                         style="margin-left: 26px">
-                          {{ tech['name'] }}<br/> <!--TODO ADD NUMBER OF JOBS-->
+                          {{ tech['name'] }} (Jobs {{tech['job_count']}})
                       </md-radio-button>
                   </md-radio-group>
 

@@ -77,11 +77,13 @@
 
         render() {
 
-          let MyJobsButton = createElement('button', { onClick: () => this.getMyDashboard() }, 'My Jobs');
+          
 
-          let AllJobsButton = createElement('button', { onClick: () => this.getManagerDashboard() }, 'All Active Jobs');
+          let AllJobsButton = createElement('button', { onClick: () => this.getManagerDashboard(), className: 'jobs_button' }, 'All Active Jobs');
 
-          let title = createElement('div', {className: 'title'}, 'Active Jobs', MyJobsButton);
+          let MyJobsButton = createElement('button', { onClick: () => this.getMyDashboard(), className: 'jobs_button'}, 'My Jobs');     
+
+          let title = createElement('div', {className: 'title'}, AllJobsButton, MyJobsButton);
 
           if (this.state.hasError) {
             // You can render any custom fallback UI
