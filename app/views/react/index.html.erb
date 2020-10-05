@@ -22,9 +22,9 @@
       function AssignedJobRow(props) {
         return (
           createElement('div', { className: 'job fflex_resp fflex_row' },
-            createElement('div', { className: 'job-tecnician-name fflex_col highlight_blue' }, props.job.to_name || '-'),
+            createElement('div', { className: 'job-tecnician-name fflex_col' }, props.job.to_name || '-'),
             createElement('div', { className: 'job-id fflex_col' },
-              createElement('a', { href: `/jobs/${props.job.id}` }, props.job.id)
+              createElement('a', { href: `/jobs/${props.job.id}`, className: 'google_blue' }, props.job.id)
             ),
             createElement('div', { className: 'job-protocol fflex_col2' },
               createElement('a', { className: 'google_blue', href: `/jobs/${props.job.id}` }, props.job.operation_type_name)
@@ -78,7 +78,7 @@
 
         render() {
 
-          let title = createElement('div', {className: 'title'}, 'Assigned Jobs');
+          let title = createElement('div', {className: 'title'}, 'Active Jobs');
 
           if (this.state.hasError) {
             // You can render any custom fallback UI
