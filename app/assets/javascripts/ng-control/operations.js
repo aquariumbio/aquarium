@@ -435,6 +435,7 @@ var no_race;
         $('#dashboard-container').show()
         $('#content-container').hide()
         if ( $('#dashboard-container').html().length == 0 ) {
+
           // BUILD FROM SCRATCH
           $.ajax({
             type: "GET",
@@ -445,7 +446,32 @@ var no_race;
               $('#dashboard-container').html(response)
             }
           })
-        } 
+        } else{
+          // SOME REACT METHOD TO UPDATE / RE-DISPLAY THE TABLE
+          alert('update me!')
+        
+          fetch('/api/v2/dashboard/my')
+          .then(result => result.json())
+          .then(
+            (result) => {
+              this.setState({
+                isLoading: false,
+                jobs: result.data
+              });
+              console.log("response");
+              console.log(result.data);
+            },
+            (error) => {
+              console.log("error:" + JSON.stringify(error));
+              this.setState({
+                isLoading: false,
+                error
+              });
+            }
+          )
+          alert('get dashboard called')
+        
+        }
 
         $scope.current.active_jobs = true;
         $scope.current.activity_report.selected = false;

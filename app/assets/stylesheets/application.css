@@ -26,3 +26,7 @@ body {
   padding-top: 48px !important;
   padding-bottom: 0px;
 }
+
+a.google_blue, a.google_blue:visited {
+  color: #1a0dab;
+}

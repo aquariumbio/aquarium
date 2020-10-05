@@ -4,7 +4,6 @@
 
       const createElement = React.createElement;
 
-
       function AssignedJobTitle(props) {
         return (
           createElement('div', { className: 'assigned_job_table_title fflex_resp fflex_title' },
@@ -20,6 +19,13 @@
       }
 
       function AssignedJobRow(props) {
+        let start_time = null;
+        if (props.job.pc == 0){
+          let job_state = JSON.parse(props.job.state).filter(obj => {
+            return obj.operation === "initialize"
+          });
+          start_time = new Date(job_state[0].time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        }
         return (
           createElement('div', { className: 'job fflex_resp fflex_row' },
             createElement('div', { className: 'job-tecnician-name fflex_col' }, props.job.to_name || '-'),
@@ -32,13 +38,11 @@
             createElement('div', { className: 'job-status fflex_col' }, props.job.pc == 0 ? 'Running' : 'Ready'),
             createElement('div', { className: 'job-operations fflex_col fflex_center_text' }, props.job.operation_count),
             createElement('div', { className: 'job-assigned-time fflex_col fflex_center_text' }, props.job.assigend_at ? new Date(props.job.assigend_at).toLocaleDateString('en-US') : '-'),
-            createElement('div', { className: 'job-start-time fflex_col fflex_center_text' }, props.job.pc == 0 ? 'TODO parse start' : '-'),
+            createElement('div', { className: 'job-start-time fflex_col fflex_center_text' }, props.job.pc == 0 ? start_time : '-'),
           )
         )
       }
-    
 
-// 
       class AssignedJobsTable extends React.Component {
         constructor(props) {
           super(props);
@@ -48,22 +52,17 @@
             liked: false 
           };
 
-          this.getManagerDashboard = this.getManagerDashboard.bind(this)
+          this.getManagerDashboard = this.getManagerDashboard.bind(this);
+          this.getMyDashboard = this.getMyDashboard.bind(this);
 
         }
 
         componentDidMount() {
-            this.getManagerDashboard()
-
-            let interval = 300000 // 5 minutes
-
-            this.fetch = setInterval(() => {
-              this.getManagerDashboard()
-            }, interval); 
+          this.getManagerDashboard()
         }
 
         componentWillUnmount() {
-          clearInterval(this.fetch);
+          
         }
 
         static getDerivedStateFromError(error) {
@@ -78,7 +77,11 @@
 
         render() {
 
-          let title = createElement('div', {className: 'title'}, 'Active Jobs');
+          let MyJobsButton = createElement('button', { onClick: () => this.getMyDashboard() }, 'My Jobs');
+
+          let AllJobsButton = createElement('button', { onClick: () => this.getManagerDashboard() }, 'All Active Jobs');
+
+          let title = createElement('div', {className: 'title'}, 'Active Jobs', MyJobsButton);
 
           if (this.state.hasError) {
             // You can render any custom fallback UI
@@ -95,7 +98,6 @@
           }
           
           if (!this.state.isLoading && !this.state.hasError){      
-
             content = this.state.jobs.map(function(job, i) {
                 return createElement( AssignedJobRow, {key: i + 1, job: job})
               }
@@ -116,8 +118,6 @@
                 isLoading: false,
                 jobs: result.data
               });
-              console.log("response");
-              console.log(result.data);
             },
             (error) => {
               console.log("error:" + JSON.stringify(error));
@@ -129,6 +129,25 @@
           )
         }
         
+        getMyDashboard() {
+          fetch('/api/v2/dashboard/my')
+          .then(result => result.json())
+          .then(
+            (result) => {
+              this.setState({
+                isLoading: false,
+                jobs: result.data
+              });
+            },
+            (error) => {
+              console.log("error:" + JSON.stringify(error));
+              this.setState({
+                isLoading: false,
+                error
+              });
+            }
+          )
+        }
       }
 
           
