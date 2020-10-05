@@ -1,4 +1,4 @@
-var no_race;
+var no_race = "init";
 
 (function () {
 
@@ -56,6 +56,8 @@ var no_race;
         if ( $scope.current.activity_report.selected ) {
           $scope.get_job_report();
         } else if ( $scope.current.active_jobs ) {
+          // CLICK ACTIVE JOBS BUTTON TO EXECUTE REACT CODE
+          $('#active_jobs_button').click();
           console.log("Active jobs should be highlighted")
         } else if ( $scope.current.operation_type !== null && $scope.current.status !== null) {
           let operation_type = aq.find(AQ.operation_types, operation_type => operation_type.id === $scope.current.operation_type.id);
@@ -455,7 +457,7 @@ var no_race;
         $('#content-container').show()
         $scope.current.activity_report.data = new JobReport([], "waiting");
         AQ.get(`/jobs/report?date=${$scope.current.activity_report.date.toString()}`).then(reponse => {
-          if (no_race == 'reports') {
+          if (no_race == 'reports' || no_race == "init") {
             $scope.current.activity_report.data = new JobReport(reponse.data, "ready", $scope.current.activity_report.date);
             $scope.current.activity_report.selected = true;
             store_cookie();
