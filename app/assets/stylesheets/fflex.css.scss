@@ -1,4 +1,4 @@
-    a.google_blue, a.google_blue:visited {
+        a.google_blue, a.google_blue:visited {
       color: #1a0dab;
     }
 
@@ -72,14 +72,66 @@
     }
 
     .react_container {
-        overflow: scroll;
+        overflow-y: scroll;
         padding: 0 20px;
     }
 
     .jobs_button {
         margin: 0 16px 0 0;
+        border-top: none;
+        border-bottom: none;
+        border-right: none;
+        border-left: none;
+        background-color: rgb(255, 255, 255);
+        color: rgb(170, 170, 170);
     }
 
+    .jobs_button:disabled {
+        border-bottom: 1px solid rgb(0, 0, 0);
+        color: rgb(0, 0, 0);
+    }
+
+    // USE WHEN TABLE DOES NOT TAKE UP FULL SCREEN
+    // ACCOUNT FOR WIDE SIDE BAR
+    @media screen and (max-width: 1023px) {
+        .fflex_1024 .fflex_resp {
+          display: block;
+          overflow: auto;
+        }
+  
+        .fflex_1024 .fflex_title {
+          display:none;
+        }
+  
+        .fflex_1024 .first_row {
+          border-top: 1px solid #c0c0c0;
+        }
+  
+        .none_1024 {
+          display:block;
+        }
+  
+        .show_1024 {
+          display:none;
+        }
+  
+        div[fflex_content] {
+          line-height:22px;
+          padding:4px 0 4px 100px;
+          position:relative;
+          text-align: start;
+        }
+  
+        div[fflex_content]:before {
+          content: attr(fflex_content);
+          position: absolute;
+          font-weight: 600;
+          left: 0;
+        }
+
+    }
+    
+    // USE WHEN TABLE IS FULL PAGE WITH
     @media screen and (max-width: 767px) {
       .fflex_768 .fflex_resp {
         display: block;

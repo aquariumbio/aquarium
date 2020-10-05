@@ -542,7 +542,6 @@ var no_race = "init";
 
       // Disable unassign button when there no assignment 
       $scope.disable_unassign = function(job_id) {
-        console.log($scope.job_assignments[job_id])
         if ($scope.job_assignments[job_id] == null || $scope.job_assignments[job_id] == undefined) {
           return true;
         } else {
