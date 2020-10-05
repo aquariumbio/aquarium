@@ -1,6 +1,12 @@
     a.google_blue, a.google_blue:visited {
       color: #1a0dab;
     }
+
+    .title {
+        font-size: 18px;
+        font-weight: bold;
+        padding: 16px 0;
+      }
     /*  GENE'S FFLEX STUFF
     ---------------------------------------- */
     .fflex_resp, .fflex_bang {
@@ -61,9 +67,19 @@
         text-align: center;
     }
 
+    .highlight_blue {
+        background: rgba(227, 243, 255, 1);
+    }
+
+    .react_container {
+        overflow: scroll;
+        padding: 0 20px;
+    }
+
     @media screen and (max-width: 767px) {
       .fflex_768 .fflex_resp {
         display: block;
+        overflow: auto;
       }
 
       .fflex_768 .fflex_title {

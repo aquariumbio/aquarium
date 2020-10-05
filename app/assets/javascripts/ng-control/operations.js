@@ -445,10 +445,7 @@ var no_race;
               $('#dashboard-container').html(response)
             }
           })
-        } else{
-          // SOME REACT METHOD TO UPDATE / RE-DISPLAY THE TABLE
-          alert('update me!')
-        }
+        } 
 
         $scope.current.active_jobs = true;
         $scope.current.activity_report.selected = false;
@@ -538,6 +535,7 @@ var no_race;
         } else {
           return false;
         }
+      }
 
       // MANUALLY CLEAR THE CATEGORY NAV TO AVOID THE SCREEN FLASH WHEN CLICK { SOMETHING ELSE } > { ACTIVITY REPORTS }
       // USE INSTEAD OF current.category_index = -1; IN app/views/operations/_sidebar.html.erb
@@ -545,6 +543,7 @@ var no_race;
         no_race = nr;
         $('#cat_'+$scope.current.category_index).removeClass("selected-category").addClass("unselected-category");
       }
+
     }]);
 
 })();

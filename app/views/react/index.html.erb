@@ -1,4 +1,4 @@
-<div id="react-content"></div>
+<div id="react-content" class="react_container"></div>
 <script>
       'use strict';
 
@@ -22,7 +22,7 @@
       function AssignedJobRow(props) {
         return (
           createElement('div', { className: 'job fflex_resp fflex_row' },
-            createElement('div', { className: 'job-tecnician-name fflex_col' }, props.job.to_name || '-'),
+            createElement('div', { className: 'job-tecnician-name fflex_col highlight_blue' }, props.job.to_name || '-'),
             createElement('div', { className: 'job-id fflex_col' },
               createElement('a', { href: `/jobs/${props.job.id}` }, props.job.id)
             ),
@@ -59,7 +59,7 @@
 
             this.fetch = setInterval(() => {
               this.getManagerDashboard()
-            }, 10000); 
+            }, interval); 
         }
 
         componentWillUnmount() {
@@ -77,6 +77,9 @@
         }
 
         render() {
+
+          let title = createElement('div', {className: 'title'}, 'Assigned Jobs');
+
           if (this.state.hasError) {
             // You can render any custom fallback UI
             return createElement('div', {}, "Something went wrong.")
@@ -101,7 +104,7 @@
             content.unshift(createElement(AssignedJobTitle, {key: 0}))
           }
 
-          return createElement('div', {className: 'fflex_768'}, content);
+          return createElement('div', {className: 'fflex_768'}, title, content);
         }
       
         getManagerDashboard() {
