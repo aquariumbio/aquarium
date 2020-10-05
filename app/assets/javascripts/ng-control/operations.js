@@ -529,10 +529,10 @@ var no_race = "init";
           );
       }
 
-      function unassign_job(job_id) {
+      $scope.unassign_job = function(job_id) {
         AQ.post(`/api/v2/jobs/${job_id}/unassign`, {})
         .then(function(response){
-          console.log(response.data);
+          $scope.job_assignments[job_id] = null
         },
           function(response){
             console.log("Error during job assignment: " + JSON.stringify(response.data.data))
@@ -565,6 +565,16 @@ var no_race = "init";
         }
       }
 
+      // Disable unassign button when there no assignment 
+      $scope.disable_unassign = function(job_id) {
+        console.log($scope.job_assignments[job_id])
+        if ($scope.job_assignments[job_id] == null || $scope.job_assignments[job_id] == undefined) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
       // MANUALLY CLEAR THE CATEGORY NAV TO AVOID THE SCREEN FLASH WHEN CLICK { SOMETHING ELSE } > { ACTIVITY REPORTS }
       // USE INSTEAD OF current.category_index = -1; IN app/views/operations/_sidebar.html.erb
       $scope.clear_category_nav = function(nr) {
@@ -572,6 +582,8 @@ var no_race = "init";
         $('#cat_'+$scope.current.category_index).removeClass("selected-category").addClass("unselected-category");
       }
 
+      
+      
     }]);
 
 })();
