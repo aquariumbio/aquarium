@@ -234,7 +234,7 @@ var no_race;
           // MANUALLY SET THE CATEGORY NAV
           // NOTE: NOT SETTING current.category_index = -1; IN app/views/operations/_sidebar.html.erb TO AVOID SCREEN FLASH
           //       AND WILL NOT SET CORRECLTY IF GOING BACK TO SAME VALUE
-          $('#cat_'+$scope.current.category_index).attr("class","- no-highlight selected-category active-category");
+          $('#cat_'+$scope.current.category_index).removeClass("unselected-category").addClass("selected-category");
 
           aq.each(operations, op => {
             op.jobs = aq.collect(op.jobs, job => AQ.Job.record(job));
@@ -467,7 +467,7 @@ var no_race;
       // USE INSTEAD OF current.category_index = -1; IN app/views/operations/_sidebar.html.erb
       $scope.clear_category_nav = function(nr) {
         no_race = nr;
-        $('#cat_'+$scope.current.category_index).attr("class","- no-highlight unselected-category active-category");
+        $('#cat_'+$scope.current.category_index).removeClass("selected-category").addClass("unselected-category");
       }
     }]);
 
