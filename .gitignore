@@ -72,4 +72,10 @@ ui/node_modules
 coverage
 
 # please do not ignore Gemfile.lock !!!
-coverage
+
+# alternate backup docker/db volumes
+# this allows the user to "change" one of the volumes to "/docker/db" before launching docker
+# NOTE: also remember to change the DB_NAME in the .env file if each volume uses a different database name
+/docker/db_prod
+/docker/db_dev
+/docker/db_test
