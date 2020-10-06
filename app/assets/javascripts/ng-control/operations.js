@@ -323,19 +323,21 @@ var no_race = "init";
       };
 
       $scope.batch = function (operation_type) {
+        $('#batch-btn').prop('disabled', true);
 
         var ops = aq.where(operation_type.operations, op => op.selected);
 
         if (ops.length > 0) {
-          operation_type.schedule(ops).then(() => {
+          operation_type.schedule(ops)
+          .then(() => {
             get_numbers().then(numbers => {
               $scope.numbers = numbers;
               $scope.select(operation_type, 'scheduled', ops);
+
               $scope.$apply();
             });
-          });
-        }
-
+          })
+        }       
       };
 
       $scope.retry = function (operation_type) {
@@ -359,6 +361,7 @@ var no_race = "init";
       };
 
       $scope.unschedule = function (operation_type) {
+        $('#remove-btn').prop('disabled', true);
 
         var ops = aq.where(operation_type.operations, op => op.selected);
 
@@ -366,8 +369,11 @@ var no_race = "init";
           operation_type.unschedule(ops).then(() => {
             get_numbers().then(numbers => {
               $scope.numbers = numbers;
-// TODO: if no jobs remain after removing operations navigate to pending page
-              $scope.select(operation_type, 'scheduled', ops);
+              if (ops.length - aq.where(operation_type.operations, op => op.status === "scheduled").length > 0){
+                $scope.select(operation_type, 'scheduled', ops);
+              } else {
+                $scope.select(operation_type, 'pending', ops);
+              }
               $scope.$apply();
             });
           });

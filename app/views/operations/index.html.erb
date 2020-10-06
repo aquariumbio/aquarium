@@ -35,7 +35,8 @@
                 ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
                 ng-disabled="disable_batch_button()"
                 ng-click="batch(current.operation_type)"
-                data-manager-action="schedule">
+                data-manager-action="schedule"
+                id="batch-btn">
         <ng-md-icon icon="attach_file" size="16" aria-label="schedule" style="fill: #fff; display: inline-flex; vertical-align: middle;"></ng-md-icon>
         <span style="display: inline-flex; vertical-align: middle;">Create Job</span>
       </md-button>
@@ -45,10 +46,13 @@
                 ng-click="unschedule(current.operation_type)"
                 ng-disabled="disable_batch_button()"
                 aria-lable="Unschedule"
-                data-manager-job-action="Remove operataion">
+                data-manager-job-action="Remove operataion"
+                id="remove-btn">
         <ng-md-icon icon="remove_circle_outline" aria-label="Remove operation" style="fill: #fff; display: inline-flex; vertical-align: middle;"></ng-md-icon>
         <span style="display: inline-flex; vertical-align: middle;">Remove</span>
       </md-button>
+
+      
 
       <md-button ng-if="current.status == 'error'"
                 aria-label="Retry" 
