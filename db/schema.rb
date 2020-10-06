@@ -432,10 +432,23 @@ ActiveRecord::Schema.define(version: 20200910000000) do
     t.integer  "assigned_to", limit: 4
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+    t.integer  "pc",          limit: 4
     t.string   "by_name",     limit: 255
     t.string   "by_login",    limit: 255
     t.string   "to_name",     limit: 255
     t.string   "to_login",    limit: 255
+  end
+
+  create_table "view_job_associations", id: false, force: :cascade do |t|
+    t.integer "job_id", limit: 4
+    t.integer "n",      limit: 8, default: 0, null: false
+  end
+
+  create_table "view_job_operation_types", id: false, force: :cascade do |t|
+    t.integer "job_id",            limit: 4
+    t.integer "operation_type_id", limit: 4
+    t.string  "name",              limit: 255
+    t.string  "category",          limit: 255
   end
 
   create_table "wires", force: :cascade do |t|
