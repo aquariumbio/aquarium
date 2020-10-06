@@ -332,8 +332,10 @@ var no_race = "init";
           .then(() => {
             get_numbers().then(numbers => {
               $scope.numbers = numbers;
+              ops = aq.each(ops, op => {
+                op.selected = false
+              })
               $scope.select(operation_type, 'scheduled', ops);
-
               $scope.$apply();
             });
           })
@@ -369,6 +371,9 @@ var no_race = "init";
           operation_type.unschedule(ops).then(() => {
             get_numbers().then(numbers => {
               $scope.numbers = numbers;
+              ops = aq.each(ops, op => {
+                op.selected = false
+              })
               if (ops.length - aq.where(operation_type.operations, op => op.status === "scheduled").length > 0){
                 $scope.select(operation_type, 'scheduled', ops);
               } else {
