@@ -145,11 +145,11 @@
                 </md-button>
 
                 <md-menu-content width="4"  class="scrollable flex" style="padding-top: 0;">
-                  <div style="background-color: #fff; position: absolute; z-index: 1; width: 100%">
+                  <div style="background-color: #fff; position: absolute; z-index: 1; width: 100%;">
                     <h1 class="md-title" style="text-align: left; margin-left: 26px;">Assign Job</h1>
                   </div>
                   
-                  <md-radio-group ng-model="selectedTech" ng-if="current.technicians.length > 0" class="md-primary" style="z-index: 0; margin-top: 62px; margin-bottom: 50px;">
+                  <md-radio-group ng-model="selectedTech" ng-if="current.technicians.length > 0" class="md-primary" style="z-index: 0; margin-top: 62px; margin-bottom: 30px;">
                       <md-radio-button ng-repeat="tech in current.technicians"
                                         ng-value="tech" 
                                         style="margin-left: 26px">
@@ -158,25 +158,25 @@
                   </md-radio-group>
 
                   <div ng-if="current.technicians.length > 0"
-                       style="position: absolute; right: 0px; top: 256px; display: flex; justify-content: center; z-index:1; width:100%; background-color: #fff;">
+                       style="position: absolute; right: 0px; top: 256px; display: flex; justify-content: flex-end; z-index:1; width:100%; background-color: #fff;">
                     <md-button ng-click="$mdMenu.close($event)" 
                                class="md-primary"
                                aria-label="Close assignment menu"
-                                style="min-width: auto; max-width: 50px; font-size: small; padding: 0;">
+                               style="min-width: auto;  font-size: small; padding: 0;">
                       Cancel
                     </md-button>
                     <md-button ng-click="unassign_job(job_id)" 
                                class="md-primary"
                                aria-label="Unassign technician from job"
                                ng-disabled="disable_unassign(job_id)"
-                               style="min-width: auto; max-width: 50px; font-size: small; padding: 0;">
+                               style="min-width: auto;  font-size: small; padding: 0;">
                       Unassign
                     </md-button>
                     <md-button ng-click="assign_job(selectedTech['id'], selectedTech['name'], job_id)" 
                                class="md-primary"
                                aria-label="Assign technician to job"
                                ng-disabled="disable_assign(selectedTech)"
-                               style="min-width: auto; max-width: 50px; font-size: small; padding: 0;">
+                               style="min-width: auto;  font-size: small; padding: 0;">
                       OK
                     </md-button>
                   </div>
