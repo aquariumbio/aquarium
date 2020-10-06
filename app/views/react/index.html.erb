@@ -7,8 +7,8 @@
       function AssignedJobTitle(props) {
         return (
           createElement('div', { className: 'assigned_job_table_title fflex_resp fflex_title' },
-            createElement('div', { className: 'job-tecnician-name fflex_col' },'Technician'),
-            createElement('div', { className: 'job-id fflex_col' }, 'Job'),
+            createElement('div', { className: 'job-tecnician-name fflex_col typography_figma_bold' },'Technician'),
+            createElement('div', { className: 'job-id fflex_col typography_figma_bold' }, 'Job'),
             createElement('div', { className: 'job-protocol fflex_col2' },'Protocol'),
             createElement('div', { className: 'job-status fflex_col' }, 'Status'),
             createElement('div', { className: 'job-operations fflex_col fflex_center_text' }, 'Operations'),
@@ -29,12 +29,12 @@
 
         return (
           createElement('div', { className: `active-job fflex_resp fflex_row` },
-            createElement('div', { className: 'job-tecnician-name fflex_col', fflex_content: 'Technician' }, props.job.to_name || '-'),
+            createElement('div', { className: 'job-tecnician-name fflex_col highlight_blue', fflex_content: 'Technician' }, props.job.to_name || '-'),
             createElement('div', { className: 'job-id fflex_col', fflex_content: "Job"},
-              createElement('a', { href: `/jobs/${props.job.id}`, className: 'google_blue' }, props.job.id)
+              createElement('a', { href: `/jobs/${props.job.id}`, className: 'figma_blue' }, props.job.id)
             ),
             createElement('div', { className: 'job-protocol fflex_col2', fflex_content: 'Protocol' },
-              createElement('a', { className: 'google_blue', href: `/jobs/${props.job.id}` }, props.job.operation_type_name)
+              createElement('a', { className: 'figma_blue', href: `/jobs/${props.job.id}` }, props.job.operation_type_name)
             ),
             createElement('div', { className: 'job-status fflex_col', fflex_content: 'Status' }, props.job.pc == 0 ? 'Running' : 'Ready'),
             createElement('div', { className: 'job-operations fflex_col fflex_center_text', fflex_content: 'Status'}, props.job.operation_count),
@@ -73,9 +73,9 @@
 
         render() {
 
-          let AllJobsButton = createElement('button', { onClick: () => this.getActiveJobsDashboard(), className: 'jobs_button', disabled: !this.state.my_jobs }, 'All Active Jobs');
+          let AllJobsButton = createElement('button', { onClick: () => this.getActiveJobsDashboard(), className: 'title jobs_button', disabled: !this.state.my_jobs }, 'All Active Jobs');
 
-          let MyJobsButton = createElement('button', { onClick: () => this.getActiveJobsDashboard(true), className: 'jobs_button', disabled: this.state.my_jobs}, 'My Jobs');     
+          let MyJobsButton = createElement('button', { onClick: () => this.getActiveJobsDashboard(true), className: 'title jobs_button', disabled: this.state.my_jobs}, 'My Jobs');     
 
           let title = createElement('div', {className: 'title'}, AllJobsButton, MyJobsButton);
 
