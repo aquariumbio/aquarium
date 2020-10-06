@@ -4,6 +4,16 @@
 
       <% if current_user && current_user.is_admin %>
 
+        <div id="active_jobs_button" ng-click="clear_category_nav('jobs');
+                       current.switch_user = false;
+                       current.active_jobs = true;
+                       select_active_jobs()"
+             ng-class="current.active_jobs ?
+                      'no-highlight selected-category alt-category' :
+                      'no-highlight unselected-category alt-category'">
+            Home
+        </div>
+
         <div ng-click="clear_category_nav('switch');
                        current.switch_user = true;
                        current.active_jobs = false;
@@ -12,16 +22,6 @@
                       'no-highlight selected-category alt-category' :
                       'no-highlight unselected-category alt-category'">
             Switch User
-        </div>
-
-        <div id="active_jobs_button" ng-click="clear_category_nav('jobs');
-                       current.switch_user = false;
-                       current.active_jobs = true;
-                       select_active_jobs()"
-             ng-class="current.active_jobs ?
-                      'no-highlight selected-category alt-category' :
-                      'no-highlight unselected-category alt-category'">
-            Active Jobs
         </div>
 
         <div ng-click="clear_category_nav('reports');
