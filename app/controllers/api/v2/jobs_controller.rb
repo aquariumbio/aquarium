@@ -124,9 +124,8 @@ private
     jal.assigned_by = @by
     jal.assigned_to = @to
 
-    jal.save!
-
-    if jal.id
+    if jal.valid?
+      jal.save!
       result = api_ok(jal)
     else
       result = api_error(jal.errors)
