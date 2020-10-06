@@ -1,171 +1,60 @@
-<html>
+<% provide(:title, "AQUARIUM") %>
+<% content_for :show_errors do %>true<% end %>
 
-<head>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<style>
-@import url('https://fonts.googleapis.com/css?family=Roboto');
-
-a.google_blue, a.google_blue:visited {
-  color: #1a0dab;
-}
-
-body {
-  font-family: 'Roboto Regular', sans-serif;
-  font-size:14px;
-  margin: 32px;
-}
-
-.title {
-  font-size: 18px;
-  font-weight: bold;
-  padding: 16px 0;
-}
-
-/*  GENE'S FFLEX STUFF
----------------------------------------- */
-.fflex_resp, .fflex_bang {
-  display: -ms-flexbox;
-  display: flex;
-  position:relative;
-}
-
-.fflex_col {
-  flex: 1 1 0;
-  margin: 0 8px;
-  min-width:0;
-}
-
-.fflex_col2 {
-  flex: 2 1 0;
-  margin: 0 8px;
-  min-width:0;
-}
-
-.fflex_col3 {
-  flex: 3 1 0;
-  margin: 0 8px;
-  min-width:0;
-}
-
-.fflex_col4 {
-  flex: 4 1 0;
-  margin: 0 8px;
-  min-width:0;
-}
-
-.fflex_col_auto  {
-  width: auto;
-  margin: 0 8px;
-  min-width:0;
-}
-
-.fflex_title {
-  padding:8px 0;
-  background-color:#2196f3;
-  font-size: 16px;
-  color:white;
-}
-
-.fflex_row {
-  padding:8px 0;
-  align-items: center;
-  border-bottom: 1px solid #c0c0c0;
-}
-
-@media screen and (max-width: 767px) {
-  .fflex_768 .fflex_resp {
-    display: block;
-  }
-
-  .fflex_768 .fflex_title {
-    display:none;
-  }
-
-  .fflex_768 .first_row {
-    border-top: 1px solid #c0c0c0;
-  }
-
-  .none_768 {
-    display:block;
-  }
-
-  .show_768 {
-    display:none;
-  }
-
-  div[fflex_content] {
-    line-height:22px;
-    padding:4px 0 4px 100px;
-    position:relative;
-  }
-
-  div[fflex_content]:before {
-    content: attr(fflex_content);
-    position: absolute;
-    font-weight: 600;
-    left: 0;
-  }
-
-}
-</style>
-</head>
-
-<body>
-<div class="title">
-  Technician Dashboard ( <%= @jobs.length %> Jobs )
-</div>
-<div class="fflex_768">
-  <div class="fflex_resp fflex_title">
-    <div class="fflex_col">
-      Technician
-    </div>
-    <div class="fflex_col">
-      Job
-    </div>
-    <div class="fflex_col2">
-      Protocol
-    </div>
-    <div class="fflex_col">
-      Status
-    </div>
-    <div class="fflex_col">
-      Operations
-    </div>
-    <div class="fflex_col">
-      Assigned
-    </div>
-    <div class="fflex_col">
-      Started
-    </div>
+<div style="padding:0 24px">
+  <div class="title">
+    Technician Dashboard ( <%= @jobs.length %> Jobs )
   </div>
-  <% first_row = "first_row" %>
-  <% @jobs.each do |job| %>
-    <div class="fflex_resp fflex_row <%= first_row %>">
-      <div fflex_content="Technician" class="fflex_col">
-        <%= job.user_name || job.to_name || "-" %>
+  <div class="fflex_768">
+    <div class="fflex_resp fflex_title">
+      <div class="fflex_col">
+        Technician
       </div>
-      <div fflex_content="Job" class="fflex_col">
-        <a class="google_blue" href="/jobs/<%= job.id %>"><%= job.id %></a>
+      <div class="fflex_col">
+        Job
       </div>
-      <div fflex_content="Protocol" class="fflex_col2">
-        <a class="google_blue" href="/jobs/<%= job.id %>"><%= job.operation_type_name %></a>
+      <div class="fflex_col2">
+        Protocol
       </div>
-      <div fflex_content="Status" class="fflex_col">
-        <%= job.pc == 0 ? "Running" : "Ready" %>
+      <div class="fflex_col">
+        Status
       </div>
-      <div fflex_content="Operations" class="fflex_col">
-        <%= job.operation_count %>
+      <div class="fflex_col">
+        Operations
       </div>
-      <div fflex_content="Assigned" class="fflex_col">
-        <%= job.assigend_at.strftime('%m-%d-%y') || "-" %>
+      <div class="fflex_col">
+        Assigned
       </div>
-      <div fflex_content="Started" class="fflex_col">
-        <%= job.pc == 0 ? ( raw "&lt;time>" ) : "-" %>
+      <div class="fflex_col">
+        Started
       </div>
     </div>
-    <% first_row = "" %>
-  <% end %>
+    <% first_row = "first_row" %>
+    <% @jobs.each do |job| %>
+      <div class="fflex_resp fflex_row <%= first_row %>">
+        <div fflex_content="Technician" class="fflex_col">
+          <%= job.to_name || "-" %>
+        </div>
+        <div fflex_content="Job" class="fflex_col">
+          <a class="google_blue" href="/jobs/<%= job.id %>"><%= job.id %></a>
+        </div>
+        <div fflex_content="Protocol" class="fflex_col2">
+          <a class="google_blue" href="/jobs/<%= job.id %>"><%= job.operation_type_name %></a>
+        </div>
+        <div fflex_content="Status" class="fflex_col">
+          <%= job.pc == 0 ? "Running" : "Ready" %>
+        </div>
+        <div fflex_content="Operations" class="fflex_col">
+          <%= job.operation_count %>
+        </div>
+        <div fflex_content="Assigned" class="fflex_col">
+          <%= job.assigend_at.strftime('%m-%d-%y') || "-" %>
+        </div>
+        <div fflex_content="Started" class="fflex_col">
+          <%= job.pc == 0 ? ( raw "&lt;time>" ) : "-" %>
+        </div>
+      </div>
+      <% first_row = "" %>
+    <% end %>
+  </div>
 </div>
-</body>
-
-</html>
