@@ -78,6 +78,8 @@ var no_race = "init";
 
       init1();
 
+      get_tech_list();
+
       $scope.status = 'Loading Operation Types ...';
 
       AQ.OperationType.deployed_with_timing().then(operation_types => {
@@ -153,7 +155,6 @@ var no_race = "init";
             date: $scope.current.activity_report.date
           }
         });
-        console.log(aqCookieManager.get_object("managerState"));
       }
 
       function highlight_categories(numbers) {
@@ -260,9 +261,24 @@ var no_race = "init";
               }
             })
           });
+          
           $scope.jobs = aq.uniq(aq.collect(operation_type.operations, op => {
             return op.jobs.length > 0 ? op.last_job.id : null
           }));
+
+          let job_assignments = new Object;
+          aq.each(operation_type.operations, op => {
+            if (op.jobs.length > 0 && op.last_job.assignment != null) {
+
+              const assignment = { 
+                assigned_to: op.last_job.assignment.assigned_to,
+                to_name: op.last_job.assignment.to_name
+              }
+             job_assignments[op.last_job.id] == undefined ? job_assignments[op.last_job.id] = assignment : null
+            }
+          });
+          $scope.job_assignments = job_assignments;
+
           $scope.applying_user_filter = false;
           $scope.$apply();
         })
@@ -307,19 +323,23 @@ var no_race = "init";
       };
 
       $scope.batch = function (operation_type) {
+        $('#batch-btn').prop('disabled', true);
 
         var ops = aq.where(operation_type.operations, op => op.selected);
 
         if (ops.length > 0) {
-          operation_type.schedule(ops).then(() => {
+          operation_type.schedule(ops)
+          .then(() => {
             get_numbers().then(numbers => {
               $scope.numbers = numbers;
+              ops = aq.each(ops, op => {
+                op.selected = false
+              })
               $scope.select(operation_type, 'scheduled', ops);
               $scope.$apply();
             });
-          });
-        }
-
+          })
+        }       
       };
 
       $scope.retry = function (operation_type) {
@@ -342,15 +362,23 @@ var no_race = "init";
 
       };
 
-      $scope.unschedule = function (operation_type, jid) {
+      $scope.unschedule = function (operation_type) {
+        $('#remove-btn').prop('disabled', true);
 
-        var ops = aq.where(operation_type.operations, op => op.selected && op.last_job.id === jid);
+        var ops = aq.where(operation_type.operations, op => op.selected);
 
         if (ops.length > 0) {
           operation_type.unschedule(ops).then(() => {
             get_numbers().then(numbers => {
               $scope.numbers = numbers;
-              $scope.select(operation_type, 'pending_true', ops);
+              ops = aq.each(ops, op => {
+                op.selected = false
+              })
+              if (ops.length - aq.where(operation_type.operations, op => op.status === "scheduled").length > 0){
+                $scope.select(operation_type, 'scheduled', ops);
+              } else {
+                $scope.select(operation_type, 'pending', ops);
+              }
               $scope.$apply();
             });
           });
@@ -420,6 +448,7 @@ var no_race = "init";
         $('#dashboard-container').show()
         $('#content-container').hide()
         if ( $('#dashboard-container').html().length == 0 ) {
+
           // BUILD FROM SCRATCH
           $.ajax({
             type: "GET",
@@ -430,9 +459,6 @@ var no_race = "init";
               $('#dashboard-container').html(response)
             }
           })
-        } else{
-          // SOME REACT METHOD TO UPDATE / RE-DISPLAY THE TABLE
-          alert('update me!')
         }
 
         $scope.current.active_jobs = true;
@@ -464,6 +490,75 @@ var no_race = "init";
           }
         })
       }
+      
+      function get_tech_list() {
+
+        AQ.get('/api/v2/groups/55/users?options[]=job_count')
+          .then(response => {
+            $scope.current.technicians = response.data.data;
+          });
+          // TODO: error handling
+
+      }
+
+      $scope.assign_job = function (assign_to_id, to_name, job_id) {
+
+        AQ.post(`/api/v2/jobs/${job_id}/assign?to=${assign_to_id}`, {})
+          .then(function(response){
+            $scope.job_assignments[job_id] = {
+                assigned_to: assign_to_id,
+                to_name: to_name
+              }
+            }, function(response){
+              console.log("Error during job assignment: " + JSON.stringify(response.data.data))
+            }
+          );
+      }
+
+      $scope.unassign_job = function(job_id) {
+        AQ.post(`/api/v2/jobs/${job_id}/unassign`, {})
+        .then(function(response){
+          $scope.job_assignments[job_id] = null
+        },
+          function(response){
+            console.log("Error during job assignment: " + JSON.stringify(response.data.data))
+        }); 
+      }
+
+      function get_job_assignment(job_id) {
+        AQ.get(`/api/v2/jobs/${job_id}/assignment`)
+        .then(response => {
+          if (response.data.status === 200) {
+            return response.data.data
+          }
+        });
+      }
+
+      $scope.disable_batch_button = function() {
+        if ($scope.current.operation_type.operations) {
+          // Enable button if a single operation has been selected
+          return !$scope.current.operation_type.operations.some(operation => operation.selected == true)
+        } else {
+          return true
+        }
+      }
+
+      $scope.disable_assign = function(techAssignment) {
+        if (techAssignment == undefined) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      // Disable unassign button when there no assignment 
+      $scope.disable_unassign = function(job_id) {
+        if ($scope.job_assignments[job_id] == null || $scope.job_assignments[job_id] == undefined) {
+          return true;
+        } else {
+          return false;
+        }
+      }
 
       // MANUALLY CLEAR THE CATEGORY NAV TO AVOID THE SCREEN FLASH WHEN CLICK { SOMETHING ELSE } > { ACTIVITY REPORTS }
       // USE INSTEAD OF current.category_index = -1; IN app/views/operations/_sidebar.html.erb
@@ -471,6 +566,9 @@ var no_race = "init";
         no_race = nr;
         $('#cat_'+$scope.current.category_index).removeClass("selected-category").addClass("unselected-category");
       }
+
+      
+      
     }]);
 
 })();

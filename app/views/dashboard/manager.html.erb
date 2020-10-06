@@ -72,6 +72,10 @@ body {
   border-bottom: 1px solid #c0c0c0;
 }
 
+.highlight_blue {
+  background: rgba(227, 243, 255, 1);
+}
+
 @media screen and (max-width: 767px) {
   .fflex_768 .fflex_resp {
     display: block;
@@ -142,7 +146,7 @@ body {
   <% @jobs.each do |job| %>
     <div class="fflex_resp fflex_row <%= first_row %>">
       <div fflex_content="Technician" class="fflex_col">
-        <%= job.user_name || job.to_name || "-" %>
+        <%= job.to_name || "-" %>
       </div>
       <div fflex_content="Job" class="fflex_col">
         <a class="google_blue" href="/jobs/<%= job.id %>"><%= job.id %></a>

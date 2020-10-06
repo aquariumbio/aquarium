@@ -6,9 +6,27 @@ class JobAssignmentLog < ActiveRecord::Base
   belongs_to :assigned_by_user, class_name: "User", foreign_key: "assigned_by"
   belongs_to :assigned_to_user, class_name: "User", foreign_key: "assigned_to"
 
-  validate :job_id_exists
-  validate :assigned_by_exists
-  validate :assigned_to_exists
+  ### VALIDATIONS
+
+  # VALIDATE FOREIGN KEYS ON SAVE
+  def save
+    err = nil
+    err = 1 if !job_id_exists
+    err = 1 if !assigned_by_exists
+    err = 1 if !assigned_to_exists
+
+    err ? nil : super
+  end
+
+  # VALIDATE FOREIGN KEYS ON SAVE!
+  def save!
+    err = nil
+    err = 1 if !job_id_exists
+    err = 1 if !assigned_by_exists
+    err = 1 if !assigned_to_exists
+
+    err ? nil : super
+  end
 
   private
 
