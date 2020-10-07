@@ -86,9 +86,10 @@ the aquarium service:
 
 The following values can be set using this file or environment variables:
 
-| Config key        | Environment Variable | Default                               |
-| ----------------- | -------------------- | ------------------------------------- |
-| lab_name          | LAB_NAME             | `Your Lab`                            |
-| lab_email_address | LAB_EMAIL_ADDRESS    | –                                     |
-| logo_path         | LOGO_PATH            | `aquarium-logo.png`                   |
-| image_uri         | IMAGE_URI            | _S3_PROTOCOL_`://`_S3_HOST_`/images/` |
+| Config key           | Environment Variable | Default                               |
+| -----------------    | -------------------- | ------------------------------------- |
+| lab_name             | LAB_NAME             | `Your Lab`                            |
+| lab_email_address    | LAB_EMAIL_ADDRESS    | –                                     |
+| logo_path            | LOGO_PATH            | `aquarium-logo.png`                   |
+| image_uri            | IMAGE_URI            | _S3_PROTOCOL_`://`_S3_HOST_`/images/` |
+| technician_dashboard | TECH_DASHBOARD       | `false`                               |

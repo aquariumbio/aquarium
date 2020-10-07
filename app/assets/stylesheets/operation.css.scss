@@ -10,6 +10,14 @@
     width: 30%;
   }
 
+  .category-container-full {
+    padding-top: 4px;
+    padding-right: 8px;
+    /*border-right: 1px solid #eee;*/
+    /*border-bottom: 2px solid #eee;*/
+    width: 100%;
+  }
+
   .selected-category, .unselected-category {
     cursor: pointer;
     font-size: 9pt;

@@ -1,6 +1,21 @@
 (function() {
   var w = angular.module("aquarium");
 
+  w.directive('focusedWhen', function() {
+    return {
+      scope: {
+        focusedWhen: '=',
+      },
+      link: function($scope, $element) {
+        $scope.$watch('focusedWhen', function(shouldFocus) {
+          if (shouldFocus) {
+            $element[0].focus();
+          }
+        });
+      }
+    };
+  });
+
   w.controller("technicianCtrl", [
     "$scope",
     "$http",
@@ -136,15 +151,15 @@
       };
 
       $scope.keyDown = function(evt) {
-        console.log(evt.key, evt);
-
         switch (evt.key) {
           case "PageUp":
+            event.preventDefault();
             if ($scope.job.state.index > 0) {
               $scope.job.state.index--;
             }
             break;
           case "PageDown":
+            event.preventDefault();
             if ($scope.job.state.index < $scope.job.backtrace.length - 1) {
               $scope.job.state.index++;
             } else {
@@ -153,7 +168,24 @@
             break;
           case "a":
             if (evt.ctrlKey) {
+              event.preventDefault();
               $scope.job.backtrace.last.check_all();
+            }
+            break;
+          case "End":
+            event.preventDefault();
+            document.getElementById('content-container').focus();
+            if ($scope.job.state.index < $scope.job.backtrace.length - 1) {
+              $scope.job.state.index++;
+            } else if (!$scope.job.backtrace.last.check_next()) {
+              $scope.ok();
+            }
+            break;
+          case "Home":
+            event.preventDefault();
+            document.getElementById('content-container').focus();
+            if(!$scope.job.backtrace.last.uncheck_prev() && $scope.job.state.index > 0) {
+              $scope.job.state.index--;
             }
 
           default:

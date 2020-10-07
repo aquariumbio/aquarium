@@ -43,7 +43,7 @@ gem 'protected_attributes_continued'
 
 gem 'rack-cors', '~> 1.0.5', require: 'rack/cors'
 
-gem 'rails', '4.2.11.1'
+gem 'rails', '4.2.11.3'
 
 gem 'redcarpet'
 
@@ -68,6 +68,7 @@ group :development do
   gem 'web-console', '~> 3.0'
   gem 'yard', '>= 0.9.20'
   gem 'yard-activerecord'
+  gem 'dev_only', path: 'components/dev_only'
 end
 
 group :development, :test do
