@@ -1,0 +1,41 @@
+    <% if !@ok %>
+      <div class="plus16"></div>
+      <span class="red">admin permission required to view this page.</span>
+      <div class="plus16"></div>
+      NOTE: either redirect or show warning.
+    <% else %>
+      <% @users.each do |user| %>
+        <div class="fflex_resp fflex_row">
+          <div fflex_content="Login" class="fflex_col"><%= user.login %></div>
+          <div fflex_content="Name" class="fflex_col"><%= user.name %></div>
+          <!-- TODO: LOOP TRHOUGH ROLES FROM DB -->
+          <% if user.id == @user_id %>
+            <div fflex_content="Admin" class="fflex_40 center"><%= image_tag("checkbox-disabled.svg") %></div>
+            <div fflex_content="Manage" class="fflex_40 center"><input type="checkbox" <%= "checked" if user.roles.index(".2.") %> onchange="go_toggle(<%= user.id %>,2)"></div>
+            <div fflex_content="Run" class="fflex_40 center"><input type="checkbox" <%= "checked" if user.roles.index(".3.") %> onchange="go_toggle(<%= user.id %>,3)"></div>
+            <div fflex_content="Design" class="fflex_40 center"><input type="checkbox" <%= "checked" if user.roles.index(".4.") %> onchange="go_toggle(<%= user.id %>,4)"></div>
+            <div fflex_content="Develop" class="fflex_40 center"><input type="checkbox" <%= "checked" if user.roles.index(".5.") %> onchange="go_toggle(<%= user.id %>,5)"></div>
+            <div fflex_content="Retired" class="fflex_40 center"><%= image_tag("box-disabled.svg") %></div>
+          <% else %>
+            <div fflex_content="Admin" class="fflex_40 center"><input type="checkbox" <%= "checked" if user.roles.index(".1.") %> onchange="go_toggle(<%= user.id %>,1)"></div>
+            <div fflex_content="Manage" class="fflex_40 center"><input type="checkbox" <%= "checked" if user.roles.index(".2.") %> onchange="go_toggle(<%= user.id %>,2)"></div>
+            <div fflex_content="Run" class="fflex_40 center"><input type="checkbox" <%= "checked" if user.roles.index(".3.") %> onchange="go_toggle(<%= user.id %>,3)"></div>
+            <div fflex_content="Design" class="fflex_40 center"><input type="checkbox" <%= "checked" if user.roles.index(".4.") %> onchange="go_toggle(<%= user.id %>,4)"></div>
+            <div fflex_content="Develop" class="fflex_40 center"><input type="checkbox" <%= "checked" if user.roles.index(".5.") %> onchange="go_toggle(<%= user.id %>,5)"></div>
+            <div fflex_content="Retired" class="fflex_40 center"><input type="checkbox" <%= "checked" if user.roles.index(".6.") %> onchange="go_toggle(<%= user.id %>,6)"></div>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+
+<script>
+  document.getElementById('s.login').style.display='none';
+  document.getElementById('s.name').style.display='none';
+  document.getElementById('s.1').style.display='none';
+  document.getElementById('s.2').style.display='none';
+  document.getElementById('s.3').style.display='none';
+  document.getElementById('s.4').style.display='none';
+  document.getElementById('s.5').style.display='none';
+  document.getElementById('s.6').style.display='none';
+  document.getElementById('<%= @sort %>').style.display='';
+</script>

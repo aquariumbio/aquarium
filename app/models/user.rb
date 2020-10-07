@@ -37,6 +37,56 @@ class User < ActiveRecord::Base
     memberships.where(group_id: group_id).present?
   end
 
+  # does user have permissions for <role>
+  # if retired then they lose all other permissions, but keep them in the list for reference
+  def is_role?(role)
+    role_ids = Role.role_ids
+puts ">>> role #{role}"
+puts ">>> roles #{roles}"
+
+    if roles == "."
+      return false
+    elsif roles.index(".#{Role.role_ids.key("retired")}.")
+      # only return true if checking "retired"
+      role == "retired"
+    else
+      # check <role> and check "admin"
+      roles.index(".#{Role.role_ids.key(role)}.") or roles.index(".#{Role.role_ids.key("admin")}.")
+    end
+  end
+
+  # toggle role
+  def role_toggle(user_id,role_id)
+    user = User.find(user_id)
+    return if !user
+
+    role_ids = Role.role_ids
+    return if !role_ids[role_id]
+
+    if user.roles.index(".#{role_id}.")
+      # replace all instances of ".<id>." with "." (there should only be one)
+      user.roles.gsub!(".#{role_id}.",".")
+    else
+      # append "<id>." if not ".<id>."
+      user.roles += ("#{role_id}.")
+    end
+
+    user.save
+  end
+
+  def self.get_roles(ins, order)
+
+    wheres = ""
+    ors = "where"
+    ins.each do |i|
+      wheres += "#{ors} roles like '%.#{i.to_i}.%'"
+      ors = " or"
+    end
+
+    sql = "select id, login, name, roles from users #{wheres} order by #{order}"
+    User.find_by_sql sql
+  end
+
   # deprecated
   # TODO: eliminate need for this
   # keep because it is used by json_controller.current

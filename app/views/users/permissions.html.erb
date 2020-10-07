@@ -1,0 +1,154 @@
+<%= stylesheet_link_tag 'gene' %>
+<%= javascript_include_tag 'jquery.min' %>
+
+<div class="fflex_768">
+  <div class="fflex_resp fflex_title fflex_top">
+      <div class="fflex_col pointer" style="line-height:40px;margin-top:68;" onclick="$('#sort').val('login');go_filter()">
+        Login<span id="s.login" style="color:#dddddd;">&nbsp; &#9650;</span>
+      </div>
+      <div class="fflex_col pointer" style="line-height:40px;margin-top:68;" onclick="$('#sort').val('name');go_filter()">
+        Name<span id="s.name" style="color:#dddddd;display:none">&nbsp; &#9650;</span>
+      </div>
+      <!-- TODO: LOOP TRHOUGH ROLES FROM DB -->
+      <div class="fflex_40">
+        <div style="transform:rotate(270deg);"><div class="pointer" style="margin-left:-68px;" onclick="$('#sort').val('role.admin');go_filter()">
+          <span id="s.1" style="color:#dddddd;display:none">&#9658; &nbsp;</span>Admin
+        </div></div>
+      </div>
+      <div class="fflex_40">
+        <div style="transform:rotate(270deg);"><div class="pointer" style="margin-left:-68px;" onclick="$('#sort').val('role.manage');go_filter()">
+          <span id="s.2" style="color:#dddddd;display:none">&#9658; &nbsp;</span>Manage
+        </div></div>
+      </div>
+      <div class="fflex_40">
+        <div style="transform:rotate(270deg);"><div class="pointer" style="margin-left:-68px;" onclick="$('#sort').val('role.run');go_filter()">
+          <span id="s.3" style="color:#dddddd;display:none">&#9658; &nbsp;</span>Run
+        </div></div>
+      </div>
+      <div class="fflex_40">
+        <div style="transform:rotate(270deg);"><div class="pointer" style="margin-left:-68px;" onclick="$('#sort').val('role.design');go_filter()">
+          <span id="s.4" style="color:#dddddd;display:none">&#9658; &nbsp;</span>Design
+        </div></div>
+      </div>
+      <div class="fflex_40">
+        <div style="transform:rotate(270deg);"><div class="pointer" style="margin-left:-68px;" onclick="$('#sort').val('role.develop');go_filter()">
+          <span id="s.5" style="color:#dddddd;display:none">&#9658; &nbsp;</span>Develop
+        </div></div>
+      </div>
+      <div class="fflex_40">
+        <div style="transform:rotate(270deg);"><div class="pointer" style="margin-left:-68px;" onclick="$('#sort').val('role.retired');go_filter()">
+          <span id="s.6" style="color:#dddddd;display:none">&#9658; &nbsp;</span>Retired
+        </div></div>
+      </div>
+  </div>
+  <form id="form_filter" name="form_filter">
+    <input class="hidden" id="sort" name="sort" value="login">
+    <div class="fflex_resp fflex_title2 fflex_top2">
+      <div class="fflex_col">
+        &nbsp;
+      </div>
+      <div class="fflex_col rright">
+        Show:
+      </div>
+      <!-- TODO: LOOP TRHOUGH ROLES FROM DB -->
+      <div class="fflex_40 center">
+        <input type = "checkbox" id="r.1" name="r.1" style="background-color:white;" onchange="go_filter()">
+      </div>
+      <div class="fflex_40 center">
+        <input type = "checkbox" id="r.2" name="r.2" style="background-color:white;" onchange="go_filter()">
+      </div>
+      <div class="fflex_40 center">
+        <input type = "checkbox" id="r.3" name="r.3" style="background-color:white;" onchange="go_filter()">
+      </div>
+      <div class="fflex_40 center">
+        <input type = "checkbox" id="r.4" name="r.4" style="background-color:white;" onchange="go_filter()">
+      </div>
+      <div class="fflex_40 center">
+        <input type = "checkbox" id="r.5" name="r.5" style="background-color:white;" onchange="go_filter()">
+      </div>
+      <div class="fflex_40 center">
+        <input type = "checkbox" id="r.6" name="r.6" style="background-color:white;" onchange="go_filter()">
+      </div>
+    </div>
+  </form>
+
+  <div style="height:140px;"></div>
+  <div id="users" class="body_margin">
+    <% if !@ok %>
+      <div class="plus16"></div>
+      <span class="red">admin permission required to view this page.</span>
+      <div class="plus16"></div>
+      NOTE: either redirect or show warning.
+    <% else %>
+      <% @users.each do |user| %>
+        <div class="fflex_resp fflex_row">
+          <div fflex_content="Login" class="fflex_col"><%= user.login %></div>
+          <div fflex_content="Name" class="fflex_col"><%= user.name %></div>
+          <!-- TODO: LOOP TRHOUGH ROLES FROM DB -->
+          <% if user.id == @user_id %>
+            <div fflex_content="Admin" class="fflex_40 center"><%= image_tag("checkbox-disabled.svg") %></div>
+            <div fflex_content="Manage" class="fflex_40 center"><input type="checkbox" <%= "checked" if user.roles.index(".2.") %> onchange="go_toggle(<%= user.id %>,2)"></div>
+            <div fflex_content="Run" class="fflex_40 center"><input type="checkbox" <%= "checked" if user.roles.index(".3.") %> onchange="go_toggle(<%= user.id %>,3)"></div>
+            <div fflex_content="Design" class="fflex_40 center"><input type="checkbox" <%= "checked" if user.roles.index(".4.") %> onchange="go_toggle(<%= user.id %>,4)"></div>
+            <div fflex_content="Develop" class="fflex_40 center"><input type="checkbox" <%= "checked" if user.roles.index(".5.") %> onchange="go_toggle(<%= user.id %>,5)"></div>
+            <div fflex_content="Retired" class="fflex_40 center"><%= image_tag("box-disabled.svg") %></div>
+          <% else %>
+            <div fflex_content="Admin" class="fflex_40 center"><input type="checkbox" <%= "checked" if user.roles.index(".1.") %> onchange="go_toggle(<%= user.id %>,1)"></div>
+            <div fflex_content="Manage" class="fflex_40 center"><input type="checkbox" <%= "checked" if user.roles.index(".2.") %> onchange="go_toggle(<%= user.id %>,2)"></div>
+            <div fflex_content="Run" class="fflex_40 center"><input type="checkbox" <%= "checked" if user.roles.index(".3.") %> onchange="go_toggle(<%= user.id %>,3)"></div>
+            <div fflex_content="Design" class="fflex_40 center"><input type="checkbox" <%= "checked" if user.roles.index(".4.") %> onchange="go_toggle(<%= user.id %>,4)"></div>
+            <div fflex_content="Develop" class="fflex_40 center"><input type="checkbox" <%= "checked" if user.roles.index(".5.") %> onchange="go_toggle(<%= user.id %>,5)"></div>
+            <div fflex_content="Retired" class="fflex_40 center"><input type="checkbox" <%= "checked" if user.roles.index(".6.") %> onchange="go_toggle(<%= user.id %>,6)"></div>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  function go_filter() {
+    $('#users').html("<div style='line-height:40px'>Loading...</div>")
+    $('#users').load("/users/permissions", $('#form_filter').serializeArray())
+  }
+
+  function go_toggle(uid,rid) {
+    $.ajax({
+      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+      url: "/users/role_toggle/"+uid+"/"+rid+".js",
+      method: "POST",
+    });
+  }
+
+</script>
+
+<% if 1==0 %>
+  <div id="loadmore">
+    <% if @users.length==0 %>
+      <div class="plus32"></div>
+      <div class="info">No Users</div>
+    <% else %>
+      <% i=1 %>
+      <% @users.each do |g| %>
+        <% if i!=21 %>
+          <% i+=1 %>
+          <%= render :partial => "/partial/users/user", :locals => { :u => g } %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+  <% if i==21 %>
+    <script>
+      var loadurl = "/user/loadmore?<%= raw @params %>"
+    </script>
+    <div id="loadmore_button_wrapper">
+      <div class="plus32"></div>
+      <span id="loadmore_button">
+      <%= button_block("blue","Show More","loadmore(loadurl)") %>
+      </span>
+      <span id="loading_button" class="none">
+      <%= button_block("alt","Loading...","") %>
+      </span>
+    </div>
+  <% end %>
+<% end %>

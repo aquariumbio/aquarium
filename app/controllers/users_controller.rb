@@ -134,6 +134,11 @@ class UsersController < ApplicationController
   def index
     @user = User.new
 
+    if Rails.env == "development" and params[:error].to_i == 1
+      # THROW AN ERROR
+      params[:throw,:error]
+    end
+
     respond_to do |format|
       format.html do
         @users, @alpha_params = User.all.alpha_paginate(params[:letter], { db_mode: true, db_field: 'name' })
@@ -141,6 +146,86 @@ class UsersController < ApplicationController
       end
       format.json { render json: User.includes(memberships: :group).all.sort { |a, b| a[:login] <=> b[:login] } }
     end
+  end
+
+  def permissions_role
+    @role = params[:role].to_s # ESCAPE THIS
+    @role_id = Role.role_ids.key(@role)
+    redirect_to "/users/permissions" and return if !@role_id
+
+    if 1==0
+      redirect_to "/users/permissions" and return if !current_user.is_role?(@role)
+    else
+      @ok = current_user.is_role?(@role)
+    end
+
+    respond_to do |format|
+      format.html do
+        render :layout => false
+      end
+    end
+  end
+
+  def permissions
+    # DISALLOW IF NOT ADMIN
+    if 1==0
+      redirect_to "/" and return if !current_user.is_role?("admin")
+    else
+puts ">>> HERE"
+      @ok = current_user.is_role?("admin")
+    end
+
+    @user_id = current_user.id
+    @role_ids = Role.role_ids()
+
+    sort = params[:sort]
+    ins = []
+    order = "login"
+    @sort = "s.login"
+
+    if sort == "name"
+      order = "name, login"
+      @sort = "s.name"
+    end
+
+    @role_ids.each do |key,val|
+      ins << key if params["r.#{key}".to_sym]
+      if sort == "role.#{val}"
+        order = "roles like '%.#{key}.%' desc, login"
+        @sort = "s.#{key}"
+      end
+    end
+
+    @users = User.get_roles(ins, order)
+
+    respond_to do |format|
+      format.html do
+        if request.request_method == "POST"
+          render "users/permissions_ajax", :layout => false
+        else
+          render :layout => false
+        end
+      end
+#       format.json { render json: User.includes(memberships: :group).all.sort { |a, b| a[:login] <=> b[:login] } }
+    end
+  end
+
+  def role_toggle
+    # TODO: CHECK WHETHER HAVE PERMISSIONS (NEED TO BE ADMIN)
+    # TODO: CANNOT UNCHECK "AMDIN" FOR SELF
+
+    uid = params[:user_id].to_i
+    rid = params[:role_id].to_i
+
+    if uid == current_user.id and ( rid == 1 or rid == 6 )
+      # noop
+    else
+      current_user.role_toggle(uid,rid)
+    end
+
+    render body: nil
+#     TODO: FOR ERROR - RENDER THE ERROR
+#     render text: "alert('done')"
   end
 
   def current

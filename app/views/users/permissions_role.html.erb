@@ -1,0 +1,17 @@
+<%= stylesheet_link_tag 'gene' %>
+<%= javascript_include_tag 'jquery.min' %>
+
+<div style="height:100px"></div>
+
+<div class="body_margin center">
+  <% if !@ok %>
+    <span class="red"><%= @role %> role required to view this page.</span>
+    <div class="plus16"></div>
+    NOTE: either redirect or show warning.
+  <% else %>
+    <%= @role %> role enabled.
+    <div class="plus16"></div>
+    NOTE: show page.
+  <% end %>
+</div>
+
