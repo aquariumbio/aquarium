@@ -5,6 +5,11 @@ class DashboardController < ApplicationController
 
   before_filter :signed_in_user
 
+  def react
+
+    render :layout => "aq2-dashboard"
+  end
+
   def manager
     # FROM API/V2/DASHBOARD
     # TODO: MOVE SQL TO MODEL
@@ -25,7 +30,6 @@ class DashboardController < ApplicationController
     @jobs = Job.find_by_sql sql
 
     render :layout => "aq2-dashboard"
-
   end
 
   def technician

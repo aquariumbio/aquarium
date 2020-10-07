@@ -1,162 +1,175 @@
-<div class="header not-scrollable no-print">
+<!-- RESPONSIVE  MENU BAR -->
+<div class="aq2">
+<div class="fflex_resp main-toolbar" style="justify-content:space-between;align-items:center;">
 
-  <md-toolbar class="main-toolbar md-hue-25">
+  <!-- LEFT -->
+  <div class="fflex_resp" style="align-items:center;">
+    <div class="fflex_col_auto">
+      <a class="nav_menu" href="#" onclick="alert('show menu')">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="white">
+      <path d="M3 18h18v-2H3v2z"></path>
+      <path d="M3 13h18v-2H3v2z"></path>
+      <path d="M3 6v2h18V6H3z"></path>
+      </svg>
+      </a>
+      <div class="sub_menu" style="position:absolute;display:none">
+          <div class="sub_menu_item">
+            <a href="/static_pages/direct_purchase">Direct Purchase</a>
+          </div>
 
-    <div class="md-toolbar-tools">
+          <div class="sub_menu_divider"></div>
 
-      <md-menu layout="row">
-
-        <div class='detail-menu clickable'
-             ng-click="openMenu($mdMenu, $event)">
-          <ng-md-icon icon="menu" size="30" aria-label="Menu"></ng-md-icon>
-        </div>
-
-        <md-menu-content width="4" class="scrollable" flex>
-
-          <md-menu-item>
-            <md-button href="/static_pages/direct_purchase">Direct Purchase</md-button>
-          </md-menu-item>
-
-          <md-menu-divider></md-menu-divider>
-
-          <md-menu-item>
-            <md-button href="/logs">Logs</md-button>
-          </md-menu-item>
+          <div class="sub_menu_item">
+            <a class="sub_nav" href="/logs">Logs</a>
+          </div>
 
           <% if current_user && current_user.is_admin %>
 
-            <md-menu-divider></md-menu-divider>
+            <div class="sub_menu_divider"></div>
 
-            <md-menu-item>
-              <md-button href="/users">Users</md-button>
-            </md-menu-item>
-            <md-menu-item>
-              <md-button href="/groups">Groups</md-button>
-            </md-menu-item>
-            <md-menu-item>
-              <md-button href="/announcements">Announcements</md-button>
-            </md-menu-item>
+            <div class="sub_menu_item">
+              <a class="sub_nav" href="/users">Users</a>
+            </div>
+            <div class="sub_menu_item">
+              <a class="sub_nav" href="/groups">Groups</a>
+            </div>
+            <div class="sub_menu_item">
+              <a class="sub_nav" href="/announcements">Announcements</a>
+            </div>
 
-            <md-menu-divider></md-menu-divider>
+            <div class="sub_menu_divider"></div>
 
-            <md-menu-item>
-              <md-button href="/budgets">Budgets</md-button>
-            </md-menu-item>
-            <md-menu-item>
-              <md-button href="/invoices?all=true">Invoices</md-button>
-            </md-menu-item>
-            <md-menu-item>
-              <md-button href="/parameters">Parameters</md-button>
-            </md-menu-item>
+            <div class="sub_menu_item">
+              <a class="sub_nav" href="/budgets">Budgets</a>
+            </div>
+            <div class="sub_menu_item">
+              <a class="sub_nav" href="/invoices?all=true">Invoices</a>
+            </div>
+            <div class="sub_menu_item">
+              <a class="sub_nav" href="/parameters">Parameters</a>
+            </div>
 
-            <md-menu-divider></md-menu-divider>
+            <div class="sub_menu_divider"></div>
 
-            <md-menu-item>
-              <md-button href="/sample_types">Sample Type Definitions</md-button>
-            </md-menu-item>
-            <md-menu-item>
-              <md-button href="/object_types">Containers</md-button>
-            </md-menu-item>
-            <md-menu-item>
-              <md-button href="/wizards">Location Wizards</md-button>
-            </md-menu-item>
+            <div class="sub_menu_item">
+              <a class="sub_nav" href="/sample_types">Sample Type Definitions</a>
+            </div>
+            <div class="sub_menu_item">
+              <a class="sub_nav" href="/object_types">Containers</a>
+            </div>
+            <div class="sub_menu_item">
+              <a class="sub_nav" href="/wizards">Location Wizards</a>
+            </div>
 
-            <md-menu-divider></md-menu-divider>
+            <div class="sub_menu_divider"></div>
 
-            <md-menu-item>
-              <md-button href="/import">Import Workflows</md-button>
-            </md-menu-item>
+            <div class="sub_menu_item">
+              <a class="sub_nav" href="/import">Import Workflows</a>
+            </div>
 
-            <md-menu-item>
-              <md-button href="/publish">Export Workflows</md-button>
-            </md-menu-item>
+            <div class="sub_menu_item">
+              <a class="sub_nav" href="/publish">Export Workflows</a>
+            </div>
 
           <% end %>
 
-          <md-menu-divider></md-menu-divider>
+          <div class="sub_menu_divider"></div>
 
-          <md-menu-item>
-            <md-button href="http://klavinslab.org/aquarium" class="dropdown-toggle" target='documentation'>Help</md-button>
-          </md-menu-item>
-
-        </md-menu-content>
-
-      </md-menu>
-
-      <div class="aq2-logo" layout="column" flex md-truncate>
-        <div class='top'>
-          <a href="/" class="aquarium">AQUARIUM</a>
-          <span class="version">v<%= Bioturk::Application.config.aquarium_version %></span>
-        </div>
-        <div class='bottom'>
-          <span class="instance"><%= Bioturk::Application.config.instance_name %>:</span>
-          <span class="mode"><%= Rails.env %></span>
-        </div>
+          <div class="sub_menu_item">
+            <a class="sub_nav" href="http://klavinslab.org/aquarium" class="dropdown-toggle" target='documentation'>Help</a>
+          </div>
       </div>
-
-      <md-button href="/plans" aria-label="Designer"
-                 class="main-button <%= yield(:title) == 'Designer' ? 'underlined' : '' %>">
-        <%= link_to "Designer", plans_path %>
-      </md-button>
-
-      <md-button href="/launcher" aria-label="Plans"
-                 class="main-button <%= yield(:title) == 'Plans' ? 'underlined' : '' %>">
-        <%= link_to "Plans", launcher_path %>
-      </md-button>
-
-
-      <% if Bioturk::Application.config.technician_dashboard %>
-        <md-button href="/technician_dashboard" aria-label="Technician"
-                   class="main-button <%= yield(:title) == 'Technician' ? 'underlined' : '' %>">
-          <%= link_to "Technician", '/technician_dashboard' %>
-        </md-button>
-      <% end %>
-
-      <md-button href="/operations" aria-label="Manager"
-                 class="main-button <%= yield(:title) == 'Manager' ? 'underlined' : '' %>">
-        <%= link_to "Manager", operations_path %>
-      </md-button>
-
-      <md-button href="/browser" aria-label="Samples"
-                 class="main-button <%= yield(:title) == 'Samples' ? 'underlined' : '' %>">
-        <%= link_to "Samples", browser_path %>
-      </md-button>
-
-      <% if current_user && current_user.is_admin %>
-
-        <md-button href="/operation_types" aria-label="Developer"
-                   class="main-button <%= yield(:title) == 'Developer' ? 'underlined' : '' %>">
-          <%= link_to "Developer", operation_types_path %>
-        </md-button>
-
-      <% end %>
-
-      <md-menu>
-
-        <md-button class="login"
-                   ng-click="openMenu($mdMenu, $event)"
-                   aria-label="<%= current_user.login %>"
-                   id="user-specific-button">
-          &#x25CF; <%= current_user.login %>
-        </md-button>
-
-        <md-menu-content width="3" class="scrollable">
-          <md-menu-item>
-            <md-button href='/users/<%= current_user.id %>' id="profile-button">Profile</md-button>
-          </md-menu-item>
-          <md-menu-item>
-            <md-button href="/invoices" id="invoices-button">Invoices</md-button>
-          </md-menu-item>
-          <md-menu-divider></md-menu-divider>
-          <md-menu-item>
-            <md-button href="/signout" data-method="delete" id="signout-button">Signout</md-button>
-          </md-menu-item>
-        </md-menu-content>
-
-      </md-menu>
-
     </div>
 
-  </md-toolbar>
+    <div class="fflex_col_auto aq2-logo show_768">
+      <div class="top">
+        <a href="/" class="aquarium">AQUARIUM</a>
+        <span class="version">v<%= Bioturk::Application.config.aquarium_version %></span>
+      </div>
+      <div class="bottom">
+        <span class="instance"><%= Bioturk::Application.config.instance_name %>:</span>
+        <span class="mode"><%= Rails.env %></span>
+      </div>
+    </div>
+
+    <div class="fflex_col_auto aq2-logo hide_768">
+      <div class="top">
+        <a href="/" class="aquarium">AQUARIUM</a>
+      </div>
+      <div class="bottom">
+        <span class="instance"><%= Bioturk::Application.config.instance_name %></span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- RIGHT ( MENU ITEMS MEDIUM AND LARGE SCREEN ONLY ) -->
+  <div class="fflex_resp">
+
+    <div class="fflex_col_auto hide_1024" style="min-width:88px;">
+      <a class="nav" href="#" onclick="alert('show menu')">Activity</a>
+      <div class="sub_menu" style="position:absolute;display:none">
+        <div class="sub_menu_item">
+          <a class="sub_nav" href="/plans">Home</a>
+        </div>
+        <div class="sub_menu_item">
+          <a class="sub_nav" href="/plans">Designer</a>
+        </div>
+        <div class="sub_menu_item">
+          <a class="sub_nav" href="/launcher">Plans</a>
+        </div>
+        <div class="sub_menu_item">
+          <a class="sub_nav" href="/operations">Manager</a>
+        </div>
+        <div class="sub_menu_item">
+          <a class="sub_nav" href="/browser">Samples</a>
+        </div>
+        <% if current_user && current_user.is_admin %>
+          <div class="sub_menu_item">
+            <a class="sub_nav" href="/operation_types">Developer</a>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="fflex_col show_1024 fflex_center_text" style="min-width:88px;">
+        <a class="nav" href="/plans">Designer</a>
+    </div>
+
+    <div class="fflex_col show_1024 fflex_center_text" style="min-width:88px;">
+        <a class="nav" href="/launcher">Plans</a>
+    </div>
+
+    <div class="fflex_col show_1024 fflex_center_text" style="min-width:88px;">
+        <a class="nav" href="/operations">Manager</a>
+    </div>
+
+    <div class="fflex_col show_1024 fflex_center_text" style="min-width:88px;">
+        <a class="nav" href="/browser">Samples</a>
+    </div>
+
+    <% if current_user && current_user.is_admin %>
+      <div class="fflex_col show_1024 fflex_center_text" style="min-width:88px;">
+          <a class="nav" href="/operation_types">Developer</a>
+      </div>
+    <% end %>
+
+    <div class="fflex_col" style="min-width:112px;">
+      <a class="nav_login" href="#" onclick="alert('show menu')">&bull; User</a>
+      <div class="sub_menu" style="position:absolute;display:none">
+        <div class="sub_menu_item">
+          <a class="sub_nav" href="/profile">Profile</a>
+        </div>
+        <div class="sub_menu_item">
+          <a class="sub_nav" href="/invoices">Invoices</a>
+        </div>
+        <div class="sub_menu_item">
+          <a class="sub_nav" href="/signout">Signout</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div>
+</div>
+

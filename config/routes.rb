@@ -228,6 +228,8 @@ Bioturk::Application.routes.draw do
   # DASHBOARD
   get '/dashboard/manager',              to: 'dashboard#manager'
   get '/dashboard/technician',           to: 'dashboard#technician'
+  get '/dashboard',                      to: 'dashboard#react'
+
 
   # API V2
   get '/api/v2/users',                   to: 'api/v2/users#index'
@@ -250,8 +252,6 @@ Bioturk::Application.routes.draw do
 
   post '/api/v2/jobs/:id/assign',        to: 'api/v2/jobs#assign'
   post '/api/v2/jobs/:id/unassign',      to: 'api/v2/jobs#unassign'
-
-  get '/react',                          to: 'react#index'
 
   resources :users do
     get 'change_password'

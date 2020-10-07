@@ -1,3 +1,35 @@
+    div.top {
+      font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    div.bottom {
+      font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    a.nav {
+      color:white;
+      line-height:36px;
+      font-size:14px;
+      letter-spacing:0.14px;
+      text-transform:uppercase;
+      font-weight:500;
+      font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    a.nav_login {
+      color:rgb(0, 255, 34);
+      line-height:36px;
+      font-size:14px;
+      letter-spacing:0.14px;
+      text-transform:uppercase;
+      font-weight:500;
+      font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+
+    a.sub_menu_item {
+      color:white;
+    }
+
     a.google_blue, a.google_blue:visited {
       color: #1a0dab;
     }
@@ -126,6 +158,14 @@
             color: rgb(0, 0, 0);
         }
 
+        .hide_1024 {
+          display:none;
+        }
+
+        .show_1024 {
+          display:block;
+        }
+
         // USE WHEN TABLE DOES NOT TAKE UP FULL SCREEN
         // ACCOUNT FOR WIDE SIDE BAR
         @media screen and (max-width: 1023px) {
@@ -142,14 +182,6 @@
             border-top: 1px solid #c0c0c0;
             }
 
-            .none_1024 {
-            display:block;
-            }
-
-            .show_1024 {
-            display:none;
-            }
-
             .fflex_1024 div[fflex_content] {
             line-height:22px;
             padding:4px 0 4px 100px;
@@ -164,6 +196,22 @@
             left: 0;
             }
 
+            .hide_1024 {
+              display:block;
+            }
+
+            .show_1024 {
+              display:none;
+            }
+
+        }
+
+        .hide_768 {
+          display:none;
+        }
+
+        .show_768 {
+          display:block;
         }
 
         // USE WHEN TABLE IS FULL PAGE WITH
@@ -181,14 +229,6 @@
                 border-top: 1px solid #c0c0c0;
             }
 
-            .none_768 {
-                display:block;
-            }
-
-            .show_768 {
-                display:none;
-            }
-
             .fflex_768 div[fflex_content] {
                 line-height:22px;
                 padding:4px 0 4px 100px;
@@ -200,6 +240,14 @@
                 position: absolute;
                 font-weight: 600;
                 left: 0;
+            }
+
+            .hide_768 {
+                display:block;
+            }
+
+            .show_768 {
+                display:none;
             }
 
         }
