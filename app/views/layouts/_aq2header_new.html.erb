@@ -159,9 +159,11 @@
 </div>
 <script>
   function toggle(m) {
-    clear_menus()
-    if ($('#'+m).css('display') == "none") $('#'+m).show()
-    else $('#'+m).hide()
+
+    if ($('#'+m).css('display') == "none") {
+      clear_menus()
+      $('#'+m).show()
+    } else $('#'+m).hide()
     event.stopPropagation()
   }
 
