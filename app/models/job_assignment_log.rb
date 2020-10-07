@@ -13,32 +13,30 @@ class JobAssignmentLog < ActiveRecord::Base
   private
 
   def job_id_exists
-    if Job.exists?(self.job_id)
-      return true
-    else
+    unless Job.exists?(self.job_id)
       self.errors[:job_id] << "invalid job"
       return false
     end
+
+    true
   end
 
   def assigned_by_exists
-    if User.exists?(self.assigned_by)
-      return true
-    else
+    unless User.exists?(self.assigned_by)
       self.errors[:by_id] << "invalid user"
       return false
     end
+
+    true
   end
 
   def assigned_to_exists
-    if !self.assigned_to
-      return true
-    elsif User.exists?(self.assigned_to)
-      return true
-    else
+    unless self.assigned_to and User.exists?(self.assigned_to)
       self.errors[:to_id] << "invalid user"
       return false
     end
+
+    true
   end
 
 end
