@@ -58,7 +58,7 @@ RSpec.describe Collection, type: :model do
   context 'collisions' do
 
     it 'should not put two parts at the same location in the same collection' do
-
+      skip('spec should use collection methods rather than PartAssociation')
       c = example_collection
       d = example_collection
 
