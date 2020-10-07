@@ -23,8 +23,8 @@
 
         <td>
           <% if current_user && current_user.is_admin %>
-            <input type='checkbox' 
-                   ng-model='op.selected' 
+            <input type='checkbox'
+                   ng-model='op.selected'
                    ng-if="!operation_type.on_the_fly && ( status == 'pending' || status == 'scheduled' || status == 'error' )"
                    ng-attr-data-operation-checkbox="{{op.id}}">
           <% end %>
@@ -40,41 +40,41 @@
               <span ng-if="$first"  style="width: 26px; display: inline-block"><b>out:</b></span>
               <span ng-if="!$first" style="width: 26px; display: inline-block">&nbsp;</span>
               {{fv.name}}
-              <span ng-if="fv.sample">: 
+              <span ng-if="fv.sample">:
                 <a href="/browser?sid={{fv.sample.id}}" target="samples">{{fv.sample.id}}: {{fv.sample.name}}</a>
                 <span ng-if="fv.item.object_type"> as {{fv.item.object_type.name}}</span>
                 <span ng-if="fv.child_item_id">
-                  ( 
+                  (
                     <div ng-if="fv.child_item_id && !fv.is_part"
-                         item="fv.item" 
-                         container="fv.item.object_type" 
+                         item="fv.item"
+                         container="fv.item.object_type"
                          sample="fv.sample"></div>
                     <div ng-if="fv.child_item_id && fv.is_part"
-                         item="fv.part" 
-                         container="fv.part.object_type" 
+                         item="fv.part"
+                         container="fv.part.object_type"
                          sample="fv.part.sample"
                          collection="fv.item"
                          row="fv.row"
                          column=fv.column></div>
                   )
-                </span>                
+                </span>
               </span>
             </li>
             <li ng-repeat="fv in op.field_values | filter: { role: 'input' } track by $index">
               <span ng-if="$first"  style="width: 18px; display: inline-block"><b>in:</b></span>
               <span ng-if="!$first" style="width: 18px; display: inline-block">&nbsp;</span>
               {{fv.name}}
-              <span ng-if="fv.sample">: 
+              <span ng-if="fv.sample">:
                 <a href="/browser?sid={{fv.sample.id}}" target="samples">{{fv.sample.id}}: {{fv.sample.name}}</a>
                 <span ng-if="fv.child_item_id">
-                  ( 
+                  (
                     <div ng-if="fv.child_item_id && !fv.is_part"
-                         item="fv.item" 
-                         container="fv.item.object_type" 
+                         item="fv.item"
+                         container="fv.item.object_type"
                          sample="fv.sample"></div>
                     <div ng-if="fv.child_item_id && fv.is_part"
-                         item="fv.part" 
-                         container="fv.part.object_type" 
+                         item="fv.part"
+                         container="fv.part.object_type"
                          sample="fv.part.sample"
                          collection="fv.item"
                          row="fv.row"
@@ -83,7 +83,7 @@
                 </span>
               </span>
               <span ng-if="fv.value">{{fv.value}}</span>
-            </li>      
+            </li>
             <li ng-repeat="da in op.data_associations">
                 <b>{{da.key}}:</b> {{da.value}}
             </li>
@@ -94,7 +94,7 @@
           <div ng-if="op.jobs.length > 0" ng-repeat="job in op.jobs">
             <a href="/jobs/{{job.id}}">{{job.id}}</a> (<span>{{job.status}}</span>)
           </div>
-          <div ng-if="op.jobs.length == 0">--</div>          
+          <div ng-if="op.jobs.length == 0">--</div>
         </td>
 
         <td>
@@ -102,7 +102,7 @@
           <span ng-if="op.plans.length == 0">n/a</span>
         </td>
 
-        <td>{{op.updated_at|date}}</td>
+        <td>{{ op.updated_at | naturalDate }}</td>
 
         <% if current_user && current_user.is_admin %>
 
@@ -122,7 +122,7 @@
                   <md-button ng-click="change_status(op,s)" aria-label="Change to {{s}}">
                     {{s}}
                   </md-button>
-                </md-menu-item>           
+                </md-menu-item>
               </md-menu-content>
 
             </md-menu>
@@ -136,7 +136,7 @@
       <tr ng-if="( status == 'error' || status == 'done' ) && operations.length < $parent.$parent.numbers[operationtype.id][status]">
         <td></td>
         <td colspan=5 style='padding-top: 16px'>
-          <md-button class='md-raised md-primary md-small' 
+          <md-button class='md-raised md-primary md-small'
                      ng-click="$parent.$parent.more(status)">More</md-button>
         </td>
       </tr>
