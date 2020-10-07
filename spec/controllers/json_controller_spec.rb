@@ -33,7 +33,7 @@ RSpec.describe JsonController, type: :controller do
       post :index, params, as: :json
 
       expect(response.headers['Content-Type']).to eq('application/json; charset=utf-8')
-      expect(response.body).to eq('[]')
+      expect(response.body).not_to be_nil
     end
   end
 

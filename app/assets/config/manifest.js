@@ -8,3 +8,7 @@
 // Images and fonts so that views can link to them
 //
 //= link_tree ../images
+
+// DEV_ONLY GEM
+//= link dev_only/application.js
+//= link dev_only/application.css

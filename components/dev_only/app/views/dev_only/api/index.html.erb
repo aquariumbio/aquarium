@@ -1,0 +1,229 @@
+<link rel="stylesheet" media="screen" href="dev_only.css">
+
+<div class="m_40">
+  <div class="right"><div class="absolute" style="width:100px;margin-left:-100px;text-align:right;"><span class="pxl">&nbsp;</span><a class="link" href="#" onclick="$(window).scrollTop($('#api_call').offset().top);return false;">&rarr; API Call</a></div></div>
+  <div class="clear"></div>
+
+  <div class="bold center pxl">Defined API Calls</div>
+  <div class="plus16"></div>
+
+  <div id="api_box" class="box_black">
+    <div class="left bold" style="width:200px">Get Users</div>
+    <div class="left">
+      /api/v2/users
+      &nbsp;&bull;&nbsp;
+      <a class="link" href="#" onclick="$('#api').val('/api/v2/users/');go_api('GET');return false;">GET</a>
+      <div class="plus16"></div>
+      /api/v2/users/ <input id="a1-user_id" value=1 style="width:50px;">
+      &nbsp;&bull;&nbsp;
+      <a class="link" href="#" onclick="$('#api').val('/api/v2/users/'+parseInt($('#a1-user_id').val() || 0));go_api('GET');return false;">GET</a>
+      <div class="plus16"></div>
+      /api/v2/users/ <input id="a2-user_id" value=1 style="width:50px;"> / jobs
+      &nbsp;&bull;&nbsp;
+      <label><input type="checkbox" id="a2-pending">&nbsp; Pending</label>
+      &nbsp;&bull;&nbsp;
+      <label><input type="checkbox" id="a2-running">&nbsp; Running</label>
+      &nbsp;&bull;&nbsp;
+      <label><input type="checkbox" id="a2-done">&nbsp; Done</label>
+      &nbsp;&bull;&nbsp;
+      <a class="link" href="#" onclick="go_a2();go_api('GET');return false;">GET</a>
+      <script>
+        function go_a2() {
+          var p = []
+          if ($('#a2-pending').prop("checked")) p.push( "status[]=pending" )
+          if ($('#a2-running').prop("checked")) p.push( "status[]=running" )
+          if ($('#a2-done').prop("checked")) p.push( "status[]=done" )
+          if ( p.length == 0 )
+            $('#api').val('/api/v2/users/'+parseInt($('#a2-user_id').val() || 0)+'/jobs');
+          else
+            $('#api').val('/api/v2/users/'+parseInt($('#a2-user_id').val() || 0)+'/jobs?'+p.join('&'));
+        }
+      </script>
+      <div class="plus16"></div>
+      /api/v2/users/ <input id="a3-user_id" value=1 style="width:50px;"> / assigned_jobs
+      &nbsp;&bull;&nbsp;
+      <label><input type="checkbox" id="a3-pending">&nbsp; Pending</label>
+      &nbsp;&bull;&nbsp;
+      <label><input type="checkbox" id="a3-running">&nbsp; Running</label>
+      &nbsp;&bull;&nbsp;
+      <label><input type="checkbox" id="a3-done">&nbsp; Done</label>
+      &nbsp;&bull;&nbsp;
+      <a class="link" href="#" onclick="go_a3();go_api('GET');return false;">GET</a>
+      <script>
+        function go_a3() {
+          var p = []
+          if ($('#a3-pending').prop("checked")) p.push( "status[]=pending" )
+          if ($('#a3-running').prop("checked")) p.push( "status[]=running" )
+          if ($('#a3-done').prop("checked")) p.push( "status[]=done" )
+          if ( p.length == 0 )
+            $('#api').val('/api/v2/users/'+parseInt($('#a3-user_id').val() || 0)+'/assigned_jobs');
+          else
+            $('#api').val('/api/v2/users/'+parseInt($('#a3-user_id').val() || 0)+'/assigned_jobs?'+p.join('&'));
+        }
+      </script>
+    </div>
+    <div class="clear"></div>
+
+    <div class="plus16 border_bottom"></div>
+    <div class="plus16"></div>
+
+    <div class="left bold" style="width:200px">Get Jobs</div>
+    <div class="left">
+      /api/v2/jobs
+      &nbsp;&bull;&nbsp;
+      Limit &nbsp;<input id="a8-limit" value="200" disabled style="width:50px;">
+      &nbsp;&bull;&nbsp;
+      <a class="link" href="#" onclick="$('#api').val('/api/v2/jobs');go_api('GET');return false;">GET</a>
+      <div class="plus16"></div>
+      /api/v2/jobs/ <input id="a4-job_id" value=1 style="width:50px;">
+      &nbsp;&bull;&nbsp;
+      <a class="link" href="#" onclick="$('#api').val('/api/v2/jobs/'+parseInt($('#a4-job_id').val() || 0));go_api('GET');return false;">GET</a>
+      <div class="plus16"></div>
+      /api/v2/jobs/ <input id="a5-job_id" value=1 style="width:50px;"> / assignment
+      &nbsp;&bull;&nbsp;
+      <a class="link" href="#" onclick="$('#api').val('/api/v2/jobs/'+parseInt($('#a5-job_id').val() || 0)+'/assignment');go_api('GET');return false;">GET</a>
+    </div>
+    <div class="clear"></div>
+
+    <div class="plus16 border_bottom"></div>
+    <div class="plus16"></div>
+
+    <div class="left bold" style="width:200px">Get Dashboard</div>
+    <div class="left">
+      /api/v2/dashboard
+      &nbsp;&bull;&nbsp;
+      Limit &nbsp;<input id="a9-limit" value="200" disabled style="width:50px;">
+      &nbsp;&bull;&nbsp;
+      <a class="link" href="#" onclick="$('#api').val('/api/v2/dashboard');go_api('GET');return false;">GET</a>
+      <div class="plus16"></div>
+      /api/v2/dashboard/my
+      &nbsp;&bull;&nbsp;
+      Limit &nbsp;<input id="a10-limit" value="200" disabled style="width:50px;">
+      &nbsp;&bull;&nbsp;
+      <a class="link" href="#" onclick="$('#api').val('/api/v2/dashboard/my');go_api('GET');return false">GET</a>
+      <div class="plus16"></div>
+      /api/v2/dashboard/ <input id="a10-to_id" value=1 style="width:50px;">
+      &nbsp;&bull;&nbsp;
+      Limit &nbsp;<input id="a10-limit" value="200" disabled style="width:50px;">
+      &nbsp;&bull;&nbsp;
+      <a class="link" href="#" onclick="$('#api').val('/api/v2/dashboard/'+$('#a10-to_id').val());go_api('GET');return false">GET</a>
+    </div>
+    <div class="clear"></div>
+
+
+    <div class="plus16 border_bottom"></div>
+    <div class="plus16"></div>
+
+    <div class="left bold" style="width:200px">Assign Job</div>
+    <div class="left">
+      <form id="form_job_assign">
+      /api/v2/jobs/ <input id="p1-job_id" value=1 style="width:50px;"> / assign
+      &nbsp;&bull;&nbsp;
+      to:
+      <input name="to" style="width:40px">
+      &nbsp;&bull;&nbsp;
+      <a class="link" href="#" onclick="$('#api').val('/api/v2/jobs/'+parseInt($('#p1-job_id').val() || 0)+'/assign?'+$('#form_job_assign').serialize());go_api('POST');return false;">POST</a>
+      </form>
+    </div>
+    <div class="clear"></div>
+
+    <div class="plus16 border_bottom"></div>
+    <div class="plus16"></div>
+
+    <div class="left bold" style="width:200px">Unassign Job</div>
+    <div class="left">
+      /api/v2/jobs/ <input id="p2-job_id" value=1 style="width:50px;"> / unassign
+      &nbsp;&bull;&nbsp;
+      <a class="link" href="#" onclick="$('#api').val('/api/v2/jobs/'+parseInt($('#p2-job_id').val() || 0)+'/unassign');go_api('POST');return false;">POST</a>
+    </div>
+    <div class="clear"></div>
+
+    <div class="plus16 border_bottom"></div>
+    <div class="plus16"></div>
+
+    <div class="left bold" style="width:200px">Get Groups</div>
+    <div class="left">
+      /api/v2/groups
+      &nbsp;&bull;&nbsp;
+      <a class="link" href="#" onclick="$('#api').val('/api/v2/groups/');go_api('GET');return false;">GET</a>
+      <div class="plus16"></div>
+      /api/v2/groups/ <input id="a6-group_id" value=55 style="width:50px;">
+      &nbsp;&bull;&nbsp;
+      <a class="link" href="#" onclick="$('#api').val('/api/v2/groups/'+parseInt($('#a6-group_id').val() || 0));go_api('GET');return false;">GET</a>
+      <div class="plus16"></div>
+      /api/v2/groups/ <input id="a7-group_id" value=55 style="width:50px;"> / users
+      &nbsp;&bull;&nbsp;
+      <a class="link" href="#" onclick="$('#api').val('/api/v2/groups/'+parseInt($('#a7-group_id').val() || 0)+'/users');go_api('GET');return false;">GET</a>
+    </div>
+    <div class="clear"></div>
+
+    <div class="plus16 border_bottom"></div>
+    <div class="plus16"></div>
+
+    <div class="left bold" style="width:200px">Get Roles</div>
+    <div class="left">
+      /api/v2/roles/10/users
+      &nbsp;&bull;&nbsp;
+      <a class="link" href="#" onclick="$('#api').val('/api/v2/roles/10/users');go_api('GET');return false;">GET</a>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <div id="api_call" class="plus16"></div>
+
+  <div class="right"><div class="absolute" style="width:175px;margin-left:-175px;text-align:right;"><span class="pxl">&nbsp;</span><a class="link" href="#" onclick="$(window).scrollTop(0);return false;">&rarr; Defined API Calls</a></div></div>
+  <div class="clear"></div>
+
+  <div class="bold center pxl">API Call</div>
+  <div class="plus16"></div>
+
+  <form id="form">
+    <input id="api" type="text" style="width:100%;padding:8px;font-size:20px;">
+  </form>
+  <div class="plus16"></div>
+
+  <div class="plus8"></div>
+  <div class="left">
+    <a id="get_post_get" class="button_blue" href="#" onclick="go_api('GET');return false;">GET</a>
+    &nbsp;
+    <a id="get_post_post" class="button_alt" href="#" onclick="go_api('POST');return false;">POST</a>
+  </div>
+  <div class="right">
+    <a class="link" href="#" onclick="$('#results').html('');return false;">Clear Results</a>
+  </div>
+  <div class="clear"></div>
+  <div class="plus8"></div>
+  <div class="plus16"></div>
+
+  <div class="results" id="results" style="font-family:courier;"></div>
+
+  <script>
+    function go_api(tt) {
+      var ok = false
+      $('#results').attr('class','loading')
+      $('#api_box').attr('class','box_loading')
+      if (tt == "GET" ) {
+        $('#get_post_get').attr('class','button_blue')
+        $('#get_post_post').attr('class','button_alt')
+      } else {
+        $('#get_post_get').attr('class','button_alt')
+        $('#get_post_post').attr('class','button_blue')
+      }
+      $.ajax({
+        type: tt,
+        url: $('#api').val(),
+        dataType: "json",
+
+        success: function(response) {
+          ok = true
+          $('#results').html(JSON.stringify(response, null, 2).replace(/\n/g,"<br>").replace(/  /g,"&nbsp; "))
+        },
+        complete: function(response) {
+          if ( !ok ) $('#results').html('Invalid API Call')
+          $('#results').attr('class','results')
+          $('#api_box').attr('class','box_black')
+          $(window).scrollTop($('#api_call').offset().top)
+        }
+      })
+    }
+  </script>
+
