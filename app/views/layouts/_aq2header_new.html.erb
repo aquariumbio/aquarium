@@ -155,7 +155,7 @@
     <% end %>
 
     <div class="fflex_col" style="min-width:112px;">
-      <a class="nav_login" href="#" onclick="alert('show menu')">&bull; User</a>
+      <a class="nav_login" href="#" onclick="alert('show menu')">&bull; <%= current_user.login %></a>
       <div class="sub_menu" style="position:absolute;display:none">
         <div class="sub_menu_item">
           <a class="sub_nav" href="/profile">Profile</a>
