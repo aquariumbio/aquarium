@@ -1,30 +1,163 @@
-  <div id="react-content" style="padding:24px"></div>
-  <script>
-        'use strict';
+<div id="react-content" class="react_container"></div>
 
-        var e = React.createElement;
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+<script type="text/babel">
+  'use strict';
 
-        class LikeButton extends React.Component {
-          constructor(props) {
-            super(props);
-            this.state = { liked: false };
-          }
+  const createElement = React.createElement;
 
 
-          render() {
+  function TechDashTableTitle() {
+    return (
+      createElement('div', { className: 'assigned_job_table_title fflex_resp tech_table_title' },
+        createElement('div', { className: 'job-tecnician-name fflex_col ' },'JOB #'),
+        createElement('div', { className: 'job-protocol fflex_col2 ' },'PROTOCOL'),
+        createElement('div', { className: 'job-operations fflex_col ' }, 'OPERATIONS'),
+        createElement('div', { className: 'job-assigned-time fflex_col ' }, 'CREATED'),
+        createElement('div', { className: 'job-start-time fflex_col ' }, 'ASSIGNED'),
+      )
+    )
+  }
 
-            if (this.state.liked) {
-              return 'You liked this.';
-            }
+  function TechDashTableRow( key, job ) {
+    let classNames = key === 0 ? 'active-job fflex_resp fflex_row first_row' : 'active-job fflex_resp fflex_row'
+    
+    return (
+      createElement('div', { key: key, className: classNames },
+        createElement('div', { className: 'job-id fflex_col', fflex_content: "Job"},
+          createElement('a', { href: `/jobs/${job.id}`, className: 'figma_blue' }, job.id)
+        ),
+        createElement('div', { className: 'job-protocol fflex_col2', fflex_content: 'Protocol' },
+          createElement('a', { className: 'figma_blue', href: `/jobs/${job.id}` }, job.operation_type_name)
+        ),
+        createElement('div', { className: 'job-operations fflex_col', fflex_content: 'Operations'}, job.operation_count),
+        createElement('div', { className: 'job-created fflex_col', fflex_content: 'Created'}, job.created_at ? new Date(job.created_at).toLocaleString('en-US') : '-'), 
+        createElement('div', { className: 'job-assigned-time fflex_col', fflex_content: 'Assigned'}, job.assigend_at ? new Date(job.assigend_at).toLocaleString('en-US') : '-'),
+      )
+    )
+  }
 
-            return e(
-              'button',
-              { onClick: () => this.setState({ liked: true }) },
-              'Like'
-            );
-          }
+  function ActiveJobs(jobs) {
+
+    let rows = jobs.map(function( job, i ) {
+            return TechDashTableRow( i, job )
+          });
+
+    return (
+      createElement('div', {className: 'tech_dash_table_content'}, rows)
+    )
+  }
+
+  class TechnicianDashboard extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = { 
+        isLoading: true,
+        hasError: false,
+        my_jobs: false,
+        readyJobs: [],
+        runningJobs: [],
+      };
+
+      this.getTechnicianDashboard = this.getTechnicianDashboard.bind(this);
+
+    }
+
+    componentDidMount() {
+      this.getTechnicianDashboard()
+    }
+
+    static getDerivedStateFromError(error) {
+      // Update state so the next render will show the fallback UI.
+      return { hasError: true };
+    }
+
+    componentDidCatch(error, errorInfo) {
+      console.log(error, errorInfo);
+    }
+
+    render() {
+
+      let PageTitle = createElement('div', {className: 'page_title'}, 'Jobs')
+
+         
+      let Buttons = createElement('div', {className: 'btn_block'}, 
+                      createElement('div', {className: 'btn_cont'}, 
+                        createElement('button', { onClick: () => this.getTechnicianDashboard(), id: 'ready_jobs_btn', className: 'view_select_btn', disabled: !this.state.my_jobs }, 'READY'),
+                        createElement('p', {}, this.state.readyJobs.length)
+                      ), 
+                      createElement('div', {className: 'btn_cont'}, 
+                          createElement('button', { onClick: () => this.getTechnicianDashboard(), id: 'running_jobs_btn', className: 'view_select_btn', disabled: this.state.my_jobs}, 'RUNNING'),
+                          createElement('p', {}, this.state.runningJobs.length)
+                      )
+                    );
+      
+      let TechNavLeft = createElement('div', {className: 'tech_nav_left'}, PageTitle, Buttons);
+
+      if (this.state.hasError) {
+        // You can render any custom fallback UI
+        return createElement('div', {}, "Something went wrong.")
+      }
+
+      let content
+
+      if (this.state.isLoading) {
+        content = createElement(
+          'p',
+          {},
+          'Loading...',
+        )
+      }
+
+      // No jobs case
+      if (!this.state.isLoading && this.state.jobs.length < 1) {
+        content = createElement('div', {}, this.state.my_jobs ? 'No assigned jobs' : 'No active jobs')
+      }
+      
+      if (!this.state.isLoading && !this.state.hasError && this.state.jobs.length > 0){      
+        content = createElement('div', {}, TechDashTableTitle(), ActiveJobs(this.state.jobs) );
+      }
+
+      return (
+        <button id="myButton" onClick={() => $("#myButton").html("Button New Text")}>
+          Like
+        </button>
+      );
+      // return (
+      //   createElement('div', {className: 'tech_dashboard'}, TechNavLeft, content)
+      // )
+    }
+
+  
+    getTechnicianDashboard() {
+      fetch('/api/v2/dashboard/my')
+      .then(result => result.json())
+      .then(
+        (result) => {
+          let ready = result.data.filter(job => job.pc === -1 )
+          let running = result.data.filter(job => job.pc === 0 )
+          // this.organizeJobs(result.data)
+          this.setState({
+            isLoading: false,
+            jobs: result.data,
+            readyJobs: ready,
+            runningJobs: running,
+
+          });
+        },
+        (error) => {
+          console.log("error:" + JSON.stringify(error));
+          this.setState({
+            isLoading: false,
+            error,
+          });
         }
+      )
+    }
+    
+    
+  }
 
-        const domContainer = document.querySelector('#react-content');
-        ReactDOM.render(e(LikeButton), domContainer);
-  </script>
+  const domContainer = document.querySelector('#react-content');
+  ReactDOM.render(createElement(TechnicianDashboard), domContainer);
+</script>

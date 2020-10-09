@@ -544,6 +544,7 @@ var no_race = "init";
       }
 
       $scope.disable_assign = function(techAssignment) {
+        console.log(techAssignment);
         if (techAssignment == undefined) {
           return true;
         } else {
