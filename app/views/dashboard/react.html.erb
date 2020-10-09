@@ -2,49 +2,54 @@
 
 <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 <script type="text/babel">
-  'use strict';
+    'use strict';
 
   const createElement = React.createElement;
 
 
   function TechDashTableTitle() {
     return (
-      createElement('div', { className: 'assigned_job_table_title fflex_resp tech_table_title' },
-        createElement('div', { className: 'job-tecnician-name fflex_col ' },'JOB #'),
-        createElement('div', { className: 'job-protocol fflex_col2 ' },'PROTOCOL'),
-        createElement('div', { className: 'job-operations fflex_col ' }, 'OPERATIONS'),
-        createElement('div', { className: 'job-assigned-time fflex_col ' }, 'CREATED'),
-        createElement('div', { className: 'job-start-time fflex_col ' }, 'ASSIGNED'),
-      )
+      <div className="assigned_job_table_title fflex_resp tech_table_title">
+        <div className="job-tecnician-name fflex_col" >JOB #</div>
+        <div className="job-protocol fflex_col2 ">PROTOCOL</div>
+        <div className="job-operations fflex_col "> OPERATIONS</div>
+        <div className="job-assigned-time fflex_col "> CREATED</div>
+        <div className="job-start-time fflex_col "> ASSIGNED</div>
+      </div>
     )
   }
 
   function TechDashTableRow( key, job ) {
-    let classNames = key === 0 ? 'active-job fflex_resp fflex_row first_row' : 'active-job fflex_resp fflex_row'
+    let classNames = key === 0 ? "active-job fflex_resp fflex_row first_row" : "active-job fflex_resp fflex_row"
     
     return (
-      createElement('div', { key: key, className: classNames },
-        createElement('div', { className: 'job-id fflex_col', fflex_content: "Job"},
-          createElement('a', { href: `/jobs/${job.id}`, className: 'figma_blue' }, job.id)
-        ),
-        createElement('div', { className: 'job-protocol fflex_col2', fflex_content: 'Protocol' },
-          createElement('a', { className: 'figma_blue', href: `/jobs/${job.id}` }, job.operation_type_name)
-        ),
-        createElement('div', { className: 'job-operations fflex_col', fflex_content: 'Operations'}, job.operation_count),
-        createElement('div', { className: 'job-created fflex_col', fflex_content: 'Created'}, job.created_at ? new Date(job.created_at).toLocaleString('en-US') : '-'), 
-        createElement('div', { className: 'job-assigned-time fflex_col', fflex_content: 'Assigned'}, job.assigend_at ? new Date(job.assigend_at).toLocaleString('en-US') : '-'),
-      )
+      <div key={key} className={`active-job fflex_resp fflex_row ${key === 0 ? "first_row" : ""}`} >
+        <div className="job-id fflex_col" fflex_content="Job">
+          <a href={`/jobs/${job.id}`} className="figma_blue"> {job.id}</a>
+        </div>
+        <div className="job-protocol fflex_col2" fflex_content="Protocol">
+          <a className="figma_blue" href={`/jobs/${job.id}`} > {job.operation_type_name}</a>
+        </div>
+        <div className="job-operations fflex_col" fflex_content="Operations"> {job.operation_count}</div>
+        <div className="job-created fflex_col" fflex_content="Created"> {job.created_at ? new Date(job.created_at).toLocaleString("en-US") : "-"}</div>
+        <div className="job-assigned-time fflex_col" fflex_content="Assigned">{ job.assigend_at ? new Date(job.assigend_at).toLocaleString("en-US") : "-"}</div>
+      </div>
     )
   }
 
-  function ActiveJobs(jobs) {
-
-    let rows = jobs.map(function( job, i ) {
-            return TechDashTableRow( i, job )
-          });
-
+  function ActiveJobsTable(jobs) {
     return (
-      createElement('div', {className: 'tech_dash_table_content'}, rows)
+      <div>
+        {TechDashTableTitle()}
+        <div className="tech_dash_table_content">
+          { jobs.length > 0 ?
+            jobs.map(function( job, i ) {
+                return TechDashTableRow( i, job )
+              }) :
+            <h3>No jobs</h3>
+          }
+        </div>
+      </div>
     )
   }
 
@@ -54,14 +59,24 @@
       this.state = { 
         isLoading: true,
         hasError: false,
-        my_jobs: false,
+        jobs: false,
         readyJobs: [],
         runningJobs: [],
+        viewReadyJobs: true,
+        viewRunningJobs: false,
       };
 
-      this.getTechnicianDashboard = this.getTechnicianDashboard.bind(this);
+    this.getTechnicianDashboard = this.getTechnicianDashboard.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+  }
 
-    }
+  handleClick() {
+    this.setState(state => ({
+      viewReadyJobs: !state.viewReadyJobs,
+      viewRunningJobs: !state.viewRunningJobs
+    }));
+  }
+  
 
     componentDidMount() {
       this.getTechnicianDashboard()
@@ -76,56 +91,57 @@
       console.log(error, errorInfo);
     }
 
+    
+
     render() {
-
-      let PageTitle = createElement('div', {className: 'page_title'}, 'Jobs')
-
-         
-      let Buttons = createElement('div', {className: 'btn_block'}, 
-                      createElement('div', {className: 'btn_cont'}, 
-                        createElement('button', { onClick: () => this.getTechnicianDashboard(), id: 'ready_jobs_btn', className: 'view_select_btn', disabled: !this.state.my_jobs }, 'READY'),
-                        createElement('p', {}, this.state.readyJobs.length)
-                      ), 
-                      createElement('div', {className: 'btn_cont'}, 
-                          createElement('button', { onClick: () => this.getTechnicianDashboard(), id: 'running_jobs_btn', className: 'view_select_btn', disabled: this.state.my_jobs}, 'RUNNING'),
-                          createElement('p', {}, this.state.runningJobs.length)
-                      )
-                    );
-      
-      let TechNavLeft = createElement('div', {className: 'tech_nav_left'}, PageTitle, Buttons);
-
       if (this.state.hasError) {
-        // You can render any custom fallback UI
-        return createElement('div', {}, "Something went wrong.")
+        return <h1> Ooops... Something went wrong. Please try again.</h1>
       }
-
-      let content
 
       if (this.state.isLoading) {
-        content = createElement(
-          'p',
-          {},
-          'Loading...',
-        )
-      }
-
-      // No jobs case
-      if (!this.state.isLoading && this.state.jobs.length < 1) {
-        content = createElement('div', {}, this.state.my_jobs ? 'No assigned jobs' : 'No active jobs')
-      }
-      
-      if (!this.state.isLoading && !this.state.hasError && this.state.jobs.length > 0){      
-        content = createElement('div', {}, TechDashTableTitle(), ActiveJobs(this.state.jobs) );
+        return <h1>Loading active jobs...</h1>
       }
 
       return (
-        <button id="myButton" onClick={() => $("#myButton").html("Button New Text")}>
-          Like
-        </button>
-      );
-      // return (
-      //   createElement('div', {className: 'tech_dashboard'}, TechNavLeft, content)
-      // )
+        <div className="tech_dashboard">
+          <div className="left_nav"> 
+            <div className="btn_block">
+              <div className={`btn_cont ${ this.state.viewReadyJobs ? "disabled" : "" }`}> 
+                <button id="ready_jobs_btn"
+                        className="view_select_btn" 
+                        onClick={this.handleClick} 
+                        disabled={ this.state.viewReadyJobs }>
+                    READY
+                </button>
+                <button className="jobs_count"
+                        onClick={this.handleClick} 
+                        disabled={ this.state.viewReadyJobs }>
+                  {this.state.readyJobs.length}
+                </button>
+              </div>
+              <div className={`btn_cont ${ this.state.viewRunningJobs ? "disabled" : "" }`}>
+                  <button id="running_jobs_btn" 
+                          className="view_select_btn"
+                          onClick={this.handleClick} 
+                          disabled={ this.state.viewRunningJobs}>
+                    RUNNING
+                  </button>
+                  <button className="jobs_count"
+                          onClick={this.handleClick} 
+                          disabled={ this.state.viewReadyJobs }>
+                    {this.state.runningJobs.length}
+                  </button>
+              </div>
+            </div>
+            <div className="page_title">Jobs</div>
+          </div>
+
+          { this.state.viewReadyJobs && ActiveJobsTable(this.state.readyJobs) }
+
+          { this.state.viewRunningJobs && ActiveJobsTable(this.state.runningJobs) }
+      
+        </div>
+      )
     }
 
   
@@ -134,15 +150,10 @@
       .then(result => result.json())
       .then(
         (result) => {
-          let ready = result.data.filter(job => job.pc === -1 )
-          let running = result.data.filter(job => job.pc === 0 )
-          // this.organizeJobs(result.data)
           this.setState({
             isLoading: false,
-            jobs: result.data,
-            readyJobs: ready,
-            runningJobs: running,
-
+            readyJobs: result.data.filter(job => job.pc === -1 ),
+            runningJobs: result.data.filter(job => job.pc === 0 ),
           });
         },
         (error) => {
@@ -159,5 +170,5 @@
   }
 
   const domContainer = document.querySelector('#react-content');
-  ReactDOM.render(createElement(TechnicianDashboard), domContainer);
+  ReactDOM.render(<TechnicianDashboard/>, domContainer);
 </script>

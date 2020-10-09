@@ -109,7 +109,7 @@ a.figma_blue:visited {
 
 .fflex_row {
   padding: 8px 0;
-//   border-bottom: 1px solid #c0c0c0;
+  //   border-bottom: 1px solid #c0c0c0;
   font-family: Roboto;
   font-style: normal;
   font-weight: 400;
@@ -117,8 +117,6 @@ a.figma_blue:visited {
   letter-spacing: 0.25px;
   text-align: left;
 }
-
-
 
 .fflex_right {
   justify-content: right;
@@ -129,7 +127,7 @@ a.figma_blue:visited {
 }
 
 .highlight_blue {
-  background: rgba(227, 243, 255, 1);
+  background-color: rgba(227, 243, 255, 1);
 }
 
 .react_container {
@@ -238,84 +236,84 @@ a.figma_blue:visited {
   display: flex;
 }
 
-.tech_nav_left {
+.left_nav {
   position: absolute;
   width: 307px;
   height: 100%;
   left: 0px;
   top: 44px;
-  background: #6bbbe8;
+  background-color: #6bbbe8;
   color: #ffffff;
 }
 
-.tech_nav_left > .page_title {
-    position: absolute;
-    left: 30px;
-    top: 60px;
-    font-weight: bold;
-    font-size: 30px;
-    line-height: 24px;
-    letter-spacing: 0.16px;
+.left_nav > .page_title {
+  position: absolute;
+  left: 30px;
+  top: 60px;
+  font-weight: bold;
+  font-size: 30px;
+  line-height: 24px;
+  letter-spacing: 0.16px;
 }
 
 .btn_block {
-    position: absolute;
-    top: 107px;
-    padding-left: 24px;
-    padding-right: 13px;
-
+  position: absolute;
+  top: 107px;
 }
+
 .btn_cont {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #6bbbe8;
-    color: #ffffff;
-    height: 64px;
-    width: 258px;
+  display: flex;
+  justify-content: space-between;
+  background-color: #6bbbe8;
+  color: #ffffff;
+  height: 64px;
+  width: 270px;
+  padding-left: 24px;
+  padding-right: 13px;
 }
 
-.btn_cont .selected {
-  background: #A2D7F5;;
+.btn_block .disabled {
+  background-color: #a2d7f5;
 }
 
-.btn_cont p {
-    background-color: #fff;
-    color: #000;
-    width: 72px;
-    text-align: center;
-    vertical-align: middle;
-    font-size: 14px;
-    margin: 0;
-    border-radius: 20px;
+.btn_cont .jobs_count {
+  background: #fff;
+  color: #000;
+  height: 40px;
+  width: 70px;
+  border-radius: 15px;
+  margin-top: 10px;
+  border: none;
 }
-
-
 
 .view_select_btn {
-    font-weight: bold;
+  font-weight: bold;
   font-size: 21px;
   color: #ffffff;
   border: none;
   background-color: transparent;
 }
 
+.view_select_btn .disabled {
+  background-color: #a2d7f5;
+}
+
 .tech_dash_table_content {
-    position: absolute;
-    left: 307px;;
-    top: 225px;
-    width: 1583px;
-    padding-left: 30px;
+  position: absolute;
+  left: 307px;
+  top: 225px;
+  width: 1583px;
+  padding-left: 30px;
 }
 .tech_table_title {
   position: absolute;
-  width: 1583px;;
+  width: 1583px;
   left: 307px;
   top: 153px;
   padding-left: 30px;
 
   height: 64px;
-  background: #e9e9e9;
+  background-color: #e9e9e9;
 
   font-family: Roboto;
   font-style: normal;
@@ -328,5 +326,5 @@ a.figma_blue:visited {
   letter-spacing: 0.25px;
   font-variant: small-caps;
 
-  color: #333333;  
+  color: #333333;
 }
