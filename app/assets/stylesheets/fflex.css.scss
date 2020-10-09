@@ -112,13 +112,17 @@ a.figma_blue:visited {
 }
 
 .fflex_row {
-  padding: 8px 0;
   font-family: Roboto;
   font-style: normal;
   font-weight: 400;
   line-height: 29px;
   letter-spacing: 0.25px;
   text-align: left;
+  border-bottom: 1px solid #c0c0c0;
+}
+
+.fflex_row:hover {
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.8);
 }
 
 .fflex_center_text {
@@ -253,7 +257,7 @@ a.figma_blue:visited {
 
 .btn_block {
   position: absolute;
-  top: 107px;
+  top: 108px;
 }
 
 .btn_block .selected {
