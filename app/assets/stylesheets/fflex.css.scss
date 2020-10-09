@@ -256,6 +256,10 @@ a.figma_blue:visited {
   top: 107px;
 }
 
+.btn_block .selected {
+  background-color: #a2d7f5;
+}
+
 .btn_cont {
   display: flex;
   justify-content: space-between;
@@ -266,9 +270,9 @@ a.figma_blue:visited {
   padding-left: 24px;
   padding-right: 13px;
 }
-
-.btn_block .disabled {
-  background-color: #a2d7f5;
+.btn_cont:hover {
+  filter: drop-shadow(0px 10px 4px rgba(0, 0, 0, 0.5));
+  cursor: pointer;
 }
 
 .btn_cont .jobs_count {
