@@ -55,6 +55,11 @@ a.figma_blue:visited {
   color: rgb(170, 170, 170);
 }
 
+.jobs_button:disabled {
+  border-bottom: 1px solid rgb(0, 0, 0);
+  color: rgb(0, 0, 0);
+}
+
 /*  GENE'S FFLEX STUFF
         ---------------------------------------- */
 .fflex_resp,
@@ -101,7 +106,6 @@ a.figma_blue:visited {
 
 .fflex_title {
   padding: 8px 0;
-  /* background-color:#2196f3; */
   font-size: 16px;
   color: rgba(0, 0, 0, 1);
   border-bottom: 2px solid #c0c0c0;
@@ -109,17 +113,12 @@ a.figma_blue:visited {
 
 .fflex_row {
   padding: 8px 0;
-  //   border-bottom: 1px solid #c0c0c0;
   font-family: Roboto;
   font-style: normal;
   font-weight: 400;
   line-height: 29px;
   letter-spacing: 0.25px;
   text-align: left;
-}
-
-.fflex_right {
-  justify-content: right;
 }
 
 .fflex_center_text {
@@ -135,10 +134,6 @@ a.figma_blue:visited {
   padding: 0 20px;
 }
 
-.jobs_button:disabled {
-  border-bottom: 1px solid rgb(0, 0, 0);
-  color: rgb(0, 0, 0);
-}
 
 .hide_1024 {
   display: none;
