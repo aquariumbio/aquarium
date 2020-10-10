@@ -229,7 +229,7 @@ Bioturk::Application.routes.draw do
   get '/dashboard/manager',              to: 'dashboard#manager'
   get '/dashboard/technician',           to: 'dashboard#technician'
   get '/dashboard',                      to: 'dashboard#react'
-  
+
   # ACTIVE JOBS HACK
   get '/react',                          to: 'react#index'
 

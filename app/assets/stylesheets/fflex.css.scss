@@ -1,13 +1,51 @@
+$border: #a0a0a0;
+$lightgray: #f0f0f0;
+
 div.top {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
 div.bottom {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+a.nav_menu {
+  line-height: 44px;
+}
+
 a.nav {
   color: white;
-  line-height: 36px;
+  line-height: 44px;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: 400;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-decoration: none;
+}
+
+a.nav:hover {
+  font-size: 18px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+a.nav2 {
+  color: white;
+  line-height: 44px;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: 400;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-decoration: none;
+}
+
+a.nav2:hover {
+  text-decoration: none;
+}
+
+a.nav_login {
+  color: rgb(0, 255, 34);
+  line-height: 44px;
   font-size: 14px;
   letter-spacing: 0.14px;
   text-transform: uppercase;
@@ -16,17 +54,39 @@ a.nav {
 }
 
 a.nav_login {
-  color: rgb(0, 255, 34);
-  line-height: 36px;
-  font-size: 14px;
-  letter-spacing: 0.14px;
-  text-transform: uppercase;
-  font-weight: 500;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-decoration: none;
 }
 
-a.sub_menu_item {
-  color: white;
+a.sub_nav {
+  display: block;
+  font-size: 14px;
+  color: black;
+  padding: 0 8px;
+}
+
+a.sub_nav:hover {
+  background-color: $lightgray;
+  text-decoration: none;
+}
+
+div.sub_menu {
+  position: absolute;
+  border-left: 1px solid $border;
+  border-right: 1px solid $border;
+  border-bottom: 1px solid $border;
+  max-height: calc(100vh - 44px);
+  min-width: 96px;
+  overflow-y: auto;
+  background-color: white;
+}
+
+div.sub_menu_item {
+  line-height: 44px;
+}
+
+div.sub_menu_item_top {
+  line-height: 44px;
+  border-top: 1px solid $border;
 }
 
 a.google_blue,
@@ -60,8 +120,7 @@ a.figma_blue:visited {
   color: rgb(0, 0, 0);
 }
 
-/*  GENE'S FFLEX STUFF
-        ---------------------------------------- */
+/*  GENE'S FFLEX STUFF ---------------------------------------- */
 .fflex_resp,
 .fflex_bang {
   display: -ms-flexbox;
@@ -137,7 +196,6 @@ a.figma_blue:visited {
   overflow-y: scroll;
   padding: 0 20px;
 }
-
 
 .hide_1024 {
   display: none;
@@ -231,6 +289,8 @@ a.figma_blue:visited {
   }
 }
 
+/* TECH DASHBOARD NON-RESPONSIVE
+TODO: REMOVE ABSOLUTE POSITION */
 .tech_dashboard {
   display: flex;
 }
