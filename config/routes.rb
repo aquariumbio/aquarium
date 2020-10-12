@@ -266,8 +266,8 @@ Bioturk::Application.routes.draw do
   get '/logout', to: 'sessions#destroy'
   get '/item', to: 'items#update'
 
-  if Rails.env == "development"
-    mount DevOnly::Engine => "/dev_only"
+  if Rails.env == 'development'
+    mount DevOnly::Engine => '/dev_only'
   end
 
 end
