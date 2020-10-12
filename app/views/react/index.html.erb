@@ -38,7 +38,7 @@
             ),
             createElement('div', { className: 'job-status fflex_col', fflex_content: 'Status' }, props.job.pc == 0 ? 'Running' : 'Ready'),
             createElement('div', { className: 'job-operations fflex_col fflex_center_text', fflex_content: 'Status'}, props.job.operation_count),
-            createElement('div', { className: 'job-assigned-time fflex_col fflex_center_text', fflex_content: 'Assigned'}, props.job.assigend_at ? new Date(props.job.assigend_at).toLocaleDateString('en-US') : '-'),
+            createElement('div', { className: 'job-assigned-time fflex_col fflex_center_text', fflex_content: 'Assigned'}, props.job.assigend_at ? naturalDate(props.job.assigend_at) : '-'),
             createElement('div', { className: 'job-start-time fflex_col fflex_center_text', fflex_content: 'Started' }, props.job.pc == 0 ? start_time : '-'),
           )
         )

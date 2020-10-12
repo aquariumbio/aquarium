@@ -124,3 +124,32 @@ Date.prototype.format = function (mask, utc) {
 	return dateFormat(this, mask, utc);
 };
 
+function naturalDate(date) {
+
+	// ACTUAL TIMESTAMP
+	let today = new Date()
+
+	// TIMESTAMP FOR INPUT DATE AT 00:00:00
+	date = new Date(date)
+	let date_begin = new Date( date.getFullYear(), date.getMonth(), date.getDate() )
+
+	// GET DAYS (0 = TODAY)
+	// NOTE: 86400000 = 1000 * 60 * 60 * 24 = MILLISECONDS IN A DAY
+	let days = Math.floor((today - date_begin)/86400000)
+
+	switch(true) {
+		case (days == 0):
+			return "today"
+			break;
+		case (days == 1):
+			return "yesterday"
+			break;
+		case (days > 1 && days < 4):
+			return days + " days ago"
+			break;
+		default:
+			// TODO: DECLARE THIS A CONSTANT
+			let months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+			return months[date.getMonth()]+" "+date.getDate()+", "+date.getFullYear()
+	}
+}
