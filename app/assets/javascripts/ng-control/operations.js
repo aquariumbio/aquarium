@@ -497,8 +497,6 @@ var no_race = "init";
           .then(response => {
             $scope.current.technicians = response.data.data;
           });
-          // TODO: error handling
-
       }
 
       $scope.assign_job = function (assign_to_id, to_name, job_id) {
@@ -544,7 +542,6 @@ var no_race = "init";
       }
 
       $scope.disable_assign = function(techAssignment) {
-        console.log(techAssignment);
         if (techAssignment == undefined) {
           return true;
         } else {
@@ -552,7 +549,6 @@ var no_race = "init";
         }
       }
 
-      // TODO FIX DISABLE FUNCTION
       // Disable unassign button when there no assignment 
       $scope.disable_unassign = function(job_id) {
         if ($scope.job_assignments[job_id] == null || $scope.job_assignments[job_id] == undefined) {
