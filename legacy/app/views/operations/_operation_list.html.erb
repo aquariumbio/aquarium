@@ -2,109 +2,124 @@
 
   <div class='oplist'>
 
+    <!-- TODO: REFACTOR THIS AND ALL TABLES TO USE FLEX -->
     <table class='table table-condensed oplist'
            ng-show="operations.length > 0">
 
       <tr>
-        <th class='selector'></th>
-        <th class='id'>Op Id</th>
-        <th>User</th>
-        <th class="output">Data</th>
-        <th>Job(s)</th>
+        <th class='selector'>
+          <!-- NOT USING AN NG-MODEL AND EVALUATING JAVASCRIPT DIRECTLY INSTEAD -->
+          <input type="checkbox"
+                 id="select_all_{{jobid}}"
+                 ng-show="!operation_type.on_the_fly && ( status == 'pending' || status == 'scheduled' || status == 'error' )"
+                 ng-click="checkAll(operations, jobid)"
+                 aria-label='select all operations'
+                 style="margin: 0">
+        </th>
         <th>Plan</th>
-        <th>Last Update</th>
-        <% if current_user && current_user.is_admin %>
-          <th ng-if="status != 'scheduled' && status != 'running'"></th>
-        <% end %>
+        <th class="output">Input/Output</th>
+        <th>Last Updated</th>
+        <th>Client</th>
+        <th>Op ID</th>
+        <th>Status</th>
       </tr>
 
       <tr ng-repeat="op in operations"
-          ng-if="!jobid || op.last_job.id == jobid">
+          ng-if="!jobid || op.last_job.id == jobid"
+          ng-class="{'selected-row': true == op.selected}">
 
-        <td>
+        <td> <!-- Selector -->
           <% if current_user && current_user.is_admin %>
-            <input type='checkbox'
+            <!-- COULD POTENTIALLY USE NG-CHECKED BUT THIS WORKS -->
+            <input type="checkbox"
                    ng-model='op.selected'
-                   ng-if="!operation_type.on_the_fly && ( status == 'pending' || status == 'scheduled' || status == 'error' )"
-                   ng-attr-data-operation-checkbox="{{op.id}}">
+                   ng-init="checked=false"
+                   ng-show="!operation_type.on_the_fly && ( status == 'pending' || status == 'scheduled' || status == 'error' )"
+                   ng-attr-data-operation-checkbox="{{op.id}}"
+                   ng-change="checkParent(operations, jobid)"
+                   style="margin: 0">
           <% end %>
         </td>
 
-        <td>{{op.id}}</td>
-
-        <td>{{op.user.name}}</td>
-
-        <td>
-          <ul class='input-list'>
-            <li ng-repeat="fv in op.field_values | filter: { role: 'output' } track by $index">
-              <span ng-if="$first"  style="width: 26px; display: inline-block"><b>out:</b></span>
-              <span ng-if="!$first" style="width: 26px; display: inline-block">&nbsp;</span>
-              {{fv.name}}
-              <span ng-if="fv.sample">:
-                <a href="/browser?sid={{fv.sample.id}}" target="samples">{{fv.sample.id}}: {{fv.sample.name}}</a>
-                <span ng-if="fv.item.object_type"> as {{fv.item.object_type.name}}</span>
-                <span ng-if="fv.child_item_id">
-                  (
-                    <div ng-if="fv.child_item_id && !fv.is_part"
-                         item="fv.item"
-                         container="fv.item.object_type"
-                         sample="fv.sample"></div>
-                    <div ng-if="fv.child_item_id && fv.is_part"
-                         item="fv.part"
-                         container="fv.part.object_type"
-                         sample="fv.part.sample"
-                         collection="fv.item"
-                         row="fv.row"
-                         column=fv.column></div>
-                  )
-                </span>
-              </span>
-            </li>
-            <li ng-repeat="fv in op.field_values | filter: { role: 'input' } track by $index">
-              <span ng-if="$first"  style="width: 18px; display: inline-block"><b>in:</b></span>
-              <span ng-if="!$first" style="width: 18px; display: inline-block">&nbsp;</span>
-              {{fv.name}}
-              <span ng-if="fv.sample">:
-                <a href="/browser?sid={{fv.sample.id}}" target="samples">{{fv.sample.id}}: {{fv.sample.name}}</a>
-                <span ng-if="fv.child_item_id">
-                  (
-                    <div ng-if="fv.child_item_id && !fv.is_part"
-                         item="fv.item"
-                         container="fv.item.object_type"
-                         sample="fv.sample"></div>
-                    <div ng-if="fv.child_item_id && fv.is_part"
-                         item="fv.part"
-                         container="fv.part.object_type"
-                         sample="fv.part.sample"
-                         collection="fv.item"
-                         row="fv.row"
-                         column=fv.column></div>
-                  )
-                </span>
-              </span>
-              <span ng-if="fv.value">{{fv.value}}</span>
-            </li>
-            <li ng-repeat="da in op.data_associations">
-                <b>{{da.key}}:</b> {{da.value}}
-            </li>
-          </ul>
-        </td>
-
-        <td>
-          <div ng-if="op.jobs.length > 0" ng-repeat="job in op.jobs">
-            <a href="/jobs/{{job.id}}">{{job.id}}</a> (<span>{{job.status}}</span>)
-          </div>
-          <div ng-if="op.jobs.length == 0">--</div>
-        </td>
-
-        <td>
+        <td> <!-- Plan -->
           <a ng-repeat="plan in op.plans" href="/plans?plan_id={{plan.id}}" target="designer">{{plan.id}}{{$last ? '' : ', '}}</a>
           <span ng-if="op.plans.length == 0">n/a</span>
         </td>
 
-        <td>{{ op.updated_at | naturalDate }}</td>
+        <td> <!-- Input/Output -->
+          <ul class='input-list'>
+            <li ng-repeat="fv in op.field_values | filter: { role: 'output' } track by $index"
+                style="display: inline-flex; flex-direction: row; align-items: flex-start;">
+              <span ng-if="$first"  class="data-col-1"><b>out:</b></span>
+              <span ng-if="!$first" class="data-col-1">&nbsp;</span>
 
-        <% if current_user && current_user.is_admin %>
+              <span class="data-col-2">{{fv.name}}:</span>
+
+              <span ng-if="fv.sample" class="data-col-3">
+                <a href="/browser?sid={{fv.sample.id}}" target="samples">{{fv.sample.id}}: {{fv.sample.name}}</a>
+                <span ng-if="fv.item.object_type"> as {{fv.item.object_type.name}}</span>
+                <span ng-if="fv.child_item_id" >
+                  (
+                    <div ng-if="fv.child_item_id && !fv.is_part"
+                         item="fv.item"
+                         container="fv.item.object_type"
+                         sample="fv.sample"></div>
+                    <div ng-if="fv.child_item_id && fv.is_part"
+                         item="fv.part"
+                         container="fv.part.object_type"
+                         sample="fv.part.sample"
+                         collection="fv.item"
+                         row="fv.row"
+                         column=fv.column></div>
+                  )
+                </span>
+              </span>
+            </li>
+
+            <li ng-repeat="fv in op.field_values | filter: { role: 'input' } track by $index"
+                style="display: inline-flex; flex-direction: row; align-items: flex-start;">
+              <span ng-if="$first"  class="data-col-1"><b>in:</b></span>
+              <span ng-if="!$first" class="data-col-1">&nbsp;</span>
+
+              <span class="data-col-2">{{fv.name}}:</span>
+
+              <span ng-if="fv.sample" class="data-col-3">
+                <a href="/browser?sid={{fv.sample.id}}" target="samples">{{fv.sample.id}}: {{fv.sample.name}}</a>
+                <span ng-if="fv.child_item_id" >
+                  (
+                    <div ng-if="fv.child_item_id && !fv.is_part"
+                         item="fv.item"
+                         container="fv.item.object_type"
+                         sample="fv.sample"></div>
+                    <div ng-if="fv.child_item_id && fv.is_part"
+                         item="fv.part"
+                         container="fv.part.object_type"
+                         sample="fv.part.sample"
+                         collection="fv.item"
+                         row="fv.row"
+                         column=fv.column></div>
+                  )
+                </span>
+              </span>
+              <!-- TODO: BREAK TO NEW LINE -->
+              <span ng-if="fv.value" class="data-col-3" style="color: black !important">{{fv.value}}</span>
+            </li>
+            <li ng-repeat="da in op.data_associations"
+                style="display: inline-flex; flex-direction: row; align-items: flex-start;">
+              <span class="data-col-1">&nbsp;</span>
+              <span ng-if="da.key" class="data-col-2">{{da.key}}:</span>
+              <span ng-if="da.value" class="data-col-3">{{da.value}}</span>
+            </li>
+          </ul>
+        </td>
+
+        <td>{{ op.updated_at | naturalDate }}</td> <!-- Last Updated -->
+
+        <td style="word-wrap:break-word">{{op.user.name}}</td> <!-- Client -->
+
+        <td>{{op.id}}</td> <!-- Operation ID -->
+
+        <% if current_user && current_user.is_admin %> <!-- Status w/ update -->
 
           <td ng-if="op.status != 'scheduled' && op.status != 'running'">
 
@@ -129,6 +144,8 @@
 
           </td>
 
+          <td ng-if="op.status === 'scheduled' || op.status === 'running'">{{op.status}}</td>
+
         <% end %>
 
       </tr>
@@ -143,7 +160,7 @@
 
     </table>
 
-    <h1 ng-if="operations.length == 0" class='md-title'>No operations</h1>
+    <h1 ng-if="operations.length == 0" class='md-title'>No {{status}} operations</h1>
 
     <h1 ng-if="!operations" class='md-title'>Checking for operations...</h1>
 

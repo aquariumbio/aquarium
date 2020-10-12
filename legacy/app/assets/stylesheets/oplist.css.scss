@@ -9,11 +9,19 @@
       border-right: none !important;
       text-align: left !important;
     }
+    td {
+      font-size: 14px;
+      line-height: 18px;
+      span {
+        vertical-align: top;
+        text-align: left;
+      }
+    }
     .selector {
       width: 20px;
     }
     .output {
-      width: 60%;
+      width: 50%;
     }
     .id {
       width: 50px;
@@ -22,6 +30,44 @@
       color: red;
       font-weight: bold;
     }
+    .selected-row {
+      background-color: #E3F3FF;
+    }
   }
+
+  .data-col-1 {
+    width: 22px;
+    left: 652px;
+    top: 367px;
+    font-style: normal;
+    font-weight: bold;
+    text-align: right;
+    letter-spacing: 0.25px;
+    margin-right: 4px;
+  }
+
+  .data-col-2 {
+    width: 140px;
+    left: 683px;
+    top: 367px;
+    font-style: normal;
+    font-weight: normal;
+    align-items: center;
+    letter-spacing: 0.25px;
+  }
+  
+  .data-col-3 {
+    width: 400px;
+    left: 783px;
+    top: 367px;
+    font-style: normal;
+    font-weight: normal;
+    align-items: center;
+    letter-spacing: 0.25px;
+  }
+
+
+  
+
 }
 

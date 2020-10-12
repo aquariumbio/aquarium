@@ -1,3 +1,5 @@
+var no_race = "init";
+
 (function () {
 
   let w = angular.module('aquarium');
@@ -54,6 +56,8 @@
         if ( $scope.current.activity_report.selected ) {
           $scope.get_job_report();
         } else if ( $scope.current.active_jobs ) {
+          // CLICK ACTIVE JOBS BUTTON TO EXECUTE REACT CODE
+          $('#active_jobs_button').click();
           console.log("Active jobs should be highlighted")
         } else if ( $scope.current.operation_type !== null && $scope.current.status !== null) {
           let operation_type = aq.find(AQ.operation_types, operation_type => operation_type.id === $scope.current.operation_type.id);
@@ -73,6 +77,8 @@
       $scope.get_numbers = get_numbers;
 
       init1();
+
+      get_tech_list();
 
       $scope.status = 'Loading Operation Types ...';
 
@@ -144,12 +150,11 @@
           selected_user: $scope.current.selected_user,
           filter_user: $scope.current.filter_user,
           active_jobs: $scope.current.active_jobs,
-          activity_report: { 
+          activity_report: {
             selected: $scope.current.activity_report.selected,
             date: $scope.current.activity_report.date
           }
         });
-        console.log(aqCookieManager.get_object("managerState"));
       }
 
       function highlight_categories(numbers) {
@@ -168,16 +173,19 @@
       $scope.toggle_show_completed = function() {
         // This is a hack. When you click the toggle switch, the ng-click method is called first.
         // After that, the md-switch directive changes the value of show_completed to reflect the
-        // new switch state. 
+        // new switch state.
         $scope.current.show_completed = !$scope.current.show_completed;
         store_cookie();
         $scope.current.show_completed = !$scope.current.show_completed;
       }
 
       $scope.select_first_operation_type = function(cat_index) {
+        $('#dashboard-container').hide()
+        $('#content-container').show()
+
         $scope.category_index = cat_index;
         $scope.current.activity_report.selected = false;
-        store_cookie();        
+        store_cookie();
         let ots = aq.where($scope.operation_types, ot => ot.category == $scope.categories[$scope.category_index]);
         if ( ots.length > 0 ) {
           $scope.select(ots[0],"waiting", [])
@@ -185,6 +193,7 @@
       }
 
       $scope.select = function (operation_type, status, selected_ops, append = false) {
+        no_race = "select"
 
         if (!append) {
           $scope.current.operation_type = operation_type;
@@ -217,7 +226,7 @@
           operation_type_id: operation_type.id,
           status: actual_status
         };
-        
+
         if ($scope.current.filter_user && $scope.current.selected_user) {
           criteria.user_id = $scope.current.selected_user.id
         } else if (!$scope.current_user.is_admin) {
@@ -225,6 +234,11 @@
         }
 
         AQ.Operation.manager_list(criteria, options).then(operations => {
+          // MANUALLY SET THE CATEGORY NAV
+          // NOTE: NOT SETTING current.category_index = -1; IN app/views/operations/_sidebar.html.erb TO AVOID SCREEN FLASH
+          //       AND WILL NOT SET CORRECLTY IF GOING BACK TO SAME VALUE
+          $('#cat_'+$scope.current.category_index).removeClass("unselected-category").addClass("selected-category");
+
           aq.each(operations, op => {
             op.jobs = aq.collect(op.jobs, job => AQ.Job.record(job));
             op.field_values = aq.collect(op.field_values, fv => AQ.FieldValue.record(fv))
@@ -247,9 +261,24 @@
               }
             })
           });
+          
           $scope.jobs = aq.uniq(aq.collect(operation_type.operations, op => {
             return op.jobs.length > 0 ? op.last_job.id : null
           }));
+
+          let job_assignments = new Object;
+          aq.each(operation_type.operations, op => {
+            if (op.jobs.length > 0 && op.last_job.assignment != null) {
+
+              const assignment = { 
+                assigned_to: op.last_job.assignment.assigned_to,
+                to_name: op.last_job.assignment.to_name
+              }
+             job_assignments[op.last_job.id] == undefined ? job_assignments[op.last_job.id] = assignment : null
+            }
+          });
+          $scope.job_assignments = job_assignments;
+
           $scope.applying_user_filter = false;
           $scope.$apply();
         })
@@ -281,7 +310,7 @@
           $scope.$apply();
         });
 
-        get_running_jobs();        
+        get_running_jobs();
 
       }
 
@@ -294,19 +323,23 @@
       };
 
       $scope.batch = function (operation_type) {
+        $('#batch-btn').prop('disabled', true);
 
         var ops = aq.where(operation_type.operations, op => op.selected);
 
         if (ops.length > 0) {
-          operation_type.schedule(ops).then(() => {
+          operation_type.schedule(ops)
+          .then(() => {
             get_numbers().then(numbers => {
               $scope.numbers = numbers;
+              ops = aq.each(ops, op => {
+                op.selected = false
+              })
               $scope.select(operation_type, 'scheduled', ops);
               $scope.$apply();
             });
-          });
-        }
-
+          })
+        }       
       };
 
       $scope.retry = function (operation_type) {
@@ -318,7 +351,7 @@
             for (var i = 0; i < op.outputs.length; i++) {
               op.outputs[i].item.mark_as_deleted()
               op.outputs[i].clear_item().save();
-            }            
+            }
             get_numbers().then(numbers => {
               $scope.numbers = numbers;
               $scope.select(operation_type, 'pending', ops);
@@ -329,15 +362,23 @@
 
       };
 
-      $scope.unschedule = function (operation_type, jid) {
+      $scope.unschedule = function (operation_type) {
+        $('#remove-btn').prop('disabled', true);
 
-        var ops = aq.where(operation_type.operations, op => op.selected && op.last_job.id === jid);
+        var ops = aq.where(operation_type.operations, op => op.selected);
 
         if (ops.length > 0) {
           operation_type.unschedule(ops).then(() => {
             get_numbers().then(numbers => {
               $scope.numbers = numbers;
-              $scope.select(operation_type, 'pending_true', ops);
+              ops = aq.each(ops, op => {
+                op.selected = false
+              })
+              if (ops.length - aq.where(operation_type.operations, op => op.status === "scheduled").length > 0){
+                $scope.select(operation_type, 'scheduled', ops);
+              } else {
+                $scope.select(operation_type, 'pending', ops);
+              }
               $scope.$apply();
             });
           });
@@ -395,7 +436,7 @@
           c += ' unselected-category';
         }
 
-        if ( $scope.current.active[$scope.categories[index]] ) {          
+        if ( $scope.current.active[$scope.categories[index]] ) {
           c += " active-category";
         }
 
@@ -404,6 +445,22 @@
       }
 
       $scope.select_active_jobs = function() {
+        $('#dashboard-container').show()
+        $('#content-container').hide()
+        if ( $('#dashboard-container').html().length == 0 ) {
+
+          // BUILD FROM SCRATCH
+          $.ajax({
+            type: "GET",
+            url: "/react",
+            dataType: "html",
+
+            success: function(response) {
+              $('#dashboard-container').html(response)
+            }
+          })
+        }
+
         $scope.current.active_jobs = true;
         $scope.current.activity_report.selected = false;
         store_cookie();
@@ -413,7 +470,7 @@
         $scope.current.activity_report.date = new Date($scope.current.activity_report.date);
         $scope.current.activity_report.date.setDate($scope.current.activity_report.date.getDate()-1);
         $scope.get_job_report();
-      }      
+      }
 
       $scope.increment_date = function() {
         $scope.current.activity_report.date = new Date($scope.current.activity_report.date);
@@ -422,14 +479,98 @@
       }
 
       $scope.get_job_report = function() {
+        $('#dashboard-container').hide()
+        $('#content-container').show()
         $scope.current.activity_report.data = new JobReport([], "waiting");
         AQ.get(`/jobs/report?date=${$scope.current.activity_report.date.toString()}`).then(reponse => {
-          $scope.current.activity_report.data = new JobReport(reponse.data, "ready", $scope.current.activity_report.date);
-          $scope.current.activity_report.selected = true;
-          store_cookie();
+          if (no_race == 'reports' || no_race == "init") {
+            $scope.current.activity_report.data = new JobReport(reponse.data, "ready", $scope.current.activity_report.date);
+            $scope.current.activity_report.selected = true;
+            store_cookie();
+          }
         })
-      }   
+      }
+      
+      function get_tech_list() {
 
+        AQ.get('/api/v2/groups/55/users?options[]=job_count')
+          .then(response => {
+            $scope.current.technicians = response.data.data;
+          });
+          // TODO: error handling
+
+      }
+
+      $scope.assign_job = function (assign_to_id, to_name, job_id) {
+
+        AQ.post(`/api/v2/jobs/${job_id}/assign?to=${assign_to_id}`, {})
+          .then(function(response){
+            $scope.job_assignments[job_id] = {
+                assigned_to: assign_to_id,
+                to_name: to_name
+              }
+            }, function(response){
+              console.log("Error during job assignment: " + JSON.stringify(response.data.data))
+            }
+          );
+      }
+
+      $scope.unassign_job = function(job_id) {
+        AQ.post(`/api/v2/jobs/${job_id}/unassign`, {})
+        .then(function(response){
+          $scope.job_assignments[job_id] = null
+        },
+          function(response){
+            console.log("Error during job assignment: " + JSON.stringify(response.data.data))
+        }); 
+      }
+
+      function get_job_assignment(job_id) {
+        AQ.get(`/api/v2/jobs/${job_id}/assignment`)
+        .then(response => {
+          if (response.data.status === 200) {
+            return response.data.data
+          }
+        });
+      }
+
+      $scope.disable_batch_button = function() {
+        if ($scope.current.operation_type.operations) {
+          // Enable button if a single operation has been selected
+          return !$scope.current.operation_type.operations.some(operation => operation.selected == true)
+        } else {
+          return true
+        }
+      }
+
+      $scope.disable_assign = function(techAssignment) {
+        console.log(techAssignment);
+        if (techAssignment == undefined) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      // TODO FIX DISABLE FUNCTION
+      // Disable unassign button when there no assignment 
+      $scope.disable_unassign = function(job_id) {
+        if ($scope.job_assignments[job_id] == null || $scope.job_assignments[job_id] == undefined) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      // MANUALLY CLEAR THE CATEGORY NAV TO AVOID THE SCREEN FLASH WHEN CLICK { SOMETHING ELSE } > { ACTIVITY REPORTS }
+      // USE INSTEAD OF current.category_index = -1; IN app/views/operations/_sidebar.html.erb
+      $scope.clear_category_nav = function(nr) {
+        no_race = nr;
+        $('#cat_'+$scope.current.category_index).removeClass("selected-category").addClass("unselected-category");
+      }
+
+      
+      
     }]);
 
 })();

@@ -1,0 +1,192 @@
+<div id="react-content" class="react_container"></div>
+
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+<script type="text/babel">
+    "use strict";
+
+  class TechnicianDashboard extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = { 
+        isLoading: true,
+        hasError: false,
+        readyJobs: [],
+        runningJobs: [],
+        viewReadyJobs: true,
+      };
+
+    this.getTechnicianDashboard = this.getTechnicianDashboard.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+    // Get fresh data and change view
+    handleClick(viewReadyJobs) {
+      this.getTechnicianDashboard(viewReadyJobs);
+    }
+
+    componentDidMount() {
+      // Get initial data
+      this.getTechnicianDashboard()
+    }
+
+    static getDerivedStateFromError(error) {
+      // Update state so the next render will show the fallback UI.
+      return { hasError: true };
+    }
+
+    componentDidCatch(error, errorInfo) {
+      console.log(error, errorInfo);
+    }
+
+    render() {
+      if (this.state.hasError) {
+        return <h1> Ooops... Something went wrong. Please try again.</h1>
+      }
+
+      if (this.state.isLoading) {
+        return <h1>Loading active jobs...</h1>
+      }
+      return (
+        <div className="tech_dashboard">
+          <div className="left_nav"> 
+            <div className="btn_block">
+              <div className={`btn_cont ${ this.state.viewReadyJobs ? "selected" : "" }`}
+                   onClick={() => this.handleClick(true)}> 
+                <button id="ready_jobs_btn"
+                        className="view_select_btn">
+                    READY
+                </button>
+                <button className="jobs_count">
+                  {this.state.readyJobs.length}
+                </button>
+              </div>
+              <div className={`btn_cont ${ !this.state.viewReadyJobs ? "selected" : "" }`}
+                    onClick={() => this.handleClick(false)}>
+                  <button id="running_jobs_btn" 
+                          className="view_select_btn">
+                    RUNNING
+                  </button>
+                  <button className="jobs_count">
+                    {this.state.runningJobs.length}
+                  </button>
+              </div>
+            </div>
+            <div className="page_title">Jobs</div>
+          </div>
+
+          { this.state.viewReadyJobs ? 
+              AssignedJobsTable(this.state.readyJobs, this.state.viewReadyJobs) : 
+              AssignedJobsTable(this.state.runningJobs, this.state.viewReadyJobs)
+          }
+        </div>
+      )
+    }
+
+    getTechnicianDashboard(viewReadyJobs=true) {
+      fetch("/api/v2/dashboard/my")
+      .then(result => result.json())
+      .then(
+        (result) => {
+          this.setState({
+            isLoading: false,
+            readyJobs: result.data.filter(job => job.pc === -1 ),
+            runningJobs: result.data.filter(job => job.pc === 0 ),
+            viewReadyJobs,
+          });
+        },
+        (error) => {
+          console.log("error:" + JSON.stringify(error));
+          this.setState({
+            isLoading: false,
+            error,
+          });
+        }
+      )
+    }
+  }
+
+  function AssignedJobsTable(jobs, viewReadyJobs) {
+    return (
+      <div className="fflex_1024">
+        <div className="assigned_job_table_title fflex_resp tech_table_title">
+          <div className="job-tecnician-name fflex_col" >JOB #</div>
+          <div className="job-protocol fflex_col2 ">PROTOCOL</div>
+          <div className="job-operations fflex_col "> OPERATIONS</div>
+          <div className="job-assigned-time fflex_col "> CREATED</div>
+          <div className="job-start-time fflex_col "> ASSIGNED</div>
+          { !viewReadyJobs && <div className="job-start-time fflex_col "> STARTED</div> }
+        </div>
+
+        <div className="tech_dash_table_content">
+          { jobs.length > 0 ?
+            jobs.map(function( job, i ) {
+                return TechDashTableRow( i, job )
+              }) :
+            <h3>No jobs</h3>
+          }
+        </div>
+      </div>
+    )
+  }
+
+  function TechDashTableRow( key, job ) {
+    let classNames = key === 0 ? "active-job fflex_resp fflex_row first_row" : "active-job fflex_resp fflex_row";
+    let assigned = `${new Date(job.assigend_at).toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric", hour12: true })}, ${naturalDate(job.assigend_at)}`;
+    
+    if (job.pc == 0){
+      let job_state = JSON.parse(job.state).filter(obj => {
+        return obj.operation === "initialize"
+      });
+      let start_time = `${new Date(job_state[0].time).toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric", hour12:true})}, ${naturalDate(job_state[0].time)}`;
+    }
+    
+    return (
+      <div key={key} className={`active-job fflex_resp fflex_row ${key === 0 ? "first_row" : ""}`} >
+        <div className="job-id fflex_col" fflex_content="Job">
+          <a href={`/jobs/${job.id}`} className="figma_blue"> {job.id}</a>
+        </div>
+        <div className="job-protocol fflex_col2" fflex_content="Protocol">
+          <a className="figma_blue" href={`/jobs/${job.id}`} > {job.operation_type_name}</a>
+        </div>
+        <div className="job-operations fflex_col" fflex_content="Operations"> {job.operation_count}</div>
+        <div className="job-created fflex_col" fflex_content="Created"> {job.created_at ? naturalDate(job.created_at): "-"}</div>
+        <div className="job-assigned-time fflex_col" fflex_content="Assigned">{ job.assigend_at ? assigned : "-"}</div>
+        { job.pc === 0 && <div className="job-assigned-time fflex_col" fflex_content="Started">{ started }</div> }
+        
+      </div>
+    )
+  }
+  
+  function naturalDate(date) {
+
+    // ACTUAL TIMESTAMP
+    let today = new Date()
+
+    // TIMESTAMP FOR INPUT DATE AT 00:00:00
+    date = new Date(date)
+    let date_begin = new Date( date.getFullYear(), date.getMonth(), date.getDate() )
+
+    // GET DAYS (0 = TODAY)
+    // NOTE: 86400000 = 1000 * 60 * 60 * 24 = MILLISECONDS IN A DAY
+    let days = Math.floor((today - date_begin)/86400000)
+
+    switch(true) {
+      case (days == 0):
+        return "today"
+        break;
+      case (days == 1):
+        return "yesterday"
+        break;
+      case (days > 1 && days < 4):
+        return days + " days ago"
+        break;
+      default:
+        // TODO: DECLARE THIS A CONSTANT
+        let months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+        return months[date.getMonth()]+" "+date.getDate()+", "+date.getFullYear()
+    }
+  }
+
+  const domContainer = document.querySelector("#react-content");
+  ReactDOM.render(<TechnicianDashboard/>, domContainer);
+</script>

@@ -23,8 +23,47 @@
             operation.set_status(status);
             window.location = '/operations'
           });
-
         }
+
+        $scope.checkAll = function (operations, jobid) {
+          let checked = document.getElementById('select_all_'+(jobid || "")).checked
+          let ops = operations;
+          if (jobid) {
+            ops = operations.filter(operation => operation.last_job.id === jobid)
+          }
+
+          aq.each(ops, op => {
+            op.selected = checked;
+          });
+        };
+
+
+        $scope.checkParent = function (operations, jobid) {
+          let ops = operations;
+          if (jobid) {
+            ops = operations.filter(operation => operation.last_job.id === jobid)
+          }
+          let selected = true
+          aq.each(ops, op => {
+            if (!op.selected) selected = false;
+          });
+
+          // SET THE SELECT ALL CHECKBOX
+          document.getElementById('select_all_'+(jobid || "")).checked = selected
+        };
+
+        $scope.checkAllFalse = function (operations, checkAllOperations, jobid) {
+          let ops = operations;
+
+          if (jobid) {
+            ops = operations.filter(operation => operation.last_job.id === jobid)
+          }
+          debugger;
+          if (ops.some(op => op.selected == false)){
+            return checkAllOperations = false;
+          }
+        }
+
       }
     }
 
@@ -57,7 +96,7 @@
 
   });
 
-  // TOTO: MAKE THIS A GLOBAL FILTER AVAILABLE ANYWHERE IN THE CODE
+  // TODO: MAKE THIS A GLOBAL FILTER AVAILABLE ANYWHERE IN THE CODE
   w.filter('naturalDate', function(){
     return function(date){
 

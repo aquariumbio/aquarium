@@ -1,0 +1,144 @@
+<div id="react-content" class="react_container"></div>
+<script>
+      'use strict';
+
+      const createElement = React.createElement;
+
+      function AssignedJobTitle(props) {
+        return (
+          createElement('div', { className: 'assigned_job_table_title fflex_resp fflex_title' },
+            createElement('div', { className: 'job-tecnician-name fflex_col typography_figma_bold' },'Technician'),
+            createElement('div', { className: 'job-id fflex_col typography_figma_bold' }, 'Job'),
+            createElement('div', { className: 'job-protocol fflex_col2' },'Protocol'),
+            createElement('div', { className: 'job-status fflex_col' }, 'Status'),
+            createElement('div', { className: 'job-operations fflex_col fflex_center_text' }, 'Operations'),
+            createElement('div', { className: 'job-assigned-time fflex_col fflex_center_text' }, 'Assigned'),
+            createElement('div', { className: 'job-start-time fflex_col fflex_center_text' }, 'Started'),
+          )
+        )
+      }
+
+      function AssignedJobRow(props) {
+        let start_time = null;
+        if (props.job.pc == 0){
+          let job_state = JSON.parse(props.job.state).filter(obj => {
+            return obj.operation === "initialize"
+          });
+          start_time = new Date(job_state[0].time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        return (
+          createElement('div', { className: `active-job fflex_resp fflex_row` },
+            createElement('div', { className: 'job-tecnician-name fflex_col highlight_blue', fflex_content: 'Technician' }, props.job.to_name || '-'),
+            createElement('div', { className: 'job-id fflex_col', fflex_content: "Job"},
+              createElement('a', { href: `/jobs/${props.job.id}`, className: 'figma_blue' }, props.job.id)
+            ),
+            createElement('div', { className: 'job-protocol fflex_col2', fflex_content: 'Protocol' },
+              createElement('a', { className: 'figma_blue', href: `/jobs/${props.job.id}` }, props.job.operation_type_name)
+            ),
+            createElement('div', { className: 'job-status fflex_col', fflex_content: 'Status' }, props.job.pc == 0 ? 'Running' : 'Ready'),
+            createElement('div', { className: 'job-operations fflex_col fflex_center_text', fflex_content: 'Status'}, props.job.operation_count),
+            createElement('div', { className: 'job-assigned-time fflex_col fflex_center_text', fflex_content: 'Assigned'}, props.job.assigend_at ? new Date(props.job.assigend_at).toLocaleDateString('en-US') : '-'),
+            createElement('div', { className: 'job-start-time fflex_col fflex_center_text', fflex_content: 'Started' }, props.job.pc == 0 ? start_time : '-'),
+          )
+        )
+      }
+
+      class ManagerJobsTable extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = { 
+            isLoading: true,
+            hasError: false,
+            liked: false,
+            my_jobs: false 
+          };
+
+          this.getActiveJobsDashboard = this.getActiveJobsDashboard.bind(this);
+
+        }
+
+        componentDidMount() {
+          this.getActiveJobsDashboard()
+        }
+
+        static getDerivedStateFromError(error) {
+          // Update state so the next render will show the fallback UI.
+          return { hasError: true };
+        }
+
+        componentDidCatch(error, errorInfo) {
+          console.log(error, errorInfo);
+        }
+
+        render() {
+
+          let AllJobsButton = createElement('button', { onClick: () => this.getActiveJobsDashboard(), className: 'title jobs_button', disabled: !this.state.my_jobs }, 'All Active Jobs');
+
+          let MyJobsButton = createElement('button', { onClick: () => this.getActiveJobsDashboard(true), className: 'title jobs_button', disabled: this.state.my_jobs}, 'My Jobs');     
+
+          let title = createElement('div', {className: 'title'}, AllJobsButton, MyJobsButton);
+
+          if (this.state.hasError) {
+            // You can render any custom fallback UI
+            return createElement('div', {}, "Something went wrong.")
+          }
+
+          let content
+
+          if (this.state.isLoading) {
+            content = createElement(
+              'p',
+              {},
+              'Loading...',
+            )
+          }
+
+          // No jobs case
+          if (!this.state.isLoading && this.state.jobs.length < 1) {
+            content = createElement('div', {}, this.state.my_jobs ? 'No assigned jobs' : 'No active jobs')
+          }
+          
+          if (!this.state.isLoading && !this.state.hasError && this.state.jobs.length > 0){      
+            content = this.state.jobs.map(function(job, i) {
+                return createElement( AssignedJobRow, {key: i + 1, job: job})
+              }
+            )
+
+            content.unshift(createElement(AssignedJobTitle, {key: 0}))
+          }
+
+          return createElement('div', {className: 'fflex_1024'}, title, content);
+        }
+      
+        getActiveJobsDashboard(my_jobs=false) {
+          let url = '/api/v2/dashboard'
+          if (my_jobs) { 
+            url += '/my'
+          } 
+          fetch(url)
+          .then(result => result.json())
+          .then(
+            (result) => {
+              this.setState({
+                isLoading: false,
+                jobs: result.data,
+                my_jobs: my_jobs
+              });
+            },
+            (error) => {
+              console.log("error:" + JSON.stringify(error));
+              this.setState({
+                isLoading: false,
+                error,
+              });
+            }
+          )
+        }
+        
+        
+      }
+
+      const domContainer = document.querySelector('#react-content');
+      ReactDOM.render(createElement(ManagerJobsTable), domContainer);
+</script>
