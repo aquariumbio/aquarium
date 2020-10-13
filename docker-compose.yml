@@ -30,9 +30,9 @@ services:
       TECH_DASHBOARD: ${TECH_DASHBOARD}  
       TZ: ${TIMEZONE}
     volumes:
-      - ./db:/aquarium/db
-      - ./log:/aquarium/log
-      - ./biofab-eula.yml:/aquarium/config/user_agreement.yml
+      - ./legacy/db:/aquarium/db
+      - ./legacy/log:/aquarium/log
+      - ./legacy/biofab-eula.yml:/aquarium/config/user_agreement.yml
     networks:
       - aquarium_net
     expose:
@@ -55,7 +55,7 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       TZ: ${TIMEZONE}
     volumes:
-      - ./docker/db:/var/lib/mysql
+      - ./data/db/${ENVIRONMENT}:/var/lib/mysql
       - ./docker/mysql_init/dump.sql:/docker-entrypoint-initdb.d/dump.sql
     networks:
       - aquarium_net
@@ -84,8 +84,8 @@ services:
   s3:
     image: minio/minio:edge
     volumes:
-      - ./docker/s3/data:/data
-      - ./docker/s3/config:/root/.minio
+      - ./data/s3/data:/data
+      - ./data/s3/config:/root/.minio
     command: server /data
     expose:
       - "9000"
