@@ -62,7 +62,7 @@
           Completed
         </md-switch>
       </th>
-      <th ng-repeat="status in [ 'Waiting', 'Delayed', 'Pending', 'Deferred', 'Scheduled', 'Running', 'Error', 'Done' ]"
+      <th ng-repeat="status in [ 'Waiting', 'Delayed', 'Pending', 'Deferred', 'Batched', 'Running', 'Error', 'Done' ]"
           class='rotate'
           ng-if="current.show_completed || ( status != 'Error' && status != 'Done' )">
         <div><span>{{status}}</span></div>
@@ -75,7 +75,7 @@
         <span ng-class="timing_bullet(operation_type)">&#9679;</span>
         {{operation_type.name}}
       </td>
-      <td ng-repeat="status in [ 'waiting', 'delayed', 'pending', 'deferred', 'scheduled', 'running', 'error', 'done' ]"
+      <td ng-repeat="status in [ 'waiting', 'delayed', 'pending', 'deferred', 'Batched', 'running', 'error', 'done' ]"
           ng-class="$parent.status_selector(operation_type,status)"
           ng-click="$parent.select(operation_type,status)"
           ng-if="current.show_completed || ( status != 'error' && status != 'done' )"
@@ -176,7 +176,7 @@
            <br>
          </h2>
          <ul>
-           <li>Scheduled: {{current.activity_report.data.selection.created_at|date: 'short'}}</li>
+           <li>Batched: {{current.activity_report.data.selection.created_at|date: 'short'}}</li>
            <li>Started: {{current.activity_report.data.selection.started_at|date: 'short'}}</li>
            <li>Last Update: {{current.activity_report.data.selection.updated_at|date: 'short'}}</li>
          </ul>
