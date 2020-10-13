@@ -1,7 +1,8 @@
 <div id="react-content" class="react_container"></div>
 <script>
       'use strict';
-
+      // NOTE USING REACT W/O JSX HERE BECAUSE BABEL WILL NOT RENDER
+      // NOTE IMPORT SCRIPT BREAKS CHANGE NOT USING NATURAL DATE
       const createElement = React.createElement;
 
       function AssignedJobTitle(props) {
@@ -27,6 +28,15 @@
           start_time = new Date(job_state[0].time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
         }
 
+        let assigned_at;
+        // HANDLE VARRIED SPELLING IN API RETURN 
+        if ( props.job.assigned_at ) {
+          assigned_at = new Date(props.job.assigned_at).toLocaleDateString('en-US');
+        } else if ( props.job.assigend_at ) {
+          assigned_at = new Date(props.job.assigend_at).toLocaleDateString('en-US')
+        } else {
+          assigned_at = "-"
+        }
         return (
           createElement('div', { className: `active-job fflex_resp fflex_row` },
             createElement('div', { className: 'job-tecnician-name fflex_col highlight_blue', fflex_content: 'Technician' }, props.job.to_name || '-'),
@@ -38,7 +48,7 @@
             ),
             createElement('div', { className: 'job-status fflex_col', fflex_content: 'Status' }, props.job.pc == 0 ? 'Running' : 'Ready'),
             createElement('div', { className: 'job-operations fflex_col fflex_center_text', fflex_content: 'Status'}, props.job.operation_count),
-            createElement('div', { className: 'job-assigned-time fflex_col fflex_center_text', fflex_content: 'Assigned'}, props.job.assigend_at ? new Date(props.job.assigend_at).toLocaleDateString('en-US') : '-'),
+            createElement('div', { className: 'job-assigned-time fflex_col fflex_center_text', fflex_content: 'Assigned'}, assigned_at),
             createElement('div', { className: 'job-start-time fflex_col fflex_center_text', fflex_content: 'Started' }, props.job.pc == 0 ? start_time : '-'),
           )
         )
