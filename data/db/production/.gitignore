@@ -1,0 +1,5 @@
+# This directory is used to hold the database files from the Docker container.
+# Ignore the database files
+*
+# but keep this file to include the directory
+!.gitignore
