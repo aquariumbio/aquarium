@@ -26,7 +26,8 @@ services:
 
   db:
     volumes:
-      - ./data/db/production:/var/lib/mysql
+      # TODO: this should be production, but was misbehaving
+      - ./data/db/development:/var/lib/mysql
       - ./data/mysql_init/dump.sql:/docker-entrypoint-initdb.d/dump.sql      
 
 volumes:
