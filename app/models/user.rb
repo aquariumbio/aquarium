@@ -53,6 +53,10 @@ class User < ActiveRecord::Base
     Group.admin&.member?(self)
   end
 
+  def technician?
+    Group.technicians&.member?(self)
+  end
+
   def retired?
     Group.retired&.member?(self)
   end
