@@ -55,7 +55,7 @@ RSpec.describe Api::V2::GroupsController, type: :request do
       user_1 = user_1 || User.find_by_login('user_1')
 
       # ADD USER TO GROUP
-      membership = ( create(:membership, { group_id: 55, user_id: user_1.id }) ) rescue nil
+      membership = (create(:membership, { group_id: 55, user_id: user_1.id })) rescue nil
       plus = membership ? 1 : 0
 
       get '/api/v2/groups/55/users'
@@ -75,4 +75,3 @@ RSpec.describe Api::V2::GroupsController, type: :request do
 
   end
 end
-

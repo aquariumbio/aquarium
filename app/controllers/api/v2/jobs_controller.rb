@@ -40,7 +40,7 @@ class Api::V2::JobsController < ApplicationController
     else
       to_id = to_id.to_i
       to_user = User.find(to_id) rescue nil
-      render json: api_error( { "to_id" => ["invalid user"] } ) and return if !to_user
+      render json: api_error({ "to_id" => ["invalid user"] }) and return if !to_user
     end
 
     # TODO: MOVE SQL TO MODEL
@@ -68,7 +68,7 @@ class Api::V2::JobsController < ApplicationController
     # GET JOB
     id = params[:id].to_i
     job = Job.find(id) rescue nil
-    render json: api_error( { "job_id" => ["invalid job"] } ) and return if !job
+    render json: api_error({ "job_id" => ["invalid job"] }) and return if !job
 
     render json: api_ok(job)
   end
@@ -79,7 +79,7 @@ class Api::V2::JobsController < ApplicationController
     # GET JOB
     id = params[:id].to_i
     job = Job.find(id) rescue nil
-    render json: api_error( { "job_id" => ["invalid job"] } ) and return if !job
+    render json: api_error({ "job_id" => ["invalid job"] }) and return if !job
 
     result = job.job_assignment
 
@@ -91,7 +91,7 @@ class Api::V2::JobsController < ApplicationController
 
     @id = params[:id].to_i
     job = Job.find(@id) rescue nil
-    render json: api_error( { "job_id" => ["invalid job"] } ) and return if !job
+    render json: api_error({ "job_id" => ["invalid job"] }) and return if !job
 
     @by = current_user.id rescue nil
     @to = params[:to].to_i
@@ -105,7 +105,7 @@ class Api::V2::JobsController < ApplicationController
 
     @id = params[:id].to_i
     job = Job.find(@id) rescue nil
-    render json: api_error( { "job_id" => ["invalid job"] } ) and return if !job
+    render json: api_error({ "job_id" => ["invalid job"] }) and return if !job
 
     @by = current_user.id rescue nil
     @to = nil
@@ -114,7 +114,7 @@ class Api::V2::JobsController < ApplicationController
     return
   end
 
-private
+  private
 
   def job_post_assignment
     jal = JobAssignmentLog.new
