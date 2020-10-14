@@ -611,11 +611,15 @@ Files:
 ```bash
 aquarium
 |-- aquarium.sh                   # script to run Aquarium in production mode
+|-- data
+|   |-- db                        # directory to store database files
+|   |   |-- development
+|   |   |-- production
+|   |   `-- test
+|   `-- s3                        # directory for minio files
 |-- develop-compose.sh            # script to run Aquarium in development mode (for compatibility)
 |-- docker
-|   |-- db                        # directory to store database files
 |   |-- mysql_init                # database dump to initialize database
-|   |-- s3                        # directory for minio files
 |   |-- nginx.development.conf    # nginx configuration for development server
 |   `-- nginx.production.conf     # nginx configuration for production server
 |-- docker-compose.override.yml   # development compose file
