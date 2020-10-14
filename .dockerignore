@@ -2,7 +2,6 @@
 .idea/
 .yardoc/
 data/
-data/s3/
 docker/
 docs/
 node_modules/

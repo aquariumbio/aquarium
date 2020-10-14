@@ -3,8 +3,6 @@
 # Defines services for Aquarium, Krill, database, and S3.  Uses Docker network
 # address translation, and containers for MySQL, and the Minio S3 server.
 #
-# Run setup.sh before using this file
-#
 version: "3.5"
 services:
   app:
@@ -43,9 +41,6 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       TZ: ${TIMEZONE}
-    volumes:
-      - ./data/db/development:/var/lib/mysql
-      - ./docker/mysql_init/dump.sql:/docker-entrypoint-initdb.d/dump.sql
     networks:
       - aquarium_net
 
