@@ -18,7 +18,7 @@ class DashboardController < ApplicationController
       j.id, j.user_id, j.state, j.created_at, j.updated_at, j.pc, j.group_id, j.submitted_by,
       vjot.operation_type_id as 'operation_type_id', vjot.name as 'operation_type_name', vjot.category as 'operation_type_category',
       vjassoc.n as 'operation_count',
-      vja.assigned_by, vja.by_name, vja.by_login, vja.assigned_to, vja.to_name, vja.to_login, vja.created_at as 'assigend_at'
+      vja.assigned_by, vja.by_name, vja.by_login, vja.assigned_to, vja.to_name, vja.to_login, vja.created_at as 'assigned_at'
       from jobs j
       inner join view_job_operation_types vjot on vjot.job_id = j.id
       inner join view_job_associations vjassoc on vjassoc.job_id = j.id
@@ -40,7 +40,7 @@ class DashboardController < ApplicationController
       j.id, j.user_id, j.state, j.created_at, j.updated_at, j.pc, j.group_id, j.submitted_by,
       vjot.operation_type_id as 'operation_type_id', vjot.name as 'operation_type_name', vjot.category as 'operation_type_category',
       vjassoc.n as 'operation_count',
-      vja.assigned_by, vja.by_name, vja.by_login, vja.assigned_to, vja.to_name, vja.to_login, vja.created_at as 'assigend_at'
+      vja.assigned_by, vja.by_name, vja.by_login, vja.assigned_to, vja.to_name, vja.to_login, vja.created_at as 'assigned_at'
       from jobs j
       inner join view_job_operation_types vjot on vjot.job_id = j.id
       inner join view_job_associations vjassoc on vjassoc.job_id = j.id

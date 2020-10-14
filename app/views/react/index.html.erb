@@ -29,11 +29,9 @@
         }
 
         let assigned_at;
-        // HANDLE VARRIED SPELLING IN API RETURN 
+        // HANDLE VARRIED SPELLING IN API RETURN
         if ( props.job.assigned_at ) {
-          assigned_at = new Date(props.job.assigned_at).toLocaleDateString('en-US');
-        } else if ( props.job.assigend_at ) {
-          assigned_at = new Date(props.job.assigend_at).toLocaleDateString('en-US')
+          assigned_at = new Date(props.job.assigned_at).toLocaleDateString('en-US')
         } else {
           assigned_at = "-"
         }
@@ -57,11 +55,11 @@
       class ManagerJobsTable extends React.Component {
         constructor(props) {
           super(props);
-          this.state = { 
+          this.state = {
             isLoading: true,
             hasError: false,
             liked: false,
-            my_jobs: false 
+            my_jobs: false
           };
 
           this.getActiveJobsDashboard = this.getActiveJobsDashboard.bind(this);
@@ -85,7 +83,7 @@
 
           let AllJobsButton = createElement('button', { onClick: () => this.getActiveJobsDashboard(), className: 'title jobs_button', disabled: !this.state.my_jobs }, 'All Active Jobs');
 
-          let MyJobsButton = createElement('button', { onClick: () => this.getActiveJobsDashboard(true), className: 'title jobs_button', disabled: this.state.my_jobs}, 'My Jobs');     
+          let MyJobsButton = createElement('button', { onClick: () => this.getActiveJobsDashboard(true), className: 'title jobs_button', disabled: this.state.my_jobs}, 'My Jobs');
 
           let title = createElement('div', {className: 'title'}, AllJobsButton, MyJobsButton);
 
@@ -108,8 +106,8 @@
           if (!this.state.isLoading && this.state.jobs.length < 1) {
             content = createElement('div', {}, this.state.my_jobs ? 'No assigned jobs' : 'No active jobs')
           }
-          
-          if (!this.state.isLoading && !this.state.hasError && this.state.jobs.length > 0){      
+
+          if (!this.state.isLoading && !this.state.hasError && this.state.jobs.length > 0){
             content = this.state.jobs.map(function(job, i) {
                 return createElement( AssignedJobRow, {key: i + 1, job: job})
               }
@@ -120,12 +118,12 @@
 
           return createElement('div', {className: 'fflex_1024'}, title, content);
         }
-      
+
         getActiveJobsDashboard(my_jobs=false) {
           let url = '/api/v2/dashboard'
-          if (my_jobs) { 
+          if (my_jobs) {
             url += '/my'
-          } 
+          }
           fetch(url)
           .then(result => result.json())
           .then(
@@ -145,8 +143,8 @@
             }
           )
         }
-        
-        
+
+
       }
 
       const domContainer = document.querySelector('#react-content');
