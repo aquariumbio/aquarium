@@ -48,7 +48,7 @@
           <%= job.operation_count %>
         </div>
         <div fflex_content="Assigned" class="fflex_col">
-          <%= job.assigend_at.strftime('%m-%d-%y') || "-" %>
+          <%= job.assigned_at.strftime('%m-%d-%y') || "-" %>
         </div>
         <div fflex_content="Started" class="fflex_col">
           <%= job.pc == 0 ? ( raw "&lt;time>" ) : "-" %>

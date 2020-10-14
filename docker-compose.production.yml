@@ -24,6 +24,11 @@ services:
       - shared:/aquarium/shared
       - ./docker/nginx.production.conf:/etc/nginx/conf.d/default.conf:ro
 
+  db:
+    volumes:
+      - ./data/db/production:/var/lib/mysql
+      - ./docker/mysql_init/dump.sql:/docker-entrypoint-initdb.d/dump.sql      
+
 volumes:
   public:
   logs:

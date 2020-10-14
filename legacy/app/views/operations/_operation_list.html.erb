@@ -21,7 +21,7 @@
         <th>Last Updated</th>
         <th>Client</th>
         <th>Op ID</th>
-        <th>Status</th>
+        <th ng-show="status != 'scheduled'">Status</th>
       </tr>
 
       <tr ng-repeat="op in operations"
@@ -144,7 +144,7 @@
 
           </td>
 
-          <td ng-if="op.status === 'scheduled' || op.status === 'running'">{{op.status}}</td>
+          <td ng-show="op.status === 'running'">{{op.status}}</td>
 
         <% end %>
 

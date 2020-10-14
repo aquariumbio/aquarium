@@ -126,5 +126,3 @@ RSpec.describe Api::V2::JobsController, type: :request do
 
   end
 end
-
-

@@ -18,7 +18,7 @@ class Api::V2::JobsController < ApplicationController
       j.id, j.user_id, j.state, j.created_at, j.updated_at, j.pc, j.group_id, j.submitted_by,
       vjot.operation_type_id as 'operation_type_id', vjot.name as 'operation_type_name', vjot.category as 'operation_type_category',
       vjassoc.n as 'operation_count',
-      vja.assigned_by, vja.by_name, vja.by_login, vja.assigned_to, vja.to_name, vja.to_login, vja.created_at as 'assigend_at'
+      vja.assigned_by, vja.by_name, vja.by_login, vja.assigned_to, vja.to_name, vja.to_login, vja.created_at as 'assigned_at'
       from jobs j
       inner join view_job_operation_types vjot on vjot.job_id = j.id
       inner join view_job_associations vjassoc on vjassoc.job_id = j.id
@@ -40,7 +40,7 @@ class Api::V2::JobsController < ApplicationController
     else
       to_id = to_id.to_i
       to_user = User.find(to_id) rescue nil
-      render json: api_error( { "to_id" => ["invalid user"] } ) and return if !to_user
+      render json: api_error({ "to_id" => ["invalid user"] }) and return if !to_user
     end
 
     # TODO: MOVE SQL TO MODEL
@@ -68,7 +68,7 @@ class Api::V2::JobsController < ApplicationController
     # GET JOB
     id = params[:id].to_i
     job = Job.find(id) rescue nil
-    render json: api_error( { "job_id" => ["invalid job"] } ) and return if !job
+    render json: api_error({ "job_id" => ["invalid job"] }) and return if !job
 
     render json: api_ok(job)
   end
@@ -79,7 +79,7 @@ class Api::V2::JobsController < ApplicationController
     # GET JOB
     id = params[:id].to_i
     job = Job.find(id) rescue nil
-    render json: api_error( { "job_id" => ["invalid job"] } ) and return if !job
+    render json: api_error({ "job_id" => ["invalid job"] }) and return if !job
 
     result = job.job_assignment
 
@@ -91,7 +91,7 @@ class Api::V2::JobsController < ApplicationController
 
     @id = params[:id].to_i
     job = Job.find(@id) rescue nil
-    render json: api_error( { "job_id" => ["invalid job"] } ) and return if !job
+    render json: api_error({ "job_id" => ["invalid job"] }) and return if !job
 
     @by = current_user.id rescue nil
     @to = params[:to].to_i
@@ -105,7 +105,7 @@ class Api::V2::JobsController < ApplicationController
 
     @id = params[:id].to_i
     job = Job.find(@id) rescue nil
-    render json: api_error( { "job_id" => ["invalid job"] } ) and return if !job
+    render json: api_error({ "job_id" => ["invalid job"] }) and return if !job
 
     @by = current_user.id rescue nil
     @to = nil
@@ -114,7 +114,7 @@ class Api::V2::JobsController < ApplicationController
     return
   end
 
-private
+  private
 
   def job_post_assignment
     jal = JobAssignmentLog.new

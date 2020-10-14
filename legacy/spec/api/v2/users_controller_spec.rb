@@ -26,13 +26,13 @@ RSpec.describe Api::V2::UsersController, type: :request do
       # CHECK THE LAST THREE USERS
       len = json_response["data"].length
 
-      last_user = json_response["data"][len-1]
-      last_user["login"].should == "user_1"
+      last_user = json_response["data"][len - 1]
+      expect(last_user["login"]).to eq("user_1")
     end
 
     # GET USER
     it "get_user" do
-      get "/api/v2/users/#{@user_1.id}" #, params: { id: 1 }
+      get "/api/v2/users/#{@user_1.id}" # , params: { id: 1 }
       json_response = JSON.parse(response.body)
 
       user = json_response["data"]
@@ -41,7 +41,7 @@ RSpec.describe Api::V2::UsersController, type: :request do
 
     # GET USER (INVALID USER)
     it "get_user_invalid" do
-      get "/api/v2/users/0" #, params: { id: 1 }
+      get "/api/v2/users/0" # , params: { id: 1 }
       json_response = JSON.parse(response.body)
 
       expect(json_response["status"]).to eq(400)
@@ -77,7 +77,7 @@ RSpec.describe Api::V2::UsersController, type: :request do
 
     # GET JOBS ASSIGNED TO USER (INVALID USER)
     it "get_user_assigned_jobs_invalid" do
-      get "/api/v2/users/0" #, params: { id: 1 }
+      get "/api/v2/users/0" # , params: { id: 1 }
       json_response = JSON.parse(response.body)
 
       expect(json_response["status"]).to eq(400)
@@ -85,4 +85,3 @@ RSpec.describe Api::V2::UsersController, type: :request do
 
   end
 end
-

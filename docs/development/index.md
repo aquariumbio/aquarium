@@ -107,7 +107,7 @@ docker-compose down -v
 You can then safely remove the MySQL files to allow the switch by running
 
 ```bash
-rm -rf docker/db/*
+rm -rf data/db/development/*
 ```
 
 Then copy the dump of the database that you want to use to the default location:
@@ -130,7 +130,7 @@ cp docker/mysql_init/default.sql docker/mysql_init/dump.sql
 Before restarting Aquarium, remove the MySQL files with
 
 ```bash
-rm -rf docker/db/*
+rm -rf data/db/development/*
 ```
 
 ## Migrating the Database
@@ -611,11 +611,15 @@ Files:
 ```bash
 aquarium
 |-- aquarium.sh                   # script to run Aquarium in production mode
+|-- data
+|   |-- db                        # directory to store database files
+|   |   |-- development
+|   |   |-- production
+|   |   `-- test
+|   `-- s3                        # directory for minio files
 |-- develop-compose.sh            # script to run Aquarium in development mode (for compatibility)
 |-- docker
-|   |-- db                        # directory to store database files
 |   |-- mysql_init                # database dump to initialize database
-|   |-- s3                        # directory for minio files
 |   |-- nginx.development.conf    # nginx configuration for development server
 |   `-- nginx.production.conf     # nginx configuration for production server
 |-- docker-compose.override.yml   # development compose file

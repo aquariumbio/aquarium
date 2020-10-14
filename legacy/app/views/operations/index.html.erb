@@ -149,7 +149,7 @@
                     <h1 class="md-title" style="text-align: left; margin-left: 26px;">Assign Job</h1>
                   </div>
                   
-                  <md-radio-group ng-model="selectedTech" ng-if="current.technicians.length > 0" class="md-primary" style="z-index: 0; margin-top: 62px; margin-bottom: 30px;">
+                  <md-radio-group ng-show="current.technicians.length > 1" ng-model="selectedTech" class="md-primary" style="z-index: 0; margin-top: 62px; margin-bottom: 30px;">
                       <md-radio-button ng-repeat="tech in current.technicians"
                                         ng-value="tech" 
                                         style="margin-left: 26px">
@@ -157,7 +157,7 @@
                       </md-radio-button>
                   </md-radio-group>
 
-                  <div ng-if="current.technicians.length > 0"
+                  <div ng-show="current.technicians.length > 1"
                        style="position: absolute; right: 0px; top: 256px; display: flex; justify-content: flex-end; z-index:1; width:100%; background-color: #fff;">
                     <md-button ng-click="$mdMenu.close($event)" 
                                class="md-primary"
@@ -180,8 +180,7 @@
                       OK
                     </md-button>
                   </div>
-
-                  <p ng-if="current.technicians.length < 1" style="margin-top: 62px; margin-left: 24px;"> No Technicians </p>
+                  <p ng-show="current.technicians.length < 1" style="margin-top: 62px; margin-left: 24px;"> No Technicians </p>
 
                 </md-menu-content>
               </md-menu>
