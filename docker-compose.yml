@@ -3,19 +3,8 @@
 # Defines services for Aquarium, Krill, database, and S3.  Uses Docker network
 # address translation, and containers for MySQL, and the Minio S3 server.
 #
-# Initializes the database the first time MySQL is run from the database dump
-# in docker/mysql_init/dump.sql. If you want to use an alternative, replace this
-# file.
+# Run setup.sh before using this file
 #
-# To reininitialize the database with the original or an alternative dump file,
-# remove the docker/db directory with
-#
-#   sudo rm -rf docker/db/*
-#
-# before running `docker-compose up`
-
-# set environment variable EMAIL_SERVICE to AWS to use AWS SES
-
 version: "3.5"
 services:
   app:
@@ -55,7 +44,7 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       TZ: ${TIMEZONE}
     volumes:
-      - ./docker/db:/var/lib/mysql
+      - ./data/db/development:/var/lib/mysql
       - ./docker/mysql_init/dump.sql:/docker-entrypoint-initdb.d/dump.sql
     networks:
       - aquarium_net
@@ -84,8 +73,8 @@ services:
   s3:
     image: minio/minio:edge
     volumes:
-      - ./docker/s3/data:/data
-      - ./docker/s3/config:/root/.minio
+      - ./data/s3/data:/data
+      - ./data/s3/config:/root/.minio
     command: server /data
     expose:
       - "9000"
