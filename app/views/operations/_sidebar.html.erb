@@ -62,7 +62,7 @@
           Completed
         </md-switch>
       </th>
-      <th ng-repeat="status in [ 'Waiting', 'Delayed', 'Pending', 'Deferred', 'Scheduled', 'Running', 'Error', 'Done' ]"
+      <th ng-repeat="status in [ 'Waiting', 'Delayed', 'Pending', 'Deferred', 'Batched', 'Running', 'Error', 'Done' ]"
           class='rotate'
           ng-if="current.show_completed || ( status != 'Error' && status != 'Done' )">
         <div><span>{{status}}</span></div>

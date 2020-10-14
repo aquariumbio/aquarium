@@ -130,9 +130,7 @@
   }
 
   function TechDashTableRow( key, job ) {
-    let classNames = key === 0 ? "active-job fflex_resp fflex_row first_row" : "active-job fflex_resp fflex_row";
     let assigned = `${new Date(job.assigned_at).toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric", hour12: true })}, ${naturalDate(job.assigned_at)}`;
-    console.log(job)
     if (job.pc == 0){
       let job_state = JSON.parse(job.state).filter(obj => {
         return obj.operation === "initialize"
@@ -141,7 +139,7 @@
     }
     
     return (
-      <div key={key} className={`active-job fflex_resp fflex_row ${key === 0 ? "first_row" : ""}`} >
+      <div key={key} className={`tech_dash_row active-job fflex_resp fflex_row ${key === 0 ? "first_row" : ""}`} >
         <div className="job-id fflex_col" fflex_content="Job">
           <a href={`/jobs/${job.id}`} className="figma_blue"> {job.id}</a>
         </div>
