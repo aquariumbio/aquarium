@@ -493,7 +493,7 @@ var no_race = "init";
       
       function get_tech_list() {
 
-        AQ.get('/api/v2/groups/55/users?options[]=job_count')
+        AQ.get('/api/v2/groups/technicians/users?options[]=job_count')
           .then(response => {
             $scope.current.technicians = response.data.data;
           });
