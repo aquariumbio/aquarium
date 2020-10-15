@@ -124,19 +124,14 @@ This document describes the current API v2
 
 10. Get Group &lt;group_id>
     ```bash
-    GET /api/v2/groups/<group_id>
+    GET /api/v2/groups/<group_id> (2)
     ```
 
 11. Get Users in Group &lt;group_id>
     ```bash
-    GET /api/v2/groups/<group_id>/users
-    ```
-
-12. Get Users in Role &lt;role_id = 10>
-    ```bash
-    GET /api/v2/roles/10/users  (2)
+    GET /api/v2/groups/<group_id>/users (2)
     ```
 
 **Notes**
-- (1) the by_id will be the current_user.
-- (2) hardcoded URL in the routing table that goes to /api/v2/groups/55/users.  When we introduce roles this will be implemented in api/v2/roles_controller.
+- (1) the assigned_by field will be the current_user.
+- (2) as a special case the &lt;group_id> can also be 'technicians' to specify the technicians group.

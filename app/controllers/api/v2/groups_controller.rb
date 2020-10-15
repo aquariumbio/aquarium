@@ -13,9 +13,15 @@ class Api::V2::GroupsController < ApplicationController
     # TODO: ADD PERMISSIONS
 
     # GET GROUP
-    id = params[:id].to_i
-    group = Group.find(id) rescue nil
-    render json: api_error({ "group_id" => ["invalid group"] }) and return if !group
+    if params[:id] == "technicians"
+      # SPECIAL CASE FOR TECHNICIANS
+      group = Group.technicians
+      id = group.id
+    else
+      id = params[:id].to_i
+      group = Group.find(id) rescue nil
+    end
+    render json: api_error( { "group_id" => ["invalid group"] } ) and return if !group
 
     render json: api_ok(group)
   end
@@ -24,9 +30,15 @@ class Api::V2::GroupsController < ApplicationController
     # TODO: ADD PERMISSIONS
 
     # GET GROUP
-    id = params[:id].to_i
-    group = Group.find(id) rescue nil
-    render json: api_error({ "group_id" => ["invalid group"] }) and return if !group
+    if params[:id] == "technicians"
+      # SPECIAL CASE FOR TECHNICIANS
+      group = Group.technicians
+      id = group.id
+    else
+      id = params[:id].to_i
+      group = Group.find(id) rescue nil
+    end
+    render json: api_error( { "group_id" => ["invalid group"] } ) and return if !group
 
     job_count = false
     params[:options].to_a.each do |s|

@@ -145,26 +145,16 @@
       &nbsp;&bull;&nbsp;
       <a class="link" href="#" onclick="$('#api').val('/api/v2/groups/');go_api('GET');return false;">GET</a>
       <div class="plus16"></div>
-      /api/v2/groups/ <input id="a6-group_id" value=55 style="width:50px;">
+      /api/v2/groups/ <input id="a6-group_id" value='technicians' style="width:50px;">
       &nbsp;&bull;&nbsp;
-      <a class="link" href="#" onclick="$('#api').val('/api/v2/groups/'+parseInt($('#a6-group_id').val() || 0));go_api('GET');return false;">GET</a>
+      <a class="link" href="#" onclick="$('#api').val('/api/v2/groups/'+$('#a6-group_id').val());go_api('GET');return false;">GET</a>
       <div class="plus16"></div>
-      /api/v2/groups/ <input id="a7-group_id" value=55 style="width:50px;"> / users
+      /api/v2/groups/ <input id="a7-group_id" value='technicians' style="width:50px;"> / users
       &nbsp;&bull;&nbsp;
-      <a class="link" href="#" onclick="$('#api').val('/api/v2/groups/'+parseInt($('#a7-group_id').val() || 0)+'/users');go_api('GET');return false;">GET</a>
+      <a class="link" href="#" onclick="$('#api').val('/api/v2/groups/'+$('#a7-group_id').val()+'/users');go_api('GET');return false;">GET</a>
     </div>
     <div class="clear"></div>
 
-    <div class="plus16 border_bottom"></div>
-    <div class="plus16"></div>
-
-    <div class="left bold" style="width:200px">Get Roles</div>
-    <div class="left">
-      /api/v2/roles/10/users
-      &nbsp;&bull;&nbsp;
-      <a class="link" href="#" onclick="$('#api').val('/api/v2/roles/10/users');go_api('GET');return false;">GET</a>
-    </div>
-    <div class="clear"></div>
   </div>
   <div id="api_call" class="plus16"></div>
 

@@ -29,7 +29,7 @@ RSpec.describe Api::V2::GroupsController, type: :request do
 
     # GET GROUP
     it 'get_group' do
-      get '/api/v2/groups/55'
+      get '/api/v2/groups/technicians'
       json_response = JSON.parse(response.body)
 
       group = json_response["data"]
@@ -45,8 +45,8 @@ RSpec.describe Api::V2::GroupsController, type: :request do
     end
 
     # GET USERS IN GROUP
-    it 'get_user_jobs' do
-      get '/api/v2/groups/55/users'
+    it 'get_user_groups' do
+      get '/api/v2/groups/technicians/users'
       json_response = JSON.parse(response.body)
       len = json_response["data"].length
 
@@ -55,10 +55,11 @@ RSpec.describe Api::V2::GroupsController, type: :request do
       user_1 = user_1 || User.find_by_login('user_1')
 
       # ADD USER TO GROUP
-      membership = (create(:membership, { group_id: 55, user_id: user_1.id })) rescue nil
+      group_id = Group.technicians.id
+      membership = ( create(:membership, { group_id: group_id, user_id: user_1.id }) ) rescue nil
       plus = membership ? 1 : 0
 
-      get '/api/v2/groups/55/users'
+      get '/api/v2/groups/'+group_id.to_s+'/users'
       json_response = JSON.parse(response.body)
       len_new = json_response["data"].length
 

@@ -8,7 +8,7 @@ class JobAssignmentLog < ActiveRecord::Base
 
   validate :job_id_exists
   validate :assigned_by_exists
-  validate :assigned_to_exists
+  validate :assigned_to_null_or_exists
 
   private
 
@@ -30,8 +30,8 @@ class JobAssignmentLog < ActiveRecord::Base
     true
   end
 
-  def assigned_to_exists
-    unless self.assigned_to and User.exists?(self.assigned_to)
+  def assigned_to_null_or_exists
+    unless !self.assigned_to or ( self.assigned_to and User.exists?(self.assigned_to) )
       self.errors[:to_id] << "invalid user"
       return false
     end

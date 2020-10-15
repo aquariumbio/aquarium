@@ -250,8 +250,6 @@ Bioturk::Application.routes.draw do
   get '/api/v2/groups/:id',              to: 'api/v2/groups#group'
   get '/api/v2/groups/:id/users',        to: 'api/v2/groups#users'
 
-  get '/api/v2/roles/10/users',          to: 'api/v2/groups#users', :defaults => { :id => 55 }
-
   post '/api/v2/jobs/:id/assign',        to: 'api/v2/jobs#assign'
   post '/api/v2/jobs/:id/unassign',      to: 'api/v2/jobs#unassign'
 
