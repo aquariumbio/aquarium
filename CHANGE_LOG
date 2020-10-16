@@ -1,3 +1,15 @@
+vPENDING
+
+- Adds ability for manager to assign jobs to technicians, and improves manager
+  interface for working with jobs.
+- Changes landing page so that user in technician group will see dashboard of
+  jobs assigned to them.
+- Shows natural language dates relative to current time.
+- Improves database organization
+
+Includes changes to the database that require applying migrations. See the 
+release notes for details.
+
 v2.8.1
 
 - Krill changes: add technician foot pedal interface (thanks to Abe Miller)
