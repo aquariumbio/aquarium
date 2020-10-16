@@ -1,0 +1,47 @@
+TODO
+
+1.  CREATE A MIGRATION FILE FOR THE "USER_TOKENS" TABLE
+
+    In the meantime you can log in to the DB and run this.
+
+    -- CREATE TABLE "user_tokens" ----------------------------------
+    CREATE TABLE `user_tokens`(
+      `user_id` Int( 0 ) NOT NULL,
+      `token` VarChar( 128 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+      `created_at` DateTime NOT NULL,
+      `updated_at` DateTime NOT NULL,
+      `ip` VarChar( 18 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+      `timenow` DateTime NOT NULL,
+      PRIMARY KEY ( `ip`, `token` ) )
+    CHARACTER SET = utf8
+    COLLATE = utf8_unicode_ci
+    ENGINE = InnoDB;
+    -- -------------------------------------------------------------
+
+    -- CREATE INDEX "fk_user_tokens_user_id" -----------------------
+    CREATE INDEX `fk_user_tokens_user_id` USING BTREE ON `user_tokens`( `user_id` );
+    -- -------------------------------------------------------------
+
+    -- CREATE LINK "fk_user_tokens_user_id" ------------------------
+    ALTER TABLE `user_tokens`
+      ADD CONSTRAINT `fk_user_tokens_user_id` FOREIGN KEY ( `user_id` )
+      REFERENCES `users`( `id` )
+      ON DELETE Cascade
+      ON UPDATE No Action;
+    -- -------------------------------------------------------------
+
+
+2.  DOCUMENT THE SUPPORTED API CALLS.
+
+    In the meantime here they are:
+
+    =>  Sign In: /api/v3/user/sign_in?login=<login>&password=<password>
+
+    =>  Test Token: /api/v3/user/test_token?token=<token>
+
+    =>  Sign Out: /api/v3/user/sign_out?token=<token>&all=<on || true>
+
+
+3.  CODE FOR EDGE CASE WHERE { <IP_ADDRESS> + <TOKEN> } IS NOT UNIQUE
+
+    Suggestion: try creating a new token once and if it is not unique again then return a sign-in error and make the user re-submit...
