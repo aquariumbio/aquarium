@@ -359,7 +359,7 @@ Keep it up-to-date if you change something that affects Aquarium development.
 4.  Run type checks
 
     ```bash
-    docker-compose run -rm app srb tc
+    docker-compose run --rm app srb tc
     ```
 
     If there are any failures, fix them and start over.
@@ -569,7 +569,7 @@ the aquarium service:
 The following values can be set using this file or environment variables:
 
 | Config key           | Environment Variable | Default                               |
-| -----------------    | -------------------- | ------------------------------------- |
+| -------------------- | -------------------- | ------------------------------------- |
 | lab_name             | LAB_NAME             | `Your Lab`                            |
 | lab_email_address    | LAB_EMAIL_ADDRESS    | –                                     |
 | logo_path            | LOGO_PATH            | `aquarium-logo.png`                   |

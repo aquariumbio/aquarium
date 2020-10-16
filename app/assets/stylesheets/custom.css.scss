@@ -84,8 +84,8 @@ p {
 }
 
 .table {
-  tr:hover {
-    background-color: $selection-highlight-color;
+  tbody tr:hover:not(:first-child){
+    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.8);
   }
 }
 

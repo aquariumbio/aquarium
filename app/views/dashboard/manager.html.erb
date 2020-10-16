@@ -1,0 +1,60 @@
+<% provide(:title, "AQUARIUM") %>
+<% content_for :show_errors do %>true<% end %>
+
+<div style="padding:0 24px">
+  <div class="title">
+    Manager Dashboard ( <%= @jobs.length %> Jobs )
+  </div>
+  <div class="fflex_768">
+    <div class="fflex_resp fflex_title">
+      <div class="fflex_col">
+        Technician
+      </div>
+      <div class="fflex_col">
+        Job
+      </div>
+      <div class="fflex_col2">
+        Protocol
+      </div>
+      <div class="fflex_col">
+        Status
+      </div>
+      <div class="fflex_col">
+        Operations
+      </div>
+      <div class="fflex_col">
+        Assigned
+      </div>
+      <div class="fflex_col">
+        Started
+      </div>
+    </div>
+    <% first_row = "first_row" %>
+    <% @jobs.each do |job| %>
+      <div class="fflex_resp fflex_row <%= first_row %>">
+        <div fflex_content="Technician" class="fflex_col">
+          <%= job.to_name || "-" %>
+        </div>
+        <div fflex_content="Job" class="fflex_col">
+          <a class="google_blue" href="/jobs/<%= job.id %>"><%= job.id %></a>
+        </div>
+        <div fflex_content="Protocol" class="fflex_col2">
+          <a class="google_blue" href="/jobs/<%= job.id %>"><%= job.operation_type_name %></a>
+        </div>
+        <div fflex_content="Status" class="fflex_col">
+          <%= job.pc == 0 ? "Running" : "Ready" %>
+        </div>
+        <div fflex_content="Operations" class="fflex_col">
+          <%= job.operation_count %>
+        </div>
+        <div fflex_content="Assigned" class="fflex_col">
+          <%= job.assigned_at.strftime('%m-%d-%y') rescue "-" %>
+        </div>
+        <div fflex_content="Started" class="fflex_col">
+          <%= job.pc == 0 ? ( raw "&lt;time>" ) : "-" %>
+        </div>
+      </div>
+      <% first_row = "" %>
+    <% end %>
+  </div>
+</div>

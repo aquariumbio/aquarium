@@ -42,6 +42,7 @@ class StaticPagesController < ApplicationController
   end
 
   def home
+    redirect_to '/dashboard' and return if current_user && current_user.technician?
 
     @announcements = Announcement.last(5).reverse
 
