@@ -10,7 +10,7 @@ RSpec.describe Group do
   it 'group names should include defaults plus dummy user and group' do
     names = Group.list_names
     expect(names[:groups]).to match_array(%w[admin dummy_group technicians])
-    expect(names[:users]).to match_array([dummy_user.login, 'neptune'])
+    expect(names[:users]).to include(dummy_user.login, 'neptune')
   end
 
   it 'dummy user should not be member of dummy_group until added' do

@@ -340,7 +340,7 @@ CREATE TABLE `groups` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=238 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=237 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -349,7 +349,7 @@ CREATE TABLE `groups` (
 
 LOCK TABLES `groups` WRITE;
 /*!40000 ALTER TABLE `groups` DISABLE KEYS */;
-INSERT INTO `groups` VALUES (1,'admin','These users can use administrative functions (make users, etc)','2013-11-15 21:37:36','2013-11-15 21:37:36'),(235,'technicians','People who run jobs','2017-10-02 17:50:56','2017-10-02 17:50:56'),(236,'neptune','','2018-07-25 16:22:30','2018-07-25 16:22:30'),(237,'retired','Retired Users','2020-09-14 22:30:56','2020-09-14 22:30:56');
+INSERT INTO `groups` VALUES (1,'admin','These users can use administrative functions (make users, etc)','2013-11-15 21:37:36','2013-11-15 21:37:36'),(235,'technicians','People who run jobs','2017-10-02 17:50:56','2017-10-02 17:50:56'),(236,'neptune','','2018-07-25 16:22:30','2018-07-25 16:22:30');
 /*!40000 ALTER TABLE `groups` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1106,10 +1106,39 @@ SET character_set_client = utf8;
  1 AS `assigned_to`,
  1 AS `created_at`,
  1 AS `updated_at`,
+ 1 AS `pc`,
  1 AS `by_name`,
  1 AS `by_login`,
  1 AS `to_name`,
  1 AS `to_login`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `view_job_associations`
+--
+
+DROP TABLE IF EXISTS `view_job_associations`;
+/*!50001 DROP VIEW IF EXISTS `view_job_associations`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `view_job_associations` AS SELECT 
+ 1 AS `job_id`,
+ 1 AS `n`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `view_job_operation_types`
+--
+
+DROP TABLE IF EXISTS `view_job_operation_types`;
+/*!50001 DROP VIEW IF EXISTS `view_job_operation_types`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `view_job_operation_types` AS SELECT 
+ 1 AS `job_id`,
+ 1 AS `operation_type_id`,
+ 1 AS `name`,
+ 1 AS `category`*/;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -1211,7 +1240,43 @@ UNLOCK TABLES;
 /*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`aquarium`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `view_job_assignments` AS select `jal`.`id` AS `id`,`jal`.`job_id` AS `job_id`,`jal`.`assigned_by` AS `assigned_by`,`jal`.`assigned_to` AS `assigned_to`,`jal`.`created_at` AS `created_at`,`jal`.`updated_at` AS `updated_at`,`ub`.`name` AS `by_name`,`ub`.`login` AS `by_login`,`ut`.`name` AS `to_name`,`ut`.`login` AS `to_login` from (((`production`.`job_assignment_logs` `jal` join (select max(`production`.`job_assignment_logs`.`id`) AS `id` from `production`.`job_assignment_logs` group by `production`.`job_assignment_logs`.`job_id`) `ij` on((`ij`.`id` = `jal`.`id`))) join `production`.`users` `ub` on((`ub`.`id` = `jal`.`assigned_by`))) join `production`.`users` `ut` on((`ut`.`id` = `jal`.`assigned_to`))) */;
+/*!50001 VIEW `view_job_assignments` AS select `jal`.`id` AS `id`,`jal`.`job_id` AS `job_id`,`jal`.`assigned_by` AS `assigned_by`,`jal`.`assigned_to` AS `assigned_to`,`jal`.`created_at` AS `created_at`,`jal`.`updated_at` AS `updated_at`,`j`.`pc` AS `pc`,`ub`.`name` AS `by_name`,`ub`.`login` AS `by_login`,`ut`.`name` AS `to_name`,`ut`.`login` AS `to_login` from ((((`production`.`job_assignment_logs` `jal` join (select max(`production`.`job_assignment_logs`.`id`) AS `id` from `production`.`job_assignment_logs` group by `production`.`job_assignment_logs`.`job_id`) `ij` on((`ij`.`id` = `jal`.`id`))) join `production`.`jobs` `j` on((`j`.`id` = `jal`.`job_id`))) join `production`.`users` `ub` on((`ub`.`id` = `jal`.`assigned_by`))) join `production`.`users` `ut` on((`ut`.`id` = `jal`.`assigned_to`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `view_job_associations`
+--
+
+/*!50001 DROP VIEW IF EXISTS `view_job_associations`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`aquarium`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_job_associations` AS select `ja`.`job_id` AS `job_id`,count(0) AS `n` from `job_associations` `ja` group by `ja`.`job_id` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `view_job_operation_types`
+--
+
+/*!50001 DROP VIEW IF EXISTS `view_job_operation_types`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`aquarium`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_job_operation_types` AS select distinct `ja`.`job_id` AS `job_id`,`o`.`operation_type_id` AS `operation_type_id`,`ot`.`name` AS `name`,`ot`.`category` AS `category` from ((`job_associations` `ja` join `operations` `o` on((`o`.`id` = `ja`.`operation_id`))) join `operation_types` `ot` on((`ot`.`id` = `o`.`operation_type_id`))) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -1225,4 +1290,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-09-14 15:37:22
+-- Dump completed on 2020-10-15 16:46:50
