@@ -7,7 +7,7 @@ class DashboardController < ApplicationController
 
   def react
 
-    render :layout => "aq2-dashboard"
+    render layout: 'aq2-dashboard'
   end
 
   def manager
@@ -29,7 +29,7 @@ class DashboardController < ApplicationController
     "
     @jobs = Job.find_by_sql sql
 
-    render :layout => "aq2-dashboard"
+    render layout: 'aq2-dashboard'
   end
 
   def technician
@@ -51,7 +51,7 @@ class DashboardController < ApplicationController
     "
     @jobs = Job.find_by_sql sql
 
-    render :layout => "aq2-dashboard"
+    render layout: 'aq2-dashboard'
   end
 
 end

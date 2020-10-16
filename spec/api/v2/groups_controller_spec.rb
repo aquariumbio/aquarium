@@ -10,12 +10,16 @@ RSpec.describe Api::V2::GroupsController, type: :request do
     # NOTE: THESE USERS SHOULD NOT EXIST
     # NOTE: DATABASE ENTRIES IN BEFORE :ALL ARE NOT FLUSHED AUTOMATICALLY
     before :all do
-      @user_1 = create(:user, login: 'user_1') rescue nil
-      @user_1 = @user_1 || User.find_by_login('user_1')
+      @user1 = begin
+                  create(:user, login: 'user_1')
+               rescue StandardError
+                 nil
+                end
+      @user1 ||= User.find_by(login: 'user_1')
     end
 
     after :all do
-      @user_1.delete
+      @user1.delete
     end
 
     # GET GROUPS
@@ -24,7 +28,7 @@ RSpec.describe Api::V2::GroupsController, type: :request do
       json_response = JSON.parse(response.body)
 
       # JUST CHECK FOR VALID RESPONSE
-      expect(json_response["status"]).to eq(200)
+      expect(json_response['status']).to eq(200)
     end
 
     # GET GROUP
@@ -32,8 +36,8 @@ RSpec.describe Api::V2::GroupsController, type: :request do
       get '/api/v2/groups/technicians'
       json_response = JSON.parse(response.body)
 
-      group = json_response["data"]
-      expect(group["name"]).to eq("technicians")
+      group = json_response['data']
+      expect(group['name']).to eq('technicians')
     end
 
     # GET GROUP (INVALID GROUP)
@@ -41,27 +45,35 @@ RSpec.describe Api::V2::GroupsController, type: :request do
       get '/api/v2/groups/0'
       json_response = JSON.parse(response.body)
 
-      expect(json_response["status"]).to eq(400)
+      expect(json_response['status']).to eq(400)
     end
 
     # GET USERS IN GROUP
     it 'get_user_groups' do
       get '/api/v2/groups/technicians/users'
       json_response = JSON.parse(response.body)
-      len = json_response["data"].length
+      len = json_response['data'].length
 
       # ADD USER OR GET EXISTING USER
-      user_1 = create(:user, login: 'user_1') rescue nil
-      user_1 = user_1 || User.find_by_login('user_1')
+      user1 = begin
+                 create(:user, login: 'user_1')
+              rescue StandardError
+                nil
+               end
+      user1 ||= User.find_by(login: 'user_1')
 
       # ADD USER TO GROUP
       group_id = Group.technicians.id
-      membership = ( create(:membership, { group_id: group_id, user_id: user_1.id }) ) rescue nil
+      membership = begin
+                     create(:membership, { group_id: group_id, user_id: user1.id })
+                   rescue StandardError
+                     nil
+                   end
       plus = membership ? 1 : 0
 
-      get '/api/v2/groups/'+group_id.to_s+'/users'
+      get '/api/v2/groups/' + group_id.to_s + '/users'
       json_response = JSON.parse(response.body)
-      len_new = json_response["data"].length
+      len_new = json_response['data'].length
 
       expect(len_new).to eq(len + plus)
     end
@@ -71,7 +83,7 @@ RSpec.describe Api::V2::GroupsController, type: :request do
       get '/api/v2/groups/0/users'
       json_response = JSON.parse(response.body)
 
-      expect(json_response["status"]).to eq(400)
+      expect(json_response['status']).to eq(400)
     end
 
   end

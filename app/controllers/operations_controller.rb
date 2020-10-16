@@ -141,11 +141,11 @@ class OperationsController < ApplicationController
     user_ids = ops.collect { |op| op['user_id'] }
 
     jas = JobAssociation.includes(:job).where(operation_id: op_ids).as_json(include: 'job')
-    # HACK TO INCLUDE JOB_ASSIGNMENT
+    # HACK: TO INCLUDE JOB_ASSIGNMENT
     # - THIS SHOULD REALLY BE RETURNED IN THE .INCLUDES(:JOB)
     # - IT IS ALSO ANOTHER N+1 PROBLEM
     jas.each do |j|
-      j["job"]["assignment"] = Job.find(j["job_id"]).job_assignment rescue nil # rescue is redundant, job_id should always exist
+      j['job']['assignment'] = Job.find_by(id: j['job_id'])&.job_assignment
     end
     users = User.where(id: user_ids).collect { |u| { name: u.name, id: u.id, login: u.login } }.as_json
     pas = PlanAssociation.includes(:plan).where(operation_id: op_ids).as_json(include: 'plan')

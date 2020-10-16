@@ -1,3 +1,6 @@
+# typed: false
+# frozen_string_literal: true
+
 class Api::V2::JobsController < ApplicationController
   include ApiHelper
 
@@ -27,7 +30,7 @@ class Api::V2::JobsController < ApplicationController
       order by vja.to_name is null, vja.to_name, vjot.name, vja.created_at
       limit 200
     "
-    render json: api_ok(Job.find_by_sql sql)
+    render json: api_ok(Job.find_by_sql(sql))
 
   end
 
@@ -35,12 +38,13 @@ class Api::V2::JobsController < ApplicationController
     # TODO: ADD PERMISSIONS
 
     to_id = params[:id]
-    if to_id == "my"
+    if to_id == 'my'
       to_id = current_user.id
     else
       to_id = to_id.to_i
-      to_user = User.find(to_id) rescue nil
-      render json: api_error({ "to_id" => ["invalid user"] }) and return if !to_user
+      to_user = User.find_by(id: to_id)
+
+      render json: api_error({ 'to_id' => ['invalid user'] }) and return unless to_user
     end
 
     # TODO: MOVE SQL TO MODEL
@@ -58,7 +62,7 @@ class Api::V2::JobsController < ApplicationController
       order by vjot.name, vja.created_at
       limit 200
     "
-    render json: api_ok(Job.find_by_sql sql)
+    render json: api_ok(Job.find_by_sql(sql))
 
   end
 
@@ -67,8 +71,9 @@ class Api::V2::JobsController < ApplicationController
 
     # GET JOB
     id = params[:id].to_i
-    job = Job.find(id) rescue nil
-    render json: api_error({ "job_id" => ["invalid job"] }) and return if !job
+    job = Job.find_by(id: id)
+
+    render json: api_error({ 'job_id' => ['invalid job'] }) and return unless job
 
     render json: api_ok(job)
   end
@@ -78,8 +83,9 @@ class Api::V2::JobsController < ApplicationController
 
     # GET JOB
     id = params[:id].to_i
-    job = Job.find(id) rescue nil
-    render json: api_error({ "job_id" => ["invalid job"] }) and return if !job
+    job = Job.find_by(id: id)
+
+    render json: api_error({ 'job_id' => ['invalid job'] }) and return unless job
 
     result = job.job_assignment
 
@@ -90,28 +96,30 @@ class Api::V2::JobsController < ApplicationController
     # TODO: ADD PERMISSIONS
 
     @id = params[:id].to_i
-    job = Job.find(@id) rescue nil
-    render json: api_error({ "job_id" => ["invalid job"] }) and return if !job
+    job = Job.find_by(id: @id)
 
-    @by = current_user.id rescue nil
+    render json: api_error({ 'job_id' => ['invalid job'] }) and return unless job
+
+    @by = current_user&.id
     @to = params[:to].to_i
 
     api_ok(job_post_assignment)
-    return
+    nil
   end
 
   def unassign
     # TODO: ADD PERMISSIONS
 
     @id = params[:id].to_i
-    job = Job.find(@id) rescue nil
-    render json: api_error({ "job_id" => ["invalid job"] }) and return if !job
+    job = Job.find_by(id: @id)
 
-    @by = current_user.id rescue nil
+    render json: api_error({ 'job_id' => ['invalid job'] }) and return unless job
+
+    @by = current_user&.id
     @to = nil
 
     api_ok(job_post_assignment)
-    return
+    nil
   end
 
   private

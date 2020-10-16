@@ -1,3 +1,6 @@
+# typed: false
+# frozen_string_literal: true
+
 class ViewJobAssignment < ActiveRecord::Base
 
   # DEFINE THE PRIMARY KEY
