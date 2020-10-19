@@ -9,9 +9,12 @@ class Api::V3::UserController < ApplicationController
       render :json => { :status => 400, :error => "Invalid." }.to_json and return
     end
 
-    token = SecureRandom.hex(64) # 128 characters
     ip = request.remote_ip
     timenow = Time.now.utc
+
+    # CREATE A TOKEN
+    token = UserToken.new_token(ip)
+    render :json => { :status => 400, :error => "Invalid." }.to_json if !token
 
     user_token = UserToken.new
     user_token.user_id = user.id

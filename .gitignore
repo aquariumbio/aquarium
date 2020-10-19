@@ -24,6 +24,8 @@
 /tmp
 /public/assets
 /public/assets_dev
+/v3/log
+/v3/tmp
 
 # Ignore protocol repos
 /repos/*
