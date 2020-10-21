@@ -37,7 +37,7 @@ TODO
 
     =>  Sign In: /api/v3/user/sign_in?login=<login>&password=<password>
 
-    =>  Test Token: /api/v3/user/test_token?token=<token>
+    =>  Test Token: /api/v3/user/validate_token?token=<token>
 
     =>  Sign Out: /api/v3/user/sign_out?token=<token>&all=<on || true>
 

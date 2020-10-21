@@ -23,37 +23,38 @@ class Api::V3::UserController < ApplicationController
     user_token.timenow = timenow
     user_token.save
 
-    render :json => { :status => 200, :data => { :token => token} }.to_json
+    render :json => { :status => 200, :data => { :token => token } }.to_json
   end
 
-  def test_token
-    token = params[:token].to_s.strip.downcase
+  def sign_out
     ip = request.remote_ip
+    token = params[:token].to_s.strip.downcase
+    all = params[:all] == "true" ? true : false
 
-    status, user = User.validate_token({:token => token, :ip => ip})
+    signout = User.sign_out({:ip => ip, :token => token, :all => all})
+    if !signout
+      render :json => { :status => 400, :error => "Invalid." }.to_json and return
+    end
+
+    render :json => { :status => 200, :data => { :message => "Signed out." } }.to_json
+  end
+
+  def validate_token()
+    ip = request.remote_ip
+    token = params[:token].to_s.strip.downcase
+    role_id = params[:role_id] ? params[:role_id].to_i : false
+
+    status, user = User.validate_token({:ip => ip, :token => token},role_id)
     case status
       when 400
         render :json => { :status => 400, :error => "Invalid." }.to_json and return
       when 401
         render :json => { :status => 401, :error => "Session timeout." }.to_json and return
+      when 403
+        render :json => { :status => 403, :error => "#{Role.role_ids[role_id].capitalize} permissions required." }.to_json and return
       when 200
-        render :json => { :status => 200, :data => user }.to_json
+        render :json => { :status => 200, :data => user }.to_json and return
       end
-
   end
-
-  def sign_out
-    token = params[:token].to_s.strip.downcase
-    all = ( params[:all] == "on" || params[:all] == "true" ) ? true : false
-    ip = request.remote_ip
-
-    signout = User.sign_out({:token => token, :ip => ip, :all => all})
-    if !signout
-      render :json => { :status => 400, :error => "Invalid." }.to_json and return
-    end
-
-    render :json => { :status => 200, :data => { :message => "Success." } }.to_json
-  end
-
 
 end
