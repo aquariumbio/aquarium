@@ -95,7 +95,7 @@ class User < ActiveRecord::Base
       return user
     end
 
-    def self.get_roles(ins, order)
+    def self.get_users_by_role(ins, order)
       wheres = ""
       ors = "where"
       ins.each do |i|

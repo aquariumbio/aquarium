@@ -1,6 +1,6 @@
 class Api::V3::UsersController < ApplicationController
 
-  def permissions
+  def roles
     ip = request.remote_ip
     token = params[:token].to_s.strip.downcase
 
@@ -39,7 +39,7 @@ class Api::V3::UsersController < ApplicationController
       end
     end
 
-    users = User.get_roles(ins, order)
+    users = User.get_users_by_role(ins, order)
 
     render :json => { :status => 200, :data => { :users => users } }.to_json
   end
