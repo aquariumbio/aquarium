@@ -5,7 +5,7 @@ RSpec.describe Api::V3::UserController, type: :request do
 
     # INITIALIZE USERS
     before :all do
-      @user_1 = create(:user, login: 'user_1') rescue  User.find_by(login: 'user_1')
+      @user_1 = create(:user, login: 'user_1')
       @token_1 = []
     end
 

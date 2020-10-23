@@ -11,7 +11,7 @@ class Api::V3::RolesController < ApplicationController
       when 401
         render :json => { :status => 401, :error => "Session timeout." }.to_json and return
       when 403
-        render :json => { :status => 403, :error => "Admin permissions required." }.to_json and return
+        render :json => { :status => 403, :error => "Permissions required." }.to_json and return
       when 200
         # noop
       end

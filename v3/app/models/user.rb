@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
 
     has_secure_password
 
-    def self.validate_token(options, check_role_id = false)
+    def self.validate_token(options, check_role_id = 0) # check_role_id default to 0 for 'any'
       option_token = options[:token].to_s
       option_ip = options[:ip].to_s
       option_timenow = Time.now.utc
@@ -28,7 +28,7 @@ class User < ActiveRecord::Base
         User.connection.execute sql
 
         return 401, nil
-      elsif check_role_id and !usertoken.is_role?(check_role_id)
+      elsif !usertoken.is_role?(check_role_id)
         # FORBIDDEN / DO NOT RESET USER.TIMENOW
         return 403, nil
       else
@@ -64,10 +64,13 @@ class User < ActiveRecord::Base
     end
 
     # DOES USER HAVE PERMISSIONS FOR <ROLE_ID>
-    # IF RETIRED THEN THEY LOSE ALL PERMISSIONS
     def is_role?(role_id)
-      if role_ids == "." or  role_ids.index(".#{Role.role_ids.key("retired")}.")
+      if role_ids.index(".#{Role.role_ids.key("retired")}.")
+        # RETIRED - ALWAYS FALSE
         return false
+      elsif role_id == 0
+        # ANY ROLE - ALWAYS TRUE (EVEN IF ".")
+        return true
       else
         # CHECK <ROLE_ID> AND CHECK "ADMIN"
         role_ids.index(".#{role_id}.") or role_ids.index(".#{Role.role_ids.key("admin")}.")

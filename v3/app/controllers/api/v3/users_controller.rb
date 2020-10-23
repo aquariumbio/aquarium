@@ -33,7 +33,7 @@ class Api::V3::UsersController < ApplicationController
       order = "name, login"
     end
     role_ids.each do |key,val|
-      ins << key if params_show.index(key.to_s)
+      ins << key if params_show.index(key) or params_show.index(key.to_s)
       if params_sort == "role.#{val}"
         order = "role_ids like '%.#{key}.%' desc, login"
       end
