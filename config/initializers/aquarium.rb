@@ -50,7 +50,9 @@ Bioturk::Application.config.image_server_interface = ENV['IMAGE_URI'] || instanc
 Bioturk::Application.config.krill_port = ENV['KRILL_PORT'] || 3500
 Bioturk::Application.config.krill_hostname = ENV['KRILL_HOST'] || 'krill' # for docker NAT
 
-Bioturk::Application.config.debug_tools = true # false will hide debug buttons in planner and manager
+debug_tools = true
+debug_tools = ActiveRecord::Type::Boolean.new.type_cast_from_user(ENV['DEBUG_TOOLS']) if ENV['DEBUG_TOOLS']
+Bioturk::Application.config.debug_tools = debug_tools # false will hide debug buttons in planner and manager
 Bioturk::Application.config.technician_dashboard = ENV['TECH_DASHBOARD']&.casecmp('true')&.zero? || instance_config[:technician_dashboard] # show or hide the technician view dashboard from the top nav menu
 
 # TODO: move this elsewhere
