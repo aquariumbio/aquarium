@@ -14,7 +14,7 @@ RSpec.describe Api::V2::GroupsController, type: :request do
                   create(:user, login: 'user_1')
                rescue StandardError
                  nil
-                end
+               end
       @user1 ||= User.find_by(login: 'user_1')
     end
 
