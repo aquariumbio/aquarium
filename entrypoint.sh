@@ -34,6 +34,7 @@ unset BUNDLE_BIN
 # - S3_HOST is set to localhost:9000.
 _fix_local_minio_ip() {
     echo "Fixing IP address for local minio"
+    # TODO: should not happen if S3_SERVICE is AWS
     if [ ! -z ${S3_LOCAL+x} ] || [ -z ${S3_HOST+x} ] || [ $(expr "$S3_HOST" : 'localhost.*') -gt 0 ]; then
         # see https://serverfault.com/questions/551487/dnat-from-localhost-127-0-0-1
         echo "fix ip address for local s3"
@@ -114,6 +115,28 @@ _build_empty_database() {
     echo "building empty database"
 }
 
+_update_database() {
+    # get current version and apply database updates
+    VERSION=`grep -o -e "[[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]\+" config/initializers/version.rb`
+    if [ "${VERSION}" == "2.9.0" ]; then
+        # 2.9.0 includes three migrations and a database script
+        echo "Performing database upgrates for version 2.9.0"
+
+        # update field types
+        rake db:migrate VERSION=20200810000000
+
+        # remove orphan records from the database
+        # annoyingly hard to execute
+        # db mysql -u ${DB_USER} -p${DB_PASSWORD} -P 3307 -D production < db/script/foreign-keys/remove_orphans.sql
+
+        # add foreign keys
+        rake db:migrate VERSION=20200810000001
+
+        # add job assignment tables
+        rake db:migrate VERSION=20200910000000
+    fi
+}
+
 _main() {
     echo "Running aquarium entrypoint script with arguments: $*"
 
@@ -126,6 +149,8 @@ _main() {
         _start_production_server
     elif [ $1 = "krill" ]; then
         _start_krill_server $2
+    elif [ $1 = "update" ]; then
+        _update_database
     else
         # If the normal image startup flags were not given as arguments, 
         # then exec whatever arguments were given
