@@ -103,7 +103,7 @@ _start_development_server() {
 _start_krill_server() {
     _add_ecs_namespace()
     echo "Starting $1 Krill runner"
-    exec rails runner -e $1 'Krill::Server.new.run(3500)'
+    exec rails runner -e $1 "Krill::Server.new.run(${KRILL_PORT}:-3500)"
 }
 
 
