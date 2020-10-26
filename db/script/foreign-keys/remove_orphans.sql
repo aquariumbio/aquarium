@@ -1,8 +1,12 @@
 /* NOTES
 
-1. This script deletes all orphan rows in the database. It is used to scrub the database before adding foreign keys. For examle, if a {job}.user_id points to a user_id that is no longer in the database then that {job} must be deleted before the foreign key can be added.
+1. This script deletes all orphan rows in the database. 
+   It is used to scrub the database before adding foreign keys. 
+   For examle, if a {job}.user_id points to a user_id that is no longer in the database then that {job} must be deleted before the foreign key can be added.
 
-2. Some relationships in Aquarium are not reinforced using foreign keys.  Those references take the form of [ :parent_class, :parent_id ] where :parent_class identifies the table and :parent_id identifies the row in that table.  This script removes orphan rows for those as well.
+2. Some relationships in Aquarium are not reinforced using foreign keys.
+   Those references take the form of [ :parent_class, :parent_id ] where :parent_class identifies the table and :parent_id identifies the row in that table.  
+   This script removes orphan rows for those as well.
 
 parent_classes in the data_associations table
   Item            => items table
@@ -26,9 +30,11 @@ parent_classes in the field_values table
 parent_classes in the timings table
   OperationType   => operation_types table
 
-3. The order in which these queries are run is important. For example, if <child> points to <parent>, then we need to delete any orphan rows in <parent> before checking for orphan rows in <child>
+3. The order in which these queries are run is important. 
+   For example, if <child> points to <parent>, then we need to delete any orphan rows in <parent> before checking for orphan rows in <child>
 
-4. The <items> table and <locators> table are double linked (item.locator_id points to a locator and locator.item_id points to an item).  For these tables we first remove all orphan locators not tied to items, then remove orphan items items, then remove any other locators where the item may have been deleted
+4. The <items> table and <locators> table are double linked (item.locator_id points to a locator and locator.item_id points to an item).  
+   For these tables we first remove all orphan locators not tied to items, then remove orphan items items, then remove any other locators where the item may have been deleted
 
 */
 
