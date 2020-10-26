@@ -39,9 +39,10 @@ Bioturk::Application.configure do
 
   # TODO: decide how to deal with logging
   # Writes logs to disk
-  config.logger = Logger.new(config.paths['log'].first, 1, 1024 * 1024)
+  # config.logger = Logger.new(config.paths['log'].first, 1, 1024 * 1024)
   # logs to STDOUT for standard Docker configuration
-  # config.logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
+  # TODO: rails 5 has RAILS_LOG_TO_STDOUT for this
+  config.logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation can not be found)
@@ -54,7 +55,6 @@ Bioturk::Application.configure do
   # By default use minio for S3, but set to AWS if S3_SERVICE is set to 'AWS'
   config.paperclip_defaults = if ENV['S3_SERVICE'] && ENV['S3_SERVICE'].casecmp('AWS').zero?
                               {
-                                # TODO: change usage of AWS environment variables to instead use S3_
                                 storage: :s3,
                                 s3_host_name: "s3-#{ENV['S3_REGION']}.amazonaws.com",
                                 s3_permissions: :private,
