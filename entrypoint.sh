@@ -103,7 +103,7 @@ _start_development_server() {
 _start_krill_server() {
     _add_ecs_namespace()
     echo "Starting $1 Krill runner"
-    exec rails runner -e $1 "Krill::Server.new.run(${KRILL_PORT}:-3500)"
+    exec rails runner -e $1 "Krill::Server.new.run(${KRILL_PORT:-3500})"
 }
 
 
@@ -116,25 +116,7 @@ _build_empty_database() {
 }
 
 _update_database() {
-    # get current version and apply database updates
-    VERSION=`grep -o -e "[[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]\+" config/initializers/version.rb`
-    if [ "${VERSION}" == "2.9.0" ]; then
-        # 2.9.0 includes three migrations and a database script
-        echo "Performing database upgrates for version 2.9.0"
-
-        # update field types
-        rake db:migrate VERSION=20200810000000
-
-        # remove orphan records from the database
-        # annoyingly hard to execute
-        # db mysql -u ${DB_USER} -p${DB_PASSWORD} -P 3307 -D production < db/script/foreign-keys/remove_orphans.sql
-
-        # add foreign keys
-        rake db:migrate VERSION=20200810000001
-
-        # add job assignment tables
-        rake db:migrate VERSION=20200910000000
-    fi
+    rake db:migrate
 }
 
 _main() {
