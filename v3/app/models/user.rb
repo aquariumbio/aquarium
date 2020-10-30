@@ -65,6 +65,7 @@ class User < ActiveRecord::Base
 
     # DOES USER HAVE PERMISSIONS FOR <ROLE_ID>
     def is_role?(role_id)
+      role_id = role_id.to_s.to_i # ensure it is an integer
       if role_ids.index(".#{Role.role_ids.key("retired")}.")
         # RETIRED - ALWAYS FALSE
         return false

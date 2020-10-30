@@ -42,7 +42,7 @@ class Api::V3::UserController < ApplicationController
   def validate_token()
     ip = request.remote_ip
     token = params[:token].to_s.strip.downcase
-    role_id = params[:role_id] ? params[:role_id].to_i : false
+    role_id = params[:role_id] ? params[:role_id].to_i : 0
 
     status, user = User.validate_token({:ip => ip, :token => token},role_id)
     case status
