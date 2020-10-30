@@ -51,7 +51,8 @@ class Api::V3::UserController < ApplicationController
       when 401
         render :json => { :status => 401, :error => "Session timeout." }.to_json and return
       when 403
-        render :json => { :status => 403, :error => "#{Role.role_ids[role_id].capitalize} permissions required." }.to_json and return
+        error = Role.role_ids[role_id] ? "#{Role.role_ids[role_id].capitalize} permissions required." : "Forbidden."
+        render :json => { :status => 403, :error => error }.to_json and return
       when 200
         render :json => { :status => 200, :data => user }.to_json and return
       end
