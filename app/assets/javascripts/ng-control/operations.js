@@ -193,6 +193,7 @@ var no_race = "init";
       }
 
       $scope.select = function (operation_type, status, selected_ops, append = false) {
+        $('#select_all_').prop( "checked", false );
         no_race = "select"
 
         if (!append) {
