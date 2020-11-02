@@ -160,6 +160,10 @@ class OperationsController < ApplicationController
     fvs.each do |fv|
       fv['item'] = items.find { |i| i['id'] == fv['child_item_id'] }
       fv['sample'] = samples.find { |s| s['id'] == fv['child_sample_id'] }
+      # GET THE CONTAINER TYPE IF THERE IS AN ALLOWABLE_FIELD_TYPE_ID
+      if fv['allowable_field_type_id']
+        fv['field_type'] = AllowableFieldType.find(fv['allowable_field_type_id']).object_type.name
+      end
     end
 
     ops.each do |op|

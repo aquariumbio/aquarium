@@ -53,7 +53,7 @@
               <span ng-if="$first"  class="data-col-1"><b>out:</b></span>
               <span ng-if="!$first" class="data-col-1">&nbsp;</span>
 
-              <span class="data-col-2">{{fv.name}}:</span>
+              <span class="data-col-2">{{fv.name}}: {{fv.field_type}}</span>
 
               <span ng-if="fv.sample" class="data-col-3">
                 <a href="/browser?sid={{fv.sample.id}}" target="samples">{{fv.sample.id}}: {{fv.sample.name}}</a>
@@ -81,7 +81,7 @@
               <span ng-if="$first"  class="data-col-1"><b>in:</b></span>
               <span ng-if="!$first" class="data-col-1">&nbsp;</span>
 
-              <span class="data-col-2">{{fv.name}}:</span>
+              <span class="data-col-2">{{fv.name}}: {{fv.field_type}}</span>
 
               <span ng-if="fv.sample" class="data-col-3">
                 <a href="/browser?sid={{fv.sample.id}}" target="samples">{{fv.sample.id}}: {{fv.sample.name}}</a>
