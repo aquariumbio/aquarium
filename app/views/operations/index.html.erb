@@ -148,11 +148,17 @@
                   <div style="background-color: #fff; position: absolute; z-index: 1; width: 100%;">
                     <h1 class="md-title" style="text-align: left; margin-left: 26px;">Assign Job</h1>
                   </div>
-                  
+
                   <md-radio-group ng-show="current.technicians.length > 1" ng-model="selectedTech" class="md-primary" style="z-index: 0; margin-top: 62px; margin-bottom: 30px;">
+                      <!-- HACK: Using onclick b/c ng-click closes the modal w/o submitting. 
+                           Using jquery to further get around angularjs default behaviors. -->
                       <md-radio-button ng-repeat="tech in current.technicians"
-                                        ng-value="tech" 
-                                        style="margin-left: 26px">
+                                        ng-value="tech"
+                                        style="margin-left: 26px"
+                                        class="assign_{{job_id}}"
+                                        ok_button="ok_{{job_id}}"
+                                        onclick="$(this).addClass('md-checked'); 
+                                                 $('#'+$(this).attr('ok_button')).removeAttr('disabled')">
                           {{ tech['name'] }} (Jobs: {{tech['job_count'] || 0}} )
                       </md-radio-button>
                   </md-radio-group>
@@ -173,6 +179,7 @@
                       Unassign
                     </md-button>
                     <md-button ng-click="assign_job(selectedTech['id'], selectedTech['name'], job_id)" 
+                               id="ok_{{job_id}}"
                                class="md-primary"
                                aria-label="Assign technician to job"
                                ng-disabled="disable_assign(selectedTech)"
