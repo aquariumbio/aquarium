@@ -1,7 +1,6 @@
 /* eslint-disable jest/valid-expect */
 describe('/login', function () {
   beforeEach(() => {
-    cy.clearLocalStorage()
     cy.visit('/login')
   })
 
@@ -30,7 +29,7 @@ describe('/login', function () {
     cy.window()
     .then((win) => {
       // eslint-disable-next-line no-unused-expressions
-      expect(win.localStorage.token).to.be.undefined
+      expect(win.sessionStorage.token).to.be.undefined
     })
 
     cy.get('[data-test=username]').type('marikoa')
@@ -43,7 +42,7 @@ describe('/login', function () {
 
     cy.window()
       .then((win) => {
-        token = win.localStorage.token
+        token = win.sessionStorage.token
       })
       .then(() => {
         // eslint-disable-next-line no-unused-expressions
@@ -51,5 +50,5 @@ describe('/login', function () {
       })
   })
 
-  // TODO: test localstorage for token after login
+  // TODO: test sessionStorage for token after login
 })

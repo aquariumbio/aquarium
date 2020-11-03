@@ -8,7 +8,9 @@ import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
   menuButton: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
+    color: "#00ff22",
+    fontSize: "1rem",
   },
 }));
 
@@ -24,13 +26,13 @@ const User = (props) => {
   useEffect(() => {
     if (logout && !logOutErrors !== "") {
       // storetoken in local storage to keep user logged in between page refreshes
-      localStorage.clear('token');
+      sessionStorage.clear('token');
     }
   });
 
   const handleSignOut = (event) => {
     event.preventDefault();
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
 
     axios
     .post(`user/sign_out?token=${token}`)
@@ -55,7 +57,7 @@ const User = (props) => {
     history.push(pageURL);
     setAnchorEl(null);
   };
-  if (!localStorage.getItem("token")) {
+  if (!sessionStorage.getItem("token")) {
     return <Redirect to="/login" />;
   }
   return ( 
@@ -67,7 +69,7 @@ const User = (props) => {
         aria-label="menu"
         onClick={handleMenu}
       >
-        USER
+       ● USER
       </IconButton>
       <Menu
         id="user-menu"

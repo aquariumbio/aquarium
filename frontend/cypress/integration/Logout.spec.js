@@ -11,7 +11,7 @@ describe('/logout', function () {
 
     cy.window()
       .then((win) => {
-        token = win.localStorage.token
+        token = win.sessionStorage.token
       })
       .then(() => {
         // eslint-disable-next-line no-unused-expressions
@@ -22,7 +22,7 @@ describe('/logout', function () {
     cy.window()
       .then((win) => {
         // eslint-disable-next-line no-unused-expressions
-        expect(win.localStorage.token).to.be.undefined
+        expect(win.sessionStorage.token).to.be.undefined
       })
   })
 

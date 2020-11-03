@@ -15,10 +15,7 @@ const useStyles = makeStyles(theme => ({
   menuButton: {
     marginRight: theme.spacing(3),
     color: '#fff',
-    [theme.breakpoints.between('sm', 'md')]: {
-      fontSize: 'small',
-    },
-
+    fontSize: "1rem",
   },
   title: {
     [theme.breakpoints.down("xs")]: {

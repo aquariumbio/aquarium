@@ -12,6 +12,7 @@ import Header from "../Header";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import API from '../../helpers/API';
 
 const useStyles = makeStyles({});
 const theme = createMuiTheme({
@@ -23,16 +24,19 @@ const theme = createMuiTheme({
 });
 export default function App() {
   const classes = useStyles();
+  API.validate_token();
   return (
     <ThemeProvider theme={theme}>
       <div className={classes.container} data-test-name="app-container">
+
+
         { /* Users cannot interact with the app if they do not have a token */
-          !localStorage.getItem('token') &&
-          <Redirect to="/login"/>
+          // !sessionStorage.getItem('token') &&
+          // <Redirect to="/login"/>
              
         }
 
-        { localStorage.getItem('token') && 
+        { sessionStorage.getItem('token') && 
           <Header/>
         }
 

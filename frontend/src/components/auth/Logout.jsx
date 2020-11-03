@@ -11,13 +11,13 @@ export default function Logout(props) {
 
   useEffect(() => {
     if (logout && !logOutErrors !== "") {
-      // storetoken in local storage to keep user logged in between page refreshes
-      localStorage.clear('token');
+      // storetoken in session storage to keep user logged in between page refreshes
+      sessionStorage.clear('token');
     }
   });
 
   const handleSignOut = (event) => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
 
     axios
     .post(`user/sign_out?token=${token}`)
@@ -33,7 +33,7 @@ export default function Logout(props) {
       }
     })
   }
-  if (!localStorage.getItem("token")) {
+  if (!sessionStorage.getItem("token")) {
     return <Redirect to="/login" />;
   }
   return (

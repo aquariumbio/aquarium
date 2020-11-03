@@ -19,18 +19,18 @@ Cypress.Commands.add("login", () => {
     url: `http://localhost:3001/api/v3/user/sign_in?login=${login}&password=${password}`
   })
   .then((resp) => {
-    window.localStorage.setItem('token', resp.body.data.token)
+    window.sessionStorage.setItem('token', resp.body.data.token)
   })
 })
 Cypress.Commands.add("logout", () => {
-  let token = window.localStorage.getItem('token');
+  let token = window.sessionStorage.getItem('token');
 
   cy.request({
     method: 'POST',
     url: `http://localhost:3001/api/v3/user/sign_out?token=${token}`
   })
   .then((resp) => {
-    window.localStorage.clear();
+    window.sessionStorage.clear();
   })
 })
 //

@@ -11,7 +11,7 @@ axios.defaults.baseURL = 'http://localhost:3001/api/v3/';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router basename={"aquarium/v3/"}>
+    <Router>
       <CssBaseline />
       <App />
     </Router>

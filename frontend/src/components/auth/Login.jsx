@@ -19,7 +19,7 @@ const Login = (props) => {
   useEffect(() => {
     if (!loginErrors && token !== "") {
       // storetoken in local storage to keep user logged in between page refreshes
-      localStorage.setItem('token', token);
+      sessionStorage.setItem('token', token);
     }
     const listener = event => {
       if (event.code === "Enter" || event.code === "NumpadEnter") {
@@ -52,7 +52,7 @@ const Login = (props) => {
     });
   }
 
-  if (localStorage.getItem("token")) {
+  if (sessionStorage.getItem("token")) {
     return <Redirect to="/" />;
   }
   return (
