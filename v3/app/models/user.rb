@@ -96,10 +96,10 @@ class User < ActiveRecord::Base
       return user
     end
 
-    def self.get_users_by_role(ins, order)
+    def self.get_users_by_role(conditions, order)
       wheres = ""
       ors = "where"
-      ins.each do |i|
+      conditions.each do |i|
         wheres += "#{ors} role_ids like '%.#{i.to_i}.%'"
         ors = " or"
       end

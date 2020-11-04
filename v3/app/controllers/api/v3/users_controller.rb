@@ -14,7 +14,7 @@ class Api::V3::UsersController < ApplicationController
     end
     params_sort = params[:sort]
 
-    ins = []
+    conditions = []
     order = "login"
     role_ids = Role.role_ids()
 
@@ -22,13 +22,13 @@ class Api::V3::UsersController < ApplicationController
       order = "name, login"
     end
     role_ids.each do |key,val|
-      ins << key if params_show.index(key) or params_show.index(key.to_s)
+      conditions << key if params_show.index(key) or params_show.index(key.to_s)
       if params_sort == "role.#{val}"
         order = "role_ids like '%.#{key}.%' desc, login"
       end
     end
 
-    users = User.get_users_by_role(ins, order)
+    users = User.get_users_by_role(conditions, order)
 
     render :json => { :status => 200, :data => { :users => users } }.to_json
   end
