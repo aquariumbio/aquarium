@@ -311,6 +311,14 @@ ActiveRecord::Schema.define(version: 2020_10_30_000000) do
     t.index ["part_id"], name: "index_part_associations_on_part_id"
   end
 
+  create_table "permissions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "sort"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["name"], name: "index_roles_on_name", unique: true
+  end
+
   create_table "plan_associations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "plan_id"
     t.integer "operation_id"
@@ -332,14 +340,6 @@ ActiveRecord::Schema.define(version: 2020_10_30_000000) do
     t.text "layout"
     t.index ["budget_id"], name: "index_plans_on_budget_id"
     t.index ["user_id"], name: "index_plans_on_user_id"
-  end
-
-  create_table "roles", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "name", default: "", null: false
-    t.integer "sort"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.index ["name"], name: "index_roles_on_name", unique: true
   end
 
   create_table "sample_types", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
@@ -414,7 +414,7 @@ ActiveRecord::Schema.define(version: 2020_10_30_000000) do
     t.string "password_digest"
     t.string "remember_token"
     t.string "key"
-    t.string "role_ids", default: "."
+    t.string "permission_ids", default: "."
     t.index ["login"], name: "index_users_on_login", unique: true
     t.index ["remember_token"], name: "index_users_on_remember_token"
   end

@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
 
     has_secure_password
 
-    def self.validate_token(options, check_role_id = 0) # check_role_id default to 0 for 'any'
+    def self.validate_token(options, check_permission_id = 0) # check_permission_id default to 0 for 'any'
       option_token = options[:token].to_s
       option_ip = options[:ip].to_s
       option_timenow = Time.now.utc
@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
       wheres = sanitize_sql_for_conditions(["ut.token = ? and ut.ip = ?", option_token, option_ip])
 
       sql = "
-        select ut.*, u.name, u.login, u.role_ids
+        select ut.*, u.name, u.login, u.permission_ids
         from user_tokens ut
         inner join users u on u.id = ut.user_id
         where #{wheres}
@@ -28,7 +28,7 @@ class User < ActiveRecord::Base
         User.connection.execute sql
 
         return 401, nil
-      elsif !usertoken.has_role?(check_role_id)
+      elsif !usertoken.has_permission?(check_permission_id)
         # FORBIDDEN / DO NOT RESET USER.TIMENOW
         return 403, nil
       else
@@ -37,7 +37,7 @@ class User < ActiveRecord::Base
         sql = "update user_tokens ut set timenow = '#{option_timenow.to_s[0,19]}' where #{wheres} limit 1"
         User.connection.execute sql
 
-        return 200, { :id => usertoken.user_id, :name => usertoken.name, :login => usertoken.login, :role_ids => usertoken.role_ids }
+        return 200, { :id => usertoken.user_id, :name => usertoken.name, :login => usertoken.login, :permission_ids => usertoken.permission_ids }
       end
     end
 
@@ -64,31 +64,31 @@ class User < ActiveRecord::Base
     end
 
     # DOES USER HAVE PERMISSIONS FOR <ROLE_ID>
-    def has_role?(role_id)
+    def has_permission?(permission_id)
       # RETIRED - ALWAYS FALSE
-      return false if role_ids.index(".#{Role.role_ids.key("retired")}.")
+      return false if permission_ids.index(".#{Permission.permission_ids.key("retired")}.")
 
       # ANY ROLE - ALWAYS TRUE (EVEN IF ".")
-      return true if role_id == 0
+      return true if permission_id == 0
 
       # CHECK <ROLE_ID> AND CHECK "ADMIN"
-      role_ids.index(".#{role_id}.") or role_ids.index(".#{Role.role_ids.key("admin")}.")
+      permission_ids.index(".#{permission_id}.") or permission_ids.index(".#{Permission.permission_ids.key("admin")}.")
     end
 
     # SET ROLE
-    def self.set_role(user_id,role_id,val)
+    def self.set_permission(user_id,permission_id,val)
       user = User.find_by(id: user_id)
       return false if !user
 
-      role_ids = Role.role_ids
-      return false if !role_ids[role_id]
+      permission_ids = Permission.permission_ids
+      return false if !permission_ids[permission_id]
 
-      if !val and user.role_ids.index(".#{role_id}.")
+      if !val and user.permission_ids.index(".#{permission_id}.")
         # REPLACE ALL INSTANCES OF ".<ID>." WITH "." (THERE SHOULD ONLY BE ONE)
-        user.role_ids.gsub!(".#{role_id}.",".")
-      elsif val and !user.role_ids.index(".#{role_id}.")
+        user.permission_ids.gsub!(".#{permission_id}.",".")
+      elsif val and !user.permission_ids.index(".#{permission_id}.")
         # APPEND "<ID>." IF NOT ".<ID>."
-        user.role_ids += ("#{role_id}.")
+        user.permission_ids += ("#{permission_id}.")
       end
 
       user.save
@@ -96,15 +96,15 @@ class User < ActiveRecord::Base
       return user
     end
 
-    def self.get_users_by_role(conditions, order)
+    def self.get_users_by_permission(conditions, order)
       wheres = ""
       ors = "where"
       conditions.each do |i|
-        wheres += "#{ors} role_ids like '%.#{i.to_i}.%'"
+        wheres += "#{ors} permission_ids like '%.#{i.to_i}.%'"
         ors = " or"
       end
 
-      sql = "select id, login, name, role_ids from users #{wheres} order by #{order}"
+      sql = "select id, login, name, permission_ids from users #{wheres} order by #{order}"
       User.find_by_sql sql
     end
 

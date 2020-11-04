@@ -29,7 +29,7 @@ class Api::V3::TokenController < ApplicationController
   def delete
     ip = request.remote_ip
     token = params[:token].to_s.strip.downcase
-    all = params[:all] == "true" ? true : false
+    all = ( params[:all] == "true" || params[:all] == "on" )
 
     signout = User.sign_out({:ip => ip, :token => token, :all => all})
     if !signout
@@ -40,9 +40,9 @@ class Api::V3::TokenController < ApplicationController
   end
 
   def get_user()
-    role_id = params[:role_id] ? params[:role_id].to_i : 0
+    permission_id = params[:permission_id] ? params[:permission_id].to_i : 0
 
-    result = check_token_for_permission(role_id)
+    result = check_token_for_permission(permission_id)
     render :json => result.to_json # and return if result[:error]
   end
 

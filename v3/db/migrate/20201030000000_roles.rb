@@ -1,23 +1,23 @@
 # typed: false
-class Roles < ActiveRecord::Migration[4.2]
+class Permissions < ActiveRecord::Migration[4.2]
 
   def change
-    add_column :users, :role_ids, :string, :default => "."
+    add_column :users, :permission_ids, :string, :default => "."
 
     # CREATE ROLES TABLE
-    create_table :roles do |t|
+    create_table :permissions do |t|
       t.string :name, :default => '', :unique => true
       t.integer :sort
 
       t.timestamps
     end
 
-    change_column_null :roles, :name, false
-    add_index :roles, :name, unique: true
+    change_column_null :permissions, :name, false
+    add_index :permissions, :name, unique: true
 
     # POPULATE ROLES TABLE
     execute <<-SQL
-      INSERT INTO `roles`(`id`,`name`,`sort`,`created_at`,`updated_at`) VALUES
+      INSERT INTO `permissions`(`id`,`name`,`sort`,`created_at`,`updated_at`) VALUES
       ( '1', 'admin', '1', '2020-01-01 00:00:00', '2020-01-01 00:00:00' ),
       ( '2', 'manage', '2', '2020-01-01 00:00:00', '2020-01-01 00:00:00' ),
       ( '3', 'run', '3', '2020-01-01 00:00:00', '2020-01-01 00:00:00' ),

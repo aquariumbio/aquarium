@@ -13,11 +13,12 @@ class ApplicationController < ActionController::API
       when 401
         { :status => 401, :error => "Session timeout." }
       when 403
-        permission = Role.role_ids[permission_id]
+        permission = Permission.permission_ids[permission_id]
         error = permission ? "#{permission.capitalize} permissions required." : "Forbidden."
         { :status => 403, :error => error }
       when 200
         { :status => 200, :user => user }
       end
+
   end
 end
