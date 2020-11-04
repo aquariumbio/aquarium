@@ -5,6 +5,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import { withRouter, Redirect} from "react-router-dom";
 import axios from "axios";
+import Divider from '@material-ui/core/Divider';
 
 const useStyles = makeStyles(theme => ({
   menuButton: {
@@ -19,7 +20,6 @@ const User = (props) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-
   const [ logOutErrors, setLoginOutError ] = useState(null);
   const [ logout, setlogout ] = useState(false);
 
@@ -93,6 +93,7 @@ const User = (props) => {
         <MenuItem onClick={() => handleMenuClick("/invoices")}>
           Invoices
         </MenuItem>
+        <Divider/>
         <MenuItem onClick={handleSignOut}>
           Sign Out
         </MenuItem>
