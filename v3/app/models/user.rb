@@ -28,7 +28,7 @@ class User < ActiveRecord::Base
         User.connection.execute sql
 
         return 401, nil
-      elsif !usertoken.is_role?(check_role_id)
+      elsif !usertoken.has_role?(check_role_id)
         # FORBIDDEN / DO NOT RESET USER.TIMENOW
         return 403, nil
       else
@@ -64,7 +64,7 @@ class User < ActiveRecord::Base
     end
 
     # DOES USER HAVE PERMISSIONS FOR <ROLE_ID>
-    def is_role?(role_id)
+    def has_role?(role_id)
       role_id = role_id.to_s.to_i # ensure it is an integer
       if role_ids.index(".#{Role.role_ids.key("retired")}.")
         # RETIRED - ALWAYS FALSE
