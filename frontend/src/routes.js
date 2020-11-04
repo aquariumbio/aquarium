@@ -1,53 +1,53 @@
-import Login from "./components/auth/Login"
-import Home from "./components/Home";
-import User from "./components/User";
-import Plan from "./components/Plan";
-import Manager from "./components/Manager";
-import Samples from "./components/Samples";
-import Developer from "./components/Developer";
-import Designer from "./components/Designer";
-import Logout from "./components/auth/Logout";
+import LoginDialog from './components/auth/LoginDialog';
+import Home from './components/Home';
+import UserMenu from './components/UserMenu';
+import Plan from './components/Plan';
+import Manager from './components/Manager';
+import Samples from './components/Samples';
+import Developer from './components/Developer';
+import Designer from './components/Designer';
+import LogoutButton from './components/auth/LogoutButton';
 
 const routes = [
   {
-    path: "/login",
+    path: '/login',
     exact: true,
-    component: Login
+    component: LoginDialog,
   },
   {
-    path: "/logout",
+    path: '/logout',
     exact: true,
-    component: Logout
+    component: LogoutButton,
   },
   {
-    path: "/user",
+    path: '/user',
     exact: true,
-    component: User 
+    component: UserMenu,
   },
   {
-    path: "/designer",
+    path: '/designer',
     exact: true,
-    component: Designer 
+    component: Designer,
   },
   {
-    path: "/plan",
+    path: '/plan',
     exact: true,
-    component: Plan 
+    component: Plan,
   },
   {
-    path: "/manager",
+    path: '/manager',
     exact: true,
-    component: Manager 
+    component: Manager,
   },
   {
-    path: "/samples",
+    path: '/samples',
     exact: true,
-    component: Samples 
+    component: Samples,
   },
   {
-    path: "/developer",
+    path: '/developer',
     exact: true,
-    component: Developer
+    component: Developer,
   },
 
   // {
@@ -142,9 +142,9 @@ const routes = [
   // },
 
   {
-    path: "/",
+    path: '/',
     forceRefresh: true,
-    component: Home 
+    component: Home,
 
   },
 ];

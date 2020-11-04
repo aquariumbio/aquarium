@@ -1,14 +1,18 @@
+/* eslint-disable consistent-return */
 import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:3001/api/v3/';
-const session_token = sessionStorage.getItem('token');
+const sessionToken = sessionStorage.getItem('token');
 
-const validate_token = async function() {
+// TODO: FIX LINTING PROBLEMS & remove disble lines
+// eslint-disable-next-line func-names
+const validateToken = async function () {
+  // eslint-disable-next-line no-return-await
   return await axios
-    .post(`user/validate_token?token=${session_token}`)
-    .then(response => {
+    .post(`user/validate_token?token=${sessionToken}`)
+    .then((response) => {
       if (response.data.status === 200) {
-        return true
+        return true;
       }
       if (response.data.status !== 200) {
         sessionStorage.clear('token');
@@ -17,24 +21,24 @@ const validate_token = async function() {
     });
 };
 
-const sign_out = (setLoginOutError) => {
+const signOut = (setLoginOutError) => {
   axios
-    .post(`user/sign_out?token=${session_token}`)
-    .then(response => {
+    .post(`user/sign_out?token=${sessionToken}`)
+    .then((response) => {
       if (response.data.status === 200) {
         sessionStorage.clear('token');
         window.location.reload();
       }
 
       if (response.data.status !== 200) {
-        return setLoginOutError(response.data.error)
+        return setLoginOutError(response.data.error);
       }
-    })
+    });
 };
 
-const API = { 
-  isAuthenticated: validate_token,
-  sign_out: sign_out, 
+const API = {
+  isAuthenticated: validateToken,
+  sign_out: signOut,
 };
 
-export default API 
+export default API;

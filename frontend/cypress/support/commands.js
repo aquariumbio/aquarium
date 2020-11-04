@@ -10,29 +10,30 @@
 //
 //
 // -- This is a parent command --
-Cypress.Commands.add("login", () => {
-  let login = 'marikoa';
-  let password = 'MtXzwmLYTDq5Gucr';
+Cypress.Commands.add('login', () => {
+  const login = 'marikoa';
+  const password = 'MtXzwmLYTDq5Gucr';
 
   cy.request({
     method: 'POST',
-    url: `http://localhost:3001/api/v3/user/sign_in?login=${login}&password=${password}`
+    url: `http://localhost:3001/api/v3/user/sign_in?login=${login}&password=${password}`,
   })
-  .then((resp) => {
-    window.sessionStorage.setItem('token', resp.body.data.token)
-  })
-})
-Cypress.Commands.add("logout", () => {
-  let token = window.sessionStorage.getItem('token');
+    .then((resp) => {
+      window.sessionStorage.setItem('token', resp.body.data.token);
+    });
+});
+Cypress.Commands.add('logout', () => {
+  const token = window.sessionStorage.getItem('token');
 
   cy.request({
     method: 'POST',
-    url: `http://localhost:3001/api/v3/user/sign_out?token=${token}`
+    url: `http://localhost:3001/api/v3/user/sign_out?token=${token}`,
   })
-  .then((resp) => {
-    window.sessionStorage.clear();
-  })
-})
+    // eslint-disable-next-line no-unused-vars
+    .then((resp) => {
+      window.sessionStorage.clear();
+    });
+});
 //
 // -- This is a child command --
 // Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })

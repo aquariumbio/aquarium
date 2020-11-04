@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button';
 import { useHistory, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
-export default function Logout() {
+export default function LogoutButton() {
   const history = useHistory();
 
   const [logOutErrors, setLoginOutError] = useState();
@@ -21,6 +21,7 @@ export default function Logout() {
 
     axios
       .post(`user/sign_out?token=${token}`)
+      // eslint-disable-next-line consistent-return
       .then((response) => {
         if (response.data.status === 200) {
           setlogout(true);

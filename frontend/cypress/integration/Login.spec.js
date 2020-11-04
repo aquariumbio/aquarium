@@ -1,54 +1,52 @@
-/* eslint-disable jest/valid-expect */
-describe('/login', function () {
+describe('/login', () => {
   beforeEach(() => {
-    cy.visit('/login')
-  })
+    cy.visit('/login');
+  });
 
   it('greets with powered by aquarium', () => {
-      cy.contains('h6', 'Powered by Aquarium')
-  })
+    cy.contains('h6', 'Powered by Aquarium');
+  });
 
   it('requires username', () => {
-    cy.get('form').contains('SIGN IN').click()
-    cy.get('p').should('contain', 'Invalid login/password combination')
-  })
+    cy.get('form').contains('SIGN IN').click();
+    cy.get('p').should('contain', 'Invalid login/password combination');
+  });
 
   it('requires password, enter submits form', () => {
-    cy.get('[data-test=username]').type('maggie{enter}')
-    cy.get('p').should('contain', 'Invalid login/password combination')
-  })
+    cy.get('[data-test=username]').type('maggie{enter}');
+    cy.get('p').should('contain', 'Invalid login/password combination');
+  });
 
   it('requires valid username and password', () => {
-    cy.get('[data-test=username]').type('marikoa')
-    cy.get('[data-test=password]').type('invalid')
-    cy.get('form').contains('SIGN IN').click()
-    cy.get('p').should('contain', 'Invalid login/password combination')
-  })
+    cy.get('[data-test=username]').type('marikoa');
+    cy.get('[data-test=password]').type('invalid');
+    cy.get('form').contains('SIGN IN').click();
+    cy.get('p').should('contain', 'Invalid login/password combination');
+  });
 
   it('navigates to / on successful login', () => {
     cy.window()
-    .then((win) => {
+      .then((win) => {
       // eslint-disable-next-line no-unused-expressions
-      expect(win.sessionStorage.token).to.be.undefined
-    })
+        expect(win.sessionStorage.token).to.be.undefined;
+      });
 
-    cy.get('[data-test=username]').type('marikoa')
-    cy.get('[data-test=password]').type('MtXzwmLYTDq5Gucr')
-    cy.get('form').contains('SIGN IN').click()
-    cy.url().should('eq', Cypress.env("baseUrl") + "/")
+    cy.get('[data-test=username]').type('marikoa');
+    cy.get('[data-test=password]').type('MtXzwmLYTDq5Gucr');
+    cy.get('form').contains('SIGN IN').click();
+    cy.url().should('eq', `${Cypress.env('baseUrl')}/`);
 
-        
-    let token
+    let token;
 
     cy.window()
       .then((win) => {
-        token = win.sessionStorage.token
+        token = win.sessionStorage.token;
       })
       .then(() => {
         // eslint-disable-next-line no-unused-expressions
-        expect(token).to.exist
-      })
-  })
+        expect(token).to.exist;
+      });
+  });
 
   // TODO: test sessionStorage for token after login
-})
+});

@@ -1,19 +1,21 @@
+// TODO: ADD PROP TYPES
+/* eslint-disable react/prop-types */
 import React from 'react';
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
 
 const DropdownMenu = (props) => {
-  const { history, menuItems} = props;
+  const { history, menuItems } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
-  const handleMenu = event => {
+  const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMenuClick = pageURL => {
+  const handleMenuClick = (pageURL) => {
     history.push(pageURL);
     setAnchorEl(null);
   };
@@ -30,25 +32,25 @@ const DropdownMenu = (props) => {
       <Menu
         id="menu-appbar"
         anchorEl={anchorEl}
-        getContentAnchorEl={null} 
+        getContentAnchorEl={null}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center"
+          vertical: 'bottom',
+          horizontal: 'center',
         }}
         keepMounted
         transformOrigin={{
-          vertical: "top",
-          horizontal: "center"
+          vertical: 'top',
+          horizontal: 'center',
         }}
         open={open}
         onClose={() => setAnchorEl(null)}
       >
         {
-          menuItems.map((menuItem, index) => {
+          menuItems.map((menuItem) => {
             const { menuTitle, pageURL } = menuItem;
 
             return (
-              <MenuItem key={index} onClick={() => handleMenuClick(pageURL)}>
+              <MenuItem key={menuTitle} onClick={() => handleMenuClick(pageURL)}>
                 {menuTitle}
               </MenuItem>
             );
@@ -56,7 +58,7 @@ const DropdownMenu = (props) => {
         }
       </Menu>
     </>
-   );
-}
- 
+  );
+};
+
 export default DropdownMenu;
