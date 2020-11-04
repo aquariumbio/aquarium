@@ -66,6 +66,10 @@ docs/.sass-cache/**
 # ignore cyprus dependencies
 ui/node_modules
 
+# ignore cypress screenshots and videos
+frontend/cypress/screenshots
+frontend/cypress/videos
+
 # ignore vscode settings
 .vscode
 
