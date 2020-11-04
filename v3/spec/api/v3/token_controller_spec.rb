@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::V3::UserController, type: :request do
+RSpec.describe Api::V3::TokenController, type: :request do
   describe 'api' do
 
     # INITIALIZE USERS
@@ -16,7 +16,7 @@ RSpec.describe Api::V3::UserController, type: :request do
 
     # SIGN IN
     it "invalid_sign_in" do
-      post "/api/v3/user/sign_in?login=user_1&password=wrong_password"
+      post "/api/v3/token/create?login=user_1&password=wrong_password"
       resp = JSON.parse(response.body)
 
       expect(resp["status"]).to eq 400
@@ -25,7 +25,7 @@ RSpec.describe Api::V3::UserController, type: :request do
     # SIGN IN 3 TIMES
     it "sign_in_3_times" do
       # SIGN IN AND SET TOKEN
-      post "/api/v3/user/sign_in?login=user_1&password=password"
+      post "/api/v3/token/create?login=user_1&password=password"
       resp = JSON.parse(response.body)
       expect(resp["status"]).to eq 200
 
@@ -33,7 +33,7 @@ RSpec.describe Api::V3::UserController, type: :request do
       @token_1 << token
 
       # SIGN IN AND SET TOKEN
-      post "/api/v3/user/sign_in?login=user_1&password=password"
+      post "/api/v3/token/create?login=user_1&password=password"
       resp = JSON.parse(response.body)
       expect(resp["status"]).to eq 200
 
@@ -41,7 +41,7 @@ RSpec.describe Api::V3::UserController, type: :request do
       @token_1 << token
 
       # SIGN IN AND SET TOKEN
-      post "/api/v3/user/sign_in?login=user_1&password=password"
+      post "/api/v3/token/create?login=user_1&password=password"
       resp = JSON.parse(response.body)
       expect(resp["status"]).to eq 200
 
@@ -51,42 +51,42 @@ RSpec.describe Api::V3::UserController, type: :request do
 
     # CHECK TOKENS
     it "check_token" do
-      post "/api/v3/user/validate_token?token=#{@token_1[0]}"
+      post "/api/v3/token/get_user?token=#{@token_1[0]}"
       resp = JSON.parse(response.body)
       expect(resp["status"]).to eq 200
 
-      post "/api/v3/user/validate_token?token=#{@token_1[1]}"
+      post "/api/v3/token/get_user?token=#{@token_1[1]}"
       resp = JSON.parse(response.body)
       expect(resp["status"]).to eq 200
 
-      post "/api/v3/user/validate_token?token=#{@token_1[2]}"
+      post "/api/v3/token/get_user?token=#{@token_1[2]}"
       resp = JSON.parse(response.body)
       expect(resp["status"]).to eq 200
     end
 
     # SIGN OUT
     it "sign_out" do
-      post "/api/v3/user/sign_out?token=#{@token_1[0]}"
+      post "/api/v3/token/delete?token=#{@token_1[0]}"
       resp = JSON.parse(response.body)
       expect(resp["status"]).to eq 200
 
       # CHECK TOKENS
-      post "/api/v3/user/validate_token?token=#{@token_1[0]}"
+      post "/api/v3/token/get_user?token=#{@token_1[0]}"
       resp = JSON.parse(response.body)
       expect(resp["status"]).to eq 400
 
-      post "/api/v3/user/validate_token?token=#{@token_1[1]}"
+      post "/api/v3/token/get_user?token=#{@token_1[1]}"
       resp = JSON.parse(response.body)
       expect(resp["status"]).to eq 200
 
-      post "/api/v3/user/validate_token?token=#{@token_1[2]}"
+      post "/api/v3/token/get_user?token=#{@token_1[2]}"
       resp = JSON.parse(response.body)
       expect(resp["status"]).to eq 200
     end
 
     # INVALID SIGN OUT
     it "invalid_sign_out" do
-      post "/api/v3/user/sign_out?token=#{@token_1[0]}"
+      post "/api/v3/token/delete?token=#{@token_1[0]}"
       resp = JSON.parse(response.body)
 
       expect(resp["status"]).to eq 400
@@ -94,16 +94,16 @@ RSpec.describe Api::V3::UserController, type: :request do
 
     # SIGN OUT ALL
     it "sign_out_all" do
-      post "/api/v3/user/sign_out?token=#{@token_1[1]}&all=true"
+      post "/api/v3/token/delete?token=#{@token_1[1]}&all=true"
       resp = JSON.parse(response.body)
       expect(resp["status"]).to eq 200
 
       # CHECK TOKENS
-      post "/api/v3/user/validate_token?token=#{@token_1[1]}"
+      post "/api/v3/token/get_user?token=#{@token_1[1]}"
       resp = JSON.parse(response.body)
       expect(resp["status"]).to eq 400
 
-      post "/api/v3/user/validate_token?token=#{@token_1[2]}"
+      post "/api/v3/token/get_user?token=#{@token_1[2]}"
       resp = JSON.parse(response.body)
       expect(resp["status"]).to eq 400
     end

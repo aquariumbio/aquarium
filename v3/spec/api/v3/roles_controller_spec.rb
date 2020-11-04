@@ -14,15 +14,15 @@ RSpec.describe Api::V3::RolesController, type: :request do
       @user_3 = create(:user, login: 'user_3', role_ids:'.1.6.')
       @token_3 = []
 
-      post "/api/v3/user/sign_in?login=user_1&password=password"
+      post "/api/v3/token/create?login=user_1&password=password"
       resp = JSON.parse(response.body)
       @token_1 << resp["data"]["token"]
 
-      post "/api/v3/user/sign_in?login=user_2&password=password"
+      post "/api/v3/token/create?login=user_2&password=password"
       resp = JSON.parse(response.body)
       @token_2 << resp["data"]["token"]
 
-      post "/api/v3/user/sign_in?login=user_3&password=password"
+      post "/api/v3/token/create?login=user_3&password=password"
       resp = JSON.parse(response.body)
       @token_3 << resp["data"]["token"]
      end

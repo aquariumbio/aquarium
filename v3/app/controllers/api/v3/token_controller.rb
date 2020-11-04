@@ -1,6 +1,6 @@
-class Api::V3::UserController < ApplicationController
+class Api::V3::TokenController < ApplicationController
 
-  def sign_in
+  def create
     login = params[:login].to_s.strip.downcase
     password = params[:password]
 
@@ -26,7 +26,7 @@ class Api::V3::UserController < ApplicationController
     render :json => { :status => 200, :data => { :token => token } }.to_json
   end
 
-  def sign_out
+  def delete
     ip = request.remote_ip
     token = params[:token].to_s.strip.downcase
     all = params[:all] == "true" ? true : false
@@ -39,23 +39,11 @@ class Api::V3::UserController < ApplicationController
     render :json => { :status => 200, :data => { :message => "Signed out." } }.to_json
   end
 
-  def validate_token()
-    ip = request.remote_ip
-    token = params[:token].to_s.strip.downcase
+  def get_user()
     role_id = params[:role_id] ? params[:role_id].to_i : 0
 
-    status, user = User.validate_token({:ip => ip, :token => token},role_id)
-    case status
-      when 400
-        render :json => { :status => 400, :error => "Invalid." }.to_json and return
-      when 401
-        render :json => { :status => 401, :error => "Session timeout." }.to_json and return
-      when 403
-        error = Role.role_ids[role_id] ? "#{Role.role_ids[role_id].capitalize} permissions required." : "Forbidden."
-        render :json => { :status => 403, :error => error }.to_json and return
-      when 200
-        render :json => { :status => 200, :data => user }.to_json and return
-      end
+    result = check_token_for_permission(role_id)
+    render :json => result.to_json # and return if result[:error]
   end
 
 end

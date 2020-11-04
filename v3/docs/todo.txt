@@ -35,11 +35,11 @@ TODO
 
     In the meantime here they are:
 
-    =>  Sign In: /api/v3/user/sign_in?login=<login>&password=<password>
+    =>  Sign In: /api/v3/token/create?login=<login>&password=<password>
 
-    =>  Test Token: /api/v3/user/validate_token?token=<token>
+    =>  Test Token: /api/v3/token/get_user?token=<token>
 
-    =>  Sign Out: /api/v3/user/sign_out?token=<token>&all=<on || true>
+    =>  Sign Out: /api/v3/token/delete?token=<token>&all=<on || true>
 
 
 3.  CODE FOR EDGE CASE WHERE { <IP_ADDRESS> + <TOKEN> } IS NOT UNIQUE
