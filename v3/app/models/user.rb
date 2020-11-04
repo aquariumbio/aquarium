@@ -65,17 +65,14 @@ class User < ActiveRecord::Base
 
     # DOES USER HAVE PERMISSIONS FOR <ROLE_ID>
     def has_role?(role_id)
-      role_id = role_id.to_s.to_i # ensure it is an integer
-      if role_ids.index(".#{Role.role_ids.key("retired")}.")
-        # RETIRED - ALWAYS FALSE
-        return false
-      elsif role_id == 0
-        # ANY ROLE - ALWAYS TRUE (EVEN IF ".")
-        return true
-      else
-        # CHECK <ROLE_ID> AND CHECK "ADMIN"
-        role_ids.index(".#{role_id}.") or role_ids.index(".#{Role.role_ids.key("admin")}.")
-      end
+      # RETIRED - ALWAYS FALSE
+      return false if role_ids.index(".#{Role.role_ids.key("retired")}.")
+
+      # ANY ROLE - ALWAYS TRUE (EVEN IF ".")
+      return true if role_id == 0
+
+      # CHECK <ROLE_ID> AND CHECK "ADMIN"
+      role_ids.index(".#{role_id}.") or role_ids.index(".#{Role.role_ids.key("admin")}.")
     end
 
     # SET ROLE
