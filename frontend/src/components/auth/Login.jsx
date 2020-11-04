@@ -4,8 +4,10 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles';
-import { useHistory, Redirect } from "react-router-dom";
+import Divider from '@material-ui/core/Divider';
+import { useHistory, Redirect, withRouter } from "react-router-dom";
 import axios from "axios";
+import API from '../../helpers/API';
 
 const Login = (props) => {
   const classes = useStyles();
@@ -52,22 +54,22 @@ const Login = (props) => {
     });
   }
 
-  if (sessionStorage.getItem("token")) {
-    return <Redirect to="/" />;
+  if (sessionStorage.getItem("token") && API.isAuthenticated()) {
+    history.push("/");
+    window.location.reload();
   }
   return (
     <div className={classes.root}>
       <header>
-        <Typography variant="h1" gutterBottom align="center">
+        <Typography className={classes.labName} variant="h1" gutterBottom align="center">
           Your Lab
         </Typography>
-        <Typography variant="subtitle1" gutterBottom align="center">
+        <Typography className={classes.subtitle} variant="subtitle1" gutterBottom align="center">
           Powered by Aquarium
         </Typography>
       </header>
-
+      <Divider className={classes.divider}/>
       <form className={classes.form} noValidate autoComplete="off" name="login" onSubmit={handleSubmit}>
-          <Grid item xs={12} sm={12}>
             <TextField 
               name="login" 
               className={classes.input}
@@ -80,6 +82,7 @@ const Login = (props) => {
               onChange={ event => setLogin(event.target.value)}
               data-test="username"
               />
+
             <TextField 
               name="password" 
               className={classes.input}
@@ -91,7 +94,7 @@ const Login = (props) => {
               value={password} 
               onChange={ event => setPassword(event.target.value)}
               data-test="password"/>
-        </Grid>
+
         { loginErrors &&
           <p>Invalid login/password combination</p>
         }
@@ -100,12 +103,22 @@ const Login = (props) => {
     </div>
   )
 }
-export default Login;
+export default withRouter(Login);
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    marginTop: '20%',
+    marginTop: '10%',
+  },
+  divider: {
+    marginTop: '40px',
+    marginBottom: '40px',
+  },
+  labName: {
+    fontSize: '112px',
+    fontWeight: '400',
+    letterSpacing: '-.01em',
+    lineHeight: '112px',
   },
   form: {
     margin: theme.spacing(3),
@@ -118,6 +131,7 @@ const useStyles = makeStyles((theme) => ({
       width: 'auto',
     },
   },
+
   input: {
     margin: theme.spacing(2),
   },
@@ -134,6 +148,11 @@ const useStyles = makeStyles((theme) => ({
       color: '#065683',
       border: '.25em solid #065683'
     }
+  },
+
+  subtitle: {
+    color: '#66b',
+    fontSize: '20px',
   },
 
 }));
