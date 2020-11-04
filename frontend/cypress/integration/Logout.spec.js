@@ -18,7 +18,7 @@ describe('/logout', function () {
         expect(token).to.exist
       })
     cy.contains('button', 'SIGN OUT').click()
-    cy.url().should('contain', '/aquarium/v3/login')
+    cy.url().should('contain', '/login')
     cy.window()
       .then((win) => {
         // eslint-disable-next-line no-unused-expressions

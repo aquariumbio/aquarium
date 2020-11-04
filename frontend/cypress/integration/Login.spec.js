@@ -35,7 +35,7 @@ describe('/login', function () {
     cy.get('[data-test=username]').type('marikoa')
     cy.get('[data-test=password]').type('MtXzwmLYTDq5Gucr')
     cy.get('form').contains('SIGN IN').click()
-    cy.url().should('eq', 'http://localhost:3002/aquarium/v3/')
+    cy.url().should('eq', Cypress.env("baseUrl") + "/")
 
         
     let token
