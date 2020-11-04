@@ -1,20 +1,20 @@
 import axios from 'axios';
-import { Redirect } from "react-router-dom";
 
 axios.defaults.baseURL = 'http://localhost:3001/api/v3/';
 const session_token = sessionStorage.getItem('token');
 
-const validate_token = function() {
-  axios
+const validate_token = async function() {
+  return await axios
     .post(`user/validate_token?token=${session_token}`)
     .then(response => {
-      // when the token is invalid we redirect the user to the login page
-      if (response.data.status !== 200) {
-        console.log(response.data.error)
-        sessionStorage.clear('token');
-        return <Redirect to="/login" />;
+      if (response.data.status === 200) {
+        return true
       }
-    })
+      if (response.data.status !== 200) {
+        sessionStorage.clear('token');
+        return false;
+      }
+    });
 };
 
 const sign_out = (setLoginOutError) => {
@@ -24,7 +24,6 @@ const sign_out = (setLoginOutError) => {
       if (response.data.status === 200) {
         sessionStorage.clear('token');
         window.location.reload();
-        return <Redirect to="/login" />;
       }
 
       if (response.data.status !== 200) {
@@ -34,7 +33,7 @@ const sign_out = (setLoginOutError) => {
 };
 
 const API = { 
-  validate_token: validate_token,
+  isAuthenticated: validate_token,
   sign_out: sign_out, 
 };
 
