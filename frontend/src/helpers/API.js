@@ -21,12 +21,32 @@ const validateToken = async function () {
     });
 };
 
+const signIn = async (login, password, setLoginError) => {
+  let signInSuccessful = false;
+  await axios
+    .post(`user/sign_in?login=${login}&password=${password}`)
+    .then((response) => {
+      if (response.data.status === 200 && response.data.data.token) {
+        setLoginError();
+        sessionStorage.setItem('token', response.data.data.token);
+        signInSuccessful = true;
+        window.location.reload();
+      }
+
+      if (response.data.status !== 200) {
+        return setLoginError(response.data.error);
+      }
+    });
+  return signInSuccessful;
+};
+
 const signOut = (setLoginOutError) => {
   axios
     .post(`user/sign_out?token=${sessionToken}`)
     .then((response) => {
       if (response.data.status === 200) {
         sessionStorage.clear('token');
+        setLoginOutError();
         window.location.reload();
       }
 
@@ -38,7 +58,8 @@ const signOut = (setLoginOutError) => {
 
 const API = {
   isAuthenticated: validateToken,
-  sign_out: signOut,
+  signIn,
+  signOut,
 };
 
 export default API;

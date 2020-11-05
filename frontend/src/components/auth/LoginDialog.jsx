@@ -5,7 +5,6 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import { useHistory, withRouter } from 'react-router-dom';
-import axios from 'axios';
 import API from '../../helpers/API';
 
 const useStyles = makeStyles((theme) => ({
@@ -67,32 +66,15 @@ const LoginDialog = () => {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [loginErrors, setLoginError] = useState();
+  // eslint-disable-next-line no-unused-vars
   const [token, setToken] = useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios
-      .post(`user/sign_in?login=${login}&password=${password}`)
-      // eslint-disable-next-line consistent-return
-      .then((response) => {
-        if (response.data.status === 200 && response.data.data.token) {
-          setLoginError();
-          setToken(response.data.data.token);
-          history.push('/');
-          window.location.reload();
-        }
-
-        if (response.data.status !== 200) {
-          return setLoginError(response.data.error);
-        }
-      });
+    API.signIn(login, password, setLoginError);
   };
 
   useEffect(() => {
-    if (!loginErrors && token !== '') {
-      // storetoken in local storage to keep user logged in between page refreshes
-      sessionStorage.setItem('token', token);
-    }
     const listener = (event) => {
       if (event.code === 'Enter' || event.code === 'NumpadEnter') {
         handleSubmit(event);
