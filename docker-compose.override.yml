@@ -11,35 +11,21 @@ version: "3.5"
 services:
   app:
     build:
-      context: .
+      context: ./backend
       target: aquarium-development
     image: aquarium-development
     command: ["development"]
     environment:
       ENABLE_SORBET_RUNTIME_ERRORS: "true"
     volumes:
-      - ./app:/aquarium/app
-      - ./components:/aquarium/components
-      - ./config:/aquarium/config
-      - ./coverage:/aquarium/coverage
-      - ./docs:/aquarium/docs
-      - ./lib:/aquarium/lib
-      - ./sorbet:/aquarium/sorbet
-      - ./spec:/aquarium/spec
-      - ./test:/aquarium/test
-      - ./ui:/aquarium/ui
-      - ./Gemfile.lock:/aquarium/Gemfile.lock
-      - ./package.json:/aquarium/package.json
-      - ./yarn.lock:/aquarium/yarn.lock
-      - ./.rubocop.yml:/aquarium/.rubocop.yml
-      - ./.rubocop_todo.yml:/aquarium/.rubocop_todo.yml
+      - ./backend:/aquarium
 
   krill:
     image: aquarium-development
     command: ["krill", "development"]
     volumes:
-      - ./config:/aquarium/config
-      - ./lib:/aquarium/lib
+      - ./backend/config:/aquarium/config
+      - ./backend/lib:/aquarium/lib
 
   web:
     command: [nginx-debug, "-g", "daemon off;"]

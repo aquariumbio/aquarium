@@ -1,0 +1,25 @@
+title: BIOFAB User Agreement
+updated: July 10, 2017
+clauses:
+  - title: Intellectual property
+    text: | 
+      BIOFAB users retain all intellectual property regarding any and all samples used in any method in the BIOFAB that is under their username(s) in Aquarium.
+      To use a sample belonging to another user, a user must receive prior authorization sample owner. Recorded proof of this authorization must be presented upon request.
+      Many samples are under Materials Transfer Agreements (MTAs). Users may not violate these agreements by initiating the transfer of those samples, or new samples based on those samples, out of the BIOFAB. Users may not transfer materials into the BIOFAB without the proper MTAs. In general, it is the user's responsibility to adhere to existing MTAs.
+
+  - title: Allowable sample types
+    text: "We only accept, make, and release samples of the following categories: non-pathogenic DNA, K-12 strains of Escherichia coli, and lab strains of Saccharomyces cerevisiae. This is including but not limited to: non-pathogenic recombinant DNA, DH5-Alpha E. coli, and W303 MATa/MATα strains of yeast."
+  - title: Picking up a sample
+    text: "Sample pickup must occur during BIOFAB business hours: 8:00AM-4:30PM Monday through Friday, excluding state and federal holidays. When picking up a sample from the BIOFAB, a BIOFAB manager or technician is required to assist. Samples cannot be removed from the BIOFAB unless the user has received prior authorization and instructions from a lab manager."
+  - title: Dropping off samples
+    text: "All samples must be dropped off during BIOFAB business hours: 8:00AM-4:30PM Monday through Friday, excluding state and federal holidays. When dropping off a sample, check in with a BIOFAB lab manager or technician."
+  - title: Requesting a refund
+    text: "To be eligible for refunds, users must request a refund within 30 days of receiving their invoice, before the invoice is paid. Any and all refund requests must be reported to a BIOFAB lab manager. The BIOFAB is only responsible for refunds due to invoice and billing mistakes, or any technical mistakes provably made by the BIOFAB and approved by a BIOFAB lab manager. The BIOFAB will not refund any user for jobs that failed due to design or job submission issues."
+  - title: Shipping of samples
+    text: "Users are solely responsible for any samples shipped to or requested from the BIOFAB. It is the users responsibility to ensure any samples being shipped do not violate shipping regulations or MTAs. Samples must be within the acceptable sample types the BIOFAB can accept, make, or release which include but are not limited to non-pathogenic DNA, K-12 strains of Escherichia coli and lab strains of Saccharomyces cerevisiae.  Those who request sample shipment are liable for any samples that may become lost or damaged during shipping. If any samples are being shipped to the BIOFAB it is the user’s responsibility to notify a BIOFAB manager that samples are on their way before they arrive and how they should be handled upon arrival."
+  - title: Sample storage
+    text: "The UW BIOFAB will make every attempt to preserve and maintain samples and items stored on behalf of the user in our freezers and other storage systems. Nevertheless, the UW BIOFAB is not responsible for samples lost or contaminated due to any reason including equipment malfunction, user errors, BIOFAB employee errors, and/or software errors or bugs."
+  - title: Data
+    text: "The UW BIOFAB will make every attempt to preserve and maintain data stored on behalf of the user. Nevertheless, the UW BIOFAB is not responsible for data lost due to any reason including user errors, BIOFAB employee errors, software errors or bugs, and/or data storage service provider problems."
+  - title: Consequences
+    text: "Failure to follow the aforementioned procedures and rules may result in suspension of your Aquarium and BIOFAB account, without refund of any and all jobs performed. A user who has had the account suspended may nevertheless receive/pick up any and all samples and items stored under their username."
