@@ -18,9 +18,9 @@ services:
       SESSION_TIMEOUT: ${SESSION_TIMEOUT}
       TZ: ${TIMEZONE}
     volumes:
-      - ./v3/db:/aquarium/db
-      - ./v3/log:/aquarium/log
-      - ./v3/biofab-eula.yml:/aquarium/config/user_agreement.yml
+      - ./backend/db:/aquarium/db
+      - ./backend/log:/aquarium/log
+#      - ./backend/biofab-eula.yml:/aquarium/config/user_agreement.yml
     networks:
       - aquarium_net
     expose:
