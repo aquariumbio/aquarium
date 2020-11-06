@@ -2,7 +2,10 @@
 
 module Api
   module V3
+    # TOKEN RELATED API CALLS
     class TokenController < ApplicationController
+      # SIGN IN
+      # /api/v3/token/create?login=<login>&password=<password>
       def create
         login = params[:login].to_s.strip.downcase
         password = params[:password]
@@ -27,6 +30,8 @@ module Api
         render json: { status: 200, data: { token: token } }.to_json
       end
 
+      # SIGN OUT (ALL = SIGN OUT OF ALL DEVICES)
+      # /api/v3/token/delete?token=<token>&all=<true>
       def delete
         ip = request.remote_ip
         token = params[:token].to_s.strip.downcase
@@ -38,6 +43,8 @@ module Api
         render json: { status: 200, data: { message: 'Signed out.' } }.to_json
       end
 
+      # GET USER
+      # /api/v3/token/get_user?token=<token>
       def get_user
         permission_id = params[:permission_id] ? params[:permission_id].to_i : 0
 

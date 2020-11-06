@@ -13,6 +13,7 @@
 #   - IF ADMIN (AND NOT RETIRED), THEN THE USER HAS ACCESS TO MANAGE, RUN, DESIGN, AND DEVELOP
 #     REGARDLESS OF WHETHER THE USER HAS EXPLICIT PERMISSIONS FOR THOSE ITEMS
 
+# PERMISSIONS TABLE
 class Permission < ActiveRecord::Base
   # usage   permission_ids[<id>]
   # usage   permission_ids.key(<name>)

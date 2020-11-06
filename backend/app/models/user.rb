@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
+# USERS TABLE
 class User < ActiveRecord::Base
   has_secure_password
 
-  def self.validate_token(options, check_permission_id = 0) # check_permission_id default to 0 for 'any'
+  # VALIDATE TOKEN (CHECK AGAINST OPTIONAL PERMISSION_ID)
+  # CHECK_PERMISSION_ID DEFAULT TO 0 FOR 'ANY'
+  def self.validate_token(options, check_permission_id = 0)
     option_token = options[:token].to_s
     option_ip = options[:ip].to_s
     option_timenow = Time.now.utc
@@ -29,7 +32,7 @@ class User < ActiveRecord::Base
       User.connection.execute sql
 
       [401, nil]
-    elsif !usertoken.has_permission?(check_permission_id)
+    elsif !usertoken.permission?(check_permission_id)
       # FORBIDDEN / DO NOT RESET USER.TIMENOW
       [403, nil]
     else
@@ -42,6 +45,8 @@ class User < ActiveRecord::Base
     end
   end
 
+  # SIGN OUT
+  # ALL = SIGN OUT OF ALL DEVICES
   def self.sign_out(options)
     token = options[:token].to_s
     ip = options[:ip].to_s
@@ -53,19 +58,18 @@ class User < ActiveRecord::Base
     usertoken = (User.find_by_sql sql)[0]
     return false unless usertoken
 
-    if all
-      sql = "delete from user_tokens where user_id = #{usertoken.user_id}"
-      User.connection.execute sql
-    else
-      sql = "delete from user_tokens where #{wheres} limit 1"
-      User.connection.execute sql
-    end
+    sql = if all
+            "delete from user_tokens where user_id = #{usertoken.user_id}"
+          else
+            "delete from user_tokens where #{wheres} limit 1"
+          end
+    User.connection.execute sql
 
     true
   end
 
   # DOES USER HAVE PERMISSIONS FOR <ROLE_ID>
-  def has_permission?(permission_id)
+  def permission?(permission_id)
     # RETIRED - ALWAYS FALSE
     return false if permission_ids.index(".#{Permission.permission_ids.key('retired')}.")
 

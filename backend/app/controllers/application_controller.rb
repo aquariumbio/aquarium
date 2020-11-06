@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# APPLICATION CONTROLLER
 class ApplicationController < ActionController::API
   # CHECK THE TOKEN AGAINST SPECIFIC PERMISSION_ID (0 = ANYTHING NOT RETIRED)
   # RETURN STATUS <AND> ( ERROR <OR> USER )

@@ -2,7 +2,10 @@
 
 module Api
   module V3
+    # USER RELATED API CALLS
     class UsersController < ApplicationController
+      # RETURN LIST OF USERS FILTERED AND/OR SORTED BY PERMISSION
+      # /api/v3/users/permissions?token=<token>&show[]=[1,2,3,4,5,6]&sort=<sort>
       def permissions
         # CHECK FOR ADMIN PERMISSIONS
         result = check_token_for_permission(1)
@@ -32,6 +35,8 @@ module Api
         render json: { status: 200, data: { users: users } }.to_json
       end
 
+      # SET SPECIFIC PERMISSION FOR SPECIFIC USER
+      # /api/v3/users/set_permission?token=<token>&user_id=<user_id>&permission_id=<permission_id>&value=<true>
       def set_permission
         # CHECK FOR ADMIN PERMISSIONS
         result = check_token_for_permission(1)

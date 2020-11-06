@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# USER_TOKENS TABLE
 class UserToken < ActiveRecord::Base
   def self.new_token(this_ip)
     exists = true
