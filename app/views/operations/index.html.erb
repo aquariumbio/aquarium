@@ -32,7 +32,7 @@
     <div ng-if="!current.activity_report.selected">
       <md-button aria-label="Schedule"
                 class='md-raised md-primary'
-                ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
+                ng-if="current.status == 'pending'"
                 ng-disabled="disable_batch_button()"
                 ng-click="batch(current.operation_type)"
                 data-manager-action="schedule"
