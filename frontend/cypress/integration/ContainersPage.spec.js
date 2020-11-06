@@ -1,4 +1,4 @@
-describe('/containers', () => {
+describe('/object_types', () => {
   beforeEach(() => {
     cy.login();
   });
@@ -8,7 +8,7 @@ describe('/containers', () => {
   });
 
   it('has place holder header', () => {
-    cy.visit('/containers');
+    cy.visit('/object_types');
     cy.contains('h1', 'Containers');
   });
 });

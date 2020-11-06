@@ -1,4 +1,4 @@
-describe('/location_wizards', () => {
+describe('/plans', () => {
   beforeEach(() => {
     cy.login();
   });
@@ -8,7 +8,7 @@ describe('/location_wizards', () => {
   });
 
   it('has place holder header', () => {
-    cy.visit('/location_wizards');
-    cy.contains('h1', 'Location Wizards');
+    cy.visit('/plans');
+    cy.contains('h1', 'Plans');
   });
 });

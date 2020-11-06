@@ -1,4 +1,4 @@
-describe('/import_workflows', () => {
+describe('/wizards', () => {
   beforeEach(() => {
     cy.login();
   });
@@ -8,7 +8,7 @@ describe('/import_workflows', () => {
   });
 
   it('has place holder header', () => {
-    cy.visit('/import_workflows');
-    cy.contains('h1', 'Import Workflows');
+    cy.visit('/wizards');
+    cy.contains('h1', 'Location Wizards');
   });
 });

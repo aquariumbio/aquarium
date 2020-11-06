@@ -14,7 +14,7 @@ import LeftHamburgerMenu from './LeftHamburgerMenu';
 const mainNavItems = [
   {
     menuTitle: 'PLAN',
-    pageURL: '/plan',
+    pageURL: '/plans',
   },
   {
     menuTitle: 'SAMPLES',

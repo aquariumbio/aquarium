@@ -1,4 +1,4 @@
-describe('/plan', () => {
+describe('/sample_types', () => {
   beforeEach(() => {
     cy.login();
   });
@@ -8,7 +8,7 @@ describe('/plan', () => {
   });
 
   it('has place holder header', () => {
-    cy.visit('/plan');
-    cy.contains('h1', 'Plan');
+    cy.visit('/sample_types');
+    cy.contains('h1', 'Sample Types');
   });
 });

@@ -1,11 +1,11 @@
 // TODO: ADD PROP-TYPES
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
+import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import { withRouter } from 'react-router-dom';
 import Divider from '@material-ui/core/Divider';
 import API from '../helpers/API';
 
