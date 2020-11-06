@@ -1,4 +1,4 @@
-import LoginDialog from './components/auth/LoginDialog';
+import LoginDialog from './components/LoginDialog';
 import Home from './components/Home';
 import UserMenu from './components/UserMenu';
 import Plan from './components/Plan';
@@ -6,18 +6,12 @@ import Manager from './components/Manager';
 import Samples from './components/Samples';
 import Developer from './components/Developer';
 import Designer from './components/Designer';
-import LogoutButton from './components/auth/LogoutButton';
 
 const routes = [
   {
     path: '/login',
     exact: true,
     component: LoginDialog,
-  },
-  {
-    path: '/logout',
-    exact: true,
-    component: LogoutButton,
   },
   {
     path: '/user',

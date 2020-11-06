@@ -3,8 +3,7 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import LoginDialog from '../auth/LoginDialog';
-import LogoutButton from '../auth/LogoutButton';
+import LoginDialog from '../LoginDialog';
 import Manager from '../Manager';
 import Plan from '../Plan';
 import Samples from '../Samples';
@@ -40,7 +39,6 @@ export default function App() {
           <>
             {/* Header should show on all pages except login */}
             <Header />
-            <Route exact path="/logout" render={(props) => <LogoutButton {...props} />} />
             <Route exact path="/user" render={(props) => <UserMenu {...props} />} />
             <Route exact path="/manager" render={(props) => <Manager {...props} />} />
             <Route exact path="/Plan" render={(props) => <Plan {...props} />} />

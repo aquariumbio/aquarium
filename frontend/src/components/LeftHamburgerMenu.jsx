@@ -1,11 +1,11 @@
-// TODO: ADD PROP TYPES
-/* eslint-disable react/prop-types */
 import React from 'react';
+import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { Divider } from '@material-ui/core';
+import { withRouter } from 'react-router-dom';
 
 const LeftHamburgerMenu = (props) => {
   const { history } = props;
@@ -65,10 +65,15 @@ const LeftHamburgerMenu = (props) => {
         <MenuItem onClick={() => handleMenuClick('/import_workflows)')}>Import Workflows</MenuItem>
         <MenuItem onClick={() => handleMenuClick('/export_workflows')}>Export Workflows</MenuItem>
         <Divider />
-        <MenuItem linkButton href="http://klavinslab.org/aquarium" primaryText="Sample Link" />
+        <MenuItem component="a" href="http://klavinslab.org/aquarium">Help</MenuItem>
       </Menu>
     </>
   );
 };
 
-export default LeftHamburgerMenu;
+export default withRouter(LeftHamburgerMenu);
+
+LeftHamburgerMenu.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  history: PropTypes.object.isRequired,
+};
