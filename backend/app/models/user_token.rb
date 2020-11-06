@@ -1,13 +1,12 @@
 class UserToken < ActiveRecord::Base
-
   def self.new_token(this_ip)
     exists = true
     count = 0
 
     # MAKE 3 ATTEMPTS TO CREATE A TOKEN
-    while exists and count < 3
+    while exists && (count < 3)
       this_token = SecureRandom.hex(64) # 128 characters
-      wheres = sanitize_sql_for_conditions(["ip = ? and token = ?", this_ip, this_token])
+      wheres = sanitize_sql_for_conditions(['ip = ? and token = ?', this_ip, this_token])
       sql = "select * from user_tokens where #{wheres} limit 1"
       exists = (UserToken.find_by_sql sql)[0]
 
@@ -17,7 +16,6 @@ class UserToken < ActiveRecord::Base
     # RETURN NIL IF ALL 3 ATTPEMPTS FAIL
     return nil if exists
 
-    return this_token
+    this_token
   end
-
 end

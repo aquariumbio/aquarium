@@ -21,6 +21,6 @@ development:
 
 test:
   <<: *default
-  database: <%= ENV['DB_NAME'] %>_test
+  database: <%= ENV['DB_NAME'] %>
   pool: 5
   timeout: 5000
