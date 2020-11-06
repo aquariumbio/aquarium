@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+import { withRouter } from 'react-router-dom';
+
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import { Divider } from '@material-ui/core';
-import { withRouter } from 'react-router-dom';
+import Divider from '@material-ui/core/Divider';
 
 const LeftHamburgerMenu = (props) => {
   const { history } = props;
@@ -59,11 +61,11 @@ const LeftHamburgerMenu = (props) => {
         <MenuItem onClick={() => handleMenuClick('/parameters')}>Parameters</MenuItem>
         <Divider />
         <MenuItem onClick={() => handleMenuClick('/sample_types')}>Sample Type Definitions</MenuItem>
-        <MenuItem onClick={() => handleMenuClick('/containers')}>Containers</MenuItem>
+        <MenuItem onClick={() => handleMenuClick('/object_types')}>Containers</MenuItem>
         <MenuItem onClick={() => handleMenuClick('/wizards')}>Location Wizards</MenuItem>
         <Divider />
-        <MenuItem onClick={() => handleMenuClick('/import_workflows)')}>Import Workflows</MenuItem>
-        <MenuItem onClick={() => handleMenuClick('/export_workflows')}>Export Workflows</MenuItem>
+        <MenuItem onClick={() => handleMenuClick('/import)')}>Import Workflows</MenuItem>
+        <MenuItem onClick={() => handleMenuClick('/publish')}>Export Workflows</MenuItem>
         <Divider />
         <MenuItem component="a" href="http://klavinslab.org/aquarium">Help</MenuItem>
       </Menu>

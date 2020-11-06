@@ -1,11 +1,11 @@
 import LoginDialog from './components/LoginDialog';
-import Home from './components/Home';
+import Home from './components/HomePage';
 import UserMenu from './components/UserMenu';
-import Plan from './components/Plan';
-import Manager from './components/Manager';
-import Samples from './components/Samples';
-import Developer from './components/Developer';
-import Designer from './components/Designer';
+import PlansPage from './components/PlansPage';
+import ManagerPage from './components/ManagerPage';
+import SamplesPage from './components/SamplesPage';
+import DeveloperPage from './components/DeveloperPage';
+import DesignerPage from './components/DesignerPage';
 
 const routes = [
   {
@@ -21,27 +21,27 @@ const routes = [
   {
     path: '/designer',
     exact: true,
-    component: Designer,
+    component: DesignerPage,
   },
   {
-    path: '/plan',
+    path: '/plans',
     exact: true,
-    component: Plan,
+    component: PlansPage,
   },
   {
     path: '/manager',
     exact: true,
-    component: Manager,
+    component: ManagerPage,
   },
   {
     path: '/samples',
     exact: true,
-    component: Samples,
+    component: SamplesPage,
   },
   {
     path: '/developer',
     exact: true,
-    component: Developer,
+    component: DeveloperPage,
   },
 
   // {
@@ -106,13 +106,13 @@ const routes = [
   // },
   // {
   //   title: "Containers",
-  //   path: "/containers",
+  //   path: "/object_types",
   //   exact: true,
   //   component: <div>Containers</div>
   // },
   // {
   //   title: "Location Wizards",
-  //   path: "/location_wizards",
+  //   path: "/wizards",
   //   exact: true,
   //   component: <div>Location Wizards</div>
   // },

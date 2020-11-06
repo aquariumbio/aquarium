@@ -1,4 +1,4 @@
-describe('/export_workflows', () => {
+describe('/import', () => {
   beforeEach(() => {
     cy.login();
   });
@@ -8,7 +8,7 @@ describe('/export_workflows', () => {
   });
 
   it('has place holder header', () => {
-    cy.visit('/export_workflows');
-    cy.contains('h1', 'Export Workflows');
+    cy.visit('/import');
+    cy.contains('h1', 'Import Workflows');
   });
 });

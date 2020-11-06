@@ -1,4 +1,4 @@
-describe('/sample_type_definitions', () => {
+describe('/publish', () => {
   beforeEach(() => {
     cy.login();
   });
@@ -8,7 +8,7 @@ describe('/sample_type_definitions', () => {
   });
 
   it('has place holder header', () => {
-    cy.visit('/sample_type_definitions');
-    cy.contains('h1', 'Sample Type Definitions');
+    cy.visit('/publish');
+    cy.contains('h1', 'Export Workflows');
   });
 });
