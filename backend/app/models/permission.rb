@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # DEFAULT PERMISSIONS
 #   1 - ADMIN
 #   2 - MANAGE
@@ -20,7 +22,7 @@ class Permission < ActiveRecord::Base
       hash = {}
       sql = 'select * from permissions order by sort, id'
       (Permission.find_by_sql sql).each do |r|
-        hash = hash.update({ r.id => r.name })
+        hash.update({ r.id => r.name })
       end
       hash
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ActiveRecord::Base
   has_secure_password
 
@@ -68,7 +70,7 @@ class User < ActiveRecord::Base
     return false if permission_ids.index(".#{Permission.permission_ids.key('retired')}.")
 
     # ANY ROLE - ALWAYS TRUE (EVEN IF ".")
-    return true if permission_id == 0
+    return true if permission_id.zero?
 
     # CHECK <ROLE_ID> AND CHECK "ADMIN"
     permission_ids.index(".#{permission_id}.") or permission_ids.index(".#{Permission.permission_ids.key('admin')}.")
