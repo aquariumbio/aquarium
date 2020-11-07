@@ -1,7 +1,7 @@
 Cypress.Commands.add("designer", () => {
   cy.contains("Designer")
     .click()
-    .url().should('equal', 'http://localhost:3000/plans')
+    .url().should('equal', 'http://localhost:3001/plans')
     .wait('@planOperationTypes')
 });
 

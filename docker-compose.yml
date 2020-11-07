@@ -24,7 +24,7 @@ services:
     networks:
       - aquarium_net
     expose:
-      - "3000"
+      - "3001"
     depends_on:
       - db
       - s3

@@ -2,7 +2,7 @@ Cypress.Commands.add("manager", () => {
   cy.contains("Manager")
     .click()
     .url()
-    .should('equal', 'http://localhost:3000/operations')
+    .should('equal', 'http://localhost:3001/operations')
     .wait(1000) 
 });
 

@@ -43,7 +43,7 @@ namespace :technician do
 
     # launch brower window
     cmd = '/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome '
-    cmd += "http://localhost:3000/krill/start?job=#{job.id}"
+    cmd += "http://localhost:3001/krill/start?job=#{job.id}"
     system cmd
 
   end

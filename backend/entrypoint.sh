@@ -96,7 +96,7 @@ _start_production_server() {
 _start_development_server() {
 #     _fix_local_minio_ip
     echo "Starting development Rails server"
-    exec rails server -e development -p 3000 -b '0.0.0.0'
+    exec rails server -e development -p 3001 -b '0.0.0.0'
 }
 
 # Starts the krill server using the rails environment passed as an argument.

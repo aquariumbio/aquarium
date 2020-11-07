@@ -89,7 +89,7 @@ Test.verify("Create a fragment named #{frag}",
                 description: 'This is a test of the create api method',
                 fields: {
                   'Sequence' => 'N/A',
-                  'Length' => 3000,
+                  'Length' => 3001,
                   'Template' => temp_id,
                   'Forward Primer' => fwd_id,
                   'Reverse Primer' => rev,

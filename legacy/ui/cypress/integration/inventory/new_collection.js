@@ -19,7 +19,7 @@ describe('Collections', function() {
 
       const new_collection_id = xhr.response.body.id;
       cy.wrap(new_collection_id).should('be.above', 0)
-      cy.url().should('equal', `http://localhost:3000/items/${new_collection_id}`)  
+      cy.url().should('equal', `http://localhost:3001/items/${new_collection_id}`)  
 
     })   
 
