@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 const SampleTypeDefinitions = () => (
   <>
     <Paper elevation={3}>
-      <Typography variant="h1">Sample Type Definitions</Typography>
+      <Typography variant="h1">Sample Types</Typography>
     </Paper>
   </>
 );
