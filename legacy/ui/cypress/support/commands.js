@@ -11,14 +11,14 @@ Cypress.Commands.add("login", () => {
       .route('POST', '/operations/manager_list').as('managerList')  
 
     cy.viewport(1500, 900)
-      .visit('http://localhost:3001')
+      .visit('http://localhost:3000')
       .get('#session_login')
       .type('neptune')
       .get('#session_password')
       .type('aquarium')
 
     cy.contains('Sign in').click()
-      .url().should('equal', 'http://localhost:3001/')
+      .url().should('equal', 'http://localhost:3000/')
       .wait(100)
 
 });
@@ -27,14 +27,14 @@ Cypress.Commands.add("logout", () => {
 
     cy.get('#user-specific-button').click()
     cy.get('#signout-button').click();
-    cy.url().should('equal', 'http://localhost:3001/signout')
+    cy.url().should('equal', 'http://localhost:3000/signout')
 
 });
 
 Cypress.Commands.add("samples", () => {
 
     cy.contains("Samples").click()
-    cy.url().should('equal', 'http://localhost:3001/browser')
+    cy.url().should('equal', 'http://localhost:3000/browser')
     cy.wait(1000) 
 
 });

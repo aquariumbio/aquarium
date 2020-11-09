@@ -25,7 +25,7 @@ module Test
     u = if ARGV[0] == 'r'
           'http://bioturk.ee.washington.edu:3011/api'
         else
-          'http://localhost:3001/api'
+          'http://localhost:3000/api'
         end
     puts
     puts "Connecting to #{u}" unless @@report
