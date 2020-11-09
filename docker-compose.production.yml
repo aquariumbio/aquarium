@@ -27,7 +27,7 @@ services:
   db:
     volumes:
       - ./data/db/production:/var/lib/mysql
-      - ./docker/mysql_init/dump.sql:/docker-entrypoint-initdb.d/dump.sql      
+      - ./docker/mysql_init/dump.sql:/docker-entrypoint-initdb.d/dump.sql
 
 volumes:
   public:

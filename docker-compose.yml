@@ -5,6 +5,20 @@
 #
 version: "3.5"
 services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - './frontend:/app'
+      - '/app/node_modules'
+    ports:
+      - 3000:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      - aquarium_net
+
   app:
     environment:
       DB_NAME: ${DB_NAME}
@@ -108,6 +122,7 @@ services:
       - aquarium_net
     depends_on:
       - app
+      - frontend
       - s3
       - createbucket
 
