@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 const ExportWorkflowsPage = () => (
   <>
     <Paper elevation={3}>
-      <Typography variant="h1">Export Workflow</Typography>
+      <Typography variant="h1">Export Workflows</Typography>
     </Paper>
   </>
 );

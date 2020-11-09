@@ -5,12 +5,12 @@ import Typography from '@material-ui/core/Typography';
 // Route: /import
 // Left hamburger menu
 
-const ImportWorkfowsPage = () => (
+const ImportWorkflowsPage = () => (
   <>
     <Paper elevation={3}>
-      <Typography variant="h1">Import Workfows</Typography>
+      <Typography variant="h1">Import Workflows</Typography>
     </Paper>
   </>
 );
 
-export default ImportWorkfowsPage;
+export default ImportWorkflowsPage;

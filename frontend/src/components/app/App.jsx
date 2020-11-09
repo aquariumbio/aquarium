@@ -25,6 +25,8 @@ import ExportWorkflowsPage from '../ExportWorkflowsPage';
 import InvoicesPage from '../InvoicesPage';
 import LocationWizardsPage from '../LocationWizardsPage';
 import LogsPage from '../LogsPage';
+import ImportWorkflowsPage from '../ImportWorkflowsPage';
+import GroupsPage from '../GroupsPage';
 import API from '../../helpers/API';
 
 const useStyles = makeStyles({});
@@ -58,17 +60,19 @@ export default function App() {
             <Route exact path="/developer" render={(props) => <DeveloperPage {...props} />} />
             <Route exact path="/designer" render={(props) => <DesignerPage {...props} />} />
             <Route exact path="/users" render={(props) => <UsersPage {...props} />} />
-            <Route exact path="/sample_type_definitions" render={(props) => <SampleTypesPage {...props} />} />
+            <Route exact path="/sample_types" render={(props) => <SampleTypesPage {...props} />} />
             <Route exact path="/announcements" render={(props) => <AnnouncementsPage {...props} />} />
             <Route exact path="/budgets" render={(props) => <BudgetsPage {...props} />} />
             <Route exact path="/object_types" render={(props) => <ContainersPage {...props} />} />
             <Route exact path="/direct_purchase" render={(props) => <DirectPurchasePage {...props} />} />
+            <Route exact path="/import" render={(props) => <ImportWorkflowsPage {...props} />} />
             <Route exact path="/publish" render={(props) => <ExportWorkflowsPage {...props} />} />
             <Route exact path="/invoices" render={(props) => <InvoicesPage {...props} />} />
             <Route exact path="/wizards" render={(props) => <LocationWizardsPage {...props} />} />
             <Route exact path="/logs" render={(props) => <LogsPage {...props} />} />
             <Route exact path="/parameters" render={(props) => <ParametersPage {...props} />} />
             <Route exact path="/roles" render={(props) => <RolesPage {...props} />} />
+            <Route exact path="/groups" render={(props) => <GroupsPage {...props} />} />
 
             <Route exact path="/" render={(props) => <HomePage {...props} />} />
           </>
