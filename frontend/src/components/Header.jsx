@@ -9,11 +9,12 @@ import { withRouter } from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
 import DropdownMenu from './shared/DropdownMenu';
 import UserMenu from './UserMenu';
+import LeftHamburgerMenu from './LeftHamburgerMenu';
 
 const mainNavItems = [
   {
     menuTitle: 'PLAN',
-    pageURL: '/plan',
+    pageURL: '/plans',
   },
   {
     menuTitle: 'SAMPLES',
@@ -32,69 +33,6 @@ const mainNavItems = [
     pageURL: '/developer',
   },
 
-];
-
-const leftNavMenuItems = [
-  {
-    menuTitle: 'Direct Purchase',
-    pageURL: '/direct_purchase',
-  },
-  {
-    menuTitle: 'Logs',
-    pageURL: '/logs',
-  },
-  {
-    menuTitle: 'Users',
-    pageURL: '/users',
-  },
-  {
-    menuTitle: 'Groups',
-    pageURL: '/groups',
-  },
-  {
-    menuTitle: 'Roles',
-    pageURL: '/roles',
-  },
-  {
-    menuTitle: 'Announcements',
-    pageURL: '/announcements',
-  },
-  {
-    menuTitle: 'Budgets',
-    pageURL: '/budgets',
-  },
-  {
-    menuTitle: 'Invoices',
-    pageURL: '/invoices',
-  },
-  {
-    menuTitle: 'Parameters',
-    pageURL: '/parameters',
-  },
-  {
-    menuTitle: 'Sampel Type Definitions',
-    pageURL: '/sample_type_definitions',
-  },
-  {
-    menuTitle: 'Containers',
-    pageURL: '/containers',
-  },
-  {
-    menuTitle: 'Location Wizards',
-    pageURL: '/location_wizards',
-  },
-  {
-    menuTitle: 'Import Workflows',
-    pageURL: '/workflows/imports',
-  },
-  {
-    menuTitle: 'Export Workflows',
-    pageURL: '/workflows/exports',
-  },
-  {
-    menuTitle: 'Help',
-    pageURL: '/help',
-  },
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -142,8 +80,7 @@ const Header = (props) => {
     <div>
       <AppBar position="static" className={classes.root}>
         <Toolbar>
-          {/* LEFT HAMBURGER MENU */}
-          <DropdownMenu menuItems={leftNavMenuItems} />
+          <LeftHamburgerMenu />
 
           <IconButton
             edge="start"

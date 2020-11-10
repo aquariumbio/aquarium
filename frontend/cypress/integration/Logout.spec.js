@@ -4,7 +4,7 @@ describe('/logout', () => {
   });
 
   it('has place holder header', () => {
-    cy.visit('/logout');
+    cy.visit('/');
 
     let token;
 
@@ -16,7 +16,8 @@ describe('/logout', () => {
         // eslint-disable-next-line no-unused-expressions
         expect(token).to.exist;
       });
-    cy.contains('button', 'SIGN OUT').click();
+    cy.contains('button', 'USER').click();
+    cy.contains('Sign Out').click();
     cy.url().should('contain', '/login');
     cy.window()
       .then((win) => {
