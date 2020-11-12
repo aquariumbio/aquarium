@@ -4,12 +4,12 @@ import axios from 'axios';
 axios.defaults.baseURL = 'http://localhost:3001/api/v3/';
 const sessionToken = sessionStorage.getItem('token');
 
-// TODO: FIX LINTING PROBLEMS & remove disble lines
+// TODO: FIX LINTING PROBLEMS & remove disable lines
 // eslint-disable-next-line func-names
 const validateToken = async function () {
   // eslint-disable-next-line no-return-await
   return await axios
-    .post(`user/validate_token?token=${sessionToken}`)
+    .post(`token/get_user?token=${sessionToken}`)
     .then((response) => {
       if (response.data.status === 200) {
         return true;
@@ -24,7 +24,7 @@ const validateToken = async function () {
 const signIn = async (login, password, setLoginError) => {
   let signInSuccessful = false;
   await axios
-    .post(`user/sign_in?login=${login}&password=${password}`)
+    .post(`token/create?login=${login}&password=${password}`)
     .then((response) => {
       if (response.data.status === 200 && response.data.data.token) {
         setLoginError();
@@ -42,7 +42,7 @@ const signIn = async (login, password, setLoginError) => {
 
 const signOut = (setLoginOutError) => {
   axios
-    .post(`user/sign_out?token=${sessionToken}`)
+    .post(`token/delete?token=${sessionToken}`)
     .then((response) => {
       if (response.data.status === 200) {
         sessionStorage.clear('token');

@@ -20,7 +20,7 @@ export default function LogoutButton() {
     const token = sessionStorage.getItem('token');
 
     axios
-      .post(`user/sign_out?token=${token}`)
+      .post(`token/delete?token=${token}`)
       // eslint-disable-next-line consistent-return
       .then((response) => {
         if (response.data.status === 200) {

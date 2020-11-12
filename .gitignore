@@ -19,11 +19,16 @@
 # Ignore the default SQLite database.
 /db/*.sqlite3
 
+# Ignore the default SQLite database
+./data
+
 # Ignore all logfiles and tempfiles.
 /log
 /tmp
 /public/assets
 /public/assets_dev
+/backend/log
+/backend/tmp
 
 # Ignore protocol repos
 /repos/*

@@ -5,6 +5,20 @@
 #
 version: "3.5"
 services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - './frontend:/app'
+      - './frontend/node_modules:/app/node_modules'
+    ports:
+      - 3000:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      - aquarium_net
+
   app:
     environment:
       DB_NAME: ${DB_NAME}
@@ -14,16 +28,17 @@ services:
       S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY}
       S3_REGION: ${S3_REGION}
       SECRET_KEY_BASE: ${SECRET_KEY_BASE}
-      TECH_DASHBOARD: ${TECH_DASHBOARD}  
+      TECH_DASHBOARD: ${TECH_DASHBOARD}
+      SESSION_TIMEOUT: ${SESSION_TIMEOUT}
       TZ: ${TIMEZONE}
     volumes:
-      - ./legacy/db:/aquarium/db
-      - ./legacy/log:/aquarium/log
-      - ./legacy/biofab-eula.yml:/aquarium/config/user_agreement.yml
+      - ./backend/db:/aquarium/db
+      - ./backend/log:/aquarium/log
+#      - ./backend/biofab-eula.yml:/aquarium/config/user_agreement.yml
     networks:
       - aquarium_net
     expose:
-      - "3000"
+      - "3001"
     depends_on:
       - db
       - s3
@@ -76,7 +91,7 @@ services:
     environment:
       MINIO_ACCESS_KEY: ${S3_ID}
       MINIO_SECRET_KEY: ${S3_SECRET_ACCESS_KEY}
-      MINIO_REGION: ${S3_REGION} 
+      MINIO_REGION: ${S3_REGION}
     networks:
       - aquarium_net
 
@@ -107,6 +122,7 @@ services:
       - aquarium_net
     depends_on:
       - app
+      - frontend
       - s3
       - createbucket
 

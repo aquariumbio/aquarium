@@ -39,7 +39,7 @@ The following commands will allow you to run Aquarium in Rails development mode 
    docker-compose up
    ```
 
-   In development mode, Aquarium is available at `localhost:3000`.
+   In development mode, Aquarium is available at `localhost:3001`.
 
 3. **Stop** the Aquarium services, by typing `ctrl-c` followed by
 

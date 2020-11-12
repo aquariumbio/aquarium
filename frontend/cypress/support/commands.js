@@ -27,7 +27,7 @@ Cypress.Commands.add('logout', () => {
 
   cy.request({
     method: 'POST',
-    url: `http://localhost:3001/api/v3/user/sign_out?token=${token}`,
+    url: `http://localhost:3001/api/v3/token/delete?token=${token}`,
   })
     // eslint-disable-next-line no-unused-vars
     .then((resp) => {
