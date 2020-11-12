@@ -4,7 +4,7 @@ import axios from 'axios';
 axios.defaults.baseURL = 'http://localhost:3001/api/v3/';
 const sessionToken = sessionStorage.getItem('token');
 
-// TODO: FIX LINTING PROBLEMS & remove disble lines
+// TODO: FIX LINTING PROBLEMS & remove disable lines
 // eslint-disable-next-line func-names
 const validateToken = async function () {
   // eslint-disable-next-line no-return-await
