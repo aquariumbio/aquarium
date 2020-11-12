@@ -1,1 +1,0 @@
-AQ.Code.getter(AQ.User,"user");
