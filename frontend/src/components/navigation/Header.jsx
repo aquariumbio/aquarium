@@ -7,7 +7,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { withRouter } from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
-import DropdownMenu from './shared/DropdownMenu';
+import DropdownMenu from '../shared/DropdownMenu';
 import UserMenu from './UserMenu';
 import LeftHamburgerMenu from './LeftHamburgerMenu';
 

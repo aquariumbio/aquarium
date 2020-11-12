@@ -4,29 +4,29 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
-import Header from '../Header';
-import LoginDialog from '../LoginDialog';
-import UserMenu from '../UserMenu';
-import ManagerPage from '../ManagerPage';
-import PlansPage from '../PlansPage';
-import SamplesPage from '../SamplesPage';
+import Header from '../navigation/Header';
+import LoginDialog from '../auth/LoginDialog';
+import UserMenu from '../navigation/UserMenu';
+import ManagerPage from '../manager/ManagerPage';
+import PlansPage from '../plans/PlansPage';
+import SamplesPage from '../samples/SamplesPage';
 import HomePage from '../HomePage';
-import DeveloperPage from '../DeveloperPage';
-import DesignerPage from '../DesignerPage';
-import ParametersPage from '../ParametersPage';
-import RolesPage from '../RolesPage';
-import UsersPage from '../UsersPage';
-import SampleTypesPage from '../SampleTypesPage';
-import AnnouncementsPage from '../AnnouncementsPage';
-import BudgetsPage from '../BudgetsPage';
-import ContainersPage from '../ContainersPage';
-import DirectPurchasePage from '../DirectPurchasePage';
-import ExportWorkflowsPage from '../ExportWorkflowsPage';
-import InvoicesPage from '../InvoicesPage';
-import LocationWizardsPage from '../LocationWizardsPage';
-import LogsPage from '../LogsPage';
-import ImportWorkflowsPage from '../ImportWorkflowsPage';
-import GroupsPage from '../GroupsPage';
+import DeveloperPage from '../developer/DeveloperPage';
+import DesignerPage from '../designer/DesignerPage';
+import ParametersPage from '../parameters/ParametersPage';
+import RolesPage from '../roles/RolesPage';
+import UsersPage from '../user/UsersPage';
+import SampleTypesPage from '../sampleTypes/SampleTypesPage';
+import AnnouncementsPage from '../announcements/AnnouncementsPage';
+import BudgetsPage from '../budgets/BudgetsPage';
+import ContainersPage from '../containers/ContainersPage';
+import DirectPurchasePage from '../directPurchase/DirectPurchasePage';
+import ExportWorkflowsPage from '../exportWorkflows/ExportWorkflowsPage';
+import InvoicesPage from '../invoices/InvoicesPage';
+import LocationWizardsPage from '../locationWizards/LocationWizardsPage';
+import LogsPage from '../logs/LogsPage';
+import ImportWorkflowsPage from '../importWorkflows/ImportWorkflowsPage';
+import GroupsPage from '../groups/GroupsPage';
 import API from '../../helpers/API';
 
 const useStyles = makeStyles({});
@@ -55,7 +55,7 @@ export default function App() {
             <Header />
             <Route exact path="/user" render={(props) => <UserMenu {...props} />} />
             <Route exact path="/manager" render={(props) => <ManagerPage {...props} />} />
-            <Route exact path="/plans" render={(props) => <PlansPage {...props} />} />
+            <Route exact path="/launcher" render={(props) => <PlansPage {...props} />} />
             <Route exact path="/samples" render={(props) => <SamplesPage {...props} />} />
             <Route exact path="/developer" render={(props) => <DeveloperPage {...props} />} />
             <Route exact path="/designer" render={(props) => <DesignerPage {...props} />} />
