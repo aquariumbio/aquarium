@@ -1,16 +1,12 @@
-/* eslint-disable no-console */
-
-/* eslint-disable consistent-return */
 import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:3001/api/v3/';
 const currentSessionToken = sessionStorage.getItem('token');
 
-// TODO: FIX LINTING PROBLEMS & remove disable lines
-// eslint-disable-next-line func-names
-const validateToken = async function () {
-  // eslint-disable-next-line no-return-await
-  return await axios
+const validateToken = async () => {
+  let validToken = false;
+
+  await axios
     .post('token/get_user', null, {
       params: {
         token: currentSessionToken,
@@ -20,26 +16,23 @@ const validateToken = async function () {
       const [status, data] = [response.data.status, response.data];
 
       if (response.data.status === 200) {
-        sessionStorage.setItem('token', data.token);
-        sessionStorage.setItem('userId', data.id);
-        sessionStorage.setItem('permissions', data.permission_ids);
-        sessionStorage.setItem('userName', data.login);
-        sessionStorage.setItem('name', data.name);
-        return true;
+        validToken = true;
       }
 
-      if (status === 200 || (status === 400 && data.error === 'Invalid.')) {
+      if (status === 400 && data.error === 'Invalid.') {
         sessionStorage.clear('token');
-        return false;
       }
+
+      // TODO: HANDLE SESSION TIMEOUT
     });
+  return validToken;
 };
 
 const signIn = async (login, password, setLoginError) => {
   let signInSuccessful = false;
   await axios
     .post('token/create', null, {
-      params: {
+      auth: {
         login,
         password,
       },
@@ -56,7 +49,7 @@ const signIn = async (login, password, setLoginError) => {
       }
 
       if (status !== 200) {
-        return setLoginError(response.data.error);
+        setLoginError(response.data.error);
       }
     });
   return signInSuccessful;
@@ -79,7 +72,7 @@ const signOut = (setLoginOutError) => {
       }
 
       if (status !== 200 && !(status === 400 && data.error === 'Invalid.')) {
-        return setLoginOutError(data.error);
+        setLoginOutError(data.error);
       }
     });
 };
