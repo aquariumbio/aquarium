@@ -1,11 +1,11 @@
-import LoginDialog from './components/LoginDialog';
+import LoginDialog from './components/auth/LoginDialog';
 import Home from './components/HomePage';
-import UserMenu from './components/UserMenu';
-import PlansPage from './components/PlansPage';
-import ManagerPage from './components/ManagerPage';
-import SamplesPage from './components/SamplesPage';
-import DeveloperPage from './components/DeveloperPage';
-import DesignerPage from './components/DesignerPage';
+import UserMenu from './components/navigation/UserMenu';
+import PlansPage from './components/plans/PlansPage';
+import ManagerPage from './components/manager/ManagerPage';
+import SamplesPage from './components/samples/SamplesPage';
+import DeveloperPage from './components/developer/DeveloperPage';
+import DesignerPage from './components/designer/DesignerPage';
 
 const routes = [
   {

@@ -100,7 +100,9 @@ const LoginDialog = () => {
           Powered by Aquarium
         </Typography>
       </header>
+
       <Divider className={classes.divider} />
+
       <form className={classes.form} noValidate autoComplete="off" name="login" onSubmit={handleSubmit}>
         <TextField
           name="login"
@@ -109,6 +111,7 @@ const LoginDialog = () => {
           autoFocus
           id="login"
           label="Login"
+          type="text"
           variant="outlined"
           value={login}
           onChange={(event) => setLogin(event.target.value)}
