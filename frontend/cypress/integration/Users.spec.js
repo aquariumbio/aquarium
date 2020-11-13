@@ -1,4 +1,4 @@
-describe('/', () => {
+describe('Users', () => {
   beforeEach(() => {
     cy.login();
   });
@@ -8,7 +8,9 @@ describe('/', () => {
   });
 
   it('has place holder header', () => {
-    cy.visit('/');
-    cy.contains('h1', 'Home');
+    cy.visit('/users');
+    cy.contains('h1', 'Users');
   });
+
+
 });
