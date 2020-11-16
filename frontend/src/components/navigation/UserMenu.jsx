@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
-import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import Divider from '@material-ui/core/Divider';
 import API from '../../helpers/API';
 
@@ -21,17 +21,12 @@ const UserMenu = (props) => {
   const { history } = props;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
   // eslint-disable-next-line no-unused-vars
   const [logOutErrors, setLogOutError] = useState(null);
 
   const handleSignOut = (event) => {
     event.preventDefault();
     API.signOut(setLogOutError);
-  };
-
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
   };
 
   const handleMenuClick = (pageURL) => {
@@ -45,7 +40,7 @@ const UserMenu = (props) => {
         className={classes.menuButton}
         color="inherit"
         aria-label="menu"
-        onClick={handleMenuOpen}
+        onClick={(e) => setAnchorEl(e.currentTarget)}
       >
         ● USER
       </IconButton>
@@ -62,7 +57,7 @@ const UserMenu = (props) => {
           vertical: 'top',
           horizontal: 'right',
         }}
-        open={open}
+        open={!!anchorEl}
         onClose={() => setAnchorEl(null)}
       >
         <MenuItem onClick={() => handleMenuClick('/users')}>
