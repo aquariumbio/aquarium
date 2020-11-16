@@ -1,8 +1,0 @@
-default: &default
-  instance_name: Keller Lab
-
-production:
-  <<: *default
-
-development:
-  <<: *default

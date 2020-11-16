@@ -32,14 +32,13 @@ const signIn = async (login, password, setLoginError) => {
   let signInSuccessful = false;
   await axios
     .post('token/create', null, {
-      auth: {
+      params: {
         login,
         password,
       },
     })
     .then((response) => {
-      console.log(response);
-      const [status, data] = [response.data.status, response.data.data];
+      const [status, data] = [response.status, response.data];
 
       if (status === 200 && data.token) {
         setLoginError();
@@ -48,7 +47,7 @@ const signIn = async (login, password, setLoginError) => {
         window.location.reload();
       }
 
-      if (status !== 200) {
+      if (status === 401) {
         setLoginError(response.data.error);
       }
     });
@@ -63,15 +62,15 @@ const signOut = (setLoginOutError) => {
       },
     })
     .then((response) => {
-      const [status, data] = [response.data.status, response.data];
+      const [status, data] = [response.status, response.data];
 
-      if (status === 200 || (status === 400 && data.error === 'Invalid.')) {
+      if (status === 200 || (status === 401 && data.error === 'Invalid.')) {
         sessionStorage.clear('token');
         setLoginOutError();
         window.location.reload();
       }
 
-      if (status !== 200 && !(status === 400 && data.error === 'Invalid.')) {
+      if (status === 401 && data.error !== 'Invalid.') {
         setLoginOutError(data.error);
       }
     });

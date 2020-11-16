@@ -8,8 +8,8 @@ module Api
       # /api/v3/users/permissions?token=<token>&show[]=[1,2,3,4,5,6]&sort=<sort>
       def permissions
         # CHECK FOR ADMIN PERMISSIONS
-        result = check_token_for_permission(1)
-        render json: result.to_json and return if result[:error]
+        status, response = check_token_for_permission(1)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
 
         params_show = if params[:show].is_a?(Array)
                         params[:show]
@@ -32,27 +32,27 @@ module Api
 
         users = User.get_users_by_permission(conditions, order)
 
-        render json: { status: 200, data: { users: users } }.to_json
+        render json: { users: users }.to_json, status: :ok
       end
 
       # SET SPECIFIC PERMISSION FOR SPECIFIC USER
       # /api/v3/users/set_permission?token=<token>&user_id=<user_id>&permission_id=<permission_id>&value=<true>
       def set_permission
         # CHECK FOR ADMIN PERMISSIONS
-        result = check_token_for_permission(1)
-        render json: result.to_json and return if result[:error]
+        status, response = check_token_for_permission(1)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
 
         uid = params[:user_id].to_i
         rid = params[:permission_id].to_i
         val = (params[:value] == 'true' || params[:value] == 'on')
-        if (uid == result[:user][:id]) && ((rid == 1) || (rid == 6))
-          render json: { status: 403, error: 'Cannot edit admin or retired for self.' }.to_json and return
+        if (uid == response[:user][:id]) && ((rid == 1) || (rid == 6))
+          render json: { error: 'Cannot edit admin or retired for self.' }.to_json, status: :forbidden and return
         end
 
         valid = User.set_permission(uid, rid, val)
-        render json: { status: 400, error: 'Invalid.' }.to_json and return unless valid
+        render json: { error: 'Invalid.' }.to_json, status: :unauthorized and return unless valid
 
-        render json: { status: 200, data: { id: valid.id, name: valid.name, login: valid.login, permission_ids: valid.permission_ids } }.to_json
+        render json: { user: { id: valid.id, name: valid.name, login: valid.login, permission_ids: valid.permission_ids } }.to_json, status: :ok
       end
     end
   end

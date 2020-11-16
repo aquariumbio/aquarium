@@ -25,22 +25,22 @@ class User < ActiveRecord::Base
 
     if !usertoken
       # INVALID TOKEN OR IP
-      [400, nil]
+      [401, "Invalid."]
     elsif usertoken.timenow.to_s[0, 19] < timeok
-      # SESSION TIMEOUT / REMOVE TOKEN
-      sql = "delete from user_tokens ut where #{wheres} limit 1"
-      User.connection.execute sql
-
-      [401, nil]
+      # SESSION TIMEOUT
+      [401, "Session timeout."]
     elsif !usertoken.permission?(check_permission_id)
-      # FORBIDDEN / DO NOT RESET USER.TIMENOW
+      # FORBIDDEN
       [403, nil]
     else
-      # VALID TOKEN + IP + TIME / RESET USER.TIMENOW
+      # VALID TOKEN + IP + TIME
+
+      #RESET USER.TIMENOW
       usertoken.timenow = option_timenow
       sql = "update user_tokens ut set timenow = '#{option_timenow.to_s[0, 19]}' where #{wheres} limit 1"
       User.connection.execute sql
 
+      # RETURN USER
       [200, { id: usertoken.user_id, name: usertoken.name, login: usertoken.login, permission_ids: usertoken.permission_ids }]
     end
   end
