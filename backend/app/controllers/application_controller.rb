@@ -8,18 +8,20 @@ class ApplicationController < ActionController::API
     ip = request.remote_ip
     token = params[:token].to_s.strip.downcase
 
-    status, user = User.validate_token({ ip: ip, token: token }, permission_id)
-    @result = case status
-              when 400
-                { status: 400, error: 'Invalid.' }
-              when 401
-                { status: 401, error: 'Session timeout.' }
-              when 403
-                permission = Permission.permission_ids[permission_id]
-                error = permission ? "#{permission.capitalize} permissions required." : 'Forbidden.'
-                { status: 403, error: error }
-              when 200
-                { status: 200, user: user }
-              end
+    status_code, datum = User.validate_token({ ip: ip, token: token }, permission_id)
+    case status_code
+    when 401
+      status = "unauthorized"
+      response = { error: datum }
+    when 403
+      status = "forbidden"
+      permission = Permission.permission_ids[permission_id]
+      error = permission ? "#{permission.capitalize} permissions required." : 'Forbidden.'
+      response = { error: error }
+    when 200
+      status = "ok"
+      response = { user: datum }
+    end
+    return status, response
   end
 end

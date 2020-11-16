@@ -16,15 +16,15 @@ RSpec.describe Api::V3::PermissionsController, type: :request do
 
       post "/api/v3/token/create?login=user_1&password=password"
       resp = JSON.parse(response.body)
-      @token_1 << resp["data"]["token"]
+      @token_1 << resp["token"]
 
       post "/api/v3/token/create?login=user_2&password=password"
       resp = JSON.parse(response.body)
-      @token_2 << resp["data"]["token"]
+      @token_2 << resp["token"]
 
       post "/api/v3/token/create?login=user_3&password=password"
       resp = JSON.parse(response.body)
-      @token_3 << resp["data"]["token"]
+      @token_3 << resp["token"]
      end
 
     # NOTE: DATABASE ENTRIES IN BEFORE :ALL ARE NOT FLUSHED AUTOMATICALLY
@@ -38,29 +38,24 @@ RSpec.describe Api::V3::PermissionsController, type: :request do
     it "invalid_get_permissions" do
       # BAD TOKEN
       post "/api/v3/permissions/get_permissions"
-      resp = JSON.parse(response.body)
-      expect(resp["status"]).to eq 400
+      expect(response).to have_http_status 401
     end
 
     # FORBIDDEN GET ROLES
     it "forbidden_get_permissions" do
       # RETIRED
       post "/api/v3/permissions/get_permissions?token=#{@token_3[0]}"
-      resp = JSON.parse(response.body)
-      expect(resp["status"]).to eq 403
+      expect(response).to have_http_status 403
     end
 
     # GET ROLES
     it "get_permissions" do
       post "/api/v3/permissions/get_permissions?token=#{@token_1[0]}"
-      resp = JSON.parse(response.body)
-      expect(resp["status"]).to eq 200
+      expect(response).to have_http_status 200
 
       post "/api/v3/permissions/get_permissions?token=#{@token_2[0]}"
-      resp = JSON.parse(response.body)
-      expect(resp["status"]).to eq 200
+      expect(response).to have_http_status 200
     end
-
 
   end
 end
