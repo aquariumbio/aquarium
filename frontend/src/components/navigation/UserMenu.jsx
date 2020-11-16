@@ -26,30 +26,7 @@ const UserMenu = (props) => {
 
   const handleSignOut = (event) => {
     event.preventDefault();
-<<<<<<< HEAD:frontend/src/components/navigation/UserMenu.jsx
     API.signOut(setLogOutError);
-=======
-    const token = sessionStorage.getItem('token');
-
-    axios
-      .post(`token/delete?token=${token}`)
-      // eslint-disable-next-line consistent-return
-      .then((response) => {
-        if (response.data.status === 200) {
-          setlogout(true);
-          history.push('/login');
-          window.location.reload();
-        }
-
-        if (response.data.status !== 200) {
-          return setLoginOutError(response.data.error);
-        }
-      });
-  };
-
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
->>>>>>> statuses:frontend/src/components/UserMenu.jsx
   };
 
   const handleMenuClick = (pageURL) => {
