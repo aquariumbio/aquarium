@@ -14,19 +14,17 @@ const useStyles = makeStyles(() => ({
     marginTop: '12px',
     marginBottom: '30px',
   },
-  name: {
+  inputName: {
     fontSize: '1rem',
     fontWeight: '700',
     margin: '10px 0',
-  },
-  input: {
-
   },
 }));
 
 const SampleTypeForm = () => {
   const classes = useStyles();
   const [sampleTypeName, setSampleTypeName] = useState('');
+  const [sampleTypeDescription, setSampleTypeDescription] = useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -41,10 +39,10 @@ const SampleTypeForm = () => {
         Defining New Sample Type
       </Typography>
 
-      <Typography variant="h4" className={classes.name}>
-        Name
-      </Typography>
       <form name="sampe_type_definition_form" onSubmit={handleSubmit}>
+        <Typography variant="h4" className={classes.inputName}>
+          Name
+        </Typography>
         <TextField
           name="sample_type_name"
           fullWidth
@@ -57,6 +55,23 @@ const SampleTypeForm = () => {
           required
           // TODO: Error HANDLING -- ONLY SHOW HELPER TEXT ON ERROR
           helperText="Sample name is required."
+        />
+
+        <Typography variant="h4" className={classes.inputName}>
+          Description
+        </Typography>
+        <TextField
+          name="sample_type_description"
+          fullWidth
+          value={sampleTypeDescription}
+          id="sample_type_description"
+          label="sample type description"
+          defaultValue="New sample type description"
+          onChange={(event) => setSampleTypeDescription(event.target.value)}
+          variant="outlined"
+          required
+          // TODO: Error HANDLING -- ONLY SHOW HELPER TEXT ON ERROR
+          helperText="Sample type description is required."
         />
       </form>
     </Container>
