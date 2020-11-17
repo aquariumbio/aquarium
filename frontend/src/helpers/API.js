@@ -32,13 +32,12 @@ const signIn = async (login, password, setLoginError) => {
   let signInSuccessful = false;
   await axios
     .post('token/create', null, {
-      auth: {
+      params: {
         login,
         password,
       },
     })
     .then((response) => {
-      console.log(response);
       const [status, data] = [response.data.status, response.data.data];
 
       if (status === 200 && data.token) {
