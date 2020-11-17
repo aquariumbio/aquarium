@@ -27,6 +27,9 @@ describe('/sample_types', () => {
           cy.contains('h4', 'Description');
           cy.get('input[name="sample_type_description"]')
             .should('have.attr', 'placeholder', 'Sample type description');
+
+          cy.contains('h4', 'Fields');
+          cy.get('[data-cy=add_field]');
         });
     });
   });

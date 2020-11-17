@@ -1,10 +1,11 @@
 import { makeStyles } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import React, { useState } from 'react';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     minWidth: 'lg',
   },
@@ -18,6 +19,19 @@ const useStyles = makeStyles(() => ({
     fontSize: '1rem',
     fontWeight: '700',
     margin: '10px 0',
+    '&#field': {
+      display: 'inline-flex',
+    },
+  },
+  lightBtn: {
+    backgroundColor: 'white',
+    color: '#065683',
+    margin: theme.spacing(3, 2),
+
+    '& :hover': {
+      backgroundColor: '#065683',
+      color: 'white',
+    },
   },
 }));
 
@@ -34,7 +48,7 @@ const SampleTypeForm = () => {
   };
 
   return (
-    <Container maxWidth="xl" minWidth>
+    <Container maxWidth="xl">
       <Typography variant="h1" align="center" className={classes.title}>
         Defining New Sample Type
       </Typography>
@@ -57,7 +71,6 @@ const SampleTypeForm = () => {
           type="string"
           // TODO: Error HANDLING -- ONLY SHOW HELPER TEXT ON ERROR
           helperText="Sample name is required."
-          data-cy="input_sample_type_name"
         />
 
         <Typography variant="h4" className={classes.inputName}>
@@ -76,9 +89,20 @@ const SampleTypeForm = () => {
           required
           // TODO: Error HANDLING -- ONLY SHOW HELPER TEXT ON ERROR
           helperText="Sample type description is required."
-          data-cy="input_sample_type_description"
-
         />
+        <>
+          <Typography variant="h4" className={classes.inputName} id="field">
+            Fields
+          </Typography>
+          <Button
+            name="Add field"
+            data-cy="add_field"
+            className={classes.lightBtn}
+            size="small"
+          >
+            Add
+          </Button>
+        </>
       </form>
     </Container>
   );
