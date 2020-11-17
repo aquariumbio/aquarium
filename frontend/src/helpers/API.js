@@ -13,9 +13,9 @@ const validateToken = async () => {
       },
     })
     .then((response) => {
-      const [status, data] = [response.data.status, response.data];
+      const [status, data] = [response.status, response.data];
 
-      if (response.data.status === 200) {
+      if (status === 200) {
         validToken = true;
       }
 

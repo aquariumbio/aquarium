@@ -48,13 +48,16 @@ const SampleTypeForm = () => {
           fullWidth
           value={sampleTypeName}
           id="sample_type_name"
-          label="sample type name"
-          defaultValue="New sample type"
+          label="Sample type name"
+          placeholder="Sample type name"
           onChange={(event) => setSampleTypeName(event.target.value)}
           variant="outlined"
+          autoFocus
           required
+          type="string"
           // TODO: Error HANDLING -- ONLY SHOW HELPER TEXT ON ERROR
           helperText="Sample name is required."
+          data-cy="input_sample_type_name"
         />
 
         <Typography variant="h4" className={classes.inputName}>
@@ -65,13 +68,16 @@ const SampleTypeForm = () => {
           fullWidth
           value={sampleTypeDescription}
           id="sample_type_description"
-          label="sample type description"
-          defaultValue="New sample type description"
+          label="Sample type description"
+          placeholder="Sample type description"
           onChange={(event) => setSampleTypeDescription(event.target.value)}
           variant="outlined"
+          type="string"
           required
           // TODO: Error HANDLING -- ONLY SHOW HELPER TEXT ON ERROR
           helperText="Sample type description is required."
+          data-cy="input_sample_type_description"
+
         />
       </form>
     </Container>
