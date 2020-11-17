@@ -99,6 +99,7 @@ const SampleTypeForm = () => {
             data-cy="add_field"
             className={classes.lightBtn}
             size="small"
+            // TODO: onClick={handleAddField  }
           >
             Add
           </Button>
