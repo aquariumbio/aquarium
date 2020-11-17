@@ -1,34 +1,34 @@
 /* disabling forbidden prop spreading for react-router-dom */
 /* eslint-disable react/jsx-props-no-spreading */
+import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-
-import Header from '../navigation/Header';
-import LoginDialog from '../auth/LoginDialog';
-import UserMenu from '../navigation/UserMenu';
-import ManagerPage from '../manager/ManagerPage';
-import PlansPage from '../plans/PlansPage';
-import SamplesPage from '../samples/SamplesPage';
-import HomePage from '../HomePage';
-import DeveloperPage from '../developer/DeveloperPage';
-import DesignerPage from '../designer/DesignerPage';
-import ParametersPage from '../parameters/ParametersPage';
-import RolesPage from '../roles/RolesPage';
-import UsersPage from '../users/UsersPage';
-import SampleTypesPage from '../sampleTypes/SampleTypesPage';
+import API from '../../helpers/API';
 import AnnouncementsPage from '../announcements/AnnouncementsPage';
+import LoginDialog from '../auth/LoginDialog';
 import BudgetsPage from '../budgets/BudgetsPage';
 import ContainersPage from '../containers/ContainersPage';
+import DesignerPage from '../designer/DesignerPage';
+import DeveloperPage from '../developer/DeveloperPage';
 import DirectPurchasePage from '../directPurchase/DirectPurchasePage';
 import ExportWorkflowsPage from '../exportWorkflows/ExportWorkflowsPage';
+import GroupsPage from '../groups/GroupsPage';
+import HomePage from '../HomePage';
+import ImportWorkflowsPage from '../importWorkflows/ImportWorkflowsPage';
 import InvoicesPage from '../invoices/InvoicesPage';
 import LocationWizardsPage from '../locationWizards/LocationWizardsPage';
 import LogsPage from '../logs/LogsPage';
-import ImportWorkflowsPage from '../importWorkflows/ImportWorkflowsPage';
-import GroupsPage from '../groups/GroupsPage';
-import API from '../../helpers/API';
+import ManagerPage from '../manager/ManagerPage';
+import Header from '../navigation/Header';
+import UserMenu from '../navigation/UserMenu';
+import ParametersPage from '../parameters/ParametersPage';
+import PlansPage from '../plans/PlansPage';
+import RolesPage from '../roles/RolesPage';
+import SamplesPage from '../samples/SamplesPage';
+import SampleTypeForm from '../sampleTypes/SampeTypeForm';
+import SampleTypesPage from '../sampleTypes/SampleTypesPage';
 import UserProfilePage from '../users/UserProfilePage';
+import UsersPage from '../users/UsersPage';
 
 const useStyles = makeStyles({});
 const theme = createMuiTheme({
@@ -60,6 +60,7 @@ export default function App() {
             {/* Left Hamburger Menu */}
             <Route exact path="/users" render={(props) => <UsersPage {...props} />} />
             <Route exact path="/sample_types" render={(props) => <SampleTypesPage {...props} />} />
+            <Route exact path="/sample_types/new" render={(props) => <SampleTypeForm {...props} />} />
             <Route exact path="/announcements" render={(props) => <AnnouncementsPage {...props} />} />
             <Route exact path="/budgets" render={(props) => <BudgetsPage {...props} />} />
             <Route exact path="/object_types" render={(props) => <ContainersPage {...props} />} />
