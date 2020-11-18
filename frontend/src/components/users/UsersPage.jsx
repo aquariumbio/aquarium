@@ -1,14 +1,13 @@
 import React from 'react';
-
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
-const Manager = () => (
+const UsersPage = () => (
   <>
     <Paper elevation={3}>
-      <Typography variant="h1">Manager</Typography>
+      <Typography variant="h1">Users</Typography>
     </Paper>
   </>
 );
 
-export default Manager;
+export default UsersPage;

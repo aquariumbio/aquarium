@@ -1,40 +1,54 @@
-/* eslint-disable consistent-return */
 import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:3001/api/v3/';
-const sessionToken = sessionStorage.getItem('token');
+const currentSessionToken = sessionStorage.getItem('token');
 
-// TODO: FIX LINTING PROBLEMS & remove disable lines
-// eslint-disable-next-line func-names
-const validateToken = async function () {
-  // eslint-disable-next-line no-return-await
-  return await axios
-    .post(`token/get_user?token=${sessionToken}`)
+const validateToken = async () => {
+  let validToken = false;
+
+  await axios
+    .post('token/get_user', null, {
+      params: {
+        token: currentSessionToken,
+      },
+    })
     .then((response) => {
+      const [status, data] = [response.data.status, response.data];
+
       if (response.data.status === 200) {
-        return true;
+        validToken = true;
       }
-      if (response.data.status !== 200) {
+
+      if (status === 400 && data.error === 'Invalid.') {
         sessionStorage.clear('token');
-        return false;
       }
+
+      // TODO: HANDLE SESSION TIMEOUT
     });
+  return validToken;
 };
 
 const signIn = async (login, password, setLoginError) => {
   let signInSuccessful = false;
   await axios
-    .post(`token/create?login=${login}&password=${password}`)
+    .post('token/create', null, {
+      params: {
+        login,
+        password,
+      },
+    })
     .then((response) => {
-      if (response.data.status === 200 && response.data.data.token) {
+      const [status, data] = [response.data.status, response.data.data];
+
+      if (status === 200 && data.token) {
         setLoginError();
-        sessionStorage.setItem('token', response.data.data.token);
+        sessionStorage.setItem('token', data.token);
         signInSuccessful = true;
         window.location.reload();
       }
 
-      if (response.data.status !== 200) {
-        return setLoginError(response.data.error);
+      if (status !== 200) {
+        setLoginError(response.data.error);
       }
     });
   return signInSuccessful;
@@ -42,16 +56,22 @@ const signIn = async (login, password, setLoginError) => {
 
 const signOut = (setLoginOutError) => {
   axios
-    .post(`token/delete?token=${sessionToken}`)
+    .post('token/delete', null, {
+      params: {
+        token: currentSessionToken,
+      },
+    })
     .then((response) => {
-      if (response.data.status === 200) {
+      const [status, data] = [response.data.status, response.data];
+
+      if (status === 200 || (status === 400 && data.error === 'Invalid.')) {
         sessionStorage.clear('token');
         setLoginOutError();
         window.location.reload();
       }
 
-      if (response.data.status !== 200) {
-        return setLoginOutError(response.data.error);
+      if (status !== 200 && !(status === 400 && data.error === 'Invalid.')) {
+        setLoginOutError(data.error);
       }
     });
 };
