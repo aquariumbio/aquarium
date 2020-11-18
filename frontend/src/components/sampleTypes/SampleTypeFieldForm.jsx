@@ -47,111 +47,126 @@ const SampleTypeField = () => {
   };
 
   return (
-    <Grid container spacing={1} alignItems="stretch">
-      <Grid container item lg={2}>
-        <Typography className={classes.label}>
-          Name
-        </Typography>
-        <TextField
-          name="name"
-          fullWidth
-          value={fieldValue.name}
-          id="field_name"
-          label="Field name"
-          placeholder="Field name"
-          onChange={handleChange}
-          variant="outlined"
-          type="string"
-          required
-          // TODO: Error HANDLING -- ONLY SHOW HELPER TEXT ON ERROR
-          helperText="Field name is required."
-        />
+    <Grid container spacing={1}>
+      {/* Titles */}
+      <Grid container spacing={1}>
+        <Grid container item lg={2}>
+          <Typography className={classes.label}>Name</Typography>
+        </Grid>
+
+        <Grid item lg={1}>
+          <Typography className={classes.label}>Type</Typography>
+        </Grid>
+
+        <Grid item>
+          <Typography className={classes.label}>Required?</Typography>
+        </Grid>
+
+        <Grid item>
+          <Typography className={classes.label}>Array?</Typography>
+        </Grid>
+
+        <Grid item lg={2}>
+          <Typography className={classes.label}>
+            Sample Options (If type=&lsquo;sample&lsquo;)
+          </Typography>
+        </Grid>
+
+        <Grid item lg={5}>
+          <Typography className={classes.label}>Choices</Typography>
+        </Grid>
       </Grid>
 
-      <Grid item lg={1}>
-        <Typography className={classes.label}>
-          Type
-        </Typography>
+      {/* Inputs */}
+      <Grid container spacing={1}>
+        <Grid container item lg={2}>
+          <TextField
+            name="name"
+            fullWidth
+            value={fieldValue.name}
+            id="field_name"
+            label="Field name"
+            placeholder="Field name"
+            onChange={handleChange}
+            variant="outlined"
+            type="string"
+            required
+            // TODO: Error HANDLING -- ONLY SHOW HELPER TEXT ON ERROR
+            helperText="Field name is required."
+          />
+        </Grid>
 
-        <TextField
-          name="type"
-          select
-          variant="outlined"
-          labelId="field_type"
-          id="field_type_select"
-          value={fieldValue.type}
-          onChange={handleChange}
-          MenuProps={{ // open below input
-            anchorOrigin: {
-              vertical: 'bottom',
-              horizontal: 'left',
-            },
-            getContentAnchorEl: null,
-          }}
-        >
-          <MenuItem value="string">string</MenuItem>
-          <MenuItem value="number">number</MenuItem>
-          <MenuItem value="url">url</MenuItem>
-          <MenuItem value="sample">sample</MenuItem>
-        </TextField>
-      </Grid>
+        <Grid item lg={1}>
+          <TextField
+            name="type"
+            select
+            variant="outlined"
+            labelId="field_type"
+            id="field_type_select"
+            value={fieldValue.type}
+            onChange={handleChange}
+            MenuProps={{
+              // open below input
+              anchorOrigin: {
+                vertical: 'bottom',
+                horizontal: 'left',
+              },
+              getContentAnchorEl: null,
+            }}
+          >
+            <MenuItem value="string">string</MenuItem>
+            <MenuItem value="number">number</MenuItem>
+            <MenuItem value="url">url</MenuItem>
+            <MenuItem value="sample">sample</MenuItem>
+          </TextField>
+        </Grid>
 
-      <Grid item>
-        <Typography className={classes.label}>
-          Required?
-        </Typography>
-        <FormControlLabel
-          style={{ textAlign: 'center' }}
-          control={(
-            <Checkbox
-              name="isRequired"
-              value={fieldValue.isRequired}
-              onChange={handleChange}
-              color="primary"
-              inputProps={{ 'aria-label': 'Required' }}
-            />
+        <Grid item>
+          <FormControlLabel
+            style={{ textAlign: 'center' }}
+            control={(
+              <Checkbox
+                name="isRequired"
+                value={fieldValue.isRequired}
+                onChange={handleChange}
+                color="primary"
+                inputProps={{ 'aria-label': 'Required' }}
+              />
+            )}
+            label={fieldValue.isRequired.toString()}
+            labelPlacement="bottom"
+          />
+        </Grid>
+
+        <Grid item>
+          <FormControlLabel
+            style={{ textAlign: 'center' }}
+            control={(
+              <Checkbox
+                name="isArray"
+                value={fieldValue.isArray}
+                onChange={handleChange}
+                color="primary"
+                inputProps={{ 'aria-label': 'Array' }}
+              />
+            )}
+            label={fieldValue.isArray.toString()}
+            labelPlacement="bottom"
+          />
+        </Grid>
+
+        <Grid item lg={2}>
+          {showSampleOptions ? (
+            <Button variant="outlined" className={classes.marginTop}>
+              Add
+            </Button>
+          ) : (
+            <Typography className={classes.marginTop}>N/A</Typography>
           )}
-          label={fieldValue.isRequired.toString()}
-          labelPlacement="bottom"
-        />
-      </Grid>
+        </Grid>
 
-      <Grid item>
-        <Typography className={classes.label}>
-          Array?
-        </Typography>
-        <FormControlLabel
-          style={{ textAlign: 'center' }}
-          control={(
-            <Checkbox
-              name="isArray"
-              value={fieldValue.isArray}
-              onChange={handleChange}
-              color="primary"
-              inputProps={{ 'aria-label': 'Array' }}
-            />
-          )}
-          label={fieldValue.isArray.toString()}
-          labelPlacement="bottom"
-        />
-      </Grid>
-
-      <Grid item lg={2}>
-        <Typography className={classes.label}>
-          Sample Options (If type=&lsquo;sample&lsquo;)
-        </Typography>
-
-        { showSampleOptions
-          ? <Button variant="outlined" className={classes.marginTop}>Add</Button>
-          : <Typography className={classes.marginTop}>N/A</Typography>}
-      </Grid>
-
-      <Grid item lg={5}>
-        <Typography className={classes.label}>
-          Choices
-        </Typography>
-        { showSampleChoices
-          ? (
+        <Grid item lg={5}>
+          {showSampleChoices ? (
             <TextField
               name="choices"
               id="field_choices"
@@ -164,8 +179,10 @@ const SampleTypeField = () => {
               onChange={handleChange}
               className={classes.marginTop}
             />
-          )
-          : <Typography className={classes.marginTop}>N/A</Typography>}
+          ) : (
+            <Typography className={classes.marginTop}>N/A</Typography>
+          )}
+        </Grid>
       </Grid>
     </Grid>
   );
