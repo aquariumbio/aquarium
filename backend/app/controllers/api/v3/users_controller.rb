@@ -50,7 +50,7 @@ module Api
         end
 
         valid = User.set_permission(uid, rid, val)
-        render json: { error: 'Invalid.' }.to_json, status: :unauthorized and return unless valid
+        render json: { error: 'Invalid' }.to_json, status: :unauthorized and return unless valid
 
         render json: { user: { id: valid.id, name: valid.name, login: valid.login, permission_ids: valid.permission_ids } }.to_json, status: :ok
       end
