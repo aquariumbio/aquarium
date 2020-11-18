@@ -7,7 +7,9 @@ module Api
       # GET CURRENT LIST OF PERMISSIONS FROM PERMISSIONS DB
       def get_permissions
         status, response = check_token_for_permission
-        render json: response.to_json, status: status.to_sym and return if response[:error]
+        if response[:error]
+          render json: response.to_json, status: status and return 
+        end
 
         permissions = Permission.permission_ids
 
