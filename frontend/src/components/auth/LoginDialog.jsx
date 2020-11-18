@@ -24,7 +24,12 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     margin: theme.spacing(3),
-    textAlign: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '50%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
 
     '& > p': {
       color: 'red',
@@ -35,15 +40,16 @@ const useStyles = makeStyles((theme) => ({
   },
 
   input: {
-    margin: theme.spacing(2),
+    margin: theme.spacing(3, 2),
+    flexDirection: 'column',
+    width: '50%',
   },
 
   button: {
-    display: 'block',
-    marginLeft: 'auto',
-    marginRight: 'auto',
     backgroundColor: '#065683',
     color: 'white',
+    width: '50%',
+    margin: theme.spacing(3, 2),
 
     '& :hover': {
       backgroundColor: 'white',
@@ -56,7 +62,6 @@ const useStyles = makeStyles((theme) => ({
     color: '#66b',
     fontSize: '20px',
   },
-
 }));
 
 const LoginDialog = () => {
@@ -100,7 +105,9 @@ const LoginDialog = () => {
           Powered by Aquarium
         </Typography>
       </header>
+
       <Divider className={classes.divider} />
+
       <form className={classes.form} noValidate autoComplete="off" name="login" onSubmit={handleSubmit}>
         <TextField
           name="login"
@@ -109,6 +116,7 @@ const LoginDialog = () => {
           autoFocus
           id="login"
           label="Login"
+          type="text"
           variant="outlined"
           value={login}
           onChange={(event) => setLogin(event.target.value)}

@@ -1,4 +1,4 @@
-describe('/designer', () => {
+describe('/budgets', () => {
   beforeEach(() => {
     cy.login();
   });
@@ -8,7 +8,7 @@ describe('/designer', () => {
   });
 
   it('has place holder header', () => {
-    cy.visit('/designer');
-    cy.contains('h1', 'Designer');
+    cy.visit('/budgets');
+    cy.contains('h1', 'Budgets');
   });
 });

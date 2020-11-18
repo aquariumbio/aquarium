@@ -11,12 +11,12 @@
 //
 // -- This is a parent command --
 Cypress.Commands.add('login', () => {
-  const login = 'marikoa';
-  const password = 'MtXzwmLYTDq5Gucr';
+  const login = 'marikotest';
+  const password = 'aquarium';
 
   cy.request({
     method: 'POST',
-    url: `http://localhost:3001/api/v3/user/sign_in?login=${login}&password=${password}`,
+    url: `http://localhost:3001/api/v3/token/create?login=${login}&password=${password}`,
   })
     .then((resp) => {
       window.sessionStorage.setItem('token', resp.body.data.token);

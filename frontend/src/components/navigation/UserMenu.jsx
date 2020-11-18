@@ -1,13 +1,13 @@
 // TODO: ADD PROP-TYPES
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
-import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import { withRouter, Redirect } from 'react-router-dom';
-import axios from 'axios';
+import MenuItem from '@material-ui/core/MenuItem';
 import Divider from '@material-ui/core/Divider';
+import API from '../../helpers/API';
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -21,48 +21,19 @@ const UserMenu = (props) => {
   const { history } = props;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-  const [logOutErrors, setLoginOutError] = useState(null);
-  const [logout, setlogout] = useState(false);
-
-  useEffect(() => {
-    if (logout && !logOutErrors !== '') {
-      // store token in local storage to keep user logged in between page refreshes
-      sessionStorage.clear('token');
-    }
-  });
+  // eslint-disable-next-line no-unused-vars
+  const [logOutErrors, setLogOutError] = useState(null);
 
   const handleSignOut = (event) => {
     event.preventDefault();
-    const token = sessionStorage.getItem('token');
-
-    axios
-      .post(`token/delete?token=${token}`)
-      // eslint-disable-next-line consistent-return
-      .then((response) => {
-        if (response.data.status === 200) {
-          setlogout(true);
-          history.push('/login');
-          window.location.reload();
-        }
-
-        if (response.data.status !== 200) {
-          return setLoginOutError(response.data.error);
-        }
-      });
-  };
-
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
+    API.signOut(setLogOutError);
   };
 
   const handleMenuClick = (pageURL) => {
     history.push(pageURL);
     setAnchorEl(null);
   };
-  if (!sessionStorage.getItem('token')) {
-    return <Redirect to="/login" />;
-  }
+
   return (
     <>
       <IconButton
@@ -70,7 +41,7 @@ const UserMenu = (props) => {
         className={classes.menuButton}
         color="inherit"
         aria-label="menu"
-        onClick={handleMenu}
+        onClick={(e) => setAnchorEl(e.currentTarget)}
       >
         ● USER
       </IconButton>
@@ -87,7 +58,7 @@ const UserMenu = (props) => {
           vertical: 'top',
           horizontal: 'right',
         }}
-        open={open}
+        open={!!anchorEl}
         onClose={() => setAnchorEl(null)}
       >
         <MenuItem onClick={() => handleMenuClick('/users')}>
