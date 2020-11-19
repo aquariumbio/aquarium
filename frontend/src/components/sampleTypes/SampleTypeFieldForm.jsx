@@ -163,12 +163,13 @@ const SampleTypeField = () => {
           )}
         </Grid>
 
-        <Grid item lg={5}>
+        <Grid item lg={4}>
           {showSampleChoices ? (
             <TextField
               name="choices"
               id="field_choices"
               multiline
+              fullWidth
               rows={2}
               variant="outlined"
               helperText="Comma separated. Leave blank for unrestricted value."
@@ -180,7 +181,7 @@ const SampleTypeField = () => {
             <Typography>N/A</Typography>
           )}
         </Grid>
-        <Grid item>
+        <Grid item lg={1}>
           <IconButton>
             <CloseIcon />
           </IconButton>
