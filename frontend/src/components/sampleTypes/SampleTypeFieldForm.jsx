@@ -7,6 +7,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles((theme) => ({
   label: {
@@ -18,10 +20,6 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     minWidth: 120,
   },
-  marginTop: {
-    marginTop: theme.spacing(1.25),
-  },
-
 }));
 
 const SampleTypeField = () => {
@@ -58,11 +56,11 @@ const SampleTypeField = () => {
           <Typography className={classes.label}>Type</Typography>
         </Grid>
 
-        <Grid item>
+        <Grid item lg={1}>
           <Typography className={classes.label}>Required?</Typography>
         </Grid>
 
-        <Grid item>
+        <Grid item lg={1}>
           <Typography className={classes.label}>Array?</Typography>
         </Grid>
 
@@ -101,17 +99,18 @@ const SampleTypeField = () => {
             name="type"
             select
             variant="outlined"
-            labelId="field_type"
             id="field_type_select"
             value={fieldValue.type}
             onChange={handleChange}
-            MenuProps={{
-              // open below input
-              anchorOrigin: {
-                vertical: 'bottom',
-                horizontal: 'left',
+            SelectProps={{
+              MenuProps: {
+                // open below input
+                anchorOrigin: {
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                },
+                getContentAnchorEl: null,
               },
-              getContentAnchorEl: null,
             }}
           >
             <MenuItem value="string">string</MenuItem>
@@ -121,7 +120,7 @@ const SampleTypeField = () => {
           </TextField>
         </Grid>
 
-        <Grid item>
+        <Grid item lg={1}>
           <FormControlLabel
             style={{ textAlign: 'center' }}
             control={(
@@ -134,13 +133,12 @@ const SampleTypeField = () => {
               />
             )}
             label={fieldValue.isRequired.toString()}
-            labelPlacement="bottom"
+            labelPlacement="end"
           />
         </Grid>
 
-        <Grid item>
+        <Grid item lg={1}>
           <FormControlLabel
-            style={{ textAlign: 'center' }}
             control={(
               <Checkbox
                 name="isArray"
@@ -151,17 +149,17 @@ const SampleTypeField = () => {
               />
             )}
             label={fieldValue.isArray.toString()}
-            labelPlacement="bottom"
+            labelPlacement="end"
           />
         </Grid>
 
         <Grid item lg={2}>
           {showSampleOptions ? (
-            <Button variant="outlined" className={classes.marginTop}>
+            <Button variant="outlined">
               Add
             </Button>
           ) : (
-            <Typography className={classes.marginTop}>N/A</Typography>
+            <Typography>N/A</Typography>
           )}
         </Grid>
 
@@ -177,11 +175,15 @@ const SampleTypeField = () => {
               inputProps={{ 'aria-label': 'choices' }}
               value={fieldValue.choices}
               onChange={handleChange}
-              className={classes.marginTop}
             />
           ) : (
-            <Typography className={classes.marginTop}>N/A</Typography>
+            <Typography>N/A</Typography>
           )}
+        </Grid>
+        <Grid item>
+          <IconButton>
+            <CloseIcon />
+          </IconButton>
         </Grid>
       </Grid>
     </Grid>
