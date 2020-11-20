@@ -2,5 +2,7 @@
   "baseUrl": "http://localhost:3000",
   "env": {
     "baseUrl": "http://localhost:3000"
-  }
+  },
+  "experimentalComponentTesting": true,
+  "componentFolder": "src"
 }
