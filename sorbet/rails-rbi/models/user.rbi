@@ -113,11 +113,35 @@ module User::GeneratedAssociationMethods
   sig { params(value: T.any(T::Array[::Code], ::Code::ActiveRecord_Associations_CollectionProxy)).void }
   def codes=(value); end
 
+  sig { returns(::JobAssignmentLog::ActiveRecord_Associations_CollectionProxy) }
+  def job_logs_assigned_by; end
+
+  sig { params(value: T.any(T::Array[::JobAssignmentLog], ::JobAssignmentLog::ActiveRecord_Associations_CollectionProxy)).void }
+  def job_logs_assigned_by=(value); end
+
+  sig { returns(::JobAssignmentLog::ActiveRecord_Associations_CollectionProxy) }
+  def job_logs_assigned_to; end
+
+  sig { params(value: T.any(T::Array[::JobAssignmentLog], ::JobAssignmentLog::ActiveRecord_Associations_CollectionProxy)).void }
+  def job_logs_assigned_to=(value); end
+
   sig { returns(::Job::ActiveRecord_Associations_CollectionProxy) }
   def jobs; end
 
   sig { params(value: T.any(T::Array[::Job], ::Job::ActiveRecord_Associations_CollectionProxy)).void }
   def jobs=(value); end
+
+  sig { returns(::ViewJobAssignment::ActiveRecord_Associations_CollectionProxy) }
+  def jobs_assigned_by; end
+
+  sig { params(value: T.any(T::Array[::ViewJobAssignment], ::ViewJobAssignment::ActiveRecord_Associations_CollectionProxy)).void }
+  def jobs_assigned_by=(value); end
+
+  sig { returns(::ViewJobAssignment::ActiveRecord_Associations_CollectionProxy) }
+  def jobs_assigned_to; end
+
+  sig { params(value: T.any(T::Array[::ViewJobAssignment], ::ViewJobAssignment::ActiveRecord_Associations_CollectionProxy)).void }
+  def jobs_assigned_to=(value); end
 
   sig { returns(::Membership::ActiveRecord_Associations_CollectionProxy) }
   def memberships; end
