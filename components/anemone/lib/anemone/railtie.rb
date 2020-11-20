@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# typed: strong
+# typed: strict
 
 class Anemone::Railtie < Rails::Railtie
   rake_tasks do

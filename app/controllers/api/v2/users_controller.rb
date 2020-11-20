@@ -1,3 +1,4 @@
+# typed: false
 class Api::V2::UsersController < ApplicationController
   include ApiHelper
 
