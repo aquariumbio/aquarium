@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
@@ -9,6 +9,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
   label: {
@@ -22,26 +23,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SampleTypeField = () => {
+// eslint-disable-next-line object-curly-newline
+const SampleTypeField = ({ fieldType, index, updateParentState, handleRemoveFieldClick }) => {
   const classes = useStyles();
-  const [fieldValue, setFieldValue] = useState({
-    name: '',
-    type: 'string',
-    isRequired: false,
-    isArray: false,
-    choices: '',
-  });
-  let showSampleOptions = fieldValue.type === 'sample';
-  let showSampleChoices = fieldValue.type === 'string' || fieldValue.type === 'number';
+
+  let showSampleOptions = fieldType.type === 'sample';
+  let showSampleChoices = fieldType.type === 'string' || fieldType.type === 'number';
 
   useEffect(() => {
-    // Update showSampleOptions & showSampleChoices when fieldvalue.type changes
-    showSampleOptions = fieldValue.type === 'sample';
-    showSampleChoices = fieldValue.type === 'string' || fieldValue.type === 'number';
+    // Update showSampleOptions & showSampleChoices when fieldType.type changes
+    showSampleOptions = fieldType.type === 'sample';
+    showSampleChoices = fieldType.type === 'string' || fieldType.type === 'number';
   });
 
+  // Handle input change: Pass the name and value to the parent callback.
+  // If the input is a checkbox we need to use the checked attribute as our value
   const handleChange = (event) => {
-    setFieldValue({ ...fieldValue, [event.target.name]: event.target.value });
+    const { name } = event.target;
+    const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
+    const fieldTypeObj = { ...fieldType };
+    fieldTypeObj[name] = value;
+    updateParentState(name, value, index);
   };
 
   return (
@@ -49,7 +51,7 @@ const SampleTypeField = () => {
       {/* Titles */}
       <Grid container spacing={1}>
         <Grid container item lg={2}>
-          <Typography className={classes.label}>Name</Typography>
+          <Typography className={classes.label}> Field Name</Typography>
         </Grid>
 
         <Grid item lg={1}>
@@ -81,7 +83,7 @@ const SampleTypeField = () => {
           <TextField
             name="name"
             fullWidth
-            value={fieldValue.name}
+            value={fieldType.name}
             id="field_name"
             label="Field name"
             placeholder="Field name"
@@ -100,7 +102,7 @@ const SampleTypeField = () => {
             select
             variant="outlined"
             id="field_type_select"
-            value={fieldValue.type}
+            value={fieldType.type}
             onChange={handleChange}
             SelectProps={{
               MenuProps: {
@@ -126,13 +128,13 @@ const SampleTypeField = () => {
             control={(
               <Checkbox
                 name="isRequired"
-                value={fieldValue.isRequired}
+                value={fieldType.isRequired}
                 onChange={handleChange}
                 color="primary"
                 inputProps={{ 'aria-label': 'Required' }}
               />
             )}
-            label={fieldValue.isRequired.toString()}
+            label={fieldType.isRequired.toString()}
             labelPlacement="end"
           />
         </Grid>
@@ -142,13 +144,13 @@ const SampleTypeField = () => {
             control={(
               <Checkbox
                 name="isArray"
-                value={fieldValue.isArray}
+                value={fieldType.isArray}
                 onChange={handleChange}
                 color="primary"
                 inputProps={{ 'aria-label': 'Array' }}
               />
             )}
-            label={fieldValue.isArray.toString()}
+            label={fieldType.isArray.toString()}
             labelPlacement="end"
           />
         </Grid>
@@ -174,7 +176,7 @@ const SampleTypeField = () => {
               variant="outlined"
               helperText="Comma separated. Leave blank for unrestricted value."
               inputProps={{ 'aria-label': 'choices' }}
-              value={fieldValue.choices}
+              value={fieldType.choices}
               onChange={handleChange}
             />
           ) : (
@@ -182,13 +184,27 @@ const SampleTypeField = () => {
           )}
         </Grid>
         <Grid item lg={1}>
-          <IconButton>
+          <IconButton onClick={handleRemoveFieldClick(index)}>
             <CloseIcon />
           </IconButton>
         </Grid>
       </Grid>
     </Grid>
   );
+};
+
+SampleTypeField.propTypes = {
+  fieldType: PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+    type: PropTypes.string,
+    isRequired: PropTypes.bool,
+    isArray: PropTypes.bool,
+    choices: PropTypes.string,
+  }).isRequired,
+  index: PropTypes.number.isRequired,
+  updateParentState: PropTypes.func.isRequired,
+  handleRemoveFieldClick: PropTypes.func.isRequired,
 };
 
 export default SampleTypeField;

@@ -36,17 +36,60 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SampleTypeForm = () => {
+const SampleTypeForm = (sampleType) => {
   const classes = useStyles();
-  const [sampleTypeName, setSampleTypeName] = useState('');
-  const [sampleTypeDescription, setSampleTypeDescription] = useState('');
+  const [sampleTypeName, setSampleTypeName] = useState(sampleType.name || '');
+  const [sampleTypeDescription, setSampleTypeDescription] = useState(sampleType.description || '');
+  const [fieldTypes, setFieldTypes] = useState(sampleType.fieldTypes || []);
 
+  // Submit form with all data
   const handleSubmit = (event) => {
     event.preventDefault();
     // TODO: COMPLETE SUBMIT FUNCTION & REMOVE ALERT PLACE HOLDER
     // eslint-disable-next-line no-alert
     alert('Form sumbitted');
   };
+
+  // Handle click add field button --> add new field type to end of current field types array
+  const handleAddFieldClick = () => {
+    const newFieldType = {
+      id: null,
+      name: '',
+      type: 'string',
+      isRequired: false,
+      isArray: false,
+      choices: '',
+    };
+    setFieldTypes([...fieldTypes, newFieldType]);
+  };
+
+  // handle click event of the Remove button
+  const handleRemoveFieldClick = (index) => {
+    const list = [...fieldTypes];
+    list.splice(index, 1);
+    setFieldTypes(list);
+  };
+
+  // handle field type input change
+  const handleFieldInputChange = (name, value, index) => {
+    const list = [...fieldTypes];
+    list[index][name] = value;
+    setFieldTypes(list);
+  };
+
+  // create array of field components
+  const fieldTypeList = fieldTypes.map(
+    (fieldType, index) => (
+      <SampleTypeField
+        // eslint-disable-next-line react/no-array-index-key
+        key={`${fieldType.id}_${index}`}
+        fieldType={fieldType}
+        index={index}
+        updateParentState={handleFieldInputChange}
+        handleRemoveFieldClick={() => handleRemoveFieldClick}
+      />
+    ),
+  );
 
   return (
     <Container maxWidth="xl">
@@ -56,7 +99,7 @@ const SampleTypeForm = () => {
 
       <form name="sampe_type_definition_form" onSubmit={handleSubmit}>
         <Typography variant="h4" className={classes.inputName}>
-          Name
+          Sample Type Name
         </Typography>
         <TextField
           name="sample_type_name"
@@ -100,12 +143,12 @@ const SampleTypeForm = () => {
             data-cy="add_field"
             className={classes.lightBtn}
             size="small"
-            // TODO: onClick={handleAddField  }
+            onClick={handleAddFieldClick}
           >
             Add
           </Button>
         </>
-        <SampleTypeField />
+        {fieldTypeList}
       </form>
     </Container>
   );
