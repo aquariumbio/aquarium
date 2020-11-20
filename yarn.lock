@@ -7,16 +7,16 @@
   resolved "https://codeload.github.com/ajaxorg/ace-builds/tar.gz/53be42342df216d2d25dc60a12dfcb263c6f0592"
 
 "@bower_components/angular-animate@angular/bower-angular-animate#1.4 - 1.7.0 || ^1.7.2":
-  version "1.8.0"
-  resolved "https://codeload.github.com/angular/bower-angular-animate/tar.gz/46af7b34833b6c35e4358bd1d041b3eec5a9e993"
+  version "1.8.2"
+  resolved "https://codeload.github.com/angular/bower-angular-animate/tar.gz/9ad6bb07b8f364654552afe7cfd028efc4fce30d"
 
 "@bower_components/angular-aria@angular/bower-angular-aria#1.4 - 1.7.0 || ^1.7.2":
-  version "1.8.0"
-  resolved "https://codeload.github.com/angular/bower-angular-aria/tar.gz/33c5ce97493ab6dfd9604e30077016b84e276a42"
+  version "1.8.2"
+  resolved "https://codeload.github.com/angular/bower-angular-aria/tar.gz/f5d80bb8aa540fb03102efee8951f4d26939bfc9"
 
 "@bower_components/angular-cookies@angular/bower-angular-cookies#*":
-  version "1.8.0"
-  resolved "https://codeload.github.com/angular/bower-angular-cookies/tar.gz/df92365757e23897749a4ebda4a2382c3618f66d"
+  version "1.8.2"
+  resolved "https://codeload.github.com/angular/bower-angular-cookies/tar.gz/f40feabc73f8e07aa1a29bf2bae7eb0af3d27b87"
 
 "@bower_components/angular-material-icons@klarsys/angular-material-icons#*":
   version "0.7.1"
@@ -29,12 +29,12 @@
   resolved "https://codeload.github.com/angular/bower-material/tar.gz/df1bacec41ea69d9c9ad082005a3fbfae049d70b"
 
 "@bower_components/angular-messages@angular/bower-angular-messages#1.4 - 1.7.0 || ^1.7.2":
-  version "1.8.0"
-  resolved "https://codeload.github.com/angular/bower-angular-messages/tar.gz/f332ef70e123e2444920b6642b762a83a602721d"
+  version "1.8.2"
+  resolved "https://codeload.github.com/angular/bower-angular-messages/tar.gz/bfa4be6f48dfac366a901eeaf758d85c432b8407"
 
 "@bower_components/angular-resource@angular/bower-angular-resource#*":
-  version "1.8.0"
-  resolved "https://codeload.github.com/angular/bower-angular-resource/tar.gz/d888ba579e08717526c1f5b9edce77b38fac8b09"
+  version "1.8.2"
+  resolved "https://codeload.github.com/angular/bower-angular-resource/tar.gz/553634b02c4399751514df4d52185e24f86d7d8d"
 
 "@bower_components/angular@angular/bower-angular#1.7.7":
   version "1.7.7"
@@ -49,16 +49,16 @@
   resolved "https://codeload.github.com/blueimp/JavaScript-Load-Image/tar.gz/cb5e5d0736101894d22ab1094f2fede402a89be0"
 
 "@bower_components/blueimp-tmpl@blueimp/JavaScript-Templates#>=2.5.4":
-  version "3.18.0"
-  resolved "https://codeload.github.com/blueimp/JavaScript-Templates/tar.gz/3f23f552846fa14d3fd67147fa9d9004d41c2a4d"
+  version "3.19.0"
+  resolved "https://codeload.github.com/blueimp/JavaScript-Templates/tar.gz/0d0e03882313cf1c192fb4b68c4c78ab7d7d8c7a"
 
 "@bower_components/bootstrap-css@jozefizso/bower-bootstrap-css#2.3.2":
   version "0.0.0"
   resolved "https://codeload.github.com/jozefizso/bower-bootstrap-css/tar.gz/3ca4d051f9d391d56641f7f30c6c936f39944910"
 
 "@bower_components/datatables.net@DataTables/Dist-DataTables#*":
-  version "1.10.21"
-  resolved "https://codeload.github.com/DataTables/Dist-DataTables/tar.gz/ea6e9fd58fb81979e535f933ece03ef282f59620"
+  version "1.10.22"
+  resolved "https://codeload.github.com/DataTables/Dist-DataTables/tar.gz/0ccd86be2efc22059cb002825930841b816e79b3"
   dependencies:
     jquery ">=1.7"
 
@@ -101,10 +101,10 @@
   resolved "https://codeload.github.com/lodash/lodash/tar.gz/ded9bc66583ed0b4e3b7dc906206d40757b4a90a"
 
 "@bower_components/markdown-it@markdown-it/markdown-it#*":
-  version "11.0.0"
-  resolved "https://codeload.github.com/markdown-it/markdown-it/tar.gz/1093e68e51c9b3104289c3cfbaffbb1fa4039d59"
+  version "12.0.2"
+  resolved "https://codeload.github.com/markdown-it/markdown-it/tar.gz/b60493e620a685a40eac016dde2c207ee9e07875"
   dependencies:
-    argparse "^1.0.7"
+    argparse "^2.0.1"
     entities "~2.0.0"
     linkify-it "^3.0.1"
     mdurl "^1.0.1"
@@ -125,16 +125,14 @@
   resolved "https://codeload.github.com/jashkenas/underscore/tar.gz/7ee13c8a470e1a1c6bd6d5f3fee29e92d40b6c17"
 
 angular@>=1.3.0:
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/angular/-/angular-1.8.0.tgz#b1ec179887869215cab6dfd0df2e42caa65b1b51"
-  integrity sha512-VdaMx+Qk0Skla7B5gw77a8hzlcOakwF8mjlW13DpIWIDlfqwAbSSLfd8N/qZnzEmQF4jC4iofInd3gE7vL8ZZg==
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/angular/-/angular-1.8.2.tgz#5983bbb5a9fa63e213cb7749199e0d352de3a2f1"
+  integrity sha512-IauMOej2xEe7/7Ennahkbb5qd/HFADiNuLSESz9Q27inmi32zB0lnAsFeLEWcox3Gd1F6YhNd1CP7/9IukJ0Gw==
 
-argparse@^1.0.7:
-  version "1.0.10"
-  resolved "https://registry.yarnpkg.com/argparse/-/argparse-1.0.10.tgz#bcd6791ea5ae09725e17e5ad988134cd40b3d911"
-  integrity sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==
-  dependencies:
-    sprintf-js "~1.0.2"
+argparse@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/argparse/-/argparse-2.0.1.tgz#246f50f3ca78a3240f6c997e8a9bd1eac49e4b38"
+  integrity sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==
 
 blueimp-canvas-to-blob@3:
   version "3.28.0"
@@ -147,9 +145,9 @@ blueimp-load-image@5:
   integrity sha512-g5l+4dCOESBG8HkPLdGnBx8dhEwpQHaOZ0en623sl54o3bGhGMLYGc54L5cWfGmPvfKUjbsY7LOAmcW/xlkBSA==
 
 blueimp-tmpl@3:
-  version "3.18.0"
-  resolved "https://registry.yarnpkg.com/blueimp-tmpl/-/blueimp-tmpl-3.18.0.tgz#f778046f131d0e5858a839069bfc6519f027985e"
-  integrity sha512-1DFtiOm/IRzHZtemQ6X3z7VXDcZ39xyq/inCE4r8lZSlT99TTIQ4SHmKTWX1DoBxL+e///qaB+ZD90my500jVQ==
+  version "3.19.0"
+  resolved "https://registry.yarnpkg.com/blueimp-tmpl/-/blueimp-tmpl-3.19.0.tgz#1160f79c4ce55bd82d25cfa3df7db116f8d1df62"
+  integrity sha512-v8/Vge6U3uwlAjO9TxeHoYl77C1GJDZBN45pUp+39WyHU/VRzYbnGDhRNYvcT6Lh8jihVsXNZttnDpnYVA4m9w==
 
 entities@~2.0.0:
   version "2.0.3"
@@ -205,11 +203,6 @@ should-util@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/should-util/-/should-util-1.0.1.tgz#fb0d71338f532a3a149213639e2d32cbea8bcb28"
   integrity sha512-oXF8tfxx5cDk8r2kYqlkUJzZpDBqVY/II2WhvU0n9Y3XYvAYRmeaf1PvvIvTgPnv4KJ+ES5M0PyDq5Jp+Ygy2g==
-
-sprintf-js@~1.0.2:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
-  integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
 
 uc.micro@^1.0.1, uc.micro@^1.0.5:
   version "1.0.6"
