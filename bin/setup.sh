@@ -59,6 +59,7 @@ _set_variable 'S3_SERVICE' 'minio'
 _set_variable 'S3_ID' 'aquarium_minio'
 _set_variable 'S3_REGION' 'us-west-1'
 _set_variable 'TECH_DASHBOARD' 'false'
+_set_variable 'SESSION_TIMEOUT' '15'
 _set_random 'S3_SECRET_ACCESS_KEY' '40'
 _set_random 'SECRET_KEY_BASE' '64'
 _set_timezone

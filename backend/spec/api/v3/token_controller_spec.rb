@@ -3,15 +3,9 @@ require 'rails_helper'
 RSpec.describe Api::V3::TokenController, type: :request do
   describe 'api' do
 
-    # INITIALIZE USERS
+    # INITIALIZE @TOKEN_1 TO STORE TOKENS
     before :all do
-      @user_1 = create(:user, login: 'user_1')
       @token_1 = []
-    end
-
-    # NOTE: DATABASE ENTRIES IN BEFORE :ALL ARE NOT FLUSHED AUTOMATICALLY
-    after :all do
-      @user_1.delete
     end
 
     # SIGN IN
@@ -49,13 +43,13 @@ RSpec.describe Api::V3::TokenController, type: :request do
 
     # CHECK TOKENS
     it "check_token" do
-      post "/api/v3/token/get_user?token=#{@token_1[0]}"
+      get "/api/v3/token/get_user?token=#{@token_1[0]}"
       expect(response).to have_http_status 200
 
-      post "/api/v3/token/get_user?token=#{@token_1[1]}"
+      get "/api/v3/token/get_user?token=#{@token_1[1]}"
       expect(response).to have_http_status 200
 
-      post "/api/v3/token/get_user?token=#{@token_1[2]}"
+      get "/api/v3/token/get_user?token=#{@token_1[2]}"
       expect(response).to have_http_status 200
     end
 
@@ -65,13 +59,13 @@ RSpec.describe Api::V3::TokenController, type: :request do
       expect(response).to have_http_status 200
 
       # CHECK TOKENS
-      post "/api/v3/token/get_user?token=#{@token_1[0]}"
+      get "/api/v3/token/get_user?token=#{@token_1[0]}"
       expect(response).to have_http_status 401
 
-      post "/api/v3/token/get_user?token=#{@token_1[1]}"
+      get "/api/v3/token/get_user?token=#{@token_1[1]}"
       expect(response).to have_http_status 200
 
-      post "/api/v3/token/get_user?token=#{@token_1[2]}"
+      get "/api/v3/token/get_user?token=#{@token_1[2]}"
       expect(response).to have_http_status 200
     end
 
@@ -87,10 +81,10 @@ RSpec.describe Api::V3::TokenController, type: :request do
       expect(response).to have_http_status 200
 
       # CHECK TOKENS
-      post "/api/v3/token/get_user?token=#{@token_1[1]}"
+      get "/api/v3/token/get_user?token=#{@token_1[1]}"
       expect(response).to have_http_status 401
 
-      post "/api/v3/token/get_user?token=#{@token_1[2]}"
+      get "/api/v3/token/get_user?token=#{@token_1[2]}"
       expect(response).to have_http_status 401
     end
 

@@ -52,7 +52,7 @@ fi
 _set_variable 'AQUARIUM_VERSION' '2.8.1'
 _set_variable 'APP_PUBLIC_PORT' '80'
 _set_variable 'S3_PUBLIC_PORT' '9000'
-_set_variable 'DB_NAME' 'production'
+_set_variable 'DB_NAME' 'aquarium'
 _set_variable 'DB_USER' 'aquarium'
 _set_variable 'DB_PASSWORD' 'aSecretAquarium'
 _set_variable 'S3_SERVICE' 'minio'

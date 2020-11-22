@@ -91,7 +91,7 @@ _start_production_server() {
     exec puma -C config/production_puma.rb -e production
 }
 
-# Starts the production server.
+# Starts the develoment server.
 # First, fixes the local IP address for minio if needed.
 _start_development_server() {
 #     _fix_local_minio_ip

@@ -13,7 +13,7 @@ class Permissions < ActiveRecord::Migration[4.2]
     end
 
     change_column_null :permissions, :name, false
-    add_index :permissions, :name, unique: true
+    add_index :permissions, :name, unique: true     if !index_exists?(:permissions, :name)
 
     # POPULATE ROLES TABLE
     execute <<-SQL

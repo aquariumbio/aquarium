@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 2020_10_30_000000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["row1"], name: "index_account_logs_on_row1"
-    t.index ["row2"], name: "index_account_logs_on_row2"
+    t.index ["row2"], name: "fk_rails_8e6656e8a4"
     t.index ["user_id"], name: "index_account_log_associations_on_user_id"
   end
 
@@ -111,6 +111,7 @@ ActiveRecord::Schema.define(version: 2020_10_30_000000) do
     t.integer "preferred_operation_type_id"
     t.integer "preferred_field_type_id"
     t.index ["parent_class", "parent_id"], name: "index_field_types_on_parent_class_and_parent_id"
+    t.index ["parent_id"], name: "index_field_types_on_sample_type_id"
   end
 
   create_table "field_values", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
@@ -132,6 +133,23 @@ ActiveRecord::Schema.define(version: 2020_10_30_000000) do
     t.index ["child_sample_id"], name: "fk_rails_e04e5b0273"
     t.index ["field_type_id"], name: "index_field_values_on_field_type_id"
     t.index ["parent_class", "parent_id"], name: "index_field_values_on_parent_class_and_parent_id"
+    t.index ["parent_id"], name: "index_field_values_on_sample_id"
+  end
+
+  create_table "folder_contents", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+    t.integer "sample_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "folder_id"
+    t.integer "workflow_id"
+  end
+
+  create_table "folders", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.integer "parent_id"
   end
 
   create_table "groups", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
@@ -170,6 +188,17 @@ ActiveRecord::Schema.define(version: 2020_10_30_000000) do
   end
 
   create_table "job_assignment_logs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+    t.integer "job_id"
+    t.integer "assigned_by"
+    t.integer "assigned_to"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["assigned_by"], name: "index_job_assignment_logs_on_assigned_by"
+    t.index ["assigned_to"], name: "index_job_assignment_logs_on_assigned_to"
+    t.index ["job_id"], name: "index_job_assignment_logs_on_job_id"
+  end
+
+  create_table "job_assignment_logs_old", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "job_id"
     t.integer "assigned_by"
     t.integer "assigned_to"
@@ -240,7 +269,6 @@ ActiveRecord::Schema.define(version: 2020_10_30_000000) do
     t.integer "group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["group_id", "user_id"], name: "group_id_user_id", unique: true
     t.index ["group_id"], name: "index_memberships_on_group_id"
     t.index ["user_id"], name: "index_memberships_on_user_id"
   end
@@ -311,12 +339,12 @@ ActiveRecord::Schema.define(version: 2020_10_30_000000) do
     t.index ["part_id"], name: "index_part_associations_on_part_id"
   end
 
-  create_table "permissions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "name", null: false
+  create_table "permissions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+    t.string "name", default: "", null: false
     t.integer "sort"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index ["name"], name: "index_roles_on_name", unique: true
+    t.index ["name"], name: "index_permissions_on_name", unique: true
   end
 
   create_table "plan_associations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
@@ -396,7 +424,7 @@ ActiveRecord::Schema.define(version: 2020_10_30_000000) do
     t.index ["user_id"], name: "index_user_budget_associations_on_user_id"
   end
 
-  create_table "user_tokens", primary_key: ["ip", "token"], options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "user_tokens", primary_key: ["ip", "token"], options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "token", limit: 128, null: false
     t.datetime "created_at", null: false
@@ -413,6 +441,7 @@ ActiveRecord::Schema.define(version: 2020_10_30_000000) do
     t.datetime "updated_at", null: false
     t.string "password_digest"
     t.string "remember_token"
+    t.boolean "admin", default: false
     t.string "key"
     t.string "permission_ids", default: "."
     t.index ["login"], name: "index_users_on_login", unique: true

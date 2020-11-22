@@ -17,10 +17,11 @@ production:
 # use the same name as production to avoid issues with switching env in docker
 development:
   <<: *default
+  database: <%= ENV['DB_NAME'] %> #_development
   pool: 5
 
 test:
   <<: *default
-  database: <%= ENV['DB_NAME'] %>
+  database: <%= ENV['DB_NAME'] %>_test
   pool: 5
   timeout: 5000

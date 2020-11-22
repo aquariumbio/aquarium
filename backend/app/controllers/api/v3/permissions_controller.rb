@@ -5,11 +5,9 @@ module Api
     # PERMISSIONS RELATED API CALLS
     class PermissionsController < ApplicationController
       # GET CURRENT LIST OF PERMISSIONS FROM PERMISSIONS DB
-      def get_permissions
+      def index
         status, response = check_token_for_permission
-        if response[:error]
-          render json: response.to_json, status: status and return 
-        end
+        render json: response.to_json, status: status.to_sym and return if response[:error]
 
         permissions = Permission.permission_ids
 

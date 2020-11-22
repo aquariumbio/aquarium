@@ -5,7 +5,10 @@ module Api
     # USER RELATED API CALLS
     class UsersController < ApplicationController
       # RETURN LIST OF USERS FILTERED AND/OR SORTED BY PERMISSION
-      # /api/v3/users/permissions?token=<token>&show[]=[1,2,3,4,5,6]&sort=<sort>
+      # /api/v3/users/permissions
+      #   token=<token>
+      #   show[]=[<permission_ids>]
+      #   sort=<sort>
       def permissions
         # CHECK FOR ADMIN PERMISSIONS
         status, response = check_token_for_permission(1)
@@ -36,8 +39,12 @@ module Api
       end
 
       # SET SPECIFIC PERMISSION FOR SPECIFIC USER
-      # /api/v3/users/set_permission?token=<token>&user_id=<user_id>&permission_id=<permission_id>&value=<true>
-      def set_permission
+      # /api/v3/users/permissions/update
+      #   token=<token>
+      #   user_id=<user_id>
+      #   permission_id=<permission_id>
+      #   value=<true>
+      def permissions_update
         # CHECK FOR ADMIN PERMISSIONS
         status, response = check_token_for_permission(1)
         render json: response.to_json, status: status.to_sym and return if response[:error]
@@ -50,7 +57,7 @@ module Api
         end
 
         valid = User.set_permission(uid, rid, val)
-        render json: { error: 'Invalid' }.to_json, status: :unauthorized and return unless valid
+        render json: { error: 'Invalid.' }.to_json, status: :unauthorized and return unless valid
 
         render json: { user: { id: valid.id, name: valid.name, login: valid.login, permission_ids: valid.permission_ids } }.to_json, status: :ok
       end
