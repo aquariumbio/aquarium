@@ -1,11 +1,13 @@
 {
     "env": {
         "browser": true,
-        "es2021": true
+        "es2021": true,
+        "jest": true
     },
     "extends": [
         "plugin:react/recommended",
-        "airbnb"
+        "airbnb",
+        "plugin:cypress/recommended"
     ],
     "parserOptions": {
         "ecmaFeatures": {
@@ -18,6 +20,14 @@
         "react"
     ],
     "rules": {
-        "jsx-quotes": ["error", "prefer-double"]
+        "jsx-quotes": ["error", "prefer-double"],
+        "import/no-extraneous-dependencies": [
+          "error",
+          {
+            "devDependencies": false,
+            "optionalDependencies": false,
+            "peerDependencies": false
+          }
+        ]
     }
 }

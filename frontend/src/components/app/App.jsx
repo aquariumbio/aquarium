@@ -2,6 +2,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import React from 'react';
+// eslint-disable-next-line object-curly-newline
 import { Redirect, Route, Switch } from 'react-router-dom';
 import API from '../../helpers/API';
 import AnnouncementsPage from '../announcements/AnnouncementsPage';
@@ -41,10 +42,9 @@ const theme = createMuiTheme({
 
 export default function App() {
   const classes = useStyles();
-
   return (
     <ThemeProvider theme={theme}>
-      <div className={classes.container} data-test-name="app-container">
+      <div name="app-container" className={classes.container} data-cy="app-container">
         { /* Users cannot interact with the app if they do not have a token */
           (!sessionStorage.getItem('token') || !API.isAuthenticated)
           && <Redirect to="/login" />
