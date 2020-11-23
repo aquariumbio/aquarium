@@ -3,6 +3,10 @@ ARG ALPINE_VERSION=3.12
 
 # A ruby-alpine image for development
 FROM ruby:${RUBY_VERSION}-alpine${ALPINE_VERSION} AS aquarium-development
+
+# throw errors if Gemfile has been modified since Gemfile.lock
+RUN bundle config --global frozen 1
+
 RUN apk add --update --no-cache \
     bash \
     bind-tools \
@@ -24,8 +28,10 @@ RUN apk add --update --no-cache \
     openssl \
     sqlite-dev \
     tzdata \
-    wget \
-    yarn
+    wget
+
+# Explicitly set locale
+ENV LANG C.UTF-8
 
 # for sorbet: https://sorbet.org/docs/faq#what-platforms-does-sorbet-support
 ENV GLIBC_RELEASE_VERSION 2.30-r0
