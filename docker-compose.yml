@@ -5,21 +5,7 @@
 #
 version: "3.5"
 services:
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    volumes:
-      - './frontend:/app'
-      - './frontend/node_modules:/app/node_modules'
-    ports:
-      - 3000:3000
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-    networks:
-      - aquarium_net
-
-  app:
+  backend:
     environment:
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
@@ -41,11 +27,15 @@ services:
       - "3001"
     depends_on:
       - db
-      - s3
-    cap_add:
-      - NET_ADMIN
-    sysctls:
-      - net.ipv4.conf.all.route_localnet=1
+
+
+  frontend:
+    depends_on: 
+      - backend
+    expose:
+      - "3000"
+    networks:
+      - aquarium_net
 
   db:
     image: mysql:5.7
@@ -59,72 +49,13 @@ services:
     networks:
       - aquarium_net
 
-  krill:
-    networks:
-      - aquarium_net
-    expose:
-      - "3500"
-    environment:
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      S3_ACCESS_KEY_ID: ${S3_ID}
-      S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY}
-      S3_REGION: ${S3_REGION}
-      TZ: ${TIMEZONE}
-    depends_on:
-      - db
-      - app
-    cap_add:
-      - NET_ADMIN
-    sysctls:
-      - net.ipv4.conf.all.route_localnet=1
-
-  s3:
-    image: minio/minio:edge
-    volumes:
-      - ./data/s3/data:/data
-      - ./data/s3/config:/root/.minio
-    command: server /data
-    expose:
-      - "9000"
-    environment:
-      MINIO_ACCESS_KEY: ${S3_ID}
-      MINIO_SECRET_KEY: ${S3_SECRET_ACCESS_KEY}
-      MINIO_REGION: ${S3_REGION}
-    networks:
-      - aquarium_net
-
-  createbucket:
-    image: minio/mc:latest
-    depends_on:
-      - s3
-    entrypoint: >
-      /bin/sh -c "
-      while ! nc -z s3 9000; do
-        sleep 1;
-      done;
-      sleep 5;
-      /usr/bin/mc config host add aqminio http://s3:9000 ${S3_ID} ${S3_SECRET_ACCESS_KEY};
-      /usr/bin/mc mb --region ${S3_REGION} -p aqminio/images;
-      /usr/bin/mc policy set download aqminio/images;
-      exit 0;
-      "
-    networks:
-      - aquarium_net
-
   web:
     image: nginx:stable-alpine
-    ports:
-      - "80:80"
-      - "9000:9000"
     networks:
       - aquarium_net
     depends_on:
-      - app
+      - backend
       - frontend
-      - s3
-      - createbucket
 
 networks:
   aquarium_net:
