@@ -49,7 +49,7 @@ const SampleTypeField = ({ fieldType, index, updateParentState, handleRemoveFiel
   return (
     <Grid container spacing={1} cy-data="field_form_container">
       {/* Titles */}
-      <Grid container spacing={1}>
+      <>
         <Grid container item lg={2}>
           <Typography variant="h5" className={classes.label}> Field Name</Typography>
         </Grid>
@@ -75,10 +75,10 @@ const SampleTypeField = ({ fieldType, index, updateParentState, handleRemoveFiel
         <Grid item lg={5}>
           <Typography variant="h5" className={classes.label}>Choices</Typography>
         </Grid>
-      </Grid>
+      </>
 
       {/* Inputs */}
-      <Grid container spacing={1}>
+      <>
         <Grid container item lg={2}>
           <TextField
             name="name"
@@ -189,7 +189,7 @@ const SampleTypeField = ({ fieldType, index, updateParentState, handleRemoveFiel
             <CloseIcon />
           </IconButton>
         </Grid>
-      </Grid>
+      </>
     </Grid>
   );
 };
