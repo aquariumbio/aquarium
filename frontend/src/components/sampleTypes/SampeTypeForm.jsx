@@ -92,7 +92,7 @@ const SampleTypeForm = (sampleType) => {
   );
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="xl" cy-data="field_form_container">
       <Typography variant="h1" align="center" className={classes.title}>
         Defining New Sample Type
       </Typography>

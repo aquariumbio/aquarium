@@ -47,33 +47,33 @@ const SampleTypeField = ({ fieldType, index, updateParentState, handleRemoveFiel
   };
 
   return (
-    <Grid container spacing={1}>
+    <Grid container spacing={1} cy-data="field_form_container">
       {/* Titles */}
       <Grid container spacing={1}>
         <Grid container item lg={2}>
-          <Typography className={classes.label}> Field Name</Typography>
+          <Typography variant="h5" className={classes.label}> Field Name</Typography>
         </Grid>
 
         <Grid item lg={1}>
-          <Typography className={classes.label}>Type</Typography>
+          <Typography variant="h5" className={classes.label}>Type</Typography>
         </Grid>
 
         <Grid item lg={1}>
-          <Typography className={classes.label}>Required?</Typography>
+          <Typography variant="h5" className={classes.label}>Required?</Typography>
         </Grid>
 
         <Grid item lg={1}>
-          <Typography className={classes.label}>Array?</Typography>
+          <Typography variant="h5" className={classes.label}>Array?</Typography>
         </Grid>
 
         <Grid item lg={2}>
-          <Typography className={classes.label}>
+          <Typography variant="h5" className={classes.label}>
             Sample Options (If type=&lsquo;sample&lsquo;)
           </Typography>
         </Grid>
 
         <Grid item lg={5}>
-          <Typography className={classes.label}>Choices</Typography>
+          <Typography variant="h5" className={classes.label}>Choices</Typography>
         </Grid>
       </Grid>
 
@@ -93,6 +93,7 @@ const SampleTypeField = ({ fieldType, index, updateParentState, handleRemoveFiel
             required
             // TODO: Error HANDLING -- ONLY SHOW HELPER TEXT ON ERROR
             helperText="Field name is required."
+            cy-data="field_name_input"
           />
         </Grid>
 
