@@ -8,7 +8,6 @@ module Api
       #
       # @param login [String] login
       # @param password [String] password
-      #
       # @return a token
       def create
         login = params[:login].to_s.strip.downcase
@@ -38,7 +37,6 @@ module Api
       #
       # @param token [String] a token
       # @param all [String] "true" or "on" to remove all tokens associated with this user
-      #
       # @return a success message
       def delete
         ip = request.remote_ip
@@ -55,7 +53,6 @@ module Api
       #
       # @param token [String] a token
       # @param permission_id [Int] the optional permission_id to check
-      #
       # @return the user
       def get_user
         permission_id = params[:permission_id] ? params[:permission_id].to_i : 0

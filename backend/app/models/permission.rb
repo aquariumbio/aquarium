@@ -18,7 +18,6 @@ class Permission < ActiveRecord::Base
   # Cache and return the list of permissions.
   #
   # @param clear_cache [Boolean] true to clear the cache
-  #
   # @return permissions
   def self.permission_ids(clear_cache = false)
     Rails.cache.delete 'permission_ids' if clear_cache

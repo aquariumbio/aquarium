@@ -11,7 +11,6 @@ class User < ActiveRecord::Base
   #
   # @option options[:token] [String] a token
   # @option options[:ip] [String] an IP address
-  #
   # @return the user
   def self.validate_token(options, check_permission_id = 0)
     option_token = options[:token].to_s
@@ -64,7 +63,6 @@ class User < ActiveRecord::Base
   # @option options[:token] [String] the token
   # @option options[:ip] [String] the IP address associated with the token
   # @option options[:all] [String] optional "true" or "on" to sign the user out of all devices (delete all their tokens)
-  #
   # @return true
   def self.sign_out(options)
     token = options[:token].to_s
@@ -90,7 +88,6 @@ class User < ActiveRecord::Base
   # Check whether user has permission_id
   #
   # @param permission_id [Int] the permission_id to check
-  #
   # @return true
   def permission?(permission_id)
     # Retired - always false
@@ -108,7 +105,6 @@ class User < ActiveRecord::Base
   # @param id [Int] the id of the user
   # @param permission_id [Int] the permission_id to set
   # @param val [Boolean] true to turn permission on, false to turn permission off
-  #
   # @return true
   def self.set_permission(user_id, permission_id, val)
     user = User.find_by(id: user_id)
@@ -134,7 +130,6 @@ class User < ActiveRecord::Base
   #
   # @param conditions [Array] list of specific permission_ids to check (empty array for any permission_id)
   # @param order [String] order by value for the SQL query
-  #
   # @return filtered / sorted list of users
   def self.get_users_by_permission(conditions, order)
     wheres = ''

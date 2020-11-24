@@ -5,7 +5,6 @@ class UserToken < ActiveRecord::Base
   # Create a new token
   #
   # @param this_ip [String] the IP address to associate with the token
-  #
   # @return a new token
   def self.new_token(this_ip)
     exists = true

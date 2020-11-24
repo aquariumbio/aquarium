@@ -9,7 +9,6 @@ module Api
       # @param token [String] a token
       # @param show [Array] the list of permission ids to filter
       # @param sort [String] the sort order
-      #
       # @return a filtered / sorted list of users
       def permissions
         # Check for admin permissions
@@ -46,7 +45,6 @@ module Api
       # @param user_id [Int] the id of the user to change
       # @param permission_id [Int] the id of the permission to change
       # @param value [String] "true" or "on" to turn the permission on, anything else to turn the permission off
-      #
       # @return the user
       def permissions_update
         # Check for admin permissions

@@ -7,7 +7,6 @@ module Api
       # Return all sample types.
       #
       # @param token [String] a token
-      #
       # @return all sample types
       def index
         # Check for admin permissions
@@ -32,7 +31,6 @@ module Api
       #
       # @param token [String] a token
       # @param id [id] the id of the sample type
-      #
       # @return the sample type
       def show
         # Check for admin permissions
@@ -60,7 +58,6 @@ module Api
       # @param name [name] the name of the sample type
       # @param description [description] the description of the sample type
       # @param field_types [hash] the :field_types to be used for the allowable_field_types
-      #
       # @return the sample type
       def create
         # Check for admin permissions
@@ -81,7 +78,6 @@ module Api
       # @param name [name] the name of the sample type
       # @param description [description] the description of the sample type
       # @param field_types [hash] the :field_types to be used for the allowable_field_types
-      #
       # @return the sample type
       def update
          # Check for admin permissions
@@ -105,7 +101,6 @@ module Api
       #
       # @param token [String] a token
       # @param id [Int] the id of the sample type
-      #
       # @return a success message
       def delete
         # Check for admin permissions

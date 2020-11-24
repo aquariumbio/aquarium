@@ -69,11 +69,9 @@ class SampleType < ActiveRecord::Base
   # Create a sample types.
   #
   # @param st [Hash] the sample type
-  #
   # @option st[:name] [String] the name of the sample type
   # @option st[:description] [String] the description of the sample type
   # @option st[:field_types] [Hash] the field_type attributes associated with the sample type
-  #
   # feild_types = {
   #   name [String] name
   #   ftype [String]  ftype
@@ -82,11 +80,9 @@ class SampleType < ActiveRecord::Base
   #   choices [String] choices
   #   allowable_field_types [Array] array of allowable field types (for ftype = "sample")
   # }
-  #
   # allowable_field_type = {
   #   sample_type_id [Int] id of the allowable field type
   # }
-  #
   # @return the sample type
   def self.create(st)
     name = Input.text(st[:name])
@@ -108,33 +104,33 @@ class SampleType < ActiveRecord::Base
       st[:field_types].each do |ft|
         fname     = Input.text(ft[:name])
         ftype     = Input.text(ft[:ftype])
-        frequired = Input.boolean(ft[:required])
-        farray    = Input.boolean(ft[:array])
+        frequired = Input.boolean(ft[:required]) ? 1 : nil
+        farray    = Input.boolean(ft[:array]) ? 1 : nil
         fchoices  = Input.text(ft[:choices])
 
         if fname != ""
-          field_type_new  = FieldType.new
-
-          field_type_new.parent_id    = sample_type_new.id
-          field_type_new.name         = fname
-          field_type_new.ftype        = ftype
-          field_type_new.choices      = fchoices
-          field_type_new.array        = farray
-          field_type_new.required     = frequired
-          field_type_new.parent_class = "SampleType"
+          field_type_new  = FieldType.new(
+            parent_id: sample_type_new.id,
+            name: fname,
+            ftype: ftype,
+            choices: fchoices,
+            array: farray,
+            required: frequired,
+            parent_class: "SampleType"
+          )
           field_type_new.save
 
-          # SAVE ALLOWABLE FIELD TYPES IF THE FIELD TYPE IS "SAMPLE"
+          # Save allowable field types if the field type is "sample"
           if ftype == "sample" and ft[:allowable_field_types].kind_of?(Array)
             ft[:allowable_field_types].each do |aft|
               sample_type_id = Input.number(aft[:sample_type_id])
               sql = "select * from sample_types where id = #{sample_type_id} limit 1"
 
               if (SampleType.find_by_sql sql)[0]
-                allowable_field_type_new  = AllowableFieldType.new
-
-                allowable_field_type_new.field_type_id  = field_type_new.id
-                allowable_field_type_new.sample_type_id = sample_type_id
+                allowable_field_type_new  = AllowableFieldType.new(
+                  field_type_id: field_type_new.id,
+                  sample_type_id: sample_type_id
+                )
                 allowable_field_type_new.save
               end
             end
@@ -155,12 +151,10 @@ class SampleType < ActiveRecord::Base
   # - Any potential errors are handled automatically and silently
   #
   # @param st [Hash] the sample type
-  #
   # @option st[:id] [Int] the id of the sample type
   # @option st[:name] [String] the name of the sample type
   # @option st[:description] [String] the description of the sample type
   # @option st[:field_types] [Hash] the field_type attributes associated with the sample type
-  #
   # feild_types = {
   #   id [Int] the id of the existing field type <or> nil if it is new
   #   name [String] name
@@ -170,12 +164,10 @@ class SampleType < ActiveRecord::Base
   #   choices [String] choices
   #   allowable_field_types [Array] array of allowable field types (for ftype = "sample")
   # }
-  #
   # allowable_field_type = {
   #   id [Int] the id of the existing allowable field type <or> nil if it is new
   #   sample_type_id [Int] id of the allowable field type
   # }
-  #
   # @return the sample type
   def update(st)
     input_name = Input.text(st[:name])
@@ -204,8 +196,8 @@ class SampleType < ActiveRecord::Base
         fid       = Input.number(ft[:id])
         fname     = Input.text(ft[:name])
         ftype     = Input.text(ft[:ftype])
-        frequired = Input.boolean(ft[:required])
-        farray    = Input.boolean(ft[:array])
+        frequired = Input.boolean(ft[:required]) ? 1 : nil
+        farray    = Input.boolean(ft[:array]) ? 1 : nil
         fchoices  = Input.text(ft[:choices])
 
         # Find existing feild_type or create new one

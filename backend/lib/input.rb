@@ -18,12 +18,11 @@ module Input
     return n
   end
 
-  # Return a boolean (1 or nil)
-  def self.boolean(n)
-    n = n.to_s.to_i
-    n == 1 ? 1 : nil
+  # Return a boolean ("true" or "on" returns true)
+  def self.boolean(str)
+    bool = str == "true" || str == "on"
 
-    return n
+    return bool
   end
 
 end

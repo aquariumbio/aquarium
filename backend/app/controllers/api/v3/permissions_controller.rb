@@ -7,7 +7,6 @@ module Api
       # Returns the list of permissions.
       #
       # @param token [String] a token
-      #
       # @return the list of permissions
       def index
          # Check for any permissions

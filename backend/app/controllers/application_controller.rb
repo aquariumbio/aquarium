@@ -7,7 +7,6 @@ class ApplicationController < ActionController::API
   #
   # @param token [String] a token
   # @param permission_id [Int] the specific permission_id to check
-  #
   # @return the the status (i.e., ok, unauthorized, forbidden) and either the user or an error
   def check_token_for_permission(permission_id = 0)
     ip = request.remote_ip
