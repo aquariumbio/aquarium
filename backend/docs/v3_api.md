@@ -18,14 +18,16 @@ This document describes the current API v3
       ...
     }
     ```
+
     where each value is always
+
     ```bash
     - an < element >
     - an { object } if there is always only 1 object for that key
     - an [ array_of_objects ] if there can be 1-or-more objects for that key
     ```
 
-0. If the API is valid and returns errors on their input form
+2. If the API is valid and returns errors on their input form
 
     ```bash
     status: :ok (200)
@@ -33,7 +35,9 @@ This document describes the current API v3
       errors
     }
     ```
+
     where { errors } is always in the format
+
     ```bash
     {
       field_1: [ field_1_error_messages ],
@@ -44,16 +48,16 @@ This document describes the current API v3
 
 ### Token & Permission Errors
 
-3. If the API token does not exist
+1. If the API token does not exist
 
-    ```bash
-    status: :unauthorized (401),
-    {
-      error: "Invalid."
-    }
-  ```
+   ```bash
+   status: :unauthorized (401),
+   {
+     error: "Invalid"
+   }
+   ```
 
-0. If the API token is valid but the session has timed out
+2. If the API token is valid but the session has timed out
 
     ```bash
     status: :unauthorized (401),
@@ -62,7 +66,7 @@ This document describes the current API v3
     }
     ```
 
-0. If the API token is valid but the user does not have permission to see the page
+3. If the API token is valid but the user does not have permission to see the page
 
     ```bash
     status: :forbidden (403),
@@ -73,7 +77,7 @@ This document describes the current API v3
 
 ## Implemented API Calls (TODO)
 
-  ### TOKENS
+### TOKENS
 
   POST api/v3/token/create
 
@@ -81,17 +85,17 @@ This document describes the current API v3
 
   GET  api/v3/token/get_user
 
-  ### PERMISSIONS
+### PERMISSIONS
 
   get  api/v3/permissions
 
-  ### USER PERMISSIONS
+### USER PERMISSIONS
 
   GET  api/v3/users/permissions
 
   POST api/v3/users/permissions/update
 
-  ### SAMPLE TYPES
+### SAMPLE TYPES
 
   GET  api/v3/sample_types
 
