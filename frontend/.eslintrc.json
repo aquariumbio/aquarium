@@ -29,5 +29,13 @@
             "peerDependencies": false
           }
         ]
-    }
+    },
+    "overrides": [
+        {
+            "files": ["*.spec.js", "*.spec.jsx"],
+            "rules": {
+                "no-unused-expressions": "off"
+            }
+        }
+    ]
 }

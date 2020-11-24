@@ -7,15 +7,16 @@ import { mount } from 'cypress-react-unit-test';
 import SampleTypeFieldForm from '../../src/components/sampleTypes/SampleTypeFieldForm';
 
 describe('SampleTypeFieldForm', () => {
-  it('renders container and all field headers', () => {
-    const testFieldType = {
-      id: null,
-      name: '',
-      type: 'string',
-      isRequired: false,
-      isArray: false,
-      choices: '',
-    };
+  const testFieldType = {
+    id: null,
+    name: '',
+    type: 'string',
+    isRequired: false,
+    isArray: false,
+    choices: '',
+  };
+
+  it('renders fields form container', () => {
     const handleFieldInputChange = cy.stub();
     const handleRemoveFieldClick = cy.stub();
     mount(
@@ -29,7 +30,6 @@ describe('SampleTypeFieldForm', () => {
     cy.get('[cy-data="field_form_container"]')
       .should('be.visible')
       .within(() => {
-        cy.contains('h5', 'Field Name');
         cy.contains('h5', 'Type');
         cy.contains('h5', 'Required?');
         cy.contains('h5', 'Array?');
@@ -37,41 +37,70 @@ describe('SampleTypeFieldForm', () => {
         cy.contains('h5', 'Choices');
       });
   });
+  describe('Field Name Input', () => {
+    it('has field name header and input with placeholder text when fieldType is empty string', () => {
+      mount(
+        <SampleTypeFieldForm
+          fieldType={testFieldType}
+          index={0}
+          updateParentState={cy.spy().as('handleChange')}
+          handleRemoveFieldClick={() => cy.spy().as('handleRemoveFieldClick')}
+        />,
+      );
+      cy.get('[cy-data="field_form_container"]')
+        .should('be.visible')
+        .within(() => {
+          cy.contains('h5', 'Field Name');
+          cy.get('input[name="name"]')
+            .should('have.attr', 'placeholder', 'Field name');
+        });
+    });
 
-  // it('renders container and all field headers', () => {
-  //   const testFieldType = {
-  //     id: null,
-  //     name: '',
-  //     type: 'string',
-  //     isRequired: false,
-  //     isArray: false,
-  //     choices: '',
-  //   };
-  //   const handleFieldInputChange = cy.stub();
-  //   const handleRemoveFieldClick = cy.stub();
-  //   mount(
-  //     <SampleTypeFieldForm
-  //       fieldType={testFieldType}
-  //       index={0}
-  //       updateParentState={handleFieldInputChange}
-  //       handleRemoveFieldClick={() => handleRemoveFieldClick}
-  //     />,
-  //   );
-  //   cy.get('[cy-data="field_form_container"]')
-  //     .should('be.visible')
-  //     .within(() => {
-  //       cy.contains('h5', 'Field Name');
-  //       cy.get('[cy-data="field_name_input"]')
-  //         .should('have.attr', 'placeholder', 'Field name');
+    it('has field name header and input with placeholder text when fieldType is not empty string', () => {
+      const fieldType = testFieldType;
+      const testName = 'Test Name';
+      fieldType.name = testName;
+      mount(
+        <SampleTypeFieldForm
+          fieldType={fieldType}
+          index={0}
+          updateParentState={cy.spy().as('handleChange')}
+          handleRemoveFieldClick={() => cy.spy().as('handleRemoveFieldClick')}
+        />,
+      );
+      cy.get('[cy-data="field_form_container"]')
+        .within(() => {
+          cy.contains('h5', 'Field Name');
+          cy.get('input[name="name"]')
+            .should('have.value', testName);
+        });
+    });
 
-  //       cy.contains('h5', 'Type');
-  //       cy.get('[cy-data="field_type_select"]');
+    it('accepts user input', () => {
+      const fieldType = testFieldType;
+      const testName = 'Test Name';
 
-  //       cy.contains('h5', 'Required?');
-  //       cy.get('[data-cy=isRequired_checkbox]');
+      mount(
+        <SampleTypeFieldForm
+          fieldType={fieldType}
+          index={0}
+          updateParentState={cy.spy().as('handleChange')}
+          handleRemoveFieldClick={() => cy.spy().as('handleRemoveFieldClick')}
+        />,
+      );
 
-  //       cy.contains('h5', 'Array?');
-  //       cy.get('[data-cy=isArray_checkbox]');
-  //     });
-  // });
+      cy.get('[cy-data="field_form_container"]')
+        .within(() => {
+          cy.contains('h5', 'Field Name');
+          cy.get('input[name="name"]')
+            .type(testName)
+            .trigger('change')
+            .should('have.value', testName);
+
+          cy.get('@handleChange').should((spy) => {
+            expect(spy).to.have.been.called;
+          });
+        });
+    });
+  });
 });

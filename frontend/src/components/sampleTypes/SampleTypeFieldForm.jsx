@@ -85,7 +85,7 @@ const SampleTypeField = ({ fieldType, index, updateParentState, handleRemoveFiel
             fullWidth
             value={fieldType.name}
             id="field_name"
-            label="Field name"
+            // label="Field name"
             placeholder="Field name"
             onChange={handleChange}
             variant="outlined"
@@ -93,7 +93,6 @@ const SampleTypeField = ({ fieldType, index, updateParentState, handleRemoveFiel
             required
             // TODO: Error HANDLING -- ONLY SHOW HELPER TEXT ON ERROR
             helperText="Field name is required."
-            cy-data="field_name_input"
           />
         </Grid>
 
@@ -115,6 +114,7 @@ const SampleTypeField = ({ fieldType, index, updateParentState, handleRemoveFiel
                 getContentAnchorEl: null,
               },
             }}
+            cy-data="field_type_select"
           >
             <MenuItem value="string">string</MenuItem>
             <MenuItem value="number">number</MenuItem>
@@ -137,6 +137,7 @@ const SampleTypeField = ({ fieldType, index, updateParentState, handleRemoveFiel
             )}
             label={fieldType.isRequired.toString()}
             labelPlacement="end"
+            cy-data="field_is_required_checkbox"
           />
         </Grid>
 
@@ -153,12 +154,13 @@ const SampleTypeField = ({ fieldType, index, updateParentState, handleRemoveFiel
             )}
             label={fieldType.isArray.toString()}
             labelPlacement="end"
+            cy-data="field_is_array_checkbox"
           />
         </Grid>
 
         <Grid item lg={2}>
           {showSampleOptions ? (
-            <Button variant="outlined">
+            <Button variant="outlined" cy-data="add_field_option_btn">
               Add
             </Button>
           ) : (
@@ -179,13 +181,14 @@ const SampleTypeField = ({ fieldType, index, updateParentState, handleRemoveFiel
               inputProps={{ 'aria-label': 'choices' }}
               value={fieldType.choices}
               onChange={handleChange}
+              cy-data="add_field_option_input"
             />
           ) : (
             <Typography>N/A</Typography>
           )}
         </Grid>
         <Grid item lg={1}>
-          <IconButton onClick={handleRemoveFieldClick(index)}>
+          <IconButton onClick={handleRemoveFieldClick(index)} cy-data="remove_field_btn">
             <CloseIcon />
           </IconButton>
         </Grid>
