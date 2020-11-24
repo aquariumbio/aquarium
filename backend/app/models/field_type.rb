@@ -1,4 +1,4 @@
-# SAMPLE_TYPES TABLE
+# field_types table
 class FieldType < ActiveRecord::Base
 
 end

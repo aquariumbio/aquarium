@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Api::V3::UsersController, type: :request do
   describe 'api' do
 
-    # SIGN IN USERS
+    # Sign in users
     before :all do
       @token_1 = []
       @token_2 = []
@@ -22,25 +22,25 @@ RSpec.describe Api::V3::UsersController, type: :request do
       @token_3 << resp["token"]
     end
 
-    # INVALID GET USERS AND PERMISSIONS
+    # Invalid get users and permissions
     it "invalid_get_users_and_permissions" do
-      # BAD TOKEN
+      # Bad token
       get "/api/v3/users/permissions"
       expect(response).to have_http_status 401
     end
 
-    # FORBIDDEN GET USERS AND PERMISSIONS
+    # Forbidden get users and permissions
     it "forbidden_get_users_and_permissions" do
-      # NOT ADMIN
+      # Not admin
       get "/api/v3/users/permissions?token=#{@token_2[0]}"
       expect(response).to have_http_status 403
 
-      # ADMIN BUT RETIRED
+      # Admin but retired
       get "/api/v3/users/permissions?token=#{@token_3[0]}"
       expect(response).to have_http_status 403
     end
 
-    # GET USERS AND PERMISSIONS
+    # Get users and permissions
     it "get_users_and_permissions" do
       get "/api/v3/users/permissions?token=#{@token_1[0]}"
       expect(response).to have_http_status 200
@@ -55,25 +55,25 @@ RSpec.describe Api::V3::UsersController, type: :request do
       expect(response).to have_http_status 200
     end
 
-    # INVALID CHANGE PERMISSION FOR USE
+    # Invalid change permission for use
     it "invalid_get_users_and_permissions" do
-      # BAD TOKEN
+      # Bad token
       post "/api/v3/users/permissions/update?user_id=2&permission_id=4&value=true"
       expect(response).to have_http_status 401
     end
 
-    # FORBIDDEN CHANGE PERMISSION FOR USE
+    # Forbidden change permission for use
     it "forbidden_get_users_and_permissions" do
-      # NOT ADMIN
+      # Not admin
       post "/api/v3/users/permissions/update?token=#{@token_2[0]}&user_id=2&permission_id=4&value=true"
       expect(response).to have_http_status 403
 
-      # ADMIN BUT RETIRED
+      # Admin but retired
       post "/api/v3/users/permissions/update?token=#{@token_3[0]}&user_id=2&permission_id=4&value=true"
       expect(response).to have_http_status 403
     end
 
-    # CHANGE PERMISSION FOR USER
+    # Change permission for user
     it "change_permission" do
       post "/api/v3/users/permissions/update?token=#{@token_1[0]}&user_id=2&permission_id=4&value=true"
       expect(response).to have_http_status 200
@@ -88,7 +88,7 @@ RSpec.describe Api::V3::UsersController, type: :request do
       expect(resp["user"]["permission_ids"].index('.4.')).to eq(nil)
     end
 
-    # CANNOT CHANGE ADMIN / RETIRED FOR SELF
+    # Cannot change admin / retired for self
     it "cannot_change_self_permission_admin_retired" do
       post "/api/v3/users/permissions/update?token=#{@token_1[0]}&user_id=1&permission_id=1"
       expect(response).to have_http_status 403

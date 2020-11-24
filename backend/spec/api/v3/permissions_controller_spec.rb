@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Api::V3::PermissionsController, type: :request do
   describe 'api' do
 
-    # SIGN IN USERS
+    # Sign in users
     before :each do
       @token_1 = []
       @token_2 = []
@@ -22,21 +22,21 @@ RSpec.describe Api::V3::PermissionsController, type: :request do
       @token_3 << resp["token"]
     end
 
-    # INVALID GET ROLES
+    # Invalid get roles
     it "invalid_get_permissions" do
-      # BAD TOKEN
+      # Bad token
       get "/api/v3/permissions"
       expect(response).to have_http_status 401
     end
 
-    # FORBIDDEN GET ROLES
+    # Forbidden get roles
     it "forbidden_get_permissions" do
       # RETIRED
       get "/api/v3/permissions?token=#{@token_3[0]}"
       expect(response).to have_http_status 403
     end
 
-    # GET ROLES
+    # Get roles
     it "get_permissions" do
       get "/api/v3/permissions?token=#{@token_1[0]}"
       expect(response).to have_http_status 200

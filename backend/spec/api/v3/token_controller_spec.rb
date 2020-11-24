@@ -3,20 +3,20 @@ require 'rails_helper'
 RSpec.describe Api::V3::TokenController, type: :request do
   describe 'api' do
 
-    # INITIALIZE @TOKEN_1 TO STORE TOKENS
+    # Initialize @token_1 to store tokens
     before :all do
       @token_1 = []
     end
 
-    # SIGN IN
+    # Sign in
     it "invalid_sign_in" do
       post "/api/v3/token/create?login=user_1&password=wrong_password"
       expect(response).to have_http_status 401
     end
 
-    # SIGN IN 3 TIMES
+    # Sign in 3 times
     it "sign_in_3_times" do
-      # SIGN IN AND SET TOKEN
+      # Sign in and set token
       post "/api/v3/token/create?login=user_1&password=password"
       expect(response).to have_http_status 200
 
@@ -24,7 +24,7 @@ RSpec.describe Api::V3::TokenController, type: :request do
       token = resp["token"]
       @token_1 << token
 
-      # SIGN IN AND SET TOKEN
+      # Sign in and set token
       post "/api/v3/token/create?login=user_1&password=password"
       expect(response).to have_http_status 200
 
@@ -32,7 +32,7 @@ RSpec.describe Api::V3::TokenController, type: :request do
       token = resp["token"]
       @token_1 << token
 
-      # SIGN IN AND SET TOKEN
+      # Sign in and set token
       post "/api/v3/token/create?login=user_1&password=password"
       expect(response).to have_http_status 200
 
@@ -41,7 +41,7 @@ RSpec.describe Api::V3::TokenController, type: :request do
       @token_1 << token
     end
 
-    # CHECK TOKENS
+    # Check tokens
     it "check_token" do
       get "/api/v3/token/get_user?token=#{@token_1[0]}"
       expect(response).to have_http_status 200
@@ -53,12 +53,12 @@ RSpec.describe Api::V3::TokenController, type: :request do
       expect(response).to have_http_status 200
     end
 
-    # SIGN OUT
+    # Sign out
     it "sign_out" do
       post "/api/v3/token/delete?token=#{@token_1[0]}"
       expect(response).to have_http_status 200
 
-      # CHECK TOKENS
+      # Check tokens
       get "/api/v3/token/get_user?token=#{@token_1[0]}"
       expect(response).to have_http_status 401
 
@@ -69,18 +69,18 @@ RSpec.describe Api::V3::TokenController, type: :request do
       expect(response).to have_http_status 200
     end
 
-    # INVALID SIGN OUT
+    # Invalid sign out
     it "invalid_sign_out" do
       post "/api/v3/token/delete?token=#{@token_1[0]}"
       expect(response).to have_http_status 401
     end
 
-    # SIGN OUT ALL
+    # Sign out all
     it "sign_out_all" do
       post "/api/v3/token/delete?token=#{@token_1[1]}&all=true"
       expect(response).to have_http_status 200
 
-      # CHECK TOKENS
+      # Check tokens
       get "/api/v3/token/get_user?token=#{@token_1[1]}"
       expect(response).to have_http_status 401
 

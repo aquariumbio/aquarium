@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 require 'input'
 
-# APPLICATION CONTROLLER
+# application_controller
 class ApplicationController < ActionController::API
-  # CHECK THE TOKEN AGAINST SPECIFIC PERMISSION_ID (0 = ANYTHING NOT RETIRED)
-  # RETURN STATUS <AND> ( ERROR <OR> USER )
+  # Check whether a token has a specific permission_id (0 = anything that is not retired).
+  #
+  # @param token [String] a token
+  # @param permission_id [Int] the specific permission_id to check
+  #
+  # @return the the status (i.e., ok, unauthorized, forbidden) and either the user or an error
   def check_token_for_permission(permission_id = 0)
     ip = request.remote_ip
     token = params[:token].to_s.strip.downcase

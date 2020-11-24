@@ -94,10 +94,10 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 =end
 
-  # SET UP DATABASE CLEANER
-  # - CLEAN THE DB BEFORE STARTING THE SUITE
-  # - CLEAN THE DB AS NEEDED WITH DATABASECLEANER.CLEAN
-  # LOAD TEST_SEEDS.RB FILE
+  # Set up database cleaner
+  # - Clean the db before starting the suite
+  # - Clean the db as needed with DatabaseCleaner.clean
+  # Load test_seeds.rb file
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
     DatabaseCleaner.strategy = :truncation

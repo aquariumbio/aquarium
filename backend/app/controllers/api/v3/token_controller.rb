@@ -2,10 +2,14 @@
 
 module Api
   module V3
-    # TOKEN RELATED API CALLS
+    # Token related api calls
     class TokenController < ApplicationController
-      # SIGN IN
-      # /api/v3/token/create?login=<login>&password=<password>
+      # Creates a token.
+      #
+      # @param login [String] login
+      # @param password [String] password
+      #
+      # @return a token
       def create
         login = params[:login].to_s.strip.downcase
         password = params[:password]
@@ -16,7 +20,7 @@ module Api
         ip = request.remote_ip
         timenow = Time.now.utc
 
-        # CREATE A TOKEN
+        # Create a token
         token = UserToken.new_token(ip)
         render json: { error: 'Invalid' }.to_json, status: :unauthorized unless token
 
@@ -30,8 +34,12 @@ module Api
         render json: { token: token }.to_json, status: :ok
       end
 
-      # SIGN OUT (ALL = SIGN OUT OF ALL DEVICES)
-      # /api/v3/token/delete?token=<token>&all=<true>
+      # Removes a token or optionally all tokens associated with this user.
+      #
+      # @param token [String] a token
+      # @param all [String] "true" or "on" to remove all tokens associated with this user
+      #
+      # @return a success message
       def delete
         ip = request.remote_ip
         token = params[:token].to_s.strip.downcase
@@ -43,11 +51,16 @@ module Api
         render json: { message: 'Signed out' }.to_json, status: :ok
       end
 
-      # GET USER
-      # /api/v3/token/get_user?token=<token>
+      # Returns the user for the token and an optional permission_id.
+      #
+      # @param token [String] a token
+      # @param permission_id [Int] the optional permission_id to check
+      #
+      # @return the user
       def get_user
         permission_id = params[:permission_id] ? params[:permission_id].to_i : 0
 
+        # Check for permission_id permissions
         status, response = check_token_for_permission(permission_id)
         render json: response.to_json, status: status.to_sym
       end

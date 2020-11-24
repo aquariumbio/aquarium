@@ -1,22 +1,25 @@
 # frozen_string_literal: true
 
-# DEFAULT PERMISSIONS
-#   1 - ADMIN
-#   2 - MANAGE
-#   3 - RUN
-#   4 - DESIGN
-#   5 - DEVELOP
-#   6 - RETIRED
+# Default permissions
+#   1 - admin
+#   2 - manage
+#   3 - run
+#   4 - design
+#   5 - develop
+#   6 - retired
 
-# RETIRED AND ADMIN ARE SPECIAL CASES
-#   - IF RETIRED, THEN THE USER HAS NO ACCESS AND ALL OTHER PERMISSIONS ARE IGNORED (INCLUDING ADMIN)
-#   - IF ADMIN (AND NOT RETIRED), THEN THE USER HAS ACCESS TO MANAGE, RUN, DESIGN, AND DEVELOP
-#     REGARDLESS OF WHETHER THE USER HAS EXPLICIT PERMISSIONS FOR THOSE ITEMS
+# Retired and admin are special cases
+#   - If retired, then the user has no access and all other permissions are ignored (including admin)
+#   - If admin (and not retired), then the user has access to manage, run, design, and develop
+#     Regardless of whether the user has explicit permissions for those items
 
-# PERMISSIONS TABLE
+# permissions table
 class Permission < ActiveRecord::Base
-  # usage   permission_ids[<id>]
-  # usage   permission_ids.key(<name>)
+  # Cache and return the list of permissions.
+  #
+  # @param clear_cache [Boolean] true to clear the cache
+  #
+  # @return permissions
   def self.permission_ids(clear_cache = false)
     Rails.cache.delete 'permission_ids' if clear_cache
     Rails.cache.fetch 'permission_ids' do

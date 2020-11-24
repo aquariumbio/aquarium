@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Api::V3::SampleTypesController, type: :request do
   describe 'api' do
 
-    # SIGN IN USERS
+    # Sign in users
     before :all do
       @token_1 = []
 
@@ -12,7 +12,7 @@ RSpec.describe Api::V3::SampleTypesController, type: :request do
       @token_1 << resp["token"]
     end
 
-    # CREATE SAMPLE TYPE WITH ERRORS
+    # Create sample type with errors
     it "invalid_sample_type" do
       post "/api/v3/sample_types/create?token=#{@token_1[0]}"
       expect(response).to have_http_status 200
@@ -24,10 +24,10 @@ RSpec.describe Api::V3::SampleTypesController, type: :request do
     end
 
 
-    # CRUD SAMPLE TYPE
-    # COMPLEX TESTS BUT THEY ARE ALL INTER-WOVEN SO IT IS EASIER THAN BREAKING THEM UP
+    # Crud sample type
+    # Complex tests but they are all inter-woven so it is easier than breaking them up
     it "crud_sample_type" do
-      # SAMPLE TYPE PARAMETERS TO BE USED AS ALLOWABLE FEILD TYPES
+      # Sample type parameters to be used as allowable feild types
       params_1 = {
           id: nil,
           name: "sample name 1",
@@ -42,21 +42,21 @@ RSpec.describe Api::V3::SampleTypesController, type: :request do
           field_types: nil
       }
 
-      # CREATE SAMPLE TYPE
+      # Create sample type
       post "/api/v3/sample_types/create?token=#{@token_1[0]}", :params => params_1
       expect(response).to have_http_status 201
 
       resp = JSON.parse(response.body)
       id_1 = resp["id"]
 
-      # CREATE SAMPLE TYPE
+      # Create sample type
       post "/api/v3/sample_types/create?token=#{@token_1[0]}", :params => params_2
       expect(response).to have_http_status 201
 
       resp = JSON.parse(response.body)
       id_2 = resp["id"]
 
-      # SAMPLE TYPE PARAMETERS
+      # Sample type parameters
       params = {
           id: nil,
           name: "sample name 3",
@@ -92,18 +92,18 @@ RSpec.describe Api::V3::SampleTypesController, type: :request do
           ]
       }
 
-      # CREATE SAMPLE TYPE
+      # Create sample type
       post "/api/v3/sample_types/create?token=#{@token_1[0]}", :params => params
       expect(response).to have_http_status 201
 
       resp = JSON.parse(response.body)
       this_id = resp["id"]
 
-      # GET SAMPLE TYPE
+      # Get sample type
       get "/api/v3/sample_types/#{this_id}?token=#{@token_1[0]}"
       expect(response).to have_http_status 200
 
-      # GET THE SAMPLE TYPE IDS
+      # Get the sample type ids
       resp = JSON.parse(response.body)
 
       this_ft      = resp["sample_type"]["field_types"]
@@ -113,9 +113,9 @@ RSpec.describe Api::V3::SampleTypesController, type: :request do
       this_aft_id_0_0 = this_aft_0[0]["id"]
       this_aft_id_0_1 = this_aft_0[1]["id"]
 
-      # UPDATE SAMPLE TYPE
-      # SWITCH THE VALUES OF THE FIELD TYPES AND THEN CHECK RESULTS
-      # CAN RUN A SLEW OF OTHER TESTS BUT IF IT GETS THESE EVERYTHING SHOULD WORK
+      # Update sample type
+      # Switch the values of the field types and then check results
+      # Can run a slew of other tests but if it gets these everything should work
       update_params = {
           id: this_id,
           name: "sample name 4",
@@ -155,13 +155,13 @@ RSpec.describe Api::V3::SampleTypesController, type: :request do
       expect(response).to have_http_status 200
       resp = JSON.parse(response.body)
 
-      # GET SAMPLE TYPE
+      # Get sample type
       get "/api/v3/sample_types/#{this_id}?token=#{@token_1[0]}"
       expect(response).to have_http_status 200
 
       resp = JSON.parse(response.body)
 
-      # FIELDS SHOULD HAVE SWITCHED
+      # Fields should have switched
       update_ft      = resp["sample_type"]["field_types"]
       update_ft_0    = update_ft[0]["ftype"]
       update_ft_1    = update_ft[1]["ftype"]
@@ -174,7 +174,7 @@ RSpec.describe Api::V3::SampleTypesController, type: :request do
       expect(update_aft_1_0).to eq id_1
       expect(update_aft_1_1).to eq id_2
 
-      # DELETE SAMPLE TYPES
+      # Delete sample types
       post "/api/v3/sample_types/#{this_id}/delete?token=#{@token_1[0]}"
       expect(response).to have_http_status 200
 

@@ -1,9 +1,12 @@
-# SAMPLE_TYPES TABLE
+# sample_types table
 class SampleType < ActiveRecord::Base
 
   validates :name,        presence: true, uniqueness: { case_sensitive: false }
   validates :description, presence: true
 
+  # Return all sample types.
+  #
+  # @return all sample types
   def self.find_all
     sql = "
       select * from sample_types order by name
@@ -18,6 +21,11 @@ class SampleType < ActiveRecord::Base
     (SampleType.find_by_sql sql)[0]
   end
 
+  # Return details for a specific sample types.
+  #
+  # @param id [Int] the id of the sample type
+  #
+  # @return the sample types
   def self.details(id)
     # GET FEILD TYPES
     sql = "
@@ -58,6 +66,28 @@ class SampleType < ActiveRecord::Base
     return { field_types: field_types, inventory: inventory, object_types: object_types }
   end
 
+  # Create a sample types.
+  #
+  # @param st [Hash] the sample type
+  #
+  # @option st[:name] [String] the name of the sample type
+  # @option st[:description] [String] the description of the sample type
+  # @option st[:field_types] [Hash] the field_type attributes associated with the sample type
+  #
+  # feild_types = {
+  #   name [String] name
+  #   ftype [String]  ftype
+  #   required [String] required - interpreted as Boolen
+  #   array [String] array - interpreted as Boolean
+  #   choices [String] choices
+  #   allowable_field_types [Array] array of allowable field types (for ftype = "sample")
+  # }
+  #
+  # allowable_field_type = {
+  #   sample_type_id [Int] id of the allowable field type
+  # }
+  #
+  # @return the sample type
   def self.create(st)
     name = Input.text(st[:name])
     description = Input.text(st[:description])
@@ -117,37 +147,58 @@ class SampleType < ActiveRecord::Base
 
   end
 
-  # UPDATE EXISTING SAMPLE TYPE
-  # - UPDATE THE SAMPLE TYPE
-  # - KEEP ANY EXISTING FIELD TYPES (AND CHANGE THEM AS NECESSARY)
-  # - REMOVE ANY FEILD TYPES THAT NO LONGER EXIST
-  # - ADD ANY NEW FEILD TYPES
-  # - ALSO UPDATE ALLOWABLE FIELD TYPES FOR EACH FIELD TYPE
-  # ANY ERRORS ARE HANDLED AUTOMATICALLY AND SILENTLY
+  # Update existing sample type
+  # - Keeps any existing field types (and changes them as necessary)
+  # - Removes any feild types that no longer exist
+  # - Adds any new feild types
+  # - Also updates allowable field types for each field type
+  # - Any potential errors are handled automatically and silently
+  #
+  # @param st [Hash] the sample type
+  #
+  # @option st[:id] [Int] the id of the sample type
+  # @option st[:name] [String] the name of the sample type
+  # @option st[:description] [String] the description of the sample type
+  # @option st[:field_types] [Hash] the field_type attributes associated with the sample type
+  #
+  # feild_types = {
+  #   id [Int] the id of the existing field type <or> nil if it is new
+  #   name [String] name
+  #   ftype [String]  ftype
+  #   required [String] required - interpreted as Boolen
+  #   array [String] array - interpreted as Boolean
+  #   choices [String] choices
+  #   allowable_field_types [Array] array of allowable field types (for ftype = "sample")
+  # }
+  #
+  # allowable_field_type = {
+  #   id [Int] the id of the existing allowable field type <or> nil if it is new
+  #   sample_type_id [Int] id of the allowable field type
+  # }
+  #
+  # @return the sample type
   def update(st)
     input_name = Input.text(st[:name])
     input_description = Input.text(st[:description])
 
-    # CHECK FOR DUPLICATES
-
-    # UPDATE NAME AND DESCRIPTION IF NOT BLANK
+    # Update name and description if not blank
     self.name = input_name if input_name
     self.description = input_description if input_description
 
-    # UPDATE THE SAMPLE TYPE NAME AND DESCRIPTION IF VALID (OTHERWISE LEAVE AS IS)
+    # Update the sample type name and description if valid (otherwise leave as is)
     self.save if self.valid?
 
-    # LIST OF FIELD TYPE IDS
-    # - USED TO DELETE FIELD TYPES THAT WERE REMOVED ON UPDATE
-    # - INITIALIZE WITH ID = 0 TO GENERATE THE APPROPRIATE SQL QUERY LATER
+    # List of field type ids
+    # - Used to delete field types that were removed on update
+    # - Initialize with id = 0 to generate the appropriate sql query later
     field_type_ids = [0]
 
-    # SAVE FIELD TYPE IF THERE IS A FIELD NAME
+    # Save field type if there is a field name
     if st[:field_types].kind_of?(Array)
       st[:field_types].each do |ft|
-        # LIST OF ALLOWABLE FIELD TYPE IDS FOR THIS FIELD_TYPE_ID
-        # - USED TO DELETE ALLOWABLE FIELD TYPES THAT WERE REMOVED ON UPDATE
-        # - INITIALIZE WITH ID = 0 TO GENERATE THE APPROPRIATE SQL QUERY LATER
+        # List of allowable field type ids for this field_type_id
+        # - Used to delete allowable field types that were removed on update
+        # - Initialize with id = 0 to generate the appropriate sql query later
         allowable_field_type_ids = [0]
 
         fid       = Input.number(ft[:id])
@@ -157,13 +208,13 @@ class SampleType < ActiveRecord::Base
         farray    = Input.boolean(ft[:array])
         fchoices  = Input.text(ft[:choices])
 
-        # FIND EXISTING FEILD_TYPE OR CREATE NEW ONE
+        # Find existing feild_type or create new one
         sql = "select * from field_types where id = #{fid} and parent_id = #{self.id} limit 1"
 
         field_type_update = (FieldType.find_by_sql sql)[0] || FieldType.new
 
-        # SET FNAME IF EXISTS AND INPUT IS NOT BLANK
-        # AWKWARD LOGIC, BUT THAT'S HOW IT WORKS IN V2
+        # Set fname if exists and input is not blank
+        # Awkward logic, but that's how it works in v2
         fname = fname || field_type.name
 
         if fname != ""
@@ -176,43 +227,43 @@ class SampleType < ActiveRecord::Base
           field_type_update.parent_class = "SampleType"
           field_type_update.save
 
-          # APPEND TO LIST OF FIELD_TYPE_IDS
+          # Append to list of field_type_ids
           field_type_id = field_type_update.id
           field_type_ids << field_type_id
 
-          # SAVE ALLOWABLE FIELD TYPES IF THE FIELD TYPE IS "SAMPLE"
+          # Save allowable field types if the field type is "sample"
           if ftype == "sample" and ft[:allowable_field_types].kind_of?(Array)
             ft[:allowable_field_types].each do |aft|
-              # VERIFY THAT THE SAMPLE_TYPE_ID IS VALID
+              # Verify that the sample_type_id is valid
               sample_type_id = Input.number(aft[:sample_type_id])
               sql = "select * from sample_types where id = #{sample_type_id} limit 1"
 
               if (SampleType.find_by_sql sql)[0]
-                # FIND EXISTING ALLOWABLE_FIELD_TYPE OR CREATE NEW ONE
+                # Find existing allowable_field_type or create new one
                 allowable_field_type_id = Input.number(aft[:id])
                 sql = "select * from allowable_field_types where id = #{allowable_field_type_id} and field_type_id = #{field_type_id} limit 1"
                 allowable_field_type_update = (AllowableFieldType.find_by_sql sql)[0] || AllowableFieldType.new
 
-                # CREATE / UPDATE THE ALLOWABLE_FIELD_TYPE
+                # Create / update the allowable_field_type
                 allowable_field_type_update.field_type_id  = field_type_id
                 allowable_field_type_update.sample_type_id = sample_type_id
                 allowable_field_type_update.save
 
-                # APPEND TO LIST OF ALLOWABLE_FIELD_TYPE_IDS FOR THIS FIELD_TYPE_ID
+                # Append to list of allowable_field_type_ids for this field_type_id
                 allowable_field_type_ids << allowable_field_type_update.id
               end
             end
           end
 
-          # REMOVE ALLOWABLE_FIELD_TYPES FOR THIS FIELD TYPE THAT ARE NO LONER DEFINED
+          # Remove allowable_field_types for this field type that are no loner defined
           sql = "delete from allowable_field_types where field_type_id = #{field_type_id} and id not in (#{allowable_field_type_ids.join(",")})"
           AllowableFieldType.connection.execute sql
         end
       end
     end
 
-    # REMOVE FIELD_TYPES THAT ARE NO LONGER DEFINED
-    # NOTE: AUTOMATICALLY REMOVES ALLOWABLE FIELD TYPES TIED TO THESE FIELD TYPES USING MYSQL FOREIGN KEY + ONDELETE CASCADE
+    # Remove field_types that are no longer defined
+    # Note: automatically removes allowable field types tied to these field types using mysql foreign key + ondelete cascade
     sql = "delete from field_types where parent_id = #{self.id} and id not in (#{field_type_ids.join(",")})"
     FieldType.connection.execute sql
 
@@ -220,11 +271,11 @@ class SampleType < ActiveRecord::Base
   end
 
   def delete_sample_type
-    # DELETE FIELD_TYPES (THEY DO NOT HAVE FOREIGN KEYS)
+    # Delete field_types (they do not have foreign keys)
     sql = "delete from field_types where parent_class = 'SampleType' and parent_id = #{self.id}"
     FieldType.connection.execute sql
 
-    # DELETE SELF
+    # Delete self
     self.delete
 
     return true
