@@ -11,14 +11,14 @@ module Api
         password = params[:password]
 
         user = User.find_by(login: login)
-        render json: { error: 'Invalid.' }.to_json, status: :unauthorized and return if !user || !user.authenticate(password)
+        render json: { error: 'Invalid' }.to_json, status: :unauthorized and return if !user || !user.authenticate(password)
 
         ip = request.remote_ip
         timenow = Time.now.utc
 
         # CREATE A TOKEN
         token = UserToken.new_token(ip)
-        render json: { error: 'Invalid.' }.to_json, status: :unauthorized unless token
+        render json: { error: 'Invalid' }.to_json, status: :unauthorized unless token
 
         user_token = UserToken.new
         user_token.user_id = user.id
@@ -38,9 +38,9 @@ module Api
         all = (params[:all] == 'true' || params[:all] == 'on')
 
         signout = User.sign_out({ ip: ip, token: token, all: all })
-        render json: { error: 'Invalid.' }.to_json, status: :unauthorized and return unless signout
+        render json: { error: 'Invalid' }.to_json, status: :unauthorized and return unless signout
 
-        render json: { message: 'Signed out.' }.to_json, status: :ok
+        render json: { message: 'Signed out' }.to_json, status: :ok
       end
 
       # GET USER

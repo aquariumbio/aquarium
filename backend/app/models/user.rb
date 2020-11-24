@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
 
     if !usertoken
       # INVALID TOKEN OR IP
-      [401, "Invalid."]
+      [401, "Invalid"]
     elsif usertoken.timenow.to_s[0, 19] < timeok
       # SESSION TIMEOUT
       # DELETE THE TOKEN
