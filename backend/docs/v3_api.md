@@ -62,7 +62,7 @@ This document describes the current API v3
     ```bash
     status: :unauthorized (401),
     {
-      error: "Session timeout."
+      error: "Session timeout"
     }
     ```
 
@@ -71,7 +71,7 @@ This document describes the current API v3
     ```bash
     status: :forbidden (403),
     {
-      error: "<permission> permissions required." / "Forbidden."
+      error: "<permission> permissions required" / "Forbidden"
     }
     ```
 

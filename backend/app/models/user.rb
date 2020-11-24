@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
 
     if !usertoken
       # Invalid token or ip
-      [401, "Invalid."]
+      [401, "Invalid"]
     elsif usertoken.timenow.to_s[0, 19] < timeok
       # Session timeout
       # Delete the token
@@ -40,7 +40,7 @@ class User < ActiveRecord::Base
       sql = "delete from user_tokens where #{deletes} limit 1"
       User.connection.execute sql
 
-      [401, "Session timeout."]
+      [401, "Session timeout"]
     elsif !usertoken.permission?(check_permission_id)
       # Forbidden
       [403, nil]

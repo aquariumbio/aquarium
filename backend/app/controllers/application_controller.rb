@@ -21,7 +21,7 @@ class ApplicationController < ActionController::API
     when 403
       status = "forbidden"
       permission = Permission.permission_ids[permission_id]
-      error = permission ? "#{permission.capitalize} permissions required." : 'Forbidden.'
+      error = permission ? "#{permission.capitalize} permissions required" : 'Forbidden'
       response = { error: error }
     when 200
       status = "ok"
