@@ -4,10 +4,10 @@ module Api
   module V3
     # Sample type api calls
     class SampleTypesController < ApplicationController
-      # Return all sample types.
+      # Return all sample types plus details for the first sample type
       #
       # @param token [String] a token
-      # @return all sample types
+      # @return all sample types plus details for the first sample type
       def index
         # Check for admin permissions
         status, response = check_token_for_permission(1)
@@ -17,7 +17,7 @@ module Api
         list = SampleType.find_all
         render json: { sample_types: nil,  }.to_json, status: :ok and return if list.length == 0
 
-        # Get details of first item in list
+        # Get details of first sample type in list
         details = SampleType.details(list[0].id)
         details = details.update({ id: list[0].id, name: list[0].name })
 
@@ -39,17 +39,17 @@ module Api
 
         id = Input.number(params[:id])
 
-        # Get item
+        # Get sample type
         sample_type = SampleType.find_id(id)
         render json: { sample_type: nil  }.to_json, status: :ok and return if !sample_type
 
-        # Get details of first item in list
+        # Get details for sample type
         details = SampleType.details(id)
         details = details.update({ id: id, name: sample_type.name, description: sample_type.description })
 
         render json: {
           sample_type: details
-         }.to_json, status: :ok
+        }.to_json, status: :ok
       end
 
       # Create a new sample type.
@@ -64,6 +64,7 @@ module Api
         status, response = check_token_for_permission(1)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
+        # create sample type
         sample_type, errors = SampleType.create(params)
         render json: { errors: errors }.to_json, status: :ok and return if !sample_type
 
@@ -86,11 +87,11 @@ module Api
 
         id = Input.number(params[:id])
 
-        # Get item
+        # Get sample type
         sample_type = SampleType.find_id(id)
         render json: { sample_type: nil  }.to_json, status: :ok and return if !sample_type
 
-        # Update sample
+        # Update sample type
         # Note: any errors handled automatically and silently
         sample_type = sample_type.update(params)
 
@@ -109,17 +110,16 @@ module Api
 
         id = Input.number(params[:id])
 
-        # Get item
+        # Get sample type
         sample = SampleType.find_id(id)
         render json: { sample_type: nil  }.to_json, status: :ok and return if !sample
 
-        # Delete item and related items without foreign keys
+        # Delete sample type and related items that do not have foreign keys
         sample.delete_sample_type
 
         render json: {
           message: "deleted"
          }.to_json, status: :ok
-
       end
 
     end
