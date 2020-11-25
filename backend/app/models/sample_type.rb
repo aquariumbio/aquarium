@@ -14,6 +14,10 @@ class SampleType < ActiveRecord::Base
     SampleType.find_by_sql sql
   end
 
+  # Return a specific sample type.
+  #
+  # @param id [Int] the id of the sample type
+  # @return the sample types
   def self.find_id(id)
     sql = "
       select * from sample_types where id = #{id} limit 1
@@ -21,13 +25,13 @@ class SampleType < ActiveRecord::Base
     (SampleType.find_by_sql sql)[0]
   end
 
-  # Return details for a specific sample types.
+  # Return details for a specific sample type.
   #
   # @param id [Int] the id of the sample type
   #
-  # @return the sample types
+  # @return the sample type details
   def self.details(id)
-    # GET FEILD TYPES
+    # Get feild types
     sql = "
       select *, null as 'allowable_field_types'
       from field_types ft
@@ -36,8 +40,8 @@ class SampleType < ActiveRecord::Base
     "
     field_types = FieldType.find_by_sql sql
 
-    # GET SAMPLE_OPTIONS FOR FIELD_TYPE == "SAMPLE"
-    # MAKES <N> CALLS TO THE DB BUT <N> SHOULD NOT BE LARGE
+    # Get sample_options for field_type == "sample"
+    # Makes <n> calls to the db but <n> should not be large
     field_types.each do |ft|
       if ft.ftype == "sample"
         sql = "
@@ -53,11 +57,11 @@ class SampleType < ActiveRecord::Base
       end
     end
 
-    # GET INVENTORY
-    # TODO -- IMPLEMENT THIS WHEN IMPLEMENT INVENTORY
+    # Get inventory
+    # Todo -- implement this when implement inventory
     inventory = 0
 
-    # GET OBJECT TYPES (CONTAINERS)
+    # Get object types (containers)
     sql = "
       select * from object_types where sample_type_id = #{id} order by name
     "
@@ -88,7 +92,7 @@ class SampleType < ActiveRecord::Base
     name = Input.text(st[:name])
     description = Input.text(st[:description])
 
-    # CREATE TEH SAMPLE TYPE
+    # Create teh sample type
     sample_type_new = SampleType.new
     sample_type_new.name = name
     sample_type_new.description = description
@@ -96,10 +100,10 @@ class SampleType < ActiveRecord::Base
     valid = sample_type_new.valid?
     return false, sample_type_new.errors if !valid
 
-    # SAVE THE SAMPLE TYPE IF IT IS VALID
+    # Save the sample type if it is valid
     sample_type_new.save
 
-    # SAVE FIELD TYPE IF THERE IS A FIELD NAME
+    # Save field type if there is a field name
     if st[:field_types].kind_of?(Array)
       st[:field_types].each do |ft|
         fname     = Input.text(ft[:name])
