@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Select } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -45,7 +45,8 @@ const SampleTypeField = ({ fieldType, index, updateParentState, handleRemoveFiel
     fieldTypeObj[name] = value;
     updateParentState(name, value, index);
   };
-
+  // eslint-disable-next-line no-console
+  console.log(fieldType);
   return (
     <Grid container spacing={1} cy-data="field_form_container">
       {/* Titles */}
@@ -87,7 +88,7 @@ const SampleTypeField = ({ fieldType, index, updateParentState, handleRemoveFiel
             id="field_name"
             // label="Field name"
             placeholder="Field name"
-            onChange={handleChange}
+            onChange={() => handleChange}
             variant="outlined"
             type="string"
             required
@@ -97,30 +98,27 @@ const SampleTypeField = ({ fieldType, index, updateParentState, handleRemoveFiel
         </Grid>
 
         <Grid item lg={1}>
-          <TextField
+          <Select
             name="type"
-            select
             variant="outlined"
             id="field_type_select"
             value={fieldType.type}
-            onChange={handleChange}
-            SelectProps={{
-              MenuProps: {
-                // open below input
-                anchorOrigin: {
-                  vertical: 'bottom',
-                  horizontal: 'left',
-                },
-                getContentAnchorEl: null,
+            onChange={() => handleChange}
+            MenuProps={{
+              // open below input
+              anchorOrigin: {
+                vertical: 'bottom',
+                horizontal: 'left',
               },
+              getContentAnchorEl: null,
             }}
             cy-data="field_type_select"
           >
-            <MenuItem value="string">string</MenuItem>
-            <MenuItem value="number">number</MenuItem>
-            <MenuItem value="url">url</MenuItem>
-            <MenuItem value="sample">sample</MenuItem>
-          </TextField>
+            <MenuItem value="string" name="select_string">string</MenuItem>
+            <MenuItem value="number" name="select_number">number</MenuItem>
+            <MenuItem value="url" name="select_url">url</MenuItem>
+            <MenuItem value="sample" name="select_sample">sample</MenuItem>
+          </Select>
         </Grid>
 
         <Grid item lg={1}>
@@ -130,7 +128,7 @@ const SampleTypeField = ({ fieldType, index, updateParentState, handleRemoveFiel
               <Checkbox
                 name="isRequired"
                 value={fieldType.isRequired}
-                onChange={handleChange}
+                onChange={() => handleChange}
                 color="primary"
                 inputProps={{ 'aria-label': 'Required' }}
               />
@@ -147,7 +145,7 @@ const SampleTypeField = ({ fieldType, index, updateParentState, handleRemoveFiel
               <Checkbox
                 name="isArray"
                 value={fieldType.isArray}
-                onChange={handleChange}
+                onChange={() => handleChange}
                 color="primary"
                 inputProps={{ 'aria-label': 'Array' }}
               />
@@ -180,7 +178,7 @@ const SampleTypeField = ({ fieldType, index, updateParentState, handleRemoveFiel
               helperText="Comma separated. Leave blank for unrestricted value."
               inputProps={{ 'aria-label': 'choices' }}
               value={fieldType.choices}
-              onChange={handleChange}
+              onChange={() => handleChange}
               cy-data="add_field_option_input"
             />
           ) : (
