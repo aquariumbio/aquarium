@@ -1,8 +1,3 @@
-# Base docker-compose file for aquarium
-#
-# Defines services for Aquarium, Krill, database, and S3.  Uses Docker network
-# address translation, and containers for MySQL, and the Minio S3 server.
-#
 version: "3.5"
 services:
   backend:
@@ -10,9 +5,6 @@ services:
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
-      S3_ACCESS_KEY_ID: ${S3_ID}
-      S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY}
-      S3_REGION: ${S3_REGION}
       SECRET_KEY_BASE: ${SECRET_KEY_BASE}
       TECH_DASHBOARD: ${TECH_DASHBOARD}
       SESSION_TIMEOUT: ${SESSION_TIMEOUT}
@@ -20,20 +12,14 @@ services:
     volumes:
       - ./backend/db:/aquarium/db
       - ./backend/log:/aquarium/log
-#      - ./backend/biofab-eula.yml:/aquarium/config/user_agreement.yml
     networks:
       - aquarium_net
-    expose:
-      - "3001"
     depends_on:
       - db
 
-
   frontend:
-    depends_on: 
+    depends_on:
       - backend
-    expose:
-      - "3000"
     networks:
       - aquarium_net
 
@@ -48,14 +34,6 @@ services:
       TZ: ${TIMEZONE}
     networks:
       - aquarium_net
-
-  web:
-    image: nginx:stable-alpine
-    networks:
-      - aquarium_net
-    depends_on:
-      - backend
-      - frontend
 
 networks:
   aquarium_net:
