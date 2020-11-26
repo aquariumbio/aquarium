@@ -1,9 +1,10 @@
 #!/bin/bash
-ENV_FILE=.env
+ENV_DIR=.env
 
 _has_variable() {
-    variable=$1
-    grep -q "^$variable" $ENV_FILE
+    local variable=$1
+    local env_file=$2
+    grep -q "^$variable" $env_file
     if [[ $? -eq 0 ]]; then
         return 0
     else
@@ -12,56 +13,58 @@ _has_variable() {
 }
 
 _set_value() {
-    variable=$1
-    value=$2
-    echo $variable=$value >> $ENV_FILE
+    local variable=$1
+    local value=$2
+    local env_file=$3
+    echo $variable=$value >> $env_file
 }
 
 _set_variable() {
-    variable=$1
-    value=$2
-    _has_variable $variable
+    local variable=$1
+    local value=$2
+    local env_file=$3
+    _has_variable $variable $env_file
     if [[ $? -gt 0 ]]; then
-       _set_value $variable $value
+       _set_value $variable $value $env_file
     fi
 }
 
 _set_random() {
-    variable=$1
-    length=$2
-    _has_variable $variable
+    local variable=$1
+    local length=$2
+    local env_file=$3
+    _has_variable $variable $env_file
     if [[ $? -gt 0 ]]; then
-        value=`openssl rand -hex $length`
-        _set_value $variable $value
+        local value=`openssl rand -hex $length`
+        _set_value $variable $value $env_file
     fi
 }
 
 _set_timezone() {
-    _has_variable 'TIMEZONE'
+    local env_file=$1
+    _has_variable 'TIMEZONE' $env_file
     if [[ $? -gt 0 ]]; then
-        timezone=`curl https://ipapi.co/timezone` 2> /dev/null
-        _set_variable 'TIMEZONE' $timezone
+        local timezone=`curl https://ipapi.co/timezone` 2> /dev/null
+        _set_variable 'TIMEZONE' $timezone $env_file
     fi
 }
 
-if [[ ! -f "$ENV_FILE" ]]; then
-    echo "Initializing configuration file"
-    touch $ENV_FILE
-fi
+mkdir -p $ENV_DIR
+env_file=$ENV_DIR/aquarium
+_set_variable 'AQUARIUM_VERSION' '2.8.1' $env_file
+_set_timezone $env_file
+_set_variable 'TECH_DASHBOARD' 'false' $ENV_FILE
+_set_variable 'SESSION_TIMEOUT' '15' $ENV_FILE
+#_set_random 'SECRET_KEY_BASE' '64' $ENV_FILE
 
-_set_variable 'AQUARIUM_VERSION' '2.8.1'
-_set_variable 'APP_PUBLIC_PORT' '80'
-_set_variable 'S3_PUBLIC_PORT' '9000'
-_set_variable 'DB_NAME' 'production'
-_set_variable 'DB_USER' 'aquarium'
-_set_variable 'DB_PASSWORD' 'aSecretAquarium'
-_set_variable 'S3_SERVICE' 'minio'
-_set_variable 'S3_ID' 'aquarium_minio'
-_set_variable 'S3_REGION' 'us-west-1'
-_set_variable 'TECH_DASHBOARD' 'false'
-_set_random 'S3_SECRET_ACCESS_KEY' '40'
-_set_random 'SECRET_KEY_BASE' '64'
-_set_timezone
+mkdir -p $ENV_DIR/production
+env_file=$ENV_DIR/production/web
+_set_variable 'APP_PUBLIC_PORT' '80' $env_file
+
+env_file=$ENV_DIR/production/db
+_set_variable 'DB_NAME' 'production' $env_file
+_set_variable 'DB_USER' 'aquarium' $env_file
+_set_variable 'DB_PASSWORD' 'aSecretAquarium' $env_file
 
 DB_INIT_DIR=./docker/mysql_init
 DB_FILE=$DB_INIT_DIR/dump.sql
