@@ -69,12 +69,6 @@ _start_development_server() {
     exec rails server -e development -p 3001 -b '0.0.0.0'
 }
 
-# Starts the krill server using the rails environment passed as an argument.
-_start_krill_server() {
-    _add_ecs_namespace()
-    echo "Starting $1 Krill runner"
-    exec rails runner -e $1 "Krill::Server.new.run(${KRILL_PORT:-3500})"
-}
 
 
 _add_admin_user() {
@@ -99,8 +93,6 @@ _main() {
         _start_development_server
     elif [ $1 = "production" ]; then
         _start_production_server
-    elif [ $1 = "krill" ]; then
-        _start_krill_server $2
     elif [ $1 = "update" ]; then
         _update_database
     else
