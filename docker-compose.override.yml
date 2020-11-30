@@ -35,13 +35,12 @@ services:
       - './frontend:/app'
       - '/app/node_modules'
 
-# TODO: change to directory with dump file per database
   db:
     ports:
       - "3307:3306"
     volumes:
       - db_data:/var/lib/mysql
-      - ./docker/mysql_init/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+      - ./data/mysql_init/:/docker-entrypoint-initdb.d/
 
 volumes:
   db_data:
