@@ -4,7 +4,6 @@ import { makeStyles, Select } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -27,13 +26,13 @@ const useStyles = makeStyles((theme) => ({
 const SampleTypeField = ({ fieldType, index, updateParentState, handleRemoveFieldClick }) => {
   const classes = useStyles();
 
-  let showSampleOptions = fieldType.type === 'sample';
-  let showSampleChoices = fieldType.type === 'string' || fieldType.type === 'number';
+  let showSampleSelect = fieldType.type === 'sample';
+  let showChoicesInput = fieldType.type === 'string' || fieldType.type === 'number';
 
   useEffect(() => {
     // Update showSampleOptions & showSampleChoices when fieldType.type changes
-    showSampleOptions = fieldType.type === 'sample';
-    showSampleChoices = fieldType.type === 'string' || fieldType.type === 'number';
+    showSampleSelect = fieldType.type === 'sample';
+    showChoicesInput = fieldType.type === 'string' || fieldType.type === 'number';
   });
 
   // Handle input change: Pass the name and value to the parent callback.
@@ -45,26 +44,50 @@ const SampleTypeField = ({ fieldType, index, updateParentState, handleRemoveFiel
     fieldTypeObj[name] = value;
     updateParentState(name, value, index);
   };
-  // eslint-disable-next-line no-console
-  console.log(fieldType);
+
+  // Fields are not required on sample types so a user should be able add an empty field
+  // But if any of the field inputs are not empty or null we want to set some requirements
+  // eslint-disable-next-line no-unused-vars
+  const fieldRequired = () => {
+    const emptyFieldType = {
+      id: null,
+      name: '',
+      type: '',
+      isRequired: false,
+      isArray: false,
+      choices: '',
+    };
+
+    return fieldType !== emptyFieldType;
+  };
+
   return (
     <Grid container spacing={1} cy-data="field_form_container">
       {/* Titles */}
       <>
         <Grid container item lg={2}>
-          <Typography variant="h5" className={classes.label}> Field Name</Typography>
+          <Typography variant="h5" className={classes.label}>
+            {' '}
+            Field Name
+          </Typography>
         </Grid>
 
         <Grid item lg={1}>
-          <Typography variant="h5" className={classes.label}>Type</Typography>
+          <Typography variant="h5" className={classes.label}>
+            Type
+          </Typography>
         </Grid>
 
         <Grid item lg={1}>
-          <Typography variant="h5" className={classes.label}>Required?</Typography>
+          <Typography variant="h5" className={classes.label}>
+            Required
+          </Typography>
         </Grid>
 
         <Grid item lg={1}>
-          <Typography variant="h5" className={classes.label}>Array?</Typography>
+          <Typography variant="h5" className={classes.label}>
+            Array
+          </Typography>
         </Grid>
 
         <Grid item lg={2}>
@@ -74,7 +97,9 @@ const SampleTypeField = ({ fieldType, index, updateParentState, handleRemoveFiel
         </Grid>
 
         <Grid item lg={5}>
-          <Typography variant="h5" className={classes.label}>Choices</Typography>
+          <Typography variant="h5" className={classes.label}>
+            Choices
+          </Typography>
         </Grid>
       </>
 
@@ -88,24 +113,25 @@ const SampleTypeField = ({ fieldType, index, updateParentState, handleRemoveFiel
             id="field_name"
             // label="Field name"
             placeholder="Field name"
-            onChange={() => handleChange}
+            onChange={handleChange}
             variant="outlined"
             type="string"
-            required
             // TODO: Error HANDLING -- ONLY SHOW HELPER TEXT ON ERROR
-            helperText="Field name is required."
           />
         </Grid>
 
         <Grid item lg={1}>
           <Select
             name="type"
+            labelId="type-select-label"
             variant="outlined"
             id="field_type_select"
             value={fieldType.type}
-            onChange={() => handleChange}
+            onChange={handleChange}
+            displayEmpty
+            inputProps={{ 'aria-label': 'type' }}
             MenuProps={{
-              // open below input
+              // open below
               anchorOrigin: {
                 vertical: 'bottom',
                 horizontal: 'left',
@@ -114,60 +140,70 @@ const SampleTypeField = ({ fieldType, index, updateParentState, handleRemoveFiel
             }}
             cy-data="field_type_select"
           >
-            <MenuItem value="string" name="select_string">string</MenuItem>
-            <MenuItem value="number" name="select_number">number</MenuItem>
-            <MenuItem value="url" name="select_url">url</MenuItem>
-            <MenuItem value="sample" name="select_sample">sample</MenuItem>
+            <MenuItem value="" name="select_none" disabled>
+              {' '}
+              -
+              {' '}
+            </MenuItem>
+            <MenuItem value="string" name="select_string">
+              string
+            </MenuItem>
+            <MenuItem value="number" name="select_number">
+              number
+            </MenuItem>
+            <MenuItem value="url" name="select_url">
+              url
+            </MenuItem>
+            <MenuItem value="sample" name="select_sample">
+              sample
+            </MenuItem>
           </Select>
         </Grid>
 
-        <Grid item lg={1}>
-          <FormControlLabel
-            style={{ textAlign: 'center' }}
-            control={(
-              <Checkbox
-                name="isRequired"
-                value={fieldType.isRequired}
-                onChange={() => handleChange}
-                color="primary"
-                inputProps={{ 'aria-label': 'Required' }}
-              />
-            )}
-            label={fieldType.isRequired.toString()}
-            labelPlacement="end"
-            cy-data="field_is_required_checkbox"
+        <Grid item lg={1} name="is_required_checkbox_div">
+          <Checkbox
+            name="isRequired"
+            value={fieldType.isRequired}
+            onClick={handleChange}
+            color="primary"
+            inputProps={{
+              'aria-label': 'Required',
+              'cy-data': 'field_is_required_checkbox',
+            }}
           />
         </Grid>
 
-        <Grid item lg={1}>
-          <FormControlLabel
-            control={(
-              <Checkbox
-                name="isArray"
-                value={fieldType.isArray}
-                onChange={() => handleChange}
-                color="primary"
-                inputProps={{ 'aria-label': 'Array' }}
-              />
-            )}
-            label={fieldType.isArray.toString()}
-            labelPlacement="end"
-            cy-data="field_is_array_checkbox"
+        <Grid item lg={1} name="is_array_checkbox_div">
+          <Checkbox
+            name="isArray"
+            value={fieldType.isArray}
+            onClick={handleChange}
+            color="primary"
+            inputProps={{
+              'aria-label': 'Array',
+              'cy-data': 'field_is_array_checkbox',
+            }}
           />
         </Grid>
 
-        <Grid item lg={2}>
-          {showSampleOptions ? (
-            <Button variant="outlined" cy-data="add_field_option_btn">
+        <Grid item lg={2} cy-data="samples_div">
+          {showSampleSelect ? (
+            <Button
+              name="add_field_option_btn"
+              variant="outlined"
+              type="button"
+              cy-data="add_field_option_btn"
+            >
               Add
             </Button>
           ) : (
+            // ADD SAMPLES MENU
             <Typography>N/A</Typography>
           )}
         </Grid>
 
-        <Grid item lg={4}>
-          {showSampleChoices ? (
+        <Grid item lg={4} cy-data="choices_input_div">
+          {showChoicesInput ? (
             <TextField
               name="choices"
               id="field_choices"
@@ -176,17 +212,22 @@ const SampleTypeField = ({ fieldType, index, updateParentState, handleRemoveFiel
               rows={2}
               variant="outlined"
               helperText="Comma separated. Leave blank for unrestricted value."
-              inputProps={{ 'aria-label': 'choices' }}
+              inputProps={{
+                'aria-label': 'choices',
+                'cy-data': 'add_field_choices_input',
+              }}
               value={fieldType.choices}
-              onChange={() => handleChange}
-              cy-data="add_field_option_input"
+              onChange={handleChange}
             />
           ) : (
             <Typography>N/A</Typography>
           )}
         </Grid>
-        <Grid item lg={1}>
-          <IconButton onClick={handleRemoveFieldClick(index)} cy-data="remove_field_btn">
+        <Grid item lg={1} cy-data="remove_field_btn_div">
+          <IconButton
+            onClick={handleRemoveFieldClick(index)}
+            cy-data="remove_field_btn"
+          >
             <CloseIcon />
           </IconButton>
         </Grid>

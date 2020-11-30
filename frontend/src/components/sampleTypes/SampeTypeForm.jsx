@@ -55,7 +55,7 @@ const SampleTypeForm = (sampleType) => {
     const newFieldType = {
       id: null,
       name: '',
-      type: 'string',
+      type: '',
       isRequired: false,
       isArray: false,
       choices: '',
