@@ -1,3 +1,5 @@
+# TODO: change to env files from directory
+
 version: "3.5"
 services:
   backend:
