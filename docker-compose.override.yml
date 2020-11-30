@@ -12,8 +12,8 @@ services:
   backend:
     build:
       context: ./backend
-      target: aquarium-development
-    image: aquarium-development:${AQUARIUM_VERSION}
+      target: backend-development
+    image: backend-development:${AQUARIUM_VERSION}
     command: ["development"]
     environment:
       ENABLE_SORBET_RUNTIME_ERRORS: "true"
@@ -35,6 +35,8 @@ services:
       - './frontend:/app'
       - '/app/node_modules'
 
+# TODO: change to named volume for files
+# TODO: change to directory with dump file per database
   db:
     ports:
       - "3307:3306"
