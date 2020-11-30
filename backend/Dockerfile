@@ -3,8 +3,9 @@ ARG ALPINE_VERSION=3.12
 
 # A ruby-alpine image for development
 FROM ruby:${RUBY_VERSION}-alpine${ALPINE_VERSION} AS backend-development
+
 # throw errors if Gemfile has been modified since Gemfile.lock
-RUN bundle config --global frozen 1
+#RUN bundle config --global frozen 1
 
 RUN apk add --update --no-cache \
     build-base \
