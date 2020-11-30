@@ -37,7 +37,7 @@ module Api
         status, response = check_token_for_permission(1)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        id = Input.number(params[:id])
+        id = Input.index(params[:id])
 
         # Get sample type
         sample_type = SampleType.find_id(id)
@@ -85,11 +85,11 @@ module Api
         status, response = check_token_for_permission(1)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        id = Input.number(params[:id])
+        id = Input.index(params[:id])
 
         # Get sample type
         sample_type = SampleType.find_id(id)
-        render json: { sample_type: nil  }.to_json, status: :ok and return if !sample_type
+        render json: { sample_type: nil }.to_json, status: :ok and return if !sample_type
 
         # Update sample type
         # Note: any errors handled automatically and silently
@@ -108,7 +108,7 @@ module Api
         status, response = check_token_for_permission(1)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        id = Input.number(params[:id])
+        id = Input.index(params[:id])
 
         # Get sample type
         sample = SampleType.find_id(id)

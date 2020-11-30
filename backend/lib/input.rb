@@ -3,7 +3,7 @@
 # Process input parameters
 module Input
 
-  # Return text (null if blank)
+  # Return text (nil if blank)
   def self.text(str)
     str = str.to_s.strip
     str = nil if str == ""
@@ -12,7 +12,7 @@ module Input
   end
 
   # Return a number (nil or undefined returns 0)
-  def self.number(n)
+  def self.index(n)
     n = n.to_s.to_i
 
     return n

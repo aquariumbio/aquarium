@@ -8,10 +8,7 @@ class SampleType < ActiveRecord::Base
   #
   # @return all sample types
   def self.find_all
-    sql = "
-      select * from sample_types order by name
-    "
-    SampleType.find_by_sql sql
+    SampleType.order(:name)
   end
 
   # Return a specific sample type.
@@ -19,16 +16,12 @@ class SampleType < ActiveRecord::Base
   # @param id [Int] the id of the sample type
   # @return the sample types
   def self.find_id(id)
-    sql = "
-      select * from sample_types where id = #{id} limit 1
-    "
-    (SampleType.find_by_sql sql)[0]
+    SampleType.find_by(id: id)
   end
 
   # Return details for a specific sample type.
   #
   # @param id [Int] the id of the sample type
-  #
   # @return the sample type details
   def self.details(id)
     # Get feild types
@@ -76,23 +69,12 @@ class SampleType < ActiveRecord::Base
   # @option st[:name] [String] the name of the sample type
   # @option st[:description] [String] the description of the sample type
   # @option st[:field_types] [Hash] the field_type attributes associated with the sample type
-  # feild_types = {
-  #   name [String] name
-  #   ftype [String]  ftype
-  #   required [String] required - interpreted as Boolen
-  #   array [String] array - interpreted as Boolean
-  #   choices [String] choices
-  #   allowable_field_types [Array] array of allowable field types (for ftype = "sample")
-  # }
-  # allowable_field_type = {
-  #   sample_type_id [Int] id of the allowable field type
-  # }
   # @return the sample type
-  def self.create(st)
-    name = Input.text(st[:name])
-    description = Input.text(st[:description])
+  def self.create(sample_type)
+    name = Input.text(sample_type[:name])
+    description = Input.text(sample_type[:description])
 
-    # Create teh sample type
+    # Create the sample type
     sample_type_new = SampleType.new
     sample_type_new.name = name
     sample_type_new.description = description
@@ -103,48 +85,15 @@ class SampleType < ActiveRecord::Base
     # Save the sample type if it is valid
     sample_type_new.save
 
-    # Save field type if there is a field name
-    if st[:field_types].kind_of?(Array)
-      st[:field_types].each do |ft|
-        fname     = Input.text(ft[:name])
-        ftype     = Input.text(ft[:ftype])
-        frequired = Input.boolean(ft[:required]) ? 1 : nil
-        farray    = Input.boolean(ft[:array]) ? 1 : nil
-        fchoices  = Input.text(ft[:choices])
-
-        if fname != ""
-          field_type_new  = FieldType.new(
-            parent_id: sample_type_new.id,
-            name: fname,
-            ftype: ftype,
-            choices: fchoices,
-            array: farray,
-            required: frequired,
-            parent_class: "SampleType"
-          )
-          field_type_new.save
-
-          # Save allowable field types if the field type is "sample"
-          if ftype == "sample" and ft[:allowable_field_types].kind_of?(Array)
-            ft[:allowable_field_types].each do |aft|
-              sample_type_id = Input.number(aft[:sample_type_id])
-              sql = "select * from sample_types where id = #{sample_type_id} limit 1"
-
-              if (SampleType.find_by_sql sql)[0]
-                allowable_field_type_new  = AllowableFieldType.new(
-                  field_type_id: field_type_new.id,
-                  sample_type_id: sample_type_id
-                )
-                allowable_field_type_new.save
-              end
-            end
-          end
-        end
+    # Save each field type if the name is not blank
+    if sample_type[:field_types].kind_of?(Array)
+      sample_type[:field_types].each do |field_type|
+        fname = Input.text(field_type[:name])
+        FieldType.create_sampletype(sample_type_new.id, field_type) if fname != ""
       end
     end
 
     return sample_type_new, false
-
   end
 
   # Update existing sample type
@@ -159,23 +108,10 @@ class SampleType < ActiveRecord::Base
   # @option st[:name] [String] the name of the sample type
   # @option st[:description] [String] the description of the sample type
   # @option st[:field_types] [Hash] the field_type attributes associated with the sample type
-  # feild_types = {
-  #   id [Int] the id of the existing field type <or> nil if it is new
-  #   name [String] name
-  #   ftype [String]  ftype
-  #   required [String] required - interpreted as Boolen
-  #   array [String] array - interpreted as Boolean
-  #   choices [String] choices
-  #   allowable_field_types [Array] array of allowable field types (for ftype = "sample")
-  # }
-  # allowable_field_type = {
-  #   id [Int] the id of the existing allowable field type <or> nil if it is new
-  #   sample_type_id [Int] id of the allowable field type
-  # }
   # @return the sample type
-  def update(st)
-    input_name = Input.text(st[:name])
-    input_description = Input.text(st[:description])
+  def update(sample_type)
+    input_name = Input.text(sample_type[:name])
+    input_description = Input.text(sample_type[:description])
 
     # Update name and description if not blank
     self.name = input_name if input_name
@@ -189,72 +125,10 @@ class SampleType < ActiveRecord::Base
     # - Initialize with id = 0 to generate the appropriate sql query later
     field_type_ids = [0]
 
-    # Save field type if there is a field name
-    if st[:field_types].kind_of?(Array)
-      st[:field_types].each do |ft|
-        # List of allowable field type ids for this field_type_id
-        # - Used to delete allowable field types that were removed on update
-        # - Initialize with id = 0 to generate the appropriate sql query later
-        allowable_field_type_ids = [0]
-
-        fid       = Input.number(ft[:id])
-        fname     = Input.text(ft[:name])
-        ftype     = Input.text(ft[:ftype])
-        frequired = Input.boolean(ft[:required]) ? 1 : nil
-        farray    = Input.boolean(ft[:array]) ? 1 : nil
-        fchoices  = Input.text(ft[:choices])
-
-        # Find existing feild_type or create new one
-        sql = "select * from field_types where id = #{fid} and parent_id = #{self.id} limit 1"
-
-        field_type_update = (FieldType.find_by_sql sql)[0] || FieldType.new
-
-        # Set fname if exists and input is not blank
-        # Awkward logic, but that's how it works in v2
-        fname = fname || field_type.name
-
-        if fname != ""
-          field_type_update.parent_id    = self.id
-          field_type_update.name         = fname
-          field_type_update.ftype        = ftype
-          field_type_update.choices      = fchoices
-          field_type_update.array        = farray
-          field_type_update.required     = frequired
-          field_type_update.parent_class = "SampleType"
-          field_type_update.save
-
-          # Append to list of field_type_ids
-          field_type_id = field_type_update.id
-          field_type_ids << field_type_id
-
-          # Save allowable field types if the field type is "sample"
-          if ftype == "sample" and ft[:allowable_field_types].kind_of?(Array)
-            ft[:allowable_field_types].each do |aft|
-              # Verify that the sample_type_id is valid
-              sample_type_id = Input.number(aft[:sample_type_id])
-              sql = "select * from sample_types where id = #{sample_type_id} limit 1"
-
-              if (SampleType.find_by_sql sql)[0]
-                # Find existing allowable_field_type or create new one
-                allowable_field_type_id = Input.number(aft[:id])
-                sql = "select * from allowable_field_types where id = #{allowable_field_type_id} and field_type_id = #{field_type_id} limit 1"
-                allowable_field_type_update = (AllowableFieldType.find_by_sql sql)[0] || AllowableFieldType.new
-
-                # Create / update the allowable_field_type
-                allowable_field_type_update.field_type_id  = field_type_id
-                allowable_field_type_update.sample_type_id = sample_type_id
-                allowable_field_type_update.save
-
-                # Append to list of allowable_field_type_ids for this field_type_id
-                allowable_field_type_ids << allowable_field_type_update.id
-              end
-            end
-          end
-
-          # Remove allowable_field_types for this field type that are no loner defined
-          sql = "delete from allowable_field_types where field_type_id = #{field_type_id} and id not in (#{allowable_field_type_ids.join(",")})"
-          AllowableFieldType.connection.execute sql
-        end
+    # Update the field type and append the id to field_type_ids
+    if sample_type[:field_types].kind_of?(Array)
+      sample_type[:field_types].each do |field_type|
+        field_type_ids << FieldType.update_sampletype(self.id, field_type)
       end
     end
 
