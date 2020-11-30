@@ -13,8 +13,12 @@ services:
     build:
       context: ./backend
       target: backend-development
-    image: backend-development:${AQUARIUM_VERSION}
+    image: backend-development:${AQUARIUM_VERSION:-edge}
     command: ["development"]
+    env_file: 
+      - .env/development/backend    
+      - .env/development/db
+      - .env/development/timezone
     environment:
       ENABLE_SORBET_RUNTIME_ERRORS: "true"
     ports:
@@ -36,11 +40,14 @@ services:
       - '/app/node_modules'
 
   db:
+    env_file: 
+      - .env/development/db
+      - .env/development/timezone
     ports:
       - "3307:3306"
     volumes:
       - db_data:/var/lib/mysql
-      - ./data/mysql_init/:/docker-entrypoint-initdb.d/
+      - ./docker/mysql_init/:/docker-entrypoint-initdb.d/:ro
 
 volumes:
   db_data:

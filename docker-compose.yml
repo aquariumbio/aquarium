@@ -3,14 +3,6 @@
 version: "3.5"
 services:
   backend:
-    environment:
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
-      TECH_DASHBOARD: ${TECH_DASHBOARD}
-      SESSION_TIMEOUT: ${SESSION_TIMEOUT}
-      TZ: ${TIMEZONE}
     volumes:
       - ./backend/db:/aquarium/db
       - ./backend/log:/aquarium/log
@@ -28,12 +20,6 @@ services:
   db:
     image: mysql:5.7
     restart: always
-    environment:
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      TZ: ${TIMEZONE}
     networks:
       - aquarium_net
 
