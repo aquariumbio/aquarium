@@ -447,7 +447,7 @@ aquarium
 
 The Dockerfile defines the images:
 
-- aquarium-development -- image for running Aquarium in development mode
+- backend-development -- image for running Aquarium in development mode
 - aquarium-builder -- temporary image for production builds
 - aquarium -- image for running Aquarium in production model
 
