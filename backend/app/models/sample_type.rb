@@ -133,7 +133,8 @@ class SampleType < ActiveRecord::Base
     end
 
     # Remove field_types that are no longer defined
-    # Note: automatically removes allowable field types tied to these field types using mysql foreign key + ondelete cascade
+    # NOTE: also automatically removes allowable field types tied to these field types using mysql foreign key + ondelete cascade
+    # NOTE: Could move this to ield_type.rb but left it here because it is custom to the update
     sql = "delete from field_types where parent_id = #{self.id} and id not in (#{field_type_ids.join(",")})"
     FieldType.connection.execute sql
 

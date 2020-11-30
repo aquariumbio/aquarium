@@ -94,6 +94,7 @@ class FieldType < ActiveRecord::Base
     end
 
     # Remove allowable_field_types for this field type that are no loner defined
+    # NOTE: Could move this to allowable_field_type.rb but left it here because it is custom to the update
     sql = "delete from allowable_field_types where field_type_id = #{field_type_id} and id not in (#{allowable_field_type_ids.join(",")})"
     AllowableFieldType.connection.execute sql
 
