@@ -96,7 +96,7 @@ class SampleType < ActiveRecord::Base
     return sample_type_new, false
   end
 
-  # Update existing sample type
+  # Update a sample type
   # - Keeps any existing field types (and changes them as necessary)
   # - Removes any feild types that no longer exist
   # - Adds any new feild types

@@ -8,7 +8,7 @@ module Api
       #
       # @param login [String] login
       # @param password [String] password
-      # @return a token
+      # @return a token and the user
       def create
         login = params[:login].to_s.strip.downcase
         password = params[:password]
@@ -30,7 +30,7 @@ module Api
         user_token.timenow = timenow
         user_token.save
 
-        render json: { token: token }.to_json, status: :ok
+        render json: { token: token, user: { id: user.id, name: user.name, login: user.login, permission_ids: user.permission_ids } }.to_json, status: :ok
       end
 
       # Removes a token or optionally all tokens associated with this user.

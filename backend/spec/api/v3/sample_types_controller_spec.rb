@@ -30,7 +30,6 @@ RSpec.describe Api::V3::SampleTypesController, type: :request do
       # Sample type parameters to be used as allowable feild types
       params_1 = {
         sample_type: {
-          id: nil,
           name: "sample name 1",
           description: "sample definition",
           field_types: nil
@@ -39,7 +38,6 @@ RSpec.describe Api::V3::SampleTypesController, type: :request do
 
       params_2 = {
         sample_type: {
-          id: nil,
           name: "sample name 2",
           description: "sample definition",
           field_types: nil
@@ -63,7 +61,6 @@ RSpec.describe Api::V3::SampleTypesController, type: :request do
       # Sample type parameters
       params = {
         sample_type: {
-          id: nil,
           name: "sample name 3",
           description: "sample definition",
           field_types: [
