@@ -30,14 +30,14 @@ module Api
       # Return details for a specific sample type.
       #
       # @param token [String] a token
-      # @param id [id] the id of the sample type
+      # @param id [Int] the id of the sample type
       # @return the sample type
       def show
         # Check for admin permissions
         status, response = check_token_for_permission(1)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        id = Input.index(params[:id])
+        id = Input.int(params[:id])
 
         # Get sample type
         sample_type = SampleType.find_id(id)
@@ -55,9 +55,9 @@ module Api
       # Create a new sample type.
       #
       # @param token [String] a token
-      # @param name [name] the name of the sample type
-      # @param description [description] the description of the sample type
-      # @param field_types [hash] the :field_types to be used for the allowable_field_types
+      # @param name [String] the name of the sample type
+      # @param description [String] the description of the sample type
+      # @param field_types [Hash] the :field_types to be used for the allowable_field_types
       # @return the sample type
       def create
         # Check for admin permissions
@@ -69,23 +69,22 @@ module Api
         render json: { errors: errors }.to_json, status: :ok and return if !sample_type
 
         render json: sample_type.to_json, status: :created
-
       end
 
       # Update a sample type.
       #
       # @param token [String] a token
       # @param id [Int] the id of the sample type
-      # @param name [name] the name of the sample type
-      # @param description [description] the description of the sample type
-      # @param field_types [hash] the :field_types to be used for the allowable_field_types
+      # @param name [String] the name of the sample type
+      # @param description [String] the description of the sample type
+      # @param field_types [Hash] the :field_types to be used for the allowable_field_types
       # @return the sample type
       def update
          # Check for admin permissions
         status, response = check_token_for_permission(1)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        id = Input.index(params[:id])
+        id = Input.int(params[:id])
 
         # Get sample type
         sample_type = SampleType.find_id(id)
@@ -108,7 +107,7 @@ module Api
         status, response = check_token_for_permission(1)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        id = Input.index(params[:id])
+        id = Input.int(params[:id])
 
         # Get sample type
         sample = SampleType.find_id(id)

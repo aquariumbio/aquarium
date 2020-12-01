@@ -11,9 +11,16 @@ module Input
     return str
   end
 
-  # Return a number (nil or undefined returns 0)
-  def self.index(n)
+  # Return an int (nil or undefined returns 0)
+  def self.int(n)
     n = n.to_s.to_i
+
+    return n
+  end
+
+  # Return a float (nil or undefined returns 0)
+  def self.float(n)
+    n = n.to_s.to_f
 
     return n
   end

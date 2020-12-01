@@ -58,7 +58,7 @@ class FieldType < ActiveRecord::Base
     allowable_field_type_ids = [0]
 
     # Find existing feild_type or create new one
-    fid = Input.index(field_type[:id])
+    fid = Input.int(field_type[:id])
     sql = "select * from field_types where id = #{fid} and parent_id = #{parent_id} limit 1"
     field_type_update = (FieldType.find_by_sql sql)[0] || FieldType.new
 

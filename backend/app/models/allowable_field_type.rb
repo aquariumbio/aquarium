@@ -8,7 +8,7 @@ class AllowableFieldType < ActiveRecord::Base
   # @option allowable_field_type[:sample_type_id] [Int] the id of the (allowable) sample type
   # @return true
   def self.create(field_type_id, allowable_field_type)
-    sample_type_id = Input.index(allowable_field_type[:sample_type_id])
+    sample_type_id = Input.int(allowable_field_type[:sample_type_id])
     sql = "select * from sample_types where id = #{sample_type_id} limit 1"
 
     if (SampleType.find_by_sql sql)[0]
@@ -31,12 +31,12 @@ class AllowableFieldType < ActiveRecord::Base
   # @return id or 0
   def self.update(field_type_id, allowable_field_type)
     # Verify that the sample_type_id is valid
-    sample_type_id = Input.index(allowable_field_type[:sample_type_id])
+    sample_type_id = Input.int(allowable_field_type[:sample_type_id])
     sql = "select * from sample_types where id = #{sample_type_id} limit 1"
     return 0 if !(SampleType.find_by_sql sql)[0]
 
     # Find existing allowable_field_type or create new one
-    allowable_field_type_id = Input.index(allowable_field_type[:id])
+    allowable_field_type_id = Input.int(allowable_field_type[:id])
     sql = "select * from allowable_field_types where id = #{allowable_field_type_id} and field_type_id = #{field_type_id} limit 1"
     allowable_field_type_update = (AllowableFieldType.find_by_sql sql)[0] || AllowableFieldType.new
 
