@@ -17,25 +17,20 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "react",
+        "cypress"
     ],
     "rules": {
         "jsx-quotes": ["error", "prefer-double"],
         "import/no-extraneous-dependencies": [
           "error",
           {
-            "devDependencies": false,
+            "devDependencies": true,
             "optionalDependencies": false,
             "peerDependencies": false
           }
-        ]
-    },
-    "overrides": [
-        {
-            "files": ["*.spec.js", "*.spec.jsx"],
-            "rules": {
-                "no-unused-expressions": "off"
-            }
-        }
-    ]
+        ],
+        "no-unused-expressions": [0, { "extensions": ["*spec.js"] }],
+        "react/jsx-filename-extension": [0, { "extensions": ["*spec.js"] }]
+    }
 }

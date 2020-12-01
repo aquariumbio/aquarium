@@ -26,7 +26,7 @@ import ParametersPage from '../parameters/ParametersPage';
 import PlansPage from '../plans/PlansPage';
 import RolesPage from '../roles/RolesPage';
 import SamplesPage from '../samples/SamplesPage';
-import SampleTypeForm from '../sampleTypes/SampeTypeForm';
+import SampleTypeDefinitionForm from '../sampleTypes/SampeTypeDefinitionForm';
 import SampleTypesPage from '../sampleTypes/SampleTypesPage';
 import UserProfilePage from '../users/UserProfilePage';
 import UsersPage from '../users/UsersPage';
@@ -60,7 +60,7 @@ export default function App() {
             {/* Left Hamburger Menu */}
             <Route exact path="/users" render={(props) => <UsersPage {...props} />} />
             <Route exact path="/sample_types" render={(props) => <SampleTypesPage {...props} />} />
-            <Route exact path="/sample_types/new" render={(props) => <SampleTypeForm {...props} />} />
+            <Route exact path="/sample_types/new" render={(props) => <SampleTypeDefinitionForm {...props} />} />
             <Route exact path="/announcements" render={(props) => <AnnouncementsPage {...props} />} />
             <Route exact path="/budgets" render={(props) => <BudgetsPage {...props} />} />
             <Route exact path="/object_types" render={(props) => <ContainersPage {...props} />} />

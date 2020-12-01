@@ -1,13 +1,48 @@
 /// <reference types="cypress" />
-/* eslint-disable react/jsx-filename-extension */
 import React from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { mount, unmount } from 'cypress-react-unit-test';
-// import { BrowserRouter as Router } from 'react-router-dom';
-import SampleTypeField from '../../src/components/sampleTypes/SampleTypeFieldForm';
+import { FieldLabels, SampleTypeField } from '../../src/components/sampleTypes/SampleTypeFieldForm';
+
+describe('FieldLabels', () => {
+  afterEach(() => {
+    unmount('@Fieldlabels');
+  });
+
+  it('renders fields form container', () => {
+    mount(<FieldLabels />);
+
+    cy.get('div[name="field_labels"]')
+      .should('be.visible')
+      .within(() => {
+        cy.get('[cy-data="field_name_label_div"]')
+          .should('be.visible')
+          .contains('h4', 'Field Name');
+
+        cy.get('[cy-data="field_type_label_div"]')
+          .should('be.visible')
+          .contains('h4', 'Type');
+
+        cy.get('[cy-data="field_is_required_label_div"]')
+          .should('be.visible')
+          .contains('h4', 'Required');
+
+        cy.get('[cy-data="field_is_array_label_div"]')
+          .should('be.visible')
+          .contains('h4', 'Array');
+
+        cy.get('[cy-data="field_sample_options_label_div"]')
+          .should('be.visible')
+          .contains('h4', 'Sample Options (If type=‘sample‘)');
+
+        cy.get('[cy-data="field_choices_label_div"]')
+          .should('be.visible')
+          .contains('h4', 'Choices');
+      });
+  });
+});
 
 describe('SampleTypeFieldForm', () => {
-  const testFieldType = {
+  const fieldType = {
     id: null,
     name: '',
     type: '',
@@ -20,48 +55,87 @@ describe('SampleTypeFieldForm', () => {
     unmount('@SampleTypeField');
   });
 
-  it('renders fields form container', () => {
+  it('has field inputs div', () => {
     mount(
       <SampleTypeField
-        fieldType={testFieldType}
+        fieldType={fieldType}
         index={0}
         updateParentState={() => cy.spy().as('updateParentState')}
         handleRemoveFieldClick={() => cy.spy().as('handleRemoveFieldClick')}
       />,
     );
-    cy.get('[cy-data="field_form_container"]')
-      .should('be.visible')
-      .within(() => {
-        cy.contains('h5', 'Type');
-        cy.contains('h5', 'Required');
-        cy.contains('h5', 'Array');
-        cy.contains('h5', 'Sample Options (If type=‘sample‘)');
-        cy.contains('h5', 'Choices');
-      });
+    cy.get('div[name="field_inputs"]')
+      .should('exist');
   });
 
-  describe('Name Input', () => {
-    it('has field name header and input with placeholder text when fieldType is empty string', () => {
-      mount(
-        <SampleTypeField
-          fieldType={testFieldType}
-          index={0}
-          updateParentState={() => cy.spy().as('updateParentState')}
-          handleRemoveFieldClick={() => cy.spy().as('handleRemoveFieldClick')}
-        />,
-      );
-      cy.get('[cy-data="field_form_container"]')
-        .within(() => {
-          cy.contains('h5', 'Field Name');
-          cy.get('input[name="name"]')
-            .should('have.attr', 'placeholder', 'Field name');
+  describe.only('Name Input', () => {
+    context('field type is an empty string/blank', () => {
+      it('has empty input', () => {
+        mount(
+          <SampleTypeField
+            fieldType={fieldType}
+            index={0}
+            updateParentState={() => cy.spy().as('updateParentState')}
+            handleRemoveFieldClick={() => cy.spy().as('handleRemoveFieldClick')}
+          />,
+        );
+        cy.get('[cy-data="field_name_label_div"]')
+          .find('input[name="field_name"]')
+          .should('have.value', '');
+      });
+      it('accepts user input', () => {
+        const testName = 'Ms. Boop';
+        mount(
+          <SampleTypeField
+            fieldType={fieldType}
+            index={0}
+            updateParentState={() => cy.spy().as('updateParentState')}
+            handleRemoveFieldClick={() => cy.spy().as('handleRemoveFieldClick')}
+          />
+        );
+        cy.get('input[name="field_name"]').should('have.value', '').then(() => {
+          cy.get('input[name="field_name"]')
+            .type(testName)
+            .should('have.value', testName);
         });
+      });
     });
 
-    it('has field name header and input with placeholder text when fieldType is not empty string', () => {
-      const fieldType = testFieldType;
-      const testName = 'Test Name';
-      fieldType.name = testName;
+    context('field type is NOT an empty string', () => {
+      const testFieldType = fieldType;
+      const testName = 'Ms. Boop';
+      testFieldType.name = testName;
+
+      it('has value in field name input', () => {
+        mount(
+          <SampleTypeField
+            fieldType={testFieldType}
+            index={0}
+            updateParentState={() => cy.spy().as('updateParentState')}
+            handleRemoveFieldClick={() => cy.spy().as('handleRemoveFieldClick')}
+          />
+        );
+        cy.get('input[name="field_name"]').should('have.value', testName);
+      });
+
+      it('accepts user input', () => {
+        const newName = 'Mr. Boop';
+        mount(
+          <SampleTypeField
+            fieldType={testFieldType}
+            index={0}
+            updateParentState={() => cy.spy().as('updateParentState')}
+            handleRemoveFieldClick={() => cy.spy().as('handleRemoveFieldClick')}
+          />
+        );
+        cy.get('input[name="field_name"]').should('have.value', testName);
+        cy.get('input[name="field_name"]').type(newName).should('have.value', newName);
+      });
+    });
+  });
+
+  describe('Type Input', () => {
+    it('has field type header and type matches input prop', () => {
       mount(
         <SampleTypeField
           fieldType={fieldType}
@@ -71,81 +145,38 @@ describe('SampleTypeFieldForm', () => {
         />,
       );
       cy.get('[cy-data="field_form_container"]')
-        .within(() => {
-          cy.contains('h5', 'Field Name');
-          cy.get('input[name="name"]')
-            .should('have.value', testName);
-        });
-    });
-
-    it('accepts user input', () => {
-      const testName = 'Test Name';
-      mount(
-        <SampleTypeField
-          fieldType={testFieldType}
-          index={0}
-          updateParentState={() => cy.spy().as('updateParentState')}
-          handleRemoveFieldClick={() => cy.spy().as('handleRemoveFieldClick')}
-        />,
-      );
-      cy.get('[cy-data="field_form_container"]')
-        .within(() => {
-          cy.get('input[name="name"]')
-            .type(testName)
-            .should('have.value', testName);
-        });
-    });
-  });
-
-  describe('Type Input', () => {
-    it('has field type header and type matches input prop', () => {
-      mount(
-        <SampleTypeField
-          fieldType={testFieldType}
-          index={0}
-          updateParentState={() => cy.spy().as('updateParentState')}
-          handleRemoveFieldClick={() => cy.spy().as('handleRemoveFieldClick')}
-        />,
-      );
-      cy.get('[cy-data="field_form_container"]')
         .should('be.visible')
         .within(() => {
           cy.contains('h5', 'Type');
-          cy.get('input[name="type"]')
-            .should('have.value', testFieldType.type);
+          cy.get('input[name="type"]').should('have.value', fieldType.type);
         });
     });
 
     it(' calls update state function on user select', () => {
       mount(
         <SampleTypeField
-          fieldType={testFieldType}
+          fieldType={fieldType}
           index={0}
-          updateParentState={cy.stub().returns(testFieldType.type = 'number')}
+          updateParentState={cy.stub().returns((fieldType.type = 'number'))}
           handleRemoveFieldClick={() => cy.spy().as('handleRemoveFieldClick')}
         />,
       );
 
-      cy.get('[cy-data="field_form_container"]')
-        .within(() => {
-          cy.contains('h5', 'Field Name');
-          cy.get('[cy-data="field_type_select"]')
-            .within(() => {
-              cy.get('input');
-            })
-            .click();
-        });
+      cy.get('[cy-data="field_form_container"]').within(() => {
+        cy.contains('h5', 'Field Name');
+        cy.get('[cy-data="field_type_select"]')
+          .within(() => {
+            cy.get('input');
+          })
+          .click();
+      });
 
-      cy.get('ul')
-        .within(() => {
-          cy.get('li[name="select_number"]')
-            .trigger('select');
-        });
-      cy.get('[cy-data="field_type_select"]')
-        .within(() => {
-          cy.get('input')
-            .should('have.value', 'number');
-        });
+      cy.get('ul').within(() => {
+        cy.get('li[name="select_number"]').trigger('select');
+      });
+      cy.get('[cy-data="field_type_select"]').within(() => {
+        cy.get('input').should('have.value', 'number');
+      });
     });
   });
 
@@ -153,10 +184,12 @@ describe('SampleTypeFieldForm', () => {
     beforeEach(() => {
       mount(
         <SampleTypeField
-          fieldType={testFieldType}
+          fieldType={fieldType}
           index={0}
-          updateParentState={cy.stub()
-            .returns(testFieldType.isRequired = true).as('updateParentState')}
+          updateParentState={cy
+            .stub()
+            .returns((fieldType.isRequired = true))
+            .as('updateParentState')}
           handleRemoveFieldClick={() => cy.spy().as('handleRemoveFieldClick')}
         />,
       );
@@ -171,7 +204,10 @@ describe('SampleTypeFieldForm', () => {
     });
 
     it('has boolean checkbox label', () => {
-      cy.get('label').should('include.text', testFieldType.isRequired.toString());
+      cy.get('label').should(
+        'include.text',
+        fieldType.isRequired.toString(),
+      );
     });
 
     it('accepts user input, and update label', () => {
@@ -179,7 +215,10 @@ describe('SampleTypeFieldForm', () => {
         .check()
         .should('have.value', 'true');
 
-      cy.get('label').should('include.text', testFieldType.isRequired.toString());
+      cy.get('label').should(
+        'include.text',
+        fieldType.isRequired.toString(),
+      );
     });
   });
 
@@ -187,10 +226,12 @@ describe('SampleTypeFieldForm', () => {
     beforeEach(() => {
       mount(
         <SampleTypeField
-          fieldType={testFieldType}
+          fieldType={fieldType}
           index={0}
-          updateParentState={cy.stub()
-            .returns(testFieldType.isArray = true).as('updateParentState')}
+          updateParentState={cy
+            .stub()
+            .returns((fieldType.isArray = true))
+            .as('updateParentState')}
           handleRemoveFieldClick={() => cy.spy().as('handleRemoveFieldClick')}
         />,
       );
@@ -205,7 +246,7 @@ describe('SampleTypeFieldForm', () => {
     });
 
     it('has boolean checkbox label', () => {
-      cy.get('label').should('include.text', testFieldType.isArray.toString());
+      cy.get('label').should('include.text', fieldType.isArray.toString());
     });
 
     it('accepts user input, and update label', () => {
@@ -213,12 +254,12 @@ describe('SampleTypeFieldForm', () => {
         .check()
         .should('have.value', 'true');
 
-      cy.get('label').should('include.text', testFieldType.isArray.toString());
+      cy.get('label').should('include.text', fieldType.isArray.toString());
     });
   });
 
   describe('samples', () => {
-    const fieldTypes = testFieldType;
+    const fieldTypes = fieldType;
 
     context('when no field type is  selected', () => {
       beforeEach(() => {
@@ -240,9 +281,7 @@ describe('SampleTypeFieldForm', () => {
       });
 
       it('has "N/A"', () => {
-        cy.get('[cy-data="samples_div"]')
-          .contains('p', 'N/A')
-          .should('exist');
+        cy.get('[cy-data="samples_div"]').contains('p', 'N/A').should('exist');
       });
     });
 
@@ -266,9 +305,7 @@ describe('SampleTypeFieldForm', () => {
       });
 
       it('has "N/A"', () => {
-        cy.get('[cy-data="samples_div"]')
-          .contains('p', 'N/A')
-          .should('exist');
+        cy.get('[cy-data="samples_div"]').contains('p', 'N/A').should('exist');
       });
     });
 
@@ -292,9 +329,7 @@ describe('SampleTypeFieldForm', () => {
       });
 
       it('has "N/A"', () => {
-        cy.get('[cy-data="samples_div"]')
-          .contains('p', 'N/A')
-          .should('exist');
+        cy.get('[cy-data="samples_div"]').contains('p', 'N/A').should('exist');
       });
     });
 
@@ -318,9 +353,7 @@ describe('SampleTypeFieldForm', () => {
       });
 
       it('has "N/A"', () => {
-        cy.get('[cy-data="samples_div"]')
-          .contains('p', 'N/A')
-          .should('exist');
+        cy.get('[cy-data="samples_div"]').contains('p', 'N/A').should('exist');
       });
     });
 
@@ -351,8 +384,8 @@ describe('SampleTypeFieldForm', () => {
     });
   });
 
-  describe.only('Choices', () => {
-    const fieldTypes = testFieldType;
+  describe('Choices', () => {
+    const fieldTypes = fieldType;
 
     context('when no field type is selected', () => {
       beforeEach(() => {

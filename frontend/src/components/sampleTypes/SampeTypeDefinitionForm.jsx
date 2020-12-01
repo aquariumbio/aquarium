@@ -4,7 +4,8 @@ import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import React, { useState } from 'react';
-import SampleTypeField from './SampleTypeFieldForm';
+import Grid from '@material-ui/core/Grid';
+import { FieldLabels, SampleTypeField } from './SampleTypeFieldForm';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -19,28 +20,35 @@ const useStyles = makeStyles((theme) => ({
   inputName: {
     fontSize: '1rem',
     fontWeight: '700',
-    margin: '10px 0',
-    '&#field': {
-      display: 'inline-flex',
-    },
   },
   lightBtn: {
-    backgroundColor: 'white',
+    backgroundColor: 'rgb(250, 250, 250)',
     color: '#065683',
     margin: theme.spacing(3, 2),
 
     '& :hover': {
       backgroundColor: '#065683',
-      color: 'white',
+      color: 'rgb(250, 250, 250)',
     },
   },
 }));
 
-const SampleTypeForm = (sampleType) => {
+const SampleTypeDefinitionForm = (sampleType) => {
   const classes = useStyles();
   const [sampleTypeName, setSampleTypeName] = useState(sampleType.name || '');
   const [sampleTypeDescription, setSampleTypeDescription] = useState(sampleType.description || '');
-  const [fieldTypes, setFieldTypes] = useState(sampleType.fieldTypes || []);
+  const [fieldTypes, setFieldTypes] = useState(
+    sampleType.fieldTypes || [
+      {
+        id: null,
+        name: '',
+        type: '',
+        isRequired: false,
+        isArray: false,
+        choices: '',
+      },
+    ],
+  );
 
   // Submit form with all data
   const handleSubmit = (event) => {
@@ -97,61 +105,74 @@ const SampleTypeForm = (sampleType) => {
         Defining New Sample Type
       </Typography>
 
+      <Typography align="right">* field is required</Typography>
+
       <form name="sampe_type_definition_form" onSubmit={handleSubmit}>
-        <Typography variant="h4" className={classes.inputName}>
-          Sample Type Name
+        <Typography variant="h4" className={classes.inputName} display="inline">
+          Name
         </Typography>
+        <Typography variant="overline" color="error" display="inline">
+          {' '}
+          *
+          {' '}
+        </Typography>
+
         <TextField
-          name="sample_type_name"
+          name="sample_type_name_input"
           fullWidth
           value={sampleTypeName}
-          id="sample_type_name"
-          label="Sample type name"
-          placeholder="Sample type name"
+          id="sample_type_name_input"
           onChange={(event) => setSampleTypeName(event.target.value)}
           variant="outlined"
           autoFocus
           required
           type="string"
           // TODO: Error HANDLING -- ONLY SHOW HELPER TEXT ON ERROR
-          helperText="Sample name is required."
         />
 
-        <Typography variant="h4" className={classes.inputName}>
+        <Typography variant="h4" className={classes.inputName} display="inline">
           Description
         </Typography>
+        <Typography variant="overline" color="error">
+          {' '}
+          *
+          {' '}
+        </Typography>
+
         <TextField
-          name="sample_type_description"
+          name="sample_type_description_input"
           fullWidth
           value={sampleTypeDescription}
-          id="sample_type_description"
-          label="Sample type description"
-          placeholder="Sample type description"
+          id="sample_type_description_input"
           onChange={(event) => setSampleTypeDescription(event.target.value)}
           variant="outlined"
           type="string"
           required
           // TODO: Error HANDLING -- ONLY SHOW HELPER TEXT ON ERROR
-          helperText="Sample type description is required."
         />
-        <>
-          <Typography variant="h4" className={classes.inputName} id="field">
-            Fields
-          </Typography>
-          <Button
-            name="Add field"
-            data-cy="add_field"
-            className={classes.lightBtn}
-            size="small"
-            onClick={handleAddFieldClick}
-          >
-            Add
-          </Button>
-        </>
-        {fieldTypeList}
+
+        <Grid
+          container
+          spacing={1}
+          style={{ marginTop: '1rem' }}
+          cy-data="field_form_container"
+        >
+          <FieldLabels />
+          {fieldTypeList}
+        </Grid>
+
+        <Button
+          name="add_new_field"
+          data-cy="add_new_field"
+          className={classes.lightBtn}
+          size="small"
+          onClick={handleAddFieldClick}
+        >
+          Add New Field
+        </Button>
       </form>
     </Container>
   );
 };
 
-export default SampleTypeForm;
+export default SampleTypeDefinitionForm;
