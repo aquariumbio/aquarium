@@ -20,7 +20,7 @@ Everyone else should visit the installation page on [Aquarium.bio](https://www.a
 
    ```bash
    cd aquarium
-   bash ./setup.sh
+   bash ./bin/setup.sh
    ```
 
 ## Running Aquarium
@@ -44,29 +44,33 @@ The following commands will allow you to run Aquarium in Rails development mode 
 3. **Stop** the Aquarium services, by typing `ctrl-c` followed by
 
    ```bash
-   docker-compose down -v
+   docker-compose down
    ```
 
-   Alternatively, you can run this command in a separate terminal within the `aquarium` directory .
+   Alternatively, you can run this command in a separate terminal within the `aquarium` directory.
+
+   > Caution: using the `-v` option will delete the database.
+   > If you want to keep the database, you should do a dump first.
+   > See [Switching Databases](#switching-databases)
 
 ## Working with an Aquarium Container
 
 To run commands within the running Aquarium container, precede each command with
 
 ```bash
-docker-compose exec app
+docker-compose exec backend
 ```
 
 For instance, you can run the Rails console with the command
 
 ```bash
-docker-compose exec app rails c
+docker-compose exec backend rails c
 ```
 
 And, you can also run an interactive shell within the Aquarium container with the command
 
 ```bash
-docker-compose exec app /bin/sh
+docker-compose exec backend /bin/sh
 ```
 
 which allows you to work within the container.
@@ -74,71 +78,117 @@ which allows you to work within the container.
 For commands that don't require that Aquarium is running, using a command starting with
 
 ```bash
-docker-compose run --rm app
+docker-compose run --rm backend
 ```
 
 will create a temporary container.
 This can be useful for running single commands such as
 
 ```bash
-docker-compose run --rm app rspec
+docker-compose run --rm backend rspec
 ```
 
-which runs RSpec on the tests in the `spec` directory.
+which runs RSpec on the tests in the `backend/spec` directory.
 
 More details on the docker-compose commands can be found [here](https://docs.docker.com/compose/reference/overview/).
 
-## Switching databases
+## Docker environment settings
 
-The development configuration uses the MySQL Docker image, which is capable of automatically importing a database dump the first time it is started.
-You can switch the database, but doing so will destroy any changes you have made to the current database.
+The `bin/setup.sh` script that we ran when [getting started](#getting-started) creates a set of files that sets the environment variables used when running Aquarium with `docker-compose`.
+These files are stored in a directory `.env` that is organized by Rails environment and service
+
+```bash
+.env
+`-- development
+    |-- backend
+    |-- db
+    `-- timezone
+```
+
+Each file sets environment variables for the [parameters of a service](#parameters).
+
+The environment variables for the database are named differently for the Rails `backend` and MySQL `db` services, and so are defined in pairs in the `db` file.
+
+| `backend`     | `db`             |
+| ------------- | ---------------- |
+| `DB_NAME`     | `MYSQL_DATABASE` |
+| `DB_USER`     | `MYSQL_USER`     |
+| `DB_PASSWORD` | `MYSQL_PASSWORD` |
+
+If you change either of these definitions, be sure to change the other.
+
+> Note: the `db` parameter `MYSQL_ROOT_PASSWORD` does not have a corresponding variable in `backend`.
+
+## Managing databases
+
+The development configuration uses the MySQL Docker image, which is capable of automatically importing database dumps the first time it is started.
+
+Specifically, all SQL dumps in the `docker/mysql_int` directory will be loaded if the database has not been initialized.
+This will include the first time you run `docker-compose up` after either cloning the repository or [deleting the database volume](#deleting-the-database-volume).
+The initial configuration has two dump files `default.sql` and `test.sql` containing the databases `aquarium_development` and `aquarium_test`.
+
+### Switching databases
+
+If you want to switch to a database that has a different name than one of the databases with a dump in `docker/mysql_init`, you can [add the new dump](#adding-a-database-dump) and then change the value for both `DB_NAME` and `MYSQL_DATABASE` in the `.env/development/db` file.
+
+If the database names conflict, you can switch the database, but doing so will destroy any changes you have made to the current database.
 If you want to save these changes, you will have to create a database dump.
+The steps for switching databases in this case are:
 
-To make database dump, using the values of `MYSQL_USER` and `MYSQL_PASSWORD` from `.env` run the following
+1. [Create a dump](#creating-a-database-dump) of the current database if you want to be able to restore it later.
+2. [Delete the database volume](#deleting-the-database-volume).
+3. [Add the replacement dump](#adding-a-database-dump).
+4. [Migrate the database](#migrate-the-database) if the replacement database is not up-to-date with the current schema.
+
+Restore the database by following these steps for the new dump you made in the first step.
+
+### Creating a database dump
+
+To make database dump, using the values of `MYSQL_USER` and `MYSQL_PASSWORD` from `.env/development/db` run the following
 
 ```bash
 MYSQL_USER=<username>
 MYSQL_PASSWORD=<password>
 docker-compose up -d
-docker-compose exec db mysqldump -u $MYSQL_USER -p$MYSQL_PASSWORD production > production_dump.sql
-docker-compose down -v
+docker-compose exec db mysqldump -u $MYSQL_USER -p$MYSQL_PASSWORD aquarium_development > development_dump.sql
+docker-compose down
 ```
 
-You can then safely remove the MySQL files to allow the switch by running
+### Deleting the database volume
+
+The Aquarium database files are stored in a named volume managed by Docker.
+You can see what volumes exist by running
 
 ```bash
-rm -rf data/db/development/*
+docker volume ls
 ```
+
+The volume for the database files will be named `aquarium_db_data` (provided you cloned into the directory `aquarium`), and can be removed with the command
+
+```bash
+docker volume rm aquarium_db_data
+```
+
+Alternatively, you can use the `-v` option with the `docker-compose down` command when shutting Aquarium down.
+This option removes all volumes created by the compose files.
+
+### Adding a database dump
 
 Then copy the dump of the database that you want to use to the default location:
 
 ```bash
-cp production_dump.sql docker/mysql_init/dump.sql
+cp replacement_dump.sql docker/mysql_init/
 ```
 
-Note: It may be necessary to run migrations on database dump from a prior version of Aquarium.
+Note: It may be necessary to run migrations on a database dump from a prior version of Aquarium.
 See the migration instructions below.
-
-## Restoring the default database dump
-
-If you want to restart from an empty database, you can run
-
-```bash
-cp docker/mysql_init/default.sql docker/mysql_init/dump.sql
-```
-
-Before restarting Aquarium, remove the MySQL files with
-
-```bash
-rm -rf data/db/development/*
-```
 
 ## Migrating the Database
 
 ```bash
 docker-compose up -d
-docker-compose exec app env RAILS_ENV=production rake db:migrate
-docker-compose down -v
+docker-compose exec backend env RAILS_ENV=production rake db:migrate
+docker-compose down
 ```
 
 ## Testing Aquarium
@@ -146,7 +196,7 @@ docker-compose down -v
 ### Running Tests
 
 ```bash
-docker-compose run --rm app rspec
+docker-compose run --rm backend rspec
 ```
 
 Some of the tests do intentionally raise exceptions, so do not be concerned if these failures seem to be missed.
@@ -171,14 +221,14 @@ The Aquarium repository is setup to use [RuboCop](https://rubocop.readthedocs.io
 When you make changes to Aquarium code, run the command
 
 ```bash
-docker-compose run --rm app rubocop -x
+docker-compose run --rm backend rubocop -x
 ```
 
 to fix layout issues.
 Then run the command
 
 ```bash
-docker-compose run --rm app rubocop
+docker-compose run --rm backend rubocop
 ```
 
 to see if you have introduced any other issues.
@@ -203,7 +253,7 @@ _Note_: Some fixes may not be possible without affecting the Krill library for p
 This command will regenerate the `.rubocop_todo.yml` file
 
 ```bash
-docker-compose run -rm app rubocop --auto-gen-config
+docker-compose run -rm backend rubocop --auto-gen-config
 ```
 
 ### Documenting Aquarium Ruby Code
@@ -284,7 +334,7 @@ Keep it up-to-date if you change something that affects Aquarium development.
 2. Open a shell in the Aquarium container
 
    ```bash
-   docker-compose exec app /bin/sh
+   docker-compose exec backend /bin/sh
    ```
 
 3. Upgrade gems
@@ -327,7 +377,7 @@ Keep it up-to-date if you change something that affects Aquarium development.
 11. Stop the container
 
     ```bash
-    docker-compose down -v
+    docker-compose down
     ```
 
 ## Making an Aquarium Release
@@ -341,15 +391,15 @@ Keep it up-to-date if you change something that affects Aquarium development.
 2.  Build image to make sure that dependencies are up-to-date
 
     ```bash
-    docker-compose build app
+    docker-compose build backend
     ```
 
 3.  Make sure Rails tests pass
 
     ```bash
     docker-compose up -d
-    docker-compose exec app rspec
-    docker-compose down -v
+    docker-compose exec backend rspec
+    docker-compose down
     ```
 
     If there are any failures, fix them and start over.
@@ -359,7 +409,7 @@ Keep it up-to-date if you change something that affects Aquarium development.
 4.  Run type checks
 
     ```bash
-    docker-compose run -rm app srb tc
+    docker-compose run -rm backend srb tc
     ```
 
     If there are any failures, fix them and start over.
@@ -367,13 +417,13 @@ Keep it up-to-date if you change something that affects Aquarium development.
 5.  Fix any layout problems
 
     ```bash
-    docker-compose run --rm app rubocop -x
+    docker-compose run --rm backend rubocop -x
     ```
 
 6.  Run `rubocop`
 
     ```bash
-    docker-compose run --rm app rubocop
+    docker-compose run --rm backend rubocop
     ```
 
     Fix any issues and start over.
@@ -381,7 +431,7 @@ Keep it up-to-date if you change something that affects Aquarium development.
 7.  Update RuboCop TODO file
 
     ```bash
-    docker-compose run -rm app rubocop --auto-gen-config
+    docker-compose run -rm backend rubocop --auto-gen-config
     ```
 
 8.  (make sure JS tests pass)
@@ -393,7 +443,7 @@ Keep it up-to-date if you change something that affects Aquarium development.
 11. Update API documentation by running
 
     ```bash
-    docker-compose run --rm app yard
+    docker-compose run --rm backend yard
     ```
 
 12. Update `CHANGE_LOG`
@@ -543,12 +593,12 @@ the aquarium service:
 
 The following values can be set using this file or environment variables:
 
-| Config key           | Environment Variable | Default                               |
-| -----------------    | -------------------- | ------------------------------------- |
-| lab_name             | LAB_NAME             | `Your Lab`                            |
-| lab_email_address    | LAB_EMAIL_ADDRESS    | –                                     |
-| logo_path            | LOGO_PATH            | `aquarium-logo.png`                   |
-| technician_dashboard | TECH_DASHBOARD       | `false`                               |
+| Config key           | Environment Variable | Default             |
+| -------------------- | -------------------- | ------------------- |
+| lab_name             | LAB_NAME             | `Your Lab`          |
+| lab_email_address    | LAB_EMAIL_ADDRESS    | –                   |
+| logo_path            | LOGO_PATH            | `aquarium-logo.png` |
+| technician_dashboard | TECH_DASHBOARD       | `false`             |
 
 In addition to the instance details, the user agreement for the lab can be set by creating a YAML file containing the agreement.
 The YAML must include the keys `title` with the title of the agreement, `updated` with the date last updated, and `clauses`, which is a list of pairs of `title` and `text` pairs.
