@@ -33,7 +33,6 @@ const UserMenu = (props) => {
     history.push(pageURL);
     setAnchorEl(null);
   };
-
   return (
     <>
       <IconButton

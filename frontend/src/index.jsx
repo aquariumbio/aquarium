@@ -10,7 +10,6 @@ import reportWebVitals from './reportWebVitals';
 axios.defaults.baseURL = 'http://localhost:3001/api/v3/';
 
 ReactDOM.render(
-  // eslint-disable-next-line react/jsx-filename-extension
   <React.StrictMode>
     <Router>
       <CssBaseline />

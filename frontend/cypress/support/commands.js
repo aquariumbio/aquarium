@@ -19,7 +19,7 @@ Cypress.Commands.add('login', () => {
     url: `http://localhost:3001/api/v3/token/create?login=${login}&password=${password}`,
   })
     .then((resp) => {
-      window.sessionStorage.setItem('token', resp.body.data.token);
+      window.sessionStorage.setItem('token', resp.body.token);
     });
 });
 Cypress.Commands.add('logout', () => {
