@@ -65,10 +65,10 @@ class SampleType < ActiveRecord::Base
 
   # Create a sample types.
   #
-  # @param st [Hash] the sample type
-  # @option st[:name] [String] the name of the sample type
-  # @option st[:description] [String] the description of the sample type
-  # @option st[:field_types] [Hash] the field_type attributes associated with the sample type
+  # @param sample_type [Hash] the sample type
+  # @option sample_type[:name] [String] the name of the sample type
+  # @option sample_type[:description] [String] the description of the sample type
+  # @option sample_type[:field_types] [Hash] the field_type attributes associated with the sample type
   # @return the sample type
   def self.create(sample_type)
     name = Input.text(sample_type[:name])
@@ -103,11 +103,11 @@ class SampleType < ActiveRecord::Base
   # - Also updates allowable field types for each field type
   # - Any potential errors are handled automatically and silently
   #
-  # @param st [Hash] the sample type
-  # @option st[:id] [Int] the id of the sample type
-  # @option st[:name] [String] the name of the sample type
-  # @option st[:description] [String] the description of the sample type
-  # @option st[:field_types] [Hash] the field_type attributes associated with the sample type
+  # @param sample_type [Hash] the sample type
+  # @option sample_type[:id] [Int] the id of the sample type
+  # @option sample_type[:name] [String] the name of the sample type
+  # @option sample_type[:description] [String] the description of the sample type
+  # @option sample_type[:field_types] [Hash] the field_type attributes associated with the sample type
   # @return the sample type
   def update(sample_type)
     input_name = Input.text(sample_type[:name])

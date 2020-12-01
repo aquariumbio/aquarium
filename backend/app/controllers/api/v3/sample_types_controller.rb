@@ -55,17 +55,18 @@ module Api
       # Create a new sample type.
       #
       # @param token [String] a token
-      # @param name [String] the name of the sample type
-      # @param description [String] the description of the sample type
-      # @param field_types [Hash] the :field_types to be used for the allowable_field_types
+      # @param sample_type [Hash] the sample_type
       # @return the sample type
       def create
         # Check for admin permissions
         status, response = check_token_for_permission(1)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # create sample type
-        sample_type, errors = SampleType.create(params)
+        # Read sample type parameter
+        params_sample_type = params[:sample_type] || {}
+
+        # Create sample type
+        sample_type, errors = SampleType.create(params_sample_type)
         render json: { errors: errors }.to_json, status: :ok and return if !sample_type
 
         render json: sample_type.to_json, status: :created
@@ -74,25 +75,24 @@ module Api
       # Update a sample type.
       #
       # @param token [String] a token
-      # @param id [Int] the id of the sample type
-      # @param name [String] the name of the sample type
-      # @param description [String] the description of the sample type
-      # @param field_types [Hash] the :field_types to be used for the allowable_field_types
+      # @param sample_type [Hash] the sample_type
       # @return the sample type
       def update
-         # Check for admin permissions
+        # Check for admin permissions
         status, response = check_token_for_permission(1)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        id = Input.int(params[:id])
+        # Read sample type parameter
+        params_sample_type = params[:sample_type] || {}
 
         # Get sample type
+        id = Input.int(params[:id])
         sample_type = SampleType.find_id(id)
         render json: { sample_type: nil }.to_json, status: :ok and return if !sample_type
 
         # Update sample type
         # Note: any errors handled automatically and silently
-        sample_type = sample_type.update(params)
+        sample_type = sample_type.update(params_sample_type)
 
         render json: sample_type.to_json, status: :ok
       end
