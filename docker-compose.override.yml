@@ -29,7 +29,7 @@ services:
     build:
       context: ./frontend
       target: frontend-development
-    image: frontend-development
+    image: frontend-development:${AQUARIUM_VERSION:-edge}
     environment:
       - CHOKIDAR_USEPOLLING=true
     ports:
