@@ -10,10 +10,14 @@ Everyone else should visit the installation page on [Aquarium.bio](https://www.a
 
 1. Install [Docker](https://www.docker.com/get-started)
 
-2. Get Aquarium using [git](https://git-scm.com) with the command
+   The instructions use the [GitHub CLI](https://cli.github.com) instead of [git](https://git-scm.com).
+
+   [Perl](https://www.perl.org) is needed by some of the support scripts
+
+2. Get Aquarium with the command
 
    ```bash
-   git clone https://github.com/klavinslab/aquarium.git
+   gh repo clone aquariumbio/aquarium
    ```
 
 3. Initialize the environment
@@ -39,7 +43,7 @@ The following commands will allow you to run Aquarium in Rails development mode 
    docker-compose up
    ```
 
-   In development mode, Aquarium is available at `localhost:3001`.
+   In development mode, Aquarium is available at `localhost:3000`.
 
 3. **Stop** the Aquarium services, by typing `ctrl-c` followed by
 
@@ -50,7 +54,7 @@ The following commands will allow you to run Aquarium in Rails development mode 
    Alternatively, you can run this command in a separate terminal within the `aquarium` directory.
 
    > Caution: using the `-v` option will delete the database.
-   > If you want to keep the database, you should do a dump first.
+   > If you actually want to delete the database, but keep a copy, you should do a dump first.
    > See [Switching Databases](#switching-databases)
 
 ## Working with an Aquarium Container
@@ -65,7 +69,7 @@ For instance, you can run the Rails console with the command
 
 ```bash
 docker-compose exec backend rails c
-```
+````
 
 And, you can also run an interactive shell within the Aquarium container with the command
 
@@ -95,19 +99,25 @@ More details on the docker-compose commands can be found [here](https://docs.doc
 ## Docker environment settings
 
 The `bin/setup.sh` script that we ran when [getting started](#getting-started) creates a set of files that sets the environment variables used when running Aquarium with `docker-compose`.
-These files are stored in a directory `.env` that is organized by Rails environment and service
+These files are stored in a directory `.env` that is organized, roughly, by Rails environment and service
 
 ```bash
 .env
-`-- development
+|-- development
+|   |-- backend
+|   |-- db
+|   |-- frontend
+|   `-- timezone
+`-- production
     |-- backend
     |-- db
+    |-- frontend
     `-- timezone
 ```
 
 Each file sets environment variables for the [parameters of a service](#parameters).
 
-The environment variables for the database are named differently for the Rails `backend` and MySQL `db` services, and so are defined in pairs in the `db` file.
+The environment variables for the database are named differently for the Rails `backend` and MySQL `db` services, and so are defined in both files.
 
 | `backend`     | `db`             |
 | ------------- | ---------------- |
@@ -116,6 +126,7 @@ The environment variables for the database are named differently for the Rails `
 | `DB_PASSWORD` | `MYSQL_PASSWORD` |
 
 If you change either of these definitions, be sure to change the other.
+There is a helper script `bin/dbrename.sh` to change the database name.
 
 > Note: the `db` parameter `MYSQL_ROOT_PASSWORD` does not have a corresponding variable in `backend`.
 
@@ -129,9 +140,14 @@ The initial configuration has two dump files `default.sql` and `test.sql` contai
 
 ### Switching databases
 
-If you want to switch to a database that has a different name than one of the databases with a dump in `docker/mysql_init`, you can [add the new dump](#adding-a-database-dump) and then change the value for both `DB_NAME` and `MYSQL_DATABASE` in the `.env/development/db` file.
+If you want to switch to a database that has a different name than one of the databases with a dump in `docker/mysql_init`, you can [add the new dump](#adding-a-database-dump) and then change the database name with the `bin/dbrename.sh` script.
+For example, to change the database name to `drosophila_husbandtry`, use the command
 
-If the database names conflict, you can switch the database, but doing so will destroy any changes you have made to the current database.
+```bash
+./bin/dbrename.sh development drosophila_husbandry
+```
+
+Alternatively, if the database names conflict, you can switch the database, but doing so will destroy any changes you have made to the current database.
 If you want to save these changes, you will have to create a database dump.
 The steps for switching databases in this case are:
 
@@ -144,15 +160,15 @@ Restore the database by following these steps for the new dump you made in the f
 
 ### Creating a database dump
 
-To make database dump, using the values of `MYSQL_USER` and `MYSQL_PASSWORD` from `.env/development/db` run the following
+To make database dump, run the following
 
 ```bash
-MYSQL_USER=<username>
-MYSQL_PASSWORD=<password>
-docker-compose up -d
-docker-compose exec db mysqldump -u $MYSQL_USER -p$MYSQL_PASSWORD aquarium_development > development_dump.sql
+docker-compose up -d db
+bash bin/dbdump.sh development
 docker-compose down
 ```
+
+This will create a SQL dump for the database name in the `.env/development/backend` configuration file.
 
 ### Deleting the database volume
 
@@ -169,8 +185,7 @@ The volume for the database files will be named `aquarium_db_data` (provided you
 docker volume rm aquarium_db_data
 ```
 
-Alternatively, you can use the `-v` option with the `docker-compose down` command when shutting Aquarium down.
-This option removes all volumes created by the compose files.
+> Note the `-v` option of the `docker-compose down` command will remove *all* of the volumes defined in the compose files and is not recommended.
 
 ### Adding a database dump
 
@@ -187,9 +202,49 @@ See the migration instructions below.
 
 ```bash
 docker-compose up -d
-docker-compose exec backend env RAILS_ENV=production rake db:migrate
+docker-compose exec backend env RAILS_ENV=development rake db:migrate
 docker-compose down
 ```
+
+## Running more than one Aquaria
+
+It is possible to run more than one Aquarium instance, but there can be complications that you need to work around.
+
+### Complications
+
+- public ports conflicts –  the default values for the public ports will be the same for each instance configured with `bin/setup.sh`.
+  When running two versions of v3, the solution is to change the environment variables in the `.env` files.
+  See below for [running v2 and v3](#running-v2-and-v3) together.
+- service name conflicts – when starting a service Docker-Compose uses the parent directory and the service name to name the running container.
+  If you have two clones named `aquarium` and run both at the same time, you will have name conflicts.
+  The simplest solution is to name the clone directories differently.
+- docker image name conflicts – images are managed system wide, so if you have two clones and are working with two v3 versions simultaneously the image built by each will have the same name as the other.
+  So, building the image in one directory will replace the image in the other.
+  Ben's advice is that even though there is a way around this, you should reconsider the choices that led you to this scenario.
+
+### Running v2 and v3
+
+There are scenarios where you might need to run an instance of v2 and v3.
+
+1. Run the following commands to get a new clone with v2:
+
+   ```bash
+   gh repo clone aquariumbio/aquarium legacy-aquarium
+   cd legacy-aquarium
+   bash ./setup.sh
+   ```
+
+2. Until v3 is complete, you will likely want to run either `master` or `staging`.
+   If using `staging`, checkout that branch `git checkout staging`.
+   The highest numbered `v2.x` will also be the most recent v2 release.
+
+3. Edit the `legacy-aquarium/.env` file and set `APP_PUBLIC_PORT`, `S3_PUBLIC_PORT` and `EXTERNAL_DB_PORT` so they do not conflict with the values of the following variables:
+
+   | parameter | file |
+   |:---|:---|
+   | `FRONTEND_PUBLIC_PORT` | `aquarium/.env/development/backend` |
+   | `BACKEND_PUBLIC_PORT`  | `aquarium/.env/development/frontend` |
+   | `DB_PUBLIC_PORT`       | `aquarium/.env/development/frontend` |
 
 ## Testing Aquarium
 
