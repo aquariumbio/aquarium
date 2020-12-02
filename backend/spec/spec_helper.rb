@@ -93,4 +93,14 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 =end
+
+  # Set up database cleaner
+  # - Clean the db before starting the suite
+  # - Clean the db as needed with DatabaseCleaner.clean
+  # Load test_seeds.rb file
+  config.before(:suite) do
+    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.strategy = :truncation
+    load "#{Rails.root}/db/test_seeds.rb"
+  end
 end
