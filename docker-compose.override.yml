@@ -16,8 +16,8 @@ services:
     image: backend-development:${AQUARIUM_VERSION:-edge}
     command: ["development"]
     env_file: 
-      - .env/development/backend    
-      - .env/development/timezone
+      - .env_files/development/backend    
+      - .env_files/development/timezone
     environment:
       ENABLE_SORBET_RUNTIME_ERRORS: "true"
     ports:
@@ -29,7 +29,7 @@ services:
     build:
       context: ./frontend
       target: frontend-development
-    image: frontend-development
+    image: frontend-development:${AQUARIUM_VERSION:-edge}
     environment:
       - CHOKIDAR_USEPOLLING=true
     ports:
@@ -40,8 +40,8 @@ services:
 
   db:
     env_file: 
-      - .env/development/db
-      - .env/development/timezone
+      - .env_files/development/db
+      - .env_files/development/timezone
     ports:
       - "${DB_PUBLIC_PORT:-3307}:3306"
     volumes:

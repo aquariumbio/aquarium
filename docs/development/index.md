@@ -99,19 +99,17 @@ More details on the docker-compose commands can be found [here](https://docs.doc
 ## Docker environment settings
 
 The `bin/setup.sh` script that we ran when [getting started](#getting-started) creates a set of files that sets the environment variables used when running Aquarium with `docker-compose`.
-These files are stored in a directory `.env` that is organized, roughly, by Rails environment and service
+These files are stored in a directory `.env_files` that is organized, roughly, by Rails environment and service
 
 ```bash
-.env
+.env_files
 |-- development
 |   |-- backend
 |   |-- db
-|   |-- frontend
 |   `-- timezone
 `-- production
     |-- backend
     |-- db
-    |-- frontend
     `-- timezone
 ```
 
@@ -168,7 +166,7 @@ bash bin/dbdump.sh development
 docker-compose down
 ```
 
-This will create a SQL dump for the database name in the `.env/development/backend` configuration file.
+This will create a SQL dump for the database name in the `.env_files/development/backend` configuration file.
 
 ### Deleting the database volume
 
@@ -238,13 +236,10 @@ There are scenarios where you might need to run an instance of v2 and v3.
    If using `staging`, checkout that branch `git checkout staging`.
    The highest numbered `v2.x` will also be the most recent v2 release.
 
-3. Edit the `legacy-aquarium/.env` file and set `APP_PUBLIC_PORT`, `S3_PUBLIC_PORT` and `EXTERNAL_DB_PORT` so they do not conflict with the values of the following variables:
-
-   | parameter | file |
-   |:---|:---|
-   | `FRONTEND_PUBLIC_PORT` | `aquarium/.env/development/backend` |
-   | `BACKEND_PUBLIC_PORT`  | `aquarium/.env/development/frontend` |
-   | `DB_PUBLIC_PORT`       | `aquarium/.env/development/frontend` |
+3. Edit the `legacy-aquarium/.env` file and set `APP_PUBLIC_PORT`, `S3_PUBLIC_PORT` and `EXTERNAL_DB_PORT` so they do not conflict with the values of the following variables in the `aquarium/.env` file:
+`FRONTEND_PUBLIC_PORT`,
+`BACKEND_PUBLIC_PORT`,
+`DB_PUBLIC_PORT`.
 
 ## Testing Aquarium
 
@@ -567,6 +562,7 @@ Files:
 ```bash
 aquarium
 |-- .env                          # docker-compose environment file (see setup.sh)
+|-- .env_files                    # environment variable settings (see setup.sh)
 |-- docker-compose.yml            # base compose file
 `-- setup.sh
 ```

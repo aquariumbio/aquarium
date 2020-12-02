@@ -1,7 +1,7 @@
 #!/bin/bash
 set -uxo pipefail
 
-ENV_DIR=.env
+ENV_DIR='.env_files'
 
 _has_variable() {
     local variable=$1
@@ -52,6 +52,15 @@ _set_timezone() {
     fi
 }
 
+_create_compose_config() {
+    local env_file=$1
+    touch $env_file
+    _set_variable 'AQUARIUM_VERSION' 'edge' $env_file
+    _set_variable 'BACKEND_PUBLIC_PORT' '3001' $env_file
+    _set_variable 'FRONTEND_PUBLIC_PORT' '3000' $env_file
+    _set_variable 'DB_PUBLIC_PORT' '3307' $env_file
+}
+
 _create_config() {
     local environment=$1
     local sub_dir=$ENV_DIR/$environment
@@ -64,7 +73,7 @@ _create_config() {
 
     local env_file=$sub_dir/backend
     touch $env_file
-    _set_variable 'BACKEND_PUBLIC_PORT' '3001' $env_file
+
     _set_variable 'DB_HOST' 'db' $env_file
     _set_variable 'DB_PORT' '3306' $env_file
     _set_variable 'DB_NAME' $db_name $env_file
@@ -72,23 +81,22 @@ _create_config() {
     _set_variable 'DB_USER' $db_user $env_file
     _set_variable 'SESSION_TIMEOUT' '15' $env_file
 
-    env_file=$sub_dir/frontend
-    touch $env_file
-    _set_variable 'FRONTEND_PUBLIC_PORT' '3001' $env_file
-
     env_file=$sub_dir/db
     touch $env_file
     _set_variable 'MYSQL_DATABASE' $db_name $env_file
     _set_variable 'MYSQL_USER' $db_user $env_file
     _set_variable 'MYSQL_PASSWORD' $db_password $env_file
     _set_variable 'MYSQL_ROOT_PASSWORD' $db_password $env_file
-    _set_variable 'DB_PUBLIC_PORT' '3307' $env_file
 
     env_file=$sub_dir/timezone
     touch $env_file
     _set_timezone $env_file
 }
 
+# Need a .env file to parameterize the compose file
+_create_compose_config '.env'
+
+# Otherwise, set environment variables in $ENV_DIR
 _create_config 'development' 'aquarium' 'aSecretAquarium'
 _create_config 'production' 'aquarium' 'aSecretAquarium'
 
