@@ -124,16 +124,14 @@
               <a href="#" ng-click="item.new_location = item.location" ng-if="item.new_location != item.location">
                 <ng-md-icon icon="undo" size="22" aria-label="Undo" style="fill: #444"></ng-md-icon>
               </a>
-              <% if current_user && current_user.is_admin %>
-                <a href="#" data-target="#" ng-click="item.mark_as_deleted(); sample.show_deleted=true" class="no-highlight">
-                  <ng-md-icon icon="delete"
-                              size="22"
-                              aria-label="Delete"
-                              style="fill: #444"
-                              data-item-popup-action="delete"
-                              ng-attr-data-item-id="{{item.id}}"></ng-md-icon>
-                </a>
-              <% end %>
+              <a href="#" data-target="#" ng-click="item.mark_as_deleted(); sample.show_deleted=true" class="no-highlight">
+                <ng-md-icon icon="delete"
+                            size="22"
+                            aria-label="Delete"
+                            style="fill: #444"
+                            data-item-popup-action="delete"
+                            ng-attr-data-item-id="{{item.id}}"></ng-md-icon>
+              </a>
             </div>
           </div>
 
