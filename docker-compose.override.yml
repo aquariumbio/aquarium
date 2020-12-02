@@ -17,12 +17,11 @@ services:
     command: ["development"]
     env_file: 
       - .env/development/backend    
-      - .env/development/db
       - .env/development/timezone
     environment:
       ENABLE_SORBET_RUNTIME_ERRORS: "true"
     ports:
-      - "3001:3001"
+      - "${BACKEND_PUBLIC_PORT:-3001}:3001"
     volumes:
       - ./backend:/aquarium
 
@@ -34,7 +33,7 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
     ports:
-      - "3000:3000"
+      - "${FRONTEND_PUBLIC_PORT:-3000}:3000"
     volumes:
       - './frontend:/app'
       - '/app/node_modules'
@@ -44,7 +43,7 @@ services:
       - .env/development/db
       - .env/development/timezone
     ports:
-      - "3307:3306"
+      - "${DB_PUBLIC_PORT:-3307}:3306"
     volumes:
       - db_data:/var/lib/mysql
       - ./docker/mysql_init/:/docker-entrypoint-initdb.d/:ro
