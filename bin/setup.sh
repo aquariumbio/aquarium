@@ -52,9 +52,10 @@ _set_timezone() {
     fi
 }
 
-_create_port_config() {
+_create_compose_config() {
     local env_file=$1
     touch $env_file
+    _set_variable 'AQUARIUM_VERSION' 'edge' $env_file
     _set_variable 'BACKEND_PUBLIC_PORT' '3001' $env_file
     _set_variable 'FRONTEND_PUBLIC_PORT' '3000' $env_file
     _set_variable 'DB_PUBLIC_PORT' '3307' $env_file
@@ -93,7 +94,7 @@ _create_config() {
 }
 
 # Need a .env file to parameterize the compose file
-_create_port_config '.env'
+_create_compose_config '.env'
 
 # Otherwise, set environment variables in $ENV_DIR
 _create_config 'development' 'aquarium' 'aSecretAquarium'
