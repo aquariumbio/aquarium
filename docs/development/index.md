@@ -689,26 +689,18 @@ Files:
 
 ```bash
 aquarium
-|-- aquarium.sh                   # script to run Aquarium in production mode
-|-- data
-|   |-- db                        # directory to store database files
-|   |   |-- development
-|   |   |-- production
-|   |   `-- test
-|   `-- s3                        # directory for minio files
-|-- develop-compose.sh            # script to run Aquarium in development mode (for compatibility)
+.
+|-- bin
+|   |-- dbdump.sh                 # script to create a dump of the active database
+|   |-- dbrename.sh               # script to change db name in environment variables
+|   |-- develop-compose.sh        # script to run Aquarium in development mode (for compatibility)
+|   `-- setup.sh                  # script to create default environment variable settings
 |-- docker
-|   |-- mysql_init                # database dump to initialize database
-|   |-- nginx.development.conf    # nginx configuration for development server
-|   `-- nginx.production.conf     # nginx configuration for production server
+|   `-- mysql_init                # directory for database dumps to initialize database
 |-- docker-compose.override.yml   # development compose file
-|-- docker-compose.production.yml # production compose file
-|-- docker-compose.windows.yml    # windows compose file
-|-- docker-compose.selenium.yml   # adds selenium service
 `-- docker-compose.yml            # base compose file
 ```
 
 The variants of `docker-compose.yml` files determine how the services used by Aquarium are configured.
-Within the aquarium repository these are set to run Aquarium using MySQL for the database, minio for S3, and nginx as the reverse proxy.
 
-The scripts `aquarium.sh` and `develop-compose.sh` are convenience scripts for running the `docker-compose` commands for Aquarium in production and development modes.
+The script `develop-compose.sh` is a convenience script for running the `docker-compose` command for Aquarium in development mode.
