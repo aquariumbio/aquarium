@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 2020_10_30_000000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["row1"], name: "index_account_logs_on_row1"
-    t.index ["row2"], name: "index_account_logs_on_row2"
+    t.index ["row2"], name: "fk_rails_8e6656e8a4"
     t.index ["user_id"], name: "index_account_log_associations_on_user_id"
   end
 
@@ -111,6 +111,7 @@ ActiveRecord::Schema.define(version: 2020_10_30_000000) do
     t.integer "preferred_operation_type_id"
     t.integer "preferred_field_type_id"
     t.index ["parent_class", "parent_id"], name: "index_field_types_on_parent_class_and_parent_id"
+    t.index ["parent_id"], name: "index_field_types_on_sample_type_id"
   end
 
   create_table "field_values", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
@@ -132,6 +133,23 @@ ActiveRecord::Schema.define(version: 2020_10_30_000000) do
     t.index ["child_sample_id"], name: "fk_rails_e04e5b0273"
     t.index ["field_type_id"], name: "index_field_values_on_field_type_id"
     t.index ["parent_class", "parent_id"], name: "index_field_values_on_parent_class_and_parent_id"
+    t.index ["parent_id"], name: "index_field_values_on_sample_id"
+  end
+
+  create_table "folder_contents", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+    t.integer "sample_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "folder_id"
+    t.integer "workflow_id"
+  end
+
+  create_table "folders", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.integer "parent_id"
   end
 
   create_table "groups", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|

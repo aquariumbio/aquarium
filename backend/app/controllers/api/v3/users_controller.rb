@@ -2,12 +2,16 @@
 
 module Api
   module V3
-    # USER RELATED API CALLS
+    # User related api calls
     class UsersController < ApplicationController
-      # RETURN LIST OF USERS FILTERED AND/OR SORTED BY PERMISSION
-      # /api/v3/users/permissions?token=<token>&show[]=[1,2,3,4,5,6]&sort=<sort>
+      # Returns a filtered / sorted list of users based on permission_ids.
+      #
+      # @param token [String] a token
+      # @param show [Array] the list of permission ids to filter
+      # @param sort [String] the sort order
+      # @return a filtered / sorted list of users
       def permissions
-        # CHECK FOR ADMIN PERMISSIONS
+        # Check for admin permissions
         status, response = check_token_for_permission(1)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
@@ -35,10 +39,15 @@ module Api
         render json: { users: users }.to_json, status: :ok
       end
 
-      # SET SPECIFIC PERMISSION FOR SPECIFIC USER
-      # /api/v3/users/set_permission?token=<token>&user_id=<user_id>&permission_id=<permission_id>&value=<true>
-      def set_permission
-        # CHECK FOR ADMIN PERMISSIONS
+      # Set a specific permission for a specific user.
+      #
+      # @param token [String] a token
+      # @param user_id [Int] the id of the user to change
+      # @param permission_id [Int] the id of the permission to change
+      # @param value [String] "true" or "on" to turn the permission on, anything else to turn the permission off
+      # @return the user
+      def permissions_update
+        # Check for admin permissions
         status, response = check_token_for_permission(1)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
