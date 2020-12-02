@@ -79,10 +79,12 @@
     Usually Scheduled {{current.operation_type.timing.as_string}}
   </div>
 
-
+  <!--  Show operations listed individually -->
   <oplist ng-if="current.operation_type && current.status != 'scheduled' && current.status != 'running'" operationtype="current.operation_type" operations="current.operation_type.operations" status="current.status">
   </oplist>
 
+  <!--  Show operations grouped into Jobs
+        Operations that have status scheduled or running should be batched into jobs.  -->
   <md-content ng-if="current.operation_type && current.status == 'scheduled' || current.status == 'running'">
 
     <div ng-if="jobs.length > 0" ng-repeat="job_id in jobs" class='job' style='margin: 16px'>
