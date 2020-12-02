@@ -26,7 +26,7 @@ const UserMenu = (props) => {
 
   const handleSignOut = (event) => {
     event.preventDefault();
-    API.signOut(setLogOutError);
+    API.tokens.signOut(setLogOutError);
   };
 
   const handleMenuClick = (pageURL) => {

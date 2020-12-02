@@ -46,7 +46,7 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <div name="app-container" className={classes.container} data-cy="app-container">
         { /* Users cannot interact with the app if they do not have a token */
-          (!sessionStorage.getItem('token') || !API.isAuthenticated)
+          (!sessionStorage.getItem('token') || !API.tokens.isAuthenticated)
           && <Redirect to="/login" />
         }
         <Switch>

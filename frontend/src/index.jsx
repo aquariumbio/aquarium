@@ -3,11 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import { BrowserRouter as Router } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import axios from 'axios';
-import App from './components/app/App';
 import reportWebVitals from './reportWebVitals';
-
-axios.defaults.baseURL = 'http://localhost:3001/api/v3/';
+import App from './components/app/App';
 
 ReactDOM.render(
   <React.StrictMode>

@@ -76,7 +76,7 @@ const LoginDialog = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    API.signIn(login, password, setLoginError);
+    API.tokens.signIn(login, password, setLoginError);
   };
 
   useEffect(() => {
@@ -91,7 +91,7 @@ const LoginDialog = () => {
     };
   });
 
-  if (sessionStorage.getItem('token') && API.isAuthenticated()) {
+  if (sessionStorage.getItem('token') && API.tokens.isAuthenticated()) {
     history.push('/');
     window.location.reload();
   }

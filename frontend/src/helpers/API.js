@@ -1,13 +1,15 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:3001/api/v3/';
+axios.defaults.baseURL = 'http://localhost:3001/api/v3';
+
+// For validation we need to send the token with every request to the backend
 const currentSessionToken = sessionStorage.getItem('token');
 
 const validateToken = async () => {
   let validToken = false;
 
   await axios
-    .post('token/get_user', null, {
+    .get('/token/get_user', null, {
       params: {
         token: currentSessionToken,
       },
@@ -31,7 +33,7 @@ const validateToken = async () => {
 const signIn = async (login, password, setLoginError) => {
   let signInSuccessful = false;
   await axios
-    .post('token/create', null, {
+    .post('/token/create', null, {
       params: {
         login,
         password,
@@ -46,40 +48,125 @@ const signIn = async (login, password, setLoginError) => {
         signInSuccessful = true;
         window.location.reload();
       }
-
-      if (status === 401) {
-        setLoginError(response.data.error);
-      }
+    })
+    .catch((error) => {
+      setLoginError(error);
+      // eslint-disable-next-line no-console
+      console.log(error);
     });
   return signInSuccessful;
 };
 
-const signOut = (setLoginOutError) => {
+const signOut = () => {
   axios
-    .post('token/delete', null, {
+    .post('/token/delete', null, {
       params: {
         token: currentSessionToken,
       },
     })
     .then((response) => {
-      const [status, data] = [response.status, response.data];
+      const [status] = [response.status, response.data];
 
-      if (status === 200 || (status === 401 && data.error === 'Invalid')) {
+      if (status === 200) {
         sessionStorage.clear('token');
-        setLoginOutError();
         window.location.reload();
       }
-
-      if (status === 401 && data.error !== 'Invalid') {
-        setLoginOutError(data.error);
-      }
+    })
+    .catch((error) => {
+      sessionStorage.clear('token');
+      window.location.reload();
+      // eslint-disable-next-line no-console
+      console.log(error);
     });
 };
 
+const getSampleTypes = () => {
+  let sampleTypes;
+  let firstSampleType;
+  // eslint-disable-next-line no-console
+  console.log(currentSessionToken);
+  axios
+    .get('/sample_types', {
+      params: {
+        token: currentSessionToken,
+      },
+    })
+    .then((response) => {
+      // eslint-disable-next-line no-console
+      console.log(response);
+
+      [sampleTypes, firstSampleType] = [
+        response.data.sample_types,
+        response.data.first,
+      ];
+
+      // eslint-disable-next-line no-console
+      console.log(sampleTypes);
+
+      // eslint-disable-next-line no-console
+      console.log(firstSampleType);
+    })
+    .catch((error) => {
+      // eslint-disable-next-line no-console
+      console.log(error);
+    });
+};
+
+/*
+### PERMISSIONS
+
+  get  api/v3/permissions
+
+### USER PERMISSIONS
+
+  GET  api/v3/users/permissions
+
+  POST api/v3/users/permissions/update
+
+### SAMPLE TYPES
+
+  GET  api/v3/sample_types
+
+  POST api/v3/sample_types/create
+
+  GET  api/v3/sample_types/:id
+
+  POST api/v3/sample_types/:id/update
+
+  POST api/v3/sample_types/:id/delete
+
+  const  = async () => {
+  await axios
+    .post('', null, {
+      params: {
+        login,
+        password,
+      },
+    })
+    .then((response) => {
+      const [status, data] = [response.status, response.data];
+
+      if (status === 200) {
+
+      }
+
+      if (status === 401) {
+
+      }
+    });
+  return ;
+};
+*/
+
 const API = {
-  isAuthenticated: validateToken,
-  signIn,
-  signOut,
+  tokens: {
+    isAuthenticated: validateToken,
+    signIn,
+    signOut,
+  },
+  sampleTypes: {
+    getSampleTypes,
+  },
 };
 
 export default API;
