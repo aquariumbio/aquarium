@@ -31,5 +31,5 @@ RUN gem update --system \
 COPY . ./
 
 # include entrypoint scripts for starting Aquarium and Krill
-RUN chmod +x ./entrypoint.sh
-ENTRYPOINT [ "/aquarium/entrypoint.sh" ]
+RUN chmod +x dev_entrypoint.sh
+ENTRYPOINT [ "/aquarium/dev_entrypoint.sh" ]
