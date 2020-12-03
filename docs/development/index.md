@@ -10,17 +10,21 @@ Everyone else should visit the installation page on [Aquarium.bio](https://www.a
 
 1. Install [Docker](https://www.docker.com/get-started)
 
-2. Get Aquarium using [git](https://git-scm.com) with the command
+   The instructions use the [GitHub CLI](https://cli.github.com) instead of [git](https://git-scm.com).
+
+   [Perl](https://www.perl.org) is needed by some of the support scripts
+
+2. Get Aquarium with the command
 
    ```bash
-   git clone https://github.com/klavinslab/aquarium.git
+   gh repo clone aquariumbio/aquarium
    ```
 
 3. Initialize the environment
 
    ```bash
    cd aquarium
-   bash ./setup.sh
+   bash ./bin/setup.sh
    ```
 
 ## Running Aquarium
@@ -39,34 +43,38 @@ The following commands will allow you to run Aquarium in Rails development mode 
    docker-compose up
    ```
 
-   In development mode, Aquarium is available at `localhost:3001`.
+   In development mode, Aquarium is available at `localhost:3000`.
 
 3. **Stop** the Aquarium services, by typing `ctrl-c` followed by
 
    ```bash
-   docker-compose down -v
+   docker-compose down
    ```
 
-   Alternatively, you can run this command in a separate terminal within the `aquarium` directory .
+   Alternatively, you can run this command in a separate terminal within the `aquarium` directory.
+
+   > Caution: using the `-v` option will delete the database.
+   > If you actually want to delete the database, but keep a copy, you should do a dump first.
+   > See [Switching Databases](#switching-databases)
 
 ## Working with an Aquarium Container
 
 To run commands within the running Aquarium container, precede each command with
 
 ```bash
-docker-compose exec app
+docker-compose exec backend
 ```
 
 For instance, you can run the Rails console with the command
 
 ```bash
-docker-compose exec app rails c
-```
+docker-compose exec backend rails c
+````
 
 And, you can also run an interactive shell within the Aquarium container with the command
 
 ```bash
-docker-compose exec app /bin/sh
+docker-compose exec backend /bin/sh
 ```
 
 which allows you to work within the container.
@@ -74,79 +82,171 @@ which allows you to work within the container.
 For commands that don't require that Aquarium is running, using a command starting with
 
 ```bash
-docker-compose run --rm app
+docker-compose run --rm backend
 ```
 
 will create a temporary container.
 This can be useful for running single commands such as
 
 ```bash
-docker-compose run --rm app rspec
+docker-compose run --rm backend rspec
 ```
 
-which runs RSpec on the tests in the `spec` directory.
+which runs RSpec on the tests in the `backend/spec` directory.
 
 More details on the docker-compose commands can be found [here](https://docs.docker.com/compose/reference/overview/).
 
-## Switching databases
+## Docker environment settings
 
-The development configuration uses the MySQL Docker image, which is capable of automatically importing a database dump the first time it is started.
-You can switch the database, but doing so will destroy any changes you have made to the current database.
+The `bin/setup.sh` script that we ran when [getting started](#getting-started) creates a set of files that sets the environment variables used when running Aquarium with `docker-compose`.
+These files are stored in a directory `.env_files` that is organized, roughly, by Rails environment and service
+
+```bash
+.env_files
+|-- development
+|   |-- backend
+|   |-- db
+|   `-- timezone
+`-- production
+    |-- backend
+    |-- db
+    `-- timezone
+```
+
+Each file sets environment variables for the [parameters of a service](#parameters).
+
+The environment variables for the database are named differently for the Rails `backend` and MySQL `db` services, and so are defined in both files.
+
+| `backend`     | `db`             |
+| ------------- | ---------------- |
+| `DB_NAME`     | `MYSQL_DATABASE` |
+| `DB_USER`     | `MYSQL_USER`     |
+| `DB_PASSWORD` | `MYSQL_PASSWORD` |
+
+If you change either of these definitions, be sure to change the other.
+There is a helper script `bin/dbrename.sh` to change the database name.
+
+> Note: the `db` parameter `MYSQL_ROOT_PASSWORD` does not have a corresponding variable in `backend`.
+
+## Managing databases
+
+The development configuration uses the MySQL Docker image, which is capable of automatically importing database dumps the first time it is started.
+
+Specifically, all SQL dumps in the `docker/mysql_int` directory will be loaded if the database has not been initialized.
+This will include the first time you run `docker-compose up` after either cloning the repository or [deleting the database volume](#deleting-the-database-volume).
+The initial configuration has two dump files `default.sql` and `test.sql` containing the databases `aquarium_development` and `aquarium_test`.
+
+### Switching databases
+
+If you want to switch to a database that has a different name than one of the databases with a dump in `docker/mysql_init`, you can [add the new dump](#adding-a-database-dump) and then change the database name with the `bin/dbrename.sh` script.
+For example, to change the database name to `drosophila_husbandtry`, use the command
+
+```bash
+./bin/dbrename.sh development drosophila_husbandry
+```
+
+Alternatively, if the database names conflict, you can switch the database, but doing so will destroy any changes you have made to the current database.
 If you want to save these changes, you will have to create a database dump.
+The steps for switching databases in this case are:
 
-To make database dump, using the values of `MYSQL_USER` and `MYSQL_PASSWORD` from `.env` run the following
+1. [Create a dump](#creating-a-database-dump) of the current database if you want to be able to restore it later.
+2. [Delete the database volume](#deleting-the-database-volume).
+3. [Add the replacement dump](#adding-a-database-dump).
+4. [Migrate the database](#migrate-the-database) if the replacement database is not up-to-date with the current schema.
+
+Restore the database by following these steps for the new dump you made in the first step.
+
+### Creating a database dump
+
+To make database dump, run the following
 
 ```bash
-MYSQL_USER=<username>
-MYSQL_PASSWORD=<password>
-docker-compose up -d
-docker-compose exec db mysqldump -u $MYSQL_USER -p$MYSQL_PASSWORD production > production_dump.sql
-docker-compose down -v
+docker-compose up -d db
+bash bin/dbdump.sh development
+docker-compose down
 ```
 
-You can then safely remove the MySQL files to allow the switch by running
+This will create a SQL dump for the database name in the `.env_files/development/backend` configuration file.
+
+### Deleting the database volume
+
+The Aquarium database files are stored in a named volume managed by Docker.
+You can see what volumes exist by running
 
 ```bash
-rm -rf data/db/development/*
+docker volume ls
 ```
+
+The volume for the database files will be named `aquarium_db_data` (provided you cloned into the directory `aquarium`), and can be removed with the command
+
+```bash
+docker volume rm aquarium_db_data
+```
+
+> Note the `-v` option of the `docker-compose down` command will remove *all* of the volumes defined in the compose files and is not recommended.
+
+### Adding a database dump
 
 Then copy the dump of the database that you want to use to the default location:
 
 ```bash
-cp production_dump.sql docker/mysql_init/dump.sql
+cp replacement_dump.sql docker/mysql_init/
 ```
 
-Note: It may be necessary to run migrations on database dump from a prior version of Aquarium.
+Note: It may be necessary to run migrations on a database dump from a prior version of Aquarium.
 See the migration instructions below.
-
-## Restoring the default database dump
-
-If you want to restart from an empty database, you can run
-
-```bash
-cp docker/mysql_init/default.sql docker/mysql_init/dump.sql
-```
-
-Before restarting Aquarium, remove the MySQL files with
-
-```bash
-rm -rf data/db/development/*
-```
 
 ## Migrating the Database
 
 ```bash
 docker-compose up -d
-docker-compose exec app env RAILS_ENV=production rake db:migrate
-docker-compose down -v
+docker-compose exec backend env RAILS_ENV=development rake db:migrate
+docker-compose down
 ```
+
+## Running more than one Aquaria
+
+It is possible to run more than one Aquarium instance, but there can be complications that you need to work around.
+
+### Complications
+
+- public ports conflicts –  the default values for the public ports will be the same for each instance configured with `bin/setup.sh`.
+  When running two versions of v3, the solution is to change the environment variables in the `.env` files.
+  See below for [running v2 and v3](#running-v2-and-v3) together.
+- service name conflicts – when starting a service Docker-Compose uses the parent directory and the service name to name the running container.
+  If you have two clones named `aquarium` and run both at the same time, you will have name conflicts.
+  The simplest solution is to name the clone directories differently.
+- docker image name conflicts – images are managed system wide, so if you have two clones and are working with two v3 versions simultaneously the image built by each will have the same name as the other.
+  So, building the image in one directory will replace the image in the other.
+  Ben's advice is that even though there is a way around this, you should reconsider the choices that led you to this scenario.
+
+### Running v2 and v3
+
+There are scenarios where you might need to run an instance of v2 and v3.
+
+1. Run the following commands to get a new clone with v2:
+
+   ```bash
+   gh repo clone aquariumbio/aquarium legacy-aquarium
+   cd legacy-aquarium
+   bash ./setup.sh
+   ```
+
+2. Until v3 is complete, you will likely want to run either `master` or `staging`.
+   If using `staging`, checkout that branch `git checkout staging`.
+   The highest numbered `v2.x` will also be the most recent v2 release.
+
+3. Edit the `legacy-aquarium/.env` file and set `APP_PUBLIC_PORT`, `S3_PUBLIC_PORT` and `EXTERNAL_DB_PORT` so they do not conflict with the values of the following variables in the `aquarium/.env` file:
+`FRONTEND_PUBLIC_PORT`,
+`BACKEND_PUBLIC_PORT`,
+`DB_PUBLIC_PORT`.
 
 ## Testing Aquarium
 
 ### Running Tests
 
 ```bash
-docker-compose run --rm app rspec
+docker-compose run --rm backend rspec
 ```
 
 Some of the tests do intentionally raise exceptions, so do not be concerned if these failures seem to be missed.
@@ -171,14 +271,14 @@ The Aquarium repository is setup to use [RuboCop](https://rubocop.readthedocs.io
 When you make changes to Aquarium code, run the command
 
 ```bash
-docker-compose run --rm app rubocop -x
+docker-compose run --rm backend rubocop -x
 ```
 
 to fix layout issues.
 Then run the command
 
 ```bash
-docker-compose run --rm app rubocop
+docker-compose run --rm backend rubocop
 ```
 
 to see if you have introduced any other issues.
@@ -203,7 +303,7 @@ _Note_: Some fixes may not be possible without affecting the Krill library for p
 This command will regenerate the `.rubocop_todo.yml` file
 
 ```bash
-docker-compose run -rm app rubocop --auto-gen-config
+docker-compose run -rm backend rubocop --auto-gen-config
 ```
 
 ### Documenting Aquarium Ruby Code
@@ -284,7 +384,7 @@ Keep it up-to-date if you change something that affects Aquarium development.
 2. Open a shell in the Aquarium container
 
    ```bash
-   docker-compose exec app /bin/sh
+   docker-compose exec backend /bin/sh
    ```
 
 3. Upgrade gems
@@ -327,7 +427,7 @@ Keep it up-to-date if you change something that affects Aquarium development.
 11. Stop the container
 
     ```bash
-    docker-compose down -v
+    docker-compose down
     ```
 
 ## Making an Aquarium Release
@@ -341,15 +441,15 @@ Keep it up-to-date if you change something that affects Aquarium development.
 2.  Build image to make sure that dependencies are up-to-date
 
     ```bash
-    docker-compose build app
+    docker-compose build backend
     ```
 
 3.  Make sure Rails tests pass
 
     ```bash
     docker-compose up -d
-    docker-compose exec app rspec
-    docker-compose down -v
+    docker-compose exec backend rspec
+    docker-compose down
     ```
 
     If there are any failures, fix them and start over.
@@ -359,7 +459,7 @@ Keep it up-to-date if you change something that affects Aquarium development.
 4.  Run type checks
 
     ```bash
-    docker-compose run -rm app srb tc
+    docker-compose run -rm backend srb tc
     ```
 
     If there are any failures, fix them and start over.
@@ -367,13 +467,13 @@ Keep it up-to-date if you change something that affects Aquarium development.
 5.  Fix any layout problems
 
     ```bash
-    docker-compose run --rm app rubocop -x
+    docker-compose run --rm backend rubocop -x
     ```
 
 6.  Run `rubocop`
 
     ```bash
-    docker-compose run --rm app rubocop
+    docker-compose run --rm backend rubocop
     ```
 
     Fix any issues and start over.
@@ -381,7 +481,7 @@ Keep it up-to-date if you change something that affects Aquarium development.
 7.  Update RuboCop TODO file
 
     ```bash
-    docker-compose run -rm app rubocop --auto-gen-config
+    docker-compose run -rm backend rubocop --auto-gen-config
     ```
 
 8.  (make sure JS tests pass)
@@ -393,7 +493,7 @@ Keep it up-to-date if you change something that affects Aquarium development.
 11. Update API documentation by running
 
     ```bash
-    docker-compose run --rm app yard
+    docker-compose run --rm backend yard
     ```
 
 12. Update `CHANGE_LOG`
@@ -447,7 +547,7 @@ aquarium
 
 The Dockerfile defines the images:
 
-- aquarium-development -- image for running Aquarium in development mode
+- backend-development -- image for running Aquarium in development mode
 - aquarium-builder -- temporary image for production builds
 - aquarium -- image for running Aquarium in production model
 
@@ -462,6 +562,7 @@ Files:
 ```bash
 aquarium
 |-- .env                          # docker-compose environment file (see setup.sh)
+|-- .env_files                    # environment variable settings (see setup.sh)
 |-- docker-compose.yml            # base compose file
 `-- setup.sh
 ```
@@ -503,31 +604,6 @@ Set the environment variable `KRILL_HOST`
 | KRILL_HOST | the hostname for the krill server   | `krill` |
 | KRILL_PORT | the port served by the krill server | 3500    |
 
-**S3**:
-Aquarium is configured to use either AWS S3 or minio, and is set to use minio by default with the hostname configured for [local deployment](http://klavinslab.org/aquarium-local/).
-
-To use minio set the following variables
-
-| Variable             | Description                             | Default          |
-| -------------------- | --------------------------------------- | ---------------- |
-| S3_PROTOCOL          | network protocol for S3 service         | `http`           |
-| S3_HOST              | network address of the S3 service       | `localhost:9000` |
-| S3_REGION            | name of S3 region                       | `us-west-1`      |
-| S3_BUCKET_NAME       | name of S3 bucket                       | `development`    |
-| S3_ACCESS_KEY_ID     | the access key id for the minio service | –                |
-| S3_SECRET_ACCESS_KEY | the access key for the minio service    | –                |
-
-For the local deployment, the minio service is named `s3`, but it is necessary to redirect `localhost:9000` in order to use the minio docker image.
-
-To use AWS S3 set the variable `S3_SERVICE` to `AWS` along with the following variables
-
-| Variable             | Description                        | Default |
-| -------------------- | ---------------------------------- | ------- |
-| S3_REGION            | name of S3 region                  | –       |
-| S3_BUCKET_NAME       | name of S3 bucket                  | –       |
-| S3_ACCESS_KEY_ID     | the access key id for your account | –       |
-| S3_SECRET_ACCESS_KEY | the access key for your account    | –       |
-
 **Timezone**:
 Set the variable `TZ` to the desired timezone for your instance.
 This should match the timezone for your database.
@@ -568,13 +644,12 @@ the aquarium service:
 
 The following values can be set using this file or environment variables:
 
-| Config key           | Environment Variable | Default                               |
-| -----------------    | -------------------- | ------------------------------------- |
-| lab_name             | LAB_NAME             | `Your Lab`                            |
-| lab_email_address    | LAB_EMAIL_ADDRESS    | –                                     |
-| logo_path            | LOGO_PATH            | `aquarium-logo.png`                   |
-| image_uri            | IMAGE_URI            | _S3_PROTOCOL_`://`_S3_HOST_`/images/` |
-| technician_dashboard | TECH_DASHBOARD       | `false`                               |
+| Config key           | Environment Variable | Default             |
+| -------------------- | -------------------- | ------------------- |
+| lab_name             | LAB_NAME             | `Your Lab`          |
+| lab_email_address    | LAB_EMAIL_ADDRESS    | –                   |
+| logo_path            | LOGO_PATH            | `aquarium-logo.png` |
+| technician_dashboard | TECH_DASHBOARD       | `false`             |
 
 In addition to the instance details, the user agreement for the lab can be set by creating a YAML file containing the agreement.
 The YAML must include the keys `title` with the title of the agreement, `updated` with the date last updated, and `clauses`, which is a list of pairs of `title` and `text` pairs.
@@ -610,28 +685,18 @@ Files:
 
 ```bash
 aquarium
-|-- aquarium.sh                   # script to run Aquarium in production mode
-|-- data
-|   |-- db                        # directory to store database files
-|   |   |-- development
-|   |   |-- production
-|   |   `-- test
-|   `-- s3                        # directory for minio files
-|-- develop-compose.sh            # script to run Aquarium in development mode (for compatibility)
+.
+|-- bin
+|   |-- dbdump.sh                 # script to create a dump of the active database
+|   |-- dbrename.sh               # script to change db name in environment variables
+|   |-- develop-compose.sh        # script to run Aquarium in development mode (for compatibility)
+|   `-- setup.sh                  # script to create default environment variable settings
 |-- docker
-|   |-- mysql_init                # database dump to initialize database
-|   |-- nginx.development.conf    # nginx configuration for development server
-|   `-- nginx.production.conf     # nginx configuration for production server
+|   `-- mysql_init                # directory for database dumps to initialize database
 |-- docker-compose.override.yml   # development compose file
-|-- docker-compose.production.yml # production compose file
-|-- docker-compose.windows.yml    # windows compose file
-|-- docker-compose.selenium.yml   # adds selenium service
 `-- docker-compose.yml            # base compose file
 ```
 
 The variants of `docker-compose.yml` files determine how the services used by Aquarium are configured.
-Within the aquarium repository these are set to run Aquarium using MySQL for the database, minio for S3, and nginx as the reverse proxy.
-The compose files mount relevant files in the `docker` sub-directory, which is where the database and S3 files are stored.
-The S3 data files depend on the `S3_SECRET_ACCESS_KEY` and so have to be removed when this value is changed, so be careful if data needs to be kept.
 
-The scripts `aquarium.sh` and `develop-compose.sh` are convenience scripts for running the `docker-compose` commands for Aquarium in production and development modes.
+The script `develop-compose.sh` is a convenience script for running the `docker-compose` command for Aquarium in development mode.
