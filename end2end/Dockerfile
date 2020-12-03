@@ -1,5 +1,7 @@
 # see https://github.com/cypress-io/cypress-example-docker-compose/blob/master/e2e/Dockerfile
-FROM cypress/base:10
+
+# cypress image tags appear to be node versions, keep it roughly matched with frontend base
+FROM cypress/base:14.15.0
 WORKDIR /app
 
 COPY package.json package-lock.json ./
