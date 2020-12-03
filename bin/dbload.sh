@@ -1,8 +1,8 @@
 #!/bin/bash
 set -uxo pipefail
 
-if [[ $# -ne 1 ]]; then
-    echo "Expected 1 argument: environment"
+if [[ $# -ne 2 ]]; then
+    echo "Expected 2 arguments: environment database-name"
     exit 2
 fi
 
@@ -11,5 +11,4 @@ USER=`perl -lne '/^DB_USER=(.*)/ && print "$1"' $ENV_DIR/backend`
 PASSWORD=`perl -lne '/^DB_PASSWORD=(.*)/ && print "$1"' $ENV_DIR/backend`
 DATABASE=`perl -lne '/^DB_NAME=(.*)/ && print "$1"' $ENV_DIR/backend`
 
-DUMP_FILE=${DATABASE}_dump.sql
-docker-compose exec db mysqldump -u "$USER" -p"$PASSWORD" $DATABASE | grep -v "mysqldump:" > $DUMP_FILE
+cat $2 | docker-compose exec -T db mysql -u "$USER" -p"$PASSWORD" "$DATABASE"

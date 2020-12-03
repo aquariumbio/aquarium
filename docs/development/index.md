@@ -69,7 +69,7 @@ For instance, you can run the Rails console with the command
 
 ```bash
 docker-compose exec backend rails c
-````
+```
 
 And, you can also run an interactive shell within the Aquarium container with the command
 
@@ -126,35 +126,52 @@ The environment variables for the database are named differently for the Rails `
 If you change either of these definitions, be sure to change the other.
 There is a helper script `bin/dbrename.sh` to change the database name.
 
+> Note: renaming the database user for development will break the configuration for the test database.
+
 > Note: the `db` parameter `MYSQL_ROOT_PASSWORD` does not have a corresponding variable in `backend`.
 
 ## Managing databases
 
 The development configuration uses the MySQL Docker image, which is capable of automatically importing database dumps the first time it is started.
 
-Specifically, all SQL dumps in the `docker/mysql_int` directory will be loaded if the database has not been initialized.
+Specifically, all SQL files in the `docker/mysql_int` directory will be loaded if the database has not been initialized.
 This will include the first time you run `docker-compose up` after either cloning the repository or [deleting the database volume](#deleting-the-database-volume).
-The initial configuration has two dump files `default.sql` and `test.sql` containing the databases `aquarium_development` and `aquarium_test`.
+The initial configuration has two files
+
+```bash
+docker
+`-- mysql_init
+    |-- create_aquarium_test.sql # script to create the aquarium_test database
+    `-- default.sql              # script for default aquarium_development database
+```
 
 ### Switching databases
 
-If you want to switch to a database that has a different name than one of the databases with a dump in `docker/mysql_init`, you can [add the new dump](#adding-a-database-dump) and then change the database name with the `bin/dbrename.sh` script.
-For example, to change the database name to `drosophila_husbandtry`, use the command
+You can only switch the database used in development.
 
-```bash
-./bin/dbrename.sh development drosophila_husbandry
-```
+The steps to switch the database are:
 
-Alternatively, if the database names conflict, you can switch the database, but doing so will destroy any changes you have made to the current database.
-If you want to save these changes, you will have to create a database dump.
-The steps for switching databases in this case are:
+1. If the name of the new database conflicts with the name of the current database, you need to [create a dump](#creating-a-database-dump) of the current database if you want to be able to restore it later.
 
-1. [Create a dump](#creating-a-database-dump) of the current database if you want to be able to restore it later.
-2. [Delete the database volume](#deleting-the-database-volume).
-3. [Add the replacement dump](#adding-a-database-dump).
+2. If the name of the new database is different than the name of the current database, you need to change the database name with the `bin/dbrename.sh` script.
+   For example, to change the name to `drosophila_husbandry`, use the command
+
+   ```bash
+   ./bin/dbrename.sh development drosophila_husbandry
+   ```
+
+3. Load the new database
+   Your options are:
+
+   - Using a database client.
+     The default public port for the db service is 3307, but may be reset using the `DB_PUBLIC_PORT` variable in the `.env` file.
+   - Load the database with `bin/dbload.sh`.
+     (Be sure to rename the database in the configuration first.)
+   - [Remove the database files](#deleting-the-database-volume),
+     [add the replacement dump](#adding-a-database-dump), and
+     restart the db service.
+
 4. [Migrate the database](#migrate-the-database) if the replacement database is not up-to-date with the current schema.
-
-Restore the database by following these steps for the new dump you made in the first step.
 
 ### Creating a database dump
 
@@ -183,7 +200,7 @@ The volume for the database files will be named `aquarium_db_data` (provided you
 docker volume rm aquarium_db_data
 ```
 
-> Note the `-v` option of the `docker-compose down` command will remove *all* of the volumes defined in the compose files and is not recommended.
+> Note the `-v` option of the `docker-compose down` command will remove _all_ of the volumes defined in the compose files and is not recommended.
 
 ### Adding a database dump
 
@@ -210,7 +227,7 @@ It is possible to run more than one Aquarium instance, but there can be complica
 
 ### Complications
 
-- public ports conflicts –  the default values for the public ports will be the same for each instance configured with `bin/setup.sh`.
+- public ports conflicts – the default values for the public ports will be the same for each instance configured with `bin/setup.sh`.
   When running two versions of v3, the solution is to change the environment variables in the `.env` files.
   See below for [running v2 and v3](#running-v2-and-v3) together.
 - service name conflicts – when starting a service Docker-Compose uses the parent directory and the service name to name the running container.
@@ -237,9 +254,9 @@ There are scenarios where you might need to run an instance of v2 and v3.
    The highest numbered `v2.x` will also be the most recent v2 release.
 
 3. Edit the `legacy-aquarium/.env` file and set `APP_PUBLIC_PORT`, `S3_PUBLIC_PORT` and `EXTERNAL_DB_PORT` so they do not conflict with the values of the following variables in the `aquarium/.env` file:
-`FRONTEND_PUBLIC_PORT`,
-`BACKEND_PUBLIC_PORT`,
-`DB_PUBLIC_PORT`.
+   `FRONTEND_PUBLIC_PORT`,
+   `BACKEND_PUBLIC_PORT`,
+   `DB_PUBLIC_PORT`.
 
 ## Testing Aquarium
 

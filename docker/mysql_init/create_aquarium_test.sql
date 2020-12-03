@@ -10,6 +10,13 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 -- ---------------------------------------------------------
 
+-- CREATE DATABASE "aquarium_test" ----------------------------------
+DROP DATABASE IF EXISTS `aquarium_test`;
+CREATE DATABASE `aquarium_test` CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+GRANT ALL ON `aquarium_test`.* TO 'aquarium'@'%' ;
+USE `aquarium_test`;
+-- ---------------------------------------------------------
+
 
 -- CREATE TABLE "account_logs" ---------------------------------
 CREATE TABLE `account_logs`(
@@ -1020,7 +1027,7 @@ ALTER TABLE `account_logs`
 	ADD CONSTRAINT `fk_rails_0fc0d85f00` FOREIGN KEY ( `row1` )
 	REFERENCES `accounts`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1029,7 +1036,7 @@ ALTER TABLE `account_logs`
 	ADD CONSTRAINT `fk_rails_8e6656e8a4` FOREIGN KEY ( `row2` )
 	REFERENCES `accounts`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1038,7 +1045,7 @@ ALTER TABLE `account_logs`
 	ADD CONSTRAINT `fk_rails_c91e200913` FOREIGN KEY ( `user_id` )
 	REFERENCES `users`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1047,7 +1054,7 @@ ALTER TABLE `accounts`
 	ADD CONSTRAINT `fk_rails_17f7ad8fd1` FOREIGN KEY ( `budget_id` )
 	REFERENCES `budgets`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1056,7 +1063,7 @@ ALTER TABLE `accounts`
 	ADD CONSTRAINT `fk_rails_9910875b16` FOREIGN KEY ( `job_id` )
 	REFERENCES `jobs`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1065,7 +1072,7 @@ ALTER TABLE `accounts`
 	ADD CONSTRAINT `fk_rails_b1e30bebc8` FOREIGN KEY ( `user_id` )
 	REFERENCES `users`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1074,7 +1081,7 @@ ALTER TABLE `accounts`
 	ADD CONSTRAINT `fk_rails_ba2f9f474f` FOREIGN KEY ( `operation_id` )
 	REFERENCES `operations`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1083,7 +1090,7 @@ ALTER TABLE `allowable_field_types`
 	ADD CONSTRAINT `fk_rails_1d47761735` FOREIGN KEY ( `field_type_id` )
 	REFERENCES `field_types`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1092,7 +1099,7 @@ ALTER TABLE `allowable_field_types`
 	ADD CONSTRAINT `fk_rails_2bc0f30ee5` FOREIGN KEY ( `sample_type_id` )
 	REFERENCES `sample_types`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1101,7 +1108,7 @@ ALTER TABLE `allowable_field_types`
 	ADD CONSTRAINT `fk_rails_a968b4a54c` FOREIGN KEY ( `object_type_id` )
 	REFERENCES `object_types`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1110,7 +1117,7 @@ ALTER TABLE `data_associations`
 	ADD CONSTRAINT `fk_rails_26226b25a9` FOREIGN KEY ( `upload_id` )
 	REFERENCES `uploads`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1119,7 +1126,7 @@ ALTER TABLE `field_values`
 	ADD CONSTRAINT `fk_rails_212ef5a639` FOREIGN KEY ( `field_type_id` )
 	REFERENCES `field_types`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1128,7 +1135,7 @@ ALTER TABLE `field_values`
 	ADD CONSTRAINT `fk_rails_319b222007` FOREIGN KEY ( `child_item_id` )
 	REFERENCES `items`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1137,7 +1144,7 @@ ALTER TABLE `field_values`
 	ADD CONSTRAINT `fk_rails_50fa557e81` FOREIGN KEY ( `allowable_field_type_id` )
 	REFERENCES `allowable_field_types`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1146,7 +1153,7 @@ ALTER TABLE `field_values`
 	ADD CONSTRAINT `fk_rails_e04e5b0273` FOREIGN KEY ( `child_sample_id` )
 	REFERENCES `samples`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1155,7 +1162,7 @@ ALTER TABLE `invoices`
 	ADD CONSTRAINT `fk_rails_3d1522a0d8` FOREIGN KEY ( `user_id` )
 	REFERENCES `users`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1164,7 +1171,7 @@ ALTER TABLE `invoices`
 	ADD CONSTRAINT `fk_rails_3dd4c64f3b` FOREIGN KEY ( `budget_id` )
 	REFERENCES `budgets`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1173,7 +1180,7 @@ ALTER TABLE `items`
 	ADD CONSTRAINT `fk_rails_6b7d1f696e` FOREIGN KEY ( `sample_id` )
 	REFERENCES `samples`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1182,7 +1189,7 @@ ALTER TABLE `items`
 	ADD CONSTRAINT `fk_rails_a6ef7e6462` FOREIGN KEY ( `object_type_id` )
 	REFERENCES `object_types`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1191,7 +1198,7 @@ ALTER TABLE `items`
 	ADD CONSTRAINT `fk_rails_d02c2a2df1` FOREIGN KEY ( `locator_id` )
 	REFERENCES `locators`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1200,7 +1207,7 @@ ALTER TABLE `job_assignment_logs`
 	ADD CONSTRAINT `fk_rails_3c67081d23` FOREIGN KEY ( `assigned_to` )
 	REFERENCES `users`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1209,7 +1216,7 @@ ALTER TABLE `job_assignment_logs`
 	ADD CONSTRAINT `fk_rails_afd4527da7` FOREIGN KEY ( `job_id` )
 	REFERENCES `jobs`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1218,7 +1225,7 @@ ALTER TABLE `job_assignment_logs`
 	ADD CONSTRAINT `fk_rails_cec96ca499` FOREIGN KEY ( `assigned_by` )
 	REFERENCES `users`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1227,7 +1234,7 @@ ALTER TABLE `job_associations`
 	ADD CONSTRAINT `fk_rails_25efd65a81` FOREIGN KEY ( `job_id` )
 	REFERENCES `jobs`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1236,7 +1243,7 @@ ALTER TABLE `job_associations`
 	ADD CONSTRAINT `fk_rails_8f590b1e09` FOREIGN KEY ( `operation_id` )
 	REFERENCES `operations`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1245,7 +1252,7 @@ ALTER TABLE `jobs`
 	ADD CONSTRAINT `fk_rails_4928288085` FOREIGN KEY ( `group_id` )
 	REFERENCES `groups`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1254,7 +1261,7 @@ ALTER TABLE `jobs`
 	ADD CONSTRAINT `fk_rails_df6238c8a6` FOREIGN KEY ( `user_id` )
 	REFERENCES `users`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1263,7 +1270,7 @@ ALTER TABLE `locators`
 	ADD CONSTRAINT `fk_rails_64c3d29cac` FOREIGN KEY ( `item_id` )
 	REFERENCES `items`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1272,7 +1279,7 @@ ALTER TABLE `locators`
 	ADD CONSTRAINT `fk_rails_bb120b6235` FOREIGN KEY ( `wizard_id` )
 	REFERENCES `wizards`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1281,7 +1288,7 @@ ALTER TABLE `logs`
 	ADD CONSTRAINT `fk_rails_81ff90ed92` FOREIGN KEY ( `job_id` )
 	REFERENCES `jobs`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1290,7 +1297,7 @@ ALTER TABLE `logs`
 	ADD CONSTRAINT `fk_rails_8fc980bf44` FOREIGN KEY ( `user_id` )
 	REFERENCES `users`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1299,7 +1306,7 @@ ALTER TABLE `memberships`
 	ADD CONSTRAINT `fk_rails_99326fb65d` FOREIGN KEY ( `user_id` )
 	REFERENCES `users`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1308,7 +1315,7 @@ ALTER TABLE `memberships`
 	ADD CONSTRAINT `fk_rails_aaf389f138` FOREIGN KEY ( `group_id` )
 	REFERENCES `groups`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1317,7 +1324,7 @@ ALTER TABLE `operations`
 	ADD CONSTRAINT `fk_rails_10e3ccbd52` FOREIGN KEY ( `operation_type_id` )
 	REFERENCES `operation_types`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1326,7 +1333,7 @@ ALTER TABLE `operations`
 	ADD CONSTRAINT `fk_rails_63fbf4e94e` FOREIGN KEY ( `user_id` )
 	REFERENCES `users`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1335,7 +1342,7 @@ ALTER TABLE `part_associations`
 	ADD CONSTRAINT `fk_rails_39a9c3d5bb` FOREIGN KEY ( `part_id` )
 	REFERENCES `items`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1344,7 +1351,7 @@ ALTER TABLE `part_associations`
 	ADD CONSTRAINT `fk_rails_f889cf647d` FOREIGN KEY ( `collection_id` )
 	REFERENCES `items`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1353,7 +1360,7 @@ ALTER TABLE `plan_associations`
 	ADD CONSTRAINT `fk_rails_5ca5742cd9` FOREIGN KEY ( `plan_id` )
 	REFERENCES `plans`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1362,7 +1369,7 @@ ALTER TABLE `plan_associations`
 	ADD CONSTRAINT `fk_rails_c36597dd79` FOREIGN KEY ( `operation_id` )
 	REFERENCES `operations`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1371,7 +1378,7 @@ ALTER TABLE `plans`
 	ADD CONSTRAINT `fk_rails_45da853770` FOREIGN KEY ( `user_id` )
 	REFERENCES `users`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1380,7 +1387,7 @@ ALTER TABLE `plans`
 	ADD CONSTRAINT `fk_rails_55f7cff6c3` FOREIGN KEY ( `budget_id` )
 	REFERENCES `budgets`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1389,7 +1396,7 @@ ALTER TABLE `samples`
 	ADD CONSTRAINT `fk_rails_8e0800c2e2` FOREIGN KEY ( `sample_type_id` )
 	REFERENCES `sample_types`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1398,7 +1405,7 @@ ALTER TABLE `samples`
 	ADD CONSTRAINT `fk_rails_d699eb2564` FOREIGN KEY ( `user_id` )
 	REFERENCES `users`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1407,7 +1414,7 @@ ALTER TABLE `uploads`
 	ADD CONSTRAINT `fk_rails_76093eb5d3` FOREIGN KEY ( `job_id` )
 	REFERENCES `jobs`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1416,7 +1423,7 @@ ALTER TABLE `user_budget_associations`
 	ADD CONSTRAINT `fk_rails_a2966bc54b` FOREIGN KEY ( `user_id` )
 	REFERENCES `users`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1425,7 +1432,7 @@ ALTER TABLE `user_budget_associations`
 	ADD CONSTRAINT `fk_rails_f1322363b9` FOREIGN KEY ( `budget_id` )
 	REFERENCES `budgets`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1434,7 +1441,7 @@ ALTER TABLE `user_tokens`
 	ADD CONSTRAINT `fk_rails_e0a9c15abb` FOREIGN KEY ( `user_id` )
 	REFERENCES `users`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1443,7 +1450,7 @@ ALTER TABLE `wires`
 	ADD CONSTRAINT `fk_rails_1073ab769d` FOREIGN KEY ( `to_id` )
 	REFERENCES `field_values`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1452,7 +1459,7 @@ ALTER TABLE `wires`
 	ADD CONSTRAINT `fk_rails_684cde68aa` FOREIGN KEY ( `from_id` )
 	REFERENCES `field_values`( `id` )
 	ON DELETE Cascade
-	ON UPDATE Restrict;
+	ON UPDATE No Action;
 -- -------------------------------------------------------------
 
 
@@ -1478,27 +1485,6 @@ AS select max(`job_assignment_logs`.`id`) AS `id` from `job_assignment_logs` gro
 CREATE VIEW `view_job_assignments`
 AS select `jal`.`id` AS `id`,`jal`.`job_id` AS `job_id`,`jal`.`assigned_by` AS `assigned_by`,`jal`.`assigned_to` AS `assigned_to`,`jal`.`created_at` AS `created_at`,`jal`.`updated_at` AS `updated_at`,`j`.`pc` AS `pc`,`ub`.`name` AS `by_name`,`ub`.`login` AS `by_login`,`ut`.`name` AS `to_name`,`ut`.`login` AS `to_login` from ((((`job_assignment_logs` `jal` join `view_job_assignment_logs` `vjal` on((`vjal`.`id` = `jal`.`id`))) join `jobs` `j` on((`j`.`id` = `jal`.`job_id`))) join `users` `ub` on((`ub`.`id` = `jal`.`assigned_by`))) join `users` `ut` on((`ut`.`id` = `jal`.`assigned_to`)));
 -- -------------------------------------------------------------
-
--- Dump data of "permissions" ------------------------------
-BEGIN;
-
-INSERT INTO `permissions`(`id`,`name`,`sort`,`created_at`,`updated_at`) VALUES
-( '1', 'admin', '1', '2020-01-01 00:00:00', '2020-01-01 00:00:00' ),
-( '2', 'manage', '2', '2020-01-01 00:00:00', '2020-01-01 00:00:00' ),
-( '3', 'run', '3', '2020-01-01 00:00:00', '2020-01-01 00:00:00' ),
-( '4', 'design', '4', '2020-01-01 00:00:00', '2020-01-01 00:00:00' ),
-( '5', 'develop', '5', '2020-01-01 00:00:00', '2020-01-01 00:00:00' ),
-( '6', 'retired', '6', '2020-01-01 00:00:00', '2020-01-01 00:00:00' );
-COMMIT;
--- ---------------------------------------------------------
-
--- Dump data of "users" ------------------------------
-BEGIN;
-
-INSERT INTO `users` VALUES (1,'Joe Neptune','neptune','2013-06-16 17:26:54','2017-10-19 04:59:18','$2a$10$HxgxLX5/ITcYpII1InAL1.jUYAiHk/rMftHniPJVvauy43VDoo8yW','TYmoWfyV42AL7dSoYcgmug',1,'VHzz9IW3xnNx8O3cA_P0rKsUWmTVH_Qz9mHKqgE-hNI','.1.');
-COMMIT;
--- ---------------------------------------------------------
-
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
