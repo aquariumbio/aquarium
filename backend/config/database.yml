@@ -1,6 +1,6 @@
 # Database configuration for docker contained aquarium
 #
-# Note: the test database uses the name set by the docker configuration for the 
+# Note: the test database uses the name set by the docker configuration for the
 # development environment.
 
 default: &default
@@ -23,6 +23,6 @@ development:
 
 test:
   <<: *default
-  database: <%= ENV['DB_NAME'] %>_test
+  database: aquarium_test
   pool: 5
   timeout: 5000
