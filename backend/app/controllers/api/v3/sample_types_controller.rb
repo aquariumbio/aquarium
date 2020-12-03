@@ -69,7 +69,7 @@ module Api
         sample_type, errors = SampleType.create(params_sample_type)
         render json: { errors: errors }.to_json, status: :ok and return if !sample_type
 
-        render json: sample_type.to_json, status: :created
+        render json: { sample_type: sample_type }.to_json, status: :created
       end
 
       # Update a sample type.
@@ -95,7 +95,7 @@ module Api
         # Note: any errors handled automatically and silently
         sample_type = sample_type.update(params_sample_type)
 
-        render json: sample_type.to_json, status: :ok
+        render json: { sample_type: sample_type }.to_json, status: :ok
       end
 
       # Delete a sample type.

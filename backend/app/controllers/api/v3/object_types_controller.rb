@@ -84,7 +84,7 @@ module Api
         object_type, errors = ObjectType.create(params_object_type)
         render json: { errors: errors }.to_json, status: :ok and return if !object_type
 
-        render json: object_type.to_json, status: :created
+        render json: { object_type: object_type }.to_json, status: :created
       end
 
       # Update an object type.
@@ -110,7 +110,7 @@ module Api
         # Note: any errors handled automatically and silently
         object_type = object_type.update(params_object_type)
 
-        render json: object_type.to_json, status: :ok
+        render json:  { object_type: object_type }.to_json, status: :ok
       end
 
       # Delete an object type.

@@ -105,12 +105,13 @@ RSpec.describe Api::V3::ObjectTypesController, type: :request do
       resp = JSON.parse(response.body)
 
       # Spot check name, min, max, cost, rows, cols
-      expect(resp["name"]).to eq "update name 1" # changed
-      expect(resp["min"]).to eq 1 # no change
-      expect(resp["max"]).to eq 2 # no change
-      expect(resp["cost"]).to eq 3 # no change
-      expect(resp["rows"]).to eq 1 # default
-      expect(resp["columns"]).to eq 12 # default
+      object_type = resp["object_type"]
+      expect(object_type["name"]).to eq "update name 1" # changed
+      expect(object_type["min"]).to eq 1 # no change
+      expect(object_type["max"]).to eq 2 # no change
+      expect(object_type["cost"]).to eq 3 # no change
+      expect(object_type["rows"]).to eq 1 # default
+      expect(object_type["columns"]).to eq 12 # default
     end
 
     # Create object type with handler = sample_container
@@ -129,7 +130,7 @@ RSpec.describe Api::V3::ObjectTypesController, type: :request do
       expect(response).to have_http_status 201
 
       resp = JSON.parse(response.body)
-      @sample_type_ids << resp["id"]
+      @sample_type_ids << resp["sample_type"]["id"]
 
       # Object type parameters
       params = {
