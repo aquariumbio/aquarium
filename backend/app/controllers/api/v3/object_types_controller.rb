@@ -38,9 +38,8 @@ module Api
         status, response = check_token_for_permission(1)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        handler = Input.text(params[:handler])
-
         # Get object_types
+        handler = Input.text(params[:handler])
         object_types = ObjectType.find_by_handler(handler)
 
         render json: {
@@ -48,6 +47,25 @@ module Api
             object_types: object_types
            }
          }.to_json, status: :ok
+      end
+
+      # Return a specific object type
+      #
+      # @param token [String] a token
+      # @param id [Int] the id of the object type
+      # @return the object_type
+      def show
+        # Check for admin permissions
+        status, response = check_token_for_permission(1)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # Get object type
+        id = Input.int(params[:id])
+        object_type = ObjectType.find_id(id)
+
+        render json: {
+          object_type: object_type
+        }.to_json, status: :ok
       end
 
       # Create a new object type.

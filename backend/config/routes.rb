@@ -41,7 +41,7 @@ Rails.application.routes.draw do
   get  'api/v3/object_types',                    to: 'api/v3/object_types#index'
   post 'api/v3/object_types/create',             to: 'api/v3/object_types#create'
   get  'api/v3/object_types/handler/:handler',   to: 'api/v3/object_types#show_handler'
-  # get  'api/v3/object_types/:id',                to: 'api/v3/object_types#show' # not currently used
+  get  'api/v3/object_types/:id',                to: 'api/v3/object_types#show'
   post 'api/v3/object_types/:id/update',         to: 'api/v3/object_types#update'
   post 'api/v3/object_types/:id/delete',         to: 'api/v3/object_types#delete'
 
