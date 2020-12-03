@@ -1,9 +1,12 @@
 #!/bin/bash
-ENV_FILE=.env
+set -uxo pipefail
+
+ENV_DIR='.env_files'
 
 _has_variable() {
-    variable=$1
-    grep -q "^$variable" $ENV_FILE
+    local variable=$1
+    local env_file=$2
+    grep -q "^$variable" $env_file
     if [[ $? -eq 0 ]]; then
         return 0
     else
@@ -12,64 +15,90 @@ _has_variable() {
 }
 
 _set_value() {
-    variable=$1
-    value=$2
-    echo $variable=$value >> $ENV_FILE
+    local variable=$1
+    local value=$2
+    local env_file=$3
+    echo $variable=$value >> $env_file
 }
 
 _set_variable() {
-    variable=$1
-    value=$2
-    _has_variable $variable
+    local variable=$1
+    local value=$2
+    local env_file=$3
+    _has_variable $variable $env_file
     if [[ $? -gt 0 ]]; then
-       _set_value $variable $value
+       _set_value $variable $value $env_file
     fi
 }
 
 _set_random() {
-    variable=$1
-    length=$2
-    _has_variable $variable
+    local variable=$1
+    local length=$2
+    local env_file=$3
+    _has_variable $variable $env_file
     if [[ $? -gt 0 ]]; then
-        value=`openssl rand -hex $length`
-        _set_value $variable $value
+        local value=`openssl rand -hex $length`
+        _set_value $variable $value $env_file
     fi
 }
 
 _set_timezone() {
-    _has_variable 'TIMEZONE'
+    local env_file=$1
+    local variable='TZ'
+    _has_variable $variable $env_file
     if [[ $? -gt 0 ]]; then
-        timezone=`curl https://ipapi.co/timezone` 2> /dev/null
-        _set_variable 'TIMEZONE' $timezone
+        local timezone=`curl https://ipapi.co/timezone` 2> /dev/null
+        _set_variable $variable $timezone $env_file
     fi
 }
 
-if [[ ! -f "$ENV_FILE" ]]; then
-    echo "Initializing configuration file"
-    touch $ENV_FILE
-fi
+_create_compose_config() {
+    local env_file=$1
+    touch $env_file
+    _set_variable 'AQUARIUM_VERSION' 'edge' $env_file
+    _set_variable 'BACKEND_PUBLIC_PORT' '3001' $env_file
+    _set_variable 'FRONTEND_PUBLIC_PORT' '3000' $env_file
+    _set_variable 'DB_PUBLIC_PORT' '3307' $env_file
+}
 
-_set_variable 'AQUARIUM_VERSION' '2.8.1'
-_set_variable 'APP_PUBLIC_PORT' '80'
-_set_variable 'S3_PUBLIC_PORT' '9000'
-_set_variable 'DB_NAME' 'production'
-_set_variable 'DB_USER' 'aquarium'
-_set_variable 'DB_PASSWORD' 'aSecretAquarium'
-_set_variable 'S3_SERVICE' 'minio'
-_set_variable 'S3_ID' 'aquarium_minio'
-_set_variable 'S3_REGION' 'us-west-1'
-_set_variable 'TECH_DASHBOARD' 'false'
-_set_variable 'SESSION_TIMEOUT' '15'
-_set_random 'S3_SECRET_ACCESS_KEY' '40'
-_set_random 'SECRET_KEY_BASE' '64'
-_set_timezone
+_create_config() {
+    local environment=$1
+    local sub_dir=$ENV_DIR/$environment
 
-DB_INIT_DIR=./docker/mysql_init
-DB_FILE=$DB_INIT_DIR/dump.sql
-if [[ ! -f "$DB_FILE" ]]; then
-    cp $DB_INIT_DIR/default.sql $DB_INIT_DIR/dump.sql
-fi
+    mkdir -p $sub_dir
 
-# TODO: is it possible to pull the version from elsewhere?
+    local db_name="aquarium_$environment"
+    local db_user=$2
+    local db_password=$3
+
+    local env_file=$sub_dir/backend
+    touch $env_file
+
+    _set_variable 'DB_HOST' 'db' $env_file
+    _set_variable 'DB_PORT' '3306' $env_file
+    _set_variable 'DB_NAME' $db_name $env_file
+    _set_variable 'DB_PASSWORD' $db_password $env_file
+    _set_variable 'DB_USER' $db_user $env_file
+    _set_variable 'SESSION_TIMEOUT' '15' $env_file
+
+    env_file=$sub_dir/db
+    touch $env_file
+    _set_variable 'MYSQL_DATABASE' $db_name $env_file
+    _set_variable 'MYSQL_USER' $db_user $env_file
+    _set_variable 'MYSQL_PASSWORD' $db_password $env_file
+    _set_variable 'MYSQL_ROOT_PASSWORD' $db_password $env_file
+
+    env_file=$sub_dir/timezone
+    touch $env_file
+    _set_timezone $env_file
+}
+
+# Need a .env file to parameterize the compose file
+_create_compose_config '.env'
+
+# Otherwise, set environment variables in $ENV_DIR
+_create_config 'development' 'aquarium' 'aSecretAquarium'
+_create_config 'production' 'aquarium' 'aSecretAquarium'
+
 # TODO: allow user to set other values
 # TODO: make this a git post-checkout hook, though don't replace secret_key_base
