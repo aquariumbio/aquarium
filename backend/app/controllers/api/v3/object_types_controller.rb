@@ -59,10 +59,10 @@ module Api
         status, response = check_token_for_permission(1)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Read sample type parameter
+        # Read object type parameter
         params_object_type = params[:object_type] || {}
 
-        # Create sample type
+        # Create object type
         object_type, errors = ObjectType.create(params_object_type)
         render json: { errors: errors }.to_json, status: :ok and return if !object_type
 
@@ -74,13 +74,13 @@ module Api
       # @param token [String] a token
       # @param id [Int] the id of the object type
       # @param object_type [Hash] the object type
-      # @return the sample type
+      # @return the object type
       def update
         # Check for admin permissions
         status, response = check_token_for_permission(1)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Get sample type
+        # Get object type
         id = Input.int(params[:id])
         object_type = ObjectType.find_id(id)
         render json: { object_type: nil }.to_json, status: :ok and return if !object_type
