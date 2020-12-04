@@ -69,32 +69,33 @@ module Api
         sample_type, errors = SampleType.create(params_sample_type)
         render json: { errors: errors }.to_json, status: :ok and return if !sample_type
 
-        render json: sample_type.to_json, status: :created
+        render json: { sample_type: sample_type }.to_json, status: :created
       end
 
       # Update a sample type.
       #
       # @param token [String] a token
-      # @param sample_type [Hash] the sample_type
+      # @param id [Int] the id of the sample type
+      # @param sample_type [Hash] the sample type
       # @return the sample type
       def update
         # Check for admin permissions
         status, response = check_token_for_permission(1)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Read sample type parameter
-        params_sample_type = params[:sample_type] || {}
-
         # Get sample type
         id = Input.int(params[:id])
         sample_type = SampleType.find_id(id)
         render json: { sample_type: nil }.to_json, status: :ok and return if !sample_type
 
+        # Read sample type parameter
+        params_sample_type = params[:sample_type] || {}
+
         # Update sample type
         # Note: any errors handled automatically and silently
         sample_type = sample_type.update(params_sample_type)
 
-        render json: sample_type.to_json, status: :ok
+        render json: { sample_type: sample_type }.to_json, status: :ok
       end
 
       # Delete a sample type.
