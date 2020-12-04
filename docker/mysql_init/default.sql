@@ -1495,10 +1495,18 @@ COMMIT;
 -- Dump data of "users" ------------------------------
 BEGIN;
 
-INSERT INTO `users` VALUES (1,'Joe Neptune','neptune','2013-06-16 17:26:54','2017-10-19 04:59:18','$2a$10$HxgxLX5/ITcYpII1InAL1.jUYAiHk/rMftHniPJVvauy43VDoo8yW','TYmoWfyV42AL7dSoYcgmug',1,'VHzz9IW3xnNx8O3cA_P0rKsUWmTVH_Qz9mHKqgE-hNI','.1.');
+INSERT INTO `users` VALUES
+(1,'Joe Neptune','neptune','2013-06-16 17:26:54','2017-10-19 04:59:18','$2a$10$HxgxLX5/ITcYpII1InAL1.jUYAiHk/rMftHniPJVvauy43VDoo8yW','TYmoWfyV42AL7dSoYcgmug',1,'VHzz9IW3xnNx8O3cA_P0rKsUWmTVH_Qz9mHKqgE-hNI','.1.');
 COMMIT;
 -- ---------------------------------------------------------
 
+-- Dump data of "users" ------------------------------
+BEGIN;
+
+INSERT INTO `schema_migrations` (`version`) VALUES
+('20201030000000');
+COMMIT;
+-- ---------------------------------------------------------
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
