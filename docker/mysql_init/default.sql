@@ -1499,6 +1499,13 @@ INSERT INTO `users` VALUES (1,'Joe Neptune','neptune','2013-06-16 17:26:54','201
 COMMIT;
 -- ---------------------------------------------------------
 
+-- Dump data of "schema_migrations" ------------------------------
+BEGIN;
+
+INSERT INTO `schema_migrations` (`version`) VALUES
+('20201030000000');
+COMMIT;
+-- ---------------------------------------------------------
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
