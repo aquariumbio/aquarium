@@ -558,8 +558,9 @@ Files:
 
 ```bash
 aquarium
-|-- Dockerfile                    # defines the image for Aquarium
-`-- entrypoint.sh                 # entrypoint for Docker image
+`-- backend
+    |-- Dockerfile                    # defines the image for Aquarium
+    `-- dev_entrypoint.sh             # entrypoint for development Docker image
 ```
 
 The Dockerfile defines the images:
