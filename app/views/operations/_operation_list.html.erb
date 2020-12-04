@@ -18,6 +18,7 @@
         </th>
         <th>Plan</th>
         <th class="output">Input/Output</th>
+        <th ng-show="status == 'error' || status == 'done'">Job(s)</th> <!--  Show Jobs column with links when viewing completed jobs (have status of error or done)  -->
         <th>Last Updated</th>
         <th>Client</th>
         <th>Op ID</th>
@@ -111,6 +112,14 @@
             </li>
           </ul>
         </td>
+
+        <!--  Show Jobs column with links when viewing completed jobs (have status of error or done)  -->
+         <td ng-show="status == 'error' || status == 'done'">
+            <div ng-if="op.jobs.length > 0" ng-repeat="job in op.jobs">
+              <a href="/jobs/{{job.id}}">{{job.id}}</a> (<span>{{job.status}}</span>)
+            </div>
+            <div ng-if="op.jobs.length == 0">--</div>
+          </td>
 
         <td>{{ op.updated_at | naturalDate }}</td> <!-- Last Updated -->
 
