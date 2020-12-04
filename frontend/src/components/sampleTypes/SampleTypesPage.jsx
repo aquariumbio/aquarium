@@ -1,9 +1,17 @@
+/* eslint-disable prefer-template */
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable no-console */
 import { makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import React, { useState, useEffect } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Grid from '@material-ui/core/Grid';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 import API from '../../helpers/API';
 
 // Route: /sample_types
@@ -31,29 +39,42 @@ const useStyles = makeStyles((theme) => ({
       color: 'white',
     },
   },
+
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
 }));
+
+const reducer = (state, newState) => ({ ...state, ...newState });
 
 const SampleTypeDefinitions = () => {
   const classes = useStyles();
 
-  // Array of sample types
-  // eslint-disable-next-line no-unused-vars
-  const [sampleTypes, setSampleTypes] = useState([]);
-
-  // Sample type to be shown on right side (form)
-  // eslint-disable-next-line no-unused-vars
-  const [currentSampleType, setCurrentSampleType] = useState();
+  const [state, setState] = useReducer(
+    reducer,
+    { sampleTypes: [], currentSampleType: {}, isLoading: true },
+  );
 
   useEffect(() => {
-    API.sampleTypes.getSampleTypes(setSampleTypes, setCurrentSampleType);
-  });
+    const fetchData = async () => {
+      const data = await API.samples.getTypes();
 
-  const handleClick = (event) => {
-    event.preventDefault();
-    API.sampleTypes.getSampleTypes(setSampleTypes, setCurrentSampleType);
-  };
+      setState({
+        sampleTypes: data.sample_types,
+        currentSampleType: data.first,
+        isLoading: false,
+      });
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
+      <Backdrop className={classes.backdrop} open={state.isLoading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Paper elevation={3}>
         <Typography variant="h1">Sample Types</Typography>
         <Button
@@ -64,7 +85,33 @@ const SampleTypeDefinitions = () => {
         >
           New
         </Button>
-        <Button onClick={handleClick}>BOOP</Button>
+        {!state.isloading && (
+          <Grid container>
+            <Grid item lg={3}>
+              <Card className={classes.root}>
+                <CardContent>
+                  {state.sampleTypes.map((st) => (
+                    <Typography key={st.id}>{st.name}</Typography>
+                  ))}
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item lg={9}>
+              <Card className={classes.root}>
+                <CardContent>
+                  {Object.entries(state.currentSampleType).map(
+                    ([key, value]) => (
+                      <Typography>
+                        <b>{key}</b>
+                        {': ' + value}
+                      </Typography>
+                    ),
+                  )}
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+        )}
       </Paper>
     </>
   );

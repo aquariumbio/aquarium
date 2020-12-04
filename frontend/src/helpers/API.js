@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:3001/api/v3';
@@ -51,7 +52,6 @@ const signIn = async (login, password, setLoginError) => {
     })
     .catch((error) => {
       setLoginError(error);
-      // eslint-disable-next-line no-console
       console.log(error);
     });
   return signInSuccessful;
@@ -75,42 +75,19 @@ const signOut = () => {
     .catch((error) => {
       sessionStorage.clear('token');
       window.location.reload();
-      // eslint-disable-next-line no-console
       console.log(error);
     });
 };
 
-const getSampleTypes = () => {
-  let sampleTypes;
-  let firstSampleType;
-  // eslint-disable-next-line no-console
-  console.log(currentSessionToken);
-  axios
-    .get('/sample_types', {
-      params: {
-        token: currentSessionToken,
-      },
-    })
-    .then((response) => {
-      // eslint-disable-next-line no-console
-      console.log(response);
-
-      [sampleTypes, firstSampleType] = [
-        response.data.sample_types,
-        response.data.first,
-      ];
-
-      // eslint-disable-next-line no-console
-      console.log(sampleTypes);
-
-      // eslint-disable-next-line no-console
-      console.log(firstSampleType);
-    })
-    .catch((error) => {
-      // eslint-disable-next-line no-console
-      console.log(error);
-    });
-};
+const getTypes = () => (axios
+  .get('/sample_types', {
+    params: {
+      token: currentSessionToken,
+    },
+  })
+  .then((response) => response.data)
+  .catch((error) => error)
+);
 
 /*
 ### PERMISSIONS
@@ -164,8 +141,8 @@ const API = {
     signIn,
     signOut,
   },
-  sampleTypes: {
-    getSampleTypes,
+  samples: {
+    getTypes,
   },
 };
 
