@@ -3,7 +3,7 @@
     <div class="container-fluid" id="header-bar">
       <%= link_to "AQUARIUM", root_path, id: "logo" %>
       <div id='environment'>
-        <%= Bioturk::Application.config.instance_name %>: 
+        <%= Bioturk::Application.config.instance_name %>:
         <%= Rails.env %>
         <span class="aquarium-version">v<%= Bioturk::Application.config.aquarium_version %></span>
       </div>
@@ -14,12 +14,14 @@
           <li id="fat-menu" class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Workflows<b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li><%= link_to "Planner", launcher_path %></li>             
+              <li><%= link_to "Planner", launcher_path %></li>
               <!-- <li><%= link_to "Planner", plans_path %></li> -->
-              <li><%= link_to "Manager", operations_path %></li>              
-              <li><%= link_to "Developer", operation_types_path %></li>                            
+              <% if current_user && current_user.is_admin %>
+                <li><%= link_to "Manager", operations_path %></li>
+              <% end %>
+              <li><%= link_to "Developer", operation_types_path %></li>
             </ul>
-          </li>        
+          </li>
 
           <li id="fat-menu" class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Inventory<b class="caret"></b></a>
@@ -27,81 +29,80 @@
               <li><a href="/browser">Samples</a></li>
               <li><%= link_to "Containers", object_types_path %></li>
               <li><%= link_to "Direct Purchase", "/krill/arguments?path=aqualib/purchasing/direct_purchase.rb" %></li>
-              <li class="divider"></li>             
+              <li class="divider"></li>
               <li><%= link_to "Import Samples from Spreadsheet", spreadsheet_path %></li>
             </ul>
           </li>
 
           <% if current_user && current_user.is_admin %>
 
-            <li id="fat-menu" class="dropdown">
-              <a href="#" class="dropdown-toggle"
-              data-toggle="dropdown">Analytics<b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><%= link_to "Job Logs", logs_path %></li>
-                <li><a href="/sample_tree/1">Chain of Custody</a></li>
-              </ul>
-            </li>
+          <li id="fat-menu" class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Analytics<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><%= link_to "Job Logs", logs_path %></li>
+              <li><a href="/sample_tree/1">Chain of Custody</a></li>
+            </ul>
+          </li>
 
-          <% end %>         
+          <% end %>
 
           <% if signed_in? %>
 
-            <li id="fat-menu" class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account<b class="caret"></b>
-              </a>
-              <ul class="dropdown-menu">
-                <li class="disabled">
-                  <a href='#'>Logged in as <%= current_user.login %></a>
-                </li>
-                <li class="divider"></li>
-                <li><%= link_to "Profile", current_user %></li>
-                <li><%= link_to "Invoices", invoices_path %></li> 
-                <li><%= link_to "Settings", edit_user_path(current_user) %></li>
-                <li class="divider"></li>
-                <li>
-                  <%= link_to "Sign out", signout_path, method: "delete" %>
-                </li>
-              </ul>
-            </li>
+          <li id="fat-menu" class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account<b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="disabled">
+                <a href='#'>Logged in as <%= current_user.login %></a>
+              </li>
+              <li class="divider"></li>
+              <li><%= link_to "Profile", current_user %></li>
+              <li><%= link_to "Invoices", invoices_path %></li>
+              <li><%= link_to "Settings", edit_user_path(current_user) %></li>
+              <li class="divider"></li>
+              <li>
+                <%= link_to "Sign out", signout_path, method: "delete" %>
+              </li>
+            </ul>
+          </li>
           <% else %>
-            <li><%= link_to "Sign in", signin_path %></li>
-            <li><%= current_user %>
+          <li><%= link_to "Sign in", signin_path %></li>
+          <li><%= current_user %>
+            <% end %>
+
+            <% if current_user && current_user.is_admin %>
+
+          <li id="fat-menu" class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><%= link_to "New User", signup_path %></li>
+              <li><%= link_to "Change a Password", password_path %></li>
+              <li><%= link_to "Users", users_path %></li>
+              <li><%= link_to "Groups", groups_path %></li>
+              <li class="divider"></li>
+              <li><%= link_to "Budgets", budgets_path %></li>
+              <li><%= link_to "Invoices", invoices_path(:all=>true) %></li>
+              <li><%= link_to "Parameters", parameters_path %></li>
+              <li><%= link_to "Announcements", announcements_path %></li>
+              <li class="divider"></li>
+              <% if Rails.env != 'production' %>
+              <li><%= link_to "Developer", developer_path %></li>
+              <% end %>
+              <li><%= link_to "Sample Type Definitions", sample_types_path %></li>
+              <li><%= link_to "Location Wizards", wizards_path %></li>
+            </ul>
+          </li>
+
           <% end %>
-
-          <% if current_user && current_user.is_admin %>
-
-            <li id="fat-menu" class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin<b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                    <li><%= link_to "New User", signup_path %></li>
-                    <li><%= link_to "Change a Password", password_path %></li>
-                    <li><%= link_to "Users", users_path %></li>                
-                    <li><%= link_to "Groups", groups_path %></li>
-                    <li class="divider"></li>
-                    <li><%= link_to "Budgets", budgets_path %></li>
-                    <li><%= link_to "Invoices", invoices_path(:all=>true) %></li>
-                    <li><%= link_to "Parameters", parameters_path %></li>
-                    <li><%= link_to "Announcements", announcements_path %></li>                    
-                    <li class="divider"></li>
-                    <% if Rails.env != 'production' %>
-                      <li><%= link_to "Developer", developer_path %></li>
-                    <% end %>
-                    <li><%= link_to "Sample Type Definitions", sample_types_path %></li>
-                    <li><%= link_to "Location Wizards", wizards_path %></li>                    
-              </ul>
-            </li>
-
-          <% end %>          
 
           <li id="fat-menu" class="dropdown">
             <a href="/doc/index.html" class="dropdown-toggle" target='documentation'>Help</a>
           </li>
 
-           <li class='dropdown'><%= link_to search_path do %>
-               <i class='icon-search icon-white'></i>
-             <% end %>
-           </li>
+          <li class='dropdown'><%= link_to search_path do %>
+            <i class='icon-search icon-white'></i>
+            <% end %>
+          </li>
 
         </ul>
       </nav>
