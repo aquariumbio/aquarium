@@ -1,13 +1,121 @@
 # frozen_string_literal: true
 
+# @api api.v3
 module Api
   module V3
-    # Sample type api calls
+    # Sample Type API calls
+    #
+    # <b>General</b>
+    #   API Status Codes:
+    #
+    #     STATUS_CODE: 200 - OK
+    #     STATUS_CODE: 201 - Created
+    #     STATUS_CODE: 401 - Unauthorized
+    #     STATUS_CODE: 403 - Forbidden
+    #
+    #   API Success Response with Form Errors:
+    #
+    #     STATUS_CODE: 200
+    #     {
+    #       errors: {
+    #         field_1: [
+    #           field_1_error_1,
+    #           field_1_error_2,
+    #           ...
+    #         ],
+    #         field_2: [
+    #           field_2_error_1,
+    #           field_2_error_2,
+    #           ...
+    #         ],
+    #         ...
+    #       }
+    #     }
     class SampleTypesController < ApplicationController
-      # Return all sample types plus details for the first sample type
+      # Returns all sample types plus details for the first sample type
       #
+      # <b>API Call:</b>
+      #   GET: /api/v3/sample_types
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS CODE: 200
+      #   {
+      #     sample_types: [
+      #       {
+      #         id: <sample_type_id>,
+      #         name: <name>,
+      #         description: <description>,
+      #         created_at: <datetime>,
+      #         updated_at: <datetime>
+      #       },
+      #       ...
+      #     ]
+      #     first: {
+      #       id: <sample_type_id>,
+      #       name: <name>,
+      #       inventory: <inventory>,
+      #       field_types: [
+      #         {
+      #           id: <field_type_id>,
+      #           parent_id: <parent_id>,
+      #           name: <name>,
+      #           ftype: <ftype>,
+      #           choices: <choices>,
+      #           array: <array>,
+      #           required: <required>,
+      #           created_at: <datetime>,
+      #           updated_at: <dateime>,
+      #           parent_class: <parent_class>,
+      #           role: <role>,
+      #           part: <part>,
+      #           routing: <routing>,
+      #           preferred_operation_type_id: <preferred_operation_type_id>,
+      #           preferred_field_type_id: <preferred_field_type_id>,
+      #           allowable_field_types: [
+      #             {
+      #               id: <allowable_field_type_id>,
+      #               field_type_id: <field_type_id>,
+      #               sample_type_id: <sample_type_id>,
+      #               name: <name>
+      #             },
+      #             ...
+      #           ]
+      #         },
+      #       ],
+      #       object_types: [
+      #         {
+      #           id: <object_type_id>,
+      #           name: <name>,
+      #           description: <description>,
+      #           min: <min>,
+      #           max: <max>,
+      #           handler: <handler>,
+      #           safety:<safety>,
+      #           cleanup: <cleanup>,
+      #           data: <data>,
+      #           vendor: <vendor>,
+      #           created_at: <datetime>,
+      #           updated_at: <dateime>,
+      #           unit: <unit>,
+      #           cost: <cost>,
+      #           release_method: <release_method>,
+      #           release_description: <release_description>,
+      #           sample_type_id: <sample_type_id>,
+      #           image: <image>,
+      #           prefix: <prefix>,
+      #           rows: <rows>,
+      #           columns: <columns>
+      #         },
+      #         ...
+      #       ],
+      #     }
+      #   }
+      #
+      # @!method index(token)
       # @param token [String] a token
-      # @return all sample types plus details for the first sample type
       def index
         # Check for admin permissions
         status, response = check_token_for_permission(1)
@@ -27,11 +135,80 @@ module Api
          }.to_json, status: :ok
       end
 
-      # Return details for a specific sample type.
+      # Returns details for a specific sample type.
       #
+      # <b>API Call:</b>
+      #   GET: /api/v3/sample_types/<id>
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS CODE: 200
+      #   {
+      #     sample_type: {
+      #       id: <sample_type_id>,
+      #       name: <name>,
+      #       inventory: <inventory>,
+      #       field_types: [
+      #         {
+      #           id: <field_type_id>,
+      #           parent_id: <parent_id>,
+      #           name: <name>,
+      #           ftype: <ftype>,
+      #           choices: <choices>,
+      #           array: <array>,
+      #           required: <required>,
+      #           created_at: <datetime>,
+      #           updated_at: <dateime>,
+      #           parent_class: <parent_class>,
+      #           role: <role>,
+      #           part: <part>,
+      #           routing: <routing>,
+      #           preferred_operation_type_id: <preferred_operation_type_id>,
+      #           preferred_field_type_id: <preferred_field_type_id>,
+      #           allowable_field_types: [
+      #             {
+      #               id: <allowable_field_type_id>,
+      #               field_type_id: <field_type_id>,
+      #               sample_type_id: <sample_type_id>,
+      #               name: <name>
+      #             },
+      #             ...
+      #           ]
+      #         },
+      #       ],
+      #       object_types: [
+      #         {
+      #           id: <object_type_id>,
+      #           name: <name>,
+      #           description: <description>,
+      #           min: <min>,
+      #           max: <max>,
+      #           handler: <handler>,
+      #           safety:<safety>,
+      #           cleanup: <cleanup>,
+      #           data: <data>,
+      #           vendor: <vendor>,
+      #           created_at: <datetime>,
+      #           updated_at: <dateime>,
+      #           unit: <unit>,
+      #           cost: <cost>,
+      #           release_method: <release_method>,
+      #           release_description: <release_description>,
+      #           sample_type_id: <sample_type_id>,
+      #           image: <image>,
+      #           prefix: <prefix>,
+      #           rows: <rows>,
+      #           columns: <columns>
+      #         }
+      #       }
+      #     }
+      #   }
+      #
+      # @!method show(token, id)
       # @param token [String] a token
       # @param id [Int] the id of the sample type
-      # @return the sample type
       def show
         # Check for admin permissions
         status, response = check_token_for_permission(1)
@@ -54,9 +231,47 @@ module Api
 
       # Create a new sample type.
       #
+      # <b>API Call:</b>
+      #   GET: /api/v3/sample_types/create
+      #   {
+      #     token: <token>,
+      #     sample_type: {
+      #       name: <name>,
+      #       description: <description>,
+      #       field_types: [
+      #         {
+      #           name: <name>,
+      #           ftype: <ftype>,
+      #           required: <required>,
+      #           array: <array>,
+      #           choices: <choices>,
+      #           allowable_field_types: [             # (for ftype == "sample")
+      #             {
+      #               sample_type_id: <sample_type_id>
+      #             },
+      #             ...
+      #           ]
+      #         },
+      #         ...
+      #       ]
+      #     }
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS CODE: 201
+      #   {
+      #     sample_type: {
+      #       id: <sample_type_id>,
+      #       name: <name>,
+      #       description: <description>,
+      #       created_at: <datetime>,
+      #       updated_at: <datetime>
+      #     }
+      #   }
+      #
+      # @!method create(token, sample_type)
       # @param token [String] a token
       # @param sample_type [Hash] the sample_type
-      # @return the sample type
       def create
         # Check for admin permissions
         status, response = check_token_for_permission(1)
@@ -78,6 +293,54 @@ module Api
       # @param id [Int] the id of the sample type
       # @param sample_type [Hash] the sample type
       # @return the sample type
+
+      # Update an sample_type.
+      #
+      # <b>API Call:</b>
+      #   GET: /api/v3/sample_types/<id>/update
+      #   {
+      #     token: <token>
+      #     id: <sample_type_id>,
+      #     sample_type: {
+      #       name: <name>,
+      #       description: <description>,
+      #       field_types: [
+      #         {
+      #           id: <field_type_id>,
+      #           name: <name>,
+      #           ftype: <ftype>,
+      #           required: <required>,
+      #           array: <array>,
+      #           choices: <choices>,
+      #           allowable_field_types: [             # (for ftype == "sample")
+      #             {
+      #               id: <allowable_field_type_id>,
+      #               sample_type_id: <sample_type_id>
+      #             },
+      #             ...
+      #           ]
+      #         },
+      #         ...
+      #       ]
+      #     }
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS CODE: 200
+      #   {
+      #     sample_type: {
+      #       id: <sample_type_id>,
+      #       name: <name>,
+      #       description: <description>,
+      #       created_at: <datetime>,
+      #       updated_at: <datetime>
+      #     }
+      #   }
+      #
+      # @!method update(token, id, sample_type)
+      # @param token [String] a token
+      # @param id [Int] the id of the sample_type
+      # @param sample_type [Hash] the sample_type
       def update
         # Check for admin permissions
         status, response = check_token_for_permission(1)
@@ -100,9 +363,21 @@ module Api
 
       # Delete a sample type.
       #
+      # <b>API Call:</b>
+      #   POST: /api/v3/sample_types/<id>/delete
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     message: "Sample type deleted"
+      #   }
+      #
+      # @!method delete(token, id)
       # @param token [String] a token
       # @param id [Int] the id of the sample type
-      # @return a success message
       def delete
         # Check for admin permissions
         status, response = check_token_for_permission(1)
@@ -118,7 +393,7 @@ module Api
         sample.delete_sample_type
 
         render json: {
-          message: "deleted"
+          message: "Sample type deleted"
          }.to_json, status: :ok
       end
 

@@ -31,6 +31,11 @@
 /backend/log
 /backend/tmp
 
+# Ignore v3 api docs
+/backend/.yardoc
+/backend/.yardopts
+/backend/docs/api/v3
+
 # Ignore protocol repos
 /repos/*
 

@@ -24,7 +24,7 @@ class Announcement < ActiveRecord::Base
   # @param announcement [Hash] the objet type
   # @option announcement[:title] [String] the title
   # @option announcement[:message] [String] the message
-  # @option announcement[:active] [String] required - interpreted as Boolen
+  # @option announcement[:active] [String] active - interpreted as Boolen
   # return the announcement
   def self.create(announcement)
     # Read the parameters
@@ -52,7 +52,7 @@ class Announcement < ActiveRecord::Base
   # @param announcement [Hash] the objet type
   # @option announcement[:title] [String] the title
   # @option announcement[:message] [String] the message
-  # @option announcement[:active] [String] required - interpreted as Boolen
+  # @option announcement[:active] [String] active - interpreted as Boolen
   # return the announcement
   def update(announcement)
     # Read the parameters

@@ -50,9 +50,9 @@ class ObjectType < ActiveRecord::Base
   # @option object_type[:cost] [Float] the cost
   # @option object_type[:handler] [String] the handler
   # @option object_type[:release_method] [String] the release method
-  # @option object_type[:rows] [Int] the number of rows (only for handler == "collection")
-  # @option object_type[:columns] [Int] the number of rows (only for handler == "collection")
-  # @option object_type[:sample_type_id] [String] the id of the sample type (only for handler == "sample_container")
+  # @option object_type[:rows] [Int] the number of rows (for handler == "collection")
+  # @option object_type[:columns] [Int] the number of rows (for handler == "collection")
+  # @option object_type[:sample_type_id] [String] the id of the sample type (for handler == "sample_container")
   # @option object_type[:release_description] [String] the release description
   # @option object_type[:safety] [String] the safety information
   # @option object_type[:cleanup] [String] the cleanup information
@@ -134,9 +134,9 @@ class ObjectType < ActiveRecord::Base
   # @option object_type[:cost] [Float] the cost
   # @option object_type[:handler] [String] the handler
   # @option object_type[:release_method] [String] the release method
-  # @option object_type[:rows] [Int] the number of rows (only for handler == "collection")
-  # @option object_type[:columns] [Int] the number of rows (only for handler == "collection")
-  # @option object_type[:sample_type_id] [String] the id of the sample type (only for handler == "sample_container")
+  # @option object_type[:rows] [Int] the number of rows (for handler == "collection")
+  # @option object_type[:columns] [Int] the number of rows (for handler == "collection")
+  # @option object_type[:sample_type_id] [String] the id of the sample type (for handler == "sample_container")
   # @option object_type[:release_description] [String] the release description
   # @option object_type[:safety] [String] the safety information
   # @option object_type[:cleanup] [String] the cleanup information
