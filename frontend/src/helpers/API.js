@@ -89,6 +89,17 @@ const getTypes = () => (axios
   .catch((error) => error)
 );
 
+const getTypeById = (id) => (
+  axios
+    .get(`/sample_types/${id}`, {
+      params: {
+        token: currentSessionToken,
+      },
+    })
+    .then((response) => response.data.sample_type)
+    .catch((error) => error)
+);
+
 /*
 ### PERMISSIONS
 
@@ -143,6 +154,7 @@ const API = {
   },
   samples: {
     getTypes,
+    getTypeById,
   },
 };
 
