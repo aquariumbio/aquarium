@@ -1,13 +1,63 @@
 # frozen_string_literal: true
 
+# @api api.v3
 module Api
   module V3
-    # User related api calls
+    # Announcement API calls.
+    #
+    # <b>General</b>
+    #   API Status Codes:
+    #
+    #     STATUS_CODE: 200 - OK
+    #     STATUS_CODE: 201 - Created
+    #     STATUS_CODE: 401 - Unauthorized
+    #     STATUS_CODE: 403 - Forbidden
+    #
+    #   API Success Response with Form Errors:
+    #
+    #     STATUS_CODE: 200
+    #     {
+    #       errors: {
+    #         field_1: [
+    #           field_1_error_1,
+    #           field_1_error_2,
+    #           ...
+    #         ],
+    #         field_2: [
+    #           field_2_error_1,
+    #           field_2_error_2,
+    #           ...
+    #         ],
+    #         ...
+    #       }
+    #     }
     class AnnouncementsController < ApplicationController
-      # Return all announcements
+      # Returns all announcements.
       #
+      # <b>API Call:</b>
+      #   GET: /api/v3/announcements
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS CODE: 200
+      #   {
+      #     announcements: [
+      #       {
+      #         id: <announcement_id>,
+      #         title: <title>,
+      #         message: <message>,
+      #         active: <true/false>,
+      #         created_at: <datetime>,
+      #         updated_at: <datetime>
+      #       },
+      #       ...
+      #     ]
+      #   }
+      #
+      # @!method index(token)
       # @param token [String] a token
-      # @return all announcements
       def index
         # Check for any permissions
         status, response = check_token_for_permission
@@ -21,11 +71,30 @@ module Api
          }.to_json, status: :ok
       end
 
-      # Return a specific announcement
+      # Returns a specific announcement.
       #
+      # <b>API Call:</b>
+      #   GET: /api/v3/announcements/<id>
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS CODE: 200
+      #   {
+      #     announcement: {
+      #       id: <announcement_id>,
+      #       title: <title>,
+      #       message: <message>,
+      #       active: <true/false>,
+      #       created_at: <datetime>,
+      #       updated_at: <datetime>
+      #     }
+      #   }
+      #
+      # @!method show(token, id)
       # @param token [String] a token
       # @param id [Int] the id of the announcement
-      # @return the announcement
       def show
         # Check for admin permissions
         status, response = check_token_for_permission(1)
@@ -42,6 +111,31 @@ module Api
 
       # Create a new announcement.
       #
+      # <b>API Call:</b>
+      #   GET: /api/v3/announcements/create
+      #   {
+      #     token: <token>
+      #     announcement: {
+      #       title: <title>,
+      #       message: <message>,
+      #       active: <true/false>
+      #     }
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS CODE: 201
+      #   {
+      #     announcement: {
+      #       id: <announcement_id>,
+      #       title: <title>,
+      #       message: <message>,
+      #       active: <true/false>,
+      #       created_at: <datetime>,
+      #       updated_at: <datetime>
+      #     }
+      #   }
+      #
+      # @!method create(token, announcement)
       # @param token [String] a token
       # @param announcement [Hash] the announcement
       def create
@@ -61,10 +155,35 @@ module Api
 
       # Update an announcement.
       #
+      # <b>API Call:</b>
+      #   GET: /api/v3/announcements/create
+      #   {
+      #     token: <token>
+      #     id: <announcement_id>,
+      #     announcement: {
+      #       title: <title>,
+      #       message: <message>,
+      #       active: <true/false>
+      #     }
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS CODE: 200
+      #   {
+      #     announcement: {
+      #       id: <announcement_id>,
+      #       title: <title>,
+      #       message: <message>,
+      #       active: <true/false>,
+      #       created_at: <datetime>,
+      #       updated_at: <datetime>
+      #     }
+      #   }
+      #
+      # @!method update(token, id, announcement)
       # @param token [String] a token
       # @param id [Int] the id of the announcement
       # @param announcement [Hash] the announcement
-      # @return the sample type
       def update
         # Check for admin permissions
         status, response = check_token_for_permission(1)
@@ -87,9 +206,21 @@ module Api
 
       # Delete an announcement.
       #
+      # <b>API Call:</b>
+      #   POST: /api/v3/announcements/<id>/delete
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     message: "Announcement deleted"
+      #   }
+      #
+      # @!method delete(token, id)
       # @param token [String] a token
       # @param id [Int] the id of the announcement
-      # @return a success message
       def delete
         # Check for admin permissions
         status, response = check_token_for_permission(1)
@@ -104,7 +235,7 @@ module Api
         announcement.delete
 
         render json: {
-          message: "deleted"
+          message: "Announcement deleted"
          }.to_json, status: :ok
       end
 

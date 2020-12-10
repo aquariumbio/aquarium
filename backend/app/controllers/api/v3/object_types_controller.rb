@@ -1,13 +1,87 @@
 # frozen_string_literal: true
 
+# @api api.v3
 module Api
   module V3
-    # User related api calls
+    # Object Type API calls
+    #
+    # <b>General</b>
+    #   API Status Codes:
+    #
+    #     STATUS_CODE: 200 - OK
+    #     STATUS_CODE: 201 - Created
+    #     STATUS_CODE: 401 - Unauthorized
+    #     STATUS_CODE: 403 - Forbidden
+    #
+    #   API Success Response with Form Errors:
+    #
+    #     STATUS_CODE: 200
+    #     {
+    #       errors: {
+    #         field_1: [
+    #           field_1_error_1,
+    #           field_1_error_2,
+    #           ...
+    #         ],
+    #         field_2: [
+    #           field_2_error_1,
+    #           field_2_error_2,
+    #           ...
+    #         ],
+    #         ...
+    #       }
+    #     }
     class ObjectTypesController < ApplicationController
-      # Return all handlers plus object_types for the first handler
+      # Returns all handlers plus object_types for the first handler
       #
+      # <b>API Call:</b>
+      #   GET: /api/v3/object_types
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS CODE: 200
+      #   {
+      #     handlers: [
+      #       {
+      #         id: <null>,
+      #         handler: <handler>
+      #       },
+      #       ...
+      #     ]
+      #     <handler>: {
+      #       object_types: [
+      #         {
+      #           id: <id>,
+      #           name: <name>,
+      #           description: <description>,
+      #           min: <min>,
+      #           max: <max>,
+      #           handler: <handler>,
+      #           safety: <safety>,
+      #           cleanup: <cleanup>,
+      #           data: <data>,
+      #           vendor: <vendor>,
+      #           created_at: <datetime>,
+      #           updated_at: <datetime>,
+      #           unit: <unit>,,
+      #           cost: <cost>,
+      #           release_method: <release_method>,
+      #           release_description: <release_description>,
+      #           sample_type_id: <sample_type_id>,
+      #           image: <image>,
+      #           prefix: <prefix>,
+      #           rows: <rows>,
+      #           columns: <columns>
+      #         },
+      #         ...
+      #       ]
+      #     }
+      #   }
+      #
+      # @!method index(token)
       # @param token [String] a token
-      # @return all handlers plus object_types for the first handler
       def index
         # Check for admin permissions
         status, response = check_token_for_permission(1)
@@ -28,11 +102,50 @@ module Api
          }.to_json, status: :ok
       end
 
-      # Return all object_types for a specific handler.
+      # Returns all object_types for a specific handler.
       #
+      # <b>API Call:</b>
+      #   GET: /api/v3/object_types/handler/<handler>
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS CODE: 200
+      #   {
+      #     <handler>: {
+      #       object_types: [
+      #         {
+      #           id: <id>,
+      #           name: <name>,
+      #           description: <description>,
+      #           min: <min>,
+      #           max: <max>,
+      #           handler: <handler>,
+      #           safety: <safety>,
+      #           cleanup: <cleanup>,
+      #           data: <data>,
+      #           vendor: <vendor>,
+      #           created_at: <datetime>,
+      #           updated_at: <datetime>,
+      #           unit: <unit>,,
+      #           cost: <cost>,
+      #           release_method: <release_method>,
+      #           release_description: <release_description>,
+      #           sample_type_id: <sample_type_id>,
+      #           image: <image>,
+      #           prefix: <prefix>,
+      #           rows: <rows>,
+      #           columns: <columns>
+      #         },
+      #         ...
+      #       ]
+      #     }
+      #   }
+      #
+      # @!method show_handler(token, handler)
       # @param token [String] a token
       # @param handler [String] the name of the handler
-      # @return all object_types for the handler
       def show_handler
         # Check for admin permissions
         status, response = check_token_for_permission(1)
@@ -49,11 +162,45 @@ module Api
          }.to_json, status: :ok
       end
 
-      # Return a specific object type
+      # Returns a specific object type
       #
+      # <b>API Call:</b>
+      #   GET: /api/v3/object_types/<id>
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS CODE: 200
+      #   {
+      #     object_type: {
+      #       id: <id>,
+      #       name: <name>,
+      #       description: <description>,
+      #       min: <min>,
+      #       max: <max>,
+      #       handler: <handler>,
+      #       safety: <safety>,
+      #       cleanup: <cleanup>,
+      #       data: <data>,
+      #       vendor: <vendor>,
+      #       created_at: <datetime>,
+      #       updated_at: <datetime>,
+      #       unit: <unit>,,
+      #       cost: <cost>,
+      #       release_method: <release_method>,
+      #       release_description: <release_description>,
+      #       sample_type_id: <sample_type_id>,
+      #       image: <image>,
+      #       prefix: <prefix>,
+      #       rows: <rows>,
+      #       columns: <columns>
+      #     }
+      #   }
+      #
+      # @!method show(token, id)
       # @param token [String] a token
       # @param id [Int] the id of the object type
-      # @return the object_type
       def show
         # Check for admin permissions
         status, response = check_token_for_permission(1)
@@ -70,6 +217,61 @@ module Api
 
       # Create a new object type.
       #
+      # <b>API Call:</b>
+      #   GET: /api/v3/object_types/create
+      #   {
+      #     token: <token>,
+      #     object_type: {
+      #       name: <name>,
+      #       description: <description>,
+      #       prefix: <prefix>,
+      #       min: <min>,
+      #       max: <max>,
+      #       unit: <unit>,
+      #       cost: <cost>,
+      #       handler: <handler>,
+      #       release_method: <release_method>,
+      #       rows: <rows>,                               # (for handler == "collection")
+      #       columns: <columns>,                         # (for handler == "collection")
+      #       sample_type_id: <sample_type_id>,           # (for handler == "sample_container")
+      #       release_description: <release_description>,
+      #       safety:<safety>,
+      #       cleanup: <cleanup>,
+      #       data: <data>,
+      #       vendor: <vendor>,
+      #       image: <image>                              # (TODO)
+      #     }
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS CODE: 201
+      #   {
+      #     object_type: {
+      #       id: <id>,
+      #       name: <name>,
+      #       description: <description>,
+      #       min: <min>,
+      #       max: <max>,
+      #       handler: <handler>,
+      #       safety: <safety>,
+      #       cleanup: <cleanup>,
+      #       data: <data>,
+      #       vendor: <vendor>,
+      #       created_at: <datetime>,
+      #       updated_at: <datetime>,
+      #       unit: <unit>,,
+      #       cost: <cost>,
+      #       release_method: <release_method>,
+      #       release_description: <release_description>,
+      #       sample_type_id: <sample_type_id>,
+      #       image: <image>,
+      #       prefix: <prefix>,
+      #       rows: <rows>,
+      #       columns: <columns>
+      #     }
+      #   }
+      #
+      # @!method create(token, object_type)
       # @param token [String] a token
       # @param object_type [Hash] the object type
       def create
@@ -89,10 +291,65 @@ module Api
 
       # Update an object type.
       #
+      # <b>API Call:</b>
+      #   GET: /api/v3/object_types/<id>/update
+      #   {
+      #     token: <token>
+      #     id: <object_type_id>,
+      #     object_type: {
+      #       name: <name>,
+      #       description: <description>,
+      #       prefix: <prefix>,
+      #       min: <min>,
+      #       max: <max>,
+      #       unit: <unit>,
+      #       cost: <cost>,
+      #       handler: <handler>,
+      #       release_method: <release_method>,
+      #       rows: <rows>,                               # (for handler == "collection")
+      #       columns: <columns>,                         # (for handler == "collection")
+      #       sample_type_id: <sample_type_id>,           # (for handler == "sample_container")
+      #       release_description: <release_description>,
+      #       safety:<safety>,
+      #       cleanup: <cleanup>,
+      #       data: <data>,
+      #       vendor: <vendor>,
+      #       image: <image>                              # (TODO)
+      #     }
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS CODE: 200
+      #   {
+      #     object_type: {
+      #       id: <id>,
+      #       name: <name>,
+      #       description: <description>,
+      #       min: <min>,
+      #       max: <max>,
+      #       handler: <handler>,
+      #       safety: <safety>,
+      #       cleanup: <cleanup>,
+      #       data: <data>,
+      #       vendor: <vendor>,
+      #       created_at: <datetime>,
+      #       updated_at: <datetime>,
+      #       unit: <unit>,,
+      #       cost: <cost>,
+      #       release_method: <release_method>,
+      #       release_description: <release_description>,
+      #       sample_type_id: <sample_type_id>,
+      #       image: <image>,
+      #       prefix: <prefix>,
+      #       rows: <rows>,
+      #       columns: <columns>
+      #     }
+      #   }
+      #
+      # @!method update(token, id, object_type)
       # @param token [String] a token
       # @param id [Int] the id of the object type
       # @param object_type [Hash] the object type
-      # @return the object type
       def update
         # Check for admin permissions
         status, response = check_token_for_permission(1)
@@ -115,9 +372,21 @@ module Api
 
       # Delete an object type.
       #
+      # <b>API Call:</b>
+      #   POST: /api/v3/object_types/<id>/delete
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     message: "Object type deleted"
+      #   }
+      #
+      # @!method delete(token, id)
       # @param token [String] a token
       # @param id [Int] the id of the object type
-      # @return a success message
       def delete
         # Check for admin permissions
         status, response = check_token_for_permission(1)
@@ -132,7 +401,7 @@ module Api
         object_type.delete
 
         render json: {
-          message: "deleted"
+          message: "Object type deleted"
          }.to_json, status: :ok
       end
 

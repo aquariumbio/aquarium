@@ -385,6 +385,15 @@ will generate the documentation and write it to the directory `docs/api`.
 This location is determined by the file `.yardopts` in the project repository.
 This file also limits the API to code used in Krill the protocol development language.
 
+
+The command
+
+```sh
+docker-compose run --rm backend yardoc --api api.v3 --output-dir docs/api/v3
+```
+
+will generate the Aquarium API
+
 ### Modifying this Document
 
 This document is `docs/development/index.md` in the `aquarium` repository.

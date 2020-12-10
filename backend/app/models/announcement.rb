@@ -6,7 +6,7 @@ class Announcement < ActiveRecord::Base
 
   # Return all announcements.
   #
-  # @return all announcments
+  # @return all announcements
   def self.find_all
     Announcement.order(created_at: :desc)
   end
@@ -14,7 +14,7 @@ class Announcement < ActiveRecord::Base
   # Return a specific announcement.
   #
   # @param id [Int] the id of the announcement
-  # @return the announcments
+  # @return the announcements
   def self.find_id(id)
     Announcement.find_by(id: id)
   end
@@ -24,7 +24,7 @@ class Announcement < ActiveRecord::Base
   # @param announcement [Hash] the objet type
   # @option announcement[:title] [String] the title
   # @option announcement[:message] [String] the message
-  # @option announcement[:active] [String] required - interpreted as Boolen
+  # @option announcement[:active] [String] active - interpreted as Boolen
   # return the announcement
   def self.create(announcement)
     # Read the parameters
@@ -52,7 +52,7 @@ class Announcement < ActiveRecord::Base
   # @param announcement [Hash] the objet type
   # @option announcement[:title] [String] the title
   # @option announcement[:message] [String] the message
-  # @option announcement[:active] [String] required - interpreted as Boolen
+  # @option announcement[:active] [String] active - interpreted as Boolen
   # return the announcement
   def update(announcement)
     # Read the parameters
