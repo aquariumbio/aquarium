@@ -108,11 +108,13 @@
           }
 
           if (!this.state.isLoading && !this.state.hasError && this.state.jobs.length > 0){
+            // Create an array of react elements sorted by job id
             content = this.state.jobs.map(function(job, i) {
                 return createElement( AssignedJobRow, {key: i + 1, job: job})
               }
-            )
+            ).sort((a, b) => b.props.job.id - a.props.job.id);
 
+            // Add title row to beginning of array
             content.unshift(createElement(AssignedJobTitle, {key: 0}))
           }
 

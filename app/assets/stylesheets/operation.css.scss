@@ -29,8 +29,8 @@
     color: #999;
   }
 
- .unselected-category {   
-    background: #eee; 
+ .unselected-category {
+    background: #eee;
     &:hover {
       background: #ccc;
     };
@@ -38,8 +38,8 @@
 
   .selected-category {
     background: lightblue;
-    border: 1pt solid #aaf;    
-  }  
+    border: 1pt solid #aaf;
+  }
 
   .active-category {
     font-weight: bold;
@@ -50,11 +50,11 @@
     font-weight: bold;
     color: black;
     background: $selection-highlight-color;
-  }  
+  }
 
   .op-type-none {
     color: #ccc;
-  }  
+  }
 
   .input-list {
     list-style: none;
@@ -97,7 +97,7 @@
 
   .capitalize {
      text-transform: capitalize;
-  }  
+  }
 
   .job {
     .job-toolbar {
@@ -105,7 +105,7 @@
       color: #eee;
       filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.24));
       border-radius: 4px;
-      
+
       .md-toolbar-tools {
         color: #eee;
         .md-button.md-icon-button {
@@ -123,12 +123,12 @@
   }
 
   .switch-user-container {
-    width: 70%;    
+    width: 70%;
   }
 
   .active-jobs-table {
     font-size: 9pt;
-    width: 70%;    
+    width: 70%;
     .type {
       width: 20%;;
     }
@@ -166,7 +166,7 @@
     }
 
     th.rotate > div {
-      transform: 
+      transform:
         translate(0px, 55px)
         rotate(270deg);
       width: 20px;
@@ -206,6 +206,14 @@
 
   .md-datepicker-input {
     margin: 0;
+  }
+
+  .title-link {
+    text-decoration: underline;
+     &:hover {
+      text-decoration: none;
+      color: rgb(238,238,238)
+    };
   }
 
 }
