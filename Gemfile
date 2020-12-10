@@ -47,6 +47,8 @@ gem 'rails', '4.2.11.3'
 
 gem 'redcarpet'
 
+gem 'ruby-unit'
+
 gem 'sassc-rails'
 
 gem 'tzinfo-data'
