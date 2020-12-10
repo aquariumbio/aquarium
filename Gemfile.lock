@@ -225,6 +225,7 @@ GEM
     rubocop-sorbet (0.5.1)
       rubocop
     ruby-progressbar (1.10.1)
+    ruby-units (2.3.1)
     ruby2_keywords (0.0.2)
     sassc (2.4.0)
       ffi (~> 1.9)
@@ -305,6 +306,7 @@ DEPENDENCIES
   rubocop
   rubocop-rails
   rubocop-sorbet
+  ruby-units
   sassc-rails
   simplecov
   sorbet

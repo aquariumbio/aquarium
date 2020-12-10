@@ -47,7 +47,7 @@ gem 'rails', '4.2.11.3'
 
 gem 'redcarpet'
 
-gem 'ruby-unit'
+gem 'ruby-units'
 
 gem 'sassc-rails'
 
