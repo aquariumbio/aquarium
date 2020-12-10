@@ -6,7 +6,7 @@ class Announcement < ActiveRecord::Base
 
   # Return all announcements.
   #
-  # @return all announcments
+  # @return all announcements
   def self.find_all
     Announcement.order(created_at: :desc)
   end
@@ -14,7 +14,7 @@ class Announcement < ActiveRecord::Base
   # Return a specific announcement.
   #
   # @param id [Int] the id of the announcement
-  # @return the announcments
+  # @return the announcements
   def self.find_id(id)
     Announcement.find_by(id: id)
   end
