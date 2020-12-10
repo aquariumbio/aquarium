@@ -7,6 +7,109 @@ module ViewJobAssignment::ActiveRelation_WhereNot
   def not(opts, *rest); end
 end
 
+module ViewJobAssignment::GeneratedAttributeMethods
+  extend T::Sig
+
+  sig { returns(T.nilable(Integer)) }
+  def assigned_by; end
+
+  sig { params(value: T.nilable(Integer)).void }
+  def assigned_by=(value); end
+
+  sig { returns(T::Boolean) }
+  def assigned_by?; end
+
+  sig { returns(T.nilable(Integer)) }
+  def assigned_to; end
+
+  sig { params(value: T.nilable(Integer)).void }
+  def assigned_to=(value); end
+
+  sig { returns(T::Boolean) }
+  def assigned_to?; end
+
+  sig { returns(T.nilable(String)) }
+  def by_login; end
+
+  sig { params(value: T.nilable(String)).void }
+  def by_login=(value); end
+
+  sig { returns(T::Boolean) }
+  def by_login?; end
+
+  sig { returns(T.nilable(String)) }
+  def by_name; end
+
+  sig { params(value: T.nilable(String)).void }
+  def by_name=(value); end
+
+  sig { returns(T::Boolean) }
+  def by_name?; end
+
+  sig { returns(ActiveSupport::TimeWithZone) }
+  def created_at; end
+
+  sig { params(value: T.any(DateTime, Date, Time, ActiveSupport::TimeWithZone)).void }
+  def created_at=(value); end
+
+  sig { returns(T::Boolean) }
+  def created_at?; end
+
+  sig { returns(Integer) }
+  def id; end
+
+  sig { params(value: Integer).void }
+  def id=(value); end
+
+  sig { returns(T::Boolean) }
+  def id?; end
+
+  sig { returns(T.nilable(Integer)) }
+  def job_id; end
+
+  sig { params(value: T.nilable(Integer)).void }
+  def job_id=(value); end
+
+  sig { returns(T::Boolean) }
+  def job_id?; end
+
+  sig { returns(T.nilable(Integer)) }
+  def pc; end
+
+  sig { params(value: T.nilable(Integer)).void }
+  def pc=(value); end
+
+  sig { returns(T::Boolean) }
+  def pc?; end
+
+  sig { returns(T.nilable(String)) }
+  def to_login; end
+
+  sig { params(value: T.nilable(String)).void }
+  def to_login=(value); end
+
+  sig { returns(T::Boolean) }
+  def to_login?; end
+
+  sig { returns(T.nilable(String)) }
+  def to_name; end
+
+  sig { params(value: T.nilable(String)).void }
+  def to_name=(value); end
+
+  sig { returns(T::Boolean) }
+  def to_name?; end
+
+  sig { returns(ActiveSupport::TimeWithZone) }
+  def updated_at; end
+
+  sig { params(value: T.any(DateTime, Date, Time, ActiveSupport::TimeWithZone)).void }
+  def updated_at=(value); end
+
+  sig { returns(T::Boolean) }
+  def updated_at?; end
+end
+
 module ViewJobAssignment::GeneratedAssociationMethods
   extend T::Sig
 
@@ -35,6 +138,7 @@ module ViewJobAssignment::CustomFinderMethods
 end
 
 class ViewJobAssignment < ActiveRecord::Base
+  include ViewJobAssignment::GeneratedAttributeMethods
   include ViewJobAssignment::GeneratedAssociationMethods
   extend ViewJobAssignment::CustomFinderMethods
   extend T::Sig

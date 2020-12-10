@@ -7,6 +7,64 @@ module JobAssignmentLog::ActiveRelation_WhereNot
   def not(opts, *rest); end
 end
 
+module JobAssignmentLog::GeneratedAttributeMethods
+  extend T::Sig
+
+  sig { returns(T.nilable(Integer)) }
+  def assigned_by; end
+
+  sig { params(value: T.nilable(Integer)).void }
+  def assigned_by=(value); end
+
+  sig { returns(T::Boolean) }
+  def assigned_by?; end
+
+  sig { returns(T.nilable(Integer)) }
+  def assigned_to; end
+
+  sig { params(value: T.nilable(Integer)).void }
+  def assigned_to=(value); end
+
+  sig { returns(T::Boolean) }
+  def assigned_to?; end
+
+  sig { returns(ActiveSupport::TimeWithZone) }
+  def created_at; end
+
+  sig { params(value: T.any(DateTime, Date, Time, ActiveSupport::TimeWithZone)).void }
+  def created_at=(value); end
+
+  sig { returns(T::Boolean) }
+  def created_at?; end
+
+  sig { returns(Integer) }
+  def id; end
+
+  sig { params(value: Integer).void }
+  def id=(value); end
+
+  sig { returns(T::Boolean) }
+  def id?; end
+
+  sig { returns(T.nilable(Integer)) }
+  def job_id; end
+
+  sig { params(value: T.nilable(Integer)).void }
+  def job_id=(value); end
+
+  sig { returns(T::Boolean) }
+  def job_id?; end
+
+  sig { returns(ActiveSupport::TimeWithZone) }
+  def updated_at; end
+
+  sig { params(value: T.any(DateTime, Date, Time, ActiveSupport::TimeWithZone)).void }
+  def updated_at=(value); end
+
+  sig { returns(T::Boolean) }
+  def updated_at?; end
+end
+
 module JobAssignmentLog::GeneratedAssociationMethods
   extend T::Sig
 
@@ -47,6 +105,7 @@ module JobAssignmentLog::CustomFinderMethods
 end
 
 class JobAssignmentLog < ActiveRecord::Base
+  include JobAssignmentLog::GeneratedAttributeMethods
   include JobAssignmentLog::GeneratedAssociationMethods
   extend JobAssignmentLog::CustomFinderMethods
   extend T::Sig
