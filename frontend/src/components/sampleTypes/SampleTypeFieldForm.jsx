@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React, { useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, Select } from '@material-ui/core';
@@ -5,10 +6,10 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Checkbox from '@material-ui/core/Checkbox';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import PropTypes from 'prop-types';
+import { StandardButton } from '../shared/Buttons';
 
 const useStyles = makeStyles((theme) => ({
   label: {
@@ -25,14 +26,15 @@ const useStyles = makeStyles((theme) => ({
 export const FieldLabels = () => {
   const classes = useStyles();
   return (
-    <div name="field_labels">
-      <Grid container item lg={2} cy-data="field_name_label_div">
+    // wrap in fragment to maintain grid layout when rendered in parent
+    <>
+      <Grid item lg={2} cy-data="field_name_label_div">
         <Typography variant="h4" className={classes.label}>
           Field Name
         </Typography>
       </Grid>
 
-      <Grid item lg={1} cy-data="field_type_label_div">
+      <Grid item lg={2} cy-data="field_type_label_div">
         <Typography variant="h4" className={classes.label}>
           Type
         </Typography>
@@ -56,23 +58,247 @@ export const FieldLabels = () => {
         </Typography>
       </Grid>
 
-      <Grid item lg={5} cy-data="field_choices_label_div">
+      <Grid item lg={3} cy-data="field_choices_label_div">
         <Typography variant="h4" className={classes.label}>
           Choices
         </Typography>
       </Grid>
-    </div>
+
+      <Grid item lg={1} cy-data="field_choices_label_div" />
+    </>
   );
 };
 
-export const SampleTypeField = (
-  {
-    fieldType,
-    index,
-    updateParentState,
-    handleRemoveFieldClick,
-  },
-) => {
+const NameInput = ({ name, handleChange }) => (
+  <Grid item lg={2} cy-data="field_name_label_div">
+    <TextField
+      name="name"
+      fullWidth
+      value={name}
+      id="field_name"
+      onChange={handleChange}
+      variant="outlined"
+      inputProps={{
+        'aria-label': 'field_name',
+        'cy-data': 'field_name_input',
+      }}
+    />
+  </Grid>
+);
+NameInput.propTypes = {
+  name: PropTypes.string.isRequired,
+  handleChange: PropTypes.func.isRequired,
+};
+
+const SelectType = ({ handleChange, type }) => (
+  <Grid item lg={2}>
+    <Select
+      name="type"
+      labelId="type_select_label"
+      variant="outlined"
+      id="field_type_select"
+      value={type}
+      onChange={handleChange}
+      displayEmpty
+      inputProps={{ 'aria-label': 'type' }}
+      MenuProps={{
+        // open below
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'left',
+        },
+        getContentAnchorEl: null,
+      }}
+      cy-data="field_type_select"
+    >
+      <MenuItem value="" name="select_none" disabled>
+        {' '}
+        Choose one{' '}
+      </MenuItem>
+      <MenuItem value="string" name="select_string">
+        string
+      </MenuItem>
+      <MenuItem value="number" name="select_number">
+        number
+      </MenuItem>
+      <MenuItem value="url" name="select_url">
+        url
+      </MenuItem>
+      <MenuItem value="sample" name="select_sample">
+        sample
+      </MenuItem>
+    </Select>
+  </Grid>
+);
+SelectType.propTypes = {
+  handleChange: PropTypes.func.isRequired,
+  type: PropTypes.string.isRequired,
+};
+
+const RequiredCheckbox = ({ isRequired, handleChange }) => (
+  <Grid item lg={1} cy-data="is_required_checkbox_div">
+    <Checkbox
+      name="isRequired"
+      value={isRequired}
+      onClick={handleChange}
+      color="primary"
+      inputProps={{
+        'aria-label': 'Required',
+        'cy-data': 'field_is_required_checkbox',
+      }}
+    />
+  </Grid>
+);
+RequiredCheckbox.propTypes = {
+  isRequired: PropTypes.bool.isRequired,
+  handleChange: PropTypes.func.isRequired,
+};
+
+const ArrayCheckbox = ({ isArray, handleChange }) => (
+  <Grid item lg={1} cy-data="is_array_checkbox_div">
+    <Checkbox
+      name="isArray"
+      value={isArray}
+      onClick={handleChange}
+      color="primary"
+      inputProps={{
+        'aria-label': 'Array',
+        'cy-data': 'field_is_array_checkbox',
+      }}
+    />
+  </Grid>
+);
+ArrayCheckbox.propTypes = {
+  isArray: PropTypes.bool.isRequired,
+  handleChange: PropTypes.func.isRequired,
+};
+
+const SampleOptionsInput = ({
+  handleAddClick,
+  // handleChange,
+  // allowableFieldTypes,
+  showSampleSelect,
+}) => (
+  <Grid item lg={2} cy-data="samples_div">
+    {showSampleSelect ? (
+      <>
+        {/* <AllowableFieldTypes
+              sampleTypes={sampleTypes}
+              handleChange={handleChange}
+              fieldType={fieldType}
+              fieldTypeIndex={index}
+            /> */}
+        <StandardButton
+          name="add_field_option_btn"
+          variant="outlined"
+          testName="add_field_option_btn"
+          handleClick={handleAddClick}
+          text="Add"
+          dark
+        />
+      </>
+    ) : (
+      // ADD SAMPLES MENU
+      <Typography>N/A</Typography>
+    )}
+  </Grid>
+);
+SampleOptionsInput.propTypes = {
+  // handleChange: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  // allowableFieldTypes: PropTypes.array.isRequired,
+  showSampleSelect: PropTypes.bool.isRequired,
+  handleAddClick: PropTypes.func.isRequired,
+};
+
+const ChoicesInput = ({ handleChange, choices, showChoicesInput }) => (
+  <Grid item lg={3} cy-data="choices_input_div">
+    {showChoicesInput ? (
+      <TextField
+        name="choices"
+        id="field_choices"
+        multiline
+        fullWidth
+        rows={2}
+        variant="outlined"
+        helperText="Comma separated. Leave blank for unrestricted value."
+        inputProps={{
+          'aria-label': 'choices',
+          'cy-data': 'add_field_choices_input',
+        }}
+        value={choices}
+        onChange={handleChange}
+      />
+    ) : (
+      <Typography>N/A</Typography>
+    )}
+  </Grid>
+);
+ChoicesInput.propTypes = {
+  handleChange: PropTypes.func.isRequired,
+  choices: PropTypes.string.isRequired,
+  showChoicesInput: PropTypes.bool.isRequired,
+};
+
+const RemoveField = ({ handleRemoveFieldClick, index }) => (
+  <Grid item lg={1} cy-data="remove_field_btn_div">
+    <IconButton
+      onClick={handleRemoveFieldClick(index)}
+      cy-data="remove_field_btn"
+    >
+      <CloseIcon />
+    </IconButton>
+  </Grid>
+);
+RemoveField.propTypes = {
+  handleRemoveFieldClick: PropTypes.func.isRequired,
+  index: PropTypes.number.isRequired,
+};
+
+// // eslint-disable-next-line no-unused-vars
+// const AllowableFieldTypes = (sampleTypes, handleChange, fieldTypeIndex, fieldType) => (
+//   <>
+//     {fieldType.allowable_field_types !== undefined
+//     && fieldType.allowable_field_types.map((aft, index) => (
+//       <Select
+//         name={`allowableFieldType[${fieldTypeIndex}]`}
+//         labelId="allowable_field_type_select_label"
+//         variant="outlined"
+//         id="allowable_field_type_select"
+//         value={aft[index]}
+//         onChange={handleChange}
+//         displayEmpty
+//         inputProps={{ 'aria-label': 'allowable_field_type_select_label' }}
+//         MenuProps={{
+//           // open below
+//           anchorOrigin: {
+//             vertical: 'bottom',
+//             horizontal: 'left',
+//           },
+//           getContentAnchorEl: null,
+//         }}
+//         cy-data="allowable_field_type_select_label"
+//       >
+//         <MenuItem value={{}} name="select_none" disabled>
+//           {' Choose one '}
+//         </MenuItem>
+//         {sampleTypes.map((st) => (
+//           <MenuItem key={index} value={st} name={`select_${st.name}`}>
+//             {st.name}
+//           </MenuItem>
+//         ))}
+//       </Select>
+//     ))}
+//   </>
+// );
+
+export const SampleTypeField = ({
+  fieldType,
+  index,
+  updateParentState,
+  handleRemoveFieldClick,
+  handleAddAllowableFieldClick,
+}) => {
   let showSampleSelect = fieldType.type === 'sample';
   let showChoicesInput = fieldType.type === 'string' || fieldType.type === 'number';
 
@@ -103,138 +329,44 @@ export const SampleTypeField = (
       isRequired: false,
       isArray: false,
       choices: '',
+      allowableFieldTypes: [],
     };
 
     return fieldType !== emptyFieldType;
   };
 
   return (
-    <div name="field_inputs">
-      <Grid container item lg={2} cy-data="field_name_label_div">
-        <TextField
-          name="field_name"
-          fullWidth
-          value={fieldType.name}
-          id="field_name"
-          onChange={handleChange}
-          variant="outlined"
-          type="string"
-          // TODO: Error HANDLING -- ONLY SHOW HELPER TEXT ON ERROR
-        />
-      </Grid>
+    // wrap in fragment to maintain grid layout when rendered in parent
+    <>
+      <NameInput name={fieldType.name} handleChange={handleChange} />
 
-      <Grid item lg={1}>
-        <Select
-          name="type"
-          labelId="type-select-label"
-          variant="outlined"
-          id="field_type_select"
-          value={fieldType.type}
-          onChange={handleChange}
-          displayEmpty
-          inputProps={{ 'aria-label': 'type' }}
-          MenuProps={{
-            // open below
-            anchorOrigin: {
-              vertical: 'bottom',
-              horizontal: 'left',
-            },
-            getContentAnchorEl: null,
-          }}
-          cy-data="field_type_select"
-        >
-          <MenuItem value="" name="select_none" disabled>
-            {' '}
-            -
-            {' '}
-          </MenuItem>
-          <MenuItem value="string" name="select_string">
-            string
-          </MenuItem>
-          <MenuItem value="number" name="select_number">
-            number
-          </MenuItem>
-          <MenuItem value="url" name="select_url">
-            url
-          </MenuItem>
-          <MenuItem value="sample" name="select_sample">
-            sample
-          </MenuItem>
-        </Select>
-      </Grid>
+      <SelectType handleChange={handleChange} type={fieldType.type} />
 
-      <Grid item lg={1} cy-data="is_required_checkbox_div">
-        <Checkbox
-          name="isRequired"
-          value={fieldType.isRequired}
-          onClick={handleChange}
-          color="primary"
-          inputProps={{
-            'aria-label': 'Required',
-            'cy-data': 'field_is_required_checkbox',
-          }}
-        />
-      </Grid>
+      <RequiredCheckbox
+        isRequired={fieldType.isRequired}
+        handleChange={handleChange}
+      />
 
-      <Grid item lg={1} cy-data="is_array_checkbox_div">
-        <Checkbox
-          name="isArray"
-          value={fieldType.isArray}
-          onClick={handleChange}
-          color="primary"
-          inputProps={{
-            'aria-label': 'Array',
-            'cy-data': 'field_is_array_checkbox',
-          }}
-        />
-      </Grid>
+      <ArrayCheckbox isArray={fieldType.isArray} handleChange={handleChange} />
 
-      <Grid item lg={2} cy-data="samples_div">
-        {showSampleSelect ? (
-          <Button
-            name="add_field_option_btn"
-            variant="outlined"
-            type="button"
-            cy-data="add_field_option_btn"
-          >
-            Add
-          </Button>
-        ) : (
-          // ADD SAMPLES MENU
-          <Typography>N/A</Typography>
-        )}
-      </Grid>
+      <SampleOptionsInput
+        handleAddClick={handleAddAllowableFieldClick}
+        handleChange={handleChange}
+        showSampleSelect={showSampleSelect}
+        allowableFieldTypes={[]}
+      />
 
-      <Grid item lg={4} cy-data="choices_input_div">
-        {showChoicesInput ? (
-          <TextField
-            name="choices"
-            id="field_choices"
-            multiline
-            fullWidth
-            rows={2}
-            variant="outlined"
-            helperText="Comma separated. Leave blank for unrestricted value."
-            inputProps={{
-              'aria-label': 'choices',
-              'cy-data': 'add_field_choices_input',
-            }}
-            value={fieldType.choices}
-            onChange={handleChange}
-          />
-        ) : (
-          <Typography>N/A</Typography>
-        )}
-      </Grid>
-      <Grid item lg={1} cy-data="remove_field_btn_div">
-        <IconButton
-          onClick={handleRemoveFieldClick(index)}
-          cy-data="remove_field_btn"
-        >
-          <CloseIcon />
-        </IconButton>
-      </Grid>
-    </div>
+      <ChoicesInput
+        handleChange={handleChange}
+        choices={fieldType.choices}
+        showChoicesInput={showChoicesInput}
+      />
+
+      <RemoveField
+        handleRemoveFieldClick={handleRemoveFieldClick}
+        index={index}
+      />
+    </>
   );
 };
 
@@ -250,4 +382,7 @@ SampleTypeField.propTypes = {
   index: PropTypes.number.isRequired,
   updateParentState: PropTypes.func.isRequired,
   handleRemoveFieldClick: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  // sampleTypes: PropTypes.array.isRequired,
+  handleAddAllowableFieldClick: PropTypes.func.isRequired,
 };
