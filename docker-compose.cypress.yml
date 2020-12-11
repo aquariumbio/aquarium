@@ -1,0 +1,13 @@
+  e2e:
+    image: cypress
+    build: ./end2end
+    container_name: cypress
+    depends_on: 
+      - frontend
+    environment:
+      - CYPRESS_baseURL=http://frontend:${FRONTEND_PUBLIC_PORT}
+    command: npx cypress run
+    volumes:
+      - ./end2end:/app
+    networks:
+      - aquarium_net
