@@ -270,6 +270,13 @@ Some of the tests do intentionally raise exceptions, so do not be concerned if t
 
 Test coverage is captured by simplecov in the file `coverage/index.html`.
 
+
+### Running Frontend tests
+
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.cypress.yml up --abort-on-container-exit --exit-code-from e2e
+```
+
 ### Adding Tests
 
 Add additional RSpec tests in the `spec` directory.
