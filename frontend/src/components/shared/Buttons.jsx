@@ -26,19 +26,18 @@ const useStyles = makeStyles((theme) => ({
 
 // Button with onClick hanlder
 export const StandardButton = ({
-  name, text, styling, dense, type, handleClick, testName,
+  name, text, dark, dense, type, handleClick, testName,
 }) => {
   const classes = useStyles();
-  const cname = styling === 'light' ? classes.light : classes.dark;
+  const cname = dark ? classes.dark : classes.light;
   const noMargin = dense ? classes.dense : '';
 
   return (
     <Button
       name={name}
       className={`${cname} ${noMargin}`}
-      component={RouterLink}
       type={type}
-      onClick={() => handleClick}
+      onClick={handleClick}
       cy-data={testName}
     >
       {text}
@@ -48,7 +47,7 @@ export const StandardButton = ({
 StandardButton.propTypes = {
   name: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
-  styling: PropTypes.string,
+  dark: PropTypes.bool,
   dense: PropTypes.bool,
   type: PropTypes.string,
   handleClick: PropTypes.func.isRequired,
@@ -56,17 +55,17 @@ StandardButton.propTypes = {
 
 };
 StandardButton.defaultProps = {
-  styling: 'light',
+  dark: false,
   type: 'button',
   dense: false,
 };
 
 // Button with routing, takes a link string
 export const LinkButton = ({
-  name, text, styling, dense, type, linkTo, testName,
+  name, text, dark, dense, type, linkTo, testName,
 }) => {
   const classes = useStyles();
-  const cname = styling === 'light' ? classes.light : classes.dark;
+  const cname = dark ? classes.dark : classes.light;
   const noMargin = dense ? classes.dense : '';
   return (
     <Button
@@ -82,7 +81,7 @@ export const LinkButton = ({
   );
 };
 LinkButton.propTypes = {
-  styling: PropTypes.string,
+  dark: PropTypes.bool,
   dense: PropTypes.bool,
   name: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
@@ -91,7 +90,7 @@ LinkButton.propTypes = {
   testName: PropTypes.string.isRequired,
 };
 LinkButton.defaultProps = {
-  styling: 'light',
+  dark: false,
   type: 'button',
   dense: false,
 };
