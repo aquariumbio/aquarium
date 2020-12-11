@@ -1,114 +1,108 @@
-/* eslint-disable prefer-template */
 /* eslint-disable react/no-array-index-key */
-/* eslint-disable no-console */
 import { makeStyles } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import React, { useReducer, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
+import Divider from '@material-ui/core/Divider';
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import Toolbar from '@material-ui/core/Toolbar';
 import API from '../../helpers/API';
+import SideBar from './SideBar';
+import LoadingBackdrop from '../shared/LoadingBackdrop';
+import ShowSampleType from './ShowSampleType';
+import { LinkButton } from '../shared/Buttons';
 
 // Route: /sample_types
 // Linked in LeftHamburgeMenu
 
-const useStyles = makeStyles((theme) => ({
-  darkBtn: {
-    backgroundColor: '#065683',
-    color: 'white',
-    margin: theme.spacing(3, 2),
-
-    '& :hover': {
-      backgroundColor: 'white',
-      color: '#065683',
-    },
-  },
-
-  lightBtn: {
-    backgroundColor: 'white',
-    color: '#065683',
-    margin: theme.spacing(3, 2),
-
-    '& :hover': {
-      backgroundColor: '#065683',
-      color: 'white',
-    },
-  },
-
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    color: '#fff',
+const useStyles = makeStyles(() => ({
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 }));
-
-const reducer = (state, newState) => ({ ...state, ...newState });
 
 const SampleTypeDefinitions = () => {
   const classes = useStyles();
 
-  const [state, setState] = useReducer(
-    reducer,
-    { sampleTypes: [], currentSampleType: {}, isLoading: true },
-  );
+  const [sampleTypes, setSampleTypes] = useState([]);
+  const [currentSampleType, setCurrentSampleType] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       const data = await API.samples.getTypes();
-
-      setState({
-        sampleTypes: data.sample_types,
-        currentSampleType: data.first,
-        isLoading: false,
-      });
+      setSampleTypes(data.sample_types);
+      setCurrentSampleType(data.first);
+      setIsLoading(false);
     };
 
     fetchData();
   }, []);
 
+  const pageRef = React.useRef();
   return (
     <>
-      <Backdrop className={classes.backdrop} open={state.isLoading}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
-      <Paper elevation={3}>
-        <Typography variant="h1">Sample Types</Typography>
-        <Button
-          name="New Sample Type"
-          className={classes.darkBtn}
-          component={Link} // Wrap Link in button for routing
-          to="/sample_types/new"
-        >
-          New
-        </Button>
-        {!state.isloading && (
+      <LoadingBackdrop isLoading={isLoading} />
+      <Paper elevation={3} ref={pageRef}>
+        {!isLoading && (
           <Grid container>
-            <Grid item lg={3}>
-              <Card className={classes.root}>
-                <CardContent>
-                  {state.sampleTypes.map((st) => (
-                    <Typography key={st.id}>{st.name}</Typography>
-                  ))}
-                </CardContent>
-              </Card>
+            {/* SIDE BAR */}
+            <Grid item lg={2} name="left_side_bar">
+              <SideBar
+                setCurrentSampleType={setCurrentSampleType}
+                sampleTypes={sampleTypes}
+              />
             </Grid>
-            <Grid item lg={9}>
-              <Card className={classes.root}>
-                <CardContent>
-                  {Object.entries(state.currentSampleType).map(
-                    ([key, value]) => (
-                      <Typography>
-                        <b>{key}</b>
-                        {': ' + value}
-                      </Typography>
-                    ),
-                  )}
-                </CardContent>
-              </Card>
+
+            {/* MAIN CONTENT */}
+            <Grid item lg={10} name="right_main_container">
+              <Toolbar className={classes.header}>
+                <Breadcrumbs
+                  separator={<NavigateNextIcon fontSize="small" />}
+                  aria-label="breadcrumb"
+                  component="div"
+                >
+                  <Typography display="inline" variant="h6" component="h1">
+                    Sample Type Defnitions
+                  </Typography>
+                  <Typography display="inline" variant="h6" component="h1">
+                    {currentSampleType.name}
+                  </Typography>
+                </Breadcrumbs>
+                <div>
+                  <LinkButton
+                    name="Edit Sample Type"
+                    testName="edit_sample_type_btn"
+                    text="Edit"
+                    type="button"
+                    linkTo={`/sample_types/${currentSampleType.id}/edit`}
+                  />
+
+                  <LinkButton
+                    name="Delete Sample Type"
+                    testName="delete_sample_type_btn"
+                    text="Delete"
+                    type="button"
+                    linkTo={`/sample_types/${currentSampleType.id}/delete`}
+                  />
+                  <LinkButton
+                    name="New Sample Type"
+                    testName="new_sample_type_btn"
+                    text="New"
+                    dark
+                    type="button"
+                    linkTo="/sample_types/new"
+                  />
+                </div>
+              </Toolbar>
+
+              <Divider />
+
+              <ShowSampleType sampleType={currentSampleType} />
             </Grid>
           </Grid>
         )}
