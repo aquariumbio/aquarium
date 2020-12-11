@@ -31,7 +31,6 @@ const ObjectTypesList = ({ objectTypes, sampleTypeId }) => {
         component="ul"
         className={classes.list}
       >
-
         {objectTypes.length ? (
           objectTypes.map((object) => (
             <li key={object.id}>
@@ -45,7 +44,8 @@ const ObjectTypesList = ({ objectTypes, sampleTypeId }) => {
           <li>No object categories.</li>
         )}
         <LinkButton
-          name="Add object type"
+          name="add_object_type"
+          testName="add_object_type"
           text="Add"
           linkTo={`/object_types/new?sample_type_id=${sampleTypeId}`}
           dense
