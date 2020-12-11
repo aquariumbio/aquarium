@@ -1,15 +1,18 @@
 import { makeStyles } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { FieldLabels, SampleTypeField } from './SampleTypeFieldForm';
+import API from '../../helpers/API';
+import LoadingBackdrop from '../shared/LoadingBackdrop';
+import { StandardButton } from '../shared/Buttons';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   container: {
     minWidth: 'lg',
+    overflow: 'auto',
   },
   title: {
     fontSize: '2.5rem',
@@ -21,22 +24,14 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '1rem',
     fontWeight: '700',
   },
-  lightBtn: {
-    backgroundColor: 'rgb(250, 250, 250)',
-    color: '#065683',
-    margin: theme.spacing(3, 2),
-
-    '& :hover': {
-      backgroundColor: '#065683',
-      color: 'rgb(250, 250, 250)',
-    },
-  },
 }));
 
 const SampleTypeDefinitionForm = (sampleType) => {
   const classes = useStyles();
   const [sampleTypeName, setSampleTypeName] = useState(sampleType.name || '');
-  const [sampleTypeDescription, setSampleTypeDescription] = useState(sampleType.description || '');
+  const [sampleTypeDescription, setSampleTypeDescription] = useState(
+    sampleType.description || '',
+  );
   const [fieldTypes, setFieldTypes] = useState(
     sampleType.fieldTypes || [
       {
@@ -46,9 +41,28 @@ const SampleTypeDefinitionForm = (sampleType) => {
         isRequired: false,
         isArray: false,
         choices: '',
+        allowableFieldTypes: [],
       },
     ],
   );
+  const [sampleTypes, setSampleTypes] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  //  Get sample types top populate sample options menu
+  useEffect(() => {
+    //  We cannot use async directly in useEffect
+    //  so we create an async function that we will call from w/in
+    const fetchData = async () => {
+      const data = await API.samples.getTypes();
+      //  Update state with response from API
+      setSampleTypes(data.sample_types);
+      setIsLoading(false);
+    };
+
+    fetchData();
+    //  We only want to fetch data when the component is mounted
+    //  so we pass an empty array as the second argument to useEffect
+  }, []);
 
   // Submit form with all data
   const handleSubmit = (event) => {
@@ -67,8 +81,25 @@ const SampleTypeDefinitionForm = (sampleType) => {
       isRequired: false,
       isArray: false,
       choices: '',
+      allowable_field_types: [],
     };
     setFieldTypes([...fieldTypes, newFieldType]);
+  };
+
+  // eslint-disable-next-line no-console
+  console.log(JSON.stringify(sampleTypeName));
+
+  // eslint-disable-next-line no-console
+  console.log(sampleTypeName);
+
+  // Handle click add new sample to the end of the allowable fields array
+  const handleAddAllowableFieldClick = (index) => {
+    const list = [...fieldTypes];
+    if (list[index].allowable_field_types === undefined) {
+      list[index].allowable_field_types = [];
+    }
+    list[index].allowable_field_types.push({});
+    setFieldTypes(list);
   };
 
   // handle click event of the Remove button
@@ -86,21 +117,22 @@ const SampleTypeDefinitionForm = (sampleType) => {
   };
 
   // create array of field components
-  const fieldTypeList = fieldTypes.map(
-    (fieldType, index) => (
-      <SampleTypeField
-        // eslint-disable-next-line react/no-array-index-key
-        key={`${fieldType.id}_${index}`}
-        fieldType={fieldType}
-        index={index}
-        updateParentState={handleFieldInputChange}
-        handleRemoveFieldClick={() => handleRemoveFieldClick}
-      />
-    ),
-  );
+  const fieldTypeList = fieldTypes.map((fieldType, index) => (
+    <SampleTypeField
+      // eslint-disable-next-line react/no-array-index-key
+      key={`${fieldType.id}_${index}`}
+      fieldType={fieldType}
+      sampleTypes={sampleTypes}
+      index={index}
+      updateParentState={handleFieldInputChange}
+      handleRemoveFieldClick={() => handleRemoveFieldClick}
+      handleAddAllowableFieldClick={() => handleAddAllowableFieldClick}
+    />
+  ));
 
   return (
     <Container maxWidth="xl" cy-data="field_form_container">
+      <LoadingBackdrop isLoading={isLoading} />
       <Typography variant="h1" align="center" className={classes.title}>
         Defining New Sample Type
       </Typography>
@@ -111,10 +143,8 @@ const SampleTypeDefinitionForm = (sampleType) => {
         <Typography variant="h4" className={classes.inputName} display="inline">
           Name
         </Typography>
-        <Typography variant="overline" color="error" display="inline">
-          {' '}
-          *
-          {' '}
+        <Typography variant="overline" color="error">
+          {' * '}
         </Typography>
 
         <TextField
@@ -134,9 +164,7 @@ const SampleTypeDefinitionForm = (sampleType) => {
           Description
         </Typography>
         <Typography variant="overline" color="error">
-          {' '}
-          *
-          {' '}
+          {' * '}
         </Typography>
 
         <TextField
@@ -151,25 +179,25 @@ const SampleTypeDefinitionForm = (sampleType) => {
           // TODO: Error HANDLING -- ONLY SHOW HELPER TEXT ON ERROR
         />
 
-        <Grid
-          container
-          spacing={1}
-          style={{ marginTop: '1rem' }}
-          cy-data="field_form_container"
-        >
-          <FieldLabels />
-          {fieldTypeList}
-        </Grid>
+        {!!fieldTypeList.length && (
+          <Grid
+            container
+            spacing={1}
+            style={{ marginTop: '1rem' }}
+            cy-data="field_form_container"
+          >
+            <FieldLabels />
 
-        <Button
+            {fieldTypeList}
+          </Grid>
+        )}
+
+        <StandardButton
           name="add_new_field"
-          data-cy="add_new_field"
-          className={classes.lightBtn}
-          size="small"
-          onClick={handleAddFieldClick}
-        >
-          Add New Field
-        </Button>
+          testName="add_new_field"
+          handleClick={handleAddFieldClick}
+          text="Add New Field"
+        />
       </form>
     </Container>
   );
