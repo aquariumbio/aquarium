@@ -82,7 +82,7 @@ services:
       - aquarium_net
 
   createbucket:
-    image: minio/mc:latest
+    image: minio/mc:RELEASE.2020-11-25T23-04-07Z
     depends_on:
       - s3
     entrypoint: >
