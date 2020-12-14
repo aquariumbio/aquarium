@@ -101,20 +101,12 @@ const getTypeById = (id) => (
     .catch((error) => error)
 );
 
-const sampleTypeCreate = (sampleType) => {
+const sampleTypeCreate = (FormData) => {
   axios
     .post('api/v3/sample_types/create', null, {
       params: {
         token: currentSessionToken,
-        sample_type: {
-          id: null,
-          name: sampleType.name,
-          type: sampleType.type,
-          required: sampleType.isRequired,
-          array: false,
-          choices: '',
-          allowable_field_types: [],
-        },
+        sample_type: FormData,
       },
     })
     .then((response) => {

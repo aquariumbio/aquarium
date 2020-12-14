@@ -26,71 +26,50 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const SampleTypeDefinitionForm = (sampleType) => {
+const initialSampleType = {
+  id: null,
+  name: '',
+  description: '',
+};
+
+const newFieldType = {
+  id: null,
+  name: '',
+  type: '',
+  required: false,
+  array: false,
+  choices: '',
+  allowable_field_types: [],
+};
+
+const SampleTypeDefinitionForm = () => {
   const classes = useStyles();
-  const [sampleTypeName, setSampleTypeName] = useState(sampleType.name || '');
-  const [sampleTypeDescription, setSampleTypeDescription] = useState(
-    sampleType.description || '',
-  );
-  const [fieldTypes, setFieldTypes] = useState(
-    sampleType.fieldTypes || [
-      {
-        id: null,
-        name: '',
-        type: '',
-        isRequired: false,
-        isArray: false,
-        choices: '',
-        allowableFieldTypes: [],
-      },
-    ],
-  );
-  const [sampleTypes, setSampleTypes] = useState([]);
+  const [sampleTypeName, setSampleTypeName] = useState(initialSampleType.name);
+  const [sampleTypeDescription, setSampleTypeDescription] = useState(initialSampleType.description);
+  const [fieldTypes, setFieldTypes] = useState([newFieldType]);
+  const [sampleTypesList, setSampleTypesList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  //  Get sample types top populate sample options menu
+  /*  Get sample types top populate sample options menu
+      We cannot use async directly in useEffect so we create an async function that we will call
+      from w/in useEffect.
+      Our async function gets and sets the sampleTypesList.
+      We only want to fetch data when the component is mounted so we pass an empty array as the
+      second argument to useEffect  */
   useEffect(() => {
-    //  We cannot use async directly in useEffect
-    //  so we create an async function that we will call from w/in
     const fetchData = async () => {
       const data = await API.samples.getTypes();
-      //  Update state with response from API
-      setSampleTypes(data.sample_types);
+      setSampleTypesList(data.sample_types);
       setIsLoading(false);
     };
 
     fetchData();
-    //  We only want to fetch data when the component is mounted
-    //  so we pass an empty array as the second argument to useEffect
   }, []);
-
-  // Submit form with all data
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // TODO: COMPLETE SUBMIT FUNCTION & REMOVE ALERT PLACE HOLDER
-    // eslint-disable-next-line no-alert
-    alert('Form sumbitted');
-  };
 
   // Handle click add field button --> add new field type to end of current field types array
   const handleAddFieldClick = () => {
-    const newFieldType = {
-      id: null,
-      name: '',
-      type: '',
-      isRequired: false,
-      isArray: false,
-      choices: '',
-      allowable_field_types: [],
-    };
     setFieldTypes([...fieldTypes, newFieldType]);
   };
-
-  // eslint-disable-next-line no-console
-  console.log(JSON.stringify(sampleTypeName));
-
-  // eslint-disable-next-line no-console
-  console.log(sampleTypeName);
 
   // Handle click add new sample to the end of the allowable fields array
   const handleAddAllowableFieldClick = (index) => {
@@ -110,9 +89,9 @@ const SampleTypeDefinitionForm = (sampleType) => {
   };
 
   // handle field type input change
-  const handleFieldInputChange = (name, value, index) => {
+  const handleFieldInputChange = (value, index) => {
     const list = [...fieldTypes];
-    list[index][name] = value;
+    list[index] = value;
     setFieldTypes(list);
   };
 
@@ -122,13 +101,25 @@ const SampleTypeDefinitionForm = (sampleType) => {
       // eslint-disable-next-line react/no-array-index-key
       key={`${fieldType.id}_${index}`}
       fieldType={fieldType}
-      sampleTypes={sampleTypes}
+      sampleTypesList={sampleTypesList}
       index={index}
       updateParentState={handleFieldInputChange}
       handleRemoveFieldClick={() => handleRemoveFieldClick}
       handleAddAllowableFieldClick={() => handleAddAllowableFieldClick}
     />
   ));
+
+  // Submit form with all data
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const formData = {
+      id: null,
+      name: sampleTypeName,
+      description: sampleTypeDescription,
+      field_types: fieldTypes,
+    };
+    API.samples.create(formData);
+  };
 
   return (
     <Container maxWidth="xl" cy-data="field_form_container">
@@ -148,7 +139,7 @@ const SampleTypeDefinitionForm = (sampleType) => {
         </Typography>
 
         <TextField
-          name="sample_type_name_input"
+          name="name"
           fullWidth
           value={sampleTypeName}
           id="sample_type_name_input"
@@ -168,7 +159,7 @@ const SampleTypeDefinitionForm = (sampleType) => {
         </Typography>
 
         <TextField
-          name="sample_type_description_input"
+          name="description"
           fullWidth
           value={sampleTypeDescription}
           id="sample_type_description_input"
@@ -187,7 +178,6 @@ const SampleTypeDefinitionForm = (sampleType) => {
             cy-data="field_form_container"
           >
             <FieldLabels />
-
             {fieldTypeList}
           </Grid>
         )}

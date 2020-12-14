@@ -135,11 +135,11 @@ SelectType.propTypes = {
   type: PropTypes.string.isRequired,
 };
 
-const RequiredCheckbox = ({ isRequired, handleChange }) => (
+const RequiredCheckbox = ({ required, handleChange }) => (
   <Grid item lg={1} cy-data="is_required_checkbox_div">
     <Checkbox
-      name="isRequired"
-      value={isRequired}
+      name="required"
+      value={required}
       onClick={handleChange}
       color="primary"
       inputProps={{
@@ -150,15 +150,15 @@ const RequiredCheckbox = ({ isRequired, handleChange }) => (
   </Grid>
 );
 RequiredCheckbox.propTypes = {
-  isRequired: PropTypes.bool.isRequired,
+  required: PropTypes.bool.isRequired,
   handleChange: PropTypes.func.isRequired,
 };
 
-const ArrayCheckbox = ({ isArray, handleChange }) => (
+const ArrayCheckbox = ({ array, handleChange }) => (
   <Grid item lg={1} cy-data="is_array_checkbox_div">
     <Checkbox
-      name="isArray"
-      value={isArray}
+      name="array"
+      value={array}
       onClick={handleChange}
       color="primary"
       inputProps={{
@@ -169,7 +169,7 @@ const ArrayCheckbox = ({ isArray, handleChange }) => (
   </Grid>
 );
 ArrayCheckbox.propTypes = {
-  isArray: PropTypes.bool.isRequired,
+  array: PropTypes.bool.isRequired,
   handleChange: PropTypes.func.isRequired,
 };
 
@@ -315,7 +315,8 @@ export const SampleTypeField = ({
     const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
     const fieldTypeObj = { ...fieldType };
     fieldTypeObj[name] = value;
-    updateParentState(name, value, index);
+    // updateParentState(name, value, index);
+    updateParentState(fieldTypeObj, index);
   };
 
   // Fields are not required on sample types so a user should be able add an empty field
@@ -326,8 +327,8 @@ export const SampleTypeField = ({
       id: null,
       name: '',
       type: '',
-      isRequired: false,
-      isArray: false,
+      required: false,
+      array: false,
       choices: '',
       allowableFieldTypes: [],
     };
@@ -343,11 +344,11 @@ export const SampleTypeField = ({
       <SelectType handleChange={handleChange} type={fieldType.type} />
 
       <RequiredCheckbox
-        isRequired={fieldType.isRequired}
+        required={fieldType.required}
         handleChange={handleChange}
       />
 
-      <ArrayCheckbox isArray={fieldType.isArray} handleChange={handleChange} />
+      <ArrayCheckbox array={fieldType.array} handleChange={handleChange} />
 
       <SampleOptionsInput
         handleAddClick={handleAddAllowableFieldClick}
@@ -375,8 +376,8 @@ SampleTypeField.propTypes = {
     id: PropTypes.number,
     name: PropTypes.string,
     type: PropTypes.string,
-    isRequired: PropTypes.bool,
-    isArray: PropTypes.bool,
+    required: PropTypes.bool,
+    array: PropTypes.bool,
     choices: PropTypes.string,
   }).isRequired,
   index: PropTypes.number.isRequired,
