@@ -20,6 +20,8 @@ RSpec.describe Api::V3::UsersController, type: :request do
       post "/api/v3/token/create?login=user_3&password=password"
       resp = JSON.parse(response.body)
       @token_3 << resp["token"]
+
+      @user_ids = []
     end
 
     # Invalid get users and permissions
@@ -95,6 +97,94 @@ RSpec.describe Api::V3::UsersController, type: :request do
 
       post "/api/v3/users/permissions/update?token=#{@token_1[0]}&user_id=1&permission_id=6"
       expect(response).to have_http_status 403
+    end
+
+    # Invalid get users
+    it "invalid_get_users" do
+      # Bad token
+      get "/api/v3/users"
+      expect(response).to have_http_status 401
+    end
+
+    # Forbidden get users
+    it "forbidden_get_users" do
+      # Not admin
+      get "/api/v3/users?token=#{@token_2[0]}"
+      expect(response).to have_http_status 403
+
+      # Admin but retired
+      get "/api/v3/users?token=#{@token_3[0]}"
+      expect(response).to have_http_status 403
+    end
+
+    # Get users
+    it "get_users" do
+      get "/api/v3/users?token=#{@token_1[0]}"
+      expect(response).to have_http_status 200
+    end
+
+    # Create user - errors
+    it "create_user_errors" do
+      # user parameters
+      params = {
+        user: {
+          "name": "  ",
+          "login": "  ",
+          "password": "a 1"
+        }
+      }
+      post "/api/v3/users/create?token=#{@token_1[0]}", :params => params
+      expect(response).to have_http_status 200
+
+      resp = JSON.parse(response.body)
+
+      # Check errors
+      errors = resp["errors"]
+      expect(errors["name"]).to eq [ "can't be blank" ]
+      expect(errors["login"]).to eq [ "can't be blank" ]
+      expect(errors["password"]).to eq [ "password must be at least 10 characters", "passsword cannot contain spaces or invisible characters" ]
+    end
+
+    # Create user
+    it "create_user" do
+      # user parameters
+      params = {
+        user: {
+          "name": " abc  123 ",
+          "login": " abc123 ",
+          "password": "password123"
+        }
+      }
+      post "/api/v3/users/create?token=#{@token_1[0]}", :params => params
+      expect(response).to have_http_status 201
+
+      resp = JSON.parse(response.body)
+
+      @user_ids << resp["user"]["id"]
+    end
+
+    # Invalid get user
+    it "invalid_get_user" do
+      # Bad token
+      get "/api/v3/users/#{@user_ids[0]}"
+      expect(response).to have_http_status 401
+    end
+
+    # Forbidden get user
+    it "forbidden_get_user" do
+      # Not admin
+      get "/api/v3/users/#{@user_ids[0]}?token=#{@token_2[0]}"
+      expect(response).to have_http_status 403
+
+      # Admin but retired
+      get "/api/v3/users/#{@user_ids[0]}?token=#{@token_3[0]}"
+      expect(response).to have_http_status 403
+    end
+
+    # get user
+    it "get_user" do
+      get "/api/v3/users/#{@user_ids[0]}?token=#{@token_1[0]}"
+      expect(response).to have_http_status 200
     end
 
   end

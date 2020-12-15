@@ -289,7 +289,7 @@ class User < ActiveRecord::Base
   def custom_validator
     errors.add(:name, "name cannot contain invisible characters") if name and !TEXT.match(name)
     errors.add(:login, "login cannot contain spaces or invisible characters") if login and !TEXT_NO_SPACES.match(login)
-    errors.add(:password, "password must be at least 10 characters") if password.to_s.length < 10
+    errors.add(:password, "password must be at least 10 characters") if password and password.to_s.length < 10
     errors.add(:password, "passsword cannot contain spaces or invisible characters") if password and !TEXT_NO_SPACES.match(password)
   end
 
