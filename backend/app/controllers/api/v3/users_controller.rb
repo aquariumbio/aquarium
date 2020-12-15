@@ -148,6 +148,93 @@ module Api
         render json: { user: user }.to_json, status: :created
       end
 
+      # Update a user's info.
+      #
+      # <b>API Call:</b>
+      #   POST: /api/v3/users/update_info
+      #   {
+      #     token: <token>
+      #     id: <user_id>,
+      #     user: {
+      #       name: <name>
+      #     }
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS CODE: 200
+      #   {
+      #     user: {
+      #       id: <user_id>,
+      #       name: <name>,
+      #       login: <login>,
+      #       permission_ids: <permission_ids>
+      #     }
+      #   }
+      #
+      # @!method update(token, id, user)
+      # @param token [String] a token
+      # @param id [Int] the id of the user
+      # @param user [Hash] the user
+      def update_info
+        # Check for admin permissions <or> self
+        params_user_id = Input.int(params[:id])
+        status, response = check_token_for_permission(-1, params_user_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # get the user
+        user = User.find_id(params_user_id)
+        return [ { error: 'Invalid' }, :unauthorized ] unless user
+
+        params_user = params[:user] || {}
+        response, status = user.update_info(params_user)
+        render json: response.to_json, status: status
+      end
+
+      # Update a user's permissions
+      #
+      # <b>API Call:</b>
+      #   GET: /api/v3/users/update_permissions
+      #   {
+      #     token: <token>
+      #     id: <user_id>,
+      #     user: {
+      #       permission_ids: [ <array_of_permission_ids> ]
+      #     }
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS CODE: 200
+      #   {
+      #     user: {
+      #       id: <user_id>,
+      #       name: <name>,
+      #       login: <login>,
+      #       permission_ids: <permission_ids>
+      #     }
+      #   }
+      #
+      # @!method update(token, id, user)
+      # @param token [String] a token
+      # @param id [Int] the id of the user
+      # @param user [Hash] the user
+      def update_permissions
+        # Check for admin permissions <or> self
+        status, response = check_token_for_permission(1)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # user who is updating
+        by_user_id = response[:user]["id"]
+
+        # get the user
+        params_user_id = Input.int(params[:id])
+        user = User.find_id(params_user_id)
+        return [ { error: 'Invalid' }, :unauthorized ] unless user
+
+        params_user = params[:user] || {}
+        response, status = user.update_permissions(by_user_id, params_user)
+        render json: response.to_json, status: status
+      end
+
       ###
       ### FOR USERS/PERMISSIONS PAGES
       ###

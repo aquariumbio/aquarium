@@ -59,6 +59,70 @@ class User < ActiveRecord::Base
     return user_new, false
   end
 
+  # Update a user's info (information tab)
+  #
+  # @param user [Hash] the objet type
+  # @param user_data [Hash] the objet type
+  # TODO: UPDATE EMAIL ADDRESS + PHONE NUMBER
+  # return the user
+  def update_info(user_data)
+    valid = true
+
+    # update name
+    self.name = Input.text_field(user_data[:name])
+    valid = false if !self.valid_name?
+
+    # TODO: update email address (user_profile branch)
+    # TODO: update phone number (user_profile branch)
+
+    return self.errors, :ok if !valid
+
+    # Update the user (use SQL directly to bypass password validations)
+    sets = ActiveRecord::Base.sanitize_sql( [ 'name = ?', self.name ] )
+    sql = "update users set #{sets} where id = #{self.id} limit 1"
+    User.connection.execute sql
+
+    # Remove password_digest from return value
+    return self, :ok
+  end
+
+  # Update a user's permissions (permissions tab)
+  #
+  # @param user_data [Hash] the objet type
+  # @option user_data[:permission_ids] [Array] array of permission ids
+  # return the user
+  def update_permissions(by_user_id, user_data)
+    valid = true
+    update_self = by_user_id == self.id
+
+    # update permissions_ids
+    # initialize permission_ids
+    self.permission_ids = update_self ? ".1." : "."
+    user_data[:permission_ids].to_a.each do |permission_id|
+      if !Permission.permission_ids[permission_id]
+        self.errors.add(:permisisons, "Permission_id #{permission_id} is invalid")
+        valid = false
+      elsif update_self && permission_id == 1
+        # noop
+      elsif update_self && permission_id == 6
+        self.errors.add(:permisisons, "Cannot set retired for self")
+        valid = false
+      else
+        self.permission_ids += "#{permission_id.to_i}."
+      end
+    end
+
+    return self.errors, :ok if !valid
+
+    # Update the user (use SQL directly to bypass password validations)
+    sets = ActiveRecord::Base.sanitize_sql( [ 'permission_ids = ?', self.permission_ids ] )
+    sql = "update users set #{sets} where id = #{self.id} limit 1"
+    User.connection.execute sql
+
+    # Remove password_digest from return value
+    return self, :ok
+  end
+
   # Validate a token for an optional permission_id and return the user
   #
   # @param options [Hash] options
@@ -227,5 +291,14 @@ class User < ActiveRecord::Base
     errors.add(:login, "login cannot contain spaces or invisible characters") if login and !TEXT_NO_SPACES.match(login)
     errors.add(:password, "password must be at least 10 characters") if password.to_s.length < 10
     errors.add(:password, "passsword cannot contain spaces or invisible characters") if password and !TEXT_NO_SPACES.match(password)
+  end
+
+  def valid_name?
+    User.validators_on(:name).each do |validator|
+      validator.validate_each(self, :name, self.name)
+    end
+
+    # Return true if there are no errors (i.e., errors.to_json == "{}")
+    self.errors.to_json == "{}"
   end
 end
