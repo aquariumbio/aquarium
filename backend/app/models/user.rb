@@ -4,6 +4,61 @@
 class User < ActiveRecord::Base
   has_secure_password
 
+  validates :name,             presence: true
+  validates :login,            presence: true, uniqueness: { case_sensitive: false }
+  validates :password,         presence: true
+  validate  :custom_validator
+
+  # Return all users.
+  #
+  # @return all users
+  def self.find_all
+    User.select("id, name, login, permission_ids").order(:name)
+  end
+
+  # Return a specific user.
+  #
+  # @param id [Int] the id of the user
+  # @return the user
+  def self.find_id(id)
+    User.select("id, name, login, permission_ids").find_by(id: id)
+  end
+
+  # Create a user
+  #
+  # @param user [Hash] the objet type
+  # @option user[:name] [String] the name
+  # @option user[:password] [String] the password
+  # @option user[:login] [String] the login
+  # @option user[:permission_ids] [Array] the permission_ids
+  # return the user
+  def self.create(user)
+    # Read the parameters
+    name = Input.text_field(user[:name])
+    login = Input.text_field(user[:login])
+    password = user[:password]
+
+    permission_ids = "."
+    user[:permission_ids].to_a.each do |permission_id|
+      permission_ids += "#{permission_id.to_i}."
+    end
+
+    user_new = User.new(
+      name: name,
+      login: login,
+      password: password,
+      permission_ids: permission_ids
+    )
+
+    valid = user_new.valid?
+    return false, user_new.errors if !valid
+
+    # Save the user if it is valid
+    user_new.save
+
+    return user_new, false
+  end
+
   # Validate a token for an optional permission_id and return the user
   #
   # @param options [Hash] options
@@ -12,47 +67,47 @@ class User < ActiveRecord::Base
   # @option options[:token] [String] a token
   # @option options[:ip] [String] an IP address
   # @return the user
-  def self.validate_token(options, check_permission_id = 0)
+  def self.validate_token(options, check_permission_id, check_target_id)
     option_token = options[:token].to_s
     option_ip = options[:ip].to_s
     option_timenow = Time.now.utc
     timeok = (option_timenow - ENV['SESSION_TIMEOUT'].to_i.minutes).to_s[0, 19]
 
-    wheres = sanitize_sql_for_conditions(['ut.token = ? and ut.ip = ?', option_token, option_ip])
+    wheres = sanitize_sql(['ut.token = ? and ut.ip = ?', option_token, option_ip])
 
     sql = "
-        select ut.*, u.name, u.login, u.permission_ids
+        select u.id, u.name, u.login, u.permission_ids, ut.timenow
         from user_tokens ut
         inner join users u on u.id = ut.user_id
         where #{wheres}
         limit 1
       "
-    usertoken = (User.find_by_sql sql)[0]
+    user = (User.find_by_sql sql)[0]
 
-    if !usertoken
+    if !user
       # Invalid token or ip
       [401, "Invalid"]
-    elsif usertoken.timenow.to_s[0, 19] < timeok
+    elsif user.timenow.to_s[0, 19] < timeok
       # Session timeout
       # Delete the token
-      deletes = sanitize_sql_for_conditions(['token = ? and ip = ?', option_token, option_ip])
+      deletes = sanitize_sql(['token = ? and ip = ?', option_token, option_ip])
       sql = "delete from user_tokens where #{deletes} limit 1"
       User.connection.execute sql
 
       [401, "Session timeout"]
-    elsif !usertoken.permission?(check_permission_id)
+    elsif !user.permission?(check_permission_id, check_target_id)
       # Forbidden
       [403, nil]
     else
       # Valid token + ip + time
 
       #Reset user.timenow
-      usertoken.timenow = option_timenow
+      user.timenow = option_timenow
       sql = "update user_tokens ut set timenow = '#{option_timenow.to_s[0, 19]}' where #{wheres} limit 1"
       User.connection.execute sql
 
       # Returns user
-      [200, { id: usertoken.user_id, name: usertoken.name, login: usertoken.login, permission_ids: usertoken.permission_ids }]
+      [200, user.attributes.except("timenow")]
     end
   end
 
@@ -69,14 +124,14 @@ class User < ActiveRecord::Base
     ip = options[:ip].to_s
     all = options[:all]
 
-    wheres = sanitize_sql_for_conditions(['token = ? and ip = ?', token, ip])
+    wheres = sanitize_sql(['token = ? and ip = ?', token, ip])
 
     sql = "select * from user_tokens where #{wheres} limit 1"
-    usertoken = (User.find_by_sql sql)[0]
-    return false unless usertoken
+    user = (User.find_by_sql sql)[0]
+    return false unless user
 
     sql = if all
-            "delete from user_tokens where user_id = #{usertoken.user_id}"
+            "delete from user_tokens where user_id = #{user.user_id}"
           else
             "delete from user_tokens where #{wheres} limit 1"
           end
@@ -86,17 +141,30 @@ class User < ActiveRecord::Base
   end
 
   # Check whether user has permission_id
+  # permission_id ==  0: anything                                (not retired)
+  # permission_id ==  1: admin                                   (not retired)
+  # permission_id == -1: admin             or target_id == self  (not retired)
+  # permission_id ==  2: manage  or admin                        (not retired)
+  # permission_id ==  3: run     or admin                        (not retired)
+  # permission_id ==  4: design  or admin                        (not retired)
+  # permission_id ==  5: develop or admin                        (not retired)
+  # permission_id ==  6: retired
   #
   # @param permission_id [Int] the permission_id to check
+  # @param target_id [Int] the user_id of the user being updated
   # @return true
-  def permission?(permission_id)
-    # Retired - always false
+  def permission?(permission_id, target_id)
+    # return false if retired
     return false if permission_ids.index(".#{Permission.permission_ids.key('retired')}.")
 
-    # Any role - always true (even if ".")
+    # return true if permission_id == 0
     return true if permission_id.zero?
 
-    # Check <role_id> and check "admin"
+    # return true if permission_id == -1 and target_id is self
+    return true if permission_id == -1 and target_id == self.id
+
+    # Check <permission_id> and check "admin"
+    # NOTE: permission_id == -1 will still validate on admin
     permission_ids.index(".#{permission_id}.") or permission_ids.index(".#{Permission.permission_ids.key('admin')}.")
   end
 
@@ -106,13 +174,19 @@ class User < ActiveRecord::Base
   # @param permission_id [Int] the permission_id to set
   # @param val [Boolean] true to turn permission on, false to turn permission off
   # @return true
-  def self.set_permission(user_id, permission_id, val)
-    user = User.find_by(id: user_id)
-    return false unless user
+  def self.set_permission(by_user_id, user_id, permission_id, val)
+    # Cannot edit admin or retired for self
+    return [ { error: 'Cannot edit admin or retired for self.' }, :forbidden ] if user_id == by_user_id && ((permission_id == 1) || (permission_id == 6))
 
+    # Check user_id
+    user = User.find_id(user_id)
+    return [ { error: 'Invalid' }, :unauthorized ] unless user
+
+    # Check valid permission_id
     permission_ids = Permission.permission_ids
-    return false unless permission_ids[permission_id]
+    return [ { error: 'Invalid' }, :unauthorized ]  unless permission_ids[permission_id]
 
+    # Update permission_id
     if !val && user.permission_ids.index(".#{permission_id}.")
       # Replace all instances of ".<id>." with "." (there should only be one)
       user.permission_ids.gsub!(".#{permission_id}.", '.')
@@ -121,9 +195,12 @@ class User < ActiveRecord::Base
       user.permission_ids += "#{permission_id}."
     end
 
-    user.save
+    # Update the user (use SQL directly to bypass password validations)
+    sets = sanitize_sql( [ 'permission_ids = ?', user.permission_ids ] )
+    sql = "update users set #{sets} where id = #{user_id} limit 1"
+    User.connection.execute sql
 
-    user
+    return { user: user }, :ok
   end
 
   # Return filtered / sorted list of users with specific permission_ids.
@@ -141,5 +218,14 @@ class User < ActiveRecord::Base
 
     sql = "select id, login, name, permission_ids from users #{wheres} order by #{order}"
     User.find_by_sql sql
+  end
+
+  private
+
+  def custom_validator
+    errors.add(:name, "name cannot contain invisible characters") if name and !TEXT.match(name)
+    errors.add(:login, "login cannot contain spaces or invisible characters") if login and !TEXT_NO_SPACES.match(login)
+    errors.add(:password, "password must be at least 10 characters") if password.to_s.length < 10
+    errors.add(:password, "passsword cannot contain spaces or invisible characters") if password and !TEXT_NO_SPACES.match(password)
   end
 end

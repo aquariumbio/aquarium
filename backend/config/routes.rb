@@ -28,7 +28,12 @@ Rails.application.routes.draw do
 
   # User permissions
   get  'api/v3/users/permissions',               to: 'api/v3/users#permissions'
-  post 'api/v3/users/permissions/update',        to: 'api/v3/users#permissions_update'
+  post 'api/v3/users/permissions/update',        to: 'api/v3/users#update_permission'
+
+  # Users
+  get  'api/v3/users',                            to: 'api/v3/users#index'
+  post 'api/v3/users/create',                     to: 'api/v3/users#create'
+  get  'api/v3/users/:id',                        to: 'api/v3/users#show'
 
   # Sample Types
   get  'api/v3/sample_types',                    to: 'api/v3/sample_types#index'

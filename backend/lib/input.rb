@@ -33,4 +33,12 @@ module Input
     return bool
   end
 
+  # Return a text_field
+  def self.text_field(str)
+    str = str.to_s.strip.gsub(/ +/,' ')
+    str = nil if str == ""
+
+    return str
+  end
+
 end

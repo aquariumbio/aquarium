@@ -13,7 +13,7 @@ class UserToken < ActiveRecord::Base
     # Make 3 attempts to create a token
     while exists && (count < 3)
       this_token = SecureRandom.hex(16) # 32 characters
-      conditions = sanitize_sql_for_conditions(['ip = ? and token = ?', this_ip, this_token])
+      conditions = sanitize_sql(['ip = ? and token = ?', this_ip, this_token])
       sql = "select * from user_tokens where #{conditions} limit 1"
       exists = (UserToken.find_by_sql sql)[0]
 

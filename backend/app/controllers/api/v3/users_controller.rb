@@ -32,6 +32,126 @@ module Api
     #       }
     #     }
     class UsersController < ApplicationController
+      # Returns all users.
+      #
+      # <b>API Call:</b>
+      #   GET: /api/v3/users
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS CODE: 200
+      #   {
+      #     users: [
+      #       {
+      #         id: <user_id>,
+      #         name: <name>,
+      #         login: <login>,
+      #         permission_ids: <permission_ids>
+      #       },
+      #       ...
+      #     ]
+      #   }
+      #
+      # @!method index(token)
+      # @param token [String] a token
+      def index
+        # Check for any permissions
+        status, response = check_token_for_permission(1)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # Get users
+        users = User.find_all
+
+        render json: {
+          users: users
+         }.to_json, status: :ok
+      end
+
+      # Returns a specific user.
+      #
+      # <b>API Call:</b>
+      #   GET: /api/v3/users/<id>
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS CODE: 200
+      #   {
+      #     user: {
+      #       id: <user_id>,
+      #       name: <name>,
+      #       login: <login>,
+      #       permission_ids: <permission_ids>
+      #     }
+      #   }
+      #
+      # @!method show(token, id)
+      # @param token [String] a token
+      # @param id [Int] the id of the user
+      def show
+        # Check for admin permissions
+        status, response = check_token_for_permission(1)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # Get user
+        id = Input.int(params[:id])
+        user = User.find_id(id)
+
+        render json: {
+          user: user
+        }.to_json, status: :ok
+      end
+
+      # Create a new user.
+      #
+      # <b>API Call:</b>
+      #   POST: /api/v3/users/create
+      #   {
+      #     token: <token>
+      #     user: {
+      #       name: <name>,
+      #       login: <login>,
+      #       password: <password>,
+      #       permission_ids: [ <array_of_permission_ids> ]
+      #     }
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS CODE: 201
+      #   {
+      #     user: {
+      #       id: <user_id>,
+      #       name: <name>,
+      #       login: <login>,
+      #       permission_ids: <permission_ids>
+      #     }
+      #   }
+      #
+      # @!method create(token, user)
+      # @param token [String] a token
+      # @param user [Hash] the user
+      def create
+        # Check for admin permissions
+        status, response = check_token_for_permission(1)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # Read sample type parameter
+        params_user = params[:user] || {}
+
+        # Create sample type
+        user, errors = User.create(params_user)
+        render json: { errors: errors }.to_json, status: :ok and return if !user
+
+        render json: { user: user }.to_json, status: :created
+      end
+
+      ###
+      ### FOR USERS/PERMISSIONS PAGES
+      ###
+
       # Returns a filtered / sorted list of users based on permission_ids.
       #
       # <b>API Call:</b>
@@ -94,7 +214,7 @@ module Api
       # Set a specific permission for a specific user.
       #
       # <b>API Call:</b>
-      #   GET: /api/v3/users/permissions/update
+      #   POST: /api/v3/users/permissions/update
       #   {
       #     token: <token>,
       #     user_id: <user_id>,
@@ -115,27 +235,23 @@ module Api
       #     ]
       #   }
       #
-      # @!method permissions_update(token, user_id, permission_id, value)
+      # @!method update_permission(token, user_id, permission_id, value)
       # @param token [String] a token
       # @param user_id [Int] the id of the user to change
       # @param permission_id [Int] the id of the permission to change
       # @param value [Boolean] the permission setting ( <true/false> or <on/off> or <1/0> )
-      def permissions_update
+      def update_permission
         # Check for admin permissions
         status, response = check_token_for_permission(1)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        uid = Input.int(params[:user_id])
-        rid = Input.int(params[:permission_id])
-        val = Input.boolean(params[:value])
-        if (uid == response[:user][:id]) && ((rid == 1) || (rid == 6))
-          render json: { error: 'Cannot edit admin or retired for self.' }.to_json, status: :forbidden and return
-        end
+        by_user_id = response[:user]["id"]
+        to_user_id = Input.int(params[:user_id])
+        to_permission_id = Input.int(params[:permission_id])
+        to_value = Input.boolean(params[:value])
 
-        valid = User.set_permission(uid, rid, val)
-        render json: { error: 'Invalid' }.to_json, status: :unauthorized and return unless valid
-
-        render json: { user: { id: valid.id, name: valid.name, login: valid.login, permission_ids: valid.permission_ids } }.to_json, status: :ok
+        response, status = User.set_permission(by_user_id, to_user_id, to_permission_id, to_value)
+        render json: response.to_json, status: status
       end
     end
   end
