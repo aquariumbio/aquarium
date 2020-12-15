@@ -35,7 +35,7 @@ const initialSampleType = {
 const newFieldType = {
   id: null,
   name: '',
-  type: '',
+  ftype: '',
   required: false,
   array: false,
   choices: '',
@@ -47,19 +47,19 @@ const SampleTypeDefinitionForm = () => {
   const [sampleTypeName, setSampleTypeName] = useState(initialSampleType.name);
   const [sampleTypeDescription, setSampleTypeDescription] = useState(initialSampleType.description);
   const [fieldTypes, setFieldTypes] = useState([newFieldType]);
-  const [sampleTypesList, setSampleTypesList] = useState([]);
+  const [sampleTypes, setSampleTypes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   /*  Get sample types top populate sample options menu
       We cannot use async directly in useEffect so we create an async function that we will call
       from w/in useEffect.
-      Our async function gets and sets the sampleTypesList.
+      Our async function gets and sets the sampleTypes.
       We only want to fetch data when the component is mounted so we pass an empty array as the
       second argument to useEffect  */
   useEffect(() => {
     const fetchData = async () => {
       const data = await API.samples.getTypes();
-      setSampleTypesList(data.sample_types);
+      setSampleTypes(data.sample_types);
       setIsLoading(false);
     };
 
@@ -101,11 +101,11 @@ const SampleTypeDefinitionForm = () => {
       // eslint-disable-next-line react/no-array-index-key
       key={`${fieldType.id}_${index}`}
       fieldType={fieldType}
-      sampleTypesList={sampleTypesList}
+      sampleTypes={sampleTypes}
       index={index}
       updateParentState={handleFieldInputChange}
       handleRemoveFieldClick={() => handleRemoveFieldClick}
-      handleAddAllowableFieldClick={() => handleAddAllowableFieldClick}
+      handleAddAllowableFieldClick={handleAddAllowableFieldClick}
     />
   ));
 
@@ -187,6 +187,15 @@ const SampleTypeDefinitionForm = () => {
           testName="add_new_field"
           handleClick={handleAddFieldClick}
           text="Add New Field"
+        />
+
+        <StandardButton
+          name="save"
+          testName="save_sample_type"
+          handleClick={handleSubmit}
+          text="Save"
+          type="submit"
+          dark
         />
       </form>
     </Container>

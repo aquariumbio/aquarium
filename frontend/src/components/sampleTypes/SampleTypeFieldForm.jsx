@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable react/no-array-index-key */
 import React, { useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
@@ -90,17 +91,17 @@ NameInput.propTypes = {
   handleChange: PropTypes.func.isRequired,
 };
 
-const SelectType = ({ handleChange, type }) => (
+const SelectType = ({ handleChange, ftype }) => (
   <Grid item lg={2}>
     <Select
-      name="type"
+      name="ftype"
       labelId="type_select_label"
       variant="outlined"
       id="field_type_select"
-      value={type}
+      value={ftype}
       onChange={handleChange}
       displayEmpty
-      inputProps={{ 'aria-label': 'type' }}
+      inputProps={{ 'aria-label': 'ftype' }}
       MenuProps={{
         // open below
         anchorOrigin: {
@@ -112,8 +113,7 @@ const SelectType = ({ handleChange, type }) => (
       cy-data="field_type_select"
     >
       <MenuItem value="" name="select_none" disabled>
-        {' '}
-        Choose one{' '}
+        {' Choose one '}
       </MenuItem>
       <MenuItem value="string" name="select_string">
         string
@@ -132,7 +132,7 @@ const SelectType = ({ handleChange, type }) => (
 );
 SelectType.propTypes = {
   handleChange: PropTypes.func.isRequired,
-  type: PropTypes.string.isRequired,
+  ftype: PropTypes.string.isRequired,
 };
 
 const RequiredCheckbox = ({ required, handleChange }) => (
@@ -175,27 +175,31 @@ ArrayCheckbox.propTypes = {
 
 const SampleOptionsInput = ({
   handleAddClick,
-  // handleChange,
-  // allowableFieldTypes,
+  handleChange,
   showSampleSelect,
+  sampleTypes,
+  fieldType,
+  index,
 }) => (
   <Grid item lg={2} cy-data="samples_div">
     {showSampleSelect ? (
       <>
-        {/* <AllowableFieldTypes
-              sampleTypes={sampleTypes}
-              handleChange={handleChange}
-              fieldType={fieldType}
-              fieldTypeIndex={index}
-            /> */}
-        <StandardButton
-          name="add_field_option_btn"
-          variant="outlined"
-          testName="add_field_option_btn"
-          handleClick={handleAddClick}
-          text="Add"
-          dark
+        <AllowableFieldTypes
+          sampleTypes={sampleTypes}
+          handleChange={handleChange}
+          fieldType={fieldType}
+          fieldTypeIndex={index}
         />
+        <div style={{ display: 'block' }}>
+          <StandardButton
+            name="add_field_option_btn"
+            variant="outlined"
+            testName="add_field_option_btn"
+            handleClick={() => handleAddClick(index)}
+            text="Add option"
+            dense
+          />
+        </div>
       </>
     ) : (
       // ADD SAMPLES MENU
@@ -204,11 +208,16 @@ const SampleOptionsInput = ({
   </Grid>
 );
 SampleOptionsInput.propTypes = {
-  // handleChange: PropTypes.func.isRequired,
+  handleChange: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   // allowableFieldTypes: PropTypes.array.isRequired,
   showSampleSelect: PropTypes.bool.isRequired,
   handleAddClick: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  sampleTypes: PropTypes.array.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  fieldType: PropTypes.object.isRequired,
+  index: PropTypes.number.isRequired,
 };
 
 const ChoicesInput = ({ handleChange, choices, showChoicesInput }) => (
@@ -255,42 +264,59 @@ RemoveField.propTypes = {
   index: PropTypes.number.isRequired,
 };
 
-// // eslint-disable-next-line no-unused-vars
-// const AllowableFieldTypes = (sampleTypes, handleChange, fieldTypeIndex, fieldType) => (
-//   <>
-//     {fieldType.allowable_field_types !== undefined
-//     && fieldType.allowable_field_types.map((aft, index) => (
-//       <Select
-//         name={`allowableFieldType[${fieldTypeIndex}]`}
-//         labelId="allowable_field_type_select_label"
-//         variant="outlined"
-//         id="allowable_field_type_select"
-//         value={aft[index]}
-//         onChange={handleChange}
-//         displayEmpty
-//         inputProps={{ 'aria-label': 'allowable_field_type_select_label' }}
-//         MenuProps={{
-//           // open below
-//           anchorOrigin: {
-//             vertical: 'bottom',
-//             horizontal: 'left',
-//           },
-//           getContentAnchorEl: null,
-//         }}
-//         cy-data="allowable_field_type_select_label"
-//       >
-//         <MenuItem value={{}} name="select_none" disabled>
-//           {' Choose one '}
-//         </MenuItem>
-//         {sampleTypes.map((st) => (
-//           <MenuItem key={index} value={st} name={`select_${st.name}`}>
-//             {st.name}
-//           </MenuItem>
-//         ))}
-//       </Select>
-//     ))}
-//   </>
-// );
+const AllowableFieldTypes = ({
+  sampleTypes, handleChange, fieldTypeIndex, fieldType,
+}) => (
+  <>
+    {!!fieldType.allowable_field_types
+      && fieldType.allowable_field_types.map((aft, index) => (
+        <div style={{ display: 'block' }} key={index}>
+          <Select
+            style={{ width: 250 }}
+            name={`allowableFieldType[${fieldTypeIndex}]`}
+            labelId="allowable_field_type_select_label"
+            variant="outlined"
+            id={`allowable_field_type_select[${index}]`}
+            value={aft.name}
+            onChange={handleChange}
+            displayEmpty
+            defaultValue=""
+            inputProps={{ 'aria-label': 'allowable_field_type_select_label' }}
+            MenuProps={{
+              // open below
+              anchorOrigin: {
+                vertical: 'bottom',
+                horizontal: 'left',
+              },
+              getContentAnchorEl: null,
+            }}
+            cy-data="allowable_field_type_select_label"
+          >
+            <MenuItem value="" name="select_none" disabled>
+              {' Choose one '}
+            </MenuItem>
+            {sampleTypes.map((st) => (
+              <MenuItem
+                key={st.id}
+                value={st.name}
+                name={`select_${st.name}`}
+              >
+                {st.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </div>
+      ))}
+  </>
+);
+AllowableFieldTypes.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  sampleTypes: PropTypes.array.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  fieldTypeIndex: PropTypes.number.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  fieldType: PropTypes.object.isRequired,
+};
 
 export const SampleTypeField = ({
   fieldType,
@@ -298,14 +324,15 @@ export const SampleTypeField = ({
   updateParentState,
   handleRemoveFieldClick,
   handleAddAllowableFieldClick,
+  sampleTypes,
 }) => {
-  let showSampleSelect = fieldType.type === 'sample';
-  let showChoicesInput = fieldType.type === 'string' || fieldType.type === 'number';
+  let showSampleSelect = fieldType.ftype === 'sample';
+  let showChoicesInput = fieldType.ftype === 'string' || fieldType.ftype === 'number';
 
   useEffect(() => {
-    // Update showSampleOptions & showSampleChoices when fieldType.type changes
-    showSampleSelect = fieldType.type === 'sample';
-    showChoicesInput = fieldType.type === 'string' || fieldType.type === 'number';
+    // Update showSampleOptions & showSampleChoices when fieldType.ftype changes
+    showSampleSelect = fieldType.ftype === 'sample';
+    showChoicesInput = fieldType.ftype === 'string' || fieldType.ftype === 'number';
   });
 
   // Handle input change: Pass the name and value to the parent callback.
@@ -326,7 +353,7 @@ export const SampleTypeField = ({
     const emptyFieldType = {
       id: null,
       name: '',
-      type: '',
+      ftype: '',
       required: false,
       array: false,
       choices: '',
@@ -341,7 +368,7 @@ export const SampleTypeField = ({
     <>
       <NameInput name={fieldType.name} handleChange={handleChange} />
 
-      <SelectType handleChange={handleChange} type={fieldType.type} />
+      <SelectType handleChange={handleChange} ftype={fieldType.ftype} />
 
       <RequiredCheckbox
         required={fieldType.required}
@@ -354,7 +381,9 @@ export const SampleTypeField = ({
         handleAddClick={handleAddAllowableFieldClick}
         handleChange={handleChange}
         showSampleSelect={showSampleSelect}
-        allowableFieldTypes={[]}
+        fieldType={fieldType}
+        sampleTypes={sampleTypes}
+        index={index}
       />
 
       <ChoicesInput
@@ -375,10 +404,12 @@ SampleTypeField.propTypes = {
   fieldType: PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string,
-    type: PropTypes.string,
+    ftype: PropTypes.string,
     required: PropTypes.bool,
     array: PropTypes.bool,
     choices: PropTypes.string,
+    // eslint-disable-next-line react/forbid-prop-types
+    allowable_field_types: PropTypes.array,
   }).isRequired,
   index: PropTypes.number.isRequired,
   updateParentState: PropTypes.func.isRequired,
@@ -386,4 +417,6 @@ SampleTypeField.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   // sampleTypes: PropTypes.array.isRequired,
   handleAddAllowableFieldClick: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  sampleTypes: PropTypes.array.isRequired,
 };

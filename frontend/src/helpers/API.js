@@ -102,12 +102,11 @@ const getTypeById = (id) => (
 );
 
 const sampleTypeCreate = (FormData) => {
+  console.log(FormData);
   axios
-    .post('api/v3/sample_types/create', null, {
-      params: {
-        token: currentSessionToken,
-        sample_type: FormData,
-      },
+    .post('sample_types/create', {
+      sample_type: FormData,
+      token: currentSessionToken,
     })
     .then((response) => {
       console.log(response);
