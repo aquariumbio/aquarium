@@ -202,7 +202,6 @@ const SampleOptionsInput = ({
         </div>
       </>
     ) : (
-      // ADD SAMPLES MENU
       <Typography>N/A</Typography>
     )}
   </Grid>
@@ -228,7 +227,6 @@ const ChoicesInput = ({ handleChange, choices, showChoicesInput }) => (
         id="field_choices"
         multiline
         fullWidth
-        rows={2}
         variant="outlined"
         helperText="Comma separated. Leave blank for unrestricted value."
         inputProps={{
