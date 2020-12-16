@@ -17,23 +17,48 @@ require 'rails_helper'
 # new:
 #  /json, {model: model_name, method: 'new'}
 RSpec.describe JsonController, type: :controller do
+  let!(:test_user) { create(:user) }
+  let!(:dummy_plan) { create(:plan, name: 'DummyPlan') }
+  let!(:dummy_association) { create(:data_association, owner: dummy_plan, key: 'dummy', value: 'dummy_value') }
+
   before do
     token_name = "remember_token_#{Bioturk::Application.environment_name}".to_sym
-    cookies[token_name] = User.find(1).remember_token
+    cookies[token_name] = test_user.remember_token
   end
 
   context 'where' do
+
     it 'where should work' do
       params = {
         model: 'DataAssociation',
         method: 'where',
-        arguments: { parent_id: 1, parent_class: 'Plan' },
+        arguments: { parent_id: dummy_plan.id, parent_class: dummy_plan.class },
         options: { offset: -1, limit: -1, reverse: false }
       }
       post :index, params, as: :json
 
       expect(response.headers['Content-Type']).to eq('application/json; charset=utf-8')
       expect(response.body).not_to be_nil
+      response_data = JSON.parse(response.body)
+      expect(response_data).not_to be_empty
+
+    end
+  end
+
+  context 'find' do
+    it 'find should work' do
+      params = {
+        model: 'DataAssociation',
+        id: dummy_association.id
+      }
+      post :index, params, as: :json
+
+      expect(response.headers['Content-Type']).to eq('application/json; charset=utf-8')
+      expect(response.body).not_to be_nil
+      response_data = JSON.parse(response.body)
+      expect(response_data).not_to have_key('errors')
+      expect(response_data['id']).to eq(dummy_association.id)
+      expect(response_data['parent_id']).to eq(dummy_plan.id)
     end
   end
 
