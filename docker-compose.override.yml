@@ -48,17 +48,5 @@ services:
       - db_data:/var/lib/mysql
       - ./docker/mysql_init/:/docker-entrypoint-initdb.d/:ro
 
-  e2e:
-    image: cypress
-    build: ./end2end
-    container_name: cypress
-    depends_on: 
-      - frontend
-    environment:
-      - CYPRESS_baseURL=http://frontend:${FRONTEND_PUBLIC_PORT}
-    command: npx cypress run
-    volumes:
-      - ./end2end:/app
-
 volumes:
   db_data:
