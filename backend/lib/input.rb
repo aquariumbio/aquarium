@@ -25,9 +25,10 @@ module Input
     return n
   end
 
-  # Return a boolean ("true" or "on" returns true)
+  # Return a boolean ("true" or "on" or "1" returns true)
   def self.boolean(str)
-    bool = str == "true" || str == "on"
+    str = str.to_s.strip
+    bool = str == "true" || str == "on" || str == "1"
 
     return bool
   end

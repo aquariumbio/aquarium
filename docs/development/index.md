@@ -270,6 +270,13 @@ Some of the tests do intentionally raise exceptions, so do not be concerned if t
 
 Test coverage is captured by simplecov in the file `coverage/index.html`.
 
+
+### Running Frontend tests
+
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.cypress.yml up --abort-on-container-exit --exit-code-from e2e
+```
+
 ### Adding Tests
 
 Add additional RSpec tests in the `spec` directory.
@@ -384,6 +391,15 @@ yardoc
 will generate the documentation and write it to the directory `docs/api`.
 This location is determined by the file `.yardopts` in the project repository.
 This file also limits the API to code used in Krill the protocol development language.
+
+
+The command
+
+```sh
+docker-compose run --rm backend yardoc --api api.v3 --output-dir docs/api/v3
+```
+
+will generate the Aquarium API
 
 ### Modifying this Document
 
@@ -558,8 +574,9 @@ Files:
 
 ```bash
 aquarium
-|-- Dockerfile                    # defines the image for Aquarium
-`-- entrypoint.sh                 # entrypoint for Docker image
+`-- backend
+    |-- Dockerfile                    # defines the image for Aquarium
+    `-- dev_entrypoint.sh             # entrypoint for development Docker image
 ```
 
 The Dockerfile defines the images:

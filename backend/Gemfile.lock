@@ -200,10 +200,14 @@ GEM
     websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    yard (0.9.25)
+    yard-activerecord (0.0.16)
+      yard (>= 0.8.3)
     zeitwerk (2.4.0)
 
 PLATFORMS
   ruby
+  x86_64-linux-musl
 
 DEPENDENCIES
   bcrypt (~> 3.1.7)
@@ -222,9 +226,11 @@ DEPENDENCIES
   simplecov
   spring
   spring-watcher-listen (~> 2.0.0)
+  yard (~> 0.9.25)
+  yard-activerecord (~> 0.0.16)
 
 RUBY VERSION
    ruby 2.7.2p137
 
 BUNDLED WITH
-   2.1.4
+   2.2.0

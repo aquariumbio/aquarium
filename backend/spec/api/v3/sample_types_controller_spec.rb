@@ -24,13 +24,12 @@ RSpec.describe Api::V3::SampleTypesController, type: :request do
     end
 
 
-    # Crud sample type
-    # Complex tests but they are all inter-woven so it is easier than breaking them up
+    # CRUD tests
+    # TODO: Break this up into separate tests (the way it is done for object types)
     it "crud_sample_type" do
       # Sample type parameters to be used as allowable feild types
       params_1 = {
         sample_type: {
-          id: nil,
           name: "sample name 1",
           description: "sample definition",
           field_types: nil
@@ -39,7 +38,6 @@ RSpec.describe Api::V3::SampleTypesController, type: :request do
 
       params_2 = {
         sample_type: {
-          id: nil,
           name: "sample name 2",
           description: "sample definition",
           field_types: nil
@@ -51,19 +49,18 @@ RSpec.describe Api::V3::SampleTypesController, type: :request do
       expect(response).to have_http_status 201
 
       resp = JSON.parse(response.body)
-      id_1 = resp["id"]
+      id_1 = resp["sample_type"]["id"]
 
       # Create sample type
       post "/api/v3/sample_types/create?token=#{@token_1[0]}", :params => params_2
       expect(response).to have_http_status 201
 
       resp = JSON.parse(response.body)
-      id_2 = resp["id"]
+      id_2 = resp["sample_type"]["id"]
 
       # Sample type parameters
       params = {
         sample_type: {
-          id: nil,
           name: "sample name 3",
           description: "sample definition",
           field_types: [
@@ -103,7 +100,7 @@ RSpec.describe Api::V3::SampleTypesController, type: :request do
       expect(response).to have_http_status 201
 
       resp = JSON.parse(response.body)
-      this_id = resp["id"]
+      this_id = resp["sample_type"]["id"]
 
       # Get sample type
       get "/api/v3/sample_types/#{this_id}?token=#{@token_1[0]}"

@@ -10,7 +10,7 @@ FROM ruby:${RUBY_VERSION}-alpine${ALPINE_VERSION} AS backend-development
 RUN apk add --update --no-cache \
     build-base \
     mariadb-dev \
-    mysql-client \    
+    mysql-client \
     tzdata
 
 RUN mkdir -p /aquarium
