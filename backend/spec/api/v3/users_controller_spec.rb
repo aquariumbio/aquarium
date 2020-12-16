@@ -24,6 +24,10 @@ RSpec.describe Api::V3::UsersController, type: :request do
       @user_ids = []
     end
 
+    ###
+    ### users and permissions
+    ###
+
     # Invalid get users and permissions
     it "invalid_get_users_and_permissions" do
       # Bad token
@@ -99,6 +103,10 @@ RSpec.describe Api::V3::UsersController, type: :request do
       expect(response).to have_http_status 403
     end
 
+    ###
+    ### get users
+    ###
+
     # Invalid get users
     it "invalid_get_users" do
       # Bad token
@@ -123,26 +131,31 @@ RSpec.describe Api::V3::UsersController, type: :request do
       expect(response).to have_http_status 200
     end
 
-    # Create user - errors
+    ###
+    ### create user
+    ###
+
+    # Create user with errors
     it "create_user_errors" do
       # user parameters
       params = {
         user: {
           "name": "  ",
           "login": "  ",
-          "password": "a 1"
+          "password": "a 1",
+          "permission_ids": [ 1, 2, 99 ]
         }
       }
       post "/api/v3/users/create?token=#{@token_1[0]}", :params => params
       expect(response).to have_http_status 200
 
-      resp = JSON.parse(response.body)
-
       # Check errors
+      resp = JSON.parse(response.body)
       errors = resp["errors"]
       expect(errors["name"]).to eq [ "can't be blank" ]
       expect(errors["login"]).to eq [ "can't be blank" ]
       expect(errors["password"]).to eq [ "password must be at least 10 characters", "passsword cannot contain spaces or invisible characters" ]
+      expect(errors["permission_ids"]).to eq [ "Permission_id 99 is invalid" ]
     end
 
     # Create user
@@ -159,9 +172,12 @@ RSpec.describe Api::V3::UsersController, type: :request do
       expect(response).to have_http_status 201
 
       resp = JSON.parse(response.body)
-
       @user_ids << resp["user"]["id"]
     end
+
+    ###
+    ### get user
+    ###
 
     # Invalid get user
     it "invalid_get_user" do
@@ -185,6 +201,159 @@ RSpec.describe Api::V3::UsersController, type: :request do
     it "get_user" do
       get "/api/v3/users/#{@user_ids[0]}?token=#{@token_1[0]}"
       expect(response).to have_http_status 200
+    end
+
+    ###
+    ### update user info
+    ###
+
+    # Invalid update user info
+    it "invalid_update_user_info" do
+      # Bad token
+      post "/api/v3/users/#{@user_ids[0]}/update_info"
+      expect(response).to have_http_status 401
+    end
+
+    # Forbidden update user info
+    it "forbidden_update_user_info" do
+      # Not admin
+      post "/api/v3/users/#{@user_ids[0]}/update_info?token=#{@token_2[0]}"
+      expect(response).to have_http_status 403
+
+      # Admin but retired
+      post "/api/v3/users/#{@user_ids[0]}/update_info?token=#{@token_3[0]}"
+      expect(response).to have_http_status 403
+    end
+
+    # update user info with errors
+    it "update_user_info_errors" do
+      params = {
+        user: {
+          "name": "  ",
+          "email": "abc"
+        }
+      }
+      post "/api/v3/users/#{@user_ids[0]}/update_info?token=#{@token_1[0]}", :params => params
+      expect(response).to have_http_status 200
+
+      # Check errors
+      resp = JSON.parse(response.body)
+      errors = resp["errors"]
+      expect(errors["name"]).to eq [ "can't be blank" ]
+      expect(errors["email"]).to eq [ "invalid email" ]
+    end
+
+    # update user info
+    it "update_user_info" do
+      params = {
+        user: {
+          "name": "  abc  456  ",
+          "email": "abc@def.com",
+          "phone": "123-446-7890"
+        }
+      }
+      post "/api/v3/users/#{@user_ids[0]}/update_info?token=#{@token_1[0]}", :params => params
+      expect(response).to have_http_status 200
+
+      get "/api/v3/users/#{@user_ids[0]}/show_info?token=#{@token_1[0]}"
+      # Check user
+      resp = JSON.parse(response.body)
+      user = resp["user"]
+      expect(user["name"]).to eq "abc 456"
+      expect(user["email"]).to eq "abc@def.com"
+      expect(user["phone"]).to eq "123-446-7890"
+    end
+
+    # update self info
+    it "update_self_info" do
+      # login as self
+      post "/api/v3/token/create?login=abc123&password=password123"
+      resp = JSON.parse(response.body)
+      @token = resp["token"]
+
+      # update self
+      params = {
+        user: {
+          "name": "  abc  789  ",
+        }
+      }
+      post "/api/v3/users/#{@user_ids[0]}/update_info?token=#{@token}", :params => params
+      expect(response).to have_http_status 200
+
+      # Check user
+      resp = JSON.parse(response.body)
+      user = resp["user"]
+      expect(user["name"]).to eq "abc 789"
+    end
+
+    ###
+    ### update user permissions
+    ###
+
+    # Invalid update user permissions
+    it "invalid_update_user_permissions" do
+      # Bad token
+      post "/api/v3/users/#{@user_ids[0]}/update_permissions"
+      expect(response).to have_http_status 401
+    end
+
+    # Forbidden update user permissions
+    it "forbidden_update_user_permissions" do
+      # Not admin
+      post "/api/v3/users/#{@user_ids[0]}/update_permissions?token=#{@token_2[0]}"
+      expect(response).to have_http_status 403
+
+      # Admin but retired
+      post "/api/v3/users/#{@user_ids[0]}/update_permissions?token=#{@token_3[0]}"
+      expect(response).to have_http_status 403
+    end
+
+    # update user permissions with errors
+    it "update_user_permissions_errors" do
+      params = {
+        user: {
+          "permission_ids": [ 1, 2, 6, 99 ]
+        }
+      }
+      post "/api/v3/users/#{@user_ids[0]}/update_permissions?token=#{@token_1[0]}", :params => params
+      expect(response).to have_http_status 200
+
+      # Check errors
+      resp = JSON.parse(response.body)
+      errors = resp["errors"]
+      expect(errors["permission_ids"]).to eq [ "Permission_id 99 is invalid" ]
+    end
+
+    # update self permissions with errors
+    it "update_self_permissions_errors" do
+      params = {
+        user: {
+          "permission_ids": [ 1, 2, 6, 99 ]
+        }
+      }
+      post "/api/v3/users/1/update_permissions?token=#{@token_1[0]}", :params => params
+      expect(response).to have_http_status 200
+
+      # Check errors
+      resp = JSON.parse(response.body)
+      errors = resp["errors"]
+      expect(errors["permission_ids"]).to eq [ "Cannot set retired for self", "Permission_id 99 is invalid" ]
+    end
+
+    # update user permissions
+    it "update_user_permissions" do
+      params = {
+        user: {
+          "permission_ids": [ 1, 2, 6 ]
+        }
+      }
+      post "/api/v3/users/#{@user_ids[0]}/update_permissions?token=#{@token_1[0]}", :params => params
+      expect(response).to have_http_status 200
+
+      # Check user
+      resp = JSON.parse(response.body)
+      user = resp["user"]
+      expect(user["permission_ids"]).to eq ".1.2.6."
     end
 
   end

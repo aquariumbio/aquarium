@@ -34,6 +34,7 @@ Rails.application.routes.draw do
   get  'api/v3/users',                            to: 'api/v3/users#index'
   post 'api/v3/users/create',                     to: 'api/v3/users#create'
   get  'api/v3/users/:id',                        to: 'api/v3/users#show'
+  get  'api/v3/users/:id/show_info',              to: 'api/v3/users#show_info'
   post 'api/v3/users/:id/update_info',            to: 'api/v3/users#update_info'
   post 'api/v3/users/:id/update_permissions',     to: 'api/v3/users#update_permissions'
 

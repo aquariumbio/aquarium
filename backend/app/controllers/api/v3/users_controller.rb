@@ -105,6 +105,44 @@ module Api
         }.to_json, status: :ok
       end
 
+      # Returns a specific user.
+      #
+      # <b>API Call:</b>
+      #   GET: /api/v3/users/<id>
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS CODE: 200
+      #   {
+      #     user: {
+      #       id: <user_id>,
+      #       name: <name>,
+      #       login: <login>,
+      #       permission_ids: <permission_ids>,
+      #       user_email: <email>,
+      #       user_phone: <phone>
+      #     }
+      #   }
+      #
+      # @!method show_info(token, id)
+      # @param token [String] a token
+      # @param id [Int] the id of the user
+      def show_info
+        # Check for admin permissions
+        status, response = check_token_for_permission(1)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # Get user
+        id = Input.int(params[:id])
+        user = User.find_id_show_info(id)
+
+        render json: {
+          user: user
+        }.to_json, status: :ok
+      end
+
       # Create a new user.
       #
       # <b>API Call:</b>
@@ -157,6 +195,8 @@ module Api
       #     id: <user_id>,
       #     user: {
       #       name: <name>
+      #       email: <email>
+      #       phone: <phone>
       #     }
       #   }
       #
@@ -171,7 +211,7 @@ module Api
       #     }
       #   }
       #
-      # @!method update(token, id, user)
+      # @!method update_info(token, id, user)
       # @param token [String] a token
       # @param id [Int] the id of the user
       # @param user [Hash] the user
@@ -213,7 +253,7 @@ module Api
       #     }
       #   }
       #
-      # @!method update(token, id, user)
+      # @!method update_permissions(token, id, user)
       # @param token [String] a token
       # @param id [Int] the id of the user
       # @param user [Hash] the user

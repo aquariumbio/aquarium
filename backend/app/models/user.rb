@@ -24,6 +24,22 @@ class User < ActiveRecord::Base
     User.select("id, name, login, permission_ids").find_by(id: id)
   end
 
+  # Return a specific user.
+  #
+  # @param id [Int] the id of the user
+  # @return the user
+  def self.find_id_show_info(id)
+    sql = "
+      select u.id, u.name, u.login, u.permission_ids, p_email.value as 'email', p_phone.value as 'phone'
+      from users u
+      left join parameters p_email on p_email.user_id = u.id and p_email.key = 'email'
+      left join parameters p_phone on p_phone.user_id = u.id and p_phone.key = 'phone'
+      where u.id = #{id.to_i}
+      limit 1
+    "
+    (User.find_by_sql sql)[0]
+  end
+
   # Create a user
   #
   # @param user [Hash] the objet type
@@ -38,22 +54,33 @@ class User < ActiveRecord::Base
     login = Input.text_field(user[:login])
     password = user[:password]
 
-    permission_ids = "."
-    user[:permission_ids].to_a.each do |permission_id|
-      permission_ids += "#{permission_id.to_i}."
-    end
-
+    # create the user and check whether it is valid
     user_new = User.new(
       name: name,
       login: login,
       password: password,
-      permission_ids: permission_ids
     )
-
     valid = user_new.valid?
-    return false, user_new.errors if !valid
 
-    # Save the user if it is valid
+    # read and validate permission ids
+    valid_permission_ids = true
+    permission_ids = "."
+
+    user[:permission_ids].to_a.each do |permission_id|
+      permission_id = permission_id.to_i
+      if !Permission.permission_ids[permission_id]
+        user_new.errors.add(:permission_ids, "Permission_id #{permission_id} is invalid")
+        valid_permission_ids = false
+      else
+        permission_ids += "#{permission_id}."
+      end
+    end
+    user_new.permission_ids = permission_ids
+
+    # Return errors if invalid
+    return false, user_new.errors if !valid or !valid_permission_ids
+
+    # Set the permission_ids and save the user
     user_new.save
 
     return user_new, false
@@ -61,29 +88,30 @@ class User < ActiveRecord::Base
 
   # Update a user's info (information tab)
   #
-  # @param user [Hash] the objet type
   # @param user_data [Hash] the objet type
-  # TODO: UPDATE EMAIL ADDRESS + PHONE NUMBER
   # return the user
   def update_info(user_data)
     valid = true
 
-    # update name
+    # update info
     self.name = Input.text_field(user_data[:name])
-    valid = false if !self.valid_name?
+    email = Input.text_field(user_data[:email])
+    phone = Input.text_field(user_data[:phone])
+    valid = false if !self.valid_info?(email,phone)
 
-    # TODO: update email address (user_profile branch)
-    # TODO: update phone number (user_profile branch)
+    return { errors: self.errors }, :ok if !valid
 
-    return self.errors, :ok if !valid
-
-    # Update the user (use SQL directly to bypass password validations)
+    # Update the user name (use SQL directly to bypass password validations)
     sets = ActiveRecord::Base.sanitize_sql( [ 'name = ?', self.name ] )
     sql = "update users set #{sets} where id = #{self.id} limit 1"
     User.connection.execute sql
 
+    # Update the user email and phone
+    Parameter.create_or_update(self.id, "email", email)
+    Parameter.create_or_update(self.id, "phone", phone)
+
     # Remove password_digest from return value
-    return self, :ok
+    return { user: self }, :ok
   end
 
   # Update a user's permissions (permissions tab)
@@ -99,20 +127,21 @@ class User < ActiveRecord::Base
     # initialize permission_ids
     self.permission_ids = update_self ? ".1." : "."
     user_data[:permission_ids].to_a.each do |permission_id|
+      permission_id = permission_id.to_i
       if !Permission.permission_ids[permission_id]
-        self.errors.add(:permisisons, "Permission_id #{permission_id} is invalid")
+        self.errors.add(:permission_ids, "Permission_id #{permission_id} is invalid")
         valid = false
       elsif update_self && permission_id == 1
         # noop
       elsif update_self && permission_id == 6
-        self.errors.add(:permisisons, "Cannot set retired for self")
+        self.errors.add(:permission_ids, "Cannot set retired for self")
         valid = false
       else
         self.permission_ids += "#{permission_id.to_i}."
       end
     end
 
-    return self.errors, :ok if !valid
+    return { errors: self.errors }, :ok if !valid
 
     # Update the user (use SQL directly to bypass password validations)
     sets = ActiveRecord::Base.sanitize_sql( [ 'permission_ids = ?', self.permission_ids ] )
@@ -120,7 +149,7 @@ class User < ActiveRecord::Base
     User.connection.execute sql
 
     # Remove password_digest from return value
-    return self, :ok
+    return { user: self }, :ok
   end
 
   # Validate a token for an optional permission_id and return the user
@@ -287,16 +316,17 @@ class User < ActiveRecord::Base
   private
 
   def custom_validator
-    errors.add(:name, "name cannot contain invisible characters") if name and !TEXT.match(name)
-    errors.add(:login, "login cannot contain spaces or invisible characters") if login and !TEXT_NO_SPACES.match(login)
+    errors.add(:name, "name cannot contain invisible characters") if name and !REGEX_TEXT.match(name)
+    errors.add(:login, "login cannot contain spaces or invisible characters") if login and !REGEX_TEXT_NO_SPACES.match(login)
     errors.add(:password, "password must be at least 10 characters") if password and password.to_s.length < 10
-    errors.add(:password, "passsword cannot contain spaces or invisible characters") if password and !TEXT_NO_SPACES.match(password)
+    errors.add(:password, "passsword cannot contain spaces or invisible characters") if password and !REGEX_TEXT_NO_SPACES.match(password)
   end
 
-  def valid_name?
+  def valid_info?(email, phone)
     User.validators_on(:name).each do |validator|
       validator.validate_each(self, :name, self.name)
     end
+    errors.add(:email, "invalid email") if email and !REGEX_EMAIL.match(email)
 
     # Return true if there are no errors (i.e., errors.to_json == "{}")
     self.errors.to_json == "{}"
