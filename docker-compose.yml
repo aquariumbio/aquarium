@@ -1,6 +1,6 @@
 # TODO: change to env files from directory
 
-version: "3.5"
+version: "3.7"
 services:
   backend:
     volumes:

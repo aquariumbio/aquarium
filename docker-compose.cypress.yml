@@ -1,15 +1,13 @@
-  version: "3.5"
+  version: "3.7"
   services:
     e2e:
-      image: cypress
-      build: ./end2end
-      container_name: cypress
+      image: cypress/included:6.1.0
       depends_on: 
         - frontend
       environment:
-        - CYPRESS_baseURL=http://frontend:${FRONTEND_PUBLIC_PORT}
-      command: npx cypress run
+        - CYPRESS_baseUrl=http://frontend:${FRONTEND_PUBLIC_PORT}
+      working_dir: /e2e
       volumes:
-        - ./end2end:/app
+        - ./end2end:/e2e
       networks:
         - aquarium_net
