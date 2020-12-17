@@ -77,51 +77,49 @@ const Header = (props) => {
   };
 
   return (
-    <div>
-      <AppBar position="static" className={classes.root}>
-        <Toolbar>
-          <LeftHamburgerMenu />
+    <AppBar position="static" className={classes.root} component="nav">
+      <Toolbar>
+        <LeftHamburgerMenu />
 
-          <IconButton
-            edge="start"
-            className={classes.logo}
-            color="inherit"
-            aria-label="home"
-            onClick={() => handleButtonClick('/')}
-          >
-            AQUARIUM
-          </IconButton>
+        <IconButton
+          edge="start"
+          className={classes.logo}
+          color="inherit"
+          aria-label="home"
+          onClick={() => handleButtonClick('/')}
+        >
+          AQUARIUM
+        </IconButton>
 
-          {isMediumScreen ? (
-            <div className={classes.headerOptions}>
+        {isMediumScreen ? (
+          <div className={classes.headerOptions}>
 
-              <DropdownMenu className={classes.menuButton} menuItems={mainNavItems} />
-              <UserMenu />
-            </div>
-          ) : (
-            <div className={classes.headerOptions}>
-              {mainNavItems.map((menuItem) => {
-                const { menuTitle, pageURL } = menuItem;
-                return (
-                  <IconButton
-                    key={menuTitle}
-                    edge="start"
-                    className={classes.menuButton}
-                    color="inherit"
-                    aria-label={menuItem}
-                    onClick={() => handleButtonClick(pageURL)}
-                  >
-                    {menuTitle}
-                  </IconButton>
+            <DropdownMenu className={classes.menuButton} menuItems={mainNavItems} />
+            <UserMenu />
+          </div>
+        ) : (
+          <div className={classes.headerOptions}>
+            {mainNavItems.map((menuItem) => {
+              const { menuTitle, pageURL } = menuItem;
+              return (
+                <IconButton
+                  key={menuTitle}
+                  edge="start"
+                  className={classes.menuButton}
+                  color="inherit"
+                  aria-label={menuItem}
+                  onClick={() => handleButtonClick(pageURL)}
+                >
+                  {menuTitle}
+                </IconButton>
 
-                );
-              })}
-              <UserMenu />
-            </div>
-          )}
-        </Toolbar>
-      </AppBar>
-    </div>
+              );
+            })}
+            <UserMenu />
+          </div>
+        )}
+      </Toolbar>
+    </AppBar>
   );
 };
 
