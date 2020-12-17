@@ -62,7 +62,7 @@ StandardButton.defaultProps = {
 
 // Button with routing, takes a link string
 export const LinkButton = ({
-  name, text, dark, dense, type, linkTo, testName,
+  name, text, dark, dense, linkTo, testName,
 }) => {
   const classes = useStyles();
   const cname = dark ? classes.dark : classes.light;
@@ -72,7 +72,6 @@ export const LinkButton = ({
       name={name}
       className={`${cname} ${noMargin}`}
       component={RouterLink}
-      type={type}
       to={linkTo}
       data-cy={testName}
     >
@@ -85,12 +84,10 @@ LinkButton.propTypes = {
   dense: PropTypes.bool,
   name: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
-  type: PropTypes.string,
   linkTo: PropTypes.string.isRequired,
   testName: PropTypes.string.isRequired,
 };
 LinkButton.defaultProps = {
   dark: false,
-  type: 'button',
   dense: false,
 };

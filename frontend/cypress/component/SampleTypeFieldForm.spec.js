@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 import React from 'react';
-import { mount, unmount } from 'cypress-react-unit-test';
+import { mount } from 'cypress-react-unit-test';
 import { FieldLabels, SampleTypeField } from '../../src/components/sampleTypes/SampleTypeFieldForm';
 
 describe('FieldLabels', () => {
@@ -46,10 +46,6 @@ describe('SampleTypeFieldForm', () => {
     array: false,
     choices: '',
   };
-
-  afterEach(() => {
-    unmount('@SampleTypeField');
-  });
 
   it('has field inputs container', () => {
     const testFieldType = {
