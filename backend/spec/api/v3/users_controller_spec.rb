@@ -249,19 +249,19 @@ RSpec.describe Api::V3::UsersController, type: :request do
         user: {
           "name": "  abc  456  ",
           "email": "abc@def.com",
-          "phone": "123-446-7890"
+          "phone": "123-456-7890"
         }
       }
       post "/api/v3/users/#{@user_ids[0]}/update_info?token=#{@token_1[0]}", :params => params
       expect(response).to have_http_status 200
 
-      get "/api/v3/users/#{@user_ids[0]}/show_info?token=#{@token_1[0]}"
       # Check user
+      get "/api/v3/users/#{@user_ids[0]}/show_info?token=#{@token_1[0]}"
       resp = JSON.parse(response.body)
       user = resp["user"]
       expect(user["name"]).to eq "abc 456"
       expect(user["email"]).to eq "abc@def.com"
-      expect(user["phone"]).to eq "123-446-7890"
+      expect(user["phone"]).to eq "123-456-7890"
     end
 
     # update self info
@@ -275,15 +275,19 @@ RSpec.describe Api::V3::UsersController, type: :request do
       params = {
         user: {
           "name": "  abc  789  ",
+          "email": "abc@789.com"
         }
       }
       post "/api/v3/users/#{@user_ids[0]}/update_info?token=#{@token}", :params => params
       expect(response).to have_http_status 200
 
       # Check user
+      get "/api/v3/users/#{@user_ids[0]}/show_info?token=#{@token_1[0]}"
       resp = JSON.parse(response.body)
       user = resp["user"]
       expect(user["name"]).to eq "abc 789"
+      expect(user["email"]).to eq "abc@789.com"
+      expect(user["phone"]).to eq nil
     end
 
     ###
@@ -355,6 +359,5 @@ RSpec.describe Api::V3::UsersController, type: :request do
       user = resp["user"]
       expect(user["permission_ids"]).to eq ".1.2.6."
     end
-
   end
 end

@@ -32,8 +32,8 @@ class User < ActiveRecord::Base
     sql = "
       select u.id, u.name, u.login, u.permission_ids, p_email.value as 'email', p_phone.value as 'phone'
       from users u
-      left join parameters p_email on p_email.user_id = u.id and p_email.key = 'email'
-      left join parameters p_phone on p_phone.user_id = u.id and p_phone.key = 'phone'
+      left join user_parameters p_email on p_email.user_id = u.id and p_email.key = 'email'
+      left join user_parameters p_phone on p_phone.user_id = u.id and p_phone.key = 'phone'
       where u.id = #{id.to_i}
       limit 1
     "
@@ -107,8 +107,8 @@ class User < ActiveRecord::Base
     User.connection.execute sql
 
     # Update the user email and phone
-    Parameter.create_or_update(self.id, "email", email)
-    Parameter.create_or_update(self.id, "phone", phone)
+    UserParameter.set_user_parameter(self.id, "email", email)
+    UserParameter.set_user_parameter(self.id, "phone", phone)
 
     # Remove password_digest from return value
     return { user: self }, :ok

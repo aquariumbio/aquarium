@@ -189,7 +189,7 @@ module Api
       # Update a user's info.
       #
       # <b>API Call:</b>
-      #   POST: /api/v3/users/update_info
+      #   POST: /api/v3/users/<id>/update_info
       #   {
       #     token: <token>
       #     id: <user_id>,
@@ -275,6 +275,95 @@ module Api
         render json: response.to_json, status: status
       end
 
+      # Set agreement to true for <agreement> = /lab|aquarium/.
+      #
+      # <b>API Call:</b>
+      #   POST: /api/v3/users/<id>/agreements/<agreeement>
+      #   {
+      #     token: <token>,
+      #     id: <user_id>,
+      #     agreement: "lab" | "aquarium"
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS CODE: 200
+      #   {
+      #     user: {
+      #       id: <user_id>,
+      #       name: <name>,
+      #       login: <login>,
+      #       permission_ids: <permission_ids>
+      #     }
+      #   }
+      #
+      # @!method update_info(token, id)
+      # @param token [String] a token
+      # @param id [Int] the id of the user
+      def agreements
+        # Check for admin permissions <or> self
+        params_user_id = Input.int(params[:id])
+        status, response = check_token_for_permission(-1, params_user_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # get the user
+        user = User.find_id(params_user_id)
+        render json: { error: 'Invalid' }.to_json, status: :unauthorized and return if !user
+
+        # Update the agreement to true
+        UserParameter.set_user_parameter(user.id, params[:agreement], true)
+
+        render json: { user:  user }.to_json, status: :ok
+      end
+
+      # Set preferences for <preference> = /new_samples_private|lab_name/.
+      #
+      # <b>API Call:</b>
+      #   POST: /api/v3/users/<id>/preferences/<preference>
+      #   {
+      #     token: <token>,
+      #     id: <user_id>,
+      #     value: <value>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS CODE: 200
+      #   {
+      #     user: {
+      #       id: <user_id>,
+      #       name: <name>,
+      #       login: <login>,
+      #       permission_ids: <permission_ids>
+      #     }
+      #   }
+      #
+      # @!method update_info(token, id)
+      # @param token [String] a token
+      # @param id [Int] the id of the user
+      def preferences
+        # Check for admin permissions <or> self
+        params_user_id = Input.int(params[:id])
+        status, response = check_token_for_permission(-1, params_user_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # get the user
+        user = User.find_id(params_user_id)
+        render json: { error: 'Invalid' }.to_json, status: :unauthorized and return if !user
+
+        # Read inputs
+        preference = params[:preference]
+        value = case preference
+        when "new_samples_private"
+          Input.boolean(params[:value])
+        when "lab_name"
+          Input.text_field(params[:value])
+        end
+
+        # Update the user lab agreement to true
+        UserParameter.set_user_parameter(user.id, params[:preference], value)
+
+        render json: { user:  user }.to_json, status: :ok
+      end
+
       ###
       ### FOR USERS/PERMISSIONS PAGES
       ###
@@ -341,7 +430,7 @@ module Api
       # Set a specific permission for a specific user.
       #
       # <b>API Call:</b>
-      #   POST: /api/v3/users/permissions/update
+      #   POST: /api/v3/users/<id>/permissions/update
       #   {
       #     token: <token>,
       #     user_id: <user_id>,
