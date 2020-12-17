@@ -1,0 +1,4 @@
+MYSQL_DATABASE=aquarium_production
+MYSQL_USER=aquarium
+MYSQL_PASSWORD=aSecretAquarium
+MYSQL_ROOT_PASSWORD=aSecretAquarium

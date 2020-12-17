@@ -99,7 +99,7 @@ const SampleTypeDefinitionForm = () => {
   const fieldTypeList = fieldTypes.map((fieldType, index) => (
     <SampleTypeField
       // eslint-disable-next-line react/no-array-index-key
-      key={`${fieldType.id}_${index}`}
+      key={`${fieldType.id}-${index}`}
       fieldType={fieldType}
       sampleTypes={sampleTypes}
       index={index}
@@ -122,7 +122,7 @@ const SampleTypeDefinitionForm = () => {
   };
 
   return (
-    <Container maxWidth="xl" cy-data="field_form_container">
+    <Container maxWidth="xl" data-cy="sampe-type-definition-container">
       <LoadingBackdrop isLoading={isLoading} />
       <Typography variant="h1" align="center" className={classes.title}>
         Defining New Sample Type
@@ -130,7 +130,7 @@ const SampleTypeDefinitionForm = () => {
 
       <Typography align="right">* field is required</Typography>
 
-      <form name="sampe_type_definition_form" onSubmit={handleSubmit}>
+      <form name="sampe-type-definition-form" data-cy="sampe-type-definition-form" onSubmit={handleSubmit}>
         <Typography variant="h4" className={classes.inputName} display="inline">
           Name
         </Typography>
@@ -142,12 +142,16 @@ const SampleTypeDefinitionForm = () => {
           name="name"
           fullWidth
           value={sampleTypeName}
-          id="sample_type_name_input"
+          id="sample-type-name-input"
           onChange={(event) => setSampleTypeName(event.target.value)}
           variant="outlined"
           autoFocus
           required
           type="string"
+          inputProps={{
+            'aria-label': 'sample-type-name-input',
+            'data-cy': 'sample-type-name-input',
+          }}
           // TODO: Error HANDLING -- ONLY SHOW HELPER TEXT ON ERROR
         />
 
@@ -162,11 +166,15 @@ const SampleTypeDefinitionForm = () => {
           name="description"
           fullWidth
           value={sampleTypeDescription}
-          id="sample_type_description_input"
+          id="sample-type-description-input"
           onChange={(event) => setSampleTypeDescription(event.target.value)}
           variant="outlined"
           type="string"
           required
+          inputProps={{
+            'aria-label': 'sample-type-description-input',
+            'data-cy': 'sample-type-description-input',
+          }}
           // TODO: Error HANDLING -- ONLY SHOW HELPER TEXT ON ERROR
         />
 
@@ -175,7 +183,7 @@ const SampleTypeDefinitionForm = () => {
             container
             spacing={1}
             style={{ marginTop: '1rem' }}
-            cy-data="field_form_container"
+            data-cy="fields-container"
           >
             <FieldLabels />
             {fieldTypeList}
@@ -183,15 +191,15 @@ const SampleTypeDefinitionForm = () => {
         )}
 
         <StandardButton
-          name="add_new_field"
-          testName="add_new_field"
+          name="add-new-field"
+          testName="add-new-field"
           handleClick={handleAddFieldClick}
           text="Add New Field"
         />
 
         <StandardButton
           name="save"
-          testName="save_sample_type"
+          testName="save-sample-type"
           handleClick={handleSubmit}
           text="Save"
           type="submit"

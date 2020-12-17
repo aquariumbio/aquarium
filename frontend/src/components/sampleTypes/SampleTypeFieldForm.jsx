@@ -28,60 +28,64 @@ export const FieldLabels = () => {
   const classes = useStyles();
   return (
     // wrap in fragment to maintain grid layout when rendered in parent
-    <>
-      <Grid item lg={2} cy-data="field_name_label_div">
+    <Grid
+      container
+      spacing={1}
+      style={{ marginTop: '1rem' }}
+      data-cy="field-labels"
+    >
+      <Grid item lg={2} data-cy="field-name-label-div">
         <Typography variant="h4" className={classes.label}>
           Field Name
         </Typography>
       </Grid>
 
-      <Grid item lg={2} cy-data="field_type_label_div">
+      <Grid item lg={2} data-cy="field-type-label-div">
         <Typography variant="h4" className={classes.label}>
           Type
         </Typography>
       </Grid>
 
-      <Grid item lg={1} cy-data="field_is_required_label_div">
+      <Grid item lg={1} data-cy="field-is-required-label-div">
         <Typography variant="h4" className={classes.label}>
           Required
         </Typography>
       </Grid>
 
-      <Grid item lg={1} cy-data="field_is_array_label_div">
+      <Grid item lg={1} data-cy="field-is-array-label-div">
         <Typography variant="h4" className={classes.label}>
           Array
         </Typography>
       </Grid>
 
-      <Grid item lg={2} cy-data="field_sample_options_label_div">
+      <Grid item lg={2} data-cy="field-sample-options-label-div">
         <Typography variant="h4" className={classes.label}>
           Sample Options (If type=&lsquo;sample&lsquo;)
         </Typography>
       </Grid>
 
-      <Grid item lg={3} cy-data="field_choices_label_div">
+      <Grid item lg={3} data-cy="field-choices-label-div">
         <Typography variant="h4" className={classes.label}>
           Choices
         </Typography>
       </Grid>
 
-      <Grid item lg={1} cy-data="field_choices_label_div" />
-    </>
+      <Grid item lg={1} data-cy="field-choices-label-div" />
+    </Grid>
   );
 };
 
 const NameInput = ({ name, handleChange }) => (
-  <Grid item lg={2} cy-data="field_name_label_div">
+  <Grid item lg={2} data-cy="field-name-input-div">
     <TextField
       name="name"
       fullWidth
       value={name}
-      id="field_name"
       onChange={handleChange}
       variant="outlined"
       inputProps={{
-        'aria-label': 'field_name',
-        'cy-data': 'field_name_input',
+        'aria-label': 'field-name',
+        'data-cy': 'field-name-input',
       }}
     />
   </Grid>
@@ -92,39 +96,42 @@ NameInput.propTypes = {
 };
 
 const SelectType = ({ handleChange, ftype }) => (
-  <Grid item lg={2}>
+  <Grid item lg={2} data-cy="ftype-select-div">
     <Select
       name="ftype"
-      labelId="type_select_label"
+      labelId="type-select-label"
       variant="outlined"
-      id="field_type_select"
       value={ftype}
       onChange={handleChange}
       displayEmpty
-      inputProps={{ 'aria-label': 'ftype' }}
+      data-cy="ftype-select" // Clickable DOM element
+      inputProps={{
+        'aria-label': 'ftype',
+        'data-cy': 'ftype-input', // DOM element with value
+      }}
       MenuProps={{
-        // open below
+        // open menu below
         anchorOrigin: {
           vertical: 'bottom',
           horizontal: 'left',
         },
         getContentAnchorEl: null,
       }}
-      cy-data="field_type_select"
+
     >
-      <MenuItem value="" name="select_none" disabled>
+      <MenuItem value="" name="select-none" disabled>
         {' Choose one '}
       </MenuItem>
-      <MenuItem value="string" name="select_string">
+      <MenuItem value="string" name="select-string">
         string
       </MenuItem>
-      <MenuItem value="number" name="select_number">
+      <MenuItem value="number" name="select-number">
         number
       </MenuItem>
-      <MenuItem value="url" name="select_url">
+      <MenuItem value="url" name="select-url">
         url
       </MenuItem>
-      <MenuItem value="sample" name="select_sample">
+      <MenuItem value="sample" name="select-sample">
         sample
       </MenuItem>
     </Select>
@@ -136,7 +143,7 @@ SelectType.propTypes = {
 };
 
 const RequiredCheckbox = ({ required, handleChange }) => (
-  <Grid item lg={1} cy-data="is_required_checkbox_div">
+  <Grid item lg={1} data-cy="required-checkbox-div">
     <Checkbox
       name="required"
       value={required}
@@ -144,7 +151,7 @@ const RequiredCheckbox = ({ required, handleChange }) => (
       color="primary"
       inputProps={{
         'aria-label': 'Required',
-        'cy-data': 'field_is_required_checkbox',
+        'data-cy': 'field-required-checkbox',
       }}
     />
   </Grid>
@@ -155,7 +162,7 @@ RequiredCheckbox.propTypes = {
 };
 
 const ArrayCheckbox = ({ array, handleChange }) => (
-  <Grid item lg={1} cy-data="is_array_checkbox_div">
+  <Grid item lg={1} data-cy="array-checkbox-div">
     <Checkbox
       name="array"
       value={array}
@@ -163,7 +170,7 @@ const ArrayCheckbox = ({ array, handleChange }) => (
       color="primary"
       inputProps={{
         'aria-label': 'Array',
-        'cy-data': 'field_is_array_checkbox',
+        'data-cy': 'array-checkbox',
       }}
     />
   </Grid>
@@ -181,7 +188,7 @@ const SampleOptionsInput = ({
   fieldType,
   index,
 }) => (
-  <Grid item lg={2} cy-data="samples_div">
+  <Grid item lg={2} data-cy="samples-div">
     {showSampleSelect ? (
       <>
         <AllowableFieldTypes
@@ -192,9 +199,9 @@ const SampleOptionsInput = ({
         />
         <div style={{ display: 'block' }}>
           <StandardButton
-            name="add_field_option_btn"
+            name="add-field-option-btn"
             variant="outlined"
-            testName="add_field_option_btn"
+            testName="add-field-option-btn"
             handleClick={() => handleAddClick(index)}
             text="Add option"
             dense
@@ -220,18 +227,18 @@ SampleOptionsInput.propTypes = {
 };
 
 const ChoicesInput = ({ handleChange, choices, showChoicesInput }) => (
-  <Grid item lg={3} cy-data="choices_input_div">
+  <Grid item lg={3} data-cy="choices-input-div">
     {showChoicesInput ? (
       <TextField
         name="choices"
-        id="field_choices"
+        id="field-choices"
         multiline
         fullWidth
         variant="outlined"
         helperText="Comma separated. Leave blank for unrestricted value."
         inputProps={{
           'aria-label': 'choices',
-          'cy-data': 'add_field_choices_input',
+          'data-cy': 'add-field-choices-input',
         }}
         value={choices}
         onChange={handleChange}
@@ -248,10 +255,10 @@ ChoicesInput.propTypes = {
 };
 
 const RemoveField = ({ handleRemoveFieldClick, index }) => (
-  <Grid item lg={1} cy-data="remove_field_btn_div">
+  <Grid item lg={1} data-cy="remove-field-btn-div">
     <IconButton
       onClick={handleRemoveFieldClick(index)}
-      cy-data="remove_field_btn"
+      data-cy="remove-field-btn"
     >
       <CloseIcon />
     </IconButton>
@@ -272,14 +279,14 @@ const AllowableFieldTypes = ({
           <Select
             style={{ width: 250 }}
             name={`allowableFieldType[${fieldTypeIndex}]`}
-            labelId="allowable_field_type_select_label"
+            labelId="allowable-field-type-select-label"
             variant="outlined"
-            id={`allowable_field_type_select[${index}]`}
+            id={`allowable-field-type-select[${index}]`}
             value={aft.name}
             onChange={handleChange}
             displayEmpty
             defaultValue=""
-            inputProps={{ 'aria-label': 'allowable_field_type_select_label' }}
+            inputProps={{ 'aria-label': 'allowable-field-type-select-label' }}
             MenuProps={{
               // open below
               anchorOrigin: {
@@ -288,16 +295,16 @@ const AllowableFieldTypes = ({
               },
               getContentAnchorEl: null,
             }}
-            cy-data="allowable_field_type_select_label"
+            data-cy="allowable-field-type-select-label"
           >
-            <MenuItem value="" name="select_none" disabled>
+            <MenuItem value="" name="select-none" disabled>
               {' Choose one '}
             </MenuItem>
             {sampleTypes.map((st) => (
               <MenuItem
                 key={st.id}
                 value={st.name}
-                name={`select_${st.name}`}
+                name={`select-${st.name}`}
               >
                 {st.name}
               </MenuItem>
@@ -363,7 +370,12 @@ export const SampleTypeField = ({
 
   return (
     // wrap in fragment to maintain grid layout when rendered in parent
-    <>
+    <Grid
+      container
+      spacing={1}
+      style={{ marginTop: '1rem' }}
+      data-cy="field-inputs"
+    >
       <NameInput name={fieldType.name} handleChange={handleChange} />
 
       <SelectType handleChange={handleChange} ftype={fieldType.ftype} />
@@ -394,7 +406,7 @@ export const SampleTypeField = ({
         handleRemoveFieldClick={handleRemoveFieldClick}
         index={index}
       />
-    </>
+    </Grid>
   );
 };
 

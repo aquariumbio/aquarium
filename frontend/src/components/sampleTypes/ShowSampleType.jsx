@@ -21,7 +21,7 @@ const ShowSampleType = ({ sampleType }) => {
   const classes = useStyles();
 
   return (
-    <Card name="sample_type_definition_card">
+    <Card name="sample_type_definition_card" data-cy="show-sample-type">
       <CardContent>
         <Typography variant="h6" component="h2">
           {sampleType.description}

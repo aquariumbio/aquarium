@@ -16,7 +16,7 @@ const LoadingBackdrop = React.forwardRef(({ isLoading }, ref) => {
   const classes = useStyles();
 
   return (
-    <Backdrop className={classes.backdrop} open={isLoading} ref={ref}>
+    <Backdrop className={classes.backdrop} open={isLoading} ref={ref} data-cy="ladoing-backdrop">
       <CircularProgress color="inherit" />
     </Backdrop>
   );

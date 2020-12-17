@@ -38,7 +38,7 @@ export const StandardButton = ({
       className={`${cname} ${noMargin}`}
       type={type}
       onClick={handleClick}
-      cy-data={testName}
+      data-cy={testName}
     >
       {text}
     </Button>
@@ -74,7 +74,7 @@ export const LinkButton = ({
       component={RouterLink}
       type={type}
       to={linkTo}
-      cy-data={testName}
+      data-cy={testName}
     >
       {text}
     </Button>

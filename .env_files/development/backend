@@ -1,0 +1,6 @@
+DB_HOST=db
+DB_PORT=3306
+DB_NAME=aquarium_development
+DB_PASSWORD=aSecretAquarium
+DB_USER=aquarium
+SESSION_TIMEOUT=15

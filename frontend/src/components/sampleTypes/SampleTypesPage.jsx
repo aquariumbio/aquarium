@@ -43,15 +43,14 @@ const SampleTypeDefinitions = () => {
     fetchData();
   }, []);
 
-  const pageRef = React.useRef();
   return (
     <>
       <LoadingBackdrop isLoading={isLoading} />
-      <Paper elevation={3} ref={pageRef}>
+      <Paper elevation={3}>
         {!isLoading && (
           <Grid container>
             {/* SIDE BAR */}
-            <Grid item lg={2} name="left_side_bar">
+            <Grid item lg={2} name="sample-types-side-bar" data-cy="sample-types-side-bar">
               <SideBar
                 setCurrentSampleType={setCurrentSampleType}
                 sampleTypes={sampleTypes}
@@ -59,12 +58,13 @@ const SampleTypeDefinitions = () => {
             </Grid>
 
             {/* MAIN CONTENT */}
-            <Grid item lg={10} name="right_main_container">
+            <Grid item lg={10} name="sample-types-main-container" data-cy="sample-types-main-container">
               <Toolbar className={classes.header}>
                 <Breadcrumbs
                   separator={<NavigateNextIcon fontSize="small" />}
                   aria-label="breadcrumb"
                   component="div"
+                  data-cy="page-title"
                 >
                   <Typography display="inline" variant="h6" component="h1">
                     Sample Type Defnitions

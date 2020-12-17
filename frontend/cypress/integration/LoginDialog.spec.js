@@ -19,7 +19,7 @@ describe('/login', () => {
   });
 
   it('requires valid username and password', () => {
-    cy.get('[data-test=username]').type('marikoa');
+    cy.get('[data-test=username]').type('marikotest ');
     cy.get('[data-test=password]').type('invalid');
     cy.get('form').contains('SIGN IN').click();
     cy.get('p').should('contain', 'Invalid login/password combination');
@@ -32,7 +32,7 @@ describe('/login', () => {
         expect(win.sessionStorage.token).to.be.undefined;
       });
 
-    cy.get('[data-test=username]').type('marikotest');
+    cy.get('[data-test=username]').type('marikotest ');
     cy.get('[data-test=password]').type('aquarium');
     cy.get('form').contains('SIGN IN').click();
     cy.url().should('eq', `${Cypress.env('baseUrl')}/`);

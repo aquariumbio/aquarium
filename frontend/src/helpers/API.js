@@ -102,64 +102,20 @@ const getTypeById = (id) => (
 );
 
 const sampleTypeCreate = (FormData) => {
-  console.log(FormData);
   axios
     .post('sample_types/create', {
       sample_type: FormData,
       token: currentSessionToken,
     })
     .then((response) => {
+      // TODO: return sucess for notification
       console.log(response);
     })
     .catch((error) => {
+      // TODO: return errors for notification
       console.log(error);
     });
 };
-/*
-### PERMISSIONS
-
-  get  api/v3/permissions
-
-### USER PERMISSIONS
-
-  GET  api/v3/users/permissions
-
-  POST api/v3/users/permissions/update
-
-### SAMPLE TYPES
-
-  GET  api/v3/sample_types
-
-  POST api/v3/sample_types/create
-
-  GET  api/v3/sample_types/:id
-
-  POST api/v3/sample_types/:id/update
-
-  POST api/v3/sample_types/:id/delete
-
-  const  = async () => {
-  await axios
-    .post('', null, {
-      params: {
-        login,
-        password,
-      },
-    })
-    .then((response) => {
-      const [status, data] = [response.status, response.data];
-
-      if (status === 200) {
-
-      }
-
-      if (status === 401) {
-
-      }
-    });
-  return ;
-};
-*/
 
 const API = {
   tokens: {

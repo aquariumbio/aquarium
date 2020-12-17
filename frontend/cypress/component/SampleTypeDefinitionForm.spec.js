@@ -11,19 +11,21 @@ describe('Sample Type Definition Form', () => {
 
     it('renders fields form container', () => {
       mount(<SampleTypeDefinitionForm />);
-      cy.get('[cy-data="field_form_container"]')
+      cy.get('[data-cy="sampe-type-definition-container"]')
         .should('be.visible')
         .within(() => {
+          cy.get('[data-cy="ladoing-backdrop"]').should('not.be.visible');
+          cy.get('[data-cy="sampe-type-definition-form"]');
           cy.contains('h1', 'Defining New Sample Type');
           cy.contains('p', '* field is required');
+
           cy.contains('h4', 'Name');
-          cy.get('input[id="sample_type_name_input"]');
+          cy.get('[data-cy="sample-type-name-input"]');
+
           cy.contains('h4', 'Description');
-          cy.get('input[id="sample_type_description_input"]');
-          cy.get('button[name="add_new_field"]');
-          cy.get('[cy-data="field_form_container"]')
-            .find('div[name="field_inputs"]')
-            .should('have.length', 1);
+          cy.get('[data-cy="sample-type-description-input"]');
+
+          cy.get('button[name="add-new-field"]');
         });
     });
 
@@ -31,7 +33,7 @@ describe('Sample Type Definition Form', () => {
       it('accepts user input', () => {
         const userInput = 'Boop';
         mount(<SampleTypeDefinitionForm />);
-        cy.get('input[id="sample_type_name_input"]')
+        cy.get('[data-cy="sample-type-name-input"]')
           .type(userInput)
           .should('have.value', userInput);
       });
@@ -41,7 +43,7 @@ describe('Sample Type Definition Form', () => {
       it('accepts user input', () => {
         const userInput = 'Boop';
         mount(<SampleTypeDefinitionForm />);
-        cy.get('input[id="sample_type_description_input"]')
+        cy.get('input[id="sample-type-description-input"]')
           .type(userInput)
           .should('have.value', userInput);
       });
@@ -50,16 +52,16 @@ describe('Sample Type Definition Form', () => {
     context('add new field button', () => {
       it('adds field onclick', () => {
         mount(<SampleTypeDefinitionForm />);
-        cy.get('[cy-data="field_form_container"]')
-          .find('div[name="field_inputs"]')
-          .should('have.length', 1);
 
-        cy.get('button[name="add_new_field"]')
-          .click();
-
-        cy.get('[cy-data="field_form_container"]')
-          .find('div[name="field_inputs"]')
-          .should('have.length', 2);
+        cy.get('[data-cy="fields-container"]')
+          .get('[data-cy="field-inputs"]')
+          .its('length')
+          .then((size) => {
+            cy.get('button[name="add-new-field"]')
+              .click();
+            cy.get('[data-cy="field-inputs"]')
+              .its('length').should('be.greaterThan', size);
+          });
       });
     });
   });
