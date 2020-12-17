@@ -72,6 +72,19 @@ describe('SampleTypeFieldForm', () => {
     cy.get('[data-cy="field-inputs"]').should('exist');
   });
 
+  it('has delete button', () => {
+    mount(
+      <SampleTypeField
+        fieldType={fieldType}
+        index={0}
+        updateParentState={cy.spy().as('updateParentState')}
+        handleRemoveFieldClick={cy.spy().as('handleRemoveFieldClick')}
+      />,
+    );
+    cy.get('[data-cy="remove-field-btn-div"]');
+    cy.get('[data-cy="remove-field-btn"]');
+  });
+
   describe('Name Input', () => {
     context('field type is an empty string/blank', () => {
       it('has empty input', () => {
