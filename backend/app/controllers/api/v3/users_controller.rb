@@ -296,7 +296,7 @@ module Api
       #     }
       #   }
       #
-      # @!method update_info(token, id)
+      # @!method agreements(token, id)
       # @param token [String] a token
       # @param id [Int] the id of the user
       def agreements
@@ -310,7 +310,7 @@ module Api
         render json: { error: 'Invalid' }.to_json, status: :unauthorized and return if !user
 
         # Update the agreement to true
-        UserParameter.set_user_parameter(user.id, params[:agreement], true)
+        UserProfile.set_user_profile(user.id, params[:agreement], true)
 
         render json: { user:  user }.to_json, status: :ok
       end
@@ -336,7 +336,7 @@ module Api
       #     }
       #   }
       #
-      # @!method update_info(token, id)
+      # @!method preferences(token, id)
       # @param token [String] a token
       # @param id [Int] the id of the user
       def preferences
@@ -359,7 +359,7 @@ module Api
         end
 
         # Update the user lab agreement to true
-        UserParameter.set_user_parameter(user.id, params[:preference], value)
+        UserProfile.set_user_profile(user.id, params[:preference], value)
 
         render json: { user:  user }.to_json, status: :ok
       end

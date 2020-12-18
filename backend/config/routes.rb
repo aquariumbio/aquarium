@@ -26,7 +26,7 @@ Rails.application.routes.draw do
   # Permissions
   get  'api/v3/permissions',                      to: 'api/v3/permissions#index'
 
-  # User permissions
+  # User permissions (for possible "permissions" hamburger menu - currently unused)
   get  'api/v3/users/permissions',                to: 'api/v3/users#permissions'
   post 'api/v3/users/permissions/update',         to: 'api/v3/users#update_permission'
 
@@ -39,6 +39,31 @@ Rails.application.routes.draw do
   post 'api/v3/users/:id/update_permissions',      to: 'api/v3/users#update_permissions'
   post 'api/v3/users/:id/agreements/:agreement',   to: 'api/v3/users#agreements', constraints: { agreement: /lab|aquarium/ }
   post 'api/v3/users/:id/preferences/:preference', to: 'api/v3/users#preferences', constraints: { preference: /new_samples_private|lab_name/ }
+
+  # Groups
+  get  'api/v3/groups',                           to: 'api/v3/groups#index'
+  post 'api/v3/groups/create',                    to: 'api/v3/groups#create'
+  get  'api/v3/groups/:id',                       to: 'api/v3/groups#show'
+  post 'api/v3/groups/:id/update',                to: 'api/v3/groups#update'
+  post 'api/v3/groups/:id/delete',                to: 'api/v3/groups#delete'
+
+  # Announcements
+  get  'api/v3/announcements',                     to: 'api/v3/announcements#index'
+  post 'api/v3/announcements/create',              to: 'api/v3/announcements#create'
+  get  'api/v3/announcements/:id',                 to: 'api/v3/announcements#show'
+  post 'api/v3/announcements/:id/update',          to: 'api/v3/announcements#update'
+  post 'api/v3/announcements/:id/delete',          to: 'api/v3/announcements#delete'
+
+  # Budgets
+
+  # Invoices
+
+  # Parameters
+  get  'api/v3/parameters',                        to: 'api/v3/parameters#index'
+  post 'api/v3/parameters/create',                 to: 'api/v3/parameters#create'
+  get  'api/v3/parameters/:id',                    to: 'api/v3/parameters#show'
+  post 'api/v3/parameters/:id/update',             to: 'api/v3/parameters#update'
+  post 'api/v3/parameters/:id/delete',             to: 'api/v3/parameters#delete'
 
   # Sample Types
   get  'api/v3/sample_types',                     to: 'api/v3/sample_types#index'
@@ -55,27 +80,7 @@ Rails.application.routes.draw do
   post 'api/v3/object_types/:id/update',          to: 'api/v3/object_types#update'
   post 'api/v3/object_types/:id/delete',          to: 'api/v3/object_types#delete'
 
-  # Announcements
-  get  'api/v3/announcements',                     to: 'api/v3/announcements#index'
-  post 'api/v3/announcements/create',              to: 'api/v3/announcements#create'
-  get  'api/v3/announcements/:id',                 to: 'api/v3/announcements#show'
-  post 'api/v3/announcements/:id/update',          to: 'api/v3/announcements#update'
-  post 'api/v3/announcements/:id/delete',          to: 'api/v3/announcements#delete'
-
-  # Parameters
-  get  'api/v3/parameters',                        to: 'api/v3/parameters#index'
-  post 'api/v3/parameters/create',                 to: 'api/v3/parameters#create'
-  get  'api/v3/parameters/:id',                    to: 'api/v3/parameters#show'
-  post 'api/v3/parameters/:id/update',             to: 'api/v3/parameters#update'
-  post 'api/v3/parameters/:id/delete',             to: 'api/v3/parameters#delete'
-
-
-  # Groups
-  get  'api/v3/groups',                           to: 'api/v3/groups#index'
-  post 'api/v3/groups/create',                    to: 'api/v3/groups#create'
-  get  'api/v3/groups/:id',                       to: 'api/v3/groups#show'
-  post 'api/v3/groups/:id/update',                to: 'api/v3/groups#update'
-  post 'api/v3/groups/:id/delete',                to: 'api/v3/groups#delete'
+  # Location Wizards
 
 end
 
