@@ -27,8 +27,8 @@ RSpec.describe Api::V3::AnnouncementsController, type: :request do
 
     # CRUD tests
 
-    # Create announcement with handler = collection
-    it "create_announcement_collection" do
+    # Create announcement
+    it "create_announcement" do
       # announcement parameters
       params = {
         announcement: {

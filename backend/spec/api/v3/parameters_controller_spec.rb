@@ -30,8 +30,8 @@ RSpec.describe Api::V3::ParametersController, type: :request do
 
     # CRUD tests
 
-    # Create parameter with handler = collection
-    it "create_parameter_collection" do
+    # Create parameter
+    it "create_parameter" do
       # parameter parameters
       params = {
         parameter: {
