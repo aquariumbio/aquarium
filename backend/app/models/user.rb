@@ -29,14 +29,7 @@ class User < ActiveRecord::Base
   # @param id [Int] the id of the user
   # @return the user
   def self.find_id_show_info(id)
-    sql = "
-      select u.id, u.name, u.login, u.permission_ids, p_email.value as 'email', p_phone.value as 'phone'
-      from users u
-      left join user_profiles p_email on p_email.user_id = u.id and p_email.key = 'email'
-      left join user_profiles p_phone on p_phone.user_id = u.id and p_phone.key = 'phone'
-      where u.id = #{id.to_i}
-      limit 1
-    "
+    sql = "select * from view_users u where u.id = #{id.to_i} limit 1"
     (User.find_by_sql sql)[0]
   end
 
@@ -83,7 +76,8 @@ class User < ActiveRecord::Base
     # Set the permission_ids and save the user
     user_new.save
 
-    return user_new, false
+    # Redundant second call to the DB to scrub the info but not a huge deal
+    return User.find_id_show_info(user_new.id), false
   end
 
   # Update a user's info (information tab)
