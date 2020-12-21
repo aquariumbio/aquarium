@@ -64,5 +64,16 @@ describe('Sample Type Definition Form', () => {
           });
       });
     });
+
+    context.only('all(back) button', () => {
+      it('changes route onclick', () => {
+        mount(<SampleTypeDefinitionForm />);
+        cy.url().should('include', '/sample_types/').and('include', '/edit');
+        cy.get('[data-cy="back"]')
+          .click().then(() => {
+            cy.url().should('not.include', '/edit');
+          });
+      });
+    });
   });
 });
