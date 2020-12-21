@@ -1,13 +1,15 @@
+/* eslint-disable no-unused-vars */
 import { makeStyles } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
+import PropTypes from 'prop-types';
 import { FieldLabels, SampleTypeField } from './SampleTypeFieldForm';
 import API from '../../helpers/API';
 import LoadingBackdrop from '../shared/LoadingBackdrop';
-import { StandardButton } from '../shared/Buttons';
+import { StandardButton, LinkButton } from '../shared/Buttons';
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -42,12 +44,15 @@ const newFieldType = {
   allowable_field_types: [],
 };
 
-const SampleTypeDefinitionForm = () => {
+const SampleTypeDefinitionForm = ({ match }) => {
   const classes = useStyles();
   const [sampleTypeName, setSampleTypeName] = useState(initialSampleType.name);
   const [sampleTypeDescription, setSampleTypeDescription] = useState(initialSampleType.description);
   const [fieldTypes, setFieldTypes] = useState([newFieldType]);
   const [sampleTypes, setSampleTypes] = useState([]);
+  const [objectTypes, setObjectTypes] = useState([]);
+  const [inventory, setInventory] = useState(0);
+  const [id, setId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   /*  Get sample types top populate sample options menu
@@ -64,6 +69,21 @@ const SampleTypeDefinitionForm = () => {
     };
 
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchDataById = async () => {
+      const data = await API.samples.getTypeById(match.params.id);
+      setFieldTypes(data.field_types);
+      setSampleTypeDescription(data.description);
+      setSampleTypeName(data.name);
+      setObjectTypes(data.object_types);
+      setInventory(data.inventory);
+      setId(data.id);
+      setIsLoading(false);
+    };
+
+    match.params.id ? fetchDataById() : '';
   }, []);
 
   // Handle click add field button --> add new field type to end of current field types array
@@ -118,15 +138,30 @@ const SampleTypeDefinitionForm = () => {
       description: sampleTypeDescription,
       field_types: fieldTypes,
     };
-    API.samples.create(formData);
+    // change submit action based on form type
+    id ? API.samples.update(formData, id) : API.samples.create(formData);
   };
 
   return (
     <Container maxWidth="xl" data-cy="sampe-type-definition-container">
       <LoadingBackdrop isLoading={isLoading} />
-      <Typography variant="h1" align="center" className={classes.title}>
-        Defining New Sample Type
-      </Typography>
+      {match.url === '/sample_types/new' && (
+        <Typography variant="h1" align="center" className={classes.title}>
+          Defining New Sample Type
+        </Typography>
+      )}
+
+      {id && (
+        <Typography variant="h1" align="center" className={classes.title}>
+          <u>{sampleTypeName}</u> Type Definition
+        </Typography>
+      )}
+
+      {id && (
+        <Typography variant="h2" align="center" className={classes.title}>
+          Editing Sample Type {id}
+        </Typography>
+      )}
 
       <Typography align="right">* field is required</Typography>
 
@@ -152,7 +187,6 @@ const SampleTypeDefinitionForm = () => {
             'aria-label': 'sample-type-name-input',
             'data-cy': 'sample-type-name-input',
           }}
-          // TODO: Error HANDLING -- ONLY SHOW HELPER TEXT ON ERROR
         />
 
         <Typography variant="h4" className={classes.inputName} display="inline">
@@ -175,7 +209,6 @@ const SampleTypeDefinitionForm = () => {
             'aria-label': 'sample-type-description-input',
             'data-cy': 'sample-type-description-input',
           }}
-          // TODO: Error HANDLING -- ONLY SHOW HELPER TEXT ON ERROR
         />
 
         {!!fieldTypeList.length && (
@@ -205,9 +238,25 @@ const SampleTypeDefinitionForm = () => {
           type="submit"
           dark
         />
+
+        <LinkButton
+          name="back"
+          testName="back"
+          text="All"
+          linkTo="/sample_types"
+        />
       </form>
     </Container>
   );
+};
+
+SampleTypeDefinitionForm.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.objectOf(PropTypes.string),
+    path: PropTypes.string,
+    url: PropTypes.string,
+    isExact: PropTypes.bool,
+  }).isRequired,
 };
 
 export default SampleTypeDefinitionForm;
