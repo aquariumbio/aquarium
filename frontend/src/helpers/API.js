@@ -44,8 +44,6 @@ const signIn = async (login, password, setLoginError) => {
     })
     .then((response) => {
       const [status, data] = [response.status, response.data];
-      // eslint-disable-next-line no-debugger
-      debugger;
 
       if (status === 200 && data.token) {
         console.log('login success');

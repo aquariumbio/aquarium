@@ -146,7 +146,7 @@ const RequiredCheckbox = ({ required, handleChange }) => (
   <Grid item lg={1} data-cy="required-checkbox-div">
     <Checkbox
       name="required"
-      value={required}
+      checked={required}
       onClick={handleChange}
       color="primary"
       inputProps={{
@@ -165,7 +165,7 @@ const ArrayCheckbox = ({ array, handleChange }) => (
   <Grid item lg={1} data-cy="array-checkbox-div">
     <Checkbox
       name="array"
-      value={array}
+      checked={array}
       onClick={handleChange}
       color="primary"
       inputProps={{
@@ -344,7 +344,7 @@ export const SampleTypeField = ({
   // If the input is a checkbox we need to use the checked attribute as our value
   const handleChange = (event) => {
     const { name } = event.target;
-    const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
+    const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value.toString();
     const fieldTypeObj = { ...fieldType };
     fieldTypeObj[name] = value;
     // updateParentState(name, value, index);
