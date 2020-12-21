@@ -1,5 +1,5 @@
 # typed: false
-class CreateViewUsers < ActiveRecord::Migration
+class CreateViewUsers < ActiveRecord::Migration[4.2]
 
   # View used to get extended user data (including parameters)
   def change

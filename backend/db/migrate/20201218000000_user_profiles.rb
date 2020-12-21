@@ -1,5 +1,5 @@
 # typed: false
-class UserProfiles < ActiveRecord::Migration
+class UserProfiles < ActiveRecord::Migration[4.2]
 
   def change
     # backup parameters table
