@@ -27,7 +27,9 @@ const validateToken = async () => {
       }
 
       // TODO: HANDLE SESSION TIMEOUT
-    });
+    })
+    .catch((error) => error);
+
   return validToken;
 };
 
@@ -42,8 +44,11 @@ const signIn = async (login, password, setLoginError) => {
     })
     .then((response) => {
       const [status, data] = [response.status, response.data];
+      // eslint-disable-next-line no-debugger
+      debugger;
 
       if (status === 200 && data.token) {
+        console.log('login success');
         setLoginError();
         sessionStorage.setItem('token', data.token);
         signInSuccessful = true;
@@ -52,7 +57,7 @@ const signIn = async (login, password, setLoginError) => {
     })
     .catch((error) => {
       setLoginError(error);
-      console.log(error);
+      console.log('Login error');
     });
   return signInSuccessful;
 };
@@ -102,6 +107,7 @@ const getTypeById = (id) => (
 );
 
 const sampleTypeCreate = (FormData) => {
+  console.log(FormData);
   axios
     .post('sample_types/create', {
       sample_type: FormData,
@@ -117,6 +123,37 @@ const sampleTypeCreate = (FormData) => {
     });
 };
 
+const sampleTypUpdate = (FormData, id) => {
+  console.log(FormData);
+  axios
+    .post(`/sample_types/${id}/update`, {
+      sample_type: FormData,
+      token: currentSessionToken,
+    })
+    .then((response) => {
+      // TODO: return sucess for notification
+      console.log(response);
+    })
+    .catch((error) => {
+      // TODO: return errors for notification
+      console.log(error);
+    });
+};
+
+const UNAUTHORIZED = 401;
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const { status } = error.response;
+    // eslint-disable-next-line no-debugger
+    debugger;
+    if (status === UNAUTHORIZED) {
+      sessionStorage.clear('token');
+    }
+    return Promise.reject(error);
+  },
+);
+
 const API = {
   tokens: {
     isAuthenticated: validateToken,
@@ -127,6 +164,7 @@ const API = {
     getTypes,
     getTypeById,
     create: sampleTypeCreate,
+    update: sampleTypUpdate,
   },
 };
 
