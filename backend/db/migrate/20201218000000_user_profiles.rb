@@ -21,6 +21,18 @@ class UserProfiles < ActiveRecord::Migration[4.2]
       or id in (select max(id) as 'id' from parameters_bak up where up.key = 'Lab Name' group by up.user_id)
     SQL
 
+    # set user_profiles.id as the primary key
+    execute <<-SQL
+      alter table user_profiles
+      add primary key(id);
+    SQL
+
+    # set user_profiles.id to auto-increment
+    execute <<-SQL
+      alter table user_profiles
+      modify column id int auto_increment;
+    SQL
+
     # change 'biofab' to 'lab_agreement'
     execute <<-SQL
       update user_profiles up
