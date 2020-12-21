@@ -11,6 +11,9 @@ import ObjectTypesList from './ObjectTypesList';
 import FieldTypesList from './FieldTypesList';
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    overflowX: 'auto',
+  },
   inventory: {
     fontSize: '0.875rem',
     marginBottom: theme.spacing(2),
@@ -21,7 +24,7 @@ const ShowSampleType = ({ sampleType }) => {
   const classes = useStyles();
 
   return (
-    <Card name="sample_type_definition_card" data-cy="show-sample-type">
+    <Card name="sample_type_definition_card" data-cy="show-sample-type" className={classes.root}>
       <CardContent>
         <Typography variant="h6" component="h2">
           {sampleType.description}
