@@ -1,13 +1,11 @@
 // TODO: ADD PROP-TYPES
 /* eslint-disable react/prop-types */
 import React from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { withRouter } from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
-import DropdownMenu from '../shared/DropdownMenu';
 import UserMenu from './UserMenu';
 import LeftHamburgerMenu from './LeftHamburgerMenu';
 
@@ -69,8 +67,6 @@ const useStyles = makeStyles((theme) => ({
 const Header = (props) => {
   const { history } = props;
   const classes = useStyles();
-  const theme = useTheme();
-  const isMediumScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleButtonClick = (pageURL) => {
     history.push(pageURL);
@@ -91,33 +87,25 @@ const Header = (props) => {
           AQUARIUM
         </IconButton>
 
-        {isMediumScreen ? (
-          <div className={classes.headerOptions}>
+        <div className={classes.headerOptions}>
+          {mainNavItems.map((menuItem) => {
+            const { menuTitle, pageURL } = menuItem;
+            return (
+              <IconButton
+                key={menuTitle}
+                edge="start"
+                className={classes.menuButton}
+                color="inherit"
+                aria-label={menuItem}
+                onClick={() => handleButtonClick(pageURL)}
+              >
+                {menuTitle}
+              </IconButton>
 
-            <DropdownMenu className={classes.menuButton} menuItems={mainNavItems} />
-            <UserMenu />
-          </div>
-        ) : (
-          <div className={classes.headerOptions}>
-            {mainNavItems.map((menuItem) => {
-              const { menuTitle, pageURL } = menuItem;
-              return (
-                <IconButton
-                  key={menuTitle}
-                  edge="start"
-                  className={classes.menuButton}
-                  color="inherit"
-                  aria-label={menuItem}
-                  onClick={() => handleButtonClick(pageURL)}
-                >
-                  {menuTitle}
-                </IconButton>
-
-              );
-            })}
-            <UserMenu />
-          </div>
-        )}
+            );
+          })}
+          <UserMenu />
+        </div>
       </Toolbar>
     </AppBar>
   );
