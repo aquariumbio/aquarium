@@ -50,15 +50,13 @@ const SampleTypeDefinitions = () => {
         {!isLoading && (
           <Grid container>
             {/* SIDE BAR */}
-            <Grid item lg={2} name="sample-types-side-bar" data-cy="sample-types-side-bar">
-              <SideBar
-                setCurrentSampleType={setCurrentSampleType}
-                sampleTypes={sampleTypes}
-              />
-            </Grid>
+            <SideBar
+              setCurrentSampleType={setCurrentSampleType}
+              sampleTypes={sampleTypes}
+            />
 
             {/* MAIN CONTENT */}
-            <Grid item lg={10} name="sample-types-main-container" data-cy="sample-types-main-container">
+            <Grid item xs={10} name="sample-types-main-container" data-cy="sample-types-main-container" overflow="visible">
               <Toolbar className={classes.header}>
                 <Breadcrumbs
                   separator={<NavigateNextIcon fontSize="small" />}
