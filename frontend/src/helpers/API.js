@@ -122,10 +122,24 @@ const sampleTypeCreate = (FormData) => {
 };
 
 const sampleTypUpdate = (FormData, id) => {
-  console.log(FormData);
   axios
     .post(`/sample_types/${id}/update`, {
       sample_type: FormData,
+      token: currentSessionToken,
+    })
+    .then((response) => {
+      // TODO: return sucess for notification
+      console.log(response);
+    })
+    .catch((error) => {
+      // TODO: return errors for notification
+      console.log(error);
+    });
+};
+
+const sampleTypDelete = (id) => {
+  axios
+    .post(`/sample_types/${id}/delete`, {
       token: currentSessionToken,
     })
     .then((response) => {
@@ -146,7 +160,8 @@ axios.interceptors.response.use(
     // eslint-disable-next-line no-debugger
     debugger;
     if (status === UNAUTHORIZED) {
-      sessionStorage.clear('token');
+      // sessionStorage.clear('token');
+      signOut();
     }
     return Promise.reject(error);
   },
@@ -163,6 +178,7 @@ const API = {
     getTypeById,
     create: sampleTypeCreate,
     update: sampleTypUpdate,
+    delete: sampleTypDelete,
   },
 };
 

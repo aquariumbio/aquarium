@@ -12,7 +12,7 @@ import FieldTypesList from './FieldTypesList';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    overflowX: 'auto',
+    height: 'calc(100% - 64px)',
   },
   inventory: {
     fontSize: '0.875rem',

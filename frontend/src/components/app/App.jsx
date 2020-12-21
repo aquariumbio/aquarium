@@ -3,7 +3,7 @@
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import React from 'react';
 // eslint-disable-next-line object-curly-newline
-import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import AnnouncementsPage from '../announcements/AnnouncementsPage';
 import LoginDialog from '../auth/LoginDialog';
 import BudgetsPage from '../budgets/BudgetsPage';
@@ -29,9 +29,13 @@ import SampleTypeDefinitionForm from '../sampleTypes/SampeTypeDefinitionForm';
 import SampleTypesPage from '../sampleTypes/SampleTypesPage';
 import UserProfilePage from '../users/UserProfilePage';
 import UsersPage from '../users/UsersPage';
-import API from '../../helpers/API';
 
-const useStyles = makeStyles({});
+const useStyles = makeStyles(() => ({
+  root: {
+    height: '100vh',
+    overflow: 'scroll',
+  },
+}));
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -42,21 +46,13 @@ const theme = createMuiTheme({
 
 export default function App() {
   const classes = useStyles();
-  const location = useLocation();
 
   return (
     <ThemeProvider theme={theme}>
       <div name="app-container" className={classes.container} data-cy="app-container">
         { /* Users cannot interact with the app if they do not have a token */
-          (!API.tokens.isAuthenticated || !sessionStorage.getItem('token'))
-          && (
-          <Redirect
-            to={{
-              pathname: '/login',
-              state: { from: location },
-            }}
-          />
-          )
+          !sessionStorage.getItem('token')
+          && <Redirect to="/login" />
         }
         <Switch>
           <Route path="/login" render={(props) => <LoginDialog {...props} />} />

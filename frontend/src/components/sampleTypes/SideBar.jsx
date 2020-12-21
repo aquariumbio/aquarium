@@ -7,9 +7,20 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core';
 import API from '../../helpers/API';
 
+const useStyles = makeStyles(() => ({
+  root: {
+    height: '100%',
+    overflowY: 'scroll',
+  },
+}));
 const SideBar = ({ sampleTypes, setCurrentSampleType }) => {
+  // eslint-disable-next-line no-console
+  console.log(window.innerHeight);
+  const classes = useStyles();
+
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const fetchData = async (id) => {
@@ -20,10 +31,11 @@ const SideBar = ({ sampleTypes, setCurrentSampleType }) => {
   const handleListItemClick = (event, index, id) => {
     fetchData(id);
     setSelectedIndex(index);
+    window.scrollTo(0, 0);
   };
 
   return (
-    <Grid item xs={2} name="sample-types-side-bar" data-cy="sample-types-side-bar">
+    <Grid item xs={2} name="sample-types-side-bar" data-cy="sample-types-side-bar" className={classes.root}>
       <Card>
         <CardContent>
           <List component="nav" aria-label="sample types list">

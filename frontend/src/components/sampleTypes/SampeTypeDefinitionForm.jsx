@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
+import Alert from '@material-ui/lab/Alert';
 import { FieldLabels, SampleTypeField } from './SampleTypeFieldForm';
 import API from '../../helpers/API';
 import LoadingBackdrop from '../shared/LoadingBackdrop';
@@ -158,9 +159,13 @@ const SampleTypeDefinitionForm = ({ match }) => {
       )}
 
       {id && (
-        <Typography variant="h2" align="center" className={classes.title}>
-          Editing Sample Type {id}
-        </Typography>
+        <>
+          <Alert severity="info">Note: Changing a sample type can have far reaching effects! Edit with care.</Alert>
+
+          <Typography variant="h2" align="center" className={classes.title}>
+            Editing Sample Type {id}
+          </Typography>
+        </>
       )}
 
       <Typography align="right">* field is required</Typography>

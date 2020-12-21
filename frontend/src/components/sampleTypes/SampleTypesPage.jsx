@@ -1,6 +1,5 @@
 /* eslint-disable react/no-array-index-key */
 import { makeStyles } from '@material-ui/core';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
@@ -12,12 +11,15 @@ import API from '../../helpers/API';
 import SideBar from './SideBar';
 import LoadingBackdrop from '../shared/LoadingBackdrop';
 import ShowSampleType from './ShowSampleType';
-import { LinkButton } from '../shared/Buttons';
+import { LinkButton, StandardButton } from '../shared/Buttons';
 
 // Route: /sample_types
 // Linked in LeftHamburgeMenu
 
 const useStyles = makeStyles(() => ({
+  root: {
+    height: '100vh',
+  },
   header: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -32,6 +34,12 @@ const SampleTypeDefinitions = () => {
   const [currentSampleType, setCurrentSampleType] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
+  /*  Get sample types top populate sample options menu
+      We cannot use async directly in useEffect so we create an async function that we will call
+      from w/in useEffect.
+      Our async function gets and sets the sampleTypes.
+      We only want to fetch data when the component is mounted so we pass an empty array as the
+      second argument to useEffect  */
   useEffect(() => {
     const fetchData = async () => {
       const data = await API.samples.getTypes();
@@ -43,68 +51,71 @@ const SampleTypeDefinitions = () => {
     fetchData();
   }, []);
 
+  const handleDelete = async () => {
+    await API.samples.delete(currentSampleType.id);
+    window.location.reload();
+  };
+
   return (
     <>
       <LoadingBackdrop isLoading={isLoading} />
-      <Paper elevation={3}>
-        {!isLoading && (
-          <Grid container>
-            {/* SIDE BAR */}
-            <SideBar
-              setCurrentSampleType={setCurrentSampleType}
-              sampleTypes={sampleTypes}
-            />
+      {!isLoading && (
+        <Grid container className={classes.root}>
+          {/* SIDE BAR */}
+          <SideBar
+            setCurrentSampleType={setCurrentSampleType}
+            sampleTypes={sampleTypes}
+          />
 
-            {/* MAIN CONTENT */}
-            <Grid item xs={10} name="sample-types-main-container" data-cy="sample-types-main-container" overflow="visible">
-              <Toolbar className={classes.header}>
-                <Breadcrumbs
-                  separator={<NavigateNextIcon fontSize="small" />}
-                  aria-label="breadcrumb"
-                  component="div"
-                  data-cy="page-title"
-                >
-                  <Typography display="inline" variant="h6" component="h1">
-                    Sample Type Defnitions
-                  </Typography>
-                  <Typography display="inline" variant="h6" component="h1">
-                    {currentSampleType.name}
-                  </Typography>
-                </Breadcrumbs>
-                <div>
-                  <LinkButton
-                    name="Edit Sample Type"
-                    testName="edit_sample_type_btn"
-                    text="Edit"
-                    type="button"
-                    linkTo={`/sample_types/${currentSampleType.id}/edit`}
-                  />
+          {/* MAIN CONTENT */}
+          <Grid item xs={10} name="sample-types-main-container" data-cy="sample-types-main-container" overflow="visible">
+            <Toolbar className={classes.header}>
+              <Breadcrumbs
+                separator={<NavigateNextIcon fontSize="small" />}
+                aria-label="breadcrumb"
+                component="div"
+                data-cy="page-title"
+              >
+                <Typography display="inline" variant="h6" component="h1">
+                  Sample Type Defnitions
+                </Typography>
+                <Typography display="inline" variant="h6" component="h1">
+                  {currentSampleType.name}
+                </Typography>
+              </Breadcrumbs>
+              <div>
+                <LinkButton
+                  name="Edit Sample Type"
+                  testName="edit_sample_type_btn"
+                  text="Edit"
+                  type="button"
+                  linkTo={`/sample_types/${currentSampleType.id}/edit`}
+                />
 
-                  <LinkButton
-                    name="Delete Sample Type"
-                    testName="delete_sample_type_btn"
-                    text="Delete"
-                    type="button"
-                    linkTo={`/sample_types/${currentSampleType.id}/delete`}
-                  />
-                  <LinkButton
-                    name="New Sample Type"
-                    testName="new_sample_type_btn"
-                    text="New"
-                    dark
-                    type="button"
-                    linkTo="/sample_types/new"
-                  />
-                </div>
-              </Toolbar>
+                <StandardButton
+                  name="Delete Sample Type"
+                  testName="delete_sample_type_btn"
+                  text="Delete"
+                  type="button"
+                  handleClick={handleDelete}
+                />
+                <StandardButton
+                  name="New Sample Type"
+                  testName="new_sample_type_btn"
+                  text="New"
+                  dark
+                  type="button"
+                  linkTo="/sample_types/new"
+                />
+              </div>
+            </Toolbar>
 
-              <Divider />
+            <Divider />
 
-              <ShowSampleType sampleType={currentSampleType} />
-            </Grid>
+            <ShowSampleType sampleType={currentSampleType} />
           </Grid>
-        )}
-      </Paper>
+        </Grid>
+      )}
     </>
   );
 };
