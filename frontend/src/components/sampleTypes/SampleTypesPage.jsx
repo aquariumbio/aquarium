@@ -99,7 +99,7 @@ const SampleTypeDefinitions = () => {
                   type="button"
                   handleClick={handleDelete}
                 />
-                <StandardButton
+                <LinkButton
                   name="New Sample Type"
                   testName="new_sample_type_btn"
                   text="New"

@@ -17,8 +17,6 @@ const useStyles = makeStyles(() => ({
   },
 }));
 const SideBar = ({ sampleTypes, setCurrentSampleType }) => {
-  // eslint-disable-next-line no-console
-  console.log(window.innerHeight);
   const classes = useStyles();
 
   const [selectedIndex, setSelectedIndex] = useState(0);

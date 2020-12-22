@@ -340,19 +340,19 @@ export const SampleTypeField = ({
     showChoicesInput = fieldType.ftype === 'string' || fieldType.ftype === 'number';
   });
 
-  // Handle input change: Pass the name and value to the parent callback.
-  // If the input is a checkbox we need to use the checked attribute as our value
+  // Handle input change: Pass the name and value to the parent function from props.
+  // If the input is a checkbox we need to use the checked attribute as our value.
+  // Trim our values to ensure strings don't have leading and trailing white space.
   const handleChange = (event) => {
     const { name } = event.target;
-    const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value.toString();
+    const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value.trim();
     const fieldTypeObj = { ...fieldType };
     fieldTypeObj[name] = value;
-    // updateParentState(name, value, index);
     updateParentState(fieldTypeObj, index);
   };
 
-  // Fields are not required on sample types so a user should be able add an empty field
-  // But if any of the field inputs are not empty or null we want to set some requirements
+  /*  Fields are not required on sample types so a user should be able add an empty field
+      But if any of the field inputs are not empty or null we want to set some requirements */
   // eslint-disable-next-line no-unused-vars
   const fieldRequired = () => {
     const emptyFieldType = {

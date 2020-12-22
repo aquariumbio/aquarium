@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import Alert from '@material-ui/lab/Alert';
+import Divider from '@material-ui/core/Divider';
 import { FieldLabels, SampleTypeField } from './SampleTypeFieldForm';
 import API from '../../helpers/API';
 import LoadingBackdrop from '../shared/LoadingBackdrop';
@@ -55,6 +56,7 @@ const SampleTypeDefinitionForm = ({ match }) => {
   const [inventory, setInventory] = useState(0);
   const [id, setId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [disableSubmit, setDisableSubmit] = useState(false);
 
   /*  Get sample types top populate sample options menu
       We cannot use async directly in useEffect so we create an async function that we will call
@@ -87,6 +89,11 @@ const SampleTypeDefinitionForm = ({ match }) => {
     match.params.id ? fetchDataById() : '';
   }, []);
 
+  // Update allowSubmit state if name and Description change
+  useEffect(() => {
+    setDisableSubmit(!(!!sampleTypeName || !!sampleTypeDescription));
+  });
+
   // Handle click add field button --> add new field type to end of current field types array
   const handleAddFieldClick = () => {
     setFieldTypes([...fieldTypes, newFieldType]);
@@ -115,20 +122,6 @@ const SampleTypeDefinitionForm = ({ match }) => {
     list[index] = value;
     setFieldTypes(list);
   };
-
-  // create array of field components
-  const fieldTypeList = fieldTypes.map((fieldType, index) => (
-    <SampleTypeField
-      // eslint-disable-next-line react/no-array-index-key
-      key={`${fieldType.id}-${index}`}
-      fieldType={fieldType}
-      sampleTypes={sampleTypes}
-      index={index}
-      updateParentState={handleFieldInputChange}
-      handleRemoveFieldClick={() => handleRemoveFieldClick}
-      handleAddAllowableFieldClick={handleAddAllowableFieldClick}
-    />
-  ));
 
   // Submit form with all data
   const handleSubmit = (event) => {
@@ -216,7 +209,7 @@ const SampleTypeDefinitionForm = ({ match }) => {
           }}
         />
 
-        {!!fieldTypeList.length && (
+        {!!fieldTypes.length && (
           <Grid
             container
             spacing={1}
@@ -224,7 +217,30 @@ const SampleTypeDefinitionForm = ({ match }) => {
             data-cy="fields-container"
           >
             <FieldLabels />
-            {fieldTypeList}
+            { /* create array of field components */
+              fieldTypes.map((fieldType, index) => (
+                // React.Fragment instead of the shorthand <></> so we can use a key
+                <React.Fragment key={Math.random().toString(36).substr(7)}>
+                  <SampleTypeField
+                    // Composite key of name & random string b/c we allow multiple selections
+                    key={`${fieldType.name}-${Math.random().toString(36).substr(7)}`}
+                    fieldType={fieldType}
+                    sampleTypes={sampleTypes}
+                    index={index}
+                    updateParentState={handleFieldInputChange}
+                    handleRemoveFieldClick={() => handleRemoveFieldClick}
+                    handleAddAllowableFieldClick={handleAddAllowableFieldClick}
+                  />
+                  {/* Add divider below all but last fieldType */
+                    index !== fieldTypes.length - 1 ? (
+                      <Grid item xs={12}>
+                        <Divider />
+                      </Grid>
+                    ) : <></>
+                  }
+                </React.Fragment>
+              ))
+            }
           </Grid>
         )}
 
@@ -233,7 +249,9 @@ const SampleTypeDefinitionForm = ({ match }) => {
           testName="add-new-field"
           handleClick={handleAddFieldClick}
           text="Add New Field"
+          dark
         />
+        <Divider />
 
         <StandardButton
           name="save"
@@ -241,6 +259,7 @@ const SampleTypeDefinitionForm = ({ match }) => {
           handleClick={handleSubmit}
           text="Save"
           type="submit"
+          disabled={disableSubmit}
           dark
         />
 
