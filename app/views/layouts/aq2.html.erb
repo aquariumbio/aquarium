@@ -98,7 +98,7 @@
              ng-controller="<%= yield :controller %>"
              id="<%= yield :controller %>">
       <% else %>
-        <div layout='row' class="<%= yield :class %>">
+        <div layout='row' class="<%= yield :class %>" <%= "style=overflow-y:scroll" if @scroll %>>
       <% end %>
 
       <%= yield %>
