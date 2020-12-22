@@ -6,15 +6,19 @@ import { Link as RouterLink } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   dark: {
-    backgroundColor: '#065683',
-    color: 'white',
+    backgroundColor: theme.palette.primary.main,
+    color: 'rgb(255,255,255)',
     margin: theme.spacing(2),
     boxShadow: '0 2px 5px 0 rgba(0,0,0,.26)',
+    '&:disabled': {
+      backgroundColor: 'rgb(255,255,255)',
+      color: 'rgba(0, 0, 0, 0.26)',
+    },
   },
 
   light: {
-    backgroundColor: 'white',
-    color: '#065683',
+    backgroundColor: 'rgb(255, 255, 255)',
+    color: theme.palette.primary.main,
     margin: theme.spacing(2),
     boxShadow: '0 2px 5px 0 rgba(0,0,0,.26)',
   },

@@ -8,10 +8,12 @@ import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import Alert from '@material-ui/lab/Alert';
 import Divider from '@material-ui/core/Divider';
-import { FieldLabels, SampleTypeField } from './SampleTypeFieldForm';
+import SampleTypeFieldForm from './fields/SampleTypeFieldForm';
+import FieldLabels from './fields/FieldLabels';
 import API from '../../helpers/API';
 import LoadingBackdrop from '../shared/LoadingBackdrop';
 import { StandardButton, LinkButton } from '../shared/Buttons';
+import utils from '../../helpers/utils';
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -220,10 +222,10 @@ const SampleTypeDefinitionForm = ({ match }) => {
             { /* create array of field components */
               fieldTypes.map((fieldType, index) => (
                 // React.Fragment instead of the shorthand <></> so we can use a key
-                <React.Fragment key={Math.random().toString(36).substr(7)}>
-                  <SampleTypeField
+                <React.Fragment key={utils.randString()}>
+                  <SampleTypeFieldForm
                     // Composite key of name & random string b/c we allow multiple selections
-                    key={`${fieldType.name}-${Math.random().toString(36).substr(7)}`}
+                    key={`${fieldType.name}-${utils.randString()}`}
                     fieldType={fieldType}
                     sampleTypes={sampleTypes}
                     index={index}

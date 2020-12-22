@@ -4,6 +4,7 @@ import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/sty
 import React from 'react';
 // eslint-disable-next-line object-curly-newline
 import { Redirect, Route, Switch } from 'react-router-dom';
+
 import AnnouncementsPage from '../announcements/AnnouncementsPage';
 import LoginDialog from '../auth/LoginDialog';
 import UserMenu from '../navigation/UserMenu';
@@ -39,7 +40,10 @@ const useStyles = makeStyles(() => ({
 const theme = createMuiTheme({
   palette: {
     primary: {
+      light: '#5290c1',
       main: '#136390',
+      dark: '#003962',
+      contrastText: '#fff',
     },
   },
 });
