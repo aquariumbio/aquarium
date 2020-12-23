@@ -241,7 +241,7 @@ module Api
       # Update a user's permissions
       #
       # <b>API Call:</b>
-      #   GET: /api/v3/users/update_permissions
+      #   POST: /api/v3/users/<id>/update_permissions
       #   {
       #     token: <token>
       #     id: <user_id>,
@@ -450,7 +450,7 @@ module Api
       # Set a specific permission for a specific user.
       #
       # <b>API Call:</b>
-      #   POST: /api/v3/users/<id>/permissions/update
+      #   POST: /api/v3/users/permissions/update
       #   {
       #     token: <token>,
       #     user_id: <user_id>,

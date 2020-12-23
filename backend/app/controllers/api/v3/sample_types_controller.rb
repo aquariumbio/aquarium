@@ -232,7 +232,7 @@ module Api
       # Create a new sample type.
       #
       # <b>API Call:</b>
-      #   GET: /api/v3/sample_types/create
+      #   POST: /api/v3/sample_types/create
       #   {
       #     token: <token>,
       #     sample_type: {
@@ -294,10 +294,10 @@ module Api
       # @param sample_type [Hash] the sample type
       # @return the sample type
 
-      # Update an sample_type.
+      # Update a sample_type.
       #
       # <b>API Call:</b>
-      #   GET: /api/v3/sample_types/<id>/update
+      #   POST: /api/v3/sample_types/<id>/update
       #   {
       #     token: <token>
       #     id: <sample_type_id>,

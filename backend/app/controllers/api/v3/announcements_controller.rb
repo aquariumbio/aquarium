@@ -108,7 +108,7 @@ module Api
       # Create a new announcement.
       #
       # <b>API Call:</b>
-      #   GET: /api/v3/announcements/create
+      #   POST: /api/v3/announcements/create
       #   {
       #     token: <token>
       #     announcement: {
@@ -152,7 +152,7 @@ module Api
       # Update an announcement.
       #
       # <b>API Call:</b>
-      #   GET: /api/v3/announcements/create
+      #   POST: /api/v3/announcements/<id>/update
       #   {
       #     token: <token>
       #     id: <announcement_id>,

@@ -106,7 +106,7 @@ module Api
       # Create a new parameter.
       #
       # <b>API Call:</b>
-      #   GET: /api/v3/parameters/create
+      #   POST: /api/v3/parameters/create
       #   {
       #     token: <token>
       #     parameter: {
@@ -147,10 +147,10 @@ module Api
         render json: { parameter: parameter }.to_json, status: :created
       end
 
-      # Update an parameter.
+      # Update a parameter.
       #
       # <b>API Call:</b>
-      #   GET: /api/v3/parameters/create
+      #   POST: /api/v3/parameters/<id>/update
       #   {
       #     token: <token>
       #     id: <parameter_id>,
@@ -198,7 +198,7 @@ module Api
         render json: { parameter: parameter }.to_json, status: :ok
       end
 
-      # Delete an parameter.
+      # Delete a parameter.
       #
       # <b>API Call:</b>
       #   POST: /api/v3/parameters/<id>/delete

@@ -148,7 +148,7 @@ module Api
         render json: { group: group }.to_json, status: :created
       end
 
-      # Update an group.
+      # Update a group.
       #
       # <b>API Call:</b>
       #   GET: /api/v3/groups/create
@@ -197,7 +197,7 @@ module Api
         render json: { group: group }.to_json, status: :ok
       end
 
-      # Delete an group.
+      # Delete a group.
       #
       # <b>API Call:</b>
       #   POST: /api/v3/groups/<id>/delete

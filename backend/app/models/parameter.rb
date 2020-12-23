@@ -22,7 +22,7 @@ class Parameter < ActiveRecord::Base
     Parameter.find_by(id: id)
   end
 
-  # Create an parameter
+  # Create a parameter
   #
   # @param parameter [Hash] the objet type
   # @option parameter[:key] [String] the key
@@ -50,7 +50,7 @@ class Parameter < ActiveRecord::Base
     return parameter_new, false
   end
 
-  # Update an parameter
+  # Update a parameter
   #
   # @param parameter [Hash] the objet type
   # @option parameter[:key] [String] the key

@@ -31,7 +31,7 @@ class Group < ActiveRecord::Base
     Group.find_by(id: id)
   end
 
-  # Create an group
+  # Create a group
   #
   # @param group [Hash] the objet type
   # @option group[:name] [String] the name
@@ -56,7 +56,7 @@ class Group < ActiveRecord::Base
     return group_new, false
   end
 
-  # Update an group
+  # Update a group
   #
   # @param group [Hash] the objet type
   # @option group[:name] [String] the name
