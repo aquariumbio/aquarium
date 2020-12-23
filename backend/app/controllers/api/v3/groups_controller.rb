@@ -136,10 +136,10 @@ module Api
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Read sample type parameter
+        # Read group parameter
         params_group = params[:group] || {}
 
-        # Create sample type
+        # Create group
         group, errors = Group.create(params_group)
         render json: { errors: errors }.to_json, status: :ok and return if !group
 
@@ -180,7 +180,7 @@ module Api
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Get sample type
+        # Get group
         id = Input.int(params[:id])
         group = Group.find_id(id)
         render json: { group: nil }.to_json, status: :ok and return if !group

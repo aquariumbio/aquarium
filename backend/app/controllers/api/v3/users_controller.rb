@@ -216,14 +216,16 @@ module Api
       # @param id [Int] the id of the user
       # @param user [Hash] the user
       def update_info
-        # Check for admin permissions <or> self
-        params_user_id = Input.int(params[:id])
-#         status, response = check_token_for_permission(-1, params_user_id)
-#         render json: response.to_json, status: status.to_sym and return if response[:error]
-
-        # Check for admin permissions
-        status, response = check_token_for_permission(Permission.admin_id)
+        # Check token for any permissions
+        status, response = check_token_for_permission
         render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # If not oneself then check token for admin permissions
+        params_user_id = Input.int(params[:id])
+        if response[:user]["id"] != params_user_id
+          status, response = check_token_for_permission(Permission.admin_id)
+          render json: response.to_json, status: status.to_sym and return if response[:error]
+        end
 
         # get the user
         user = User.find_id(params_user_id)
@@ -304,14 +306,16 @@ module Api
       # @param token [String] a token
       # @param id [Int] the id of the user
       def agreements
-        # Check for admin permissions <or> self
-        params_user_id = Input.int(params[:id])
-#         status, response = check_token_for_permission(-1, params_user_id)
-#         render json: response.to_json, status: status.to_sym and return if response[:error]
-
-        # Check for admin permissions
-        status, response = check_token_for_permission(Permission.admin_id)
+        # Check token for any permissions
+        status, response = check_token_for_permission
         render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # If not oneself then check token for admin permissions
+        params_user_id = Input.int(params[:id])
+        if response[:user]["id"] != params_user_id
+          status, response = check_token_for_permission(Permission.admin_id)
+          render json: response.to_json, status: status.to_sym and return if response[:error]
+        end
 
         # get the user
         user = User.find_id(params_user_id)
@@ -348,14 +352,16 @@ module Api
       # @param token [String] a token
       # @param id [Int] the id of the user
       def preferences
-        # Check for admin permissions <or> self
-        params_user_id = Input.int(params[:id])
-#         status, response = check_token_for_permission(-1, params_user_id)
-#         render json: response.to_json, status: status.to_sym and return if response[:error]
-
-        # Check for admin permissions
-        status, response = check_token_for_permission(Permission.admin_id)
+        # Check token for any permissions
+        status, response = check_token_for_permission
         render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # If not oneself then check token for admin permissions
+        params_user_id = Input.int(params[:id])
+        if response[:user]["id"] != params_user_id
+          status, response = check_token_for_permission(Permission.admin_id)
+          render json: response.to_json, status: status.to_sym and return if response[:error]
+        end
 
         # get the user
         user = User.find_id(params_user_id)
