@@ -33,7 +33,13 @@ const SideBar = ({ sampleTypes, setCurrentSampleType }) => {
   };
 
   return (
-    <Grid item xs={2} name="sample-types-side-bar" data-cy="sample-types-side-bar" className={classes.root}>
+    <Grid
+      item
+      xs={2}
+      name="sample-types-side-bar"
+      data-cy="sample-types-side-bar"
+      className={classes.root}
+    >
       <Card>
         <CardContent>
           <List component="nav" aria-label="sample types list">

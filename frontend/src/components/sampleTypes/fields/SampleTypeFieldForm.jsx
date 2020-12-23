@@ -61,7 +61,6 @@ const SampleTypeFieldForm = ({
     <Grid
       container
       spacing={1}
-      style={{ marginTop: '1rem' }}
       data-cy="field-inputs"
     >
       <NameInput name={fieldType.name} handleChange={handleChange} />

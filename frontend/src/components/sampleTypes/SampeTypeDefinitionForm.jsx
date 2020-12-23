@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import Alert from '@material-ui/lab/Alert';
@@ -15,7 +15,8 @@ import LoadingBackdrop from '../shared/LoadingBackdrop';
 import { StandardButton, LinkButton } from '../shared/Buttons';
 import utils from '../../helpers/utils';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
+  root: {},
   container: {
     minWidth: 'lg',
     overflow: 'auto',
@@ -23,12 +24,15 @@ const useStyles = makeStyles(() => ({
   title: {
     fontSize: '2.5rem',
     fontWeight: '700',
-    marginTop: '12px',
-    marginBottom: '30px',
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(0.25),
   },
   inputName: {
     fontSize: '1rem',
     fontWeight: '700',
+  },
+  spaceBelow: {
+    marginBottom: theme.spacing(1),
   },
 }));
 
@@ -59,6 +63,8 @@ const SampleTypeDefinitionForm = ({ match }) => {
   const [id, setId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [disableSubmit, setDisableSubmit] = useState(false);
+
+  const ref = useRef();
 
   /*  Get sample types top populate sample options menu
       We cannot use async directly in useEffect so we create an async function that we will call
@@ -139,8 +145,8 @@ const SampleTypeDefinitionForm = ({ match }) => {
   };
 
   return (
-    <Container maxWidth="xl" data-cy="sampe-type-definition-container">
-      <LoadingBackdrop isLoading={isLoading} />
+    <Container className={classes.root} maxWidth="xl" data-cy="sampe-type-definition-container">
+      <LoadingBackdrop isLoading={isLoading} ref={ref} />
       {match.url === '/sample_types/new' && (
         <Typography variant="h1" align="center" className={classes.title}>
           Defining New Sample Type
@@ -187,6 +193,7 @@ const SampleTypeDefinitionForm = ({ match }) => {
             'aria-label': 'sample-type-name-input',
             'data-cy': 'sample-type-name-input',
           }}
+          className={classes.spaceBelow}
         />
 
         <Typography variant="h4" className={classes.inputName} display="inline">
@@ -214,8 +221,6 @@ const SampleTypeDefinitionForm = ({ match }) => {
         {!!fieldTypes.length && (
           <Grid
             container
-            spacing={1}
-            style={{ marginTop: '1rem' }}
             data-cy="fields-container"
           >
             <FieldLabels />
@@ -253,7 +258,7 @@ const SampleTypeDefinitionForm = ({ match }) => {
           text="Add New Field"
           dark
         />
-        <Divider />
+        <Divider style={{ marginTop: '0px' }} />
 
         <StandardButton
           name="save"
@@ -263,6 +268,7 @@ const SampleTypeDefinitionForm = ({ match }) => {
           type="submit"
           disabled={disableSubmit}
           dark
+
         />
 
         <LinkButton

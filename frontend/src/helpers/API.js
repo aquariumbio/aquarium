@@ -157,8 +157,7 @@ axios.interceptors.response.use(
   (response) => response,
   (error) => {
     const { status } = error.response;
-    // eslint-disable-next-line no-debugger
-    debugger;
+
     if (status === UNAUTHORIZED) {
       // sessionStorage.clear('token');
       signOut();

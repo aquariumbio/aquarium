@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme) => ({
   dark: {
     backgroundColor: theme.palette.primary.main,
     color: 'rgb(255,255,255)',
-    margin: theme.spacing(2),
+    margin: `${theme.spacing(2)}px ${theme.spacing(2)}px ${theme.spacing(2)}px 0px `,
     boxShadow: '0 2px 5px 0 rgba(0,0,0,.26)',
     '&:disabled': {
       backgroundColor: 'rgb(255,255,255)',
@@ -19,8 +19,9 @@ const useStyles = makeStyles((theme) => ({
   light: {
     backgroundColor: 'rgb(255, 255, 255)',
     color: theme.palette.primary.main,
-    margin: theme.spacing(2),
     boxShadow: '0 2px 5px 0 rgba(0,0,0,.26)',
+    margin: `${theme.spacing(2)}px ${theme.spacing(2)}px ${theme.spacing(2)}px 0px `,
+
   },
 
   dense: {

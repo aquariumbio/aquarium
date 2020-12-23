@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 const ChoicesInput = ({ handleChange, choices, showChoicesInput }) => (
-  <Grid item lg={3} data-cy="choices-input-div">
+  <Grid item lg={4} data-cy="choices-input-div">
     {showChoicesInput ? (
       <TextField
         name="choices"
@@ -13,7 +13,6 @@ const ChoicesInput = ({ handleChange, choices, showChoicesInput }) => (
         multiline
         fullWidth
         variant="outlined"
-        helperText="Comma separated. Leave blank for unrestricted value."
         inputProps={{
           'aria-label': 'choices',
           'data-cy': 'add-field-choices-input',

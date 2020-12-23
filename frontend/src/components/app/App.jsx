@@ -46,6 +46,13 @@ const theme = createMuiTheme({
       contrastText: '#fff',
     },
   },
+  overrides: {
+    MuiDivider: {
+      root: {
+        margin: '16px 0px',
+      },
+    },
+  },
 });
 
 export default function App() {
@@ -69,7 +76,7 @@ export default function App() {
             {/* Left Hamburger Menu */}
             <Route exact path="/users" render={(props) => <UsersPage {...props} />} />
 
-            <Route exact path="/sample_types" render={(props) => <SampleTypesPage {...props} />} />
+            <Route exact path="/sample_types" render={(props) => <SampleTypesPage {...props} />}  />
             <Route exact path="/sample_types/new" render={(props) => <SampleTypeDefinitionForm {...props} />} />
             <Route exact path="/sample_types/:id/edit" render={(props) => <SampleTypeDefinitionForm {...props} />} />
 

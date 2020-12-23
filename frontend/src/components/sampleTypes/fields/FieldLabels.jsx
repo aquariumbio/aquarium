@@ -6,10 +6,19 @@ import { makeStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    margin: theme.spacing(2, 0, 0.5, 0),
+  },
   label: {
     fontSize: '0.875rem',
     fontWeight: '700',
     padding: '1px',
+  },
+  note: {
+    fontSize: '0.875rem',
+    // fontWeight: '700',
+    padding: '1px',
+    color: 'rgba(0, 0, 0, 0.5)',
   },
   formControl: {
     margin: theme.spacing(1),
@@ -24,7 +33,7 @@ const FieldLabels = () => {
     <Grid
       container
       spacing={1}
-      style={{ marginTop: '1rem' }}
+      className={classes.root}
       data-cy="field-labels"
     >
       <Grid item lg={2} data-cy="field-name-label-div">
@@ -33,7 +42,7 @@ const FieldLabels = () => {
         </Typography>
       </Grid>
 
-      <Grid item lg={2} data-cy="field-type-label-div">
+      <Grid item lg={1} data-cy="field-type-label-div">
         <Typography variant="h4" className={classes.label}>
           Type
         </Typography>
@@ -53,13 +62,16 @@ const FieldLabels = () => {
 
       <Grid item lg={2} data-cy="field-sample-options-label-div">
         <Typography variant="h4" className={classes.label}>
-          Sample Options (If type=&lsquo;sample&lsquo;)
+          Sample Options
         </Typography>
       </Grid>
 
-      <Grid item lg={3} data-cy="field-choices-label-div">
-        <Typography variant="h4" className={classes.label}>
+      <Grid item lg={4} data-cy="field-choices-label-div">
+        <Typography variant="h4" className={classes.label} display="inline">
           Choices
+        </Typography>
+        <Typography variant="h4" className={classes.note} display="inline">
+          (Comma separated. Leave blank for unrestricted value.)
         </Typography>
       </Grid>
 

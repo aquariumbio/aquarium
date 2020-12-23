@@ -21,8 +21,9 @@ describe('/login', () => {
   it('requires valid username and password', () => {
     cy.get('[data-test=username]').type('marikotest ');
     cy.get('[data-test=password]').type('invalid');
-    cy.get('form').contains('SIGN IN').click();
-    cy.get('p').should('contain', 'Invalid login/password combination');
+    cy.get('form').contains('SIGN IN').click().then(() => {
+      cy.get('p').should('contain', 'Invalid login/password combination');
+    });
   });
 
   it('navigates to / on successful login', () => {

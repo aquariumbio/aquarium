@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import MenuItem from '@material-ui/core/MenuItem';
 
 const FTypeSelect = ({ handleChange, ftype }) => (
-  <Grid item lg={2} data-cy="ftype-select-div">
+  <Grid item lg={1} data-cy="ftype-select-div">
     <Select
       name="ftype"
       labelId="type-select-label"

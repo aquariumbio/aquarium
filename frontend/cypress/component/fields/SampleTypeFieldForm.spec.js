@@ -1,41 +1,7 @@
 /// <reference types="cypress" />
 import React from 'react';
 import { mount } from 'cypress-react-unit-test';
-import { FieldLabels, SampleTypeField } from '../../src/components/sampleTypes/SampleTypeFieldForm';
-
-describe('FieldLabels', () => {
-  it('renders field labels form container', () => {
-    mount(<FieldLabels />);
-
-    cy.get('[data-cy="field-labels"]')
-      .should('be.visible')
-      .within(() => {
-        cy.get('[data-cy="field-name-label-div"]')
-          .should('be.visible')
-          .contains('h4', 'Field Name');
-
-        cy.get('[data-cy="field-type-label-div"]')
-          .should('be.visible')
-          .contains('h4', 'Type');
-
-        cy.get('[data-cy="field-is-required-label-div"]')
-          .should('be.visible')
-          .contains('h4', 'Required');
-
-        cy.get('[data-cy="field-is-array-label-div"]')
-          .should('be.visible')
-          .contains('h4', 'Array');
-
-        cy.get('[data-cy="field-sample-options-label-div"]')
-          .should('be.visible')
-          .contains('h4', 'Sample Options (If type=‘sample‘)');
-
-        cy.get('[data-cy="field-choices-label-div"]')
-          .should('be.visible')
-          .contains('h4', 'Choices');
-      });
-  });
-});
+import SampleTypeFieldForm from '../../../src/components/sampleTypes/fields/SampleTypeFieldForm';
 
 describe('SampleTypeFieldForm', () => {
   const fieldType = {
@@ -58,7 +24,7 @@ describe('SampleTypeFieldForm', () => {
     };
 
     mount(
-      <SampleTypeField
+      <SampleTypeFieldForm
         fieldType={testFieldType}
         index={0}
         updateParentState={cy.spy().as('updateParentState')}
@@ -70,7 +36,7 @@ describe('SampleTypeFieldForm', () => {
 
   it('has delete button', () => {
     mount(
-      <SampleTypeField
+      <SampleTypeFieldForm
         fieldType={fieldType}
         index={0}
         updateParentState={cy.spy().as('updateParentState')}
@@ -93,7 +59,7 @@ describe('SampleTypeFieldForm', () => {
           choices: '',
         };
         mount(
-          <SampleTypeField
+          <SampleTypeFieldForm
             fieldType={testFieldType}
             index={0}
             updateParentState={cy.spy().as('updateParentState')}
@@ -116,7 +82,7 @@ describe('SampleTypeFieldForm', () => {
 
         const testName = 'Ms. Boop';
         mount(
-          <SampleTypeField
+          <SampleTypeFieldForm
             fieldType={testFieldType}
             index={0}
             updateParentState={cy.spy().as('updateParentState')}
@@ -139,7 +105,7 @@ describe('SampleTypeFieldForm', () => {
 
       it('has value in field name input', () => {
         mount(
-          <SampleTypeField
+          <SampleTypeFieldForm
             fieldType={testFieldType}
             index={0}
             updateParentState={cy.spy().as('updateParentState')}
@@ -152,7 +118,7 @@ describe('SampleTypeFieldForm', () => {
       it('accepts user input', () => {
         const newName = 'Mr. Boop';
         mount(
-          <SampleTypeField
+          <SampleTypeFieldForm
             fieldType={testFieldType}
             index={0}
             updateParentState={cy.spy().as('updateParentState')}
@@ -170,7 +136,7 @@ describe('SampleTypeFieldForm', () => {
     it('has field type matches input prop', () => {
       const testFieldType = fieldType;
       mount(
-        <SampleTypeField
+        <SampleTypeFieldForm
           fieldType={testFieldType}
           index={0}
           updateParentState={cy.spy().as('updateParentState')}
@@ -183,7 +149,7 @@ describe('SampleTypeFieldForm', () => {
 
     it(' calls update state function on user select', () => {
       mount(
-        <SampleTypeField
+        <SampleTypeFieldForm
           fieldType={fieldType}
           index={0}
           updateParentState={cy.spy().as('updateParentState')}
@@ -208,7 +174,7 @@ describe('SampleTypeFieldForm', () => {
   describe('required checkbox', () => {
     beforeEach(() => {
       mount(
-        <SampleTypeField
+        <SampleTypeFieldForm
           fieldType={fieldType}
           index={0}
           updateParentState={cy.spy().as('updateParentState')}
@@ -229,7 +195,7 @@ describe('SampleTypeFieldForm', () => {
   describe('Array checkbox', () => {
     beforeEach(() => {
       mount(
-        <SampleTypeField
+        <SampleTypeFieldForm
           fieldType={fieldType}
           index={0}
           updateParentState={cy.spy().as('updateParentState')}
@@ -254,7 +220,7 @@ describe('SampleTypeFieldForm', () => {
       beforeEach(() => {
         fieldTypes.ftype = '';
         mount(
-          <SampleTypeField
+          <SampleTypeFieldForm
             fieldType={fieldTypes}
             index={0}
             updateParentState={cy.stub().as('updateParentState')}
@@ -278,7 +244,7 @@ describe('SampleTypeFieldForm', () => {
       beforeEach(() => {
         fieldTypes.ftype = 'string';
         mount(
-          <SampleTypeField
+          <SampleTypeFieldForm
             fieldType={fieldTypes}
             index={0}
             updateParentState={cy.stub().as('updateParentState')}
@@ -302,7 +268,7 @@ describe('SampleTypeFieldForm', () => {
       beforeEach(() => {
         fieldTypes.ftype = 'number';
         mount(
-          <SampleTypeField
+          <SampleTypeFieldForm
             fieldType={fieldTypes}
             index={0}
             updateParentState={cy.stub().as('updateParentState')}
@@ -326,7 +292,7 @@ describe('SampleTypeFieldForm', () => {
       beforeEach(() => {
         fieldTypes.ftype = 'url';
         mount(
-          <SampleTypeField
+          <SampleTypeFieldForm
             fieldType={fieldTypes}
             index={0}
             updateParentState={cy.stub().as('updateParentState')}
@@ -350,7 +316,7 @@ describe('SampleTypeFieldForm', () => {
       beforeEach(() => {
         fieldTypes.ftype = 'sample';
         mount(
-          <SampleTypeField
+          <SampleTypeFieldForm
             fieldType={fieldTypes}
             index={0}
             updateParentState={cy.stub().as('updateParentState')}
@@ -379,7 +345,7 @@ describe('SampleTypeFieldForm', () => {
       beforeEach(() => {
         fieldTypes.ftype = '';
         mount(
-          <SampleTypeField
+          <SampleTypeFieldForm
             fieldType={fieldTypes}
             index={0}
             updateParentState={cy.stub().as('updateParentState')}
@@ -405,7 +371,7 @@ describe('SampleTypeFieldForm', () => {
       beforeEach(() => {
         fieldTypes.ftype = 'string';
         mount(
-          <SampleTypeField
+          <SampleTypeFieldForm
             fieldType={fieldTypes}
             index={0}
             updateParentState={cy.spy().as('updateParentState')}
@@ -415,7 +381,6 @@ describe('SampleTypeFieldForm', () => {
       });
 
       it('has chocies input', () => {
-        cy.log(fieldTypes);
         cy.get('[data-cy="choices-input-div"]')
           .find('[data-cy="add-field-choices-input"]')
           .should('exist');
@@ -442,7 +407,7 @@ describe('SampleTypeFieldForm', () => {
       beforeEach(() => {
         fieldTypes.ftype = 'number';
         mount(
-          <SampleTypeField
+          <SampleTypeFieldForm
             fieldType={fieldTypes}
             index={0}
             updateParentState={cy.spy().as('updateParentState')}
@@ -478,7 +443,7 @@ describe('SampleTypeFieldForm', () => {
       beforeEach(() => {
         fieldTypes.ftype = 'url';
         mount(
-          <SampleTypeField
+          <SampleTypeFieldForm
             fieldType={fieldTypes}
             index={0}
             updateParentState={cy.stub().as('updateParentState')}
@@ -504,7 +469,7 @@ describe('SampleTypeFieldForm', () => {
       beforeEach(() => {
         fieldTypes.ftype = 'sample';
         mount(
-          <SampleTypeField
+          <SampleTypeFieldForm
             fieldType={fieldTypes}
             index={0}
             updateParentState={cy.stub().as('updateParentState')}

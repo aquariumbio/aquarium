@@ -29,7 +29,6 @@ const SampleOptionsInput = ({
             testName="add-field-option-btn"
             handleClick={() => handleAddClick(index)}
             text="Add option"
-            dense
           />
         </div>
       </>
