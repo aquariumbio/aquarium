@@ -58,8 +58,8 @@ module Api
       # @!method index(token)
       # @param token [String] a token
       def index
-        # Check for any permissions
-        status, response = check_token_for_permission
+        # Check for admin permissions
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get groups
@@ -93,7 +93,7 @@ module Api
       # @param id [Int] the id of the group
       def show
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get group
@@ -133,7 +133,7 @@ module Api
       # @param group [Hash] the group
       def create
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Read sample type parameter
@@ -177,7 +177,7 @@ module Api
       # @param group [Hash] the group
       def update
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get sample type
@@ -214,7 +214,7 @@ module Api
       # @param id [Int] the id of the group
       def delete
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get group

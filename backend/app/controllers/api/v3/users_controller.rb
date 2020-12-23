@@ -57,8 +57,8 @@ module Api
       # @!method index(token)
       # @param token [String] a token
       def index
-        # Check for any permissions
-        status, response = check_token_for_permission(1)
+        # Check for admin permissions
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get users
@@ -93,7 +93,7 @@ module Api
       # @param id [Int] the id of the user
       def show
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get user
@@ -131,7 +131,7 @@ module Api
       # @param id [Int] the id of the user
       def show_info
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get user
@@ -173,7 +173,7 @@ module Api
       # @param user [Hash] the user
       def create
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Read sample type parameter
@@ -218,7 +218,11 @@ module Api
       def update_info
         # Check for admin permissions <or> self
         params_user_id = Input.int(params[:id])
-        status, response = check_token_for_permission(-1, params_user_id)
+#         status, response = check_token_for_permission(-1, params_user_id)
+#         render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # Check for admin permissions
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # get the user
@@ -259,7 +263,7 @@ module Api
       # @param user [Hash] the user
       def update_permissions
         # Check for admin permissions <or> self
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # user who is updating
@@ -302,7 +306,11 @@ module Api
       def agreements
         # Check for admin permissions <or> self
         params_user_id = Input.int(params[:id])
-        status, response = check_token_for_permission(-1, params_user_id)
+#         status, response = check_token_for_permission(-1, params_user_id)
+#         render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # Check for admin permissions
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # get the user
@@ -342,7 +350,11 @@ module Api
       def preferences
         # Check for admin permissions <or> self
         params_user_id = Input.int(params[:id])
-        status, response = check_token_for_permission(-1, params_user_id)
+#         status, response = check_token_for_permission(-1, params_user_id)
+#         render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # Check for admin permissions
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # get the user
@@ -400,7 +412,7 @@ module Api
       # @param sort [String] the sort order
       def permissions
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         params_show = if params[:show].is_a?(Array)
@@ -458,7 +470,7 @@ module Api
       # @param value [Boolean] the permission setting ( <true/false> or <on/off> or <1/0> )
       def update_permission
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         by_user_id = response[:user]["id"]

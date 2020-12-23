@@ -154,7 +154,7 @@ class User < ActiveRecord::Base
   # @option options[:token] [String] a token
   # @option options[:ip] [String] an IP address
   # @return the user
-  def self.validate_token(options, check_permission_id, check_target_id)
+  def self.validate_token(options, check_permission_id)
     option_token = options[:token].to_s
     option_ip = options[:ip].to_s
     option_timenow = Time.now.utc
@@ -182,7 +182,7 @@ class User < ActiveRecord::Base
       User.connection.execute sql
 
       [401, "Session timeout"]
-    elsif !user.permission?(check_permission_id, check_target_id)
+    elsif !user.permission?(check_permission_id)
       # Forbidden
       [403, nil]
     else
@@ -228,27 +228,20 @@ class User < ActiveRecord::Base
   end
 
   # Check whether user has permission_id
-  # permission_id ==  0: anything                                (not retired)
-  # permission_id ==  1: admin                                   (not retired)
-  # permission_id == -1: admin             or target_id == self  (not retired)
-  # permission_id ==  2: manage  or admin                        (not retired)
-  # permission_id ==  3: run     or admin                        (not retired)
-  # permission_id ==  4: design  or admin                        (not retired)
-  # permission_id ==  5: develop or admin                        (not retired)
-  # permission_id ==  6: retired
+  # permission_id ==  0:                 anything         (not retired)
+  # permission_id ==  <id for admin>:    admin            (not retired)
+  # permission_id ==  <id for <___>>:    <___>  or admin  (not retired)
+  # permission_id ==  <id for retired>:  retired
   #
   # @param permission_id [Int] the permission_id to check
   # @param target_id [Int] the user_id of the user being updated
   # @return true
-  def permission?(permission_id, target_id)
+  def permission?(permission_id)
     # return false if retired
     return false if permission_ids.index(".#{Permission.permission_ids.key('retired')}.")
 
     # return true if permission_id == 0
     return true if permission_id.zero?
-
-    # return true if permission_id == -1 and target_id is self
-    return true if permission_id == -1 and target_id == self.id
 
     # Check <permission_id> and check "admin"
     # NOTE: permission_id == -1 will still validate on admin

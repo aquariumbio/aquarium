@@ -95,7 +95,7 @@ module Api
       # @param id [Int] the id of the announcement
       def show
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get announcement
@@ -136,7 +136,7 @@ module Api
       # @param announcement [Hash] the announcement
       def create
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Read sample type parameter
@@ -182,7 +182,7 @@ module Api
       # @param announcement [Hash] the announcement
       def update
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get sample type
@@ -219,7 +219,7 @@ module Api
       # @param id [Int] the id of the announcement
       def delete
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get announcement

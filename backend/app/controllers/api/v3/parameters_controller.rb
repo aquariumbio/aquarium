@@ -57,8 +57,8 @@ module Api
       # @!method index(token)
       # @param token [String] a token
       def index
-        # Check for any permissions
-        status, response = check_token_for_permission
+        # Check for admin permissions
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get parameters
@@ -93,7 +93,7 @@ module Api
       # @param id [Int] the id of the parameter
       def show
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get parameter
@@ -134,7 +134,7 @@ module Api
       # @param parameter [Hash] the parameter
       def create
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Read sample type parameter
@@ -180,7 +180,7 @@ module Api
       # @param parameter [Hash] the parameter
       def update
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get sample type
@@ -217,7 +217,7 @@ module Api
       # @param id [Int] the id of the parameter
       def delete
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get parameter
