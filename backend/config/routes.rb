@@ -41,11 +41,13 @@ Rails.application.routes.draw do
   post 'api/v3/users/:id/preferences/:preference', to: 'api/v3/users#preferences', constraints: { preference: /new_samples_private|lab_name/ }
 
   # Groups
-  get  'api/v3/groups',                            to: 'api/v3/groups#index'
-  post 'api/v3/groups/create',                     to: 'api/v3/groups#create'
-  get  'api/v3/groups/:id',                        to: 'api/v3/groups#show'
-  post 'api/v3/groups/:id/update',                 to: 'api/v3/groups#update'
-  post 'api/v3/groups/:id/delete',                 to: 'api/v3/groups#delete'
+  get  'api/v3/groups',                                         to: 'api/v3/groups#index'
+  post 'api/v3/groups/create',                                  to: 'api/v3/groups#create'
+  get  'api/v3/groups/:id',                                     to: 'api/v3/groups#show'
+  post 'api/v3/groups/:id/update',                              to: 'api/v3/groups#update'
+  post 'api/v3/groups/:id/delete',                              to: 'api/v3/groups#delete'
+  post 'api/v3/groups/:id/create_membership',                   to: 'api/v3/groups#create_membership'
+  post 'api/v3/groups/:id/delete_membership/:membership_id',    to: 'api/v3/groups#delete_membership'
 
   # Announcements
   get  'api/v3/announcements',                     to: 'api/v3/announcements#index'

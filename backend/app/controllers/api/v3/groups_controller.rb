@@ -230,6 +230,95 @@ module Api
         render json: { message: "Group deleted" }.to_json, status: :ok
       end
 
+      # Add a membership.
+      #
+      # <b>API Call:</b>
+      #   POST: 'api/v3/groups/:id/create_membership
+      #   {
+      #     token: <token>
+      #     id: <group_id>,
+      #     user_id: <user_id>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS CODE: 200
+      #   {
+      #     membership: {
+      #       id: <group_id>,
+      #       user_id: <user_id>,
+      #       group_id: <quota>,
+      #       created_at: <datetime>,
+      #       updated_at: <datetime>
+      #     }
+      #   }
+      #
+      # @!method create_membership(token, id, user_id)
+      # @param token [String] a token
+      # @param id [Int] the id of the budget
+      # @param user_id [Int] the user_id
+      # @param quota [Float] the budget quota
+      def create_membership
+        # Check for admin permissions
+        status, response = check_token_for_permission(Permission.admin_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # Get group
+        id = Input.int(params[:id])
+        group = Group.find_id(id)
+        render json: { group: nil }.to_json, status: :ok and return if !group
+
+        # Get user
+        user_id = Input.int(params[:user_id])
+        user = User.find_id(user_id)
+        render json: { membership: nil }.to_json, status: :ok and return if !user
+
+        # Add membership
+        membership = Membership.new({
+          user_id: user_id,
+          group_id: group.id
+        })
+        membership.save
+        render json: { membership: membership }.to_json, status: :ok
+      end
+
+      # Delete a membership.
+      #
+      # <b>API Call:</b>
+      #   POST: 'api/v3/groups/<id>/delete_membership/<membership_id>
+      #   {
+      #     token: <token>
+      #     id: <group_id>,
+      #     membership_id: <membership_id>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS CODE: 200
+      #   {
+      #     message: "Membership deleted"
+      #   }
+      #
+      # @!method delete_membership(token, id, user_id, quota)
+      # @param token [String] a token
+      # @param id [Int] the id of the budget
+      # @param user_id [Int] the user_id
+      # @param quota [Float] the budget quota
+      def delete_membership
+        # Check for admin permissions
+        status, response = check_token_for_permission(Permission.admin_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # Get membership
+        group_id = Input.int(params[:id])
+        membership_id = Input.int(params[:membership_id])
+        membership = Membership.find_id(membership_id, group_id)
+        render json: { membership: nil }.to_json, status: :ok and return if !membership
+
+        # Delete membership
+        membership.delete
+
+        render json: { message: "Membership deleted" }.to_json, status: :ok
+      end
+
     end
   end
 end
