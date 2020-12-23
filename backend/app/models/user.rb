@@ -303,10 +303,10 @@ class User < ActiveRecord::Base
   private
 
   def custom_validator
-    errors.add(:name, "name cannot contain invisible characters") if name and !REGEX_TEXT.match(name)
-    errors.add(:login, "login cannot contain spaces or invisible characters") if login and !REGEX_TEXT_NO_SPACES.match(login)
+    errors.add(:name, "name cannot contain invisible characters") if name and !REGEX_KEYBOARD_CHARS.match(name)
+    errors.add(:login, "login cannot contain spaces or invisible characters") if login and !REGEX_KEYBOARD_CHARS_NO_SPACES.match(login)
     errors.add(:password, "password must be at least 10 characters") if password and password.to_s.length < 10
-    errors.add(:password, "passsword cannot contain spaces or invisible characters") if password and !REGEX_TEXT_NO_SPACES.match(password)
+    errors.add(:password, "passsword cannot contain spaces or invisible characters") if password and !REGEX_KEYBOARD_CHARS_NO_SPACES.match(password)
   end
 
   def valid_info?(email, phone)
