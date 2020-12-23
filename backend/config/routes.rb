@@ -19,16 +19,16 @@
 Rails.application.routes.draw do
 
   # Tokens
-  post 'api/v3/token/create',                     to: 'api/v3/token#create'
-  post 'api/v3/token/delete',                     to: 'api/v3/token#delete'
-  get  'api/v3/token/get_user',                   to: 'api/v3/token#get_user'
+  post 'api/v3/token/create',                      to: 'api/v3/token#create'
+  post 'api/v3/token/delete',                      to: 'api/v3/token#delete'
+  get  'api/v3/token/get_user',                    to: 'api/v3/token#get_user'
 
   # Permissions
-  get  'api/v3/permissions',                      to: 'api/v3/permissions#index'
+  get  'api/v3/permissions',                       to: 'api/v3/permissions#index'
 
   # User permissions (for possible "permissions" hamburger menu - currently unused)
-  get  'api/v3/users/permissions',                to: 'api/v3/users#permissions'
-  post 'api/v3/users/permissions/update',         to: 'api/v3/users#update_permission'
+  get  'api/v3/users/permissions',                 to: 'api/v3/users#permissions'
+  post 'api/v3/users/permissions/update',          to: 'api/v3/users#update_permission'
 
   # Users
   get  'api/v3/users',                             to: 'api/v3/users#index'
@@ -41,11 +41,11 @@ Rails.application.routes.draw do
   post 'api/v3/users/:id/preferences/:preference', to: 'api/v3/users#preferences', constraints: { preference: /new_samples_private|lab_name/ }
 
   # Groups
-  get  'api/v3/groups',                           to: 'api/v3/groups#index'
-  post 'api/v3/groups/create',                    to: 'api/v3/groups#create'
-  get  'api/v3/groups/:id',                       to: 'api/v3/groups#show'
-  post 'api/v3/groups/:id/update',                to: 'api/v3/groups#update'
-  post 'api/v3/groups/:id/delete',                to: 'api/v3/groups#delete'
+  get  'api/v3/groups',                            to: 'api/v3/groups#index'
+  post 'api/v3/groups/create',                     to: 'api/v3/groups#create'
+  get  'api/v3/groups/:id',                        to: 'api/v3/groups#show'
+  post 'api/v3/groups/:id/update',                 to: 'api/v3/groups#update'
+  post 'api/v3/groups/:id/delete',                 to: 'api/v3/groups#delete'
 
   # Announcements
   get  'api/v3/announcements',                     to: 'api/v3/announcements#index'
@@ -55,6 +55,12 @@ Rails.application.routes.draw do
   post 'api/v3/announcements/:id/delete',          to: 'api/v3/announcements#delete'
 
   # Budgets
+  get  'api/v3/budgets',                                        to: 'api/v3/budgets#index'
+  post 'api/v3/budgets/create',                                 to: 'api/v3/budgets#create'
+  get  'api/v3/budgets/:id',                                    to: 'api/v3/budgets#show'
+  post 'api/v3/budgets/:id/update',                             to: 'api/v3/budgets#update'
+  post 'api/v3/budgets/:id/create_user_budget',                 to: 'api/v3/budgets#create_user_budget'
+  post 'api/v3/budgets/:id/delete_user_budget/:user_budget_id', to: 'api/v3/budgets#delete_user_budget'
 
   # Invoices
 
@@ -66,21 +72,26 @@ Rails.application.routes.draw do
   post 'api/v3/parameters/:id/delete',             to: 'api/v3/parameters#delete'
 
   # Sample Types
-  get  'api/v3/sample_types',                     to: 'api/v3/sample_types#index'
-  post 'api/v3/sample_types/create',              to: 'api/v3/sample_types#create'
-  get  'api/v3/sample_types/:id',                 to: 'api/v3/sample_types#show'
-  post 'api/v3/sample_types/:id/update',          to: 'api/v3/sample_types#update'
-  post 'api/v3/sample_types/:id/delete',          to: 'api/v3/sample_types#delete'
+  get  'api/v3/sample_types',                      to: 'api/v3/sample_types#index'
+  post 'api/v3/sample_types/create',               to: 'api/v3/sample_types#create'
+  get  'api/v3/sample_types/:id',                  to: 'api/v3/sample_types#show'
+  post 'api/v3/sample_types/:id/update',           to: 'api/v3/sample_types#update'
+  post 'api/v3/sample_types/:id/delete',           to: 'api/v3/sample_types#delete'
 
   # Object Types
-  get  'api/v3/object_types',                     to: 'api/v3/object_types#index'
-  post 'api/v3/object_types/create',              to: 'api/v3/object_types#create'
-  get  'api/v3/object_types/handler/:handler',    to: 'api/v3/object_types#show_handler'
-  get  'api/v3/object_types/:id',                 to: 'api/v3/object_types#show'
-  post 'api/v3/object_types/:id/update',          to: 'api/v3/object_types#update'
-  post 'api/v3/object_types/:id/delete',          to: 'api/v3/object_types#delete'
+  get  'api/v3/object_types',                      to: 'api/v3/object_types#index'
+  post 'api/v3/object_types/create',               to: 'api/v3/object_types#create'
+  get  'api/v3/object_types/handler/:handler',     to: 'api/v3/object_types#show_handler'
+  get  'api/v3/object_types/:id',                  to: 'api/v3/object_types#show'
+  post 'api/v3/object_types/:id/update',           to: 'api/v3/object_types#update'
+  post 'api/v3/object_types/:id/delete',           to: 'api/v3/object_types#delete'
 
   # Location Wizards
+  get  'api/v3/wizards',                           to: 'api/v3/wizards#index'
+  post 'api/v3/wizards/create',                    to: 'api/v3/wizards#create'
+  get  'api/v3/wizards/:id',                       to: 'api/v3/wizards#show'
+  post 'api/v3/wizards/:id/update',                to: 'api/v3/wizards#update'
+  post 'api/v3/wizards/:id/delete',                to: 'api/v3/wizards#delete'
 
 end
 
