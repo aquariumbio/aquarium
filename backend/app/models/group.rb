@@ -8,7 +8,19 @@ class Group < ActiveRecord::Base
   #
   # @return all groups
   def self.find_all
-    Group.order(created_at: :desc)
+    Group.order(:name)
+  end
+
+  # Return all groups beginning with fitst letter l ('*' as non-alphanumeric wildcard).
+  #
+  # @return all groups beginning with fitst letter l ('*' as non-alphanumeric wildcard)
+  def self.find_letter(l)
+    if l == "*"
+      sql = "select * from groups where (name regexp '^[^a-zA-Z0-9].*') order by name"
+    else
+      sql = "select * from groups where name like '#{l}%' order by name"
+    end
+    Group.find_by_sql sql
   end
 
   # Return a specific group.

@@ -60,6 +60,28 @@ RSpec.describe Api::V3::GroupsController, type: :request do
       expect(group["description"]).to eq "new description"
     end
 
+    # Get groups by fist letter
+    it "get_groups_first_letter" do
+      get "/api/v3/groups?token=#{@token_1[0]}&letter=n"
+      expect(response).to have_http_status 200
+
+      # Check
+      resp = JSON.parse(response.body)
+      groups = resp["groups"]
+      expect(groups[0]["name"]).to eq "new name"
+    end
+
+    # Get groups by fist letter none
+    it "get_groups_first_letter_none" do
+      get "/api/v3/groups?token=#{@token_1[0]}&letter=a"
+      expect(response).to have_http_status 200
+
+      # Check no groups that start with "a"
+      resp = JSON.parse(response.body)
+      groups = resp["groups"]
+      expect(groups).to eq []
+    end
+
     # Update group with errors
     it "invalid_update_group" do
       # Update group

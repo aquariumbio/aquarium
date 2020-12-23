@@ -32,7 +32,7 @@ module Api
     #       }
     #     }
     class UsersController < ApplicationController
-      # Returns all users.
+      # Returns all users / all users beginning with <letter>.
       #
       # <b>API Call:</b>
       #   GET: /api/v3/users
@@ -54,15 +54,17 @@ module Api
       #     ]
       #   }
       #
-      # @!method index(token)
+      # @!method index(token, letter)
       # @param token [String] a token
+      # @param letter [Character] a letter
       def index
         # Check for admin permissions
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get users
-        users = User.find_all
+        letter = Input.letter(params[:letter])
+        users = letter ? User.find_letter(letter) : User.find_all
 
         render json: {
           users: users

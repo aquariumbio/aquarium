@@ -11,6 +11,14 @@ module Input
     return str
   end
 
+  # Return first letter (nil if blank)
+  def self.letter(str)
+    str = str.to_s.strip
+    str = str == "" ? nil : str[0,1]
+
+    return str
+  end
+
   # Return an int (nil or undefined returns 0)
   def self.int(n)
     n = n.to_s.to_i

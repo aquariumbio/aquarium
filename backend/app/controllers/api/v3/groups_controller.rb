@@ -32,7 +32,7 @@ module Api
     #       }
     #     }
     class GroupsController < ApplicationController
-      # Returns all groups.
+      # Returns all groups / all groups beginning with <letter>.
       #
       # <b>API Call:</b>
       #   GET: /api/v3/groups
@@ -55,15 +55,17 @@ module Api
       #     ]
       #   }
       #
-      # @!method index(token)
+      # @!method index(token, letter)
       # @param token [String] a token
+      # @param letter [Character] a letter
       def index
         # Check for admin permissions
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get groups
-        groups = Group.find_all
+        letter = Input.letter(params[:letter])
+        groups = letter ? Group.find_letter(letter) : Group.find_all
 
         render json: { groups: groups }.to_json, status: :ok
       end

@@ -131,6 +131,28 @@ RSpec.describe Api::V3::UsersController, type: :request do
       expect(response).to have_http_status 200
     end
 
+    # Get users by fist letter
+    it "get_users_first_letter" do
+      get "/api/v3/users?token=#{@token_1[0]}&letter=f"
+      expect(response).to have_http_status 200
+
+      # Check
+      resp = JSON.parse(response.body)
+      users = resp["users"]
+      expect(users[0]["name"]).to eq "Factory"
+    end
+
+    # Get users by fist letter none
+    it "get_users_first_letter_none" do
+      get "/api/v3/users?token=#{@token_1[0]}&letter=a"
+      expect(response).to have_http_status 200
+
+      # Check no users that start with "a"
+      resp = JSON.parse(response.body)
+      users = resp["users"]
+      expect(users).to eq []
+    end
+
     ###
     ### create user
     ###
