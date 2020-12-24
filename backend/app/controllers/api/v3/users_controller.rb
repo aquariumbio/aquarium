@@ -66,9 +66,7 @@ module Api
         letter = Input.letter(params[:letter])
         users = letter ? User.find_letter(letter) : User.find_all
 
-        render json: {
-          users: users
-         }.to_json, status: :ok
+        render json: { users: users }.to_json, status: :ok
       end
 
       # Returns a specific user.
@@ -102,9 +100,7 @@ module Api
         id = Input.int(params[:id])
         user = User.find_id(id)
 
-        render json: {
-          user: user
-        }.to_json, status: :ok
+        render json: { user: user }.to_json, status: :ok
       end
 
       # Returns a specific user.
@@ -140,9 +136,43 @@ module Api
         id = Input.int(params[:id])
         user = User.find_id_show_info(id)
 
-        render json: {
-          user: user
-        }.to_json, status: :ok
+        render json: { user: user }.to_json, status: :ok
+      end
+
+      # Returns the groups for a specific user.
+      #
+      # <b>API Call:</b>
+      #   GET: /api/v3/users/<id>
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS CODE: 200
+      #   {
+      #     groups: {
+      #       id: <user_id>,
+      #       name: <name>,
+      #       description: <description>,
+      #       created_at: <created_at>,
+      #       updated_at: <updated_at>
+      #     },
+      #     ...
+      #   }
+      #
+      # @!method groups(token, id)
+      # @param token [String] a token
+      # @param id [Int] the id of the user
+      def groups
+        # Check for admin permissions
+        status, response = check_token_for_permission(Permission.admin_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # Get groups
+        id = Input.int(params[:id])
+        groups = User.find_id_groups(id)
+
+        render json: { groups: groups }.to_json, status: :ok
       end
 
       # Create a new user.

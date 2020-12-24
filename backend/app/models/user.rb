@@ -45,6 +45,21 @@ class User < ActiveRecord::Base
     (User.find_by_sql sql)[0]
   end
 
+  # Return a user's groups.
+  #
+  # @param id [Int] the id of the user
+  # @return the user's groups
+  def self.find_id_groups(id)
+    sql = "
+      select g.*
+      from groups g
+      inner join memberships m on m.group_id = g.id
+      where m.user_id = #{id.to_i}
+      order by g.name
+    "
+    Group.find_by_sql sql
+  end
+
   # Create a user
   #
   # @param user [Hash] the objet type

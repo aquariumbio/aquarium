@@ -120,6 +120,32 @@ RSpec.describe Api::V3::GroupsController, type: :request do
       expect(group["description"]).to eq "update description"
     end
 
+    # create membership
+    it "create_membership" do
+      # membership parameters
+puts ">>> create_membership"
+#       params = {
+#         user_id: _____
+#       }
+#
+#       post "/api/v3/groups/#{@group_ids[0]}/create_membership?token=#{@token_1[0]}", :params => params
+#       expect(response).to have_http_status 200
+    end
+
+    # get user groups
+    it "get_user_groups" do
+puts ">>> get_user_groups"
+#       post "/api/v3/user/#{___}/groups?token=#{@token_1[0]}"
+#       expect(response).to have_http_status 200
+    end
+
+    # delete membership
+    it "delete_membership" do
+puts ">>> delete_membership"
+#       post "/api/v3/groups/#{@group_ids[0]}/delete_membership/#{___}?token=#{@token_1[0]}"
+#       expect(response).to have_http_status 200
+    end
+
     # Delete the group
     it "delete_groups" do
       post "/api/v3/groups/#{@group_ids[0]}/delete?token=#{@token_1[0]}"
