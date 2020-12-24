@@ -1,3 +1,4 @@
+/* */
 import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:3001/api/v3/';
@@ -76,10 +77,76 @@ const signOut = (setLoginOutError) => {
     });
 };
 
+// Get Announcements
+const getAllAnnouncements = () => (
+  axios
+    .get('/announcements/', {
+      params: {
+        token: currentSessionToken,
+      },
+    })
+    .then((response) => {
+      console.log(response.data.announcements);
+      return response.data.announcements;
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+);
+
+const getSpecificAnnouncement = (announcementID) => (
+  axios
+    .get(`/announcements/${announcementID}`, {
+      params: {
+        token: currentSessionToken,
+      },
+    })
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+);
+
+// Post Announcements
+const createAnnouncement = (FormData) => (
+  axios
+    .post('/announcements/create', {
+      params: {
+        token: currentSessionToken,
+        data: FormData,
+      },
+    })
+    .then((response) => response.data)
+    .catch((error) => error)
+);
+
+// Post Announcements
+const updateAnnouncement = (announcementID, FormData) => (
+  axios
+    .post(`/announcements/${announcementID}/update`, {
+      params: {
+        token: currentSessionToken,
+        data: FormData,
+      },
+    })
+    .then((response) => response.data)
+    .catch((error) => error)
+);
+
 const API = {
-  isAuthenticated: validateToken,
-  signIn,
-  signOut,
+  tokens: {
+    isAuthenticated: validateToken,
+    signIn,
+    signOut,
+  },
+  announcements: {
+    getAllAnnouncements,
+    getSpecificAnnouncement,
+    create: createAnnouncement,
+    updateAnnouncement,
+  },
 };
 
 export default API;

@@ -27,7 +27,6 @@ import LocationWizardsPage from '../locationWizards/LocationWizardsPage';
 import LogsPage from '../logs/LogsPage';
 import ImportWorkflowsPage from '../importWorkflows/ImportWorkflowsPage';
 import GroupsPage from '../groups/GroupsPage';
-import API from '../../helpers/API';
 import UserProfilePage from '../users/UserProfilePage';
 
 const useStyles = makeStyles({});
@@ -46,7 +45,7 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <div className={classes.container} data-test-name="app-container">
         { /* Users cannot interact with the app if they do not have a token */
-          (!sessionStorage.getItem('token') || !API.isAuthenticated)
+          (!sessionStorage.getItem('token'))
           && <Redirect to="/login" />
         }
         <Switch>
