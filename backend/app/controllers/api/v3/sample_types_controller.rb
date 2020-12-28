@@ -41,7 +41,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     sample_types: [
       #       {
@@ -144,7 +144,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     sample_type: {
       #       id: <sample_type_id>,
@@ -258,7 +258,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 201
+      #   STATUS_CODE: 201
       #   {
       #     sample_type: {
       #       id: <sample_type_id>,
@@ -326,7 +326,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     sample_type: {
       #       id: <sample_type_id>,

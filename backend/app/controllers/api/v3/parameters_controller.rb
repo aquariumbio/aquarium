@@ -39,7 +39,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     parameters: [
       #       {
@@ -76,7 +76,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     parameter: {
       #       id: <parameter_id>,
@@ -117,7 +117,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 201
+      #   STATUS_CODE: 201
       #   {
       #     parameter: {
       #       id: <parameter_id>,
@@ -162,7 +162,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     parameter: {
       #       id: <parameter_id>,

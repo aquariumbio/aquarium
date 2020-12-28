@@ -41,7 +41,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     groups: [
       #       {
@@ -79,7 +79,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     group: {
       #       id: <group_id>,
@@ -119,7 +119,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 201
+      #   STATUS_CODE: 201
       #   {
       #     group: {
       #       id: <group_id>,
@@ -162,7 +162,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     group: {
       #       id: <group_id>,
@@ -241,7 +241,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     membership: {
       #       id: <group_id>,
@@ -294,7 +294,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     message: "Membership deleted"
       #   }

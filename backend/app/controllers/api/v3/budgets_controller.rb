@@ -41,7 +41,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     budgets: [
       #       {
@@ -77,7 +77,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     budget: {
       #       id: <budget_id>,
@@ -117,7 +117,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 201
+      #   STATUS_CODE: 201
       #   {
       #     budget: {
       #       id: <budget_id>,
@@ -160,7 +160,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     budget: {
       #       id: <budget_id>,
@@ -207,7 +207,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     user_budget: {
       #       id: <budget_id>,
@@ -263,7 +263,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     message: "UserBudget deleted"
       #   }
