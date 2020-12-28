@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 import React from 'react';
-import { mount } from 'cypress-react-unit-test';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { mount } from '@cypress/react';
+import { MemoryRouter } from 'react-router-dom';
 import SampleTypeDefinitionForm from '../../src/components/sampleTypes/SampeTypeDefinitionForm';
 
 describe('Sample Type Definition Form', () => {
@@ -18,9 +18,15 @@ describe('Sample Type Definition Form', () => {
     beforeEach(() => {
       cy.login();
       mount(
-        <Router>
+        <MemoryRouter
+          initialEntries={[
+            '/sample_types',
+            '/sample_types/new',
+          ]}
+          initialIndex={1}
+        >
           <SampleTypeDefinitionForm match={match} />
-        </Router>,
+        </MemoryRouter>
       );
     });
 
@@ -84,21 +90,19 @@ describe('Sample Type Definition Form', () => {
       url: '/sample_types/54/edit',
     };
     beforeEach(() => {
-      cy.login();
       mount(
-        <Router>
+        <MemoryRouter
+          initialEntries={['/sample_types', '/sample_types/edit']}
+          initialIndex={1}
+        >
           <SampleTypeDefinitionForm match={match} />
-        </Router>,
+        </MemoryRouter>
       );
     });
     context('all(back) button', () => {
       it('changes route onclick', () => {
-        cy.url().should('include', '/sample_types/').and('include', '/edit');
         cy.get('[data-cy="back"]')
-          .click()
-          .then(() => {
-            cy.url().should('not.include', '/edit');
-          });
+          .click();
       });
     });
   });

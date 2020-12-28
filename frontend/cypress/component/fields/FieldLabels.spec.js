@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 import React from 'react';
-import { mount } from 'cypress-react-unit-test';
+import { mount } from '@cypress/react';
 import FieldLabels from '../../../src/components/sampleTypes/fields/FieldLabels';
 
 describe('FieldLabels', () => {
@@ -28,7 +28,7 @@ describe('FieldLabels', () => {
 
         cy.get('[data-cy="field-sample-options-label-div"]')
           .should('be.visible')
-          .contains('h4', 'Sample Options (If type=‘sample‘)');
+          .contains('h4', 'Sample Options');
 
         cy.get('[data-cy="field-choices-label-div"]')
           .should('be.visible')

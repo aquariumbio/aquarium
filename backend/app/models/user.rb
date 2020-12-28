@@ -51,7 +51,7 @@ class User < ActiveRecord::Base
       sql = "update user_tokens ut set timenow = '#{option_timenow.to_s[0, 19]}' where #{wheres} limit 1"
       User.connection.execute sql
 
-      # Return user
+      # Returns user
       [200, { id: usertoken.user_id, name: usertoken.name, login: usertoken.login, permission_ids: usertoken.permission_ids }]
     end
   end
@@ -102,7 +102,7 @@ class User < ActiveRecord::Base
 
   # Set a specific permission for a specific user.
   #
-  # @param id [Int] the id of the user
+  # @param user_id [Int] the id of the user
   # @param permission_id [Int] the permission_id to set
   # @param val [Boolean] true to turn permission on, false to turn permission off
   # @return true

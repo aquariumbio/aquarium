@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 import React from 'react';
-import { mount } from 'cypress-react-unit-test';
+import { mount } from '@cypress/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { StandardButton, LinkButton } from '../../src/components/shared/Buttons';
 

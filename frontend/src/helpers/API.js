@@ -46,7 +46,6 @@ const signIn = async (login, password, setLoginError) => {
       const [status, data] = [response.status, response.data];
 
       if (status === 200 && data.token) {
-        console.log('login success');
         setLoginError();
         sessionStorage.setItem('token', data.token);
         signInSuccessful = true;

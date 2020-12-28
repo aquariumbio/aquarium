@@ -17,10 +17,9 @@ Cypress.Commands.add('login', () => {
   cy.request({
     method: 'POST',
     url: `http://localhost:3001/api/v3/token/create?login=${login}&password=${password}`,
-  })
-    .then((resp) => {
-      window.sessionStorage.setItem('token', resp.body.token);
-    });
+  }).then((resp) => {
+    window.sessionStorage.setItem('token', resp.body.token);
+  });
 });
 Cypress.Commands.add('logout', () => {
   const token = window.sessionStorage.getItem('token');

@@ -2,7 +2,7 @@
 /* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { mount } from 'cypress-react-unit-test';
+import { mount } from '@cypress/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import App from '../../src/components/app/App';
 

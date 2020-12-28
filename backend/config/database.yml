@@ -1,4 +1,7 @@
-# database configuration for docker contained aquarium
+# Database configuration for docker contained aquarium
+#
+# Note: the test database uses the name set by the docker configuration for the
+# development environment.
 
 default: &default
   adapter: <%= ENV['DB_ADAPTER'] ||= 'mysql2' %>
@@ -14,14 +17,12 @@ production:
   <<: *default
   pool: 100
 
-# use the same name as production to avoid issues with switching env in docker
 development:
   <<: *default
-  database: <%= ENV['DB_NAME'] %> #_development
   pool: 5
 
 test:
   <<: *default
-  database: <%= ENV['DB_NAME'] %>_test
+  database: aquarium_test
   pool: 5
   timeout: 5000

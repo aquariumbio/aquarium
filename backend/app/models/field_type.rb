@@ -6,10 +6,10 @@ class FieldType < ActiveRecord::Base
   # @param field_type [Hash] the field type
   # @option field_type[:name] [String] name
   # @option field_type[:ftype] [String]  ftype
-  # @option field_type[:required] [String] required - interpreted as Boolen
-  # @option field_type[:array] [String] array - interpreted as Boolean
+  # @option field_type[:required] [Boolean] required ( <true/false> or <on/off> or <1/0> )
+  # @option field_type[:array] [Boolean] array ( <true/false> or <on/off> or <1/0> )
   # @option field_type[:choices] [String] choices
-  # @option field_type[:allowable_field_types] [Array] array of allowable field types (for ftype = "sample")
+  # @option field_type[:allowable_field_types] [Array] array of allowable field types (for ftype == "sample")
   # @return true
   def self.create_sampletype(parent_id, field_type)
     # Read the parameters
@@ -42,14 +42,14 @@ class FieldType < ActiveRecord::Base
 
   # Update or create a new field type (if the id does not exist)
   #
-  # @param feild_type = [Hash] field type
-  # @option feild_type[:id] id [Int] the id of the existing field type
-  # @option feild_type[:name] [String] name
-  # @option feild_type[:ftype] [String]  ftype
-  # @option feild_type[:required] [String] required - interpreted as Boolean
-  # @option feild_type[:array] [String] array - interpreted as Boolean
-  # @option feild_type[:choices] [String] choices
-  # @option feild_type[:allowable_field_types] [Array] array of allowable field types (for ftype = "sample")
+  # @param field_type = [Hash] field type
+  # @option field_type[:id] id [Int] the id of the existing field type
+  # @option field_type[:name] [String] name
+  # @option field_type[:ftype] [String]  ftype
+  # @option field_type[:required] [Boolean] required ( <true/false> or <on/off> or <1/0> )
+  # @option field_type[:array] [Boolean] array ( <true/false> or <on/off> or <1/0> )
+  # @option field_type[:choices] [String] choices
+  # @option field_type[:allowable_field_types] [Array] array of allowable field types (for ftype == "sample")
   # @return the id of the field type or 0 (if the id does not exist and the name is blank)
   def self.update_sampletype(parent_id, field_type)
     # List of allowable field type ids for this field_type_id
@@ -57,7 +57,7 @@ class FieldType < ActiveRecord::Base
     # - Initialize with id = 0 to generate the appropriate sql query later
     allowable_field_type_ids = [0]
 
-    # Find existing feild_type or create new one
+    # Find existing field_type or create new one
     fid = Input.int(field_type[:id])
     sql = "select * from field_types where id = #{fid} and parent_id = #{parent_id} limit 1"
     field_type_update = (FieldType.find_by_sql sql)[0] || FieldType.new

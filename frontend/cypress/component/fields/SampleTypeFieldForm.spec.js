@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 import React from 'react';
-import { mount } from 'cypress-react-unit-test';
+import { mount } from '@cypress/react';
 import SampleTypeFieldForm from '../../../src/components/sampleTypes/fields/SampleTypeFieldForm';
 
 describe('SampleTypeFieldForm', () => {
