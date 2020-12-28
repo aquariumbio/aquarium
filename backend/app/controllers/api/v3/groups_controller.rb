@@ -246,7 +246,7 @@ module Api
       #     membership: {
       #       id: <group_id>,
       #       user_id: <user_id>,
-      #       group_id: <quota>,
+      #       group_id: <group_id>,
       #       created_at: <datetime>,
       #       updated_at: <datetime>
       #     }
@@ -254,9 +254,8 @@ module Api
       #
       # @!method create_membership(token, id, user_id)
       # @param token [String] a token
-      # @param id [Int] the id of the budget
+      # @param id [Int] the id of the group
       # @param user_id [Int] the user_id
-      # @param quota [Float] the budget quota
       def create_membership
         # Check for admin permissions
         status, response = check_token_for_permission(Permission.admin_id)
@@ -273,11 +272,14 @@ module Api
         render json: { membership: nil }.to_json, status: :ok and return if !user
 
         # Add membership
-        membership = Membership.new({
-          user_id: user_id,
-          group_id: group.id
-        })
-        membership.save
+        membership = Membership.find(id, user_id)
+        if !membership
+          membership = Membership.new({
+            group_id: id,
+            user_id: user_id
+          })
+          membership.save
+        end
         render json: { membership: membership }.to_json, status: :ok
       end
 
@@ -288,7 +290,7 @@ module Api
       #   {
       #     token: <token>
       #     id: <group_id>,
-      #     membership_id: <membership_id>
+      #     user_id: <user_id>
       #   }
       #
       # <b>API Return Success:</b>
@@ -297,11 +299,10 @@ module Api
       #     message: "Membership deleted"
       #   }
       #
-      # @!method delete_membership(token, id, user_id, quota)
+      # @!method delete_membership(token, id, user_id)
       # @param token [String] a token
-      # @param id [Int] the id of the budget
+      # @param id [Int] the id of the group
       # @param user_id [Int] the user_id
-      # @param quota [Float] the budget quota
       def delete_membership
         # Check for admin permissions
         status, response = check_token_for_permission(Permission.admin_id)
@@ -309,8 +310,8 @@ module Api
 
         # Get membership
         group_id = Input.int(params[:id])
-        membership_id = Input.int(params[:membership_id])
-        membership = Membership.find_id(membership_id, group_id)
+        user_id = Input.int(params[:user_id])
+        membership = Membership.find(group_id, user_id)
         render json: { membership: nil }.to_json, status: :ok and return if !membership
 
         # Delete membership

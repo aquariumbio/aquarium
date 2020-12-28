@@ -261,7 +261,6 @@ class User < ActiveRecord::Base
   # permission_id ==  <id for retired>:  retired
   #
   # @param permission_id [Int] the permission_id to check
-  # @param target_id [Int] the user_id of the user being updated
   # @return true
   def permission?(permission_id)
     # return false if retired

@@ -48,7 +48,7 @@ Rails.application.routes.draw do
   post 'api/v3/groups/:id/update',                              to: 'api/v3/groups#update'
   post 'api/v3/groups/:id/delete',                              to: 'api/v3/groups#delete'
   post 'api/v3/groups/:id/create_membership',                   to: 'api/v3/groups#create_membership'
-  post 'api/v3/groups/:id/delete_membership/:membership_id',    to: 'api/v3/groups#delete_membership'
+  post 'api/v3/groups/:id/delete_membership/:user_id',          to: 'api/v3/groups#delete_membership'
 
   # Announcements
   get  'api/v3/announcements',                     to: 'api/v3/announcements#index'

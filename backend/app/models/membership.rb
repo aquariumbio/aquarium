@@ -6,11 +6,11 @@ class Membership < ActiveRecord::Base
 
   # Return a specific membership.
   #
-  # @param membership_id [Int] the id of the membership
   # @param group_id [Int] the id of the group
+  # @param user_id [Int] the id of the user
   # @return the membership
-  def self.find_id(membership_id, group_id)
-    wheres = sanitize_sql(['id = ? and group_id = ?', membership_id, group_id ])
+  def self.find(group_id, user_id)
+    wheres = sanitize_sql(['group_id = ? and user_id = ?', group_id, user_id ])
     sql = "select * from memberships where #{wheres} limit 1"
     (Membership.find_by_sql sql)[0]
   end

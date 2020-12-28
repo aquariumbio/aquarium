@@ -123,27 +123,45 @@ RSpec.describe Api::V3::GroupsController, type: :request do
     # create membership
     it "create_membership" do
       # membership parameters
-puts ">>> create_membership"
-#       params = {
-#         user_id: _____
-#       }
-#
-#       post "/api/v3/groups/#{@group_ids[0]}/create_membership?token=#{@token_1[0]}", :params => params
-#       expect(response).to have_http_status 200
+      params = {
+        user_id: 1
+      }
+
+      post "/api/v3/groups/#{@group_ids[0]}/create_membership?token=#{@token_1[0]}", :params => params
+      expect(response).to have_http_status 200
+      resp = JSON.parse(response.body)
+
+      # Check
+      membership = resp["membership"]
+      expect(membership["group_id"]).to eq @group_ids[0]
+      expect(membership["user_id"]).to eq 1
     end
 
     # get user groups
     it "get_user_groups" do
-puts ">>> get_user_groups"
-#       post "/api/v3/user/#{___}/groups?token=#{@token_1[0]}"
-#       expect(response).to have_http_status 200
+      get "/api/v3/users/1/groups?token=#{@token_1[0]}"
+      expect(response).to have_http_status 200
+      resp = JSON.parse(response.body)
+
+      # Check
+      group = resp["groups"][0]
+      expect(group["name"]).to eq "update name"
+      expect(group["description"]).to eq "update description"
     end
 
     # delete membership
     it "delete_membership" do
-puts ">>> delete_membership"
-#       post "/api/v3/groups/#{@group_ids[0]}/delete_membership/#{___}?token=#{@token_1[0]}"
-#       expect(response).to have_http_status 200
+      post "/api/v3/groups/#{@group_ids[0]}/delete_membership/1?token=#{@token_1[0]}"
+      expect(response).to have_http_status 200
+      resp = JSON.parse(response.body)
+
+      # Check
+      get "/api/v3/users/1/groups?token=#{@token_1[0]}"
+      expect(response).to have_http_status 200
+      resp = JSON.parse(response.body)
+
+      # Check
+      expect(resp["groups"]).to eq []
     end
 
     # Delete the group
