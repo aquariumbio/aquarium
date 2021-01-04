@@ -89,7 +89,7 @@ class SampleType < ActiveRecord::Base
     if sample_type[:field_types].kind_of?(Array)
       sample_type[:field_types].each do |field_type|
         fname = Input.text(field_type[:name])
-        FieldType.create_sampletype(sample_type_new.id, field_type) if fname != ""
+        FieldType.create_sampletype(sample_type_new.id, field_type) if fname
       end
     end
 

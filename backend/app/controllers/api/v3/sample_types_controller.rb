@@ -41,7 +41,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     sample_types: [
       #       {
@@ -118,7 +118,7 @@ module Api
       # @param token [String] a token
       def index
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get list
@@ -144,7 +144,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     sample_type: {
       #       id: <sample_type_id>,
@@ -211,7 +211,7 @@ module Api
       # @param id [Int] the id of the sample type
       def show
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         id = Input.int(params[:id])
@@ -232,7 +232,7 @@ module Api
       # Create a new sample type.
       #
       # <b>API Call:</b>
-      #   GET: /api/v3/sample_types/create
+      #   POST: /api/v3/sample_types/create
       #   {
       #     token: <token>,
       #     sample_type: {
@@ -258,7 +258,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 201
+      #   STATUS_CODE: 201
       #   {
       #     sample_type: {
       #       id: <sample_type_id>,
@@ -274,7 +274,7 @@ module Api
       # @param sample_type [Hash] the sample_type
       def create
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Read sample type parameter
@@ -294,10 +294,10 @@ module Api
       # @param sample_type [Hash] the sample type
       # @return the sample type
 
-      # Update an sample_type.
+      # Update a sample_type.
       #
       # <b>API Call:</b>
-      #   GET: /api/v3/sample_types/<id>/update
+      #   POST: /api/v3/sample_types/<id>/update
       #   {
       #     token: <token>
       #     id: <sample_type_id>,
@@ -326,7 +326,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     sample_type: {
       #       id: <sample_type_id>,
@@ -343,7 +343,7 @@ module Api
       # @param sample_type [Hash] the sample_type
       def update
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get sample type
@@ -380,7 +380,7 @@ module Api
       # @param id [Int] the id of the sample type
       def delete
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         id = Input.int(params[:id])

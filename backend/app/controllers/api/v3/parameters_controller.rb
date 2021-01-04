@@ -3,7 +3,7 @@
 # @api api.v3
 module Api
   module V3
-    # Announcement API calls.
+    # Parameter API calls.
     #
     # <b>General</b>
     #   API Status Codes:
@@ -31,11 +31,9 @@ module Api
     #         ...
     #       }
     #     }
-    class AnnouncementsController < ApplicationController
-      # Returns all announcements.
-      #
+    class ParametersController < ApplicationController
       # <b>API Call:</b>
-      #   GET: /api/v3/announcements
+      #   GET: /api/v3/parameters
       #   {
       #     token: <token>
       #   }
@@ -43,12 +41,12 @@ module Api
       # <b>API Return Success:</b>
       #   STATUS_CODE: 200
       #   {
-      #     announcements: [
+      #     parameters: [
       #       {
-      #         id: <announcement_id>,
-      #         title: <title>,
-      #         message: <message>,
-      #         active: <true/false>,
+      #         id: <parameter_id>,
+      #         key: <key>,
+      #         value: <value>,
+      #         description: <true/false>,
       #         created_at: <datetime>,
       #         updated_at: <datetime>
       #       },
@@ -59,20 +57,20 @@ module Api
       # @!method index(token)
       # @param token [String] a token
       def index
-        # Check for any permissions
-        status, response = check_token_for_permission
+        # Check for admin permissions
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Get announcements
-        announcements = Announcement.find_all
+        # Get parameters
+        parameters = Parameter.find_all
 
-        render json: { announcements: announcements }.to_json, status: :ok
+        render json: { parameters: parameters }.to_json, status: :ok
       end
 
-      # Returns a specific announcement.
+      # Returns a specific parameter.
       #
       # <b>API Call:</b>
-      #   GET: /api/v3/announcements/<id>
+      #   GET: /api/v3/parameters/<id>
       #   {
       #     token: <token>
       #   }
@@ -80,11 +78,11 @@ module Api
       # <b>API Return Success:</b>
       #   STATUS_CODE: 200
       #   {
-      #     announcement: {
-      #       id: <announcement_id>,
-      #       title: <title>,
-      #       message: <message>,
-      #       active: <true/false>,
+      #     parameter: {
+      #       id: <parameter_id>,
+      #       key: <key>,
+      #       value: <value>,
+      #       description: <true/false>,
       #       created_at: <datetime>,
       #       updated_at: <datetime>
       #     }
@@ -92,94 +90,94 @@ module Api
       #
       # @!method show(token, id)
       # @param token [String] a token
-      # @param id [Int] the id of the announcement
+      # @param id [Int] the id of the parameter
       def show
         # Check for admin permissions
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Get announcement
+        # Get parameter
         id = Input.int(params[:id])
-        announcement = Announcement.find_id(id)
+        parameter = Parameter.find_id(id)
 
-        render json: { announcement: announcement }.to_json, status: :ok
+        render json: { parameter: parameter }.to_json, status: :ok
       end
 
-      # Create a new announcement.
+      # Create a new parameter.
       #
       # <b>API Call:</b>
-      #   POST: /api/v3/announcements/create
+      #   POST: /api/v3/parameters/create
       #   {
       #     token: <token>
-      #     announcement: {
-      #       title: <title>,
-      #       message: <message>,
-      #       active: <true/false>
+      #     parameter: {
+      #       key: <key>,
+      #       value: <value>,
+      #       description: <true/false>
       #     }
       #   }
       #
       # <b>API Return Success:</b>
       #   STATUS_CODE: 201
       #   {
-      #     announcement: {
-      #       id: <announcement_id>,
-      #       title: <title>,
-      #       message: <message>,
-      #       active: <true/false>,
+      #     parameter: {
+      #       id: <parameter_id>,
+      #       key: <key>,
+      #       value: <value>,
+      #       description: <true/false>,
       #       created_at: <datetime>,
       #       updated_at: <datetime>
       #     }
       #   }
       #
-      # @!method create(token, announcement)
+      # @!method create(token, parameter)
       # @param token [String] a token
-      # @param announcement [Hash] the announcement
+      # @param parameter [Hash] the parameter
       def create
         # Check for admin permissions
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Read sample type parameter
-        params_announcement = params[:announcement] || {}
+        params_parameter = params[:parameter] || {}
 
         # Create sample type
-        announcement, errors = Announcement.create(params_announcement)
-        render json: { errors: errors }.to_json, status: :ok and return if !announcement
+        parameter, errors = Parameter.create(params_parameter)
+        render json: { errors: errors }.to_json, status: :ok and return if !parameter
 
-        render json: { announcement: announcement }.to_json, status: :created
+        render json: { parameter: parameter }.to_json, status: :created
       end
 
-      # Update an announcement.
+      # Update a parameter.
       #
       # <b>API Call:</b>
-      #   POST: /api/v3/announcements/<id>/update
+      #   POST: /api/v3/parameters/<id>/update
       #   {
       #     token: <token>
-      #     id: <announcement_id>,
-      #     announcement: {
-      #       title: <title>,
-      #       message: <message>,
-      #       active: <true/false>
+      #     id: <parameter_id>,
+      #     parameter: {
+      #       key: <key>,
+      #       value: <value>,
+      #       description: <true/false>
       #     }
       #   }
       #
       # <b>API Return Success:</b>
       #   STATUS_CODE: 200
       #   {
-      #     announcement: {
-      #       id: <announcement_id>,
-      #       title: <title>,
-      #       message: <message>,
-      #       active: <true/false>,
+      #     parameter: {
+      #       id: <parameter_id>,
+      #       key: <key>,
+      #       value: <value>,
+      #       description: <true/false>,
       #       created_at: <datetime>,
       #       updated_at: <datetime>
       #     }
       #   }
       #
-      # @!method update(token, id, announcement)
+      # @!method update(token, id, parameter)
       # @param token [String] a token
-      # @param id [Int] the id of the announcement
-      # @param announcement [Hash] the announcement
+      # @param id [Int] the id of the parameter
+      # @param parameter [Hash] the parameter
       def update
         # Check for admin permissions
         status, response = check_token_for_permission(Permission.admin_id)
@@ -187,23 +185,23 @@ module Api
 
         # Get sample type
         id = Input.int(params[:id])
-        announcement = Announcement.find_id(id)
-        render json: { announcement: nil }.to_json, status: :ok and return if !announcement
+        parameter = Parameter.find_id(id)
+        render json: { parameter: nil }.to_json, status: :ok and return if !parameter
 
-        # Read announcement parameter
-        params_announcement = params[:announcement] || {}
+        # Read parameter parameter
+        params_parameter = params[:parameter] || {}
 
-        # Update announcement
-        announcement, errors = announcement.update(params_announcement)
-        render json: { errors: errors }.to_json, status: :ok and return if !announcement
+        # Update parameter
+        parameter, errors = parameter.update(params_parameter)
+        render json: { errors: errors }.to_json, status: :ok and return if !parameter
 
-        render json: { announcement: announcement }.to_json, status: :ok
+        render json: { parameter: parameter }.to_json, status: :ok
       end
 
-      # Delete an announcement.
+      # Delete a parameter.
       #
       # <b>API Call:</b>
-      #   POST: /api/v3/announcements/<id>/delete
+      #   POST: /api/v3/parameters/<id>/delete
       #   {
       #     token: <token>
       #   }
@@ -211,26 +209,26 @@ module Api
       # <b>API Return Success:</b>
       #   STATUS_CODE: 200
       #   {
-      #     message: "Announcement deleted"
+      #     value: "Parameter deleted"
       #   }
       #
       # @!method delete(token, id)
       # @param token [String] a token
-      # @param id [Int] the id of the announcement
+      # @param id [Int] the id of the parameter
       def delete
         # Check for admin permissions
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Get announcement
+        # Get parameter
         id = Input.int(params[:id])
-        announcement = Announcement.find_id(id)
-        render json: { announcement: nil  }.to_json, status: :ok and return if !announcement
+        parameter = Parameter.find_id(id)
+        render json: { parameter: nil  }.to_json, status: :ok and return if !parameter
 
-        # Delete announcement
-        announcement.delete
+        # Delete parameter
+        parameter.delete
 
-        render json: { message: "Announcement deleted" }.to_json, status: :ok
+        render json: { message: "Parameter deleted" }.to_json, status: :ok
       end
 
     end

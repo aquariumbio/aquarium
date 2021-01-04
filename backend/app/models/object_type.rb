@@ -31,7 +31,7 @@ class ObjectType < ActiveRecord::Base
   #
   # @return the objects
   def self.find_by_handler(handler)
-    wheres = sanitize_sql_for_conditions(['handler = ?', handler])
+    wheres = sanitize_sql(['handler = ?', handler])
     sql = "
       select * from object_types where #{wheres} order by name
     "

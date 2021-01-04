@@ -30,4 +30,13 @@ class Permission < ActiveRecord::Base
       hash
     end
   end
+
+  # Cache admin id.
+  #
+  # @return admin_id
+  def self.admin_id
+    Rails.cache.fetch 'admin_id' do
+      Permission.permission_ids.key('admin')
+    end
+  end
 end

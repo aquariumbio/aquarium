@@ -3,7 +3,7 @@
 # @api api.v3
 module Api
   module V3
-    # Announcement API calls.
+    # Wizard API calls.
     #
     # <b>General</b>
     #   API Status Codes:
@@ -31,11 +31,11 @@ module Api
     #         ...
     #       }
     #     }
-    class AnnouncementsController < ApplicationController
-      # Returns all announcements.
+    class WizardsController < ApplicationController
+      # Returns all wizards.
       #
       # <b>API Call:</b>
-      #   GET: /api/v3/announcements
+      #   GET: /api/v3/wizards
       #   {
       #     token: <token>
       #   }
@@ -43,12 +43,12 @@ module Api
       # <b>API Return Success:</b>
       #   STATUS_CODE: 200
       #   {
-      #     announcements: [
+      #     wizards: [
       #       {
-      #         id: <announcement_id>,
-      #         title: <title>,
-      #         message: <message>,
-      #         active: <true/false>,
+      #         id: <wizard_id>,
+      #         name: <name>,
+      #         description: <description>,
+      #         specification: <specification>,
       #         created_at: <datetime>,
       #         updated_at: <datetime>
       #       },
@@ -63,16 +63,16 @@ module Api
         status, response = check_token_for_permission
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Get announcements
-        announcements = Announcement.find_all
+        # Get wizards
+        wizards = Wizard.find_all
 
-        render json: { announcements: announcements }.to_json, status: :ok
+        render json: { wizards: wizards }.to_json, status: :ok
       end
 
-      # Returns a specific announcement.
+      # Returns a specific wizard.
       #
       # <b>API Call:</b>
-      #   GET: /api/v3/announcements/<id>
+      #   GET: /api/v3/wizards/<id>
       #   {
       #     token: <token>
       #   }
@@ -80,11 +80,11 @@ module Api
       # <b>API Return Success:</b>
       #   STATUS_CODE: 200
       #   {
-      #     announcement: {
-      #       id: <announcement_id>,
-      #       title: <title>,
-      #       message: <message>,
-      #       active: <true/false>,
+      #     wizard: {
+      #       id: <wizard_id>,
+      #       name: <name>,
+      #       description: <description>,
+      #       specification: <specification>,
       #       created_at: <datetime>,
       #       updated_at: <datetime>
       #     }
@@ -92,118 +92,118 @@ module Api
       #
       # @!method show(token, id)
       # @param token [String] a token
-      # @param id [Int] the id of the announcement
+      # @param id [Int] the id of the wizard
       def show
         # Check for admin permissions
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Get announcement
+        # Get wizard
         id = Input.int(params[:id])
-        announcement = Announcement.find_id(id)
+        wizard = Wizard.find_id(id)
 
-        render json: { announcement: announcement }.to_json, status: :ok
+        render json: { wizard: wizard }.to_json, status: :ok
       end
 
-      # Create a new announcement.
+      # Create a new wizard.
       #
       # <b>API Call:</b>
-      #   POST: /api/v3/announcements/create
+      #   POST: /api/v3/wizards/create
       #   {
       #     token: <token>
-      #     announcement: {
-      #       title: <title>,
-      #       message: <message>,
-      #       active: <true/false>
+      #     wizard: {
+      #       name: <name>,
+      #       description: <description>,
+      #       specification: <specification>,
       #     }
       #   }
       #
       # <b>API Return Success:</b>
       #   STATUS_CODE: 201
       #   {
-      #     announcement: {
-      #       id: <announcement_id>,
-      #       title: <title>,
-      #       message: <message>,
-      #       active: <true/false>,
+      #     wizard: {
+      #       id: <wizard_id>,
+      #       name: <name>,
+      #       description: <description>,
+      #       specification: <specification>,
       #       created_at: <datetime>,
       #       updated_at: <datetime>
       #     }
       #   }
       #
-      # @!method create(token, announcement)
+      # @!method create(token, wizard)
       # @param token [String] a token
-      # @param announcement [Hash] the announcement
+      # @param wizard [Hash] the wizard
       def create
         # Check for admin permissions
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Read sample type parameter
-        params_announcement = params[:announcement] || {}
+        # Read wizard parameter
+        params_wizard = params[:wizard] || {}
 
-        # Create sample type
-        announcement, errors = Announcement.create(params_announcement)
-        render json: { errors: errors }.to_json, status: :ok and return if !announcement
+        # Create wizard
+        wizard, errors = Wizard.create(params_wizard)
+        render json: { errors: errors }.to_json, status: :ok and return if !wizard
 
-        render json: { announcement: announcement }.to_json, status: :created
+        render json: { wizard: wizard }.to_json, status: :created
       end
 
-      # Update an announcement.
+      # Update a wizard.
       #
       # <b>API Call:</b>
-      #   POST: /api/v3/announcements/<id>/update
+      #   POST: /api/v3/wizards/<id>/update
       #   {
       #     token: <token>
-      #     id: <announcement_id>,
-      #     announcement: {
-      #       title: <title>,
-      #       message: <message>,
-      #       active: <true/false>
+      #     id: <wizard_id>,
+      #     wizard: {
+      #       name: <name>,
+      #       description: <description>,
+      #       specification: <specification>,
       #     }
       #   }
       #
       # <b>API Return Success:</b>
       #   STATUS_CODE: 200
       #   {
-      #     announcement: {
-      #       id: <announcement_id>,
-      #       title: <title>,
-      #       message: <message>,
-      #       active: <true/false>,
+      #     wizard: {
+      #       id: <wizard_id>,
+      #       name: <name>,
+      #       description: <description>,
+      #       specification: <specification>,
       #       created_at: <datetime>,
       #       updated_at: <datetime>
       #     }
       #   }
       #
-      # @!method update(token, id, announcement)
+      # @!method update(token, id, wizard)
       # @param token [String] a token
-      # @param id [Int] the id of the announcement
-      # @param announcement [Hash] the announcement
+      # @param id [Int] the id of the wizard
+      # @param wizard [Hash] the wizard
       def update
         # Check for admin permissions
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Get sample type
+        # Get wizard
         id = Input.int(params[:id])
-        announcement = Announcement.find_id(id)
-        render json: { announcement: nil }.to_json, status: :ok and return if !announcement
+        wizard = Wizard.find_id(id)
+        render json: { wizard: nil }.to_json, status: :ok and return if !wizard
 
-        # Read announcement parameter
-        params_announcement = params[:announcement] || {}
+        # Read wizard parameter
+        params_wizard = params[:wizard] || {}
 
-        # Update announcement
-        announcement, errors = announcement.update(params_announcement)
-        render json: { errors: errors }.to_json, status: :ok and return if !announcement
+        # Update wizard
+        wizard, errors = wizard.update(params_wizard)
+        render json: { errors: errors }.to_json, status: :ok and return if !wizard
 
-        render json: { announcement: announcement }.to_json, status: :ok
+        render json: { wizard: wizard }.to_json, status: :ok
       end
 
-      # Delete an announcement.
+      # Delete a wizard.
       #
       # <b>API Call:</b>
-      #   POST: /api/v3/announcements/<id>/delete
+      #   POST: /api/v3/wizards/<id>/delete
       #   {
       #     token: <token>
       #   }
@@ -211,26 +211,26 @@ module Api
       # <b>API Return Success:</b>
       #   STATUS_CODE: 200
       #   {
-      #     message: "Announcement deleted"
+      #     message: "Wizard deleted"
       #   }
       #
       # @!method delete(token, id)
       # @param token [String] a token
-      # @param id [Int] the id of the announcement
+      # @param id [Int] the id of the wizard
       def delete
         # Check for admin permissions
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Get announcement
+        # Get wizard
         id = Input.int(params[:id])
-        announcement = Announcement.find_id(id)
-        render json: { announcement: nil  }.to_json, status: :ok and return if !announcement
+        wizard = Wizard.find_id(id)
+        render json: { wizard: nil  }.to_json, status: :ok and return if !wizard
 
-        # Delete announcement
-        announcement.delete
+        # Delete wizard
+        wizard.delete
 
-        render json: { message: "Announcement deleted" }.to_json, status: :ok
+        render json: { message: "Wizard deleted" }.to_json, status: :ok
       end
 
     end
