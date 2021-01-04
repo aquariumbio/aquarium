@@ -127,7 +127,7 @@ module Api
 
         # Get details of first sample type in list
         details = SampleType.details(list[0].id)
-        details = details.update({ id: list[0].id, name: list[0].name })
+        details = details.update({ id: list[0].id, name: list[0].name, description: list[0].description })
 
         render json: {
           sample_types: list,
