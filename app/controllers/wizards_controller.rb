@@ -11,6 +11,7 @@ class WizardsController < ApplicationController
   def index
     @wizards = Wizard.all
     @conflicts = Wizard.conflicts
+    @scroll = true
 
     respond_to do |format|
       format.html { render layout: 'aq2' }
