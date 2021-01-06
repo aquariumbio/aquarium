@@ -8,7 +8,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
-import API from '../../helpers/API';
+import samplesAPI from '../../helpers/api/samples';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -22,7 +22,7 @@ const SideBar = ({ sampleTypes, setCurrentSampleType }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const fetchData = async (id) => {
-    const data = await API.samples.getTypeById(id);
+    const data = await samplesAPI.getTypeById(id);
     setCurrentSampleType(data);
   };
 

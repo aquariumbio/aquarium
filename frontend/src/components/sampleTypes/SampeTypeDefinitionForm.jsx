@@ -10,10 +10,11 @@ import Alert from '@material-ui/lab/Alert';
 import Divider from '@material-ui/core/Divider';
 import SampleTypeFieldForm from './fields/SampleTypeFieldForm';
 import FieldLabels from './fields/FieldLabels';
-import API from '../../helpers/API';
+import samplesAPI from '../../helpers/api/samples';
 import LoadingBackdrop from '../shared/LoadingBackdrop';
 import { StandardButton, LinkButton } from '../shared/Buttons';
 import utils from '../../helpers/utils';
+import AlertToast from '../shared/AlertToast';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -63,6 +64,7 @@ const SampleTypeDefinitionForm = ({ match }) => {
   const [id, setId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [disableSubmit, setDisableSubmit] = useState(false);
+  const [alertProps, setAlertProps] = useState({});
 
   const ref = useRef();
 
@@ -74,7 +76,7 @@ const SampleTypeDefinitionForm = ({ match }) => {
       second argument to useEffect  */
   useEffect(() => {
     const fetchData = async () => {
-      const data = await API.samples.getTypes();
+      const data = await samplesAPI.getTypes();
       setSampleTypes(data.sample_types);
       setIsLoading(false);
     };
@@ -84,7 +86,7 @@ const SampleTypeDefinitionForm = ({ match }) => {
 
   useEffect(() => {
     const fetchDataById = async () => {
-      const data = await API.samples.getTypeById(match.params.id);
+      const data = await samplesAPI.getTypeById(match.params.id);
       setFieldTypes(data.field_types);
       setSampleTypeDescription(data.description);
       setSampleTypeName(data.name);
@@ -97,7 +99,8 @@ const SampleTypeDefinitionForm = ({ match }) => {
     match.params.id ? fetchDataById() : '';
   }, []);
 
-  // Update allowSubmit state if name and Description change
+  /*  Update allowSubmit state if name and Description change
+      Disable submit if name or description are empty */
   useEffect(() => {
     setDisableSubmit(!(!!sampleTypeName || !!sampleTypeDescription));
   });
@@ -132,7 +135,7 @@ const SampleTypeDefinitionForm = ({ match }) => {
   };
 
   // Submit form with all data
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = {
       id: null,
@@ -140,13 +143,43 @@ const SampleTypeDefinitionForm = ({ match }) => {
       description: sampleTypeDescription,
       field_types: fieldTypes,
     };
-    // change submit action based on form type
-    id ? API.samples.update(formData, id) : API.samples.create(formData);
+
+    // We will have an id when we are editing a sample type
+    const update = !!id;
+    // eslint-disable-next-line no-debugger
+    debugger;
+    const response = update
+      ? await samplesAPI.update(formData, id)
+      : await samplesAPI.create(formData);
+
+    const action = update ? 'updated' : 'deleted';
+    if (response.status === 200) {
+      setAlertProps({
+        message: `${sampleTypeName} ${action}`,
+        severity: 'success',
+        open: true,
+      });
+
+      return true;
+    }
+
+    /*  Failure alert  */
+    return setAlertProps({
+      message: `${sampleTypeName} could not be ${action}`,
+      severity: 'error',
+      open: true,
+    });
   };
 
   return (
     <Container className={classes.root} maxWidth="xl" data-cy="sampe-type-definition-container">
       <LoadingBackdrop isLoading={isLoading} ref={ref} />
+      <AlertToast
+        open={alertProps.open}
+        severity={alertProps.severity}
+        message={alertProps.message}
+      />
+
       {match.url === '/sample_types/new' && (
         <Typography variant="h1" align="center" className={classes.title}>
           Defining New Sample Type

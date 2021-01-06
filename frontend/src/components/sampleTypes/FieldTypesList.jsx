@@ -27,6 +27,9 @@ const AftList = ({ allowableFieldTypes }) => allowableFieldTypes
 // Given an array of field types display as a list
 const FieldTypesList = ({ fieldTypes }) => {
   const classes = useStyles();
+  if (!fieldTypes.length) {
+    return <p>No field types</p>;
+  }
 
   return (
     <List component="ul" className={classes.list}>
@@ -34,7 +37,7 @@ const FieldTypesList = ({ fieldTypes }) => {
         <li key={field.id}>
           <b>{field.name}</b>
           {': '}
-          {field.ftype === 'sample' && field.allowable_field_types ? (
+          {field.ftype === 'sample' && field.allowable_field_types.length ? (
             <AftList allowableFieldTypes={field.allowable_field_types} />
           ) : (
             field.ftype
@@ -66,5 +69,7 @@ FieldTypesList.propTypes = {
         }),
       ),
     }),
-  ).isRequired,
+  ),
 };
+
+FieldTypesList.defaultProps = [];

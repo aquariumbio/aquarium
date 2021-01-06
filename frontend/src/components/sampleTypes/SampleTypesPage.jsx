@@ -7,18 +7,18 @@ import Divider from '@material-ui/core/Divider';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Toolbar from '@material-ui/core/Toolbar';
-import API from '../../helpers/API';
+import samplesAPI from '../../helpers/api/samples';
 import SideBar from './SideBar';
 import LoadingBackdrop from '../shared/LoadingBackdrop';
 import ShowSampleType from './ShowSampleType';
 import { LinkButton, StandardButton } from '../shared/Buttons';
+import AlertToast from '../shared/AlertToast';
 
 // Route: /sample_types
 // Linked in LeftHamburgeMenu
-
 const useStyles = makeStyles(() => ({
   root: {
-    height: '100vh',
+    height: '90vh',
   },
   header: {
     display: 'flex',
@@ -33,6 +33,11 @@ const SampleTypeDefinitions = () => {
   const [sampleTypes, setSampleTypes] = useState([]);
   const [currentSampleType, setCurrentSampleType] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [alertProps, setAlertProps] = useState({
+    message: '',
+    severity: 'info',
+    open: false,
+  });
 
   /*  Get sample types top populate sample options menu
       We cannot use async directly in useEffect so we create an async function that we will call
@@ -42,7 +47,7 @@ const SampleTypeDefinitions = () => {
       second argument to useEffect  */
   useEffect(() => {
     const fetchData = async () => {
-      const data = await API.samples.getTypes();
+      const data = await samplesAPI.getTypes();
       setSampleTypes(data.sample_types);
       setCurrentSampleType(data.first);
       setIsLoading(false);
@@ -52,23 +57,56 @@ const SampleTypeDefinitions = () => {
   }, []);
 
   const handleDelete = async () => {
-    await API.samples.delete(currentSampleType.id);
-    window.location.reload();
+    const response = await samplesAPI.delete(currentSampleType.id);
+
+    /*  When we successfully delete a sample type we set the success alert,
+        make a new call to get all sample types and update the current sample type
+        so the user is seeing valid data */
+    if (response.status === 200) {
+      const data = await samplesAPI.getTypes();
+
+      setAlertProps({
+        message: `${currentSampleType.name} deleted`,
+        severity: 'success',
+        open: true,
+      });
+
+      setSampleTypes(data.sample_types);
+      setCurrentSampleType(data.first);
+      return true;
+    }
+
+    /*  Failure alert  */
+    return setAlertProps({
+      message: `${currentSampleType.name} could not be deleted`,
+      severity: 'error',
+      open: true,
+    });
   };
 
   return (
     <>
       <LoadingBackdrop isLoading={isLoading} />
+      <AlertToast
+        open={alertProps.open}
+        severity={alertProps.severity}
+        message={alertProps.message}
+      />
+
       {!isLoading && (
         <Grid container className={classes.root}>
           {/* SIDE BAR */}
-          <SideBar
-            setCurrentSampleType={setCurrentSampleType}
-            sampleTypes={sampleTypes}
-          />
+          {currentSampleType
+            ? (
+              <SideBar
+                setCurrentSampleType={setCurrentSampleType}
+                sampleTypes={sampleTypes}
+              />
+            ) : ''}
 
           {/* MAIN CONTENT */}
           <Grid item xs={10} name="sample-types-main-container" data-cy="sample-types-main-container" overflow="visible">
+
             <Toolbar className={classes.header}>
               <Breadcrumbs
                 separator={<NavigateNextIcon fontSize="small" />}
@@ -80,25 +118,31 @@ const SampleTypeDefinitions = () => {
                   Sample Type Defnitions
                 </Typography>
                 <Typography display="inline" variant="h6" component="h1">
-                  {currentSampleType.name}
+                  {currentSampleType ? currentSampleType.name : ''}
                 </Typography>
               </Breadcrumbs>
               <div>
-                <LinkButton
-                  name="Edit Sample Type"
-                  testName="edit_sample_type_btn"
-                  text="Edit"
-                  type="button"
-                  linkTo={`/sample_types/${currentSampleType.id}/edit`}
-                />
+                {currentSampleType
+                  ? (
+                    <>
+                      <LinkButton
+                        name="Edit Sample Type"
+                        testName="edit_sample_type_btn"
+                        text="Edit"
+                        type="button"
+                        linkTo={`/sample_types/${currentSampleType.id}/edit`}
+                      />
 
-                <StandardButton
-                  name="Delete Sample Type"
-                  testName="delete_sample_type_btn"
-                  text="Delete"
-                  type="button"
-                  handleClick={handleDelete}
-                />
+                      <StandardButton
+                        name="Delete Sample Type"
+                        testName="delete_sample_type_btn"
+                        text="Delete"
+                        type="button"
+                        handleClick={handleDelete}
+                      />
+                    </>
+                  )
+                  : ''}
                 <LinkButton
                   name="New Sample Type"
                   testName="new_sample_type_btn"
@@ -112,7 +156,10 @@ const SampleTypeDefinitions = () => {
 
             <Divider />
 
-            <ShowSampleType sampleType={currentSampleType} />
+            {currentSampleType
+              ? <ShowSampleType sampleType={currentSampleType} />
+              : ''}
+
           </Grid>
         </Grid>
       )}

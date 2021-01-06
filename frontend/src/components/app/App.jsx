@@ -65,6 +65,8 @@ export default function App() {
           !sessionStorage.getItem('token')
           && <Redirect to="/login" />
         }
+        { /* TODO: REDIRECT TO PROFILE PAGE IF USER HAS NOT SIGNED AGREENEMTNS */ }
+
         <Switch>
           <Route path="/login" render={(props) => <LoginDialog {...props} />} />
           <>

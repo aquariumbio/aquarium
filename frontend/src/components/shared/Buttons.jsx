@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
     boxShadow: '0 2px 5px 0 rgba(0,0,0,.26)',
     margin: `${theme.spacing(2)}px ${theme.spacing(2)}px ${theme.spacing(2)}px 0px `,
-
   },
 
   dense: {
@@ -59,7 +58,6 @@ StandardButton.propTypes = {
   handleClick: PropTypes.func.isRequired,
   testName: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
-
 };
 StandardButton.defaultProps = {
   dark: false,
