@@ -19,7 +19,8 @@ import RolesPage from '../roles/RolesPage';
 import UsersPage from '../users/UsersPage';
 import SampleTypesPage from '../sampleTypes/SampleTypesPage';
 import BudgetsPage from '../budgets/BudgetsPage';
-import ContainersPage from '../containers/ContainersPage';
+import ObjectTypesPage from '../objectTypes/ObjectTypesPage';
+import ObjectTypeForm from '../objectTypes/ObjectTypeForm';
 import DirectPurchasePage from '../directPurchase/DirectPurchasePage';
 import ExportWorkflowsPage from '../exportWorkflows/ExportWorkflowsPage';
 import InvoicesPage from '../invoices/InvoicesPage';
@@ -84,7 +85,11 @@ export default function App() {
 
             <Route exact path="/announcements" render={(props) => <AnnouncementsPage {...props} />} />
             <Route exact path="/budgets" render={(props) => <BudgetsPage {...props} />} />
-            <Route exact path="/object_types" render={(props) => <ContainersPage {...props} />} />
+
+            <Route exact path="/object_types" render={(props) => <ObjectTypesPage {...props} />} />
+            <Route exact path="/object_types/new" render={(props) => <ObjectTypeForm {...props} />} />
+            <Route exact path="/object_types/:id/edit" render={(props) => <ObjectTypeForm {...props} />} />
+
             <Route exact path="/direct_purchase" render={(props) => <DirectPurchasePage {...props} />} />
             <Route exact path="/import" render={(props) => <ImportWorkflowsPage {...props} />} />
             <Route exact path="/publish" render={(props) => <ExportWorkflowsPage {...props} />} />
@@ -106,6 +111,8 @@ export default function App() {
             <Route exact path="/invoices" render={(props) => <InvoicesPage {...props} />} />
             <Route exact path="/users/:id" render={(props) => <UserProfilePage {...props} />} />
 
+            {/* Redirect anything else to HOME (or a 404 page or something else) */}
+            {/* TODO */}
           </>
         </Switch>
       </div>

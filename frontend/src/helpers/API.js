@@ -32,34 +32,34 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   // eslint-disable-next-line consistent-return
   (error) => {
-    const { status, message } = error.response;
-    if (status) {
-      switch (status) {
-        case 400:
-          alert(`${status}: ${message}`);
-          break;
-        case 401:
-          if (window.location.pathname !== '/login') {
-            if (currentSessionToken) {
-              axios.post('/token/delete');
-              sessionStorage.clear('token');
-            }
+    const error_response = error.response;
+    switch (error_response["status"]) {
+      case 400:
+        alert("400: "+JSON.stringify(error_response["data"]));
+        break;
+      case 401:
+        if (window.location.pathname !== '/login') {
+          if (currentSessionToken) {
+            axios.post('/token/delete');
+            sessionStorage.clear('token');
           }
-          /* TODO: HANDLE SESSION TIMEOUT
-             if (...pathname !== '/login' && message !== 'Session timeout') { OPEN LOGIN MODAL} */
-          break;
-        case 403:
-          // TODO: HANDLE PERMISSIONS
-          alert(`${status}: ${message} - Insufficient permissions`);
-          break;
-        case 404:
-          alert(`${status}: ${message}`);
-          break;
-        default:
-          alert(`${status}: ${message}`);
-      }
-      return Promise.reject(error.response);
+        }
+        /* TODO: HANDLE SESSION TIMEOUT
+           if (...pathname !== '/login' && message !== 'Session timeout') { OPEN LOGIN MODAL} */
+        alert("401: "+JSON.stringify(error_response["data"]));
+        break;
+      case 403:
+        // TODO: HANDLE PERMISSIONS
+        alert("403: "+JSON.stringify(error_response["data"]));
+        break;
+      case 404:
+        alert("404: "+JSON.stringify(error_response["data"]));
+        break;
+      default:
+        alert(error_response["status"]+": "+JSON.stringify(error_response["data"]));
     }
+    // Return something obvious to stop processing. I like simply "false"
+    return false;
   },
 );
 export default axiosInstance;

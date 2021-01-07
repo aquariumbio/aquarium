@@ -61,7 +61,7 @@ const LeftHamburgerMenu = (props) => {
         <MenuItem onClick={() => handleMenuClick('/parameters')}>Parameters</MenuItem>
         <Divider />
         <MenuItem onClick={() => handleMenuClick('/sample_types')}>Sample Type Definitions</MenuItem>
-        <MenuItem onClick={() => handleMenuClick('/object_types')}>Containers</MenuItem>
+        <MenuItem onClick={() => handleMenuClick('/object_types')}>Object Types</MenuItem>
         <MenuItem onClick={() => handleMenuClick('/wizards')}>Location Wizards</MenuItem>
         <Divider />
         <MenuItem onClick={() => handleMenuClick('/import)')}>Import Workflows</MenuItem>
