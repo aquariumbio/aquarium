@@ -102,7 +102,7 @@ const SampleTypeDefinitionForm = ({ match }) => {
   /*  Update allowSubmit state if name and Description change
       Disable submit if name or description are empty */
   useEffect(() => {
-    setDisableSubmit(!(!!sampleTypeName || !!sampleTypeDescription));
+    setDisableSubmit(!sampleTypeName.trim() || !sampleTypeDescription.trim());
   });
 
   // Handle click add field button --> add new field type to end of current field types array
