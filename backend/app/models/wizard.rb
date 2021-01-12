@@ -21,9 +21,10 @@ class Wizard < ActiveRecord::Base
 
   # Create a wizard
   #
-  # @param wizard [Hash] the objet type
+  # @param wizard [Hash] the wizard
   # @option wizard[:name] [String] the name
   # @option wizard[:description] [String] the description
+  # @option wizard[:specification] [String] the specification
   # return the wizard
   def self.create(wizard)
     # Read the parameters
@@ -48,9 +49,10 @@ class Wizard < ActiveRecord::Base
 
   # Update a wizard
   #
-  # @param wizard [Hash] the objet type
+  # @param wizard [Hash] the wizard
   # @option wizard[:name] [String] the name
   # @option wizard[:description] [String] the description
+  # @option wizard[:specification] [String] the specification
   # return the wizard
   def update(wizard)
     # Read the parameters
