@@ -5,13 +5,14 @@ RSpec.describe Api::V3::ParametersController, type: :request do
 
     # Sign in users
     before :all do
+      @create_url = "/api/v3/token/create"
       @token_1 = []
       @parameter_ids = []
       @sample_type_ids = []
 
-      post "/api/v3/token/create?login=user_1&password=password"
-      resp = JSON.parse(response.body)
-      @token_1 << resp["token"]
+      post "#{@create_url}?login=user_1&password=password"
+      response_body = JSON.parse(response.body)
+      @token_1 << response_body["token"]
 
       @parameter_ids = []
     end
@@ -22,10 +23,10 @@ RSpec.describe Api::V3::ParametersController, type: :request do
       expect(response).to have_http_status 200
 
       # Errors
-      resp = JSON.parse(response.body)
-      expect(resp["errors"]["key"]).to eq ["can't be blank"]
-      expect(resp["errors"]["value"]).to eq ["can't be blank"]
-      expect(resp["errors"]["description"]).to eq ["can't be blank"]
+      response_body = JSON.parse(response.body)
+      expect(response_body["errors"]["key"]).to eq ["can't be blank"]
+      expect(response_body["errors"]["value"]).to eq ["can't be blank"]
+      expect(response_body["errors"]["description"]).to eq ["can't be blank"]
     end
 
     # CRUD tests
@@ -46,8 +47,8 @@ RSpec.describe Api::V3::ParametersController, type: :request do
       expect(response).to have_http_status 201
 
       # Save the id
-      resp = JSON.parse(response.body)
-      this_parameter = resp["parameter"]
+      response_body = JSON.parse(response.body)
+      this_parameter = response_body["parameter"]
       @parameter_ids << this_parameter["id"]
     end
 
@@ -56,10 +57,10 @@ RSpec.describe Api::V3::ParametersController, type: :request do
       # Get parameter
       get "/api/v3/parameters/#{@parameter_ids[0]}?token=#{@token_1[0]}"
       expect(response).to have_http_status 200
-      resp = JSON.parse(response.body)
+      response_body = JSON.parse(response.body)
 
       # Check
-      parameter = resp["parameter"]
+      parameter = response_body["parameter"]
       expect(parameter["key"]).to eq "new key"
       expect(parameter["value"]).to eq "new value"
       expect(parameter["description"]).to eq "new desription"
@@ -75,10 +76,10 @@ RSpec.describe Api::V3::ParametersController, type: :request do
 
       post "/api/v3/parameters/#{@parameter_ids[0]}/update?token=#{@token_1[0]}", :params => update_params
       expect(response).to have_http_status 200
-      resp = JSON.parse(response.body)
+      response_body = JSON.parse(response.body)
 
       # Check
-      errors = resp["errors"]
+      errors = response_body["errors"]
       expect(errors["key"]).to eq ["can't be blank"]
       expect(errors["value"]).to eq ["can't be blank"]
       expect(errors["description"]).to eq ["can't be blank"]
@@ -97,10 +98,10 @@ RSpec.describe Api::V3::ParametersController, type: :request do
 
       post "/api/v3/parameters/#{@parameter_ids[0]}/update?token=#{@token_1[0]}", :params => update_params
       expect(response).to have_http_status 200
-      resp = JSON.parse(response.body)
+      response_body = JSON.parse(response.body)
 
       # Check
-      parameter = resp["parameter"]
+      parameter = response_body["parameter"]
       expect(parameter["key"]).to eq "update key"
       expect(parameter["value"]).to eq "update value"
       expect(parameter["description"]).to eq "update description"

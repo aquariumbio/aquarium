@@ -62,7 +62,7 @@ class User < ActiveRecord::Base
 
   # Create a user
   #
-  # @param user [Hash] the objet type
+  # @param user [Hash] the user
   # @option user[:name] [String] the name
   # @option user[:password] [String] the password
   # @option user[:login] [String] the login
@@ -109,7 +109,7 @@ class User < ActiveRecord::Base
 
   # Update a user's info (information tab)
   #
-  # @param user_data [Hash] the objet type
+  # @param user_data [Hash] the user
   # return the user
   def update_info(user_data)
     valid = true
@@ -137,7 +137,7 @@ class User < ActiveRecord::Base
 
   # Update a user's permissions (permissions tab)
   #
-  # @param user_data [Hash] the objet type
+  # @param user_data [Hash] the user
   # @option user_data[:permission_ids] [Array] array of permission ids
   # return the user
   def update_permissions(by_user_id, user_data)
@@ -152,9 +152,9 @@ class User < ActiveRecord::Base
       if !Permission.permission_ids[permission_id]
         self.errors.add(:permission_ids, "Permission_id #{permission_id} is invalid")
         valid = false
-      elsif update_self && permission_id == 1
+      elsif update_self && permission_id == Permission.admin_id
         # noop
-      elsif update_self && permission_id == 6
+      elsif update_self && permission_id == Permission.retired_id
         self.errors.add(:permission_ids, "Cannot set retired for self")
         valid = false
       else
@@ -255,23 +255,11 @@ class User < ActiveRecord::Base
   end
 
   # Check whether user has permission_id
-  # permission_id ==  0:                 anything         (not retired)
-  # permission_id ==  <id for admin>:    admin            (not retired)
-  # permission_id ==  <id for <___>>:    <___>  or admin  (not retired)
-  # permission_id ==  <id for retired>:  retired
   #
   # @param permission_id [Int] the permission_id to check
   # @return true
   def permission?(permission_id)
-    # return false if retired
-    return false if permission_ids.index(".#{Permission.permission_ids.key('retired')}.")
-
-    # return true if permission_id == 0
-    return true if permission_id.zero?
-
-    # Check <permission_id> and check "admin"
-    # NOTE: permission_id == -1 will still validate on admin
-    permission_ids.index(".#{permission_id}.") or permission_ids.index(".#{Permission.permission_ids.key('admin')}.")
+    Permission.ok?(permission_ids, permission_id)
   end
 
   # Set a specific permission for a specific user.

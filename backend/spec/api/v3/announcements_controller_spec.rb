@@ -5,11 +5,12 @@ RSpec.describe Api::V3::AnnouncementsController, type: :request do
 
     # Sign in users
     before :all do
+      @create_url = "/api/v3/token/create"
       @token_1 = []
 
-      post "/api/v3/token/create?login=user_1&password=password"
-      resp = JSON.parse(response.body)
-      @token_1 << resp["token"]
+      post "#{@create_url}?login=user_1&password=password"
+      response_body = JSON.parse(response.body)
+      @token_1 << response_body["token"]
 
       @announcement_ids = []
     end
@@ -20,9 +21,9 @@ RSpec.describe Api::V3::AnnouncementsController, type: :request do
       expect(response).to have_http_status 200
 
       # Errors
-      resp = JSON.parse(response.body)
-      expect(resp["errors"]["title"]).to eq ["can't be blank"]
-      expect(resp["errors"]["message"]).to eq ["can't be blank"]
+      response_body = JSON.parse(response.body)
+      expect(response_body["errors"]["title"]).to eq ["can't be blank"]
+      expect(response_body["errors"]["message"]).to eq ["can't be blank"]
     end
 
     # CRUD tests
@@ -43,8 +44,8 @@ RSpec.describe Api::V3::AnnouncementsController, type: :request do
       expect(response).to have_http_status 201
 
       # Save the id
-      resp = JSON.parse(response.body)
-      this_announcement = resp["announcement"]
+      response_body = JSON.parse(response.body)
+      this_announcement = response_body["announcement"]
       @announcement_ids << this_announcement["id"]
     end
 
@@ -53,10 +54,10 @@ RSpec.describe Api::V3::AnnouncementsController, type: :request do
       # Get announcement
       get "/api/v3/announcements/#{@announcement_ids[0]}?token=#{@token_1[0]}"
       expect(response).to have_http_status 200
-      resp = JSON.parse(response.body)
+      response_body = JSON.parse(response.body)
 
       # Check
-      announcement = resp["announcement"]
+      announcement = response_body["announcement"]
       expect(announcement["title"]).to eq "new title"
       expect(announcement["message"]).to eq "new message"
       expect(announcement["active"]).to eq false
@@ -72,10 +73,10 @@ RSpec.describe Api::V3::AnnouncementsController, type: :request do
 
       post "/api/v3/announcements/#{@announcement_ids[0]}/update?token=#{@token_1[0]}", :params => update_params
       expect(response).to have_http_status 200
-      resp = JSON.parse(response.body)
+      response_body = JSON.parse(response.body)
 
       # Check
-      errors = resp["errors"]
+      errors = response_body["errors"]
       expect(errors["title"]).to eq ["can't be blank"]
       expect(errors["message"]).to eq ["can't be blank"]
     end
@@ -93,10 +94,10 @@ RSpec.describe Api::V3::AnnouncementsController, type: :request do
 
       post "/api/v3/announcements/#{@announcement_ids[0]}/update?token=#{@token_1[0]}", :params => update_params
       expect(response).to have_http_status 200
-      resp = JSON.parse(response.body)
+      response_body = JSON.parse(response.body)
 
       # Check
-      announcement = resp["announcement"]
+      announcement = response_body["announcement"]
       expect(announcement["title"]).to eq "update title"
       expect(announcement["message"]).to eq "update message"
       expect(announcement["active"]).to eq true
