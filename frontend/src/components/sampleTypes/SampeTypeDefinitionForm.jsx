@@ -93,7 +93,6 @@ const SampleTypeDefinitionForm = ({ match }) => {
       setObjectTypes(data.object_types);
       setInventory(data.inventory);
       setId(data.id);
-      setIsLoading(false);
     };
 
     match.params.id ? fetchDataById() : '';
