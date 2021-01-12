@@ -40,7 +40,7 @@ class ObjectType < ActiveRecord::Base
 
   # Create an object type
   #
-  # @param object_type [Hash] the objet type
+  # @param object_type [Hash] the object type
   # @option object_type[:name] [String] the name
   # @option object_type[:description] [String] the description
   # @option object_type[:prefix] [String] the prefix

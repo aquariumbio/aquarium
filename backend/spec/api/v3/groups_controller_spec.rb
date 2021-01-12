@@ -5,11 +5,12 @@ RSpec.describe Api::V3::GroupsController, type: :request do
 
     # Sign in users
     before :all do
+      @create_url = "/api/v3/token/create"
       @token_1 = []
 
-      post "/api/v3/token/create?login=user_1&password=password"
-      resp = JSON.parse(response.body)
-      @token_1 << resp["token"]
+      post "#{@create_url}?login=user_1&password=password"
+      response_body = JSON.parse(response.body)
+      @token_1 << response_body["token"]
 
       @group_ids = []
     end
@@ -20,9 +21,9 @@ RSpec.describe Api::V3::GroupsController, type: :request do
       expect(response).to have_http_status 200
 
       # Errors
-      resp = JSON.parse(response.body)
-      expect(resp["errors"]["name"]).to eq ["can't be blank"]
-      expect(resp["errors"]["description"]).to eq ["can't be blank"]
+      response_body = JSON.parse(response.body)
+      expect(response_body["errors"]["name"]).to eq ["can't be blank"]
+      expect(response_body["errors"]["description"]).to eq ["can't be blank"]
     end
 
     # CRUD tests
@@ -42,8 +43,8 @@ RSpec.describe Api::V3::GroupsController, type: :request do
       expect(response).to have_http_status 201
 
       # Save the id
-      resp = JSON.parse(response.body)
-      this_group = resp["group"]
+      response_body = JSON.parse(response.body)
+      this_group = response_body["group"]
       @group_ids << this_group["id"]
     end
 
@@ -52,10 +53,10 @@ RSpec.describe Api::V3::GroupsController, type: :request do
       # Get group
       get "/api/v3/groups/#{@group_ids[0]}?token=#{@token_1[0]}"
       expect(response).to have_http_status 200
-      resp = JSON.parse(response.body)
+      response_body = JSON.parse(response.body)
 
       # Check
-      group = resp["group"]
+      group = response_body["group"]
       expect(group["name"]).to eq "new name"
       expect(group["description"]).to eq "new description"
     end
@@ -66,8 +67,8 @@ RSpec.describe Api::V3::GroupsController, type: :request do
       expect(response).to have_http_status 200
 
       # Check
-      resp = JSON.parse(response.body)
-      groups = resp["groups"]
+      response_body = JSON.parse(response.body)
+      groups = response_body["groups"]
       expect(groups[0]["name"]).to eq "new name"
     end
 
@@ -77,8 +78,8 @@ RSpec.describe Api::V3::GroupsController, type: :request do
       expect(response).to have_http_status 200
 
       # Check no groups that start with "a"
-      resp = JSON.parse(response.body)
-      groups = resp["groups"]
+      response_body = JSON.parse(response.body)
+      groups = response_body["groups"]
       expect(groups).to eq []
     end
 
@@ -92,10 +93,10 @@ RSpec.describe Api::V3::GroupsController, type: :request do
 
       post "/api/v3/groups/#{@group_ids[0]}/update?token=#{@token_1[0]}", :params => update_params
       expect(response).to have_http_status 200
-      resp = JSON.parse(response.body)
+      response_body = JSON.parse(response.body)
 
       # Check
-      errors = resp["errors"]
+      errors = response_body["errors"]
       expect(errors["name"]).to eq ["can't be blank"]
       expect(errors["description"]).to eq ["can't be blank"]
     end
@@ -112,10 +113,10 @@ RSpec.describe Api::V3::GroupsController, type: :request do
 
       post "/api/v3/groups/#{@group_ids[0]}/update?token=#{@token_1[0]}", :params => update_params
       expect(response).to have_http_status 200
-      resp = JSON.parse(response.body)
+      response_body = JSON.parse(response.body)
 
       # Check
-      group = resp["group"]
+      group = response_body["group"]
       expect(group["name"]).to eq "update name"
       expect(group["description"]).to eq "update description"
     end

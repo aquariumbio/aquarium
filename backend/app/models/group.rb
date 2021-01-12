@@ -33,7 +33,7 @@ class Group < ActiveRecord::Base
 
   # Create an group
   #
-  # @param group [Hash] the objet type
+  # @param group [Hash] the group
   # @option group[:name] [String] the name
   # @option group[:description] [String] the description
   # return the group
@@ -58,7 +58,7 @@ class Group < ActiveRecord::Base
 
   # Update an group
   #
-  # @param group [Hash] the objet type
+  # @param group [Hash] the group
   # @option group[:name] [String] the name
   # @option group[:description] [String] the description
   # return the group

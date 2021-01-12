@@ -24,7 +24,7 @@ class Parameter < ActiveRecord::Base
 
   # Create an parameter
   #
-  # @param parameter [Hash] the objet type
+  # @param parameter [Hash] the parameter
   # @option parameter[:key] [String] the key
   # @option parameter[:value] [String] the value
   # @option parameter[:description] [String] description - interpreted as Boolen
@@ -52,7 +52,7 @@ class Parameter < ActiveRecord::Base
 
   # Update an parameter
   #
-  # @param parameter [Hash] the objet type
+  # @param parameter [Hash] the parameter
   # @option parameter[:key] [String] the key
   # @option parameter[:value] [String] the value
   # @option parameter[:description] [String] description - interpreted as Boolen
