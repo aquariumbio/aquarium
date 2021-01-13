@@ -208,10 +208,10 @@ module Api
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Read sample type parameter
+        # Read user parameter
         params_user = params[:user] || {}
 
-        # Create sample type
+        # Create user
         user, errors = User.create(params_user)
         render json: { errors: errors }.to_json, status: :ok and return if !user
 

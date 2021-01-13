@@ -137,10 +137,10 @@ module Api
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Read sample type parameter
+        # Read parameter parameter
         params_parameter = params[:parameter] || {}
 
-        # Create sample type
+        # Create parameter
         parameter, errors = Parameter.create(params_parameter)
         render json: { errors: errors }.to_json, status: :ok and return if !parameter
 
@@ -183,7 +183,7 @@ module Api
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Get sample type
+        # Get parameter
         id = Input.int(params[:id])
         parameter = Parameter.find_id(id)
         render json: { parameter: nil }.to_json, status: :ok and return if !parameter
