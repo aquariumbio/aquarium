@@ -45,7 +45,7 @@ gem 'rack-cors', '~> 1.0.5', require: 'rack/cors'
 
 gem 'rails', '4.2.11.3'
 
-gem 'redcarpet'
+gem 'redcarpet', '>= 3.5.1'
 
 gem 'sassc-rails'
 
