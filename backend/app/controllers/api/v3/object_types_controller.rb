@@ -89,7 +89,7 @@ module Api
 
         # Get handlers
         handlers = ObjectType.find_handlers
-        render json: { object_types: nil }.to_json, status: :ok and return if handlers.length == 0
+        render json: { object_types: [ ] }.to_json, status: :ok and return if handlers.length == 0
 
         # Get objects of first item in list
         object_types = ObjectType.find_by_handler(handlers[0].handler)
@@ -98,8 +98,8 @@ module Api
           handlers: handlers,
           handlers[0].handler => {
             object_types: object_types
-           }
-         }.to_json, status: :ok
+          }
+        }.to_json, status: :ok
       end
 
       # Returns all object_types for a specific handler.
@@ -158,8 +158,8 @@ module Api
         render json: {
           handler => {
             object_types: object_types
-           }
-         }.to_json, status: :ok
+          }
+        }.to_json, status: :ok
       end
 
       # Returns a specific object type
@@ -358,7 +358,8 @@ module Api
         # Get object type
         id = Input.int(params[:id])
         object_type = ObjectType.find_id(id)
-        render json: { object_type: nil }.to_json, status: :ok and return if !object_type
+        render json: { object_type: nil }.to_json, status: :not_found and return if !object_type
+
 
         # Read object type parameter
         params_object_type = params[:object_type] || {}
@@ -395,14 +396,14 @@ module Api
         # Get object type
         id = Input.int(params[:id])
         object_type = ObjectType.find_id(id)
-        render json: { object_type: nil  }.to_json, status: :ok and return if !object_type
+        render json: { object_type: nil }.to_json, status: :not_found and return if !object_type
 
         # Delete object type
         object_type.delete
 
         render json: {
           message: "Object type deleted"
-         }.to_json, status: :ok
+        }.to_json, status: :ok
       end
 
     end

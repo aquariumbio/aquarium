@@ -185,7 +185,7 @@ module Api
         # Get group
         id = Input.int(params[:id])
         group = Group.find_id(id)
-        render json: { group: nil }.to_json, status: :ok and return if !group
+        render json: { group: nil }.to_json, status: :not_found and return if !group
 
         # Read group parameter
         params_group = params[:group] || {}
@@ -222,7 +222,7 @@ module Api
         # Get group
         id = Input.int(params[:id])
         group = Group.find_id(id)
-        render json: { group: nil  }.to_json, status: :ok and return if !group
+        render json: { group: nil }.to_json, status: :not_found and return if !group
 
         # Delete group
         group.delete
@@ -264,12 +264,12 @@ module Api
         # Get group
         id = Input.int(params[:id])
         group = Group.find_id(id)
-        render json: { group: nil }.to_json, status: :ok and return if !group
+        render json: { group: nil }.to_json, status: :not_found and return if !group
 
         # Get user
         user_id = Input.int(params[:user_id])
         user = User.find_id(user_id)
-        render json: { membership: nil }.to_json, status: :ok and return if !user
+        render json: { membership: nil }.to_json, status: :not_found and return if !user
 
         # Add membership
         membership = Membership.find(id, user_id)
@@ -312,7 +312,7 @@ module Api
         group_id = Input.int(params[:id])
         user_id = Input.int(params[:user_id])
         membership = Membership.find(group_id, user_id)
-        render json: { membership: nil }.to_json, status: :ok and return if !membership
+        render json: { membership: nil }.to_json, status: :not_found and return if !membership
 
         # Delete membership
         membership.delete
