@@ -263,7 +263,7 @@ var no_race = "init";
               }
             })
           });
-          
+
           $scope.jobs = aq.uniq(aq.collect(operation_type.operations, op => {
             return op.jobs.length > 0 ? op.last_job.id : null
           }));
@@ -272,7 +272,7 @@ var no_race = "init";
           aq.each(operation_type.operations, op => {
             if (op.jobs.length > 0 && op.last_job.assignment != null) {
 
-              const assignment = { 
+              const assignment = {
                 assigned_to: op.last_job.assignment.assigned_to,
                 to_name: op.last_job.assignment.to_name
               }
@@ -341,7 +341,7 @@ var no_race = "init";
               $scope.$apply();
             });
           })
-        }       
+        }
       };
 
       $scope.retry = function (operation_type) {
@@ -492,7 +492,7 @@ var no_race = "init";
           }
         })
       }
-      
+
       function get_tech_list() {
         AQ.get('/api/v2/groups/technicians/users?options[]=job_count')
           .then(response => {
@@ -514,7 +514,7 @@ var no_race = "init";
       }
 
       $scope.unassign_job = function(job_id) {
-        // HACK 
+        // HACK
         $('.assign_'+job_id).each(function(){
           $(this).removeClass('md-checked');
           $(this).attr('aria-checked',false)
@@ -556,7 +556,7 @@ var no_race = "init";
         }
       }
 
-      // Disable unassign button when there no assignment 
+      // Disable unassign button when there no assignment
       $scope.disable_unassign = function(job_id) {
         if ($scope.job_assignments[job_id] == null || $scope.job_assignments[job_id] == undefined) {
           return true;
@@ -572,10 +572,7 @@ var no_race = "init";
         $('#cat_'+$scope.current.category_index).removeClass("selected-category").addClass("unselected-category");
       }
 
-      
-      
+
     }]);
 
 })();
-
-
