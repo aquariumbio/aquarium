@@ -24,9 +24,12 @@ class Budget < ActiveRecord::Base
 
   # Create a budget
   #
-  # @param budget [Hash] the objet type
+  # @param budget [Hash] the budget
   # @option budget[:name] [String] the name
   # @option budget[:description] [String] the description
+  # @option budget[:contact] [String] the contact
+  # @option budget[:email] [String] the email
+  # @option budget[:phone] [String] the phone
   # return the budget
   def self.create(budget)
     # Read the parameters
@@ -55,9 +58,12 @@ class Budget < ActiveRecord::Base
 
   # Update a budget
   #
-  # @param budget [Hash] the objet type
+  # @param budget [Hash] the budget
   # @option budget[:name] [String] the name
   # @option budget[:description] [String] the description
+  # @option budget[:contact] [String] the contact
+  # @option budget[:email] [String] the email
+  # @option budget[:phone] [String] the phone
   # return the budget
   def update(budget)
     # Read the parameters

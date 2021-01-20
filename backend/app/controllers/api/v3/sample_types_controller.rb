@@ -123,7 +123,7 @@ module Api
 
         # Get list
         list = SampleType.find_all
-        render json: { sample_types: nil,  }.to_json, status: :ok and return if list.length == 0
+        render json: { sample_types: [ ] }.to_json, status: :ok and return if list.length == 0
 
         # Get details of first sample type in list
         details = SampleType.details(list[0].id)
@@ -132,7 +132,7 @@ module Api
         render json: {
           sample_types: list,
           first: details
-         }.to_json, status: :ok
+        }.to_json, status: :ok
       end
 
       # Returns details for a specific sample type.
@@ -218,7 +218,7 @@ module Api
 
         # Get sample type
         sample_type = SampleType.find_id(id)
-        render json: { sample_type: nil  }.to_json, status: :ok and return if !sample_type
+        render json: { sample_type: nil }.to_json, status: :not_found and return if !sample_type
 
         # Get details for sample type
         details = SampleType.details(id)
@@ -349,7 +349,7 @@ module Api
         # Get sample type
         id = Input.int(params[:id])
         sample_type = SampleType.find_id(id)
-        render json: { sample_type: nil }.to_json, status: :ok and return if !sample_type
+        render json: { sample_type: nil }.to_json, status: :not_found and return if !sample_type
 
         # Read sample type parameter
         params_sample_type = params[:sample_type] || {}
@@ -387,14 +387,14 @@ module Api
 
         # Get sample type
         sample = SampleType.find_id(id)
-        render json: { sample_type: nil  }.to_json, status: :ok and return if !sample
+        render json: { sample_type: nil }.to_json, status: :not_found and return if !sample
 
         # Delete sample type and related items that do not have foreign keys
         sample.delete_sample_type
 
         render json: {
           message: "Sample type deleted"
-         }.to_json, status: :ok
+        }.to_json, status: :ok
       end
 
     end

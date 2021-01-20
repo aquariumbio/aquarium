@@ -21,7 +21,7 @@ class Announcement < ActiveRecord::Base
 
   # Create an announcement
   #
-  # @param announcement [Hash] the objet type
+  # @param announcement [Hash] the announcement
   # @option announcement[:title] [String] the title
   # @option announcement[:message] [String] the message
   # @option announcement[:active] [String] active - interpreted as Boolen
@@ -49,7 +49,7 @@ class Announcement < ActiveRecord::Base
 
   # Update an announcement
   #
-  # @param announcement [Hash] the objet type
+  # @param announcement [Hash] the announcement
   # @option announcement[:title] [String] the title
   # @option announcement[:message] [String] the message
   # @option announcement[:active] [String] active - interpreted as Boolen

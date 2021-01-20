@@ -5,21 +5,22 @@ RSpec.describe Api::V3::UsersController, type: :request do
 
     # Sign in users
     before :all do
+      @create_url = "/api/v3/token/create"
       @token_1 = []
       @token_2 = []
       @token_3 = []
 
-      post "/api/v3/token/create?login=user_1&password=password"
-      resp = JSON.parse(response.body)
-      @token_1 << resp["token"]
+      post "#{@create_url}?login=user_1&password=password"
+      response_body = JSON.parse(response.body)
+      @token_1 << response_body["token"]
 
-      post "/api/v3/token/create?login=user_2&password=password"
-      resp = JSON.parse(response.body)
-      @token_2 << resp["token"]
+      post "#{@create_url}?login=user_2&password=password"
+      response_body = JSON.parse(response.body)
+      @token_2 << response_body["token"]
 
-      post "/api/v3/token/create?login=user_3&password=password"
-      resp = JSON.parse(response.body)
-      @token_3 << resp["token"]
+      post "#{@create_url}?login=user_3&password=password"
+      response_body = JSON.parse(response.body)
+      @token_3 << response_body["token"]
 
       @user_ids = []
     end
@@ -84,14 +85,14 @@ RSpec.describe Api::V3::UsersController, type: :request do
       post "/api/v3/users/permissions/update?token=#{@token_1[0]}&user_id=2&permission_id=4&value=true"
       expect(response).to have_http_status 200
 
-      resp = JSON.parse(response.body)
-      expect(resp["user"]["permission_ids"].index('.4.')).not_to eq(nil)
+      response_body = JSON.parse(response.body)
+      expect(response_body["user"]["permission_ids"].index('.4.')).not_to eq(nil)
 
       post "/api/v3/users/permissions/update?token=#{@token_1[0]}&user_id=2&permission_id=4"
       expect(response).to have_http_status 200
 
-      resp = JSON.parse(response.body)
-      expect(resp["user"]["permission_ids"].index('.4.')).to eq(nil)
+      response_body = JSON.parse(response.body)
+      expect(response_body["user"]["permission_ids"].index('.4.')).to eq(nil)
     end
 
     # Cannot change admin / retired for self
@@ -137,8 +138,8 @@ RSpec.describe Api::V3::UsersController, type: :request do
       expect(response).to have_http_status 200
 
       # Check
-      resp = JSON.parse(response.body)
-      users = resp["users"]
+      response_body = JSON.parse(response.body)
+      users = response_body["users"]
       expect(users[0]["name"]).to eq "Factory"
     end
 
@@ -148,8 +149,8 @@ RSpec.describe Api::V3::UsersController, type: :request do
       expect(response).to have_http_status 200
 
       # Check no users that start with "a"
-      resp = JSON.parse(response.body)
-      users = resp["users"]
+      response_body = JSON.parse(response.body)
+      users = response_body["users"]
       expect(users).to eq []
     end
 
@@ -172,8 +173,8 @@ RSpec.describe Api::V3::UsersController, type: :request do
       expect(response).to have_http_status 200
 
       # Check errors
-      resp = JSON.parse(response.body)
-      errors = resp["errors"]
+      response_body = JSON.parse(response.body)
+      errors = response_body["errors"]
       expect(errors["name"]).to eq [ "can't be blank" ]
       expect(errors["login"]).to eq [ "can't be blank" ]
       expect(errors["password"]).to eq [ "password must be at least 10 characters", "passsword cannot contain spaces or invisible characters" ]
@@ -193,8 +194,8 @@ RSpec.describe Api::V3::UsersController, type: :request do
       post "/api/v3/users/create?token=#{@token_1[0]}", :params => params
       expect(response).to have_http_status 201
 
-      resp = JSON.parse(response.body)
-      @user_ids << resp["user"]["id"]
+      response_body = JSON.parse(response.body)
+      @user_ids << response_body["user"]["id"]
     end
 
     ###
@@ -259,8 +260,8 @@ RSpec.describe Api::V3::UsersController, type: :request do
       expect(response).to have_http_status 200
 
       # Check errors
-      resp = JSON.parse(response.body)
-      errors = resp["errors"]
+      response_body = JSON.parse(response.body)
+      errors = response_body["errors"]
       expect(errors["name"]).to eq [ "can't be blank" ]
       expect(errors["email"]).to eq [ "invalid email" ]
     end
@@ -279,8 +280,8 @@ RSpec.describe Api::V3::UsersController, type: :request do
 
       # Check user
       get "/api/v3/users/#{@user_ids[0]}/show_info?token=#{@token_1[0]}"
-      resp = JSON.parse(response.body)
-      user = resp["user"]
+      response_body = JSON.parse(response.body)
+      user = response_body["user"]
       expect(user["name"]).to eq "abc 456"
       expect(user["email"]).to eq "abc@def.com"
       expect(user["phone"]).to eq "123-456-7890"
@@ -290,8 +291,8 @@ RSpec.describe Api::V3::UsersController, type: :request do
     it "update_self_info" do
       # login as self
       post "/api/v3/token/create?login=abc123&password=password123"
-      resp = JSON.parse(response.body)
-      @token = resp["token"]
+      response_body = JSON.parse(response.body)
+      @token = response_body["token"]
 
       # update self
       params = {
@@ -305,8 +306,8 @@ RSpec.describe Api::V3::UsersController, type: :request do
 
       # Check user
       get "/api/v3/users/#{@user_ids[0]}/show_info?token=#{@token_1[0]}"
-      resp = JSON.parse(response.body)
-      user = resp["user"]
+      response_body = JSON.parse(response.body)
+      user = response_body["user"]
       expect(user["name"]).to eq "abc 789"
       expect(user["email"]).to eq "abc@789.com"
       expect(user["phone"]).to eq nil
@@ -345,8 +346,8 @@ RSpec.describe Api::V3::UsersController, type: :request do
       expect(response).to have_http_status 200
 
       # Check errors
-      resp = JSON.parse(response.body)
-      errors = resp["errors"]
+      response_body = JSON.parse(response.body)
+      errors = response_body["errors"]
       expect(errors["permission_ids"]).to eq [ "Permission_id 99 is invalid" ]
     end
 
@@ -361,8 +362,8 @@ RSpec.describe Api::V3::UsersController, type: :request do
       expect(response).to have_http_status 200
 
       # Check errors
-      resp = JSON.parse(response.body)
-      errors = resp["errors"]
+      response_body = JSON.parse(response.body)
+      errors = response_body["errors"]
       expect(errors["permission_ids"]).to eq [ "Cannot set retired for self", "Permission_id 99 is invalid" ]
     end
 
@@ -377,8 +378,8 @@ RSpec.describe Api::V3::UsersController, type: :request do
       expect(response).to have_http_status 200
 
       # Check user
-      resp = JSON.parse(response.body)
-      user = resp["user"]
+      response_body = JSON.parse(response.body)
+      user = response_body["user"]
       expect(user["permission_ids"]).to eq ".1.2.6."
     end
   end
