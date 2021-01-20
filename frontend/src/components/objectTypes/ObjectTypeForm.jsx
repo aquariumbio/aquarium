@@ -64,24 +64,24 @@ const ObjectTypeForm = ({ match }) => {
   const [sampleTypes, setSampleTypes] = useState([]);
 
   const [id, setId] = useState(null);
-  const [objectTypeName, setObjectTypeName] = useState();
-  const [objectTypeDescription, setObjectTypeDescription] = useState();
-  const [objectTypeMin, setObjectTypeMin] = useState();
-  const [objectTypeMax, setObjectTypeMax] = useState();
-  const [objectTypeUnit, setObjectTypeUnit] = useState();
-  const [objectTypeCost, setObjectTypeCost] = useState();
-  const [objectTypeHandler, setObjectTypeHandler] = useState();
+  const [objectTypeName, setObjectTypeName] = useState('');
+  const [objectTypeDescription, setObjectTypeDescription] = useState('');
+  const [objectTypeMin, setObjectTypeMin] = useState('0');
+  const [objectTypeMax, setObjectTypeMax] = useState('1');
+  const [objectTypeUnit, setObjectTypeUnit] = useState('');
+  const [objectTypeCost, setObjectTypeCost] = useState('0.01');
+  const [objectTypeHandler, setObjectTypeHandler] = useState('');
   const [objectTypeReleaseMethod, setObjectTypeReleaseMethod] = useState("return");
-  const [objectTypeReleaseDescription, setObjectTypeReleaseDescription] = useState();
-  const [objectTypeSampleTypeId, setObjectTypeSampleTypeId] = useState();
-  const [objectTypeImage, setObjectTypeImage] = useState();
-  const [objectTypePrefix, setObjectTypePrefix] = useState();
-  const [objectTypeRows, setObjectTypeRows] = useState();
-  const [objectTypeColumns, setObjectTypeColumns] = useState();
-  const [objectTypeSafety, setObjectTypeSafety] = useState();
-  const [objectTypeCleanup, setObjectTypeCleanup] = useState();
-  const [objectTypeData, setObjectTypeData] = useState();
-  const [objectTypeVendor, setObjectTypeVendor] = useState();
+  const [objectTypeReleaseDescription, setObjectTypeReleaseDescription] = useState('');
+  const [objectTypeSampleTypeId, setObjectTypeSampleTypeId] = useState('');
+  const [objectTypeImage, setObjectTypeImage] = useState('');
+  const [objectTypePrefix, setObjectTypePrefix] = useState('');
+  const [objectTypeRows, setObjectTypeRows] = useState(1);
+  const [objectTypeColumns, setObjectTypeColumns] = useState(12);
+  const [objectTypeSafety, setObjectTypeSafety] = useState('');
+  const [objectTypeCleanup, setObjectTypeCleanup] = useState('');
+  const [objectTypeData, setObjectTypeData] = useState('');
+  const [objectTypeVendor, setObjectTypeVendor] = useState('');
 
   const ref = useRef();
 
@@ -420,7 +420,7 @@ const ObjectTypeForm = ({ match }) => {
           }}
         />
 
-        <Typography variant="h4" className={classes.inputName} display="inline">
+        <Typography variant="h4" className={classes.inputName}>
           Release Method
         </Typography>
 
@@ -443,35 +443,35 @@ const ObjectTypeForm = ({ match }) => {
           <MenuItem value="query">Query</MenuItem>
         </TextField>
 
-        <Typography variant="h4" className={classes.inputName} display="inline">
+        <Typography variant="h4" className={classes.inputName}>
           Release Description
         </Typography>
 
         <TextareaAutosize
           name="ReleaseDescription"
-          id="object-type-description-input"
+          id="object-type-release-description-input"
           style={{width:'100%'}}
           rowsMin={5}
-          value={objectTypeDescription}
-          onChange={(event) => setObjectTypeDescription(event.target.value)}
+          value={objectTypeReleaseDescription}
+          onChange={(event) => setObjectTypeReleaseDescription(event.target.value)}
           variant="outlined"
           type="string"
           required
           inputProps={{
-            'aria-label': 'object-type-description-input',
-            'data-cy': 'object-type-description-input',
+            'aria-label': 'object-type-release-description-input',
+            'data-cy': 'object-type-release-description-input',
           }}
         />
 
         <div className={ objectTypeHandler == 'sample_container' ? classes.show : classes.hide }>
-          <Typography variant="h4" className={classes.inputName} display="inline">
+          <Typography variant="h4" className={classes.inputName}>
             Sample Type Id
           </Typography>
 
           <TextField
             name="SampleTypeId"
             fullWidth
-            value={objectTypeSampleTypeId ? objectTypeSampleTypeId : ''}
+            value={objectTypeSampleTypeId}
             id="object-type-sample-type-id-input"
             onChange={(event) => setObjectTypeSampleTypeId(event.target.value)}
             variant="outlined"
@@ -488,8 +488,8 @@ const ObjectTypeForm = ({ match }) => {
           </TextField>
         </div>
 
-        <Typography variant="h4" className={classes.inputName} display="inline">
-          Image
+        <Typography variant="h4" className={classes.inputName}>
+          Image (Not supported yet)
         </Typography>
 
         <TextField
@@ -506,7 +506,7 @@ const ObjectTypeForm = ({ match }) => {
           }}
         />
 
-        <Typography variant="h4" className={classes.inputName} display="inline">
+        <Typography variant="h4" className={classes.inputName}>
           Prefix
         </Typography>
 
@@ -525,8 +525,8 @@ const ObjectTypeForm = ({ match }) => {
         />
 
         <div className={ objectTypeHandler == 'collection' ? classes.show : classes.hide }>
-          <Typography variant="h4" className={classes.inputName} display="inline">
-            Rows (HANDLER = "COLLECTION" ONLY)
+          <Typography variant="h4" className={classes.inputName}>
+            Rows
           </Typography>
 
           <TextField
@@ -543,8 +543,8 @@ const ObjectTypeForm = ({ match }) => {
             }}
           />
 
-          <Typography variant="h4" className={classes.inputName} display="inline">
-            Columns (HANDLER = "COLLECTION" ONLY)
+          <Typography variant="h4" className={classes.inputName}>
+            Columns
           </Typography>
 
           <TextField
@@ -562,7 +562,7 @@ const ObjectTypeForm = ({ match }) => {
           />
         </div>
 
-        <Typography variant="h4" className={classes.inputName} display="inline">
+        <Typography variant="h4" className={classes.inputName}>
           Safety
         </Typography>
 
@@ -581,7 +581,7 @@ const ObjectTypeForm = ({ match }) => {
           }}
         />
 
-        <Typography variant="h4" className={classes.inputName} display="inline">
+        <Typography variant="h4" className={classes.inputName}>
           Cleanup
         </Typography>
 
@@ -600,7 +600,7 @@ const ObjectTypeForm = ({ match }) => {
           }}
         />
 
-        <Typography variant="h4" className={classes.inputName} display="inline">
+        <Typography variant="h4" className={classes.inputName}>
           Data
         </Typography>
 
@@ -619,7 +619,7 @@ const ObjectTypeForm = ({ match }) => {
           }}
         />
 
-        <Typography variant="h4" className={classes.inputName} display="inline">
+        <Typography variant="h4" className={classes.inputName}>
           Vendor
         </Typography>
 

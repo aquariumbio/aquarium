@@ -104,19 +104,24 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-// using an object in useState works but need to force update
-const handleToggles = (id, toggleId, toggleIds, triggerUpdate) => {
+
+// change the state of toggleIds[objectType.id] and trigger React to update the screen
+// (see NOTE below)
+const handleToggles = (id, toggleId, setToggleIds, triggerUpdate) => {
   var newIds = toggleId
   newIds[id] = !newIds[id]
-  toggleIds(newIds);
+  setToggleIds(newIds);
 
   triggerUpdate();
 };
 
-
-
 const ShowObjectTypeHandler = ({ objectTypes }) => {
 
+  // NOTE: regarding toggleIds and triggerUpdate
+  // toggleIds used to track show/hide state for object type details, takes the form { objectType.id => true/false }
+  // triggerUpdate used to trigger a screen update.
+  // - React does not change the screen when changing the toggleIds
+  // - calling triggerUpdate() triggers a screen update (which also includes any state changes to toggleIds)
   const [toggleIds, setToggleIds] = useState({});
   const [, triggerUpdate] = useReducer(x => !x, false);
   const classes = useStyles();
@@ -183,7 +188,7 @@ const ShowObjectTypeHandler = ({ objectTypes }) => {
         {objectTypes.map((objectType) => (
           <div className={`${classes.flex} ${classes.flexRow}`} key = {`object_${objectType.id}`} >
             <Typography className={classes.flexCol1} >
-              <Link className={ classes.pointer } onClick={ () => handleToggles(objectType.id, toggleIds, setToggleIds, triggerUpdate) } >{objectType.name} Ids</Link>
+              <Link className={ classes.pointer } onClick={ () => handleToggles(objectType.id, toggleIds, setToggleIds, triggerUpdate) } >{objectType.name}</Link>
             </Typography>
             <Typography className={classes.flexCol3} >
               {objectType.description}
