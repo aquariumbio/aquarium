@@ -57,8 +57,8 @@
   resolved "https://codeload.github.com/jozefizso/bower-bootstrap-css/tar.gz/3ca4d051f9d391d56641f7f30c6c936f39944910"
 
 "@bower_components/datatables.net@DataTables/Dist-DataTables#*":
-  version "1.10.22"
-  resolved "https://codeload.github.com/DataTables/Dist-DataTables/tar.gz/0ccd86be2efc22059cb002825930841b816e79b3"
+  version "1.10.23"
+  resolved "https://codeload.github.com/DataTables/Dist-DataTables/tar.gz/6eced91f0dea4dd14d3ad8cd19490f3f08100de0"
   dependencies:
     jquery ">=1.7"
 
@@ -101,8 +101,8 @@
   resolved "https://codeload.github.com/lodash/lodash/tar.gz/ded9bc66583ed0b4e3b7dc906206d40757b4a90a"
 
 "@bower_components/markdown-it@markdown-it/markdown-it#*":
-  version "12.0.3"
-  resolved "https://codeload.github.com/markdown-it/markdown-it/tar.gz/ef59691072cdb003e07875737d1ce3e70ed67395"
+  version "12.0.4"
+  resolved "https://codeload.github.com/markdown-it/markdown-it/tar.gz/7b8969ce5cb2edc54f2c1aa39a85a3a08076337d"
   dependencies:
     argparse "^2.0.1"
     entities "~2.1.0"
