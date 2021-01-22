@@ -424,7 +424,7 @@ Keep it up-to-date if you change something that affects Aquarium development.
     - Click "add release notes" for the new tag, use the change log as the release notes.
     - Click "publish release".
 
-16. (Update zenodo entry)
+16. Update zenodo meta data [This may be in wrong place]
 
 17. Push image to Docker Hub
 
