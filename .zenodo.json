@@ -13,10 +13,6 @@
     "creators": [
         {
             "affiliation": "Electrical and Computer Engineering, University of Washington", 
-            "name": "Eric Klavins"
-        }, 
-        {
-            "affiliation": "Electrical and Computer Engineering, University of Washington", 
             "name": "Benjamin J. Keller"
         }, 
         {
@@ -42,6 +38,10 @@
         {
             "affiliation": "Electrical and Computer Engineering, University of Washington", 
             "name": "Mariko Anderson"
+        },
+        {
+            "affiliation": "Electrical and Computer Engineering, University of Washington", 
+            "name": "Eric Klavins"
         }
     ], 
     "access_right": "open", 
