@@ -27,13 +27,12 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ObjectTypeDefinitions = () => {
+const ObjectTypeDefinitions = ({setIsLoading}) => {
   const classes = useStyles();
 
   const [objectTypeHandlers, setObjectTypeHandlers] = useState([]);
   const [currentObjectTypeHandler, setCurrentObjectTypeHandler] = useState([]);
   const [currentObjectTypesByHandler, setCurrentObjectTypesByHandler] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
 
 
   /*  Get object types top populate object options menu
@@ -44,6 +43,9 @@ const ObjectTypeDefinitions = () => {
       second argument to useEffect  */
   useEffect(() => {
     const fetchData = async () => {
+      // loading overlay - delay by 300ms to avoid screen flash
+      let loading = setTimeout(() => { setIsLoading( true ) }, window.$timeout);
+
       const response = await objectsAPI.getHandlers();
 
       // break if the HTTP call resulted in an error ("return false" from API.js)
@@ -53,6 +55,10 @@ const ObjectTypeDefinitions = () => {
         return;
       }
 
+      // clear timeout and clear overlay
+      clearTimeout(loading);
+      setIsLoading(false);
+
       // success
       if ( response.handlers ) {
         let first = response.handlers[0]
@@ -61,7 +67,6 @@ const ObjectTypeDefinitions = () => {
         setCurrentObjectTypeHandler(first.handler);
         setCurrentObjectTypesByHandler(response[first.handler]["object_types"])
       }
-      setIsLoading(false);
     };
 
     fetchData();
@@ -69,14 +74,13 @@ const ObjectTypeDefinitions = () => {
 
   return (
     <>
-      <LoadingBackdrop isLoading={isLoading} />
-      {!isLoading && (
         <Grid container className={classes.root}>
           {/* SIDE BAR */}
           <SideBar
             objectTypeHandlers={objectTypeHandlers}
             setCurrentObjectTypeHandler={setCurrentObjectTypeHandler}
             setCurrentObjectTypesByHandler={setCurrentObjectTypesByHandler}
+            setIsLoading={setIsLoading}
           />
 
           {/* MAIN CONTENT */}
@@ -110,12 +114,11 @@ const ObjectTypeDefinitions = () => {
             <Divider />
 
             {currentObjectTypesByHandler
-              ? <ShowObjectTypesByHandler objectTypes={currentObjectTypesByHandler} />
+              ? <ShowObjectTypesByHandler objectTypes={currentObjectTypesByHandler} setIsLoading={setIsLoading} />
               : ''}
 
           </Grid>
         </Grid>
-      )}
     </>
   );
 };

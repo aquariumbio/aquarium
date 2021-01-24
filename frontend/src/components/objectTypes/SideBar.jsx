@@ -16,12 +16,15 @@ const useStyles = makeStyles(() => ({
     overflowY: 'scroll',
   },
 }));
-const SideBar = ({ objectTypeHandlers, setCurrentObjectTypeHandler, setCurrentObjectTypesByHandler }) => {
+const SideBar = ({ objectTypeHandlers, setCurrentObjectTypeHandler, setCurrentObjectTypesByHandler, setIsLoading }) => {
   const classes = useStyles();
 
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const fetchData = async (handler) => {
+    // loading overlay - delay by 300ms to avoid screen flash
+    let loading = setTimeout(() => { setIsLoading( true ) }, window.$timeout);
+
     const response = await objectsAPI.getByHandler(handler);
 
     // break if the HTTP call resulted in an error ("return false" from API.js)
@@ -31,7 +34,12 @@ const SideBar = ({ objectTypeHandlers, setCurrentObjectTypeHandler, setCurrentOb
       return;
     }
 
+    // clear timeout and clear overlay
+    clearTimeout(loading);
+    setIsLoading(false);
+
     // success
+    setIsLoading(false);
     setCurrentObjectTypeHandler(handler);
     setCurrentObjectTypesByHandler(response[handler]["object_types"]);
   };

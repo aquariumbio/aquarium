@@ -115,7 +115,7 @@ const handleToggles = (id, toggleId, setToggleIds, triggerUpdate) => {
   triggerUpdate();
 };
 
-const ShowObjectTypeHandler = ({ objectTypes }) => {
+const ShowObjectTypeHandler = ({ objectTypes, setIsLoading }) => {
 
   // NOTE: regarding toggleIds and triggerUpdate
   // toggleIds used to track show/hide state for object type details, takes the form { objectType.id => true/false }
@@ -128,6 +128,9 @@ const ShowObjectTypeHandler = ({ objectTypes }) => {
   const [alertProps, setAlertProps] = useState({});
 
   const handleDelete = async (id) => {
+    // loading overlay - delay by 300ms to avoid screen flash
+    let loading = setTimeout(() => { setIsLoading( true ) }, window.$timeout);
+
     const response = await objectsAPI.delete(id);
 
     // break if the HTTP call resulted in an error ("return false" from API.js)
@@ -136,6 +139,10 @@ const ShowObjectTypeHandler = ({ objectTypes }) => {
       alert("break")
       return;
     }
+
+    // clear timeout and clear overlay
+    clearTimeout(loading);
+    setIsLoading(false);
 
     // process errors
     const errors = response["errors"];
@@ -152,6 +159,7 @@ const ShowObjectTypeHandler = ({ objectTypes }) => {
     // simple solution - reload the page
     document.location.reload(true)
 
+    // setIsLoading(true);
     // // removing the child in the DOM works causes the DOM and the virtual DOM to go out-of-sync
     // var element = document.getElementById('object_'+id)
     // element.parentNode.removeChild(element);

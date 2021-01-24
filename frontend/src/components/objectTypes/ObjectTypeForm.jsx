@@ -46,19 +46,8 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const newFieldType = {
-  id: null,
-  name: '',
-  ftype: '',
-  required: false,
-  array: false,
-  choices: '',
-  allowable_field_types: [],
-};
-
-const ObjectTypeForm = ({ match }) => {
+const ObjectTypeForm = ({ setIsLoading, match }) => {
   const classes = useStyles();
-  const [isLoading, setIsLoading] = useState(false);
   const [disableSubmit, setDisableSubmit] = useState(false);
   const [alertProps, setAlertProps] = useState({});
   const [sampleTypes, setSampleTypes] = useState([]);
@@ -87,30 +76,35 @@ const ObjectTypeForm = ({ match }) => {
 
   useEffect(() => {
     const initNew = async () => {
-      // Start each call asynchronously
-      const call1 = samplesAPI.getTypes();
-      const call2 = tokensAPI.isPermission(1);
+      // loading overlay - delay by 300ms to avoid screen flash
+      let loading = setTimeout(() => { setIsLoading( true ) }, window.$timeout);
 
-      // Await responses (calls will still run in parallel)
-      const response1 = await call1
-      const response2 = await call2
+      // Start each call asynchronously
+      const response = await samplesAPI.getTypes();
 
       // break if the HTTP call resulted in an error ("return false" from API.js)
       // NOTE: the alert("break") is just there for testing. Whatever processing should be handled in API.js, and we just need stop the system from trying to continue...
-      if (!response1 || !response2) {
+      if (!response) {
         alert("break")
         return;
       }
 
+      // clear timeout and clear overlay
+      clearTimeout(loading);
+      setIsLoading(false);
+
       // success
       setObjectTypeReleaseMethod("return");
-      setSampleTypes(response1.sample_types);
-      if (response1.sample_types[0]) {
-        setObjectTypeSampleTypeId(response1.sample_types[0].id);
+      setSampleTypes(response.sample_types);
+      if (response.sample_types[0]) {
+        setObjectTypeSampleTypeId(response.sample_types[0].id);
       }
     };
 
     const initEdit = async () => {
+      // loading overlay - delay by 300ms to avoid screen flash
+      let loading = setTimeout(() => { setIsLoading( true ) }, window.$timeout);
+
       // Start each call asynchronously
       const call1 = samplesAPI.getTypes();
       const call2 = objectsAPI.getById(match.params.id);
@@ -125,6 +119,10 @@ const ObjectTypeForm = ({ match }) => {
         alert("break")
         return;
       }
+
+      // clear timeout and clear overlay
+      clearTimeout(loading);
+      setIsLoading(false);
 
       // success
       setSampleTypes(response1.sample_types);
@@ -156,7 +154,16 @@ const ObjectTypeForm = ({ match }) => {
 
   // Update allowSubmit state if name and Description change
   useEffect(() => {
-    setDisableSubmit( false );
+    setDisableSubmit(
+      !objectTypeName.trim()         ||
+      !objectTypeDescription.trim()  ||
+      !objectTypeUnit                ||
+      !objectTypeCost                ||
+      !objectTypeHandler.trim()      ||
+      objectTypeMin < 0              ||
+      objectTypeMax < 0              ||
+      objectTypeMin > objectTypeMax
+    );
   });
 
   // handle click event of the Remove button
@@ -232,7 +239,6 @@ const ObjectTypeForm = ({ match }) => {
 
   return (
     <Container className={classes.root} maxWidth="xl" data-cy="sampe-type-definition-container">
-      <LoadingBackdrop isLoading={isLoading} ref={ref} />
       <AlertToast
         open={alertProps.open}
         severity={alertProps.severity}
@@ -324,7 +330,7 @@ const ObjectTypeForm = ({ match }) => {
           id="object-type-min-input"
           onChange={(event) => setObjectTypeMin(event.target.value)}
           variant="outlined"
-          type="string"
+          type="number"
           required
           inputProps={{
             'aria-label': 'object-type-min-input',
@@ -346,7 +352,7 @@ const ObjectTypeForm = ({ match }) => {
           id="object-type-max-input"
           onChange={(event) => setObjectTypeMax(event.target.value)}
           variant="outlined"
-          type="string"
+          type="number"
           required
           inputProps={{
             'aria-label': 'object-type-max-input',
@@ -368,7 +374,7 @@ const ObjectTypeForm = ({ match }) => {
           id="object-type-unit-input"
           onChange={(event) => setObjectTypeUnit(event.target.value)}
           variant="outlined"
-          type="string"
+          type="number"
           required
           inputProps={{
             'aria-label': 'object-type-unit-input',
@@ -390,7 +396,7 @@ const ObjectTypeForm = ({ match }) => {
           id="object-type-cost-input"
           onChange={(event) => setObjectTypeCost(event.target.value)}
           variant="outlined"
-          type="string"
+          type="number"
           required
           inputProps={{
             'aria-label': 'object-type-cost-input',
