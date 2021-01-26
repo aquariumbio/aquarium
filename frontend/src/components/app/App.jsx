@@ -80,7 +80,7 @@ export default function App() {
 
             <Route exact path="/sample_types" render={(props) => <SampleTypesPage {...props} />} />
             <Route exact path="/sample_types/new" render={(props) => <SampleTypeDefinitionForm {...props} />} />
-            <Route exact path="/sample_types/:id/edit" render={(props) => <SampleTypeDefinitionForm {...props} />} />
+            <Route exact strict path="/sample_types/:id/edit" render={(props) => <SampleTypeDefinitionForm {...props} />} />
 
             <Route exact path="/announcements" render={(props) => <AnnouncementsPage {...props} />} />
             <Route exact path="/budgets" render={(props) => <BudgetsPage {...props} />} />
@@ -104,7 +104,9 @@ export default function App() {
 
             {/* Right user Menu */}
             <Route exact path="/invoices" render={(props) => <InvoicesPage {...props} />} />
-            <Route exact path="/users/:id" render={(props) => <UserProfilePage {...props} />} />
+            <Route exact strict path="/users/:id" render={(props) => <UserProfilePage {...props} />} />
+
+            {/* TODO: If no route matches redirect to home page */}
 
           </>
         </Switch>

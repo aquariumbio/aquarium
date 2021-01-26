@@ -8,7 +8,7 @@ tokensAPI.isAuthenticated = async () => {
   await axiosInstance
     .get('/token/get_user')
     .then((response) => {
-      sessionStorage.setItem('user', response.data);
+      sessionStorage.setItem('user', JSON.parse(response.data));
       validToken = true;
     })
     .catch((error) => error);

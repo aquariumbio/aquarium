@@ -4,10 +4,10 @@
       image: cypress
       build: ./end2end
       container_name: cypress
-      depends_on: 
+      depends_on:
         - frontend
       environment:
-        - CYPRESS_baseURL=http://frontend:${FRONTEND_PUBLIC_PORT}
+        - CYPRESS_baseURL=http://localhost:${FRONTEND_PUBLIC_PORT}
       command: npx cypress run
       volumes:
         - ./end2end:/app

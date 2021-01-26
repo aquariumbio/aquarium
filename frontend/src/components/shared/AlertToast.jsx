@@ -38,12 +38,14 @@ const AlertToast = (props) => {
     }
 
     setOpen(false);
+    // Clear alert props in parent to prevent the alert reopening
+    props.setAlertProps({});
   };
 
   return (
     <div className={classes.root}>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={severity}>
+        <Alert onClose={handleClose} severity={severity} data-cy="alert-toast">
           { message }
         </Alert>
       </Snackbar>
@@ -57,6 +59,7 @@ AlertToast.propTypes = {
   message: PropTypes.string,
   open: PropTypes.bool,
   severity: PropTypes.oneOf(['info', 'warning', 'success', 'error']),
+  setAlertProps: PropTypes.func.isRequired,
 };
 
 AlertToast.defaultProps = {

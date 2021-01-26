@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { makeStyles } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
@@ -93,7 +92,6 @@ const SampleTypeDefinitionForm = ({ match }) => {
       setObjectTypes(data.object_types);
       setInventory(data.inventory);
       setId(data.id);
-      setIsLoading(false);
     };
 
     match.params.id ? fetchDataById() : '';
@@ -102,7 +100,7 @@ const SampleTypeDefinitionForm = ({ match }) => {
   /*  Update allowSubmit state if name and Description change
       Disable submit if name or description are empty */
   useEffect(() => {
-    setDisableSubmit(!(!!sampleTypeName || !!sampleTypeDescription));
+    setDisableSubmit(!sampleTypeName.trim() || !sampleTypeDescription.trim());
   });
 
   // Handle click add field button --> add new field type to end of current field types array
@@ -146,29 +144,30 @@ const SampleTypeDefinitionForm = ({ match }) => {
 
     // We will have an id when we are editing a sample type
     const update = !!id;
-    // eslint-disable-next-line no-debugger
-    debugger;
+    let alert;
     const response = update
       ? await samplesAPI.update(formData, id)
       : await samplesAPI.create(formData);
 
-    const action = update ? 'updated' : 'deleted';
-    if (response.status === 200) {
-      setAlertProps({
+    const action = update ? 'updated' : 'saved';
+    if (response.status === 201) {
+      alert = {
         message: `${sampleTypeName} ${action}`,
         severity: 'success',
         open: true,
-      });
-
-      return true;
+      };
     }
 
     /*  Failure alert  */
-    return setAlertProps({
-      message: `${sampleTypeName} could not be ${action}`,
-      severity: 'error',
-      open: true,
-    });
+    if (response.status === 200) {
+      alert = {
+        message: `${sampleTypeName} could not be ${action}. ${JSON.stringify(response.data.errors)}`,
+        severity: 'error',
+        open: true,
+      };
+    }
+
+    return setAlertProps(alert);
   };
 
   return (
@@ -178,10 +177,11 @@ const SampleTypeDefinitionForm = ({ match }) => {
         open={alertProps.open}
         severity={alertProps.severity}
         message={alertProps.message}
+        setAlertProps={setAlertProps}
       />
 
       {match.url === '/sample_types/new' && (
-        <Typography variant="h1" align="center" className={classes.title}>
+        <Typography variant="h1" align="center" className={classes.title} data-cy="form-header">
           Defining New Sample Type
         </Typography>
       )}

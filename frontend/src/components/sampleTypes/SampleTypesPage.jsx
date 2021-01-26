@@ -47,10 +47,18 @@ const SampleTypeDefinitions = () => {
       second argument to useEffect  */
   useEffect(() => {
     const fetchData = async () => {
-      const data = await samplesAPI.getTypes();
-      setSampleTypes(data.sample_types);
-      setCurrentSampleType(data.first);
-      setIsLoading(false);
+      const responseData = await samplesAPI.getTypes();
+
+      if (responseData) {
+        setSampleTypes(responseData.sample_types);
+        setCurrentSampleType(responseData.first);
+      }
+
+      if (!responseData) {
+        setAlertProps({ severity: 'error', message: 'Error fetching data' });
+      }
+
+      return setIsLoading(false);
     };
 
     fetchData();
@@ -93,16 +101,13 @@ const SampleTypeDefinitions = () => {
         message={alertProps.message}
       />
 
-      {!isLoading && (
+      {!isLoading && sampleTypes && (
         <Grid container className={classes.root}>
           {/* SIDE BAR */}
-          {currentSampleType
-            ? (
-              <SideBar
-                setCurrentSampleType={setCurrentSampleType}
-                sampleTypes={sampleTypes}
-              />
-            ) : ''}
+          <SideBar
+            setCurrentSampleType={setCurrentSampleType}
+            sampleTypes={sampleTypes}
+          />
 
           {/* MAIN CONTENT */}
           <Grid item xs={10} name="sample-types-main-container" data-cy="sample-types-main-container" overflow="visible">
@@ -156,9 +161,15 @@ const SampleTypeDefinitions = () => {
 
             <Divider />
 
-            {currentSampleType
-              ? <ShowSampleType sampleType={currentSampleType} />
-              : ''}
+            {currentSampleType.id && (
+              <ShowSampleType sampleType={currentSampleType} />
+            )}
+
+            {!sampleTypes.length && (
+              <Typography variant="h6" component="h1">
+                No Sample Type Defnitions
+              </Typography>
+            )}
 
           </Grid>
         </Grid>

@@ -32,11 +32,11 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   // eslint-disable-next-line consistent-return
   (error) => {
-    const { status, message } = error.response;
+    const { status, data } = error.response;
     if (status) {
       switch (status) {
         case 400:
-          alert(`${status}: ${message}`);
+          alert(`${status}: ${data.message}`);
           break;
         case 401:
           if (window.location.pathname !== '/login') {
@@ -46,19 +46,19 @@ axiosInstance.interceptors.response.use(
             }
           }
           /* TODO: HANDLE SESSION TIMEOUT
-             if (...pathname !== '/login' && message !== 'Session timeout') { OPEN LOGIN MODAL} */
+             if (...pathname !== '/login' && data !== 'Session timeout') { OPEN LOGIN MODAL} */
           break;
         case 403:
           // TODO: HANDLE PERMISSIONS
-          alert(`${status}: ${message} - Insufficient permissions`);
+          alert(`${status}: ${data.message} - Insufficient permissions`);
           break;
         case 404:
-          alert(`${status}: ${message}`);
+          alert(`${status}: ${data.message}`);
           break;
         default:
-          alert(`${status}: ${message}`);
+          alert(`${status}: ${data.message}`);
       }
-      return Promise.reject(error.response);
+      return false;
     }
   },
 );

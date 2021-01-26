@@ -25,28 +25,34 @@ const ShowSampleType = ({ sampleType }) => {
 
   return (
     <Card name="sample_type_definition_card" data-cy="show-sample-type" className={classes.root}>
-      <CardContent>
-        <Typography variant="h6" component="h2">
-          {sampleType.description}
-        </Typography>
+      {sampleType.id ? (
+        <CardContent>
+          <Typography variant="h6" component="h2">
+            {sampleType.description}
+          </Typography>
 
-        {sampleType.field_types && (
-          <FieldTypesList fieldTypes={sampleType.field_types} />
-        )}
+          {sampleType.field_types && (
+            <FieldTypesList fieldTypes={sampleType.field_types} />
+          )}
 
-        <Typography variant="body1" className={classes.inventory}>
-          There are {sampleType.inventory}{' '}
-          <Link component={RouterLink} to={`/browser?stid=${sampleType.id}`}>
-            {Pluralize(sampleType.name, sampleType.inventory)}
-          </Link>{' '}
-          in the inventory
-        </Typography>
+          <Typography variant="body1" className={classes.inventory}>
+            There are {sampleType.inventory}{' '}
+            <Link component={RouterLink} to={`/browser?stid=${sampleType.id}`}>
+              {Pluralize(sampleType.name, sampleType.inventory)}
+            </Link>{' '}
+            in the inventory
+          </Typography>
 
-        <ObjectTypesList
-          sampleTypeId={sampleType.id}
-          objectTypes={sampleType.object_types}
-        />
-      </CardContent>
+          <ObjectTypesList
+            sampleTypeId={sampleType.id}
+            objectTypes={sampleType.object_types}
+          />
+        </CardContent>
+      ) : (
+        <CardContent>
+          No Sample Type Selected
+        </CardContent>
+      )}
     </Card>
   );
 };

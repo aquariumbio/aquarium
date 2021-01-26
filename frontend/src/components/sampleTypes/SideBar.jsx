@@ -1,7 +1,5 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -40,22 +38,18 @@ const SideBar = ({ sampleTypes, setCurrentSampleType }) => {
       data-cy="sample-types-side-bar"
       className={classes.root}
     >
-      <Card>
-        <CardContent>
-          <List component="nav" aria-label="sample types list">
-            {sampleTypes.map((st, index) => (
-              <ListItem
-                button
-                key={st.id}
-                selected={selectedIndex === index}
-                onClick={(event) => handleListItemClick(event, index, st.id)}
-              >
-                <ListItemText primary={st.name} primaryTypographyProps={{ noWrap: true }} />
-              </ListItem>
-            ))}
-          </List>
-        </CardContent>
-      </Card>
+      <List component="nav" aria-label="sample types list">
+        {sampleTypes.map((st, index) => (
+          <ListItem
+            button
+            key={st.id}
+            selected={selectedIndex === index}
+            onClick={(event) => handleListItemClick(event, index, st.id)}
+          >
+            <ListItemText primary={st.name} primaryTypographyProps={{ noWrap: true }} />
+          </ListItem>
+        ))}
+      </List>
     </Grid>
   );
 };
