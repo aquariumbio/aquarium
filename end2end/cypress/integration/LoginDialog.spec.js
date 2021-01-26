@@ -1,6 +1,6 @@
 describe('/login', () => {
   beforeEach(() => {
-    window.sessionStorage.clear();
+    window.localStorage.clear();
     cy.visit('/login');
   });
 
@@ -30,7 +30,7 @@ describe('/login', () => {
     cy.window()
       .then((win) => {
       // eslint-disable-next-line no-unused-expressions
-        expect(win.sessionStorage.token).to.be.undefined;
+        expect(win.localStorage.token).to.be.undefined;
       });
 
     cy.get('[data-test=username]').type('marikotest ');
@@ -42,7 +42,7 @@ describe('/login', () => {
 
     cy.window()
       .then((win) => {
-        token = win.sessionStorage.token;
+        token = win.localStorage.token;
       })
       .then(() => {
         // eslint-disable-next-line no-unused-expressions
@@ -50,5 +50,5 @@ describe('/login', () => {
       });
   });
 
-  // TODO: test sessionStorage for token after login
+  // TODO: test localStorage for token after login
 });

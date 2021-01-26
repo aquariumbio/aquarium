@@ -91,7 +91,7 @@ const LoginDialog = () => {
     };
   });
 
-  if (sessionStorage.getItem('token') && tokensAPI.isAuthenticated()) {
+  if (localStorage.getItem('token') && tokensAPI.isAuthenticated()) {
     history.push('/');
     // window.location.reload();
   }

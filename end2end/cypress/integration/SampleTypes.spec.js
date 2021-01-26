@@ -63,7 +63,7 @@ describe('Sample Types', () => {
       cy.url().should('eq', `${Cypress.env('baseUrl')}/sample_types`);
       });
 
-      it.only('can create a new sample type with just name and description', () => {
+      it('can create a new sample type with just name and description', () => {
         const randString = () => Math.random().toString(36).substr(7);
         const sampleTypeName = randString();
         const sampleTypeDescription = randString();

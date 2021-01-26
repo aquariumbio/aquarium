@@ -10,7 +10,7 @@ const axiosInstance = axios.create({
 });
 
 // For validation we need to send the token with every request to the backend
-const currentSessionToken = sessionStorage.getItem('token');
+const currentSessionToken = localStorage.getItem('token');
 
 /* We intercept the request to ensure the session token is sent in the params
    on every route except login */
@@ -42,7 +42,7 @@ axiosInstance.interceptors.response.use(
           if (window.location.pathname !== '/login') {
             if (currentSessionToken) {
               axios.post('/token/delete');
-              sessionStorage.clear('token');
+              localStorage.clear('token');
             }
           }
           /* TODO: HANDLE SESSION TIMEOUT

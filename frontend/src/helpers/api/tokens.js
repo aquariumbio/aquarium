@@ -8,7 +8,7 @@ tokensAPI.isAuthenticated = async () => {
   await axiosInstance
     .get('/token/get_user')
     .then((response) => {
-      sessionStorage.setItem('user', JSON.parse(response.data));
+      localStorage.setItem('user', JSON.parse(response.data));
       validToken = true;
     })
     .catch((error) => error);
@@ -28,7 +28,7 @@ tokensAPI.signIn = async (login, password, setLoginError) => {
     .then((response) => {
       const [data] = [response.data];
       setLoginError();
-      sessionStorage.setItem('token', data.token);
+      localStorage.setItem('token', data.token);
       signInSuccessful = true;
       window.location.reload();
     })
@@ -42,12 +42,12 @@ tokensAPI.signOut = () => {
   axiosInstance
     .post('/token/delete')
     .then((response) => {
-      sessionStorage.clear('token');
+      localStorage.clear('token');
       window.location.reload();
       return response;
     })
     .catch((error) => {
-      sessionStorage.clear('token');
+      localStorage.clear('token');
       window.location.reload();
       return error;
     });

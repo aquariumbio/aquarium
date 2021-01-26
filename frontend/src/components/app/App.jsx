@@ -60,9 +60,9 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <div name="app-container" className={classes.container} data-cy="app-container">
+      <div name="app-container" className={classes.root} data-cy="app-container">
         { /* Users cannot interact with the app if they do not have a token */
-          !sessionStorage.getItem('token')
+          !localStorage.getItem('token')
           && <Redirect to="/login" />
         }
         { /* TODO: REDIRECT TO PROFILE PAGE IF USER HAS NOT SIGNED AGREENEMTNS */ }

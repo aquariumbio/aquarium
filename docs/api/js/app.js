@@ -1,8 +1,8 @@
 (function() {
 
-var localStorage = {}, sessionStorage = {};
+var localStorage = {}, localStorage = {};
 try { localStorage = window.localStorage; } catch (e) { }
-try { sessionStorage = window.sessionStorage; } catch (e) { }
+try { localStorage = window.localStorage; } catch (e) { }
 
 function createSourceLinks() {
     $('.method_details_list .source_code').
@@ -208,7 +208,7 @@ function generateTOC() {
     }
     var title = $(this).attr('toc-title');
     if (typeof(title) == "undefined") title = $(this).text();
-    curli =$('<li><a href="#' + this.id + '">' + title + '</a></li>'); 
+    curli =$('<li><a href="#' + this.id + '">' + title + '</a></li>');
     toc.append(curli);
     lastTag = thisTag;
   });
@@ -233,7 +233,7 @@ function navResizeFn(e) {
     return;
   }
 
-  sessionStorage.navWidth = e.pageX.toString();
+  localStorage.navWidth = e.pageX.toString();
   $('.nav_wrap').css('width', e.pageX);
   $('.nav_wrap').css('-ms-flex', 'inherit');
 }
@@ -256,8 +256,8 @@ function navResizer() {
   });
   $(window).mouseup(navResizeFnStop);
 
-  if (sessionStorage.navWidth) {
-    navResizeFn({which: 1, pageX: parseInt(sessionStorage.navWidth, 10)});
+  if (localStorage.navWidth) {
+    navResizeFn({which: 1, pageX: parseInt(localStorage.navWidth, 10)});
   }
 }
 
