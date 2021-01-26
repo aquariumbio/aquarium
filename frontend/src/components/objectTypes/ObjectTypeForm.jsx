@@ -669,6 +669,7 @@ const ObjectTypeForm = ({ setIsLoading, match }) => {
 };
 
 ObjectTypeForm.propTypes = {
+  setIsLoading: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.objectOf(PropTypes.string),
     path: PropTypes.string,
