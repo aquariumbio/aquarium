@@ -14,14 +14,32 @@ const useStyles = makeStyles(() => ({
     overflowY: 'scroll',
   },
 }));
-const SideBar = ({ sampleTypes, setCurrentSampleType }) => {
+const SideBar = ({ sampleTypes, setCurrentSampleType, setIsLoading }) => {
   const classes = useStyles();
 
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const fetchData = async (id) => {
-    const data = await samplesAPI.getTypeById(id);
-    setCurrentSampleType(data);
+    // loading overlay - delay by 300ms to avoid screen flash
+    const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
+
+    const response = await samplesAPI.getTypeById(id);
+
+    // break if the HTTP call resulted in an error ("return false" from API.js)
+    // NOTE: the alert("break") is just there for testing.
+    //       whatever processing should be handled in API.js
+    //       we just need stop the system from trying to continue...
+    if (!response) {
+      alert('break');
+      return;
+    }
+
+    // clear timeout and clear overlay
+    clearTimeout(loading);
+    setIsLoading(false);
+
+    // success
+    setCurrentSampleType(response);
   };
 
   const handleListItemClick = (event, index, id) => {
@@ -57,6 +75,7 @@ const SideBar = ({ sampleTypes, setCurrentSampleType }) => {
 export default SideBar;
 
 SideBar.propTypes = {
+  setIsLoading: PropTypes.func.isRequired,
   sampleTypes: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,

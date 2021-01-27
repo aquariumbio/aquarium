@@ -10,7 +10,6 @@ import Divider from '@material-ui/core/Divider';
 import SampleTypeFieldForm from './fields/SampleTypeFieldForm';
 import FieldLabels from './fields/FieldLabels';
 import samplesAPI from '../../helpers/api/samples';
-import LoadingBackdrop from '../shared/LoadingBackdrop';
 import { StandardButton, LinkButton } from '../shared/Buttons';
 import utils from '../../helpers/utils';
 import AlertToast from '../shared/AlertToast';
@@ -52,7 +51,7 @@ const newFieldType = {
   allowable_field_types: [],
 };
 
-const SampleTypeDefinitionForm = ({ match }) => {
+const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
   const classes = useStyles();
   const [sampleTypeName, setSampleTypeName] = useState(initialSampleType.name);
   const [sampleTypeDescription, setSampleTypeDescription] = useState(initialSampleType.description);
@@ -61,7 +60,6 @@ const SampleTypeDefinitionForm = ({ match }) => {
   const [objectTypes, setObjectTypes] = useState([]);
   const [inventory, setInventory] = useState(0);
   const [id, setId] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [disableSubmit, setDisableSubmit] = useState(false);
   const [alertProps, setAlertProps] = useState({});
 
@@ -74,27 +72,62 @@ const SampleTypeDefinitionForm = ({ match }) => {
       We only want to fetch data when the component is mounted so we pass an empty array as the
       second argument to useEffect  */
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await samplesAPI.getTypes();
-      setSampleTypes(data.sample_types);
+    const fetchDataNew = async () => {
+      // loading overlay - delay by window.$timeout to avoid screen flash
+      const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
+
+      const response = await samplesAPI.getTypes();
+
+      // break if the HTTP call resulted in an error ("return false" from API.js)
+      // NOTE: the alert("break") is just there for testing.
+      //       whatever processing should be handled in API.js
+      //       we just need stop the system from trying to continue...
+      if (!response) {
+        alert('break');
+        return;
+      }
+
+      // clear timeout and clear overlay
+      clearTimeout(loading);
       setIsLoading(false);
+
+      // success
+      setSampleTypes(response.sample_types);
     };
 
-    fetchData();
-  }, []);
-
-  useEffect(() => {
     const fetchDataById = async () => {
-      const data = await samplesAPI.getTypeById(match.params.id);
-      setFieldTypes(data.field_types);
-      setSampleTypeDescription(data.description);
-      setSampleTypeName(data.name);
-      setObjectTypes(data.object_types);
-      setInventory(data.inventory);
-      setId(data.id);
+      // loading overlay - delay by window.$timeout to avoid screen flash
+      const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
+
+      const call1 = samplesAPI.getTypes();
+      const call2 = samplesAPI.getTypeById(match.params.id);
+
+      const response1 = await call1;
+      const response2 = await call2;
+
+      // break if the HTTP call resulted in an error ("return false" from API.js)
+      // NOTE: the alert("break") is just there for testing.
+      //       whatever processing should be handled in API.js
+      //       we just need stop the system from trying to continue...
+      if (!response1 || !response2) {
+        alert('break');
+        return;
+      }
+
+      // clear timeout and clear overlay
+      clearTimeout(loading);
+      setIsLoading(false);
+
+      // success
+      setFieldTypes(response2.field_types);
+      setSampleTypeDescription(response2.description);
+      setSampleTypeName(response2.name);
+      setObjectTypes(response2.object_types);
+      setInventory(response2.inventory);
+      setId(response2.id);
     };
 
-    match.params.id ? fetchDataById() : '';
+    match.params.id ? fetchDataById() : fetchDataNew();
   }, []);
 
   /*  Update allowSubmit state if name and Description change
@@ -145,10 +178,28 @@ const SampleTypeDefinitionForm = ({ match }) => {
     // We will have an id when we are editing a sample type
     const update = !!id;
     let alert;
+
+    // loading overlay - delay by window.$timeout to avoid screen flash
+    const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
+
     const response = update
       ? await samplesAPI.update(formData, id)
       : await samplesAPI.create(formData);
 
+    // break if the HTTP call resulted in an error ("return false" from API.js)
+    // NOTE: the alert("break") is just there for testing.
+    //       whatever processing should be handled in API.js
+    //       we just need stop the system from trying to continue...
+    if (!response) {
+      alert('break');
+      return;
+    }
+
+    // clear timeout and clear overlay
+    clearTimeout(loading);
+    setIsLoading(false);
+
+    // success
     const action = update ? 'updated' : 'saved';
     if (response.status === 201) {
       alert = {
@@ -167,12 +218,11 @@ const SampleTypeDefinitionForm = ({ match }) => {
       };
     }
 
-    return setAlertProps(alert);
+    setAlertProps(alert);
   };
 
   return (
     <Container className={classes.root} maxWidth="xl" data-cy="sampe-type-definition-container">
-      <LoadingBackdrop isLoading={isLoading} ref={ref} />
       <AlertToast
         open={alertProps.open}
         severity={alertProps.severity}
@@ -316,6 +366,7 @@ const SampleTypeDefinitionForm = ({ match }) => {
 };
 
 SampleTypeDefinitionForm.propTypes = {
+  setIsLoading: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.objectOf(PropTypes.string),
     path: PropTypes.string,
