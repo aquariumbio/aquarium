@@ -29,10 +29,9 @@ describe('Sample Types', () => {
       cy.get('[data-cy="edit_sample_type_btn"]').click();
       cy.url().should('include', `${Cypress.env('baseUrl')}/sample_types/`).and('include', '/edit');
     });
-
   });
 
-  describe.only('Sample Type Form', () => {
+  describe('Sample Type Form', () => {
     context('New Sample Types Form', () => {
       it('inital form', () => {
         cy.visit('/sample_types/new');

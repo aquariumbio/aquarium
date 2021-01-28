@@ -3,13 +3,13 @@ import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
+import PropTypes from 'prop-types';
 import Divider from '@material-ui/core/Divider';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Toolbar from '@material-ui/core/Toolbar';
 import samplesAPI from '../../helpers/api/samples';
 import SideBar from './SideBar';
-import LoadingBackdrop from '../shared/LoadingBackdrop';
 import ShowSampleType from './ShowSampleType';
 import { LinkButton, StandardButton } from '../shared/Buttons';
 import AlertToast from '../shared/AlertToast';
@@ -27,12 +27,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const SampleTypeDefinitions = () => {
+const SampleTypeDefinitions = ({ setIsLoading }) => {
   const classes = useStyles();
 
   const [sampleTypes, setSampleTypes] = useState([]);
   const [currentSampleType, setCurrentSampleType] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
   const [alertProps, setAlertProps] = useState({
     message: '',
     severity: 'info',
@@ -47,26 +46,56 @@ const SampleTypeDefinitions = () => {
       second argument to useEffect  */
   useEffect(() => {
     const fetchData = async () => {
-      const responseData = await samplesAPI.getTypes();
+      // loading overlay - delay by window.$timeout to avoid screen flash
+      const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
 
-      if (responseData) {
-        setSampleTypes(responseData.sample_types);
-        setCurrentSampleType(responseData.first);
+      const response = await samplesAPI.getTypes();
+
+      // break if the HTTP call resulted in an error ("return false" from API.js)
+      // NOTE: the alert("break") is just there for testing.
+      //       whatever processing should be handled in API.js
+      //       we just need stop the system from trying to continue...
+      if (!response) {
+        alert('break');
+        return;
       }
 
-      if (!responseData) {
-        setAlertProps({ severity: 'error', message: 'Error fetching data' });
-      }
+      // clear timeout and clear overlay
+      clearTimeout(loading);
+      setIsLoading(false);
 
-      return setIsLoading(false);
+      // success
+      setSampleTypes(response.sample_types);
+      setCurrentSampleType(response.first);
     };
 
     fetchData();
   }, []);
 
   const handleDelete = async () => {
+    // loading overlay - delay by window.$timeout to avoid screen flash
+    const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
+
     const response = await samplesAPI.delete(currentSampleType.id);
 
+    // break if the HTTP call resulted in an error ("return false" from API.js)
+    // NOTE: the alert("break") is just there for testing.
+    //       whatever processing should be handled in API.js
+    //       we just need stop the system from trying to continue...
+    if (!response) {
+      alert('break');
+      return;
+    }
+
+    // clear timeout and clear overlay
+    clearTimeout(loading);
+    setIsLoading(false);
+
+    // success
+    //
+    // NOTE: This seems too repetitive.
+    //       I think we should just reload the page with a trigger to set the alert
+    //
     /*  When we successfully delete a sample type we set the success alert,
         make a new call to get all sample types and update the current sample type
         so the user is seeing valid data */
@@ -81,32 +110,28 @@ const SampleTypeDefinitions = () => {
 
       setSampleTypes(data.sample_types);
       setCurrentSampleType(data.first);
-      return true;
     }
-
-    /*  Failure alert  */
-    return setAlertProps({
-      message: `${currentSampleType.name} could not be deleted`,
-      severity: 'error',
-      open: true,
-    });
   };
 
+  //
+  // NOTE: I don't think we need { sampleTypes && } here.
+  //       We should not get here if there are no sample types (but it could be an empty array)
+  //
   return (
     <>
-      <LoadingBackdrop isLoading={isLoading} />
       <AlertToast
         open={alertProps.open}
         severity={alertProps.severity}
         message={alertProps.message}
       />
 
-      {!isLoading && sampleTypes && (
+      { sampleTypes && (
         <Grid container className={classes.root}>
           {/* SIDE BAR */}
           <SideBar
             setCurrentSampleType={setCurrentSampleType}
             sampleTypes={sampleTypes}
+            setIsLoading={setIsLoading}
           />
 
           {/* MAIN CONTENT */}
@@ -177,4 +202,9 @@ const SampleTypeDefinitions = () => {
     </>
   );
 };
+
+SampleTypeDefinitions.propTypes = {
+  setIsLoading: PropTypes.func.isRequired,
+};
+
 export default SampleTypeDefinitions;
