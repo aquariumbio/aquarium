@@ -65,7 +65,7 @@ class FieldType < ActiveRecord::Base
     # Reset fname if it is blank and the id exists
     fname = Input.text(field_type[:name])
     fname = fname || field_type_update.name
-    return 0 if fname == ""
+    return 0 if !fname
 
     # Save the field_type
     ftype     = Input.text(field_type[:ftype])
