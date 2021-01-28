@@ -430,7 +430,7 @@ Keep it up-to-date if you change something that affects Aquarium development.
 
     ```bash
     bash ./aquarium.sh build
-    docker push aquariumbio/aquarium:v$NEWVERSION
+    docker push aquariumbio/aquarium:$NEWVERSION
     ```
 
 ## Aquarium Configuration
