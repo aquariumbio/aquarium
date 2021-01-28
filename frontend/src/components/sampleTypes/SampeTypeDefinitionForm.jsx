@@ -161,7 +161,7 @@ const SampleTypeDefinitionForm = ({ match }) => {
     /*  Failure alert  */
     if (response.status === 200) {
       alert = {
-        message: `${sampleTypeName} could not be ${action}. ${JSON.stringify(response.data.errors)}`,
+        message: `Error: ${sampleTypeName} could not be ${action}. ${JSON.stringify(response.data.errors)}`,
         severity: 'error',
         open: true,
       };

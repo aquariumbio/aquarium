@@ -29,7 +29,6 @@ describe('/login', () => {
   it('navigates to / on successful login', () => {
     cy.window()
       .then((win) => {
-      // eslint-disable-next-line no-unused-expressions
         expect(win.localStorage.token).to.be.undefined;
       });
 
@@ -45,7 +44,6 @@ describe('/login', () => {
         token = win.localStorage.token;
       })
       .then(() => {
-        // eslint-disable-next-line no-unused-expressions
         expect(token).to.exist;
       });
   });

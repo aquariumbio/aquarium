@@ -32,13 +32,11 @@ describe('Sample Types', () => {
 
   });
 
-  describe('Sample Type Form', () => {
+  describe.only('Sample Type Form', () => {
     context('New Sample Types Form', () => {
-      beforeEach(() => {
-        cy.visit('/sample_types/new');
-      });
-
       it('inital form', () => {
+        cy.visit('/sample_types/new');
+
         cy.get('[data-cy="form-header"]');
 
         cy.get('[data-cy="sampe-type-definition-form"]').within(() => {
@@ -55,12 +53,14 @@ describe('Sample Types', () => {
       });
 
       it('back button navigation', () => {
-      cy.url().should('eq', `${Cypress.env('baseUrl')}/sample_types/new`);
+        cy.visit('/sample_types/new');
+
+        cy.url().should('eq', `${Cypress.env('baseUrl')}/sample_types/new`);
 
         cy.get('[data-cy="sampe-type-definition-form"]').within(() => {
           cy.get('[data-cy="back"]').click();
         });
-      cy.url().should('eq', `${Cypress.env('baseUrl')}/sample_types`);
+        cy.url().should('eq', `${Cypress.env('baseUrl')}/sample_types`);
       });
 
       it('can create a new sample type with just name and description', () => {
@@ -68,17 +68,25 @@ describe('Sample Types', () => {
         const sampleTypeName = randString();
         const sampleTypeDescription = randString();
 
-        // TODO: Update to use API stubbing
-        // cy.route({
-        //   method: 'POST',
-        //   url: 'https://localhost:3001/sample_types/create',
-        //   response: {
-        //     sample_type: {
-        //       name: sampleTypeName,
-        //       description: sampleTypeDescription,
-        //     },
-        //   },
-        // }).as('createSampleType');
+        cy.intercept(
+          'POST',
+          'http://localhost:3001/api/v3/sample_types/create',
+          (req) => {
+            req.reply((res) => {
+              res.send({
+                statusCode: 201,
+                body: {
+                  sample_type: {
+                    name: sampleTypeName,
+                    description: sampleTypeDescription,
+                  },
+                },
+              });
+            });
+          }
+        ).as('createSampleType');
+
+        cy.visit('/sample_types/new');
 
         // Save disabled before inputs
         cy.get('[data-cy="save-sample-type"]')
@@ -105,11 +113,45 @@ describe('Sample Types', () => {
             .should('not.exist');
         });
 
-        // cy.wait('@createSampleType').its('requestBody').should('deep.equal', {
-        //   id: null,
-        //   name: sampleTypeName,
-        //   description: sampleTypeDescription
-        // });
+      });
+
+      it('shows error alert on failed create, duplicate name', () => {
+        const randString = () => Math.random().toString(36).substr(7);
+        const sampleTypeName = randString();
+        const sampleTypeDescription = randString();
+
+        cy.intercept(
+          'POST',
+          'http://localhost:3001/api/v3/sample_types/create',
+          (req) => {
+            req.reply((res) => {
+              res.send({
+                statusCode: 200,
+                body: {
+                  errors: {
+                    name: ['has already been taken'],
+                  },
+                },
+              });
+            });
+          }
+        ).as('createSampleType');
+
+        cy.visit('/sample_types/new');
+
+        cy.get('[data-cy="sample-type-name-input"]').type(sampleTypeName);
+
+        cy.get('[data-cy="sample-type-description-input"]').type(
+          sampleTypeDescription
+        );
+
+        cy.get('[data-cy="save-sample-type"]').click();
+
+        cy.get('[data-cy="alert-toast"]').should('contain', 'Error');
+
+        cy.wait(7000).then(() => {
+          cy.get('[data-cy="alert-toast"]').should('not.exist');
+        });
       });
     });
   });
