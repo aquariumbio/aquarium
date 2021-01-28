@@ -23,6 +23,8 @@ class AST::Node
 
   def concat(array); end
 
+  def deconstruct(); end
+
   def eql?(other); end
 
   def fancy_type(); end
@@ -53213,6 +53215,10 @@ class Hash
 
   def self.from_xml(xml, disallowed_types=T.unsafe(nil)); end
 
+  def self.ruby2_keywords_hash(hash); end
+
+  def self.ruby2_keywords_hash?(hash); end
+
   def self.try_convert(_); end
 end
 
@@ -71460,6 +71466,8 @@ class Puma::DSL
 
   def inject(&blk); end
 
+  def io_selector_backend(backend); end
+
   def load(file); end
 
   def log_formatter(&block); end
@@ -71736,6 +71744,7 @@ module Puma::MiniSSL
   OPENSSL_NO_TLS1 = ::T.let(nil, ::T.untyped)
   OPENSSL_NO_TLS1_1 = ::T.let(nil, ::T.untyped)
   OPENSSL_VERSION = ::T.let(nil, ::T.untyped)
+  VERIFICATION_FLAGS = ::T.let(nil, ::T.untyped)
   VERIFY_FAIL_IF_NO_PEER_CERT = ::T.let(nil, ::T.untyped)
   VERIFY_NONE = ::T.let(nil, ::T.untyped)
   VERIFY_PEER = ::T.let(nil, ::T.untyped)
@@ -71767,6 +71776,10 @@ class Puma::MiniSSL::Context
   def ssl_cipher_filter(); end
 
   def ssl_cipher_filter=(ssl_cipher_filter); end
+
+  def verification_flags(); end
+
+  def verification_flags=(verification_flags); end
 
   def verify_mode(); end
 
@@ -71809,6 +71822,13 @@ class Puma::MiniSSL::Engine
   def self.server(_); end
 end
 
+class Puma::MiniSSL::SSLContext
+  def initialize(_); end
+end
+
+class Puma::MiniSSL::SSLContext
+end
+
 class Puma::MiniSSL::SSLError
 end
 
@@ -71823,6 +71843,8 @@ class Puma::MiniSSL::Server
   def addr(); end
 
   def close(); end
+
+  def closed?(); end
 
   def initialize(socket, ctx); end
 
@@ -71891,6 +71913,8 @@ class Puma::NullIO
   def rewind(); end
 
   def size(); end
+
+  def string(); end
 
   def sync=(v); end
 
@@ -71975,7 +71999,7 @@ end
 class Puma::Reactor
   def add(client); end
 
-  def initialize(&block); end
+  def initialize(backend, &block); end
 
   def run(background=T.unsafe(nil)); end
 
@@ -72113,8 +72137,6 @@ class Puma::Server
 
   def reactor_wakeup(client); end
 
-  def read_body(env, client, body, cl); end
-
   def reaping_time(); end
 
   def reaping_time=(reaping_time); end
@@ -72233,6 +72255,12 @@ class Puma::UnknownPlugin
 end
 
 class Puma::UnknownPlugin
+end
+
+class Puma::UnsupportedBackend
+end
+
+class Puma::UnsupportedBackend
 end
 
 class Puma::UnsupportedOption
@@ -82259,6 +82287,12 @@ end
 module RuboCop::AST::Descendence
 end
 
+class RuboCop::AST::DstrNode
+end
+
+class RuboCop::AST::DstrNode
+end
+
 class RuboCop::AST::EnsureNode
   def body(); end
 end
@@ -84406,6 +84440,7 @@ class RuboCop::CLI::Command::AutoGenerateConfig
   PHASE_1_DISABLED = ::T.let(nil, ::T.untyped)
   PHASE_1_OVERRIDDEN = ::T.let(nil, ::T.untyped)
   PHASE_2 = ::T.let(nil, ::T.untyped)
+  YAML_OPTIONAL_DOC_START = ::T.let(nil, ::T.untyped)
 end
 
 class RuboCop::CLI::Command::ExecuteRunner
@@ -84461,6 +84496,14 @@ class RuboCop::ConfigRegeneration
   AUTO_GENERATED_FILE = ::T.let(nil, ::T.untyped)
   COMMAND_REGEX = ::T.let(nil, ::T.untyped)
   DEFAULT_OPTIONS = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::ConfigStore
+  def unvalidated(); end
+
+  def validated(); end
+
+  def validated?(); end
 end
 
 class RuboCop::ConfigValidator
@@ -85397,9 +85440,29 @@ class RuboCop::Cop::Lint::NonLocalExitFromIterator
 end
 
 class RuboCop::Cop::Lint::NumberConversion
+  def to_method_symbol(param0=T.unsafe(nil)); end
   CONVERSION_METHOD_CLASS_MAPPING = ::T.let(nil, ::T.untyped)
+  METHODS = ::T.let(nil, ::T.untyped)
   MSG = ::T.let(nil, ::T.untyped)
-  RESTRICT_ON_SEND = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::Cop::Lint::NumberedParameterAssignment
+  def on_lvasgn(node); end
+  LVAR_MSG = ::T.let(nil, ::T.untyped)
+  NUMBERED_PARAMETER_RANGE = ::T.let(nil, ::T.untyped)
+  NUM_PARAM_MSG = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::Cop::Lint::NumberedParameterAssignment
+end
+
+class RuboCop::Cop::Lint::OrAssignmentToConstant
+  def on_or_asgn(node); end
+  MSG = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::Cop::Lint::OrAssignmentToConstant
+  extend ::RuboCop::Cop::AutoCorrector
 end
 
 class RuboCop::Cop::Lint::OrderedMagicComments
@@ -85561,6 +85624,18 @@ class RuboCop::Cop::Lint::SuppressedException
   MSG = ::T.let(nil, ::T.untyped)
 end
 
+class RuboCop::Cop::Lint::SymbolConversion
+  def on_send(node); end
+
+  def on_sym(node); end
+  MSG = ::T.let(nil, ::T.untyped)
+  RESTRICT_ON_SEND = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::Cop::Lint::SymbolConversion
+  extend ::RuboCop::Cop::AutoCorrector
+end
+
 class RuboCop::Cop::Lint::ToEnumArguments
   MSG = ::T.let(nil, ::T.untyped)
   RESTRICT_ON_SEND = ::T.let(nil, ::T.untyped)
@@ -85576,6 +85651,15 @@ end
 
 class RuboCop::Cop::Lint::TrailingCommaInAttributeDeclaration
   MSG = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::Cop::Lint::TripleQuotes
+  def on_dstr(node); end
+  MSG = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::Cop::Lint::TripleQuotes
+  extend ::RuboCop::Cop::AutoCorrector
 end
 
 class RuboCop::Cop::Lint::UnderscorePrefixedVariableName
@@ -87430,6 +87514,7 @@ end
 
 class RuboCop::Cop::Style::DisableCopsWithinSourceCodeDirective
   MSG = ::T.let(nil, ::T.untyped)
+  MSG_FOR_COPS = ::T.let(nil, ::T.untyped)
 end
 
 class RuboCop::Cop::Style::DocumentDynamicEvalDefinition
@@ -87510,7 +87595,10 @@ class RuboCop::Cop::Style::EndlessMethod
 end
 
 class RuboCop::Cop::Style::EvalWithLocation
+  def valid_eval_receiver?(param0=T.unsafe(nil)); end
   MSG = ::T.let(nil, ::T.untyped)
+  MSG_EVAL = ::T.let(nil, ::T.untyped)
+  MSG_INCORRECT_FILE = ::T.let(nil, ::T.untyped)
   MSG_INCORRECT_LINE = ::T.let(nil, ::T.untyped)
   RESTRICT_ON_SEND = ::T.let(nil, ::T.untyped)
 end
@@ -87549,6 +87637,14 @@ end
 class RuboCop::Cop::Style::FormatString
   MSG = ::T.let(nil, ::T.untyped)
   RESTRICT_ON_SEND = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::Cop::Style::FormatStringToken
+  include ::RuboCop::Cop::IgnoredMethods
+end
+
+class RuboCop::Cop::Style::FormatStringToken
+  extend ::RuboCop::Cop::IgnoredMethods::Config
 end
 
 class RuboCop::Cop::Style::FrozenStringLiteralComment
@@ -87612,6 +87708,19 @@ end
 
 class RuboCop::Cop::Style::IfUnlessModifierOfIfUnless
   MSG = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::Cop::Style::IfWithBooleanLiteralBranches
+  def double_negative?(param0=T.unsafe(nil)); end
+
+  def if_with_boolean_literal_branches?(param0=T.unsafe(nil)); end
+
+  def on_if(node); end
+  MSG = ::T.let(nil, ::T.untyped)
+end
+
+class RuboCop::Cop::Style::IfWithBooleanLiteralBranches
+  extend ::RuboCop::Cop::AutoCorrector
 end
 
 class RuboCop::Cop::Style::IfWithSemicolon
@@ -87788,6 +87897,8 @@ class RuboCop::Cop::Style::NilLambda
 end
 
 class RuboCop::Cop::Style::NonNilCheck
+  MSG_FOR_REDUNDANCY = ::T.let(nil, ::T.untyped)
+  MSG_FOR_REPLACEMENT = ::T.let(nil, ::T.untyped)
   RESTRICT_ON_SEND = ::T.let(nil, ::T.untyped)
 end
 
@@ -88343,6 +88454,11 @@ class RuboCop::Formatter::SimpleTextFormatter
 end
 
 class RuboCop::MagicComment
+  def shareable_constant_value(); end
+
+  def shareable_constant_value_specified?(); end
+
+  def valid_shareable_constant_value?(); end
   TOKEN = ::T.let(nil, ::T.untyped)
 end
 
