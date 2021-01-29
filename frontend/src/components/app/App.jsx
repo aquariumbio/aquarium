@@ -32,6 +32,7 @@ import SampleTypeDefinitionForm from '../sampleTypes/SampeTypeDefinitionForm';
 import ImportWorkflowsPage from '../importWorkflows/ImportWorkflowsPage';
 import GroupsPage from '../groups/GroupsPage';
 import LoadingBackdrop from '../shared/LoadingBackdrop';
+import AlertToast from '../shared/AlertToast';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -65,8 +66,16 @@ export default function App() {
   // isLoading overlay - initialize to "false" and manage in individual components
   const [isLoading, setIsLoading] = useState(false);
 
+  // AlertToast popup - initialize to "false" and manage in individual components
+  const [alertProps, setAlertProps] = useState({});
+
   return (
     <>
+      <AlertToast
+        open={alertProps.open}
+        severity={alertProps.severity}
+        message={alertProps.message}
+      />
       <LoadingBackdrop isLoading={isLoading} />
       <ThemeProvider theme={theme}>
         <div name="app-container" className={classes.container} data-cy="app-container">
@@ -94,9 +103,9 @@ export default function App() {
               <Route exact path="/announcements" render={(props) => <AnnouncementsPage setIsLoading={setIsLoading} {...props}   />} />
               <Route exact path="/budgets" render={(props) => <BudgetsPage setIsLoading={setIsLoading} {...props}   />} />
 
-              <Route exact path="/object_types" render={(props) => <ObjectTypesPage setIsLoading={setIsLoading} {...props}   />} />
-              <Route exact path="/object_types/new" render={(props) => <ObjectTypeForm setIsLoading={setIsLoading} {...props} />} />
-              <Route exact path="/object_types/:id/edit" render={(props) => <ObjectTypeForm setIsLoading={setIsLoading} {...props}   />} />
+              <Route exact path="/object_types" render={(props) => <ObjectTypesPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props}   />} />
+              <Route exact path="/object_types/new" render={(props) => <ObjectTypeForm setIsLoading={setIsLoading} setAlertProps={setAlertProps}{...props} />} />
+              <Route exact path="/object_types/:id/edit" render={(props) => <ObjectTypeForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props}   />} />
 
               <Route exact path="/direct_purchase" render={(props) => <DirectPurchasePage setIsLoading={setIsLoading} {...props}   />} />
               <Route exact path="/import" render={(props) => <ImportWorkflowsPage setIsLoading={setIsLoading} {...props}   />} />

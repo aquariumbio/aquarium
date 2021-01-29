@@ -27,13 +27,12 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ObjectTypeDefinitions = ({setIsLoading}) => {
+const ObjectTypesPage = ({setIsLoading, setAlertProps}) => {
   const classes = useStyles();
 
   const [objectTypeHandlers, setObjectTypeHandlers] = useState([]);
   const [currentObjectTypeHandler, setCurrentObjectTypeHandler] = useState([]);
   const [currentObjectTypesByHandler, setCurrentObjectTypesByHandler] = useState([]);
-
 
   /*  Get object types top populate object options menu
       We cannot use async directly in useEffect so we create an async function that we will call
@@ -66,6 +65,12 @@ const ObjectTypeDefinitions = ({setIsLoading}) => {
         setObjectTypeHandlers(response.handlers);
         setCurrentObjectTypeHandler(first.handler);
         setCurrentObjectTypesByHandler(response[first.handler]["object_types"])
+      }
+
+      // show alert popup if passed in sessionStorage
+      if (sessionStorage.alert) {
+        setAlertProps(JSON.parse(sessionStorage.alert))
+        sessionStorage.removeItem("alert")
       }
     };
 
@@ -114,7 +119,7 @@ const ObjectTypeDefinitions = ({setIsLoading}) => {
             <Divider />
 
             {currentObjectTypesByHandler
-              ? <ShowObjectTypesByHandler objectTypes={currentObjectTypesByHandler} setIsLoading={setIsLoading} />
+              ? <ShowObjectTypesByHandler objectTypes={currentObjectTypesByHandler} setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
               : ''}
 
           </Grid>
@@ -122,4 +127,4 @@ const ObjectTypeDefinitions = ({setIsLoading}) => {
     </>
   );
 };
-export default ObjectTypeDefinitions;
+export default ObjectTypesPage;

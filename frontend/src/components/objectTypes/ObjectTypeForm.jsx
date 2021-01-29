@@ -46,10 +46,9 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const ObjectTypeForm = ({ setIsLoading, match }) => {
+const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
   const classes = useStyles();
   const [disableSubmit, setDisableSubmit] = useState(false);
-  const [alertProps, setAlertProps] = useState({});
   const [sampleTypes, setSampleTypes] = useState([]);
 
   const [id, setId] = useState(null);
@@ -239,12 +238,6 @@ const ObjectTypeForm = ({ setIsLoading, match }) => {
 
   return (
     <Container className={classes.root} maxWidth="xl" data-cy="sampe-type-definition-container">
-      <AlertToast
-        open={alertProps.open}
-        severity={alertProps.severity}
-        message={alertProps.message}
-      />
-
       {match.url === '/object_types/new' && (
         <Typography variant="h1" align="center" className={classes.title}>
           New Object Type

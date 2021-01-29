@@ -6,9 +6,7 @@ import { makeStyles } from '@material-ui/core';
 import Link from '@material-ui/core/Link';
 import { Link as RouterLink } from 'react-router-dom';
 import objectsAPI from '../../helpers/api/objects';
-import AlertToast from '../shared/AlertToast';
-
-
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -115,7 +113,7 @@ const handleToggles = (id, toggleId, setToggleIds, triggerUpdate) => {
   triggerUpdate();
 };
 
-const ShowObjectTypeHandler = ({ objectTypes, setIsLoading }) => {
+const ShowObjectTypesByHandler = ({ objectTypes, setIsLoading, setAlertProps }) => {
 
   // NOTE: regarding toggleIds and triggerUpdate
   // toggleIds used to track show/hide state for object type details, takes the form { objectType.id => true/false }
@@ -125,7 +123,7 @@ const ShowObjectTypeHandler = ({ objectTypes, setIsLoading }) => {
   const [toggleIds, setToggleIds] = useState({});
   const [, triggerUpdate] = useReducer(x => !x, false);
   const classes = useStyles();
-  const [alertProps, setAlertProps] = useState({});
+  const history = useHistory();
 
   const handleDelete = async (id) => {
     // loading overlay - delay by 300ms to avoid screen flash
@@ -148,7 +146,7 @@ const ShowObjectTypeHandler = ({ objectTypes, setIsLoading }) => {
     const errors = response["errors"];
     if (errors) {
       setAlertProps({
-        message: errors, // JSON.stringify(errors, null, 2),
+        message: JSON.stringify(errors, null, 2),
         severity: 'error',
         open: true,
       });
@@ -156,36 +154,17 @@ const ShowObjectTypeHandler = ({ objectTypes, setIsLoading }) => {
     }
 
     // success
-    // simple solution - reload the page
-    document.location.reload(true)
-
-    // setIsLoading(true);
-    // // removing the child in the DOM works causes the DOM and the virtual DOM to go out-of-sync
-    // var element = document.getElementById('object_'+id)
-    // element.parentNode.removeChild(element);
-
-    // // removing the child in the DOM works causes the DOM and the virtual DOM to go out-of-sync
-    // document.getElementById('object_'+id).outerHTML='';
-
-
-    // // using "innerHTML" keeps the DOM and the virtual DOM in sync but causes problems with the AlertToast
-    // document.getElementById('object_'+id).innerHTML='';
-    //
-    // setAlertProps({
-    //   message: response["message"],
-    //   severity: 'success',
-    //   open: true,
-    // });
+    // pass alert popup in sessionStorage (does not work if pass as object, so pass as JSON string)
+    sessionStorage.alert = JSON.stringify({
+      message: response["message"],
+      severity: 'success',
+      open: true,
+    });
+    window.location.reload();
   };
 
   return (
     <>
-      <AlertToast
-        open={alertProps.open}
-        severity={alertProps.severity}
-        message={alertProps.message}
-      />
-
       <div className={classes.flexWrapper}>
         <div className={`${classes.flex} ${classes.flexTitle}`}>
           <Typography className={classes.flexCol1}><b>Name</b></Typography>
@@ -243,6 +222,6 @@ const ShowObjectTypeHandler = ({ objectTypes, setIsLoading }) => {
   );
 };
 
-export default ShowObjectTypeHandler;
+export default ShowObjectTypesByHandler;
 
 
