@@ -2,9 +2,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import React, { useState } from 'react';
-// eslint-disable-next-line object-curly-newline
 import { Redirect, Route, Switch } from 'react-router-dom';
-
 import AnnouncementsPage from '../announcements/AnnouncementsPage';
 import LoginDialog from '../auth/LoginDialog';
 import UserMenu from '../navigation/UserMenu';
