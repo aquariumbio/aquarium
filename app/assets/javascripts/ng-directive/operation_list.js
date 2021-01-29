@@ -58,12 +58,10 @@
           if (jobid) {
             ops = operations.filter(operation => operation.last_job.id === jobid)
           }
-          debugger;
           if (ops.some(op => op.selected == false)){
             return checkAllOperations = false;
           }
-        }
-
+        };
       }
     }
 
@@ -129,4 +127,3 @@
     }
   });
 })();
-
