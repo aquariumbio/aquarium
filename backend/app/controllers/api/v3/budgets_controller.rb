@@ -63,7 +63,8 @@ module Api
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get budgets
-        budgets = Budget.find_all
+        letter = Input.letter(params[:letter])
+        budgets = letter ? Budget.find_letter(letter) : Budget.find_all
 
         render json: { budgets: budgets }.to_json, status: :ok
       end
@@ -99,6 +100,7 @@ module Api
         # Get budget
         id = Input.int(params[:id])
         budget = Budget.find_id(id)
+        render json: { budget: nil }.to_json, status: :not_found and return if !budget
 
         render json: { budget: budget }.to_json, status: :ok
       end

@@ -38,8 +38,8 @@ Rails.application.routes.draw do
   get  'api/v3/users/:id/groups',                  to: 'api/v3/users#groups'
   post 'api/v3/users/:id/update_info',             to: 'api/v3/users#update_info'
   post 'api/v3/users/:id/update_permissions',      to: 'api/v3/users#update_permissions'
-  post 'api/v3/users/:id/agreements/:agreement',   to: 'api/v3/users#agreements', constraints: { agreement: /lab|aquarium/ }
-  post 'api/v3/users/:id/preferences/:preference', to: 'api/v3/users#preferences', constraints: { preference: /new_samples_private|lab_name/ }
+  post 'api/v3/users/:id/agreements/:agreement',   to: 'api/v3/users#agreements', constraints: { agreement: /lab_agreement|aquarium_agreement/ }
+  post 'api/v3/users/:id/preferences',             to: 'api/v3/users#preferences'
 
   # Groups
   get  'api/v3/groups',                                         to: 'api/v3/groups#index'

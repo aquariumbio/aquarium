@@ -19,7 +19,7 @@ function Alert(props) {
 }
 
 function raw(message) {
-  return {__html: message.replace(/\n/g,'<br>')};
+  return { __html: message.replace(/\n/g, '<br>') };
 }
 
 const AlertToast = (props) => {
@@ -47,7 +47,7 @@ const AlertToast = (props) => {
   return (
     <div className={classes.root}>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={severity} >
+        <Alert onClose={handleClose} severity={severity}>
           <span dangerouslySetInnerHTML={raw(message)} />
         </Alert>
       </Snackbar>

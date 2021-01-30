@@ -32,13 +32,21 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   // eslint-disable-next-line consistent-return
   (error) => {
-    const error_response = error.response;
-    switch (error_response["status"]) {
+    const errorResponse = error.response;
+    switch (errorResponse['status']) {
       case 400:
-        alert("400: "+JSON.stringify(error_response["data"]));
+        alert('400: ' + JSON.stringify(errorResponse['data']));
         break;
       case 401:
         if (window.location.pathname !== '/login') {
+          // IMPORTANT: I WOULD NOT DO THIS!
+          // 401 is for 'unauthorized'
+          // - you ONLY want to delete the token for 'session timeout'
+          //   (or just only delete the session token on logout
+          //    since the user will get a new token when they log back in anyway)
+          // - you can still have a valid token and hit some other page that is unauthorized
+          // - I would be careful about being cute here, it will bite us later
+          // - this is also a reason I wanted a UNIQUE return code for 'session timeout'...
           if (currentSessionToken) {
             axios.post('/token/delete');
             sessionStorage.clear('token');
@@ -46,19 +54,19 @@ axiosInstance.interceptors.response.use(
         }
         /* TODO: HANDLE SESSION TIMEOUT
            if (...pathname !== '/login' && message !== 'Session timeout') { OPEN LOGIN MODAL} */
-        alert("401: "+JSON.stringify(error_response["data"]));
+        alert('401: ' + JSON.stringify(errorResponse['data']));
         break;
       case 403:
         // TODO: HANDLE PERMISSIONS
-        alert("403: "+JSON.stringify(error_response["data"]));
+        alert('403: ' + JSON.stringify(errorResponse['data']));
         break;
       case 404:
-        alert("404: "+JSON.stringify(error_response["data"]));
+        alert('404: ' + JSON.stringify(errorResponse['data']));
         break;
       default:
-        alert(error_response["status"]+": "+JSON.stringify(error_response["data"]));
+        alert(errorResponse['status']+': ' + JSON.stringify(errorResponse['data']));
     }
-    // Return something obvious to stop processing. I like simply "false"
+    // Return something obvious to stop processing. I like simply 'false'
     return false;
   },
 );

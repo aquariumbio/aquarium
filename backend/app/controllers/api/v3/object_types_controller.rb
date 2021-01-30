@@ -209,6 +209,7 @@ module Api
         # Get object type
         id = Input.int(params[:id])
         object_type = ObjectType.find_id(id)
+        render json: { object_type: nil }.to_json, status: :not_found and return if !object_type
 
         render json: {
           object_type: object_type

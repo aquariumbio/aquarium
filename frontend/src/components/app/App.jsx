@@ -1,10 +1,9 @@
 /* disabling forbidden prop spreading for react-router-dom */
 /* eslint-disable react/jsx-props-no-spreading */
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 // eslint-disable-next-line object-curly-newline
 import { Redirect, Route, Switch } from 'react-router-dom';
-
 import AnnouncementsPage from '../announcements/AnnouncementsPage';
 import LoginDialog from '../auth/LoginDialog';
 import UserMenu from '../navigation/UserMenu';
@@ -17,20 +16,23 @@ import DesignerPage from '../designer/DesignerPage';
 import ParametersPage from '../parameters/ParametersPage';
 import RolesPage from '../roles/RolesPage';
 import UsersPage from '../users/UsersPage';
+import UserForm from '../users/UserForm';
 import SampleTypesPage from '../sampleTypes/SampleTypesPage';
-import BudgetsPage from '../budgets/BudgetsPage';
 import ObjectTypesPage from '../objectTypes/ObjectTypesPage';
 import ObjectTypeForm from '../objectTypes/ObjectTypeForm';
 import DirectPurchasePage from '../directPurchase/DirectPurchasePage';
 import ExportWorkflowsPage from '../exportWorkflows/ExportWorkflowsPage';
 import InvoicesPage from '../invoices/InvoicesPage';
-import LocationWizardsPage from '../locationWizards/LocationWizardsPage';
+import WizardsPage from '../wizards/WizardsPage';
+import WizardForm from '../wizards/WizardForm';
 import LogsPage from '../logs/LogsPage';
 import Header from '../navigation/Header';
 import UserProfilePage from '../users/UserProfilePage';
 import SampleTypeDefinitionForm from '../sampleTypes/SampeTypeDefinitionForm';
 import ImportWorkflowsPage from '../importWorkflows/ImportWorkflowsPage';
 import GroupsPage from '../groups/GroupsPage';
+import GroupPage from '../groups/GroupPage';
+import GroupForm from '../groups/GroupForm';
 import LoadingBackdrop from '../shared/LoadingBackdrop';
 import AlertToast from '../shared/AlertToast';
 
@@ -59,7 +61,6 @@ const theme = createMuiTheme({
   },
 });
 
-
 export default function App() {
   const classes = useStyles();
 
@@ -86,47 +87,54 @@ export default function App() {
           { /* TODO: REDIRECT TO PROFILE PAGE IF USER HAS NOT SIGNED AGREENEMTNS */ }
 
           <Switch>
-            <Route path="/login" render={(props) => <LoginDialog setIsLoading={setIsLoading} {...props}  />} />
+            <Route path="/login" render={(props) => <LoginDialog setIsLoading={setIsLoading} {...props} />} />
             <>
               {/* Header should show on all pages except login */}
               <Header />
 
-              <Route exact path="/" render={(props) => <HomePage setIsLoading={setIsLoading} {...props}   />} />
+              <Route exact path="/" render={(props) => <HomePage setIsLoading={setIsLoading} {...props} />} />
 
               {/* Left Hamburger Menu */}
-              <Route exact path="/users" render={(props) => <UsersPage setIsLoading={setIsLoading} {...props}   />} />
+              <Route exact path="/users" render={(props) => <UsersPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+              <Route exact path="/users/new" render={(props) => <UserForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
 
-              <Route exact path="/sample_types" render={(props) => <SampleTypesPage setIsLoading={setIsLoading} {...props}   />} />
-              <Route exact path="/sample_types/new" render={(props) => <SampleTypeDefinitionForm setIsLoading={setIsLoading} {...props}   />} />
-              <Route exact path="/sample_types/:id/edit" render={(props) => <SampleTypeDefinitionForm setIsLoading={setIsLoading} {...props}   />} />
+              <Route exact path="/groups" render={(props) => <GroupsPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+              <Route exact path="/groups/new" render={(props) => <GroupForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+              <Route exact path="/groups/:id/show" render={(props) => <GroupPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+              <Route exact path="/groups/:id/edit" render={(props) => <GroupForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
 
-              <Route exact path="/announcements" render={(props) => <AnnouncementsPage setIsLoading={setIsLoading} {...props}   />} />
-              <Route exact path="/budgets" render={(props) => <BudgetsPage setIsLoading={setIsLoading} {...props}   />} />
+              <Route exact path="/sample_types" render={(props) => <SampleTypesPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+              <Route exact path="/sample_types/new" render={(props) => <SampleTypeDefinitionForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+              <Route exact path="/sample_types/:id/edit" render={(props) => <SampleTypeDefinitionForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
 
-              <Route exact path="/object_types" render={(props) => <ObjectTypesPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props}   />} />
-              <Route exact path="/object_types/new" render={(props) => <ObjectTypeForm setIsLoading={setIsLoading} setAlertProps={setAlertProps}{...props} />} />
-              <Route exact path="/object_types/:id/edit" render={(props) => <ObjectTypeForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props}   />} />
+              <Route exact path="/announcements" render={(props) => <AnnouncementsPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
 
-              <Route exact path="/direct_purchase" render={(props) => <DirectPurchasePage setIsLoading={setIsLoading} {...props}   />} />
-              <Route exact path="/import" render={(props) => <ImportWorkflowsPage setIsLoading={setIsLoading} {...props}   />} />
-              <Route exact path="/publish" render={(props) => <ExportWorkflowsPage setIsLoading={setIsLoading} {...props}   />} />
-              <Route exact path="/wizards" render={(props) => <LocationWizardsPage setIsLoading={setIsLoading} {...props}   />} />
-              <Route exact path="/logs" render={(props) => <LogsPage setIsLoading={setIsLoading} {...props}   />} />
-              <Route exact path="/parameters" render={(props) => <ParametersPage setIsLoading={setIsLoading} {...props}   />} />
-              <Route exact path="/roles" render={(props) => <RolesPage setIsLoading={setIsLoading} {...props}   />} />
-              <Route exact path="/groups" render={(props) => <GroupsPage setIsLoading={setIsLoading} {...props}   />} />
+              <Route exact path="/wizards" render={(props) => <WizardsPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+              <Route exact path="/wizards/new" render={(props) => <WizardForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+              <Route exact path="/wizards/:id/edit" render={(props) => <WizardForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+
+              <Route exact path="/object_types" render={(props) => <ObjectTypesPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+              <Route exact path="/object_types/new" render={(props) => <ObjectTypeForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+              <Route exact path="/object_types/:id/edit" render={(props) => <ObjectTypeForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+
+              <Route exact path="/direct_purchase" render={(props) => <DirectPurchasePage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+              <Route exact path="/import" render={(props) => <ImportWorkflowsPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+              <Route exact path="/publish" render={(props) => <ExportWorkflowsPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+              <Route exact path="/logs" render={(props) => <LogsPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+              <Route exact path="/parameters" render={(props) => <ParametersPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+              <Route exact path="/roles" render={(props) => <RolesPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
 
               {/* Main Navigation tabs */}
-              <Route exact path="/manager" render={(props) => <ManagerPage setIsLoading={setIsLoading} {...props}   />} />
-              <Route exact path="/launcher" render={(props) => <PlansPage setIsLoading={setIsLoading} {...props}   />} />
-              <Route exact path="/samples" render={(props) => <SamplesPage setIsLoading={setIsLoading} {...props}   />} />
-              <Route exact path="/developer" render={(props) => <DeveloperPage setIsLoading={setIsLoading} {...props}   />} />
-              <Route exact path="/designer" render={(props) => <DesignerPage setIsLoading={setIsLoading} {...props}   />} />
-              <Route exact path="/user" render={(props) => <UserMenu setIsLoading={setIsLoading} {...props}   />} />
+              <Route exact path="/manager" render={(props) => <ManagerPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+              <Route exact path="/launcher" render={(props) => <PlansPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+              <Route exact path="/samples" render={(props) => <SamplesPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+              <Route exact path="/developer" render={(props) => <DeveloperPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+              <Route exact path="/designer" render={(props) => <DesignerPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+              <Route exact path="/user/profile" render={(props) => <UserMenu setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
 
               {/* Right user Menu */}
-              <Route exact path="/invoices" render={(props) => <InvoicesPage setIsLoading={setIsLoading} {...props}   />} />
-              <Route exact path="/users/:id" render={(props) => <UserProfilePage setIsLoading={setIsLoading} {...props}   />} />
+              <Route exact path="/invoices" render={(props) => <InvoicesPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+              <Route exact path="/users/:id/profile" render={(props) => <UserProfilePage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
 
               {/* Redirect anything else to HOME (or a 404 page or something else) */}
               {/* TODO */}

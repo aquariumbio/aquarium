@@ -1,17 +1,20 @@
 import React, { useState, useEffect, useReducer } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import { useHistory } from "react-router";
 import PropTypes from 'prop-types';
+
 import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 import { makeStyles } from '@material-ui/core';
 import Link from '@material-ui/core/Link';
-import { Link as RouterLink } from 'react-router-dom';
+
 import objectsAPI from '../../helpers/api/objects';
-import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     height: 'calc(100% - 64px)',
   },
+
   inventory: {
     fontSize: '0.875rem',
     marginBottom: theme.spacing(2),
@@ -19,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 
   /* flex */
   flexWrapper: {
-    padding: '0 8px',
+    padding: '0 16px',
   },
 
   flex: {
@@ -38,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   flexRow: {
     padding: '8px 0',
     borderBottom: '1px solid #c0c0c0',
-    "&:hover": {
+    '&:hover': {
       boxShadow: '0 0 3px 0 rgba(0, 0, 0, 0.8)',
     },
   },
@@ -99,9 +102,7 @@ const useStyles = makeStyles((theme) => ({
   pointer: {
     cursor: 'pointer',
   },
-
 }));
-
 
 // change the state of toggleIds[objectType.id] and trigger React to update the screen
 // (see NOTE below)
@@ -109,12 +110,10 @@ const handleToggles = (id, toggleId, setToggleIds, triggerUpdate) => {
   var newIds = toggleId
   newIds[id] = !newIds[id]
   setToggleIds(newIds);
-
   triggerUpdate();
 };
 
 const ShowObjectTypesByHandler = ({ objectTypes, setIsLoading, setAlertProps }) => {
-
   // NOTE: regarding toggleIds and triggerUpdate
   // toggleIds used to track show/hide state for object type details, takes the form { objectType.id => true/false }
   // triggerUpdate used to trigger a screen update.
@@ -122,44 +121,22 @@ const ShowObjectTypesByHandler = ({ objectTypes, setIsLoading, setAlertProps }) 
   // - calling triggerUpdate() triggers a screen update (which also includes any state changes to toggleIds)
   const [toggleIds, setToggleIds] = useState({});
   const [, triggerUpdate] = useReducer(x => !x, false);
+
   const classes = useStyles();
   const history = useHistory();
 
   const handleDelete = async (id) => {
-    // loading overlay - delay by 300ms to avoid screen flash
-    let loading = setTimeout(() => { setIsLoading( true ) }, window.$timeout);
-
     const response = await objectsAPI.delete(id);
-
-    // break if the HTTP call resulted in an error ("return false" from API.js)
-    // NOTE: the alert("break") is just there for testing. Whatever processing should be handled in API.js, and we just need stop the system from trying to continue...
-    if (!response) {
-      alert("break")
-      return;
-    }
-
-    // clear timeout and clear overlay
-    clearTimeout(loading);
-    setIsLoading(false);
-
-    // process errors
-    const errors = response["errors"];
-    if (errors) {
-      setAlertProps({
-        message: JSON.stringify(errors, null, 2),
-        severity: 'error',
-        open: true,
-      });
-      return;
-    }
+    if (!response) return;
 
     // success
     // pass alert popup in sessionStorage (does not work if pass as object, so pass as JSON string)
     sessionStorage.alert = JSON.stringify({
-      message: response["message"],
+      message: response['message'],
       severity: 'success',
       open: true,
     });
+
     window.location.reload();
   };
 
@@ -172,6 +149,7 @@ const ShowObjectTypesByHandler = ({ objectTypes, setIsLoading, setAlertProps }) 
           <Typography className={classes.flexColAutoHidden}>Edit</Typography>
           <Typography className={classes.flexColAutoHidden}>Delete</Typography>
         </div>
+
         {objectTypes.map((objectType) => (
           <div className={`${classes.flex} ${classes.flexRow}`} key = {`object_${objectType.id}`} >
             <Typography className={classes.flexCol1} >
@@ -209,9 +187,11 @@ const ShowObjectTypesByHandler = ({ objectTypes, setIsLoading, setAlertProps }) 
                 </ListItem>
               </span>
             </Typography>
+
             <Typography className={classes.flexColAuto} >
               <Link component={RouterLink} to={`/object_types/${objectType.id}/edit`}>Edit</Link>
             </Typography>
+
             <Typography className={classes.flexColAuto} >
               <Link className={classes.pointer} onClick={ () => handleDelete(objectType.id) } >Delete</Link>
             </Typography>
@@ -223,5 +203,4 @@ const ShowObjectTypesByHandler = ({ objectTypes, setIsLoading, setAlertProps }) 
 };
 
 export default ShowObjectTypesByHandler;
-
 

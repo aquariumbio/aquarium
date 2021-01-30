@@ -3,7 +3,7 @@ import axiosInstance from '../API';
 const tokensAPI = {};
 
 tokensAPI.isPermission = (id) => axiosInstance
-  .get('/token/get_user?permission_id='+id)
+  .get(`/token/get_user?permission_id=${id}`)
   .then((response) => response.data)
   .catch((error) => error);
 

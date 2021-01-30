@@ -60,7 +60,7 @@ const UserMenu = (props) => {
         open={!!anchorEl}
         onClose={() => setAnchorEl(null)}
       >
-        <MenuItem onClick={() => handleMenuClick('/users')}>
+        <MenuItem onClick={() => handleMenuClick('/profile')}>
           Profile
         </MenuItem>
         <MenuItem onClick={() => handleMenuClick('/invoices')}>

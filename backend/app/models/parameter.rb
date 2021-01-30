@@ -59,13 +59,13 @@ class Parameter < ActiveRecord::Base
   # return the parameter
   def update(parameter)
     # Read the parameters
-    input_title = Input.text(parameter[:key])
-    input_message = Input.text(parameter[:value])
-    input_active = Input.text(parameter[:description])
+    input_key = Input.text(parameter[:key])
+    input_value = Input.text(parameter[:value])
+    input_description = Input.text(parameter[:description])
 
-    self.key = input_title
-    self.value = input_message
-    self.description = input_active
+    self.key = input_key
+    self.value = input_value
+    self.description = input_description
 
     valid = self.valid?
     return false, self.errors if !valid

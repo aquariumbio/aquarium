@@ -99,6 +99,7 @@ module Api
         # Get user
         id = Input.int(params[:id])
         user = User.find_id(id)
+        render json: { user: nil }.to_json, status: :not_found and return if !user
 
         render json: { user: user }.to_json, status: :ok
       end
@@ -135,6 +136,7 @@ module Api
         # Get user
         id = Input.int(params[:id])
         user = User.find_id_show_info(id)
+        render json: { user: nil }.to_json, status: :not_found and return if !user
 
         render json: { user: user }.to_json, status: :ok
       end
@@ -400,16 +402,12 @@ module Api
         render json: { error: 'Invalid' }.to_json, status: :unauthorized and return if !user
 
         # Read inputs
-        preference = params[:preference]
-        value = case preference
-        when "new_samples_private"
-          Input.boolean(params[:value])
-        when "lab_name"
-          Input.text_field(params[:value])
-        end
+        new_samples_private = Input.boolean(params[:new_samples_private])
+        lab_name = Input.text_field(params[:lab_name])
 
-        # Update the user lab agreement to true
-        UserProfile.set_user_profile(user.id, params[:preference], value)
+        # Update the preferences
+        UserProfile.set_user_profile(user.id, "new_samples_private", new_samples_private)
+        UserProfile.set_user_profile(user.id, "lab_name", lab_name)
 
         render json: { user:  user }.to_json, status: :ok
       end

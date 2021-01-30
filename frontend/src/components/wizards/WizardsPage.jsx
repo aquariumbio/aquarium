@@ -1,21 +1,19 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from 'react';
-import { useHistory } from "react-router";
-import * as queryString from "query-string";
+import { useHistory } from 'react-router';
+import * as queryString from 'query-string';
 
 import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 
-import ShowUsers from './ShowUsers';
-import { LinkButton, StandardButton } from '../shared/Buttons';
-import { Link } from 'react-router-dom';
-import usersAPI from '../../helpers/api/users';
+import ShowWizards from './ShowWizards';
+import { LinkButton } from '../shared/Buttons';
+import wizardsAPI from '../../helpers/api/wizards';
 import permissionsAPI from '../../helpers/api/permissions';
 
 // Route: /object_types
@@ -41,77 +39,76 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UsersPage = ({setIsLoading, setAlertProps, match}) => {
+const WizardsPage = ({ setIsLoading, setAlertProps, match }) => {
   const classes = useStyles();
   const history = useHistory();
 
-  // const [userLetters, setUserLetters] = useState([]);
+  // const [wizardLetters, setWizardLetters] = useState([]);
   const [currentLetter, setCurrentLetter] = useState('');
-  const [currentUsers, setCurrentUsers] = useState([]);
-  const [permissionsList, setPermissionsList] = useState({});
+  const [currentWizards, setCurrentWizards] = useState([]);
+
+  // initialize to all and get permissions
+  useEffect(() => {
+    const init = async () => {
+      const letter = queryString.parse(window.location.search)['letter'];
+
+      if (letter) {
+        // wrap the API calls
+        const responses = await wizardsAPI.getWizardsByLetter(letter);
+        if (!responses) return;
+
+        // success
+        if (responses.wizards) {
+          setCurrentLetter(letter.toUpperCase());
+          setCurrentWizards(responses['wizards']);
+        }
+      } else {
+        // wrap the API calls
+        const responses = await wizardsAPI.getWizards();
+        if (!responses) return;
+
+        // success
+        if (responses.wizards) {
+          setCurrentLetter('All');
+          setCurrentWizards(responses['wizards']);
+        }
+      }
+    };
+
+    init();
+  }, []);
 
   const fetchAll = async () => {
     // wrap the API call
-    const response = await usersAPI.getUsers();
+    const response = await wizardsAPI.getWizards();
     if (!response) return;
 
     // success
-    if (response.users) {
+    if (response.wizards) {
       setCurrentLetter('All');
-      setCurrentUsers(response['users']);
+      setCurrentWizards(response['wizards']);
     }
 
     // screen does not refresh (we do not want it to) because only query parameters change
     // allows user to hit refresh to reload
-    history.push('/users');
+    history.push('/wizards');
   };
 
   const fetchLetter = async (letter) => {
     // wrap the API call
-    const response = await usersAPI.getUsersByLetter(letter);
+    const response = await wizardsAPI.getWizardsByLetter(letter);
     if (!response) return;
 
     // success
-    if (response.users) {
+    if (response.wizards) {
       setCurrentLetter(letter.toUpperCase());
-      setCurrentUsers(response['users']);
+      setCurrentWizards(response['wizards']);
     }
 
     // screen does not refresh (we do not want it to) because only query parameters change
     // allows user to hit refresh to reload
-    history.push(`/users?letter=${letter}`.toLowerCase());
+    history.push(`/wizards?letter=${letter}`.toLowerCase());
   };
-
-  // initialize users and get permissions
-  useEffect(() => {
-    const init = async () => {
-      const letter = queryString.parse(window.location.search)['letter']
-
-      if (letter) {
-        // wrap the API calls
-        const response = await permissionsAPI.getPermissions();
-        if (!response) return;
-
-        // success
-        setPermissionsList(response.permissions)
-
-        // wrap the API calls
-        fetchLetter(letter);
-      } else {
-        // wrap the API calls
-        const response = await permissionsAPI.getPermissions();
-        if (!response) return;
-
-        // success
-        setPermissionsList(response.permissions)
-
-        // wrap the API calls
-        fetchAll()
-      }
-    }
-
-    init();
-  }, []);
 
   return (
     <>
@@ -123,7 +120,7 @@ const UsersPage = ({setIsLoading, setAlertProps, match}) => {
           data-cy="page-title"
         >
           <Typography display="inline" variant="h6" component="h1">
-            Users
+            Wizards
           </Typography>
           <Typography display="inline" variant="h6" component="h1">
             {currentLetter}
@@ -132,12 +129,12 @@ const UsersPage = ({setIsLoading, setAlertProps, match}) => {
 
         <div>
           <LinkButton
-            name="New User"
-            testName="new_user_btn"
-            text="New User"
+            name="New Wizard"
+            testName="new_wizard_btn"
+            text="New"
             dark
             type="button"
-            linkTo="/users/new"
+            linkTo="/wizards/new"
           />
         </div>
       </Toolbar>
@@ -177,11 +174,11 @@ const UsersPage = ({setIsLoading, setAlertProps, match}) => {
 
       <Divider />
 
-      {currentUsers
-        ? <ShowUsers users={currentUsers} setIsLoading={setIsLoading} setAlertProps={setAlertProps} permissionsList={permissionsList} currentLetter={currentLetter}/>
+      {currentWizards
+        ? <ShowWizards wizards={currentWizards} />
         : ''}
     </>
   );
 };
 
-export default UsersPage;
+export default WizardsPage;

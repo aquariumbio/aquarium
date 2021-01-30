@@ -1,56 +1,64 @@
 /* eslint-disable no-unused-vars */
+import React, { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
+
 import { makeStyles } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import React, { useState, useEffect, useRef } from 'react';
 import Grid from '@material-ui/core/Grid';
-import PropTypes from 'prop-types';
 import Alert from '@material-ui/lab/Alert';
 import Divider from '@material-ui/core/Divider';
+
 import objectsAPI from '../../helpers/api/objects';
 import samplesAPI from '../../helpers/api/samples';
 import tokensAPI from '../../helpers/api/tokens';
-import LoadingBackdrop from '../shared/LoadingBackdrop';
 import { StandardButton, LinkButton } from '../shared/Buttons';
 import utils from '../../helpers/utils';
 import AlertToast from '../shared/AlertToast';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
+
   container: {
     minWidth: 'lg',
     overflow: 'auto',
   },
+
   title: {
     fontSize: '2.5rem',
     fontWeight: '700',
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(0.25),
   },
+
   inputName: {
     fontSize: '1rem',
     fontWeight: '700',
   },
+
   spaceBelow: {
     marginBottom: theme.spacing(1),
   },
+
   show: {
     display: 'block',
   },
+
   hide: {
     display: 'none',
   },
-
 }));
 
 const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
   const classes = useStyles();
+
   const [disableSubmit, setDisableSubmit] = useState(false);
   const [sampleTypes, setSampleTypes] = useState([]);
 
+  // form variables
   const [id, setId] = useState(null);
   const [objectTypeName, setObjectTypeName] = useState('');
   const [objectTypeDescription, setObjectTypeDescription] = useState('');
@@ -70,64 +78,39 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
   const [objectTypeCleanup, setObjectTypeCleanup] = useState('');
   const [objectTypeData, setObjectTypeData] = useState('');
   const [objectTypeVendor, setObjectTypeVendor] = useState('');
-
   const ref = useRef();
 
   useEffect(() => {
     const initNew = async () => {
-      // loading overlay - delay by 300ms to avoid screen flash
-      let loading = setTimeout(() => { setIsLoading( true ) }, window.$timeout);
-
-      // Start each call asynchronously
+      // wrap the API call
       const response = await samplesAPI.getTypes();
-
-      // break if the HTTP call resulted in an error ("return false" from API.js)
-      // NOTE: the alert("break") is just there for testing. Whatever processing should be handled in API.js, and we just need stop the system from trying to continue...
-      if (!response) {
-        alert("break")
-        return;
-      }
-
-      // clear timeout and clear overlay
-      clearTimeout(loading);
-      setIsLoading(false);
+      if (!response) return;
 
       // success
       setObjectTypeReleaseMethod("return");
       setSampleTypes(response.sample_types);
+
       if (response.sample_types[0]) {
         setObjectTypeSampleTypeId(response.sample_types[0].id);
       }
     };
 
-    const initEdit = async () => {
-      // loading overlay - delay by 300ms to avoid screen flash
-      let loading = setTimeout(() => { setIsLoading( true ) }, window.$timeout);
-
-      // Start each call asynchronously
-      const call1 = samplesAPI.getTypes();
-      const call2 = objectsAPI.getById(match.params.id);
-
-      // Await responses (calls will still run in parallel)
-      const response1 = await call1
-      const response2 = await call2
-
-      // break if the HTTP call resulted in an error ("return false" from API.js)
-      // NOTE: the alert("break") is just there for testing. Whatever processing should be handled in API.js, and we just need stop the system from trying to continue...
-      if (!response1 || !response2) {
-        alert("break")
-        return;
-      }
-
-      // clear timeout and clear overlay
-      clearTimeout(loading);
-      setIsLoading(false);
+    const initEdit = async (id) => {
+      // wrap the API calls
+      const response = await samplesAPI.getTypes();
+      if (!response) return;
 
       // success
-      setSampleTypes(response1.sample_types);
+      setSampleTypes(response.sample_types);
 
-      const objectType = response2.object_type
-      setId(objectType.id)
+      // wrap the API calls
+      const responses = await objectsAPI.getById(id)
+      if (!responses) return;
+
+      // success
+      const objectType = responses.object_type
+
+      setId(id)
       setObjectTypeName(objectType.name);
       setObjectTypeDescription(objectType.description);
       setObjectTypeMin(objectType.min);
@@ -148,19 +131,19 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
       setObjectTypeVendor(objectType.vendor);
     };
 
-    match.params.id ? initEdit() : initNew();
+    match.params.id ? initEdit(match.params.id) : initNew();
   }, []);
 
   // Update allowSubmit state if name and Description change
   useEffect(() => {
     setDisableSubmit(
-      !objectTypeName.trim()         ||
-      !objectTypeDescription.trim()  ||
-      !objectTypeUnit                ||
-      !objectTypeCost                ||
-      !objectTypeHandler.trim()      ||
-      objectTypeMin < 0              ||
-      objectTypeMax < 0              ||
+      !objectTypeName.trim() ||
+      !objectTypeDescription.trim() ||
+      !objectTypeUnit ||
+      !objectTypeCost ||
+      !objectTypeHandler.trim() ||
+      objectTypeMin < 0 ||
+      objectTypeMax < 0 ||
       objectTypeMin > objectTypeMax
     );
   });
@@ -168,6 +151,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
   // handle click event of the Remove button
   const handleRemoveFieldClick = (index) => {
     const list = [...fieldTypes];
+
     list.splice(index, 1);
     setFieldTypes(list);
   };
@@ -175,6 +159,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
   // handle field type input change
   const handleFieldInputChange = (value, index) => {
     const list = [...fieldTypes];
+
     list[index] = value;
     setFieldTypes(list);
   };
@@ -182,42 +167,20 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
   // Submit form with all data
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // this should use jQuery.serializeArray...
-    const formData = {
-      id: id,
-      name: objectTypeName,
-      description: objectTypeDescription,
-      min: objectTypeMin,
-      max: objectTypeMax,
-      handler: objectTypeHandler,
-      unit: objectTypeUnit,
-      cost: objectTypeCost,
-      release_method: objectTypeReleaseMethod,
-      release_description: objectTypeReleaseDescription,
-      sample_type_id: objectTypeSampleTypeId,
-      image: objectTypeImage,
-      prefix: objectTypePrefix,
-      rows: objectTypeRows,
-      columns: objectTypeColumns,
-      safety: objectTypeSafety,
-      cleanup: objectTypeCleanup,
-      data: objectTypeData,
-      vendor: objectTypeVendor,
-    };
-    // change submit action based on form type
+
+    // set formData
+    const form = document.querySelector('form'); // var
+    const data = new FormData(form); // var
+    const formData = Object.fromEntries(data)
+
+    // API call
     const response = id
       ? await objectsAPI.update(formData, id)
       : await objectsAPI.create(formData);
-
-    // break if the HTTP call resulted in an error ("return false" from API.js)
-    // NOTE: the alert("break") is just there for testing. Whatever processing should be handled in API.js, and we just need stop the system from trying to continue...
-    if (!response) {
-      alert("break")
-      return;
-    }
+    if (!response) return
 
     // process errors
-    const errors = response["errors"];
+    const errors = response['errors'];
     if (errors) {
       setAlertProps({
         message: JSON.stringify(errors, null, 2),
@@ -233,32 +196,26 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
       severity: 'success',
       open: true,
     });
-
   };
 
   return (
     <Container className={classes.root} maxWidth="xl" data-cy="sampe-type-definition-container">
-      {match.url === '/object_types/new' && (
-        <Typography variant="h1" align="center" className={classes.title}>
-          New Object Type
-        </Typography>
-      )}
-
-      {id && (
-        <Typography variant="h1" align="center" className={classes.title}>
-          <u>{objectTypeName}</u>
-        </Typography>
-      )}
-
-      {id && (
-        <>
-          <Alert severity="info">Note: Changing a object type can have far reaching effects! Edit with care.</Alert>
-
-          <Typography variant="h2" align="center" className={classes.title}>
-            Editing Object Type {id}
+      {
+        id ?
+          <>
+            <Alert severity="info">Note: Changing a object type can have far reaching effects! Edit with care.</Alert>
+            <Typography variant="h1" align="center" className={classes.title}>
+              <u>{objectTypeName}</u>
+            </Typography>
+            <Typography variant="h2" align="center" className={classes.title}>
+              Editing Object Type {id}
+            </Typography>
+          </>
+        :
+          <Typography variant="h1" align="center" className={classes.title}>
+            New Object Type
           </Typography>
-        </>
-      )}
+      }
 
       <Typography align="right">* field is required</Typography>
 
@@ -339,7 +296,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
         </Typography>
 
         <TextField
-          name="Max"
+          name="max"
           fullWidth
           value={objectTypeMax}
           id="object-type-max-input"
@@ -361,7 +318,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
         </Typography>
 
         <TextField
-          name="Unit"
+          name="unit"
           fullWidth
           value={objectTypeUnit}
           id="object-type-unit-input"
@@ -383,7 +340,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
         </Typography>
 
         <TextField
-          name="Cost"
+          name="cost"
           fullWidth
           value={objectTypeCost}
           id="object-type-cost-input"
@@ -405,7 +362,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
         </Typography>
 
         <TextField
-          name="Handler"
+          name="handler"
           fullWidth
           value={objectTypeHandler}
           id="object-type-handler-input"
@@ -424,7 +381,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
         </Typography>
 
         <TextField
-          name="ReleaseMethod"
+          name="release_method"
           fullWidth
           value={objectTypeReleaseMethod}
           id="object-type-release-method-input"
@@ -447,7 +404,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
         </Typography>
 
         <TextareaAutosize
-          name="ReleaseDescription"
+          name="release_description"
           id="object-type-release-description-input"
           style={{width:'100%'}}
           rowsMin={5}
@@ -468,7 +425,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
           </Typography>
 
           <TextField
-            name="SampleTypeId"
+            name="sample_type_id"
             fullWidth
             value={objectTypeSampleTypeId}
             id="object-type-sample-type-id-input"
@@ -492,7 +449,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
         </Typography>
 
         <TextField
-          name="Image"
+          name="image"
           fullWidth
           value={objectTypeImage}
           id="object-type-image-input"
@@ -510,7 +467,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
         </Typography>
 
         <TextField
-          name="Prefix"
+          name="prefix"
           fullWidth
           value={objectTypePrefix}
           id="object-type-prefix-input"
@@ -529,7 +486,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
           </Typography>
 
           <TextField
-            name="Rows"
+            name="rows"
             fullWidth
             value={objectTypeRows}
             id="object-type-rows-input"
@@ -547,7 +504,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
           </Typography>
 
           <TextField
-            name="Columns"
+            name="columns"
             fullWidth
             value={objectTypeColumns}
             id="object-type-columns-input"
@@ -566,7 +523,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
         </Typography>
 
         <TextareaAutosize
-          name="Safety"
+          name="safety"
           style={{width:'100%'}}
           rowsMin={5}
           value={objectTypeSafety}
@@ -585,7 +542,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
         </Typography>
 
         <TextareaAutosize
-          name="Cleanup"
+          name="cleanup"
           style={{width:'100%'}}
           rowsMin={5}
           value={objectTypeCleanup}
@@ -604,7 +561,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
         </Typography>
 
         <TextareaAutosize
-          name="Data"
+          name="data"
           style={{width:'100%'}}
           rowsMin={5}
           value={objectTypeData}
@@ -623,7 +580,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
         </Typography>
 
         <TextareaAutosize
-          name="Vendor"
+          name="vendor"
           style={{width:'100%'}}
           rowsMin={5}
           value={objectTypeVendor}
@@ -647,7 +604,6 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
           type="submit"
           disabled={disableSubmit}
           dark
-
         />
 
         <LinkButton
