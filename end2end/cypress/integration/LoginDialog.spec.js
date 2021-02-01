@@ -35,7 +35,7 @@ describe('/login', () => {
     cy.get('[data-test=username]').type('marikotest ');
     cy.get('[data-test=password]').type('aquarium');
     cy.get('form').contains('SIGN IN').click();
-    cy.url().should('eq', `${Cypress.env('baseUrl')}/`);
+    cy.url().should('eq', `${Cypress.config().baseUrl}/`);
 
     let token;
 
