@@ -80,7 +80,7 @@ export const LinkButton = ({
       component={RouterLink}
       to={linkTo}
       data-cy={testName}
-      disabled={disabled}
+      disabled={disabled} // aria-disabled
     >
       {text}
     </Button>

@@ -112,10 +112,10 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
       setIsLoading(false);
 
       // success
-      setFieldTypes(responseGetCurrent.field_types);
+      responseGetCurrent.field_types && setFieldTypes(responseGetCurrent.field_types);
       setSampleTypeDescription(responseGetCurrent.description);
       setSampleTypeName(responseGetCurrent.name);
-      setObjectTypes(responseGetCurrent.object_types);
+      responseGetCurrent.field_types && setObjectTypes(responseGetCurrent.object_types);
       setInventory(responseGetCurrent.inventory);
       setId(responseGetCurrent.id);
     };
@@ -126,7 +126,10 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
   /*  Update allowSubmit state if name and Description change
       Disable submit if name or description are empty */
   useEffect(() => {
-    setDisableSubmit(!sampleTypeName.trim() || !sampleTypeDescription.trim());
+    setDisableSubmit(!sampleTypeName
+      || (!!sampleTypeName && !sampleTypeName.trim())
+      || !sampleTypeDescription
+      || (!!sampleTypeDescription && !sampleTypeDescription.trim()));
   });
 
   // Handle click add field button --> add new field type to end of current field types array

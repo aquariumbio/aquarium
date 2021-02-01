@@ -161,6 +161,7 @@ const SampleTypeDefinitions = ({ setIsLoading }) => {
                         text="Edit"
                         type="button"
                         linkTo={`/sample_types/${currentSampleType.id}/edit`}
+                        disabled={sampleTypes.length === 0}
                       />
 
                       <StandardButton
