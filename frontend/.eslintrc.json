@@ -35,6 +35,7 @@
         "react/jsx-one-expression-per-line": "off",
         "no-debugger": "warn",
         "no-console": "warn",
-        "no-unused-vars": "warn"
+        "no-unused-vars": "warn",
+        "object-curly-newline": "off"
     }
 }
