@@ -180,8 +180,8 @@ class BrowserController < ApplicationController
       samples = samples.owned_by(user: user) if user
     end
 
-    if params[:project_filter]
-      samples = samples.for_project(project: params[:project]) if params[:project].present?
+    if params[:project_filter] && params[:project].present?
+      samples = samples.for_project(project: params[:project])
     end
 
     if params[:sample_type].present?
