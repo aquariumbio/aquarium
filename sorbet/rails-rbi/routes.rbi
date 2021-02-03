@@ -1234,20 +1234,4 @@ module GeneratedUrlHelpers
 
   sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
   def logout_url(*args, **kwargs); end
-
-  # Sigs for route /dev_only
-  sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
-  def dev_only_path(*args, **kwargs); end
-
-  sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
-  def dev_only_url(*args, **kwargs); end
-end
-
-module GeneratedUrlHelpers
-  # Sigs for route /api(.:format)
-  sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
-  def api_path(*args, **kwargs); end
-
-  sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
-  def api_url(*args, **kwargs); end
 end
