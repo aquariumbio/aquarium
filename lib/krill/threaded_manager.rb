@@ -117,6 +117,7 @@ module Krill
       puts "Stopping job #{@sandbox.job.id}"
 
       @thread.kill
+      # TODO: close active connections here?
       @mutex.synchronize { @thread_status.running = false }
     end
 

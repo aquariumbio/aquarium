@@ -1,0 +1,60 @@
+{
+    "description": "<p>v2.8.1</p>\n<p>This release includes the following changes:</p>\n<ul>\n<li>Krill changes: add technician foot pedal interface (thanks to Abe Miller)</li>\n<li>Add configurable OLA Simple technician page (Abe Miller)</li>\n<li>Change handling of data associations so that only the most recent value of\na duplicate key will be displayed. (thanks to Gene Nomicos)</li>\n<li>Change library controller to allow creating library externally with pfish.</li>\n<li>Update entrypoint script to use AWS CloudMap namespace when run on ECS.</li>\n<li>Change object type list to hide internal types.</li>\n</ul>\n<p>Contributions from @marikoja , @cashmonger , @Gamemackerel , @gnomicos , and \n@bjkeller</p>", 
+    "license": "other-open", 
+    "title": "aquariumbio/aquarium: Aquarium version 2.8.1", 
+    "version": "v2.8.1", 
+    "upload_type": "software", 
+    "communities": [
+        {
+            "identifier": "aquarium"
+        }
+    ], 
+    "publication_date": "2020-09-04", 
+    "creators": [
+        {
+            "affiliation": "Electrical and Computer Engineering, University of Washington", 
+            "name": "Benjamin J. Keller"
+        }, 
+        {
+            "affiliation": "Electrical and Computer Engineering, University of Washington", 
+            "name": "Abraham Miller"
+        }, 
+        {
+            "affiliation": "Electrical and Computer Engineering, University of Washington", 
+            "name": "Garrett Newman"
+        }, 
+        {
+            "affiliation": "Electrical and Computer Engineering, University of Washington", 
+            "name": "Phuong Le"
+        }, 
+        {
+            "affiliation": "Electrical and Computer Engineering, University of Washington", 
+            "name": "Justin Vrana"
+        }, 
+        {
+            "affiliation": "Electrical and Computer Engineering, University of Washington", 
+            "name": "Gene Nomicos"
+        }, 
+        {
+            "affiliation": "Electrical and Computer Engineering, University of Washington", 
+            "name": "Mariko Anderson"
+        },
+        {
+            "affiliation": "Electrical and Computer Engineering, University of Washington", 
+            "name": "Eric Klavins"
+        }
+    ], 
+    "access_right": "open", 
+    "related_identifiers": [
+        {
+            "scheme": "url", 
+            "identifier": "https://github.com/aquariumbio/aquarium/tree/v2.8.1", 
+            "relation": "isSupplementTo"
+        }, 
+        {
+            "scheme": "doi", 
+            "identifier": "10.5281/zenodo.2535714", 
+            "relation": "isVersionOf"
+        }
+    ]
+}
