@@ -11,6 +11,8 @@ v2.9.0
 Includes changes to the database that require applying migrations. See the 
 release notes for details.
 
+Contributions from Mariko Anderson, and Gene Nomicos
+
 v2.8.1
 
 - Krill changes: add technician foot pedal interface (thanks to Abe Miller)
