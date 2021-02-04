@@ -9,7 +9,7 @@ module JobOperations # included in Job model
         Rails.logger.info "#{op.id}: SETTING STATUS FROM #{op.status} to #{str}"
         op.set_status str
       else
-        Rails.logger.info "#{op.id}: DID NOT SET STATUS BECUASE IT WAS ALREADY 'error'"
+        Rails.logger.info "#{op.id}: DID NOT SET STATUS BECAUSE IT WAS ALREADY 'error'"
       end
     end
   end
