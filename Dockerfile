@@ -1,5 +1,5 @@
 ARG RUBY_VERSION=2.6.6
-ARG ALPINE_VERSION=3.12
+ARG ALPINE_VERSION=3.13
 
 # A ruby-alpine image for development
 FROM ruby:${RUBY_VERSION}-alpine${ALPINE_VERSION} AS aquarium-development
@@ -16,7 +16,7 @@ RUN apk add --update --no-cache \
     libxml2 \
     libxslt \
     mariadb-dev \
-    musl \
+    musl>1.2.2-r1 \
     mysql-client \
     nodejs \
     nodejs-npm \
