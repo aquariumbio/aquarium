@@ -388,7 +388,11 @@ Keep it up-to-date if you change something that affects Aquarium development.
 
 9.  (Make sure JS linting passes)
 
-10. Update the version number in `package.json` and `config/initializers/version.rb` to the new version number.
+10. Update the version number in 
+
+    - `package.json`
+    - `config/initializers/version.rb`
+    - `setup.sh` (and either regenerate or edit the `.env` file)
 
 11. Update API documentation by running
 
@@ -426,12 +430,28 @@ Keep it up-to-date if you change something that affects Aquarium development.
 
 16. Update zenodo meta data [This may be in wrong place]
 
-17. Push image to Docker Hub
+17. Build Docker image (be sure that version number in `.env` matches the `$NEWVERSION`)
 
     ```bash
     bash ./aquarium.sh build
+    ```
+
+18. Scan image 
+
+    ```bash
+    snyk container test aquariumbio/aquarium:$NEWVERSION --file=./Dockerfile
+    ```
+
+    fix any issues identified, rebuild the image and rescan.
+    It may not be possible to resolve all of the identified issues.
+
+19. Push image to Docker Hub
+
+    ```bash
     docker push aquariumbio/aquarium:$NEWVERSION
     ```
+
+You should run `docker system prune` after the snyk scan.
 
 ## Aquarium Configuration
 
