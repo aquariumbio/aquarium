@@ -273,6 +273,58 @@ RSpec.describe Krill::ProtocolSandbox do
     expect(job.backtrace[1][:content]).to eq([{ title: 'blah' }, { note: dummy_item.id }])
   end
 
+  let(:no_protocol_protocol) do
+    create(
+      :operation_type,
+      name: 'no protocol code',
+      category: 'testing',
+      protocol: '',
+      user: test_user
+    )
+  end
+  it 'expect error when missing protocol code' do
+    # expect { make_operation(operation_type: no_protocol_protocol, user_id: test_user.id) }.to raise_error do |error|
+    #   expect(error).to be_a(MissingCodeError)
+    #   expect(error.message).to eq('Missing protocol code for testing/no protocol code')
+    # end
+    operation = make_operation(operation_type: no_protocol_protocol, user_id: test_user.id)
+    plan = build_plan(operation: operation, user_id: test_user.id)
+    job = Job.schedule(
+      operations: plan.operations,
+      user: test_user
+    )
+
+    expect { Krill::ProtocolSandbox.new(job: job, debug: true) }.to raise_error do |error|
+      expect(error).to be_a(Krill::KrillError)
+      expect(error.error.message).to eq('Missing protocol code for testing/no protocol code')
+    end
+  end
+
+  # cost_model is evaluated by Operation.nominal_cost
+  # let(:no_cost_model_protocol) do
+  #   create(
+  #     :operation_type,
+  #     name: 'no cost model code',
+  #     category: 'testing',
+  #     protocol: 'class Protocol; def main; show { title \'blah\' }; end end',
+  #     cost_model: '',
+  #     user: test_user
+  #   )
+  # end
+  # it 'expect error when missing cost model' do
+  #   operation = make_operation(operation_type: no_cost_model_protocol, user_id: test_user.id)
+  #   plan = build_plan(operation: operation, user_id: test_user.id)
+  #   job = Job.schedule(
+  #     operations: plan.operations,
+  #     user: test_user
+  #   )
+
+  #   expect { Krill::ProtocolSandbox.new(job: job, debug: true) }.to raise_error do |error|
+  #     expect(error).to be_a(Krill::KrillError)
+  #     expect(error.error.message).to eq('Missing protocol code for testing/no protocol code')
+  #   end
+  # end
+
   def create_job(protocol:, user:)
     operation = make_operation(
       operation_type: protocol,
@@ -295,7 +347,7 @@ RSpec.describe Krill::ProtocolSandbox do
   end
 
   def make_operation(operation_type:, user_id:)
-    operation = operation_type.operations.create(
+    operation = operation_type.create_operation(
       status: 'pending',
       user_id: user_id
     )
