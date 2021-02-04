@@ -3,9 +3,10 @@
 
 module OperationTypePlanner
 
+  # TODO: verify that this is dead code
   def instantiate(output, desired_value)
 
-    op = operations.create status: 'planning'
+    op = create_operation(status: 'planning')
 
     # Set the output fv to the desired value.
     aft = nil

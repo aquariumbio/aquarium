@@ -100,7 +100,7 @@ RSpec.describe Krill::DebugManager do
   end
 
   def make_operations_list(operation_type:, user_id:)
-    operation = operation_type.operations.create(
+    operation = operation_type.create_operation(
       status: 'pending',
       user_id: user_id
     )

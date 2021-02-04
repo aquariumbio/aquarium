@@ -24,7 +24,7 @@ class LauncherController < ApplicationController
   def operation_from(form)
 
     ot = OperationType.find(form[:operation_type][:id])
-    op = ot.operations.create status: 'planning', user_id: @user.id
+    op = ot.create_operation(status: 'planning', user_id: @user.id)
 
     form[:field_values].each do |fv|
 

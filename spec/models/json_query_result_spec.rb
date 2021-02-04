@@ -25,10 +25,10 @@ RSpec.describe JsonController::JsonQueryResult do
   end
   let!(:dummy_operations) do
     operations = []
-    operations.append(io_protocol.operations.create(status: 'waiting', user_id: test_user.id))
-    operations.append(io_protocol.operations.create(status: 'waiting', user_id: test_user.id))
-    operations.append(io_protocol.operations.create(status: 'waiting', user_id: test_user.id))
-    operations.append(io_protocol.operations.create(status: 'waiting', user_id: test_user.id))
+    operations.append(io_protocol.create_operation(status: 'waiting', user_id: test_user.id))
+    operations.append(io_protocol.create_operation(status: 'waiting', user_id: test_user.id))
+    operations.append(io_protocol.create_operation(status: 'waiting', user_id: test_user.id))
+    operations.append(io_protocol.create_operation(status: 'waiting', user_id: test_user.id))
 
     operations
   end

@@ -46,7 +46,7 @@ RSpec.describe Upload, type: :model do
       create(:item, sample_id: dummy_sample.id, object_type_id: dummy_object_type.id)
     end
     it 'can be associated with a model via a data association' do
-      operation = io_protocol.operations.create(status: 'waiting', user_id: test_user.id)
+      operation = io_protocol.create_operation(status: 'waiting', user_id: test_user.id)
       operation.associate :my_file, 'This is a test file', new_upload
     end
 
