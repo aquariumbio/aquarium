@@ -38,6 +38,10 @@ class OperationType < ActiveRecord::Base
   }
   validates :category, presence: true
 
+  def create_operation(status:, user_id:, x: -1, y: -1, parent_id: -1)
+    operations.create(status: status, user_id: user_id, x: x, y: y, parent_id: parent_id)
+  end
+
   def add_io(name, sample_name, container_name, role, opts)
     add_field(name, sample_name, container_name, role, opts)
   end
@@ -109,6 +113,10 @@ class OperationType < ActiveRecord::Base
     end
   end
 
+  def protocol?
+    !protocol.nil? && protocol.defined_classes.include?('Protocol')
+  end
+
   delegate :defined_methods, to: :protocol
   delegate :defined_classes, to: :protocol
   delegate :defined_modules, to: :protocol
@@ -127,6 +135,10 @@ class OperationType < ActiveRecord::Base
     end
   end
 
+  def cost_model?
+    !cost_model.nil? && cost_model.defined_methods.include?('cost')
+  end
+
   def precondition
     code('precondition')
   end
@@ -137,6 +149,10 @@ class OperationType < ActiveRecord::Base
     else
       new_code('precondition', content, user)
     end
+  end
+
+  def precondition?
+    !precondition.nil? && precondition.defined_methods.include?('precondition')
   end
 
   def documentation
@@ -153,6 +169,10 @@ class OperationType < ActiveRecord::Base
     else
       new_code('test', content, user)
     end
+  end
+
+  def test?
+    !test.nil? && test.defined_classes.include?('ProtocolTest')
   end
 
   #
@@ -346,6 +366,21 @@ class OperationType < ActiveRecord::Base
     end
 
     result
+  end
+
+end
+
+class MissingCodeError < StandardError
+  attr_reader :operation_type, :component_name
+
+  def initialize(operation_type:, component_name:)
+    @operation_type = operation_type
+    @component_name = component_name
+    super("Missing #{component_name} code for #{operation_path}")
+  end
+
+  def operation_path
+    "#{@operation_type.category}/#{@operation_type.name}"
   end
 
 end
