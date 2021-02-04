@@ -8,6 +8,7 @@ FactoryBot.define do
     password { 'thePassword' }
     password_confirmation { 'thePassword' }
 
+    initialize_with { User.where(name: name, login: login).first_or_create }
     # TODO: make sure agreement is set
   end
 end
