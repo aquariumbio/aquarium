@@ -4,9 +4,10 @@
 require 'rails_helper'
 
 RSpec.describe FieldValue, type: :model do
+  let!(:test_user) { create(:user) }
   let!(:an_object_type) { create(:object_type, name: 'gel_type') }
   let!(:fragment_type) { create(:sample_type_with_samples, name: 'Fragment') }
-  let!(:op_type) { create(:operation_type, name: 'Run Gel') }
+
   let!(:stripwell_type) { create(:stripwell) }
 
   # Tests new_collection
@@ -18,6 +19,15 @@ RSpec.describe FieldValue, type: :model do
     c
   end
 
+  let(:op_type) do
+    create(
+      :operation_type,
+      name: 'simple',
+      category: 'testing',
+      protocol: 'class Protocol; def main; show { title \'blah\' }; end end',
+      user: test_user
+    )
+  end
   def add_pins(op_type)
     op_type.add_input('Fragment', 'Fragment', 'Stripwell')
     op_type.add_output('Fragment', 'Fragment', 'gel_type')
@@ -36,9 +46,8 @@ RSpec.describe FieldValue, type: :model do
       expect(stripwell.part(0, 0)).to_not be_nil
       gel.set 1, 1, s
 
-      # op = OperationType.find_by_name("Run Gel").operations.create
       add_pins(op_type)
-      op = op_type.operations.create
+      op = op_type.create_operation(status: 'pending', user_id: test_user)
 
       op.set_input('Fragment', s)
       expect(op.input('Fragment')).to_not be_nil
