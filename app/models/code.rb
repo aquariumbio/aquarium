@@ -41,6 +41,8 @@ class Code < ActiveRecord::Base
     )
   end
 
+  delegate :empty?, to: :code
+
   # Returns all versions of this object.
   #
   # @return [Code] all objects with the same name and owner (parent)
