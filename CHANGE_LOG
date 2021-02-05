@@ -2,10 +2,11 @@ v2.9.0
 
 - Adds ability for manager to assign jobs to technicians, and improves manager
   interface for working with jobs. Adds filter for input in job creation
-  interface.
-- Changes landing page so that user in technician group will see dashboard of
-  jobs assigned to them.
+  interface. A user in technician group now sees dashboard of jobs assigned to 
+  them as landing page. Non-admin users no longer see the manager tab.
 - Shows natural language dates relative to current time.
+- Improve error handling for missing protocol code.
+- Improve database connection handling in Krill.
 - Improves database organization
 
 Includes changes to the database that require applying migrations. See the 
