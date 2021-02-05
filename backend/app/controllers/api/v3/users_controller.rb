@@ -99,6 +99,7 @@ module Api
         # Get user
         id = Input.int(params[:id])
         user = User.find_id(id)
+        render json: { user: nil }.to_json, status: :not_found and return if !user
 
         render json: { user: user }.to_json, status: :ok
       end
@@ -135,6 +136,7 @@ module Api
         # Get user
         id = Input.int(params[:id])
         user = User.find_id_show_info(id)
+        render json: { user: nil }.to_json, status: :not_found and return if !user
 
         render json: { user: user }.to_json, status: :ok
       end

@@ -14,6 +14,18 @@ class Budget < ActiveRecord::Base
     Budget.order(:name)
   end
 
+  # Return all budgets beginning with fitst letter l ('*' as non-alphanumeric wildcard).
+  #
+  # @return all budgets beginning with fitst letter l ('*' as non-alphanumeric wildcard)
+  def self.find_letter(l)
+    if l == "*"
+      sql = "select * from budgets where (name regexp '^[^a-zA-Z].*') order by name"
+    else
+      sql = "select * from budgets where name like '#{l}%' order by name"
+    end
+    Budget.find_by_sql sql
+  end
+
   # Return a specific budget.
   #
   # @param id [Int] the id of the budget

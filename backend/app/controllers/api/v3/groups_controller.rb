@@ -101,6 +101,7 @@ module Api
         # Get group
         id = Input.int(params[:id])
         group = Group.find_id(id)
+        render json: { group: nil }.to_json, status: :not_found and return if !group
 
         render json: { group: group }.to_json, status: :ok
       end
