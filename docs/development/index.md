@@ -453,6 +453,8 @@ Keep it up-to-date if you change something that affects Aquarium development.
 
     ```bash
     docker push aquariumbio/aquarium:$NEWVERSION
+    docker tag aquariumbio/aquarium:$NEWVERSION aquariumbio/aquarium:latest
+    docker push aquariumbio/aquarium:latest
     ```
 
 You should run `docker system prune` after the snyk scan.
