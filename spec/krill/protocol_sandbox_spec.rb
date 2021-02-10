@@ -300,6 +300,32 @@ RSpec.describe Krill::ProtocolSandbox do
     end
   end
 
+  let(:undefined_symbol_protocol) do
+    create(
+      :operation_type,
+      name: 'system_exit',
+      category: 'testing',
+      protocol: 'class Protocol; def main; CSV.parse(\'one,two\'); end; end',
+      user: test_user
+    )
+  end
+  it 'expect protocol with undefined symbol to be error' do
+    operation = make_operation(operation_type: undefined_symbol_protocol, user_id: test_user.id)
+    plan = build_plan(operation: operation, user_id: test_user.id)
+    job = Job.schedule(
+      operations: plan.operations,
+      user: test_user
+    )
+
+    sandbox = nil
+    expect { sandbox = Krill::ProtocolSandbox.new(job: job, debug: true) }.not_to raise_error
+    expect { sandbox.execute }.to raise_error do |error|
+      expect(error).to be_a(Krill::KrillError)
+      expect(error.error_message).to eq('uninitialized constant Protocol::CSV')
+    end
+
+  end
+
   # cost_model is evaluated by Operation.nominal_cost
   # let(:no_cost_model_protocol) do
   #   create(

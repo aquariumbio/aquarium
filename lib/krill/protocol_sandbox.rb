@@ -186,6 +186,15 @@ module Krill
           next
         end
 
+        # strip namespace from uninitialized constant error
+        protocol_pattern = Regexp.new("(uninitialized constant) #{@namespace}::(Protocol::\.+)$")
+        match = line.match(protocol_pattern)
+        if match
+          message, symbol = match.captures
+          messages.append("#{message} #{symbol}")
+          next
+        end
+
         messages.append(line)
       end
 
