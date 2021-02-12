@@ -77,6 +77,24 @@ RSpec.describe Krill::ShowBlock do
     expect(page_parts1).to eq(page_parts2)
   end
 
+  it 'Injecting show block should give the same result as consecutive calls' do
+    block1 = Krill::ShowBlock.new(Krill::Base)
+    note_array = %w[text1 text2 text3]
+    note_array.each { |note| block1.note(note) }
+    expected_parts = block1.run {}
+
+    sub_block = Krill::ShowBlock.new(Krill::Base)
+    sub_block.note('text2')
+
+    block2 = Krill::ShowBlock.new(Krill::Base)
+    block2.note('text1')
+    block2.insert(sub_block)
+    block2.note('text3')
+    computed_parts = block2.run {}
+
+    expect(computed_parts).to eq(expected_parts)
+  end
+
   it 'A show block has a warning after warning has been called'
   it 'Order of warnings should be maintained'
   it 'A show block has a check after check has been called'
