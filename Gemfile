@@ -43,7 +43,7 @@ gem 'protected_attributes_continued'
 
 gem 'rack-cors', '~> 1.0.5', require: 'rack/cors'
 
-gem 'rails', '4.2.11.3'
+gem 'rails', '6.0.3.5'
 
 gem 'redcarpet'
 
