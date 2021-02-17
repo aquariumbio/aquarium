@@ -218,16 +218,22 @@ class OperationTypesController < ApplicationController
           samples = values.collect do |fv|
             Sample.find_by(id: fv[:child_sample_id])
           end
-          actual_fvs = op.set_property(io.name, samples, io.role, true, aft)
-          raise "Nil value Error: Could not set #{values}" unless actual_fvs
+          begin
+            actual_fvs = op.set_property(io.name, samples, io.role, true, aft)
+          rescue FieldError
+            raise "Nil value Error: Could not set #{values}"
+          end
         else # io is not an array
           raise "Test Operation Error: This operation type may have illegal routing, or zero/multiple io with the same name: #{io.name} (#{io.role}#{io.array ? ', array' : ''}) of type #{io.type}" unless io.type != 'sample' || values.one?
 
           test_fv = values.first
           if io.sample?
             aft = AllowableFieldType.find_by(id: test_fv[:allowable_field_type_id])
-            op.set_property(test_fv[:name], Sample.find_by(id: test_fv[:child_sample_id]), test_fv[:role], true, aft)
-            raise "Active Record Error: Could not set #{test_fv}: #{op.errors.full_messages.join(', ')}" unless op.errors.empty?
+            begin
+              op.set_property(test_fv[:name], Sample.find_by(id: test_fv[:child_sample_id]), test_fv[:role], true, aft)
+            rescue FieldError
+              raise "Active Record Error: Could not set #{test_fv}: #{op.errors.full_messages.join(', ')}"
+            end
           elsif io.number?
             op.set_property(io.name, test_fv[:value].to_f, io.role, true, nil)
           else # string or json io

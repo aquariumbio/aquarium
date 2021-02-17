@@ -61,6 +61,7 @@ module FieldValuer
     field_value
   end
 
+  # TODO: move to operation
   # Changes a property in the property hash for this object.
   #
   # @param name [String]  the name of property to overwrite
@@ -69,8 +70,9 @@ module FieldValuer
     ft = field_type(name, role)
 
     unless ft
-      errors.add(:no_such_property, "#{self.class} #{id} does not have a property named #{name} with role #{role}.")
-      return self
+      message = "#{self.class} #{id} does not have a property named #{name} with role #{role}"
+      errors.add(:no_such_property, message)
+      raise FieldError.new(object: self, message: message)
     end
 
     fvs = field_values.select { |fv| fv.name == name && fv.role == role }
@@ -88,9 +90,13 @@ module FieldValuer
         fvs.each(&:destroy)
       end
     elsif ft.array && !val.is_a?(Array) && !override_array
-      errors.add(:set_property, "Tried to set property #{ft.name}, an array, to something that is not an array.")
+      message = "Tried to set property #{ft.name}, an array, to something that is not an array"
+      errors.add(:set_property, message)
+      raise FieldError.new(object: self, message: message)
     elsif !ft.array && val.is_a?(Array)
-      errors.add(:set_property, "Tried to set property #{ft.name}, which is not an array, to something is an array.")
+      message = "Tried to set property #{ft.name}, which is not an array, to something is an array"
+      errors.add(:set_property, message)
+      raise FieldError.new(object: self, message: message)
     elsif !ft.array || override_array
       fvs = [field_values.create(name: name, field_type_id: ft.id, role: role)] if fvs.empty?
 
@@ -98,8 +104,9 @@ module FieldValuer
         fv = set_value(ft, fvs[0], val)
         fv.allowable_field_type_id = aft.id if aft
       else
-        errors.add(:set_property, "Could not set #{self.class} #{id} property #{name} to #{val}")
-        return self
+        message = "Could not set #{self.class} #{id} property #{name} to #{val}"
+        errors.add(:set_property, message)
+        raise FieldError.new(object: self, message: message)
       end
 
       if errors.empty?
@@ -109,8 +116,10 @@ module FieldValuer
         Rails.logger.info "Errors setting property of #{self.class} #{id}: #{errors.full_messages.join(', ')}"
       end
     else
-      Rails.logger.info "Could not set #{self.class} #{id} property #{name} to #{val}. No case matches conditions."
-      errors.add(:set_property, "Could not set #{self.class} #{id} property #{name} to #{val}. No case matches conditions.")
+      message = "Could not set #{self.class} #{id} property #{name} to #{val}. No case matches conditions."
+      Rails.logger.info(message)
+      errors.add(:set_property, message)
+      raise FieldError.new(object: self, message: message)
     end
 
     self

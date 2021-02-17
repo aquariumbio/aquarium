@@ -425,6 +425,8 @@ class Operation < ActiveRecord::Base
       ot.field_types.select { |ft| ft.routing == r[:symbol] }.each do |ft|
         aft = ft.allowable_field_types[0]
         op.set_property(ft.name, r[:sample], ft.role, false, aft)
+      rescue FieldError
+        # TODO: handle error
       end
     end
 
@@ -468,5 +470,12 @@ class Operation < ActiveRecord::Base
   # Create an empty binding
   def empty_binding
     binding
+  end
+end
+
+class FieldError < StandardError
+  def initialize(object: , message: 'field error')
+    @object = object
+    super(message)
   end
 end

@@ -29,8 +29,11 @@ module OperationTypeRandom
 
             samples[field_type.routing] = field_sample
           end
-          op.set_property(field_type.name, field_sample, field_type.role, false, aft)
-          Rails.logger.info "Error adding property: #{op.errors.full_messages.join(', ')}" unless op.errors.empty?
+          begin
+            op.set_property(field_type.name, field_sample, field_type.role, false, aft)
+          rescue FieldError
+            Rails.logger.info "Error adding property: #{op.errors.full_messages.join(', ')}" unless op.errors.empty?
+          end
         elsif field_type.choices != '' && !field_type.choices.nil?
           op.set_property(field_type.name, field_type.choices.split(',').sample, field_type.role, true, nil)
         elsif field_type.number?
