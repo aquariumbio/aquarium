@@ -139,8 +139,8 @@ RSpec.describe ProtocolTestEngine do
     expect { ProtocolTestEngine.run(operation_type: bad_property_test, user: test_user) }.to raise_error do |error|
       expect(error).to be_a(KrillTestError)
       expect(error.message).to eq('Error during test')
-      # expect(error.error).to be_a(SystemExit)
-      # expect(error.error_message).to eq('blah')
+      # TODO: check error.error type
+      # TODO: check error.error_message
     end
   end
 end
