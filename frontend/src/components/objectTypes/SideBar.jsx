@@ -1,4 +1,3 @@
-/* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
@@ -19,6 +18,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+// eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid
 const SideBar = ({ objectTypeHandlers, setCurrentObjectTypeHandler, setCurrentObjectTypesByHandler, setIsLoading, setAlertProps }) => {
   const classes = useStyles();
 
@@ -32,7 +32,7 @@ const SideBar = ({ objectTypeHandlers, setCurrentObjectTypeHandler, setCurrentOb
     // success
     setIsLoading(false);
     setCurrentObjectTypeHandler(handler);
-    setCurrentObjectTypesByHandler(response[handler]['object_types']);
+    setCurrentObjectTypesByHandler(response[handler].object_types);
   };
 
   const handleListItemClick = (event, index, handler) => {
@@ -69,8 +69,6 @@ const SideBar = ({ objectTypeHandlers, setCurrentObjectTypeHandler, setCurrentOb
   );
 };
 
-export default SideBar;
-
 SideBar.propTypes = {
   objectTypeHandlers: PropTypes.arrayOf(
     PropTypes.shape({
@@ -79,4 +77,9 @@ SideBar.propTypes = {
     }),
   ).isRequired,
   setCurrentObjectTypeHandler: PropTypes.func.isRequired,
+  setCurrentObjectTypesByHandler: PropTypes.func.isRequired,
+  setIsLoading: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func,
 };
+
+export default SideBar;

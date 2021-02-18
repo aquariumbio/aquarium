@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -75,7 +74,7 @@ const UserForm = ({ setIsLoading, setAlertProps, match }) => {
       if (!response) return;
 
       // success
-      setPermissionsList(response.permissions)
+      setPermissionsList(response.permissions);
     };
 
     initNew();
@@ -95,22 +94,24 @@ const UserForm = ({ setIsLoading, setAlertProps, match }) => {
     event.preventDefault();
 
     // set formData
-    const form = document.querySelector('form'); // var
-    const data = new FormData(form); // var
-    const formData = Object.fromEntries(data)
+    const form = document.querySelector('form');
+    const data = new FormData(form);
+    const formData = Object.fromEntries(data);
 
     // add permission_ids to formData
-    var permission_ids = []
-    Object.keys(permissionsList).forEach(function(key) {
-      if (document.getElementById('permission_id_'+key).checked) permission_ids.push(key)
-    })
-    formData['permission_ids'] = permission_ids
+    // eslint-disable-next-line camelcase
+    const permission_ids = [];
+    Object.keys(permissionsList).forEach((key) => {
+      if (document.getElementById(`permission_id_${key}`).checked) permission_ids.push(key);
+    });
+    // eslint-disable-next-line camelcase
+    formData.permission_ids = permission_ids;
 
     const response = await usersAPI.create(formData);
     if (!response) return;
 
     // process errors
-    const errors = response['errors'];
+    const errors = response.errors;
     if (errors) {
       setAlertProps({
         message: JSON.stringify(errors, null, 2),
@@ -123,12 +124,12 @@ const UserForm = ({ setIsLoading, setAlertProps, match }) => {
     // success
     // pass alert popup in sessionStorage (does not work if pass as object, so pass as JSON string)
     sessionStorage.alert = JSON.stringify({
-      message: response['message'],
+      message: response.message,
       severity: 'success',
       open: true,
     });
 
-    history.push("/users");
+    history.push('/users');
   };
 
   return (
@@ -211,16 +212,18 @@ const UserForm = ({ setIsLoading, setAlertProps, match }) => {
           Permissions
         </Typography>
 
-        {/*  Add permissions checkboxes
-             - Use ids for each checkbox instead of names
-             - Build array of permission_ids on the fly when submit the form
-             - Hide checkbox for "retired"
-             - Could also chain .filter(ey => permissionsList[key]!="retired").map(key => ...) but that loops twice  */}
+        {// Add permissions checkboxes
+         //   - Use ids for each checkbox instead of names
+         //   - Build array of permission_ids on the fly when submit the form
+         //   - Hide checkbox for 'retired' */
+         //     eslint-disable-next-line max-len
+         //   - Could also chain .filter(ey => permissionsList[key]!='retired').map(key => ...) but that loops twice
+        }
         <div>
-          { Object.keys(permissionsList).map(key =>
-            <div className={ permissionsList[key]=="retired" ? classes.hide : classes.show }>
+          { Object.keys(permissionsList).map((key) => (
+            <div className={permissionsList[key] === 'retired' ? classes.hide : classes.show}>
               <FormControlLabel
-                control={
+                control={(
                   <Checkbox
                     id={`permission_id_${key}`}
                     color="primary"
@@ -229,11 +232,11 @@ const UserForm = ({ setIsLoading, setAlertProps, match }) => {
                       'data-cy': 'permission-id-checkbox',
                     }}
                   />
-                }
+                )}
                 label={permissionsList[key]}
               />
             </div>
-          )}
+          ))}
         </div>
 
         <Divider style={{ marginTop: '0px' }} />
@@ -261,6 +264,7 @@ const UserForm = ({ setIsLoading, setAlertProps, match }) => {
 
 UserForm.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func,
   match: PropTypes.shape({
     params: PropTypes.objectOf(PropTypes.string),
     path: PropTypes.string,

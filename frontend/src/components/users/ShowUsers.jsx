@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router';
 import { Link as RouterLink } from 'react-router-dom';
-import moment from "moment";
+import moment from 'moment';
 import PropTypes from 'prop-types';
 
 import Typography from '@material-ui/core/Typography';
@@ -9,7 +10,6 @@ import { makeStyles } from '@material-ui/core';
 import Link from '@material-ui/core/Link';
 
 import usersAPI from '../../helpers/api/users';
-import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
   flex: {
     display: '-ms-flexbox',
+    // eslint-disable-next-line no-dupe-keys
     display: 'flex',
     position: 'relative',
   },
@@ -107,7 +108,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ShowUsers = ({ users, setIsLoading, setAlertProps, permissionsList, currentLetter }) => {
   const classes = useStyles();
-  const keyRetired = Object.keys(permissionsList).find(key => permissionsList[key] === 'retired');
+  const keyRetired = Object.keys(permissionsList).find((key) => permissionsList[key] === 'retired');
   const history = useHistory();
 
   const toggleRetire = async (user, key, val) => {
@@ -115,23 +116,25 @@ const ShowUsers = ({ users, setIsLoading, setAlertProps, permissionsList, curren
       user_id: user.id,
       permission_id: key,
       value: val,
-    }
+    };
 
     const response = await usersAPI.permissionUpdate(formData);
     if (!response) return;
 
     // success
-    if (val === "on") {
-      user.permission_ids = user.permission_ids+"6."
+    if (val === 'on') {
+      // eslint-disable-next-line no-param-reassign, operator-assignment, prefer-template
+      user.permission_ids = user.permission_ids + '6.';
       setAlertProps({
-        message: val === "on" ? "retired" : "un-retired",
+        message: val === 'on' ? 'retired' : 'un-retired',
         severity: 'success',
         open: true,
       });
     } else {
-      user.permission_ids = user.permission_ids.replace(".6.",".")
+      // eslint-disable-next-line no-param-reassign
+      user.permission_ids = user.permission_ids.replace('.6.', '.');
       setAlertProps({
-        message: val === "on" ? "retired" : "un-retired",
+        message: val === 'on' ? 'retired' : 'un-retired',
         severity: 'success',
         open: true,
       });
@@ -149,27 +152,45 @@ const ShowUsers = ({ users, setIsLoading, setAlertProps, permissionsList, curren
         </div>
 
         {users.map((user) => (
-          <div className={`${classes.flex} ${classes.flexRow}`} key = {`object_${user.id}`} >
-            <Typography className={classes.flexCol1} >
-              <Link className={ classes.pointer } onClick={ () => history.push(`/users/${user.id}/profile`) } >{user.name}</Link>
+          <div className={`${classes.flex} ${classes.flexRow}`} key={`object_${user.id}`}>
+            <Typography className={classes.flexCol1}>
+              {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
+              <Link className={classes.pointer} onClick={() => history.push(`/users/${user.id}/profile`)}>{user.name}</Link>
             </Typography>
-            <Typography className={classes.flexCol1} >
+            <Typography className={classes.flexCol1}>
               {user.login}
             </Typography>
-            <Typography className={classes.flexCol1} >
+            <Typography className={classes.flexCol1}>
               {moment(user.created_at).format('DD-MM-YYYY')}
             </Typography>
-            <Typography className={classes.flexCol1} >
-              {user.permission_ids.indexOf(`.${keyRetired}.`) === -1 ?
-                <Link className={classes.pointer} onClick={() => toggleRetire(user,keyRetired,'on')} >retire</Link>
-              :
-                <Link className={classes.pointer} onClick={() => toggleRetire(user,keyRetired,'off')} >un-retire</Link>}
+            <Typography className={classes.flexCol1}>
+              {user.permission_ids.indexOf(`.${keyRetired}.`) === -1 ? (
+                /* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */
+                <Link className={classes.pointer} onClick={() => toggleRetire(user, keyRetired, 'on')}>retire</Link>
+              ) : (
+                /* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */
+                <Link className={classes.pointer} onClick={() => toggleRetire(user, keyRetired, 'off')}>un-retire</Link>
+              )}
             </Typography>
           </div>
         ))}
       </div>
     </>
   );
+};
+
+ShowUsers.propTypes = {
+  users: PropTypes.isRequired,
+  permissionsList: PropTypes.isRequired,
+  currentLetter: PropTypes.isRequired,
+  setIsLoading: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func,
+  match: PropTypes.shape({
+    params: PropTypes.objectOf(PropTypes.string),
+    path: PropTypes.string,
+    url: PropTypes.string,
+    isExact: PropTypes.bool,
+  }).isRequired,
 };
 
 export default ShowUsers;

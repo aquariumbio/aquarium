@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import * as queryString from 'query-string';

@@ -1,5 +1,5 @@
-/* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
@@ -54,11 +54,11 @@ const useStyles = makeStyles((theme) => ({
   },
 
   wrapper: {
-    padding: "0 24px",
+    padding: '0 24px',
   },
 }));
 
-const Preferences = ({setIsLoading, setAlertProps, id}) => {
+const Preferences = ({ setIsLoading, setAlertProps, id }) => {
   const classes = useStyles();
 
   const [userName, setUserName] = useState('');
@@ -75,10 +75,10 @@ const Preferences = ({setIsLoading, setAlertProps, id}) => {
     if (!response) return;
 
     // success
-    const user = response['user']
-    setUserName(user.name)
-    setLabName(user.lab_name ? user.lab_name : '')
-    setSamplesPrivate(user.new_samples_private === 1 || user.new_samples_private === "true")
+    const user = response.user;
+    setUserName(user.name);
+    setLabName(user.lab_name ? user.lab_name : '');
+    setSamplesPrivate(user.new_samples_private === 1 || user.new_samples_private === 'true');
   };
 
   useEffect(() => {
@@ -90,18 +90,18 @@ const Preferences = ({setIsLoading, setAlertProps, id}) => {
     event.preventDefault();
 
     // set formData
-    const form = document.querySelector('form'); // var
-    const data = new FormData(form); // var
-    const formData = Object.fromEntries(data)
+    const form = document.querySelector('form');
+    const data = new FormData(form);
+    const formData = Object.fromEntries(data);
 
     // add new_samples_private to formData
-    formData['new_samples_private'] = samplesPrivate
+    formData.new_samples_private = samplesPrivate;
 
     const response = await usersAPI.updatePreferences(formData, id);
     if (!response) return;
 
     // process errors
-    const errors = response['errors'];
+    const errors = response.errors;
     if (errors) {
       setAlertProps({
         message: JSON.stringify(errors, null, 2),
@@ -114,7 +114,7 @@ const Preferences = ({setIsLoading, setAlertProps, id}) => {
     // success
     // pass alert popup in sessionStorage (does not work if pass as object, so pass as JSON string)
     sessionStorage.alert = JSON.stringify({
-      message: id ? "updated" : "created",
+      message: id ? 'updated' : 'created',
       severity: 'success',
       open: true,
     });
@@ -206,6 +206,12 @@ const Preferences = ({setIsLoading, setAlertProps, id}) => {
       </div>
     </>
   );
+};
+
+Preferences.propTypes = {
+  setIsLoading: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func,
+  id: PropTypes.func.isRequired,
 };
 
 export default Preferences;

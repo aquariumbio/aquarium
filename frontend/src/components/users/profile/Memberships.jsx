@@ -1,5 +1,5 @@
-/* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
@@ -51,11 +51,11 @@ const useStyles = makeStyles((theme) => ({
   },
 
   wrapper: {
-    padding: "0 24px",
+    padding: '0 24px',
   },
 }));
 
-const Memberships = ({setIsLoading, setAlertProps, id}) => {
+const Memberships = ({ setIsLoading, setAlertProps, id }) => {
   const classes = useStyles();
 
   const [userName, setUserName] = useState('');
@@ -66,9 +66,10 @@ const Memberships = ({setIsLoading, setAlertProps, id}) => {
       // wrap the API call
       const response = await usersAPI.getProfile(id);
       if (!response) return;
+
       // success
-      const user = response['user']
-      setUserName(user.name)
+      const user = response.user;
+      setUserName(user.name);
     };
 
     init();
@@ -112,6 +113,12 @@ const Memberships = ({setIsLoading, setAlertProps, id}) => {
       </div>
     </>
   );
+};
+
+Memberships.propTypes = {
+  setIsLoading: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func,
+  id: PropTypes.func.isRequired,
 };
 
 export default Memberships;

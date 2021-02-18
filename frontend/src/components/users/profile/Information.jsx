@@ -1,5 +1,5 @@
-/* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
@@ -51,11 +51,11 @@ const useStyles = makeStyles((theme) => ({
   },
 
   wrapper: {
-    padding: "0 24px",
+    padding: '0 24px',
   },
 }));
 
-const Information = ({setIsLoading, setAlertProps, id}) => {
+const Information = ({ setIsLoading, setAlertProps, id }) => {
   const classes = useStyles();
 
   const [userReset, setUserReset] = useState();
@@ -69,10 +69,10 @@ const Information = ({setIsLoading, setAlertProps, id}) => {
     if (!response) return;
 
     // success
-    const user = response['user']
-    setUserName(user.name)
-    setUserEmail(user.email)
-    setUserPhone(user.phone)
+    const user = response.user;
+    setUserName(user.name);
+    setUserEmail(user.email);
+    setUserPhone(user.phone);
   };
 
   useEffect(() => {
@@ -84,15 +84,15 @@ const Information = ({setIsLoading, setAlertProps, id}) => {
     event.preventDefault();
 
     // set formData
-    const form = document.querySelector('form'); // var
-    const data = new FormData(form); // var
-    const formData = Object.fromEntries(data)
+    const form = document.querySelector('form');
+    const data = new FormData(form);
+    const formData = Object.fromEntries(data);
 
-    const response = await usersAPI.updateInfo(formData, id)
+    const response = await usersAPI.updateInfo(formData, id);
     if (!response) return;
 
     // process errors
-    const errors = response['errors'];
+    const errors = response.errors;
     if (errors) {
       setAlertProps({
         message: JSON.stringify(errors, null, 2),
@@ -105,7 +105,7 @@ const Information = ({setIsLoading, setAlertProps, id}) => {
     // success
     // pass alert popup in sessionStorage (does not work if pass as object, so pass as JSON string)
     sessionStorage.alert = JSON.stringify({
-      message: id ? "updated" : "created",
+      message: id ? 'updated' : 'created',
       severity: 'success',
       open: true,
     });
@@ -239,6 +239,12 @@ const Information = ({setIsLoading, setAlertProps, id}) => {
       </div>
     </>
   );
+};
+
+Information.propTypes = {
+  setIsLoading: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func,
+  id: PropTypes.func.isRequired,
 };
 
 export default Information;

@@ -1,5 +1,5 @@
-/* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
@@ -30,7 +30,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ObjectTypesPage = ({setIsLoading, setAlertProps}) => {
+const ObjectTypesPage = ({ setIsLoading, setAlertProps }) => {
   const classes = useStyles();
 
   const [objectTypeHandlers, setObjectTypeHandlers] = useState([]);
@@ -45,10 +45,10 @@ const ObjectTypesPage = ({setIsLoading, setAlertProps}) => {
 
       // success
       if (response.handlers) {
-        let first = response.handlers[0];
+        const first = response.handlers[0];
         setObjectTypeHandlers(response.handlers);
         setCurrentObjectTypeHandler(first.handler);
-        setCurrentObjectTypesByHandler(response[first.handler]['object_types']);
+        setCurrentObjectTypesByHandler(response[first.handler].object_types);
       }
     };
 
@@ -57,54 +57,66 @@ const ObjectTypesPage = ({setIsLoading, setAlertProps}) => {
 
   return (
     <>
-        <Grid container className={classes.root}>
-          {/* SIDE BAR */}
-          <SideBar
-            objectTypeHandlers={objectTypeHandlers}
-            setCurrentObjectTypeHandler={setCurrentObjectTypeHandler}
-            setCurrentObjectTypesByHandler={setCurrentObjectTypesByHandler}
-            setIsLoading={setIsLoading}
-            setAlertProps={setAlertProps}
-          />
+      <Grid container className={classes.root}>
+        {/* SIDE BAR */}
+        <SideBar
+          objectTypeHandlers={objectTypeHandlers}
+          setCurrentObjectTypeHandler={setCurrentObjectTypeHandler}
+          setCurrentObjectTypesByHandler={setCurrentObjectTypesByHandler}
+          setIsLoading={setIsLoading}
+          setAlertProps={setAlertProps}
+        />
 
-          {/* MAIN CONTENT */}
-          <Grid item xs={10} name="object-types-main-container" data-cy="object-types-main-container" overflow="visible">
-            <Toolbar className={classes.header}>
-              <Breadcrumbs
-                separator={<NavigateNextIcon fontSize="small" />}
-                aria-label="breadcrumb"
-                component="div"
-                data-cy="page-title"
-              >
-                <Typography display="inline" variant="h6" component="h1">
-                  Object Type Handlers
-                </Typography>
-                <Typography display="inline" variant="h6" component="h1">
-                  {currentObjectTypeHandler}
-                </Typography>
-              </Breadcrumbs>
+        {/* MAIN CONTENT */}
+        <Grid item xs={10} name="object-types-main-container" data-cy="object-types-main-container" overflow="visible">
+          <Toolbar className={classes.header}>
+            <Breadcrumbs
+              separator={<NavigateNextIcon fontSize="small" />}
+              aria-label="breadcrumb"
+              component="div"
+              data-cy="page-title"
+            >
+              <Typography display="inline" variant="h6" component="h1">
+                Object Type Handlers
+              </Typography>
+              <Typography display="inline" variant="h6" component="h1">
+                {currentObjectTypeHandler}
+              </Typography>
+            </Breadcrumbs>
 
-              <div>
-                <LinkButton
-                  name="New Object Type"
-                  testName="new_object_type_btn"
-                  text="New"
-                  dark
-                  type="button"
-                  linkTo="/object_types/new"
-                />
-              </div>
-            </Toolbar>
+            <div>
+              <LinkButton
+                name="New Object Type"
+                testName="new_object_type_btn"
+                text="New"
+                dark
+                type="button"
+                linkTo="/object_types/new"
+              />
+            </div>
+          </Toolbar>
 
-            <Divider />
+          <Divider />
 
-            {currentObjectTypesByHandler
-              ? <ShowObjectTypesByHandler objectTypes={currentObjectTypesByHandler} setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
-              : ''}
-          </Grid>
+          {currentObjectTypesByHandler
+            /* eslint-disable-next-line max-len */
+            ? <ShowObjectTypesByHandler objectTypes={currentObjectTypesByHandler} setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
+            : ''}
         </Grid>
+      </Grid>
     </>
   );
+};
+
+ObjectTypesPage.propTypes = {
+  setIsLoading: PropTypes.func.isRequired,
+  setAlertProps: PropTypes,
+  match: PropTypes.shape({
+    params: PropTypes.objectOf(PropTypes.string),
+    path: PropTypes.string,
+    url: PropTypes.string,
+    isExact: PropTypes.bool,
+  }).isRequired,
 };
 
 export default ObjectTypesPage;

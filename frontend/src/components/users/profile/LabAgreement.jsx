@@ -1,5 +1,5 @@
-/* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
@@ -51,11 +51,11 @@ const useStyles = makeStyles((theme) => ({
   },
 
   wrapper: {
-    padding: "0 24px",
+    padding: '0 24px',
   },
 }));
 
-const LabAgreement = ({setIsLoading, setAlertProps, id}) => {
+const LabAgreement = ({ setIsLoading, setAlertProps, id }) => {
   const classes = useStyles();
 
   const [userName, setUserName] = useState('');
@@ -67,9 +67,9 @@ const LabAgreement = ({setIsLoading, setAlertProps, id}) => {
     if (!response) return;
 
     // success
-    const user = response['user']
-    setUserName(user.name)
-    setLabAgreement(user.lab_agreement === 1 || user.lab_agreement === "true")
+    const user = response.user;
+    setUserName(user.name);
+    setLabAgreement(user.lab_agreement === 1 || user.lab_agreement === 'true');
   };
 
   useEffect(() => {
@@ -80,7 +80,7 @@ const LabAgreement = ({setIsLoading, setAlertProps, id}) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const response = await usersAPI.updateAgreement("lab_agreement", id);
+    const response = await usersAPI.updateAgreement('lab_agreement', id);
     if (!response) return;
 
     // success
@@ -121,26 +121,32 @@ const LabAgreement = ({setIsLoading, setAlertProps, id}) => {
       <Divider />
 
       <div className={classes.wrapper}>
+        <Typography>
+          Agreement
+        </Typography>
+        <Divider style={{ marginTop: '0px' }} />
+        {labAgreement ? (
           <Typography>
-            Agreement
+            ___ agreed on ___
           </Typography>
-          <Divider style={{ marginTop: '0px' }} />
-          { labAgreement ?
-              <Typography>
-                ___ agreed on ___
-              </Typography>
-            :
-              <StandardButton
-                name="agree"
-                testName="agree"
-                handleClick={handleSubmit}
-                text="Agree"
-                dark
-              />
-          }
+        ) : (
+          <StandardButton
+            name="agree"
+            testName="agree"
+            handleClick={handleSubmit}
+            text="Agree"
+            dark
+          />
+        )}
       </div>
     </>
   );
+};
+
+LabAgreement.propTypes = {
+  setIsLoading: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func,
+  id: PropTypes.func.isRequired,
 };
 
 export default LabAgreement;

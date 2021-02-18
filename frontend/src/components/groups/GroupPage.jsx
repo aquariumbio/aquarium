@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 

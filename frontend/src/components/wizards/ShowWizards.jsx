@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core';
@@ -23,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
 
   flex: {
     display: '-ms-flexbox',
+    // eslint-disable-next-line no-dupe-keys
     display: 'flex',
     position: 'relative',
   },
@@ -130,6 +132,7 @@ const ShowWizards = ({ wizards }) => {
         {wizards.map((wizard) => (
           <div className={`${classes.flex} ${classes.flexRow}`} key={`object_${wizard.id}`}>
             <Typography className={classes.flexCol1}>
+              {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
               <Link className={classes.pointer} onClick={() => alert('wizard page')}>{wizard.name}</Link>
             </Typography>
 
@@ -142,6 +145,7 @@ const ShowWizards = ({ wizards }) => {
             </Typography>
 
             <Typography className={classes.flexColAuto}>
+              {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
               <Link className={classes.pointer} onClick={() => handleDelete(wizard)}>Delete</Link>
             </Typography>
           </div>
@@ -150,4 +154,9 @@ const ShowWizards = ({ wizards }) => {
     </>
   );
 };
+
+ShowWizards.propTypes = {
+  wizards: PropTypes.isRequired,
+};
+
 export default ShowWizards;

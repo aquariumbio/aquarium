@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
@@ -90,12 +89,12 @@ const WizardForm = ({ setIsLoading, setAlertProps, match }) => {
       setWizardName(wizard.name);
       setWizardDescription(wizard.description);
 
-      const fields = JSON.parse(wizard.specification)['fields'];
-      setWizardField1Name(fields['0']['name']);
-      setWizardField2Name(fields['1']['name']);
-      setWizardField2Capacity(fields['1']['capacity']);
-      setWizardField3Name(fields['2']['name']);
-      setWizardField3Capacity(fields['2']['capacity']);
+      const fields = JSON.parse(wizard.specification).fields;
+      setWizardField1Name(fields['0'].name);
+      setWizardField2Name(fields['1'].name);
+      setWizardField2Capacity(fields['1'].capacity);
+      setWizardField3Name(fields['2'].name);
+      setWizardField3Capacity(fields['2'].capacity);
     };
 
     match.params.id ? initEdit(match.params.id) : initNew();
@@ -104,7 +103,7 @@ const WizardForm = ({ setIsLoading, setAlertProps, match }) => {
   // Update allowSubmit state
   useEffect(() => {
     setDisableSubmit(
-      !wizardName.trim()||
+      !wizardName.trim() ||
       !wizardDescription.trim()
     );
   });
@@ -114,13 +113,13 @@ const WizardForm = ({ setIsLoading, setAlertProps, match }) => {
     event.preventDefault();
 
     // set formData
-    const form = document.querySelector('form'); // var
-    const data = new FormData(form); // var
+    const form = document.querySelector('form');
+    const data = new FormData(form);
     const formData = Object.fromEntries(data);
 
     // add specification to formData
     // this is custom for Aquarium
-    formData['specification'] = {
+    formData.specification = {
       fields: {
         0: {
           name: wizardField1Name,
@@ -143,7 +142,7 @@ const WizardForm = ({ setIsLoading, setAlertProps, match }) => {
     if (!response) return;
 
     // process errors
-    const errors = response['errors'];
+    const errors = response.errors;
     if (errors) {
       setAlertProps({
         message: JSON.stringify(errors, null, 2),
@@ -166,21 +165,20 @@ const WizardForm = ({ setIsLoading, setAlertProps, match }) => {
 
   return (
     <Container className={classes.root} maxWidth="xl" data-cy="wizard-container">
-      {
-        id ?
-          <>
-            <Typography variant="h1" align="center" className={classes.title}>
-              <u>{wizardName}</u>
-            </Typography>
-            <Typography variant="h2" align="center" className={classes.title}>
-              Editing Wizard {id}
-            </Typography>
-          </>
-        :
+      {id ? (
+        <>
           <Typography variant="h1" align="center" className={classes.title}>
-            New Wizard
+            <u>{wizardName}</u>
           </Typography>
-      }
+          <Typography variant="h2" align="center" className={classes.title}>
+            Editing Wizard {id}
+          </Typography>
+        </>
+      ) : (
+        <Typography variant="h1" align="center" className={classes.title}>
+          New Wizard
+        </Typography>
+      )}
 
       <Typography align="right">* field is required</Typography>
 
@@ -366,6 +364,7 @@ const WizardForm = ({ setIsLoading, setAlertProps, match }) => {
 
 WizardForm.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func,
   match: PropTypes.shape({
     params: PropTypes.objectOf(PropTypes.string),
     path: PropTypes.string,

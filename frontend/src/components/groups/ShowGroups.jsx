@@ -152,6 +152,7 @@ const ShowGroups = ({ groups }) => {
             </Typography>
             <Typography className={classes.flexColAuto}>
               {/* TODO: change to iconButton when available */}
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <Link className={classes.spanLink} onClick={() => handleDelete(group)}>Delete</Link>
             </Typography>
           </div>

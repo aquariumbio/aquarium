@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -105,8 +104,8 @@ const GroupForm = ({ setIsLoading, setAlertProps, match }) => {
     event.preventDefault();
 
     // set formData
-    const form = document.querySelector('form'); // var
-    const data = new FormData(form); // var
+    const form = document.querySelector('form');
+    const data = new FormData(form);
     const formData = Object.fromEntries(data);
 
     const response = id
@@ -137,22 +136,20 @@ const GroupForm = ({ setIsLoading, setAlertProps, match }) => {
 
   return (
     <Container className={classes.root} maxWidth="xl" data-cy="group-container">
-      {
-        id ? (
-          <>
-            <Typography variant="h1" align="center" className={classes.title}>
-              <u>{groupName}</u>
-            </Typography>
-            <Typography variant="h2" align="center" className={classes.title}>
-              Editing Group {id}
-            </Typography>
-          </>
-        ) : (
+      {id ? (
+        <>
           <Typography variant="h1" align="center" className={classes.title}>
-            New Group
+            <u>{groupName}</u>
           </Typography>
-        )
-      }
+          <Typography variant="h2" align="center" className={classes.title}>
+            Editing Group {id}
+          </Typography>
+        </>
+      ) : (
+        <Typography variant="h1" align="center" className={classes.title}>
+          New Group
+        </Typography>
+      )}
       <Typography align="right">* field is required</Typography>
 
       <form id="group-form" name="group-form" data-cy="group-form" onSubmit={handleSubmit}>

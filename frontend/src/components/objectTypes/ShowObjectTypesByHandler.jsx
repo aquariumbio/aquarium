@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { useHistory } from "react-router";
+import { useHistory } from 'react-router';
 import PropTypes from 'prop-types';
 
 import Typography from '@material-ui/core/Typography';
@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 
   flex: {
     display: '-ms-flexbox',
+    // eslint-disable-next-line no-dupe-keys
     display: 'flex',
     position: 'relative',
   },
@@ -107,19 +108,22 @@ const useStyles = makeStyles((theme) => ({
 // change the state of toggleIds[objectType.id] and trigger React to update the screen
 // (see NOTE below)
 const handleToggles = (id, toggleId, setToggleIds, triggerUpdate) => {
-  var newIds = toggleId
-  newIds[id] = !newIds[id]
+  const newIds = toggleId;
+  newIds[id] = !newIds[id];
   setToggleIds(newIds);
   triggerUpdate();
 };
 
 const ShowObjectTypesByHandler = ({ objectTypes, setIsLoading, setAlertProps }) => {
   // NOTE: regarding toggleIds and triggerUpdate
+  // eslint-disable-next-line max-len
   // toggleIds used to track show/hide state for object type details, takes the form { objectType.id => true/false }
   // triggerUpdate used to trigger a screen update.
   // - React does not change the screen when changing the toggleIds
+  //   eslint-disable-next-line max-len
   // - calling triggerUpdate() triggers a screen update (which also includes any state changes to toggleIds)
   const [toggleIds, setToggleIds] = useState({});
+  // eslint-disable-next-line arrow-parens
   const [, triggerUpdate] = useReducer(x => !x, false);
 
   const classes = useStyles();
@@ -132,7 +136,7 @@ const ShowObjectTypesByHandler = ({ objectTypes, setIsLoading, setAlertProps }) 
     // success
     // pass alert popup in sessionStorage (does not work if pass as object, so pass as JSON string)
     sessionStorage.alert = JSON.stringify({
-      message: response['message'],
+      message: response.message,
       severity: 'success',
       open: true,
     });
@@ -151,13 +155,14 @@ const ShowObjectTypesByHandler = ({ objectTypes, setIsLoading, setAlertProps }) 
         </div>
 
         {objectTypes.map((objectType) => (
-          <div className={`${classes.flex} ${classes.flexRow}`} key = {`object_${objectType.id}`} >
-            <Typography className={classes.flexCol1} >
-              <Link className={ classes.pointer } onClick={ () => handleToggles(objectType.id, toggleIds, setToggleIds, triggerUpdate) } >{objectType.name}</Link>
+          <div className={`${classes.flex} ${classes.flexRow}`} key={`object_${objectType.id}`}>
+            <Typography className={classes.flexCol1}>
+              {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
+              <Link className={classes.pointer} onClick={() => handleToggles(objectType.id, toggleIds, setToggleIds, triggerUpdate)}>{objectType.name}</Link>
             </Typography>
-            <Typography className={classes.flexCol3} >
+            <Typography className={classes.flexCol3}>
               {objectType.description}
-              <span className={ toggleIds[objectType.id] ? classes.show : classes.hide }>
+              <span className={toggleIds[objectType.id] ? classes.show : classes.hide}>
                 <ListItem>
                   <b>Min/Max</b>: {objectType.min} / {objectType.max}
                 </ListItem>
@@ -188,12 +193,13 @@ const ShowObjectTypesByHandler = ({ objectTypes, setIsLoading, setAlertProps }) 
               </span>
             </Typography>
 
-            <Typography className={classes.flexColAuto} >
+            <Typography className={classes.flexColAuto}>
               <Link component={RouterLink} to={`/object_types/${objectType.id}/edit`}>Edit</Link>
             </Typography>
 
-            <Typography className={classes.flexColAuto} >
-              <Link className={classes.pointer} onClick={ () => handleDelete(objectType.id) } >Delete</Link>
+            <Typography className={classes.flexColAuto}>
+              {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
+              <Link className={classes.pointer} onClick={() => handleDelete(objectType.id)}>Delete</Link>
             </Typography>
           </div>
         ))}
@@ -202,5 +208,10 @@ const ShowObjectTypesByHandler = ({ objectTypes, setIsLoading, setAlertProps }) 
   );
 };
 
-export default ShowObjectTypesByHandler;
+ShowObjectTypesByHandler.propTypes = {
+  objectTypes: PropTypes.isRequired,
+  setIsLoading: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func,
+};
 
+export default ShowObjectTypesByHandler;

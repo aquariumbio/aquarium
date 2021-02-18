@@ -33,9 +33,9 @@ axiosInstance.interceptors.response.use(
   // eslint-disable-next-line consistent-return
   (error) => {
     const errorResponse = error.response;
-    switch (errorResponse['status']) {
+    switch (errorResponse.status) {
       case 400:
-        alert('400: ' + JSON.stringify(errorResponse['data']));
+        alert(`400: ${JSON.stringify(errorResponse.data)}`);
         break;
       case 401:
         if (window.location.pathname !== '/login') {
@@ -54,17 +54,17 @@ axiosInstance.interceptors.response.use(
         }
         /* TODO: HANDLE SESSION TIMEOUT
            if (...pathname !== '/login' && message !== 'Session timeout') { OPEN LOGIN MODAL} */
-        alert('401: ' + JSON.stringify(errorResponse['data']));
+        alert(`401: ${JSON.stringify(errorResponse.data)}`);
         break;
       case 403:
         // TODO: HANDLE PERMISSIONS
-        alert('403: ' + JSON.stringify(errorResponse['data']));
+        alert(`403: ${JSON.stringify(errorResponse.data)}`);
         break;
       case 404:
-        alert('404: ' + JSON.stringify(errorResponse['data']));
+        alert(`404: ${JSON.stringify(errorResponse.data)}`);
         break;
       default:
-        alert(errorResponse['status']+': ' + JSON.stringify(errorResponse['data']));
+        alert(`${errorResponse.status}: ${JSON.stringify(errorResponse.data)}`);
     }
     // Return something obvious to stop processing. I like simply 'false'
     return false;

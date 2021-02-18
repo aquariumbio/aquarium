@@ -1,7 +1,8 @@
-/* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from 'react';
-import { useHistory } from "react-router";
-import * as queryString from "query-string";
+import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
+import * as queryString from 'query-string';
+import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
@@ -14,7 +15,6 @@ import Button from '@material-ui/core/Button';
 
 import ShowUsers from './ShowUsers';
 import { LinkButton, StandardButton } from '../shared/Buttons';
-import { Link } from 'react-router-dom';
 import usersAPI from '../../helpers/api/users';
 import permissionsAPI from '../../helpers/api/permissions';
 
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   wrapper: {
-    padding: "0 24px",
+    padding: '0 24px',
   },
 
   letter: {
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UsersPage = ({setIsLoading, setAlertProps, match}) => {
+const UsersPage = ({ setIsLoading, setAlertProps, match }) => {
   const classes = useStyles();
   const history = useHistory();
 
@@ -58,7 +58,7 @@ const UsersPage = ({setIsLoading, setAlertProps, match}) => {
     // success
     if (response.users) {
       setCurrentLetter('All');
-      setCurrentUsers(response['users']);
+      setCurrentUsers(response.users);
     }
 
     // screen does not refresh (we do not want it to) because only query parameters change
@@ -74,7 +74,7 @@ const UsersPage = ({setIsLoading, setAlertProps, match}) => {
     // success
     if (response.users) {
       setCurrentLetter(letter.toUpperCase());
-      setCurrentUsers(response['users']);
+      setCurrentUsers(response.users);
     }
 
     // screen does not refresh (we do not want it to) because only query parameters change
@@ -85,7 +85,7 @@ const UsersPage = ({setIsLoading, setAlertProps, match}) => {
   // initialize users and get permissions
   useEffect(() => {
     const init = async () => {
-      const letter = queryString.parse(window.location.search)['letter']
+      const letter = queryString.parse(window.location.search).letter;
 
       if (letter) {
         // wrap the API calls
@@ -93,7 +93,7 @@ const UsersPage = ({setIsLoading, setAlertProps, match}) => {
         if (!response) return;
 
         // success
-        setPermissionsList(response.permissions)
+        setPermissionsList(response.permissions);
 
         // wrap the API calls
         fetchLetter(letter);
@@ -103,12 +103,12 @@ const UsersPage = ({setIsLoading, setAlertProps, match}) => {
         if (!response) return;
 
         // success
-        setPermissionsList(response.permissions)
+        setPermissionsList(response.permissions);
 
         // wrap the API calls
-        fetchAll()
+        fetchAll();
       }
-    }
+    };
 
     init();
   }, []);
@@ -178,10 +178,22 @@ const UsersPage = ({setIsLoading, setAlertProps, match}) => {
       <Divider />
 
       {currentUsers
-        ? <ShowUsers users={currentUsers} setIsLoading={setIsLoading} setAlertProps={setAlertProps} permissionsList={permissionsList} currentLetter={currentLetter}/>
+        /* eslint-disable-next-line max-len */
+        ? <ShowUsers users={currentUsers} setIsLoading={setIsLoading} setAlertProps={setAlertProps} permissionsList={permissionsList} currentLetter={currentLetter} />
         : ''}
     </>
   );
+};
+
+UsersPage.propTypes = {
+  setIsLoading: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func,
+  match: PropTypes.shape({
+    params: PropTypes.objectOf(PropTypes.string),
+    path: PropTypes.string,
+    url: PropTypes.string,
+    isExact: PropTypes.bool,
+  }).isRequired,
 };
 
 export default UsersPage;

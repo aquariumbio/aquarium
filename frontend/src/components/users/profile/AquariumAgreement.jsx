@@ -1,5 +1,5 @@
-/* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
@@ -51,11 +51,11 @@ const useStyles = makeStyles((theme) => ({
   },
 
   wrapper: {
-    padding: "0 24px",
+    padding: '0 24px',
   },
 }));
 
-const AquariumAgreement = ({setIsLoading, setAlertProps, id}) => {
+const AquariumAgreement = ({ setIsLoading, setAlertProps, id }) => {
   const classes = useStyles();
 
   const [userName, setUserName] = useState('');
@@ -67,9 +67,9 @@ const AquariumAgreement = ({setIsLoading, setAlertProps, id}) => {
     if (!response) return;
 
     // success
-    const user = response['user']
-    setUserName(user.name)
-    setAquariumAgreement(user.aquarium_agreement === 1 || user.aquarium_agreement === "true")
+    const user = response.user;
+    setUserName(user.name);
+    setAquariumAgreement(user.aquarium_agreement === 1 || user.aquarium_agreement === 'true');
   };
 
   useEffect(() => {
@@ -79,7 +79,7 @@ const AquariumAgreement = ({setIsLoading, setAlertProps, id}) => {
   // Submit form with all data
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const response = await usersAPI.updateAgreement("aquarium_agreement", id)
+    const response = await usersAPI.updateAgreement('aquarium_agreement', id);
     if (!response) return;
 
     // success
@@ -120,28 +120,34 @@ const AquariumAgreement = ({setIsLoading, setAlertProps, id}) => {
       <Divider />
 
       <div className={classes.wrapper}>
+        <Typography>
+          Agreement
+        </Typography>
+
+        <Divider style={{ marginTop: '0px' }} />
+
+        {aquariumAgreement ? (
           <Typography>
-            Agreement
+            ___ agreed on ___
           </Typography>
-
-          <Divider style={{ marginTop: '0px' }} />
-
-          { aquariumAgreement ?
-              <Typography>
-                ___ agreed on ___
-              </Typography>
-            :
-              <StandardButton
-                name="agree"
-                testName="agree"
-                handleClick={handleSubmit}
-                text="Agree"
-                dark
-              />
-          }
+        ) : (
+          <StandardButton
+            name="agree"
+            testName="agree"
+            handleClick={handleSubmit}
+            text="Agree"
+            dark
+          />
+        )}
       </div>
     </>
   );
+};
+
+AquariumAgreement.propTypes = {
+  setIsLoading: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func,
+  id: PropTypes.func.isRequired,
 };
 
 export default AquariumAgreement;

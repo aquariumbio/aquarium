@@ -1,7 +1,7 @@
-/* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import * as queryString from 'query-string';
+import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   wrapper: {
-    padding: "0 24px",
+    padding: '0 24px',
   },
 
   letter: {
@@ -50,7 +50,7 @@ const WizardsPage = ({ setIsLoading, setAlertProps, match }) => {
   // initialize to all and get permissions
   useEffect(() => {
     const init = async () => {
-      const letter = queryString.parse(window.location.search)['letter'];
+      const letter = queryString.parse(window.location.search).letter;
 
       if (letter) {
         // wrap the API calls
@@ -60,7 +60,7 @@ const WizardsPage = ({ setIsLoading, setAlertProps, match }) => {
         // success
         if (responses.wizards) {
           setCurrentLetter(letter.toUpperCase());
-          setCurrentWizards(responses['wizards']);
+          setCurrentWizards(responses.wizards);
         }
       } else {
         // wrap the API calls
@@ -70,7 +70,7 @@ const WizardsPage = ({ setIsLoading, setAlertProps, match }) => {
         // success
         if (responses.wizards) {
           setCurrentLetter('All');
-          setCurrentWizards(responses['wizards']);
+          setCurrentWizards(responses.wizards);
         }
       }
     };
@@ -86,7 +86,7 @@ const WizardsPage = ({ setIsLoading, setAlertProps, match }) => {
     // success
     if (response.wizards) {
       setCurrentLetter('All');
-      setCurrentWizards(response['wizards']);
+      setCurrentWizards(response.wizards);
     }
 
     // screen does not refresh (we do not want it to) because only query parameters change
@@ -102,7 +102,7 @@ const WizardsPage = ({ setIsLoading, setAlertProps, match }) => {
     // success
     if (response.wizards) {
       setCurrentLetter(letter.toUpperCase());
-      setCurrentWizards(response['wizards']);
+      setCurrentWizards(response.wizards);
     }
 
     // screen does not refresh (we do not want it to) because only query parameters change
@@ -179,6 +179,17 @@ const WizardsPage = ({ setIsLoading, setAlertProps, match }) => {
         : ''}
     </>
   );
+};
+
+WizardsPage.propTypes = {
+  setIsLoading: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func,
+  match: PropTypes.shape({
+    params: PropTypes.objectOf(PropTypes.string),
+    path: PropTypes.string,
+    url: PropTypes.string,
+    isExact: PropTypes.bool,
+  }).isRequired,
 };
 
 export default WizardsPage;

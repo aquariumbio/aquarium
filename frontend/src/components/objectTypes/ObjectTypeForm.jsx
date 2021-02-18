@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
@@ -57,6 +56,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
 
   const [disableSubmit, setDisableSubmit] = useState(false);
   const [sampleTypes, setSampleTypes] = useState([]);
+  const [fieldTypes, setFieldTypes] = useState([]);
 
   // form variables
   const [id, setId] = useState(null);
@@ -67,7 +67,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
   const [objectTypeUnit, setObjectTypeUnit] = useState('');
   const [objectTypeCost, setObjectTypeCost] = useState('0.01');
   const [objectTypeHandler, setObjectTypeHandler] = useState('');
-  const [objectTypeReleaseMethod, setObjectTypeReleaseMethod] = useState("return");
+  const [objectTypeReleaseMethod, setObjectTypeReleaseMethod] = useState('return');
   const [objectTypeReleaseDescription, setObjectTypeReleaseDescription] = useState('');
   const [objectTypeSampleTypeId, setObjectTypeSampleTypeId] = useState('');
   const [objectTypeImage, setObjectTypeImage] = useState('');
@@ -87,7 +87,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
       if (!response) return;
 
       // success
-      setObjectTypeReleaseMethod("return");
+      setObjectTypeReleaseMethod('return');
       setSampleTypes(response.sample_types);
 
       if (response.sample_types[0]) {
@@ -95,7 +95,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
       }
     };
 
-    const initEdit = async (id) => {
+    const initEdit = async (thisid) => {
       // wrap the API calls
       const response = await samplesAPI.getTypes();
       if (!response) return;
@@ -104,13 +104,13 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
       setSampleTypes(response.sample_types);
 
       // wrap the API calls
-      const responses = await objectsAPI.getById(id)
+      const responses = await objectsAPI.getById(thisid);
       if (!responses) return;
 
       // success
-      const objectType = responses.object_type
+      const objectType = responses.object_type;
 
-      setId(id)
+      setId(thisid);
       setObjectTypeName(objectType.name);
       setObjectTypeDescription(objectType.description);
       setObjectTypeMin(objectType.min);
@@ -169,18 +169,18 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
     event.preventDefault();
 
     // set formData
-    const form = document.querySelector('form'); // var
-    const data = new FormData(form); // var
-    const formData = Object.fromEntries(data)
+    const form = document.querySelector('form');
+    const data = new FormData(form);
+    const formData = Object.fromEntries(data);
 
     // API call
     const response = id
       ? await objectsAPI.update(formData, id)
       : await objectsAPI.create(formData);
-    if (!response) return
+    if (!response) return;
 
     // process errors
-    const errors = response['errors'];
+    const errors = response.errors;
     if (errors) {
       setAlertProps({
         message: JSON.stringify(errors, null, 2),
@@ -191,7 +191,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
     }
 
     // success
-    return setAlertProps({
+    setAlertProps({
       message: 'Object Type saved/updated',
       severity: 'success',
       open: true,
@@ -200,22 +200,21 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
 
   return (
     <Container className={classes.root} maxWidth="xl" data-cy="sampe-type-definition-container">
-      {
-        id ?
-          <>
-            <Alert severity="info">Note: Changing a object type can have far reaching effects! Edit with care.</Alert>
-            <Typography variant="h1" align="center" className={classes.title}>
-              <u>{objectTypeName}</u>
-            </Typography>
-            <Typography variant="h2" align="center" className={classes.title}>
-              Editing Object Type {id}
-            </Typography>
-          </>
-        :
+      {id ? (
+        <>
+          <Alert severity="info">Note: Changing a object type can have far reaching effects! Edit with care.</Alert>
           <Typography variant="h1" align="center" className={classes.title}>
-            New Object Type
+            <u>{objectTypeName}</u>
           </Typography>
-      }
+          <Typography variant="h2" align="center" className={classes.title}>
+            Editing Object Type {id}
+          </Typography>
+        </>
+      ) : (
+        <Typography variant="h1" align="center" className={classes.title}>
+          New Object Type
+        </Typography>
+      )}
 
       <Typography align="right">* field is required</Typography>
 
@@ -406,7 +405,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
         <TextareaAutosize
           name="release_description"
           id="object-type-release-description-input"
-          style={{width:'100%'}}
+          style={{ width: '100%' }}
           rowsMin={5}
           value={objectTypeReleaseDescription}
           onChange={(event) => setObjectTypeReleaseDescription(event.target.value)}
@@ -419,7 +418,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
           }}
         />
 
-        <div className={ objectTypeHandler == 'sample_container' ? classes.show : classes.hide }>
+        <div className={objectTypeHandler === 'sample_container' ? classes.show : classes.hide}>
           <Typography variant="h4" className={classes.inputName}>
             Sample Type Id
           </Typography>
@@ -480,7 +479,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
           }}
         />
 
-        <div className={ objectTypeHandler == 'collection' ? classes.show : classes.hide }>
+        <div className={objectTypeHandler === 'collection' ? classes.show : classes.hide}>
           <Typography variant="h4" className={classes.inputName}>
             Rows
           </Typography>
@@ -524,7 +523,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
 
         <TextareaAutosize
           name="safety"
-          style={{width:'100%'}}
+          style={{ width: '100%' }}
           rowsMin={5}
           value={objectTypeSafety}
           id="object-type-safety-input"
@@ -543,7 +542,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
 
         <TextareaAutosize
           name="cleanup"
-          style={{width:'100%'}}
+          style={{ width: '100%' }}
           rowsMin={5}
           value={objectTypeCleanup}
           id="object-type-cleanup-input"
@@ -562,7 +561,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
 
         <TextareaAutosize
           name="data"
-          style={{width:'100%'}}
+          style={{ width: '100%' }}
           rowsMin={5}
           value={objectTypeData}
           id="object-type-data-input"
@@ -581,7 +580,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
 
         <TextareaAutosize
           name="vendor"
-          style={{width:'100%'}}
+          style={{ width: '100%' }}
           rowsMin={5}
           value={objectTypeVendor}
           id="object-type-vendor-input"
@@ -619,6 +618,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
 
 ObjectTypeForm.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
+  setAlertProps: PropTypes,
   match: PropTypes.shape({
     params: PropTypes.objectOf(PropTypes.string),
     path: PropTypes.string,
