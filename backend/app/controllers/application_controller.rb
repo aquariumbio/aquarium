@@ -3,7 +3,11 @@ require 'input'
 
 # application_controller
 class ApplicationController < ActionController::API
-  # Check whether a token has a specific permission_id (0 = anything that is not retired).
+  # Check whether a token has a specific permission_id.
+  # permission_id ==  0:                 anything         (not retired)
+  # permission_id ==  <id for admin>:    admin            (not retired)
+  # permission_id ==  <id for <___>>:    <___>  or admin  (not retired)
+  # permission_id ==  <id for retired>:  retired
   #
   # @!method check_token_for_permission(token, permission_id)
   # @param token [String] a token

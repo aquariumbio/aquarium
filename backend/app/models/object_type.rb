@@ -31,7 +31,7 @@ class ObjectType < ActiveRecord::Base
   #
   # @return the objects
   def self.find_by_handler(handler)
-    wheres = sanitize_sql_for_conditions(['handler = ?', handler])
+    wheres = sanitize_sql(['handler = ?', handler])
     sql = "
       select * from object_types where #{wheres} order by name
     "
@@ -40,7 +40,7 @@ class ObjectType < ActiveRecord::Base
 
   # Create an object type
   #
-  # @param object_type [Hash] the objet type
+  # @param object_type [Hash] the object type
   # @option object_type[:name] [String] the name
   # @option object_type[:description] [String] the description
   # @option object_type[:prefix] [String] the prefix

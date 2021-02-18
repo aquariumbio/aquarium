@@ -104,7 +104,6 @@ class SampleType < ActiveRecord::Base
   # - Any potential errors are handled automatically and silently
   #
   # @param sample_type [Hash] the sample type
-  # @option sample_type[:id] [Int] the id of the sample type
   # @option sample_type[:name] [String] the name of the sample type
   # @option sample_type[:description] [String] the description of the sample type
   # @option sample_type[:field_types] [Hash] the field_type attributes associated with the sample type

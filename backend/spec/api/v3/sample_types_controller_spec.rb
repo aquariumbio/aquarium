@@ -5,11 +5,12 @@ RSpec.describe Api::V3::SampleTypesController, type: :request do
 
     # Sign in users
     before :all do
+      @create_url = "/api/v3/token/create"
       @token_1 = []
 
-      post "/api/v3/token/create?login=user_1&password=password"
-      resp = JSON.parse(response.body)
-      @token_1 << resp["token"]
+      post "#{@create_url}?login=user_1&password=password"
+      response_body = JSON.parse(response.body)
+      @token_1 << response_body["token"]
     end
 
     # Create sample type with errors
@@ -18,9 +19,9 @@ RSpec.describe Api::V3::SampleTypesController, type: :request do
       expect(response).to have_http_status 200
 
       # NAME CANNOT BE BLANK, DESCRSIPTION CANNOT BE BLANK
-      resp = JSON.parse(response.body)
-      expect(resp["errors"]["name"]).to eq ["can't be blank"]
-      expect(resp["errors"]["description"]).to eq ["can't be blank"]
+      response_body = JSON.parse(response.body)
+      expect(response_body["errors"]["name"]).to eq ["can't be blank"]
+      expect(response_body["errors"]["description"]).to eq ["can't be blank"]
     end
 
 
@@ -48,15 +49,15 @@ RSpec.describe Api::V3::SampleTypesController, type: :request do
       post "/api/v3/sample_types/create?token=#{@token_1[0]}", :params => params_1
       expect(response).to have_http_status 201
 
-      resp = JSON.parse(response.body)
-      id_1 = resp["sample_type"]["id"]
+      response_body = JSON.parse(response.body)
+      id_1 = response_body["sample_type"]["id"]
 
       # Create sample type
       post "/api/v3/sample_types/create?token=#{@token_1[0]}", :params => params_2
       expect(response).to have_http_status 201
 
-      resp = JSON.parse(response.body)
-      id_2 = resp["sample_type"]["id"]
+      response_body = JSON.parse(response.body)
+      id_2 = response_body["sample_type"]["id"]
 
       # Sample type parameters
       params = {
@@ -99,17 +100,17 @@ RSpec.describe Api::V3::SampleTypesController, type: :request do
       post "/api/v3/sample_types/create?token=#{@token_1[0]}", :params => params
       expect(response).to have_http_status 201
 
-      resp = JSON.parse(response.body)
-      this_id = resp["sample_type"]["id"]
+      response_body = JSON.parse(response.body)
+      this_id = response_body["sample_type"]["id"]
 
       # Get sample type
       get "/api/v3/sample_types/#{this_id}?token=#{@token_1[0]}"
       expect(response).to have_http_status 200
 
       # Get the sample type ids
-      resp = JSON.parse(response.body)
+      response_body = JSON.parse(response.body)
 
-      this_ft      = resp["sample_type"]["field_types"]
+      this_ft      = response_body["sample_type"]["field_types"]
       this_ft_id_0 = this_ft[0]["id"]
       this_ft_id_1 = this_ft[1]["id"]
       this_aft_0   = this_ft[0]["allowable_field_types"]
@@ -158,16 +159,16 @@ RSpec.describe Api::V3::SampleTypesController, type: :request do
 
       post "/api/v3/sample_types/#{this_id}/update?token=#{@token_1[0]}", :params => update_params
       expect(response).to have_http_status 200
-      resp = JSON.parse(response.body)
+      response_body = JSON.parse(response.body)
 
       # Get sample type
       get "/api/v3/sample_types/#{this_id}?token=#{@token_1[0]}"
       expect(response).to have_http_status 200
 
-      resp = JSON.parse(response.body)
+      response_body = JSON.parse(response.body)
 
       # Fields should have switched
-      update_ft      = resp["sample_type"]["field_types"]
+      update_ft      = response_body["sample_type"]["field_types"]
       update_ft_0    = update_ft[0]["ftype"]
       update_ft_1    = update_ft[1]["ftype"]
       update_aft_1   = update_ft[1]["allowable_field_types"]

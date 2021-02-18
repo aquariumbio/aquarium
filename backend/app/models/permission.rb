@@ -30,4 +30,54 @@ class Permission < ActiveRecord::Base
       hash
     end
   end
+
+  # Any permission
+  #
+  # @return 0
+  def self.any
+    0
+  end
+
+  # Cache admin id.
+  #
+  # @return admin_id
+  def self.admin_id(clear_cache = false)
+    Rails.cache.delete 'admin_id' if clear_cache
+    Rails.cache.fetch 'admin_id' do
+      Permission.permission_ids.key('admin')
+    end
+  end
+
+  # Cache retired id.
+  #
+  # @return retired_id
+  def self.retired_id(clear_cache = false)
+    Rails.cache.delete 'retired_id' if clear_cache
+    Rails.cache.fetch 'retired_id' do
+      Permission.permission_ids.key('retired')
+    end
+  end
+
+
+  # Check whether permission_ids has the specific permission permission_id. Used to gate access to the site.
+  # permission_id ==  <id for "any">:    true if anything and not retired
+  # permission_id ==  <id for admin>:    true if admin and not retired
+  # permission_id ==  <id for ___>:      true if ( ___  or admin ) and not retired
+  # permission_id ==  <id for retired>:  not supported
+  #                                      (technically it will return "false" if retired and return "true" if admin and not retired,
+  #                                       which is kind of weird, but it doesn't really matter because it is not used)
+  #
+  # @param permission_ids [Str] the permission_ids beging checked
+  # @param permission_id [Int] the permission_id for which to check
+  # @return whether permission_ids has permission for permission_id
+  def self.ok?(permission_ids, permission_id)
+    # return false if retired
+    return false if permission_ids.index(".#{Permission.permission_ids.key('retired')}.")
+
+    # return true if permission_id == 0
+    return true if permission_id == Permission.any
+
+    # Check <permission_id> and check "admin"
+    permission_ids.index(".#{permission_id}.") or permission_ids.index(".#{Permission.permission_ids.key('admin')}.")
+  end
 end
