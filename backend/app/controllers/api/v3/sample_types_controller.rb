@@ -118,7 +118,7 @@ module Api
       # @param token [String] a token
       def index
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get list
@@ -211,7 +211,7 @@ module Api
       # @param id [Int] the id of the sample type
       def show
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         id = Input.int(params[:id])
@@ -274,7 +274,7 @@ module Api
       # @param sample_type [Hash] the sample_type
       def create
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Read sample type parameter
@@ -343,7 +343,7 @@ module Api
       # @param sample_type [Hash] the sample_type
       def update
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get sample type
@@ -380,7 +380,7 @@ module Api
       # @param id [Int] the id of the sample type
       def delete
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         id = Input.int(params[:id])

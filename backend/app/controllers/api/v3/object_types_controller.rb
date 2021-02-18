@@ -84,7 +84,7 @@ module Api
       # @param token [String] a token
       def index
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get handlers
@@ -148,7 +148,7 @@ module Api
       # @param handler [String] the name of the handler
       def show_handler
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get object_types
@@ -203,7 +203,7 @@ module Api
       # @param id [Int] the id of the object type
       def show
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get object type
@@ -276,7 +276,7 @@ module Api
       # @param object_type [Hash] the object type
       def create
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Read object type parameter
@@ -352,7 +352,7 @@ module Api
       # @param object_type [Hash] the object type
       def update
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get object type
@@ -389,7 +389,7 @@ module Api
       # @param id [Int] the id of the object type
       def delete
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get object type

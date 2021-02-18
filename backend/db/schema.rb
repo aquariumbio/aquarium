@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_30_000000) do
+ActiveRecord::Schema.define(version: 2020_12_18_000010) do
 
   create_table "account_logs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
     t.integer "row1"
@@ -198,7 +198,7 @@ ActiveRecord::Schema.define(version: 2020_10_30_000000) do
     t.index ["job_id"], name: "index_job_assignment_logs_on_job_id"
   end
 
-  create_table "job_associations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "job_associations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "job_id"
     t.integer "operation_id"
     t.datetime "created_at", null: false
@@ -314,6 +314,15 @@ ActiveRecord::Schema.define(version: 2020_10_30_000000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "description"
+  end
+
+  create_table "parameters_bak", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+    t.integer "id", default: 0, null: false
+    t.string "key"
+    t.string "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text "description"
     t.integer "user_id"
   end
 
@@ -329,7 +338,7 @@ ActiveRecord::Schema.define(version: 2020_10_30_000000) do
   end
 
   create_table "permissions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
-    t.string "name", default: "", null: false
+    t.string "name", null: false
     t.integer "sort"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -411,6 +420,15 @@ ActiveRecord::Schema.define(version: 2020_10_30_000000) do
     t.datetime "updated_at", null: false
     t.index ["budget_id"], name: "index_user_budget_associations_on_budget_id"
     t.index ["user_id"], name: "index_user_budget_associations_on_user_id"
+  end
+
+  create_table "user_profiles", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+    t.string "key"
+    t.string "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_user_profiles_on_user_id"
   end
 
   create_table "user_tokens", primary_key: ["ip", "token"], options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
@@ -509,6 +527,7 @@ ActiveRecord::Schema.define(version: 2020_10_30_000000) do
   add_foreign_key "uploads", "jobs", on_delete: :cascade
   add_foreign_key "user_budget_associations", "budgets", on_delete: :cascade
   add_foreign_key "user_budget_associations", "users", on_delete: :cascade
+  add_foreign_key "user_profiles", "users", on_delete: :cascade
   add_foreign_key "user_tokens", "users", on_delete: :cascade
   add_foreign_key "wires", "field_values", column: "from_id", on_delete: :cascade
   add_foreign_key "wires", "field_values", column: "to_id", on_delete: :cascade

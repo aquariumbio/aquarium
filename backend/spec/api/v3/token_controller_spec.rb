@@ -5,39 +5,40 @@ RSpec.describe Api::V3::TokenController, type: :request do
 
     # Initialize @token_1 to store tokens
     before :all do
+      @create_url = "/api/v3/token/create"
       @token_1 = []
     end
 
     # Sign in
     it "invalid_sign_in" do
-      post "/api/v3/token/create?login=user_1&password=wrong_password"
+      post "#{@create_url}?login=user_1&password=wrong_password"
       expect(response).to have_http_status 401
     end
 
     # Sign in 3 times
     it "sign_in_3_times" do
       # Sign in and set token
-      post "/api/v3/token/create?login=user_1&password=password"
+      post "#{@create_url}?login=user_1&password=password"
       expect(response).to have_http_status 200
 
-      resp = JSON.parse(response.body)
-      token = resp["token"]
+      response_body = JSON.parse(response.body)
+      token = response_body["token"]
       @token_1 << token
 
       # Sign in and set token
-      post "/api/v3/token/create?login=user_1&password=password"
+      post "#{@create_url}?login=user_1&password=password"
       expect(response).to have_http_status 200
 
-      resp = JSON.parse(response.body)
-      token = resp["token"]
+      response_body = JSON.parse(response.body)
+      token = response_body["token"]
       @token_1 << token
 
       # Sign in and set token
-      post "/api/v3/token/create?login=user_1&password=password"
+      post "#{@create_url}?login=user_1&password=password"
       expect(response).to have_http_status 200
 
-      resp = JSON.parse(response.body)
-      token = resp["token"]
+      response_body = JSON.parse(response.body)
+      token = response_body["token"]
       @token_1 << token
     end
 

@@ -3,7 +3,7 @@
 # @api api.v3
 module Api
   module V3
-    # Announcement API calls.
+    # Group API calls.
     #
     # <b>General</b>
     #   API Status Codes:
@@ -31,11 +31,11 @@ module Api
     #         ...
     #       }
     #     }
-    class AnnouncementsController < ApplicationController
-      # Returns all announcements.
+    class GroupsController < ApplicationController
+      # Returns all groups / all groups beginning with <letter>.
       #
       # <b>API Call:</b>
-      #   GET: /api/v3/announcements
+      #   GET: /api/v3/groups
       #   {
       #     token: <token>
       #   }
@@ -43,12 +43,11 @@ module Api
       # <b>API Return Success:</b>
       #   STATUS CODE: 200
       #   {
-      #     announcements: [
+      #     groups: [
       #       {
-      #         id: <announcement_id>,
-      #         title: <title>,
-      #         message: <message>,
-      #         active: <true/false>,
+      #         id: <group_id>,
+      #         name: <name>,
+      #         description: <description>,
       #         created_at: <datetime>,
       #         updated_at: <datetime>
       #       },
@@ -56,23 +55,25 @@ module Api
       #     ]
       #   }
       #
-      # @!method index(token)
+      # @!method index(token, letter)
       # @param token [String] a token
+      # @param letter [Character] a letter
       def index
-        # Check for any permissions
-        status, response = check_token_for_permission
+        # Check for admin permissions
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Get announcements
-        announcements = Announcement.find_all
+        # Get groups
+        letter = Input.letter(params[:letter])
+        groups = letter ? Group.find_letter(letter) : Group.find_all
 
-        render json: { announcements: announcements }.to_json, status: :ok
+        render json: { groups: groups }.to_json, status: :ok
       end
 
-      # Returns a specific announcement.
+      # Returns a specific group.
       #
       # <b>API Call:</b>
-      #   GET: /api/v3/announcements/<id>
+      #   GET: /api/v3/groups/<id>
       #   {
       #     token: <token>
       #   }
@@ -80,11 +81,10 @@ module Api
       # <b>API Return Success:</b>
       #   STATUS CODE: 200
       #   {
-      #     announcement: {
-      #       id: <announcement_id>,
-      #       title: <title>,
-      #       message: <message>,
-      #       active: <true/false>,
+      #     group: {
+      #       id: <group_id>,
+      #       name: <name>,
+      #       description: <description>,
       #       created_at: <datetime>,
       #       updated_at: <datetime>
       #     }
@@ -92,28 +92,28 @@ module Api
       #
       # @!method show(token, id)
       # @param token [String] a token
-      # @param id [Int] the id of the announcement
+      # @param id [Int] the id of the group
       def show
         # Check for admin permissions
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Get announcement
+        # Get group
         id = Input.int(params[:id])
-        announcement = Announcement.find_id(id)
+        group = Group.find_id(id)
 
-        render json: { announcement: announcement }.to_json, status: :ok
+        render json: { group: group }.to_json, status: :ok
       end
 
-      # Create a new announcement.
+      # Create a new group.
       #
       # <b>API Call:</b>
-      #   GET: /api/v3/announcements/create
+      #   GET: /api/v3/groups/create
       #   {
       #     token: <token>
-      #     announcement: {
-      #       title: <title>,
-      #       message: <message>,
+      #     group: {
+      #       title: <name>,
+      #       message: <description>,
       #       active: <true/false>
       #     }
       #   }
@@ -121,89 +121,86 @@ module Api
       # <b>API Return Success:</b>
       #   STATUS CODE: 201
       #   {
-      #     announcement: {
-      #       id: <announcement_id>,
-      #       title: <title>,
-      #       message: <message>,
-      #       active: <true/false>,
+      #     group: {
+      #       id: <group_id>,
+      #       name: <name>,
+      #       description: <description>,
       #       created_at: <datetime>,
       #       updated_at: <datetime>
       #     }
       #   }
       #
-      # @!method create(token, announcement)
+      # @!method create(token, group)
       # @param token [String] a token
-      # @param announcement [Hash] the announcement
+      # @param group [Hash] the group
       def create
         # Check for admin permissions
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Read sample type parameter
-        params_announcement = params[:announcement] || {}
+        # Read group parameter
+        params_group = params[:group] || {}
 
-        # Create sample type
-        announcement, errors = Announcement.create(params_announcement)
-        render json: { errors: errors }.to_json, status: :ok and return if !announcement
+        # Create group
+        group, errors = Group.create(params_group)
+        render json: { errors: errors }.to_json, status: :ok and return if !group
 
-        render json: { announcement: announcement }.to_json, status: :created
+        render json: { group: group }.to_json, status: :created
       end
 
-      # Update an announcement.
+      # Update an group.
       #
       # <b>API Call:</b>
-      #   GET: /api/v3/announcements/create
+      #   GET: /api/v3/groups/create
       #   {
       #     token: <token>
-      #     id: <announcement_id>,
-      #     announcement: {
-      #       title: <title>,
-      #       message: <message>,
-      #       active: <true/false>
+      #     id: <group_id>,
+      #     group: {
+      #       name: <name>,
+      #       description: <description>
       #     }
       #   }
       #
       # <b>API Return Success:</b>
       #   STATUS CODE: 200
       #   {
-      #     announcement: {
-      #       id: <announcement_id>,
-      #       title: <title>,
-      #       message: <message>,
-      #       active: <true/false>,
+      #     group: {
+      #       id: <group_id>,
+      #       name: <name>,
+      #       description: <description>,
       #       created_at: <datetime>,
       #       updated_at: <datetime>
       #     }
       #   }
       #
-      # @!method update(token, id, announcement)
+      # @!method update(token, id, group)
       # @param token [String] a token
-      # @param id [Int] the id of the announcement
-      # @param announcement [Hash] the announcement
+      # @param id [Int] the id of the group
+      # @param group [Hash] the group
       def update
         # Check for admin permissions
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Get sample type
+        # Get group
         id = Input.int(params[:id])
-        announcement = Announcement.find_id(id)
-        render json: { announcement: nil }.to_json, status: :ok and return if !announcement
+        group = Group.find_id(id)
+        render json: { group: nil }.to_json, status: :ok and return if !group
 
-        # Read announcement parameter
-        params_announcement = params[:announcement] || {}
+        # Read group parameter
+        params_group = params[:group] || {}
 
-        # Update announcement
-        announcement, errors = announcement.update(params_announcement)
-        render json: { errors: errors }.to_json, status: :ok and return if !announcement
+        # Update group
+        group, errors = group.update(params_group)
+        render json: { errors: errors }.to_json, status: :ok and return if !group
 
-        render json: { announcement: announcement }.to_json, status: :ok
+        render json: { group: group }.to_json, status: :ok
       end
 
-      # Delete an announcement.
+      # Delete an group.
       #
       # <b>API Call:</b>
-      #   POST: /api/v3/announcements/<id>/delete
+      #   POST: /api/v3/groups/<id>/delete
       #   {
       #     token: <token>
       #   }
@@ -211,26 +208,26 @@ module Api
       # <b>API Return Success:</b>
       #   STATUS_CODE: 200
       #   {
-      #     message: "Announcement deleted"
+      #     message: "Group deleted"
       #   }
       #
       # @!method delete(token, id)
       # @param token [String] a token
-      # @param id [Int] the id of the announcement
+      # @param id [Int] the id of the group
       def delete
         # Check for admin permissions
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Get announcement
+        # Get group
         id = Input.int(params[:id])
-        announcement = Announcement.find_id(id)
-        render json: { announcement: nil  }.to_json, status: :ok and return if !announcement
+        group = Group.find_id(id)
+        render json: { group: nil  }.to_json, status: :ok and return if !group
 
-        # Delete announcement
-        announcement.delete
+        # Delete group
+        group.delete
 
-        render json: { message: "Announcement deleted" }.to_json, status: :ok
+        render json: { message: "Group deleted" }.to_json, status: :ok
       end
 
     end
