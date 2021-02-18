@@ -230,7 +230,6 @@ module Api
 
         render json: { message: "Parameter deleted" }.to_json, status: :ok
       end
-
     end
   end
 end

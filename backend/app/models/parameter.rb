@@ -2,7 +2,6 @@
 
 # parameters table
 class Parameter < ActiveRecord::Base
-
   validates :key,         presence: true
   validates :value,       presence: true
   validates :description, presence: true
@@ -75,5 +74,4 @@ class Parameter < ActiveRecord::Base
 
     return self, false
   end
-
 end

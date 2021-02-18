@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe Api::V3::ObjectTypesController, type: :request do
   describe 'api' do
-
     # Sign in users
     before :all do
       @create_url = "/api/v3/token/create"
@@ -19,8 +18,8 @@ RSpec.describe Api::V3::ObjectTypesController, type: :request do
     it "invalid_object_type" do
       params = {
         "object_type": {
-            "min": -1,
-            "max": -2
+          "min": -1,
+          "max": -2
         }
       }
       post "/api/v3/object_types/create?token=#{@token_1[0]}", :params => params
@@ -32,7 +31,7 @@ RSpec.describe Api::V3::ObjectTypesController, type: :request do
       expect(response_body["errors"]["description"]).to eq ["can't be blank"]
       expect(response_body["errors"]["handler"]).to eq ["can't be blank"]
       expect(response_body["errors"]["cost"]).to eq ["cost must be at least 0.01"]
-      expect(response_body["errors"]["min"]).to eq ["min must be greater than or equal to zero","min must be less than or equal to max"]
+      expect(response_body["errors"]["min"]).to eq ["min must be greater than or equal to zero", "min must be less than or equal to max"]
       expect(response_body["errors"]["max"]).to eq ["max must be greater than or equal to zero"]
     end
 
@@ -185,6 +184,5 @@ RSpec.describe Api::V3::ObjectTypesController, type: :request do
       post "/api/v3/sample_types/#{@sample_type_ids[0]}/delete?token=#{@token_1[0]}"
       expect(response).to have_http_status 200
     end
-
   end
 end

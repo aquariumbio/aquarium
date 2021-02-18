@@ -232,7 +232,6 @@ module Api
 
         render json: { message: "Announcement deleted" }.to_json, status: :ok
       end
-
     end
   end
 end

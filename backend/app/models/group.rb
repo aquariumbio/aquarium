@@ -1,6 +1,5 @@
 # groups table
 class Group < ActiveRecord::Base
-
   validates :name,        presence: true
   validates :description, presence: true
 
@@ -78,5 +77,4 @@ class Group < ActiveRecord::Base
 
     return self, false
   end
-
 end

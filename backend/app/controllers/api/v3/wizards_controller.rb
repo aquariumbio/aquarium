@@ -232,7 +232,6 @@ module Api
 
         render json: { message: "Wizard deleted" }.to_json, status: :ok
       end
-
     end
   end
 end

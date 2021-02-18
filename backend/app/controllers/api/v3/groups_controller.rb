@@ -276,9 +276,9 @@ module Api
         membership = Membership.find(id, user_id)
         if !membership
           membership = Membership.new({
-            group_id: id,
-            user_id: user_id
-          })
+                                        group_id: id,
+                                        user_id: user_id
+                                      })
           membership.save
         end
         render json: { membership: membership }.to_json, status: :ok
@@ -320,7 +320,6 @@ module Api
 
         render json: { message: "Membership deleted" }.to_json, status: :ok
       end
-
     end
   end
 end

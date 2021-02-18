@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe Api::V3::AnnouncementsController, type: :request do
   describe 'api' do
-
     # Sign in users
     before :all do
       @create_url = "/api/v3/token/create"
@@ -108,6 +107,5 @@ RSpec.describe Api::V3::AnnouncementsController, type: :request do
       post "/api/v3/announcements/#{@announcement_ids[0]}/delete?token=#{@token_1[0]}"
       expect(response).to have_http_status 200
     end
-
   end
 end

@@ -1,6 +1,5 @@
 # budgets table
 class Budget < ActiveRecord::Base
-
   validates :name,        presence: true
   validates :description, presence: true
   validates :contact,     presence: true
@@ -99,5 +98,4 @@ class Budget < ActiveRecord::Base
 
     return self, false
   end
-
 end

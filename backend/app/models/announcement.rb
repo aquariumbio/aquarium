@@ -1,6 +1,5 @@
 # announcements table
 class Announcement < ActiveRecord::Base
-
   validates :title,      presence: true
   validates :message,    presence: true
 
@@ -72,5 +71,4 @@ class Announcement < ActiveRecord::Base
 
     return self, false
   end
-
 end

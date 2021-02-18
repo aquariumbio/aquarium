@@ -246,10 +246,10 @@ module Api
 
         # Add user_budget
         user_budget = UserBudgetAssociation.new({
-          user_id: user_id,
-          budget_id: budget.id,
-          quota: quota
-        })
+                                                  user_id: user_id,
+                                                  budget_id: budget.id,
+                                                  quota: quota
+                                                })
         user_budget.save
         render json: { user_budget: user_budget }.to_json, status: :ok
       end
@@ -291,7 +291,6 @@ module Api
 
         render json: { message: "UserBudget deleted" }.to_json, status: :ok
       end
-
     end
   end
 end

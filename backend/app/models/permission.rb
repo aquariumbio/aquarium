@@ -58,7 +58,6 @@ class Permission < ActiveRecord::Base
     end
   end
 
-
   # Check whether permission_ids has the specific permission permission_id. Used to gate access to the site.
   # permission_id ==  <id for "any">:    true if anything and not retired
   # permission_id ==  <id for admin>:    true if admin and not retired

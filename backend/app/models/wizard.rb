@@ -1,6 +1,5 @@
 # wizards table
 class Wizard < ActiveRecord::Base
-
   validates :name,        presence: true
   validates :description, presence: true
 
@@ -72,5 +71,4 @@ class Wizard < ActiveRecord::Base
 
     return self, false
   end
-
 end

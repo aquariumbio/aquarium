@@ -118,12 +118,12 @@ class User < ActiveRecord::Base
     self.name = Input.text_field(user_data[:name])
     email = Input.text_field(user_data[:email])
     phone = Input.text_field(user_data[:phone])
-    valid = false if !self.valid_info?(email,phone)
+    valid = false if !self.valid_info?(email, phone)
 
     return { errors: self.errors }, :ok if !valid
 
     # Update the user name (use SQL directly to bypass password validations)
-    sets = ActiveRecord::Base.sanitize_sql( [ 'name = ?', self.name ] )
+    sets = ActiveRecord::Base.sanitize_sql(['name = ?', self.name])
     sql = "update users set #{sets} where id = #{self.id} limit 1"
     User.connection.execute sql
 
@@ -165,7 +165,7 @@ class User < ActiveRecord::Base
     return { errors: self.errors }, :ok if !valid
 
     # Update the user (use SQL directly to bypass password validations)
-    sets = ActiveRecord::Base.sanitize_sql( [ 'permission_ids = ?', self.permission_ids ] )
+    sets = ActiveRecord::Base.sanitize_sql(['permission_ids = ?', self.permission_ids])
     sql = "update users set #{sets} where id = #{self.id} limit 1"
     User.connection.execute sql
 
@@ -215,7 +215,7 @@ class User < ActiveRecord::Base
     else
       # Valid token + ip + time
 
-      #Reset user.timenow
+      # Reset user.timenow
       user.timenow = option_timenow
       sql = "update user_tokens ut set timenow = '#{option_timenow.to_s[0, 19]}' where #{wheres} limit 1"
       User.connection.execute sql
@@ -271,15 +271,15 @@ class User < ActiveRecord::Base
   # @return true
   def self.set_permission(by_user_id, user_id, permission_id, val)
     # Cannot edit admin or retired for self
-    return [ { error: 'Cannot edit admin or retired for self.' }, :forbidden ] if user_id == by_user_id && ((permission_id == 1) || (permission_id == 6))
+    return [{ error: 'Cannot edit admin or retired for self.' }, :forbidden] if user_id == by_user_id && ((permission_id == 1) || (permission_id == 6))
 
     # Check user_id
     user = User.find_id(user_id)
-    return [ { error: 'Invalid' }, :unauthorized ] unless user
+    return [{ error: 'Invalid' }, :unauthorized] unless user
 
     # Check valid permission_id
     permission_ids = Permission.permission_ids
-    return [ { error: 'Invalid' }, :unauthorized ]  unless permission_ids[permission_id]
+    return [{ error: 'Invalid' }, :unauthorized] unless permission_ids[permission_id]
 
     # Update permission_id
     if !val && user.permission_ids.index(".#{permission_id}.")
@@ -291,7 +291,7 @@ class User < ActiveRecord::Base
     end
 
     # Update the user (use SQL directly to bypass password validations)
-    sets = sanitize_sql( [ 'permission_ids = ?', user.permission_ids ] )
+    sets = sanitize_sql(['permission_ids = ?', user.permission_ids])
     sql = "update users set #{sets} where id = #{user_id} limit 1"
     User.connection.execute sql
 

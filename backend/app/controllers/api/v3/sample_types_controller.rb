@@ -123,7 +123,7 @@ module Api
 
         # Get list
         list = SampleType.find_all
-        render json: { sample_types: [ ] }.to_json, status: :ok and return if list.length == 0
+        render json: { sample_types: [] }.to_json, status: :ok and return if list.length == 0
 
         # Get details of first sample type in list
         details = SampleType.details(list[0].id)
@@ -396,7 +396,6 @@ module Api
           message: "Sample type deleted"
         }.to_json, status: :ok
       end
-
     end
   end
 end

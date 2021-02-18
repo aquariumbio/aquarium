@@ -263,7 +263,7 @@ module Api
 
         # get the user
         user = User.find_id(params_user_id)
-        return [ { error: 'Invalid' }, :unauthorized ] unless user
+        return [{ error: 'Invalid' }, :unauthorized] unless user
 
         params_user = params[:user] || {}
         response, status = user.update_info(params_user)
@@ -308,7 +308,7 @@ module Api
         # get the user
         params_user_id = Input.int(params[:id])
         user = User.find_id(params_user_id)
-        return [ { error: 'Invalid' }, :unauthorized ] unless user
+        return [{ error: 'Invalid' }, :unauthorized] unless user
 
         params_user = params[:user] || {}
         response, status = user.update_permissions(by_user_id, params_user)
@@ -358,7 +358,7 @@ module Api
         # Update the agreement to true
         UserProfile.set_user_profile(user.id, params[:agreement], true)
 
-        render json: { user:  user }.to_json, status: :ok
+        render json: { user: user }.to_json, status: :ok
       end
 
       # Set preferences for <preference> = /new_samples_private|lab_name/.
@@ -404,16 +404,16 @@ module Api
         # Read inputs
         preference = params[:preference]
         value = case preference
-        when "new_samples_private"
-          Input.boolean(params[:value])
-        when "lab_name"
-          Input.text_field(params[:value])
-        end
+                when "new_samples_private"
+                  Input.boolean(params[:value])
+                when "lab_name"
+                  Input.text_field(params[:value])
+                end
 
         # Update the user lab agreement to true
         UserProfile.set_user_profile(user.id, params[:preference], value)
 
-        render json: { user:  user }.to_json, status: :ok
+        render json: { user: user }.to_json, status: :ok
       end
 
       ###
