@@ -9,10 +9,9 @@ const useStyles = makeStyles((theme) => ({
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff',
   },
-
 }));
 
-const LoadingBackdrop = React.forwardRef(({ isLoading }) => {
+const LoadingBackdrop = ({ isLoading }) => {
   const classes = useStyles();
 
   return (
@@ -20,10 +19,10 @@ const LoadingBackdrop = React.forwardRef(({ isLoading }) => {
       <CircularProgress color="inherit" />
     </Backdrop>
   );
-});
-
-export default LoadingBackdrop;
+};
 
 LoadingBackdrop.propTypes = {
   isLoading: PropTypes.bool.isRequired,
 };
+
+export default LoadingBackdrop;

@@ -82,7 +82,6 @@ const SampleTypeFieldForm = ({
         sampleTypes={sampleTypes}
         index={index}
       />
-
       <ChoicesInput
         handleChange={handleChange}
         choices={fieldType.choices}

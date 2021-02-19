@@ -9,32 +9,45 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TextInput = ({ name, testName, onChange, value }) => {
+const TextInput = ({
+  name,
+  testName,
+  onChange,
+  value,
+  required = false,
+  type = string,
+  autoFocus = false,
+}) => {
   const classes = useStyles();
+
   return (
     <TextField
       name={name}
-      fullWidth
+      key={name}
       value={value}
-      onChange={(event) => onChange(event.target.value)}
-      variant="outlined"
-      autoFocus
-      required
-      type="string"
+      onChange={(event) => onChange(event)}
+      type={type}
       inputProps={{
         'aria-label': name,
         'data-cy': testName,
       }}
+      required={required}
+      fullWidth
+      autoFocus={autoFocus}
+      variant="outlined"
       className={classes.root}
     />
   );
 };
-
-export default TextInput;
 
 TextInput.propTypes = {
   name: PropTypes.string.isRequired,
   testName: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   value: PropTypes.oneOfType([string, object]).isRequired,
+  required: PropTypes.bool,
+  type: PropTypes.string,
+  autoFocus: PropTypes.bool,
 };
+
+export default TextInput;

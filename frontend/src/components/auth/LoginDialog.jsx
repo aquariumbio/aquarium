@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -64,20 +65,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LoginDialog = () => {
+const LoginDialog = ({ setIsLoading }) => {
   const classes = useStyles();
   const history = useHistory();
 
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [loginErrors, setLoginError] = useState();
-  // eslint-disable-next-line no-unused-vars
-  const [token, setToken] = useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault();
     tokensAPI.signIn(login, password, setLoginError);
   };
+
+  setIsLoading(false); // Prevent loading spinnter on login screen
 
   useEffect(() => {
     const listener = (event) => {
@@ -93,7 +94,6 @@ const LoginDialog = () => {
 
   if (localStorage.getItem('token') && tokensAPI.isAuthenticated()) {
     history.push('/');
-    // window.location.reload();
   }
   return (
     <div className={classes.root}>
@@ -136,11 +136,17 @@ const LoginDialog = () => {
           data-test="password"
         />
 
-        { loginErrors
-          && <p>Invalid login/password combination</p>}
+        {loginErrors &&
+          <p>Invalid login/password combination</p>}
+
         <Button className={classes.button} name="submit" type="submit">SIGN IN</Button>
       </form>
     </div>
   );
 };
+
+LoginDialog.propTypes = {
+  setIsLoading: PropTypes.func.isRequired,
+};
+
 export default withRouter(LoginDialog);
