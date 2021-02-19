@@ -7,7 +7,7 @@
       depends_on: 
         - frontend
       environment:
-        - CYPRESS_baseUrl=http://frontend:${FRONTEND_PUBLIC_PORT}
+        - CYPRESS_BASE_URL=http://frontend:${FRONTEND_PUBLIC_PORT}
       command: npx cypress run
       volumes:
         - ./end2end:/app
