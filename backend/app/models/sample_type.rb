@@ -1,6 +1,5 @@
 # sample_types table
 class SampleType < ActiveRecord::Base
-
   validates :name,        presence: true, uniqueness: { case_sensitive: false }
   validates :description, presence: true
 
@@ -46,7 +45,7 @@ class SampleType < ActiveRecord::Base
         "
         allowable_field_types = AllowableFieldType.find_by_sql sql
 
-        ft = ft.update( {allowable_field_types: allowable_field_types} )
+        ft = ft.update({ allowable_field_types: allowable_field_types })
       end
     end
 
@@ -89,7 +88,7 @@ class SampleType < ActiveRecord::Base
     if sample_type[:field_types].kind_of?(Array)
       sample_type[:field_types].each do |field_type|
         fname = Input.text(field_type[:name])
-        FieldType.create_sampletype(sample_type_new.id, field_type) if fname != ""
+        FieldType.create_sampletype(sample_type_new.id, field_type) if fname
       end
     end
 
@@ -150,5 +149,4 @@ class SampleType < ActiveRecord::Base
 
     return true
   end
-
 end

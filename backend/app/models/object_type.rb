@@ -1,6 +1,5 @@
 # object_types table
 class ObjectType < ActiveRecord::Base
-
   validates :name,             presence: true, uniqueness: { case_sensitive: false }
   validates :description,      presence: true
   validates :min,              presence: true
@@ -84,7 +83,7 @@ class ObjectType < ActiveRecord::Base
       sample_type_id = nil if !SampleType.find_by(id: sample_type_id)
     end
     release_method = Input.text(object_type[:release_method])
-    release_method = "return" if !["return","dispose","query"].index(release_method)
+    release_method = "return" if !["return", "dispose", "query"].index(release_method)
     release_description = Input.text(object_type[:release_description])
     safety = Input.text(object_type[:safety])
     cleanup = Input.text(object_type[:cleanup])
@@ -179,7 +178,7 @@ class ObjectType < ActiveRecord::Base
       input_sample_type_id = nil
     end
     input_release_method = Input.text(object_type[:release_method])
-    input_release_method = self.release_method if !["return","dispose","query"].index(release_method)
+    input_release_method = self.release_method if !["return", "dispose", "query"].index(release_method)
     input_release_description = Input.text(object_type[:release_description])
     input_safety = Input.text(object_type[:safety])
     input_cleanup = Input.text(object_type[:cleanup])

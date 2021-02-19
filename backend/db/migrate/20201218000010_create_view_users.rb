@@ -1,9 +1,7 @@
 # typed: false
 class CreateViewUsers < ActiveRecord::Migration[4.2]
-
   # View used to get extended user data (including parameters)
   def change
-
     # VIEW - CURRENT JOB ASSIGNMENT
     execute <<-SQL
       create view view_users as
@@ -23,7 +21,5 @@ class CreateViewUsers < ActiveRecord::Migration[4.2]
       left join user_profiles up_private on up_private.user_id = u.id and up_private.key = 'new_samples_private'
       left join user_profiles up_labname on up_labname.user_id = u.id and up_labname.key = 'lab_name'
     SQL
-
   end
-
 end
