@@ -10,6 +10,6 @@
         - CYPRESS_baseUrl=http://frontend:${FRONTEND_PUBLIC_PORT}
       command: npx cypress run
       volumes:
-        - ./end2end:/e2e
+        - ./end2end:/app
       networks:
         - aquarium_net
