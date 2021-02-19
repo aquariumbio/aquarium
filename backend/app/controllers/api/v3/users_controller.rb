@@ -41,7 +41,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     users: [
       #       {
@@ -64,11 +64,9 @@ module Api
 
         # Get users
         letter = Input.letter(params[:letter])
-        users = letter ? User.find_letter(letter) : User.find_all
+        users = letter ? User.find_by_first_letter(letter) : User.find_all
 
-        render json: {
-          users: users
-         }.to_json, status: :ok
+        render json: { users: users }.to_json, status: :ok
       end
 
       # Returns a specific user.
@@ -80,7 +78,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     user: {
       #       id: <user_id>,
@@ -101,10 +99,9 @@ module Api
         # Get user
         id = Input.int(params[:id])
         user = User.find_id(id)
+        render json: { user: nil }.to_json, status: :not_found and return if !user
 
-        render json: {
-          user: user
-        }.to_json, status: :ok
+        render json: { user: user }.to_json, status: :ok
       end
 
       # Returns a specific user.
@@ -116,7 +113,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     user: {
       #       id: <user_id>,
@@ -139,10 +136,45 @@ module Api
         # Get user
         id = Input.int(params[:id])
         user = User.find_id_show_info(id)
+        render json: { user: nil }.to_json, status: :not_found and return if !user
 
-        render json: {
-          user: user
-        }.to_json, status: :ok
+        render json: { user: user }.to_json, status: :ok
+      end
+
+      # Returns the groups for a specific user.
+      #
+      # <b>API Call:</b>
+      #   GET: /api/v3/users/<id>
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     groups: {
+      #       id: <user_id>,
+      #       name: <name>,
+      #       description: <description>,
+      #       created_at: <created_at>,
+      #       updated_at: <updated_at>
+      #     },
+      #     ...
+      #   }
+      #
+      # @!method groups(token, id)
+      # @param token [String] a token
+      # @param id [Int] the id of the user
+      def groups
+        # Check for admin permissions
+        status, response = check_token_for_permission(Permission.admin_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # Get groups
+        id = Input.int(params[:id])
+        groups = User.find_id_groups(id)
+
+        render json: { groups: groups }.to_json, status: :ok
       end
 
       # Create a new user.
@@ -160,7 +192,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 201
+      #   STATUS_CODE: 201
       #   {
       #     user: {
       #       id: <user_id>,
@@ -178,10 +210,10 @@ module Api
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Read sample type parameter
+        # Read user parameter
         params_user = params[:user] || {}
 
-        # Create sample type
+        # Create user
         user, errors = User.create(params_user)
         render json: { errors: errors }.to_json, status: :ok and return if !user
 
@@ -203,7 +235,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     user: {
       #       id: <user_id>,
@@ -231,7 +263,7 @@ module Api
 
         # get the user
         user = User.find_id(params_user_id)
-        return [ { error: 'Invalid' }, :unauthorized ] unless user
+        return [{ error: 'Invalid' }, :unauthorized] unless user
 
         params_user = params[:user] || {}
         response, status = user.update_info(params_user)
@@ -241,7 +273,7 @@ module Api
       # Update a user's permissions
       #
       # <b>API Call:</b>
-      #   GET: /api/v3/users/update_permissions
+      #   POST: /api/v3/users/<id>/update_permissions
       #   {
       #     token: <token>
       #     id: <user_id>,
@@ -251,7 +283,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     user: {
       #       id: <user_id>,
@@ -276,7 +308,7 @@ module Api
         # get the user
         params_user_id = Input.int(params[:id])
         user = User.find_id(params_user_id)
-        return [ { error: 'Invalid' }, :unauthorized ] unless user
+        return [{ error: 'Invalid' }, :unauthorized] unless user
 
         params_user = params[:user] || {}
         response, status = user.update_permissions(by_user_id, params_user)
@@ -294,7 +326,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     user: {
       #       id: <user_id>,
@@ -326,7 +358,7 @@ module Api
         # Update the agreement to true
         UserProfile.set_user_profile(user.id, params[:agreement], true)
 
-        render json: { user:  user }.to_json, status: :ok
+        render json: { user: user }.to_json, status: :ok
       end
 
       # Set preferences for <preference> = /new_samples_private|lab_name/.
@@ -340,7 +372,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     user: {
       #       id: <user_id>,
@@ -372,16 +404,16 @@ module Api
         # Read inputs
         preference = params[:preference]
         value = case preference
-        when "new_samples_private"
-          Input.boolean(params[:value])
-        when "lab_name"
-          Input.text_field(params[:value])
-        end
+                when "new_samples_private"
+                  Input.boolean(params[:value])
+                when "lab_name"
+                  Input.text_field(params[:value])
+                end
 
         # Update the user lab agreement to true
         UserProfile.set_user_profile(user.id, params[:preference], value)
 
-        render json: { user:  user }.to_json, status: :ok
+        render json: { user: user }.to_json, status: :ok
       end
 
       ###
@@ -401,7 +433,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     users: [
       #       {
@@ -450,7 +482,7 @@ module Api
       # Set a specific permission for a specific user.
       #
       # <b>API Call:</b>
-      #   POST: /api/v3/users/<id>/permissions/update
+      #   POST: /api/v3/users/permissions/update
       #   {
       #     token: <token>,
       #     user_id: <user_id>,
@@ -459,7 +491,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     user: [
       #       {

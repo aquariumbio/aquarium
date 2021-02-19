@@ -6,13 +6,13 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 Permission.create([
-  {id: 1, name: 'admin',   sort: 1},
-  {id: 2, name: 'manage',  sort: 2},
-  {id: 3, name: 'run',     sort: 3},
-  {id: 4, name: 'design',  sort: 4},
-  {id: 5, name: 'develop', sort: 5},
-  {id: 6, name: 'retired', sort: 6},
-])
+                    { id: 1, name: 'admin', sort: 1 },
+                    { id: 2, name: 'manage',  sort: 2 },
+                    { id: 3, name: 'run',     sort: 3 },
+                    { id: 4, name: 'design',  sort: 4 },
+                    { id: 5, name: 'develop', sort: 5 },
+                    { id: 6, name: 'retired', sort: 6 },
+                  ])
 
 # Cannot use User.create because the method is overridden
 # User.create([
@@ -21,8 +21,7 @@ Permission.create([
 #   {id: 3, name: 'Factory', login: 'user_3', password_digest: '$2a$04$6Y3URfFd8d2ENBD00O7OLe/sAgXw13pNWyP/v9eyqIfOvjh/26/7y', permission_ids: '.1.6.'},
 # ])
 
-
-timenow = (Time.now.utc).to_s[0,19]
+timenow = (Time.now.utc).to_s[0, 19]
 sql = "
   INSERT INTO `users` (`id`, `name`, `login`, `created_at`, `updated_at`, `password_digest`, `remember_token`, `admin`, `key`, `permission_ids`)
   VALUES

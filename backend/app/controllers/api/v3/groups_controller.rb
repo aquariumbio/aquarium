@@ -41,7 +41,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     groups: [
       #       {
@@ -65,7 +65,7 @@ module Api
 
         # Get groups
         letter = Input.letter(params[:letter])
-        groups = letter ? Group.find_letter(letter) : Group.find_all
+        groups = letter ? Group.find_by_first_letter(letter) : Group.find_all
 
         render json: { groups: groups }.to_json, status: :ok
       end
@@ -79,7 +79,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     group: {
       #       id: <group_id>,
@@ -101,6 +101,7 @@ module Api
         # Get group
         id = Input.int(params[:id])
         group = Group.find_id(id)
+        render json: { group: nil }.to_json, status: :not_found and return if !group
 
         render json: { group: group }.to_json, status: :ok
       end
@@ -119,7 +120,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 201
+      #   STATUS_CODE: 201
       #   {
       #     group: {
       #       id: <group_id>,
@@ -148,7 +149,7 @@ module Api
         render json: { group: group }.to_json, status: :created
       end
 
-      # Update an group.
+      # Update a group.
       #
       # <b>API Call:</b>
       #   GET: /api/v3/groups/create
@@ -162,7 +163,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     group: {
       #       id: <group_id>,
@@ -185,7 +186,7 @@ module Api
         # Get group
         id = Input.int(params[:id])
         group = Group.find_id(id)
-        render json: { group: nil }.to_json, status: :ok and return if !group
+        render json: { group: nil }.to_json, status: :not_found and return if !group
 
         # Read group parameter
         params_group = params[:group] || {}
@@ -197,7 +198,7 @@ module Api
         render json: { group: group }.to_json, status: :ok
       end
 
-      # Delete an group.
+      # Delete a group.
       #
       # <b>API Call:</b>
       #   POST: /api/v3/groups/<id>/delete
@@ -222,7 +223,7 @@ module Api
         # Get group
         id = Input.int(params[:id])
         group = Group.find_id(id)
-        render json: { group: nil  }.to_json, status: :ok and return if !group
+        render json: { group: nil }.to_json, status: :not_found and return if !group
 
         # Delete group
         group.delete
@@ -230,6 +231,95 @@ module Api
         render json: { message: "Group deleted" }.to_json, status: :ok
       end
 
+      # Add a membership.
+      #
+      # <b>API Call:</b>
+      #   POST: 'api/v3/groups/:id/create_membership
+      #   {
+      #     token: <token>
+      #     id: <group_id>,
+      #     user_id: <user_id>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     membership: {
+      #       id: <group_id>,
+      #       user_id: <user_id>,
+      #       group_id: <group_id>,
+      #       created_at: <datetime>,
+      #       updated_at: <datetime>
+      #     }
+      #   }
+      #
+      # @!method create_membership(token, id, user_id)
+      # @param token [String] a token
+      # @param id [Int] the id of the group
+      # @param user_id [Int] the user_id
+      def create_membership
+        # Check for admin permissions
+        status, response = check_token_for_permission(Permission.admin_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # Get group
+        id = Input.int(params[:id])
+        group = Group.find_id(id)
+        render json: { group: nil }.to_json, status: :not_found and return if !group
+
+        # Get user
+        user_id = Input.int(params[:user_id])
+        user = User.find_id(user_id)
+        render json: { membership: nil }.to_json, status: :not_found and return if !user
+
+        # Add membership
+        membership = Membership.find(id, user_id)
+        if !membership
+          membership = Membership.new({
+                                        group_id: id,
+                                        user_id: user_id
+                                      })
+          membership.save
+        end
+        render json: { membership: membership }.to_json, status: :ok
+      end
+
+      # Delete a membership.
+      #
+      # <b>API Call:</b>
+      #   POST: 'api/v3/groups/<id>/delete_membership/<membership_id>
+      #   {
+      #     token: <token>
+      #     id: <group_id>,
+      #     user_id: <user_id>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     message: "Membership deleted"
+      #   }
+      #
+      # @!method delete_membership(token, id, user_id)
+      # @param token [String] a token
+      # @param id [Int] the id of the group
+      # @param user_id [Int] the user_id
+      def delete_membership
+        # Check for admin permissions
+        status, response = check_token_for_permission(Permission.admin_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # Get membership
+        group_id = Input.int(params[:id])
+        user_id = Input.int(params[:user_id])
+        membership = Membership.find(group_id, user_id)
+        render json: { membership: nil }.to_json, status: :not_found and return if !membership
+
+        # Delete membership
+        membership.delete
+
+        render json: { message: "Membership deleted" }.to_json, status: :ok
+      end
     end
   end
 end

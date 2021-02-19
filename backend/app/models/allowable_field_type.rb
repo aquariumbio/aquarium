@@ -1,6 +1,5 @@
 # allowable_field_types table
 class AllowableFieldType < ActiveRecord::Base
-
   # Create an allowable field type
   #
   # @param field_type_id [Int] id of the field type
@@ -12,7 +11,7 @@ class AllowableFieldType < ActiveRecord::Base
     sql = "select * from sample_types where id = #{sample_type_id} limit 1"
 
     if (SampleType.find_by_sql sql)[0]
-      allowable_field_type_new  = AllowableFieldType.new(
+      allowable_field_type_new = AllowableFieldType.new(
         field_type_id: field_type_id,
         sample_type_id: sample_type_id
       )

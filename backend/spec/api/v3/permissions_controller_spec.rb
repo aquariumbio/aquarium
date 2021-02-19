@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe Api::V3::PermissionsController, type: :request do
   describe 'api' do
-
     # Sign in users
     before :each do
       @create_url = "/api/v3/token/create"
@@ -45,6 +44,5 @@ RSpec.describe Api::V3::PermissionsController, type: :request do
       get "/api/v3/permissions?token=#{@token_2[0]}"
       expect(response).to have_http_status 200
     end
-
   end
 end

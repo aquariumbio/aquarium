@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'input'
 
 # application_controller
@@ -33,5 +34,4 @@ class ApplicationController < ActionController::API
     end
     return status, response
   end
-
 end

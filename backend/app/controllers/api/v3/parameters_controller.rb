@@ -39,7 +39,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     parameters: [
       #       {
@@ -76,7 +76,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     parameter: {
       #       id: <parameter_id>,
@@ -106,7 +106,7 @@ module Api
       # Create a new parameter.
       #
       # <b>API Call:</b>
-      #   GET: /api/v3/parameters/create
+      #   POST: /api/v3/parameters/create
       #   {
       #     token: <token>
       #     parameter: {
@@ -117,7 +117,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 201
+      #   STATUS_CODE: 201
       #   {
       #     parameter: {
       #       id: <parameter_id>,
@@ -137,20 +137,20 @@ module Api
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Read sample type parameter
+        # Read parameter parameter
         params_parameter = params[:parameter] || {}
 
-        # Create sample type
+        # Create parameter
         parameter, errors = Parameter.create(params_parameter)
         render json: { errors: errors }.to_json, status: :ok and return if !parameter
 
         render json: { parameter: parameter }.to_json, status: :created
       end
 
-      # Update an parameter.
+      # Update a parameter.
       #
       # <b>API Call:</b>
-      #   GET: /api/v3/parameters/create
+      #   POST: /api/v3/parameters/<id>/update
       #   {
       #     token: <token>
       #     id: <parameter_id>,
@@ -162,7 +162,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     parameter: {
       #       id: <parameter_id>,
@@ -183,10 +183,10 @@ module Api
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Get sample type
+        # Get parameter
         id = Input.int(params[:id])
         parameter = Parameter.find_id(id)
-        render json: { parameter: nil }.to_json, status: :ok and return if !parameter
+        render json: { parameter: nil }.to_json, status: :not_found and return if !parameter
 
         # Read parameter parameter
         params_parameter = params[:parameter] || {}
@@ -198,7 +198,7 @@ module Api
         render json: { parameter: parameter }.to_json, status: :ok
       end
 
-      # Delete an parameter.
+      # Delete a parameter.
       #
       # <b>API Call:</b>
       #   POST: /api/v3/parameters/<id>/delete
@@ -223,14 +223,13 @@ module Api
         # Get parameter
         id = Input.int(params[:id])
         parameter = Parameter.find_id(id)
-        render json: { parameter: nil  }.to_json, status: :ok and return if !parameter
+        render json: { parameter: nil }.to_json, status: :not_found and return if !parameter
 
         # Delete parameter
         parameter.delete
 
         render json: { message: "Parameter deleted" }.to_json, status: :ok
       end
-
     end
   end
 end

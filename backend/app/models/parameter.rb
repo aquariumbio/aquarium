@@ -2,7 +2,6 @@
 
 # parameters table
 class Parameter < ActiveRecord::Base
-
   validates :key,         presence: true
   validates :value,       presence: true
   validates :description, presence: true
@@ -22,7 +21,7 @@ class Parameter < ActiveRecord::Base
     Parameter.find_by(id: id)
   end
 
-  # Create an parameter
+  # Create a parameter
   #
   # @param parameter [Hash] the parameter
   # @option parameter[:key] [String] the key
@@ -50,7 +49,7 @@ class Parameter < ActiveRecord::Base
     return parameter_new, false
   end
 
-  # Update an parameter
+  # Update a parameter
   #
   # @param parameter [Hash] the parameter
   # @option parameter[:key] [String] the key
@@ -75,5 +74,4 @@ class Parameter < ActiveRecord::Base
 
     return self, false
   end
-
 end

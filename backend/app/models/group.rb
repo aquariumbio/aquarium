@@ -1,6 +1,5 @@
 # groups table
 class Group < ActiveRecord::Base
-
   validates :name,        presence: true
   validates :description, presence: true
 
@@ -11,12 +10,12 @@ class Group < ActiveRecord::Base
     Group.order(:name)
   end
 
-  # Return all groups beginning with fitst letter l ('*' as non-alphanumeric wildcard).
+  # Return all groups beginning with first letterl ('*' as non-alphanumeric wildcard).
   #
-  # @return all groups beginning with fitst letter l ('*' as non-alphanumeric wildcard)
-  def self.find_letter(l)
+  # @return all groups beginning with first letterl ('*' as non-alphanumeric wildcard)
+  def self.find_by_first_letter(l)
     if l == "*"
-      sql = "select * from groups where (name regexp '^[^a-zA-Z0-9].*') order by name"
+      sql = "select * from groups where (name regexp '^[^a-zA-Z].*') order by name"
     else
       sql = "select * from groups where name like '#{l}%' order by name"
     end
@@ -31,7 +30,7 @@ class Group < ActiveRecord::Base
     Group.find_by(id: id)
   end
 
-  # Create an group
+  # Create a group
   #
   # @param group [Hash] the group
   # @option group[:name] [String] the name
@@ -56,7 +55,7 @@ class Group < ActiveRecord::Base
     return group_new, false
   end
 
-  # Update an group
+  # Update a group
   #
   # @param group [Hash] the group
   # @option group[:name] [String] the name
@@ -78,5 +77,4 @@ class Group < ActiveRecord::Base
 
     return self, false
   end
-
 end
