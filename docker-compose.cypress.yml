@@ -1,12 +1,14 @@
   version: "3.7"
   services:
     e2e:
-      image: cypress/included:6.1.0
+      image: cypress
+      build: ./end2end
+      container_name: cypress
       depends_on: 
         - frontend
       environment:
         - CYPRESS_baseUrl=http://frontend:${FRONTEND_PUBLIC_PORT}
-      working_dir: /e2e
+      command: npx cypress run
       volumes:
         - ./end2end:/e2e
       networks:
