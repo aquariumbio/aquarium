@@ -3,10 +3,6 @@ describe('/announcements', () => {
     cy.login();
   });
 
-  afterEach(() => {
-    cy.logout();
-  });
-
   it('has place holder header', () => {
     cy.visit('/announcements');
     cy.contains('h1', 'Announcements');

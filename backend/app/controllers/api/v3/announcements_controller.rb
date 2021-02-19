@@ -41,7 +41,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     announcements: [
       #       {
@@ -66,9 +66,7 @@ module Api
         # Get announcements
         announcements = Announcement.find_all
 
-        render json: {
-          announcements: announcements
-         }.to_json, status: :ok
+        render json: { announcements: announcements }.to_json, status: :ok
       end
 
       # Returns a specific announcement.
@@ -80,7 +78,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     announcement: {
       #       id: <announcement_id>,
@@ -97,22 +95,20 @@ module Api
       # @param id [Int] the id of the announcement
       def show
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get announcement
         id = Input.int(params[:id])
         announcement = Announcement.find_id(id)
 
-        render json: {
-          announcement: announcement
-        }.to_json, status: :ok
+        render json: { announcement: announcement }.to_json, status: :ok
       end
 
       # Create a new announcement.
       #
       # <b>API Call:</b>
-      #   GET: /api/v3/announcements/create
+      #   POST: /api/v3/announcements/create
       #   {
       #     token: <token>
       #     announcement: {
@@ -123,7 +119,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 201
+      #   STATUS_CODE: 201
       #   {
       #     announcement: {
       #       id: <announcement_id>,
@@ -140,13 +136,13 @@ module Api
       # @param announcement [Hash] the announcement
       def create
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Read sample type parameter
+        # Read announcement parameter
         params_announcement = params[:announcement] || {}
 
-        # Create sample type
+        # Create announcement
         announcement, errors = Announcement.create(params_announcement)
         render json: { errors: errors }.to_json, status: :ok and return if !announcement
 
@@ -156,7 +152,7 @@ module Api
       # Update an announcement.
       #
       # <b>API Call:</b>
-      #   GET: /api/v3/announcements/create
+      #   POST: /api/v3/announcements/<id>/update
       #   {
       #     token: <token>
       #     id: <announcement_id>,
@@ -168,7 +164,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     announcement: {
       #       id: <announcement_id>,
@@ -186,13 +182,13 @@ module Api
       # @param announcement [Hash] the announcement
       def update
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # Get sample type
+        # Get announcement
         id = Input.int(params[:id])
         announcement = Announcement.find_id(id)
-        render json: { announcement: nil }.to_json, status: :ok and return if !announcement
+        render json: { announcement: nil }.to_json, status: :not_found and return if !announcement
 
         # Read announcement parameter
         params_announcement = params[:announcement] || {}
@@ -223,22 +219,19 @@ module Api
       # @param id [Int] the id of the announcement
       def delete
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get announcement
         id = Input.int(params[:id])
         announcement = Announcement.find_id(id)
-        render json: { announcement: nil  }.to_json, status: :ok and return if !announcement
+        render json: { announcement: nil }.to_json, status: :not_found and return if !announcement
 
         # Delete announcement
         announcement.delete
 
-        render json: {
-          message: "Announcement deleted"
-         }.to_json, status: :ok
+        render json: { message: "Announcement deleted" }.to_json, status: :ok
       end
-
     end
   end
 end

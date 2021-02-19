@@ -1,6 +1,5 @@
 # field_types table
 class FieldType < ActiveRecord::Base
-
   # Create a field type
   #
   # @param field_type [Hash] the field type
@@ -19,7 +18,7 @@ class FieldType < ActiveRecord::Base
     farray    = Input.boolean(field_type[:array]) ? 1 : nil
     fchoices  = Input.text(field_type[:choices])
 
-    field_type_new  = FieldType.new(
+    field_type_new = FieldType.new(
       parent_id: parent_id,
       name: fname,
       ftype: ftype,
@@ -65,7 +64,7 @@ class FieldType < ActiveRecord::Base
     # Reset fname if it is blank and the id exists
     fname = Input.text(field_type[:name])
     fname = fname || field_type_update.name
-    return 0 if fname == ""
+    return 0 if !fname
 
     # Save the field_type
     ftype     = Input.text(field_type[:ftype])
@@ -100,5 +99,4 @@ class FieldType < ActiveRecord::Base
 
     return field_type_update.id
   end
-
 end

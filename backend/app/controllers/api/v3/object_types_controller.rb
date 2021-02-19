@@ -41,7 +41,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     handlers: [
       #       {
@@ -84,12 +84,12 @@ module Api
       # @param token [String] a token
       def index
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get handlers
         handlers = ObjectType.find_handlers
-        render json: { object_types: nil }.to_json, status: :ok and return if handlers.length == 0
+        render json: { object_types: [] }.to_json, status: :ok and return if handlers.length == 0
 
         # Get objects of first item in list
         object_types = ObjectType.find_by_handler(handlers[0].handler)
@@ -98,8 +98,8 @@ module Api
           handlers: handlers,
           handlers[0].handler => {
             object_types: object_types
-           }
-         }.to_json, status: :ok
+          }
+        }.to_json, status: :ok
       end
 
       # Returns all object_types for a specific handler.
@@ -111,7 +111,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     <handler>: {
       #       object_types: [
@@ -148,7 +148,7 @@ module Api
       # @param handler [String] the name of the handler
       def show_handler
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get object_types
@@ -158,8 +158,8 @@ module Api
         render json: {
           handler => {
             object_types: object_types
-           }
-         }.to_json, status: :ok
+          }
+        }.to_json, status: :ok
       end
 
       # Returns a specific object type
@@ -171,7 +171,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     object_type: {
       #       id: <id>,
@@ -203,12 +203,13 @@ module Api
       # @param id [Int] the id of the object type
       def show
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get object type
         id = Input.int(params[:id])
         object_type = ObjectType.find_id(id)
+        render json: { object_type: nil }.to_json, status: :not_found and return if !object_type
 
         render json: {
           object_type: object_type
@@ -244,7 +245,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 201
+      #   STATUS_CODE: 201
       #   {
       #     object_type: {
       #       id: <id>,
@@ -276,7 +277,7 @@ module Api
       # @param object_type [Hash] the object type
       def create
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Read object type parameter
@@ -319,7 +320,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     object_type: {
       #       id: <id>,
@@ -352,13 +353,13 @@ module Api
       # @param object_type [Hash] the object type
       def update
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get object type
         id = Input.int(params[:id])
         object_type = ObjectType.find_id(id)
-        render json: { object_type: nil }.to_json, status: :ok and return if !object_type
+        render json: { object_type: nil }.to_json, status: :not_found and return if !object_type
 
         # Read object type parameter
         params_object_type = params[:object_type] || {}
@@ -389,22 +390,21 @@ module Api
       # @param id [Int] the id of the object type
       def delete
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get object type
         id = Input.int(params[:id])
         object_type = ObjectType.find_id(id)
-        render json: { object_type: nil  }.to_json, status: :ok and return if !object_type
+        render json: { object_type: nil }.to_json, status: :not_found and return if !object_type
 
         # Delete object type
         object_type.delete
 
         render json: {
           message: "Object type deleted"
-         }.to_json, status: :ok
+        }.to_json, status: :ok
       end
-
     end
   end
 end

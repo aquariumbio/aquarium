@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import { useHistory, withRouter } from 'react-router-dom';
-import API from '../../helpers/API';
+import tokensAPI from '../../helpers/api/tokens';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -76,7 +76,7 @@ const LoginDialog = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    API.signIn(login, password, setLoginError);
+    tokensAPI.signIn(login, password, setLoginError);
   };
 
   useEffect(() => {
@@ -91,9 +91,9 @@ const LoginDialog = () => {
     };
   });
 
-  if (sessionStorage.getItem('token') && API.isAuthenticated()) {
+  if (localStorage.getItem('token') && tokensAPI.isAuthenticated()) {
     history.push('/');
-    window.location.reload();
+    // window.location.reload();
   }
   return (
     <div className={classes.root}>

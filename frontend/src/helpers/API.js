@@ -1,85 +1,65 @@
+/* eslint-disable no-alert */
+/* eslint-disable no-console */
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:3001/api/v3/';
-const currentSessionToken = sessionStorage.getItem('token');
+axios.defaults.baseURL = 'http://localhost:3001/api/v3';
 
-const validateToken = async () => {
-  let validToken = false;
+// Axios instance we can import and use in our apis
+const axiosInstance = axios.create({
+  baseURL: 'http://localhost:3001/api/v3',
+});
 
-  await axios
-    .post('token/get_user', null, {
-      params: {
-        token: currentSessionToken,
-      },
-    })
-    .then((response) => {
-      const [status, data] = [response.data.status, response.data];
+// For validation we need to send the token with every request to the backend
+const currentSessionToken = localStorage.getItem('token');
 
-      if (response.data.status === 200) {
-        validToken = true;
+/* We intercept the request to ensure the session token is sent in the params
+   on every route except login */
+axiosInstance.interceptors.request.use((config) => {
+  const newConfig = config;
+  if (window.location.pathname !== '/login') {
+    newConfig.params = {
+      token: currentSessionToken,
+      ...newConfig.params,
+    };
+  }
+  return newConfig;
+});
+
+// TODO: REPLACE ALL ALERTS WITH PROPER HANDLING
+/* Use interceptors to handle error responses generalized by status code
+   We can customize the response using the pathname */
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  // eslint-disable-next-line consistent-return
+  (error) => {
+    const { status, data } = error.response;
+    if (status) {
+      switch (status) {
+        case 400:
+          alert(`${status}: ${data.message}`);
+          break;
+        case 401:
+          if (window.location.pathname !== '/login') {
+            if (currentSessionToken) {
+              axios.post('/token/delete');
+              localStorage.clear('token');
+            }
+          }
+          /* TODO: HANDLE SESSION TIMEOUT
+             if (...pathname !== '/login' && data !== 'Session timeout') { OPEN LOGIN MODAL} */
+          break;
+        case 403:
+          // TODO: HANDLE PERMISSIONS
+          alert(`${status}: ${data.message} - Insufficient permissions`);
+          break;
+        case 404:
+          alert(`${status}: ${data.message}`);
+          break;
+        default:
+          alert(`${status}: ${data.message}`);
       }
-
-      if (status === 400 && data.error === 'Invalid') {
-        sessionStorage.clear('token');
-      }
-
-      // TODO: HANDLE SESSION TIMEOUT
-    });
-  return validToken;
-};
-
-const signIn = async (login, password, setLoginError) => {
-  let signInSuccessful = false;
-  await axios
-    .post('token/create', null, {
-      params: {
-        login,
-        password,
-      },
-    })
-    .then((response) => {
-      const [status, data] = [response.status, response.data];
-
-      if (status === 200 && data.token) {
-        setLoginError();
-        sessionStorage.setItem('token', data.token);
-        signInSuccessful = true;
-        window.location.reload();
-      }
-
-      if (status === 401) {
-        setLoginError(response.data.error);
-      }
-    });
-  return signInSuccessful;
-};
-
-const signOut = (setLoginOutError) => {
-  axios
-    .post('token/delete', null, {
-      params: {
-        token: currentSessionToken,
-      },
-    })
-    .then((response) => {
-      const [status, data] = [response.status, response.data];
-
-      if (status === 200 || (status === 401 && data.error === 'Invalid')) {
-        sessionStorage.clear('token');
-        setLoginOutError();
-        window.location.reload();
-      }
-
-      if (status === 401 && data.error !== 'Invalid') {
-        setLoginOutError(data.error);
-      }
-    });
-};
-
-const API = {
-  isAuthenticated: validateToken,
-  signIn,
-  signOut,
-};
-
-export default API;
+      return false;
+    }
+  },
+);
+export default axiosInstance;
