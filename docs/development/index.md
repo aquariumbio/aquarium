@@ -218,6 +218,7 @@ See the migration instructions below.
 ```bash
 docker-compose up -d
 docker-compose exec backend env RAILS_ENV=development rake db:migrate
+docker-compose exec backend env RAILS_ENV=test rake db:migrate
 docker-compose down
 ```
 
@@ -230,7 +231,7 @@ It is possible to run more than one Aquarium instance, but there can be complica
 - public ports conflicts – the default values for the public ports will be the same for each instance configured with `bin/setup.sh`.
   When running two versions of v3, the solution is to change the environment variables in the `.env` files.
   See below for [running v2 and v3](#running-v2-and-v3) together.
-- service name conflicts – when starting a service Docker-Compose uses the parent directory and the service name to name the running container.
+- service name conflicts – when starting a service, Docker-Compose uses the parent directory and the service name to name the running container.
   If you have two clones named `aquarium` and run both at the same time, you will have name conflicts.
   The simplest solution is to name the clone directories differently.
 - docker image name conflicts – images are managed system wide, so if you have two clones and are working with two v3 versions simultaneously the image built by each will have the same name as the other.
@@ -251,7 +252,7 @@ There are scenarios where you might need to run an instance of v2 and v3.
 
 2. Until v3 is complete, you will likely want to run either `master` or `staging`.
    If using `staging`, checkout that branch `git checkout staging`.
-   The highest numbered `v2.x` will also be the most recent v2 release.
+   The highest numbered `aq_2.x` branch will also be the most recent v2 release.
 
 3. Edit the `legacy-aquarium/.env` file and set `APP_PUBLIC_PORT`, `S3_PUBLIC_PORT` and `EXTERNAL_DB_PORT` so they do not conflict with the values of the following variables in the `aquarium/.env` file:
    `FRONTEND_PUBLIC_PORT`,
