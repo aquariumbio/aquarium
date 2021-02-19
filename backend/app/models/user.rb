@@ -16,10 +16,10 @@ class User < ActiveRecord::Base
     User.select("id, name, login, created_at, permission_ids").order(:name)
   end
 
-  # Return all users beginning with fitst letter l ('*' as non-alphanumeric wildcard).
+  # Return all users beginning with first letterl ('*' as non-alphanumeric wildcard).
   #
-  # @return all users beginning with fitst letter l ('*' as non-alphanumeric wildcard)
-  def self.find_letter(l)
+  # @return all users beginning with first letterl ('*' as non-alphanumeric wildcard)
+  def self.find_by_first_letter(l)
     if l == "*"
       sql = "select id, name, login, created_at, permission_ids from users where (name regexp '^[^a-zA-Z].*') order by name"
     else

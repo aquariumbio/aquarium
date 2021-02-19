@@ -64,7 +64,7 @@ module Api
 
         # Get budgets
         letter = Input.letter(params[:letter])
-        budgets = letter ? Budget.find_letter(letter) : Budget.find_all
+        budgets = letter ? Budget.find_by_first_letter(letter) : Budget.find_all
 
         render json: { budgets: budgets }.to_json, status: :ok
       end

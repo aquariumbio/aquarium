@@ -64,7 +64,7 @@ module Api
 
         # Get users
         letter = Input.letter(params[:letter])
-        users = letter ? User.find_letter(letter) : User.find_all
+        users = letter ? User.find_by_first_letter(letter) : User.find_all
 
         render json: { users: users }.to_json, status: :ok
       end

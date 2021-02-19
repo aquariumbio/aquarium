@@ -10,10 +10,10 @@ class Group < ActiveRecord::Base
     Group.order(:name)
   end
 
-  # Return all groups beginning with fitst letter l ('*' as non-alphanumeric wildcard).
+  # Return all groups beginning with first letterl ('*' as non-alphanumeric wildcard).
   #
-  # @return all groups beginning with fitst letter l ('*' as non-alphanumeric wildcard)
-  def self.find_letter(l)
+  # @return all groups beginning with first letterl ('*' as non-alphanumeric wildcard)
+  def self.find_by_first_letter(l)
     if l == "*"
       sql = "select * from groups where (name regexp '^[^a-zA-Z].*') order by name"
     else

@@ -65,7 +65,7 @@ module Api
 
         # Get groups
         letter = Input.letter(params[:letter])
-        groups = letter ? Group.find_letter(letter) : Group.find_all
+        groups = letter ? Group.find_by_first_letter(letter) : Group.find_all
 
         render json: { groups: groups }.to_json, status: :ok
       end
