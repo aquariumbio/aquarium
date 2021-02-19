@@ -21,9 +21,9 @@
         "cypress"
     ],
     "rules": {
-        "jsx-quotes": ["error", "prefer-double"],
+        "jsx-quotes": ["warn", "prefer-double"],
         "import/no-extraneous-dependencies": [
-          "error",
+          "warn",
           {
             "devDependencies": true,
             "optionalDependencies": false,
@@ -32,10 +32,23 @@
         ],
         "no-unused-expressions": [0, { "extensions": ["*spec.js"] }],
         "react/jsx-filename-extension": [0, { "extensions": ["*spec.js"] }],
-        "react/jsx-one-expression-per-line": "off",
+        "react/jsx-one-expression-per-line": "warn",
         "no-debugger": "warn",
         "no-console": "warn",
         "no-unused-vars": "warn",
-        "object-curly-newline": "off"
+        "object-curly-newline": "warn",
+        "react/require-default-props": [0],
+        "no-useless-return": "warn",
+        "operator-linebreak":["warn", "after",
+            {
+                "overrides": {
+                    "?": "before",
+                    ":": "before"
+                }
+            }],
+        "comma-dangle": "warn",
+        "vars-on-top": "off",
+        "prefer-destructuring": "warn"
+
     }
 }

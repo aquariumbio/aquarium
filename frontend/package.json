@@ -10,6 +10,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.21.0",
+    "jquery": "^3.5.1",
     "pluralize": "^8.0.0",
     "prop-types": "^15.7.2",
     "react": "^16.14.0",
