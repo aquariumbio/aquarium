@@ -1,4 +1,11 @@
 {
-  "pluginsFile": false,
-  "supportFile": false
+  "baseUrl": "http://localhost:3000",
+  "env": {
+    "apiUrl": "http://localhost:3001/api/v3"
+  },
+  "reporter": "junit",
+  "reporterOptions": {
+    "mochaFile": "cypress/results/output.xml"
+  },
+  "viewportWidth": 1280
 }
