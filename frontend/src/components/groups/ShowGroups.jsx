@@ -148,12 +148,12 @@ const ShowGroups = ({ groups }) => {
             </Typography>
             <Typography className={classes.flexColAuto}>
               {/* TODO: change to iconButton when available */}
-              <Link component={RouterLink} to={`/groups/${group.id}/edit`}>Edit</Link>
+              <Link data-cy={`edit_${group.id}`} component={RouterLink} to={`/groups/${group.id}/edit`}>Edit</Link>
             </Typography>
             <Typography className={classes.flexColAuto}>
               {/* TODO: change to iconButton when available */}
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <Link className={classes.spanLink} onClick={() => handleDelete(group)}>Delete</Link>
+              <Link data-cy={`delete_${group.id}`} className={classes.spanLink} onClick={() => handleDelete(group)}>Delete</Link>
             </Typography>
           </div>
         ))}

@@ -78,6 +78,7 @@ const UserProfilePage = ({ setIsLoading, setAlertProps, match }) => {
                 <ListItem
                   button
                   key="information"
+                  data-cy="information"
                   selected="true"
                   onClick={(event) => setCurrentPage('information')}
                 >
@@ -87,6 +88,7 @@ const UserProfilePage = ({ setIsLoading, setAlertProps, match }) => {
                 <ListItem
                   button
                   key="statistics"
+                  data-cy="statistics"
                   selected={null}
                   onClick={() => setCurrentPage('statistics')}
                 >
@@ -96,6 +98,7 @@ const UserProfilePage = ({ setIsLoading, setAlertProps, match }) => {
                 <ListItem
                   button
                   key="preferences"
+                  data-cy="preferences"
                   selected={null}
                   onClick={() => setCurrentPage('preferences')}
                 >
@@ -105,6 +108,7 @@ const UserProfilePage = ({ setIsLoading, setAlertProps, match }) => {
                 <ListItem
                   button
                   key="memberships"
+                  data-cy="memberships"
                   selected={null}
                   onClick={() => setCurrentPage('memberships')}
                 >
@@ -114,6 +118,7 @@ const UserProfilePage = ({ setIsLoading, setAlertProps, match }) => {
                 <ListItem
                   button
                   key="password"
+                  data-cy="password"
                   selected={null}
                   onClick={() => setCurrentPage('password')}
                 >
@@ -123,6 +128,7 @@ const UserProfilePage = ({ setIsLoading, setAlertProps, match }) => {
                 <ListItem
                   button
                   key="lab_agreement"
+                  data-cy="lab_agreement"
                   selected={null}
                   onClick={() => setCurrentPage('lab_agreement')}
                 >
@@ -132,6 +138,7 @@ const UserProfilePage = ({ setIsLoading, setAlertProps, match }) => {
                 <ListItem
                   button
                   key="aquarium_agreement"
+                  data-cy="aquarium_agreement"
                   selected={null}
                   onClick={() => setCurrentPage('aquarium_agreement')}
                 >

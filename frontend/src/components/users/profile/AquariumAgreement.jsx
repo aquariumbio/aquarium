@@ -69,7 +69,7 @@ const AquariumAgreement = ({ setIsLoading, setAlertProps, id }) => {
     // success
     const user = response.user;
     setUserName(user.name);
-    setAquariumAgreement(user.aquarium_agreement === 1 || user.aquarium_agreement === 'true');
+    setAquariumAgreement(user.aquarium_agreement === '1' || user.aquarium_agreement === 'true');
   };
 
   useEffect(() => {
@@ -147,7 +147,7 @@ const AquariumAgreement = ({ setIsLoading, setAlertProps, id }) => {
 AquariumAgreement.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
   setAlertProps: PropTypes.func,
-  id: PropTypes.func.isRequired,
+  id: PropTypes.isRequired,
 };
 
 export default AquariumAgreement;

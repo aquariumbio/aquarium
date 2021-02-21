@@ -155,7 +155,7 @@ const ShowUsers = ({ users, setIsLoading, setAlertProps, permissionsList, curren
           <div className={`${classes.flex} ${classes.flexRow}`} key={`object_${user.id}`}>
             <Typography className={classes.flexCol1}>
               {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
-              <Link className={classes.pointer} onClick={() => history.push(`/users/${user.id}/profile`)}>{user.name}</Link>
+              <Link data-cy={`show_${user.id}`} className={classes.pointer} onClick={() => history.push(`/users/${user.id}/profile`)}>{user.name}</Link>
             </Typography>
             <Typography className={classes.flexCol1}>
               {user.login}
@@ -166,10 +166,10 @@ const ShowUsers = ({ users, setIsLoading, setAlertProps, permissionsList, curren
             <Typography className={classes.flexCol1}>
               {user.permission_ids.indexOf(`.${keyRetired}.`) === -1 ? (
                 /* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */
-                <Link className={classes.pointer} onClick={() => toggleRetire(user, keyRetired, 'on')}>retire</Link>
+                <Link data-cy={`retire_${user.id}`} className={classes.pointer} onClick={() => toggleRetire(user, keyRetired, 'on')}>retire</Link>
               ) : (
                 /* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */
-                <Link className={classes.pointer} onClick={() => toggleRetire(user, keyRetired, 'off')}>un-retire</Link>
+                <Link data-cy={`retire_${user.id}`} className={classes.pointer} onClick={() => toggleRetire(user, keyRetired, 'off')}>un-retire</Link>
               )}
             </Typography>
           </div>

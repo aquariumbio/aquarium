@@ -118,7 +118,7 @@ const Memberships = ({ setIsLoading, setAlertProps, id }) => {
 Memberships.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
   setAlertProps: PropTypes.func,
-  id: PropTypes.func.isRequired,
+  id: PropTypes.isRequired,
 };
 
 export default Memberships;

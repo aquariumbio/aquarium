@@ -160,7 +160,7 @@ const Preferences = ({ setIsLoading, setAlertProps, id }) => {
         <form id="information-form" name="information-form" data-cy="information-form" onSubmit={handleSubmit}>
           <FormGroup>
             <FormControlLabel
-              control={<Switch checked={samplesPrivate} onChange={toggleChecked} />}
+              control={<Switch data-cy="privatetoggle" checked={samplesPrivate} onChange={toggleChecked} />}
               label="Make new samples private"
             />
           </FormGroup>
@@ -211,7 +211,7 @@ const Preferences = ({ setIsLoading, setAlertProps, id }) => {
 Preferences.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
   setAlertProps: PropTypes.func,
-  id: PropTypes.func.isRequired,
+  id: PropTypes.isRequired,
 };
 
 export default Preferences;

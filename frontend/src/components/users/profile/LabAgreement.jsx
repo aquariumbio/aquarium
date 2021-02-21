@@ -69,7 +69,7 @@ const LabAgreement = ({ setIsLoading, setAlertProps, id }) => {
     // success
     const user = response.user;
     setUserName(user.name);
-    setLabAgreement(user.lab_agreement === 1 || user.lab_agreement === 'true');
+    setLabAgreement(user.lab_agreement === '1' || user.lab_agreement === 'true');
   };
 
   useEffect(() => {
@@ -146,7 +146,7 @@ const LabAgreement = ({ setIsLoading, setAlertProps, id }) => {
 LabAgreement.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
   setAlertProps: PropTypes.func,
-  id: PropTypes.func.isRequired,
+  id: PropTypes.isRequired,
 };
 
 export default LabAgreement;

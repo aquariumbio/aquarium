@@ -142,7 +142,7 @@ const GroupForm = ({ setIsLoading, setAlertProps, match }) => {
             <u>{groupName}</u>
           </Typography>
           <Typography variant="h2" align="center" className={classes.title}>
-            Editing Group {id}
+            Edit Group {id}
           </Typography>
         </>
       ) : (

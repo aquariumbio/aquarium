@@ -188,7 +188,7 @@ const Password = ({ setIsLoading, setAlertProps, id }) => {
 Password.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
   setAlertProps: PropTypes.func,
-  id: PropTypes.func.isRequired,
+  id: PropTypes.isRequired,
 };
 
 export default Password;
