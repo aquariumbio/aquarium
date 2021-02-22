@@ -171,7 +171,7 @@ const WizardForm = ({ setIsLoading, setAlertProps, match }) => {
             <u>{wizardName}</u>
           </Typography>
           <Typography variant="h2" align="center" className={classes.title}>
-            Editing Wizard {id}
+            Edit Wizard {id}
           </Typography>
         </>
       ) : (

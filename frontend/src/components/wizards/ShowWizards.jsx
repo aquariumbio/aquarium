@@ -141,12 +141,12 @@ const ShowWizards = ({ wizards }) => {
             </Typography>
 
             <Typography className={classes.flexColAuto}>
-              <Link component={RouterLink} to={`/wizards/${wizard.id}/edit`}>Edit</Link>
+              <Link data-cy={`edit_${wizard.id}`} component={RouterLink} to={`/wizards/${wizard.id}/edit`}>Edit</Link>
             </Typography>
 
             <Typography className={classes.flexColAuto}>
               {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
-              <Link className={classes.pointer} onClick={() => handleDelete(wizard)}>Delete</Link>
+              <Link data-cy={`delete_${wizard.id}`} className={classes.pointer} onClick={() => handleDelete(wizard)}>Delete</Link>
             </Typography>
           </div>
         ))}
