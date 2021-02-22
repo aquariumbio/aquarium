@@ -207,7 +207,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
             <u>{objectTypeName}</u>
           </Typography>
           <Typography variant="h2" align="center" className={classes.title}>
-            Editing Object Type {id}
+            Edit Object Type {id}
           </Typography>
         </>
       ) : (
@@ -323,7 +323,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
           id="object-type-unit-input"
           onChange={(event) => setObjectTypeUnit(event.target.value)}
           variant="outlined"
-          type="number"
+          type="string"
           required
           inputProps={{
             'aria-label': 'object-type-unit-input',

@@ -56,6 +56,7 @@ const SideBar = ({ objectTypeHandlers, setCurrentObjectTypeHandler, setCurrentOb
               <ListItem
                 button
                 key={st.handler}
+                data-cy={`handler_${st.handler}`}
                 selected={selectedIndex === index}
                 onClick={(event) => handleListItemClick(event, index, st.handler)}
               >

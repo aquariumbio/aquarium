@@ -158,7 +158,7 @@ const ShowObjectTypesByHandler = ({ objectTypes, setIsLoading, setAlertProps }) 
           <div className={`${classes.flex} ${classes.flexRow}`} key={`object_${objectType.id}`}>
             <Typography className={classes.flexCol1}>
               {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
-              <Link className={classes.pointer} onClick={() => handleToggles(objectType.id, toggleIds, setToggleIds, triggerUpdate)}>{objectType.name}</Link>
+              <Link data-cy={`show_${objectType.id}`} className={classes.pointer} onClick={() => handleToggles(objectType.id, toggleIds, setToggleIds, triggerUpdate)}>{objectType.name}</Link>
             </Typography>
             <Typography className={classes.flexCol3}>
               {objectType.description}
@@ -194,12 +194,12 @@ const ShowObjectTypesByHandler = ({ objectTypes, setIsLoading, setAlertProps }) 
             </Typography>
 
             <Typography className={classes.flexColAuto}>
-              <Link component={RouterLink} to={`/object_types/${objectType.id}/edit`}>Edit</Link>
+              <Link data-cy={`edit_${objectType.id}`} component={RouterLink} to={`/object_types/${objectType.id}/edit`}>Edit</Link>
             </Typography>
 
             <Typography className={classes.flexColAuto}>
               {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
-              <Link className={classes.pointer} onClick={() => handleDelete(objectType.id)}>Delete</Link>
+              <Link data-cy={`delete_${objectType.id}`} className={classes.pointer} onClick={() => handleDelete(objectType.id)}>Delete</Link>
             </Typography>
           </div>
         ))}
