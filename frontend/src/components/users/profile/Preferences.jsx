@@ -78,7 +78,7 @@ const Preferences = ({ setIsLoading, setAlertProps, id }) => {
     const user = response.user;
     setUserName(user.name);
     setLabName(user.lab_name ? user.lab_name : '');
-    setSamplesPrivate(user.new_samples_private === 1 || user.new_samples_private === 'true');
+    setSamplesPrivate(user.new_samples_private === '1' || user.new_samples_private === 'true');
   };
 
   useEffect(() => {
