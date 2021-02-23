@@ -108,8 +108,8 @@ describe('/users', () => {
 
     cy.visit(`/users/${thisId}/profile`);
     cy.get(`[data-cy="lab_agreement"]`).click().then(() => {
-      // wait 1 sec, there should be a better way to do this
-      cy.wait(1000)
+      // wait 3 sec, there should be a better way to do this
+      cy.wait(3000)
 
       cy.get(`[data-cy="agree"]`).click().then(() => {
         cy.wait('@labagreement').should(({ request, response }) => {
@@ -125,8 +125,8 @@ describe('/users', () => {
 
     cy.visit(`/users/${thisId}/profile`);
     cy.get(`[data-cy="aquarium_agreement"]`).click().then(() => {
-      // wait 1 sec, there should be a better way to do this
-      cy.wait(1000)
+      // wait 3 sec, there should be a better way to do this
+      cy.wait(3000)
 
       cy.get(`[data-cy="agree"]`).click().then(() => {
         cy.wait('@aquariumagreement').should(({ request, response }) => {
