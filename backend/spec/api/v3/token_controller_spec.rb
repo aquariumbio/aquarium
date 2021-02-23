@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe Api::V3::TokenController, type: :request do
   describe 'api' do
-
     # Initialize @token_1 to store tokens
     before :all do
       @create_url = "/api/v3/token/create"
@@ -88,6 +87,5 @@ RSpec.describe Api::V3::TokenController, type: :request do
       get "/api/v3/token/get_user?token=#{@token_1[2]}"
       expect(response).to have_http_status 401
     end
-
   end
 end

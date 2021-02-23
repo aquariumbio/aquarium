@@ -1,6 +1,5 @@
 # typed: false
 class UserProfiles < ActiveRecord::Migration[4.2]
-
   def change
     # backup parameters table
     execute <<-SQL
@@ -67,8 +66,7 @@ class UserProfiles < ActiveRecord::Migration[4.2]
       alter table parameters drop user_id
     SQL
 
-    add_index       :user_profiles, :user_id                     if !index_exists?(:user_profiles, :user_id)
-    add_foreign_key :user_profiles, :users,  on_delete: :cascade rescue nil
+    add_index       :user_profiles, :user_id if !index_exists?(:user_profiles, :user_id)
+    add_foreign_key :user_profiles, :users, on_delete: :cascade rescue nil
   end
-
 end

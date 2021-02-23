@@ -89,7 +89,7 @@ module Api
 
         # Get handlers
         handlers = ObjectType.find_handlers
-        render json: { object_types: [ ] }.to_json, status: :ok and return if handlers.length == 0
+        render json: { object_types: [] }.to_json, status: :ok and return if handlers.length == 0
 
         # Get objects of first item in list
         object_types = ObjectType.find_by_handler(handlers[0].handler)
@@ -361,7 +361,6 @@ module Api
         object_type = ObjectType.find_id(id)
         render json: { object_type: nil }.to_json, status: :not_found and return if !object_type
 
-
         # Read object type parameter
         params_object_type = params[:object_type] || {}
 
@@ -406,7 +405,6 @@ module Api
           message: "Object type deleted"
         }.to_json, status: :ok
       end
-
     end
   end
 end

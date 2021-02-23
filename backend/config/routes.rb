@@ -15,9 +15,7 @@
 #
 # In all cases where a token is passed, the :token is passed as a parameter so it is not in the url
 
-
 Rails.application.routes.draw do
-
   # Tokens
   post 'api/v3/token/create',                      to: 'api/v3/token#create'
   post 'api/v3/token/delete',                      to: 'api/v3/token#delete'
@@ -95,6 +93,4 @@ Rails.application.routes.draw do
   get  'api/v3/wizards/:id',                       to: 'api/v3/wizards#show'
   post 'api/v3/wizards/:id/update',                to: 'api/v3/wizards#update'
   post 'api/v3/wizards/:id/delete',                to: 'api/v3/wizards#delete'
-
 end
-

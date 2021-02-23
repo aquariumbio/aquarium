@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe Api::V3::UsersController, type: :request do
   describe 'api' do
-
     # Sign in users
     before :all do
       @create_url = "/api/v3/token/create"
@@ -166,7 +165,7 @@ RSpec.describe Api::V3::UsersController, type: :request do
           "name": "  ",
           "login": "  ",
           "password": "a 1",
-          "permission_ids": [ 1, 2, 99 ]
+          "permission_ids": [1, 2, 99]
         }
       }
       post "/api/v3/users/create?token=#{@token_1[0]}", :params => params
@@ -175,10 +174,10 @@ RSpec.describe Api::V3::UsersController, type: :request do
       # Check errors
       response_body = JSON.parse(response.body)
       errors = response_body["errors"]
-      expect(errors["name"]).to eq [ "can't be blank" ]
-      expect(errors["login"]).to eq [ "can't be blank" ]
-      expect(errors["password"]).to eq [ "password must be at least 10 characters", "passsword cannot contain spaces or invisible characters" ]
-      expect(errors["permission_ids"]).to eq [ "Permission_id 99 is invalid" ]
+      expect(errors["name"]).to eq ["can't be blank"]
+      expect(errors["login"]).to eq ["can't be blank"]
+      expect(errors["password"]).to eq ["password must be at least 10 characters", "password cannot contain spaces or invisible characters"]
+      expect(errors["permission_ids"]).to eq ["Permission_id 99 is invalid"]
     end
 
     # Create user
@@ -262,8 +261,8 @@ RSpec.describe Api::V3::UsersController, type: :request do
       # Check errors
       response_body = JSON.parse(response.body)
       errors = response_body["errors"]
-      expect(errors["name"]).to eq [ "can't be blank" ]
-      expect(errors["email"]).to eq [ "invalid email" ]
+      expect(errors["name"]).to eq ["can't be blank"]
+      expect(errors["email"]).to eq ["invalid email"]
     end
 
     # update user info
@@ -339,7 +338,7 @@ RSpec.describe Api::V3::UsersController, type: :request do
     it "update_user_permissions_errors" do
       params = {
         user: {
-          "permission_ids": [ 1, 2, 6, 99 ]
+          "permission_ids": [1, 2, 6, 99]
         }
       }
       post "/api/v3/users/#{@user_ids[0]}/update_permissions?token=#{@token_1[0]}", :params => params
@@ -348,14 +347,14 @@ RSpec.describe Api::V3::UsersController, type: :request do
       # Check errors
       response_body = JSON.parse(response.body)
       errors = response_body["errors"]
-      expect(errors["permission_ids"]).to eq [ "Permission_id 99 is invalid" ]
+      expect(errors["permission_ids"]).to eq ["Permission_id 99 is invalid"]
     end
 
     # update self permissions with errors
     it "update_self_permissions_errors" do
       params = {
         user: {
-          "permission_ids": [ 1, 2, 6, 99 ]
+          "permission_ids": [1, 2, 6, 99]
         }
       }
       post "/api/v3/users/1/update_permissions?token=#{@token_1[0]}", :params => params
@@ -364,14 +363,14 @@ RSpec.describe Api::V3::UsersController, type: :request do
       # Check errors
       response_body = JSON.parse(response.body)
       errors = response_body["errors"]
-      expect(errors["permission_ids"]).to eq [ "Cannot set retired for self", "Permission_id 99 is invalid" ]
+      expect(errors["permission_ids"]).to eq ["Cannot set retired for self", "Permission_id 99 is invalid"]
     end
 
     # update user permissions
     it "update_user_permissions" do
       params = {
         user: {
-          "permission_ids": [ 1, 2, 6 ]
+          "permission_ids": [1, 2, 6]
         }
       }
       post "/api/v3/users/#{@user_ids[0]}/update_permissions?token=#{@token_1[0]}", :params => params

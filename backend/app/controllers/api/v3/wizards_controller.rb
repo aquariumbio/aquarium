@@ -65,7 +65,7 @@ module Api
 
         # Get wizards
         letter = Input.letter(params[:letter])
-        wizards = letter ? Wizard.find_letter(letter) : Wizard.find_all
+        wizards = letter ? Wizard.find_by_first_letter(letter) : Wizard.find_all
 
         render json: { wizards: wizards }.to_json, status: :ok
       end
@@ -233,7 +233,6 @@ module Api
 
         render json: { message: "Wizard deleted" }.to_json, status: :ok
       end
-
     end
   end
 end

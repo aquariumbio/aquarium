@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe Api::V3::WizardsController, type: :request do
   describe 'api' do
-
     # Sign in users
     before :all do
       @token_1 = []
@@ -137,6 +136,5 @@ RSpec.describe Api::V3::WizardsController, type: :request do
       post "/api/v3/wizards/#{@wizard_ids[0]}/delete?token=#{@token_1[0]}"
       expect(response).to have_http_status 200
     end
-
   end
 end

@@ -1,6 +1,5 @@
 # sample_types table
 class SampleType < ActiveRecord::Base
-
   validates :name,        presence: true, uniqueness: { case_sensitive: false }
   validates :description, presence: true
 
@@ -46,7 +45,7 @@ class SampleType < ActiveRecord::Base
         "
         allowable_field_types = AllowableFieldType.find_by_sql sql
 
-        ft = ft.update( {allowable_field_types: allowable_field_types} )
+        ft = ft.update({ allowable_field_types: allowable_field_types })
       end
     end
 
@@ -150,5 +149,4 @@ class SampleType < ActiveRecord::Base
 
     return true
   end
-
 end

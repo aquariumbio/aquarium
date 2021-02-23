@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe Api::V3::BudgetsController, type: :request do
   describe 'api' do
-
     # Sign in users
     before :all do
       @token_1 = []
@@ -112,6 +111,5 @@ RSpec.describe Api::V3::BudgetsController, type: :request do
       expect(budget["email"]).to eq "update email"
       expect(budget["phone"]).to eq "update phone"
     end
-
   end
 end

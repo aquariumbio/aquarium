@@ -1,6 +1,5 @@
 # budgets table
 class Budget < ActiveRecord::Base
-
   validates :name,        presence: true
   validates :description, presence: true
   validates :contact,     presence: true
@@ -14,10 +13,10 @@ class Budget < ActiveRecord::Base
     Budget.order(:name)
   end
 
-  # Return all budgets beginning with fitst letter l ('*' as non-alphanumeric wildcard).
+  # Return all budgets beginning with first letter l ('*' as non-alphanumeric wildcard).
   #
-  # @return all budgets beginning with fitst letter l ('*' as non-alphanumeric wildcard)
-  def self.find_letter(l)
+  # @return all budgets beginning with first letter l ('*' as non-alphanumeric wildcard)
+  def self.find_by_first_letter(l)
     if l == "*"
       sql = "select * from budgets where (name regexp '^[^a-zA-Z].*') order by name"
     else
@@ -99,5 +98,4 @@ class Budget < ActiveRecord::Base
 
     return self, false
   end
-
 end

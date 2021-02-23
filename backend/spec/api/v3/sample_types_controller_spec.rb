@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe Api::V3::SampleTypesController, type: :request do
   describe 'api' do
-
     # Sign in users
     before :all do
       @create_url = "/api/v3/token/create"
@@ -23,7 +22,6 @@ RSpec.describe Api::V3::SampleTypesController, type: :request do
       expect(response_body["errors"]["name"]).to eq ["can't be blank"]
       expect(response_body["errors"]["description"]).to eq ["can't be blank"]
     end
-
 
     # CRUD tests
     # TODO: Break this up into separate tests (the way it is done for object types)
