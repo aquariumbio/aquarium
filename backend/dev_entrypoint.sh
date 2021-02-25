@@ -31,13 +31,13 @@ _clean_up_stray_server() {
 # Starts the develoment server.
 _start_development_server() {
     echo "Starting development Rails server"
-    exec rails server -e development -p 3001 -b '0.0.0.0'
+    exec rails server -e development -p 3000 -b '0.0.0.0'
 }
 
 # Starts server with test environment for end-to-end testing
 _start_test_server() {
     echo "Starting test Rails server"
-    exec rails server -e test -p 3001 -b '0.0.0.0'
+    exec rails server -e test -p 3000 -b '0.0.0.0'
 }
 
 _main() {
