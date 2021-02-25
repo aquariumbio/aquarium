@@ -74,7 +74,7 @@ describe('/object_types', () => {
   });
 
   // edit the object_type
-  it('new object_type page', () => {
+  it('edit object_type page', () => {
     cy.intercept('POST', `http://localhost:3001/api/v3/object_types/${thisId}/update`).as('editobject_type')
 
     cy.visit(`/object_types/${thisId}/edit`);

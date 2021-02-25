@@ -81,7 +81,8 @@ describe('/users', () => {
     cy.intercept('POST', `http://localhost:3001/api/v3/users/${thisId}/preferences`).as('preferences')
 
     cy.visit(`/users/${thisId}/profile`);
-
+    // wait 1 sec, there should be a better way to do this
+    cy.wait(1000)
     cy.get(`[data-cy="preferences"]`).click().then(() => {
       // wait 1 sec, there should be a better way to do this
       cy.wait(1000)
@@ -107,9 +108,11 @@ describe('/users', () => {
     cy.intercept('POST', `http://localhost:3001/api/v3/users/${thisId}/agreements/lab_agreement`).as('labagreement')
 
     cy.visit(`/users/${thisId}/profile`);
+    // wait 1 sec, there should be a better way to do this
+    cy.wait(1000)
     cy.get(`[data-cy="lab_agreement"]`).click().then(() => {
-      // wait 3 sec, there should be a better way to do this
-      cy.wait(3000)
+      // wait 1 sec, there should be a better way to do this
+      cy.wait(1000)
 
       cy.get(`[data-cy="agree"]`).click().then(() => {
         cy.wait('@labagreement').should(({ request, response }) => {
@@ -124,9 +127,11 @@ describe('/users', () => {
     cy.intercept('POST', `http://localhost:3001/api/v3/users/${thisId}/agreements/aquarium_agreement`).as('aquariumagreement')
 
     cy.visit(`/users/${thisId}/profile`);
+    // wait 1 sec, there should be a better way to do this
+    cy.wait(1000)
     cy.get(`[data-cy="aquarium_agreement"]`).click().then(() => {
-      // wait 3 sec, there should be a better way to do this
-      cy.wait(3000)
+      // wait 1 sec, there should be a better way to do this
+      cy.wait(1000)
 
       cy.get(`[data-cy="agree"]`).click().then(() => {
         cy.wait('@aquariumagreement').should(({ request, response }) => {
