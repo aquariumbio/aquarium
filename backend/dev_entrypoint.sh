@@ -34,6 +34,12 @@ _start_development_server() {
     exec rails server -e development -p 3001 -b '0.0.0.0'
 }
 
+# Starts server with test environment for end-to-end testing
+_start_test_server() {
+    echo "Starting test Rails server"
+    exec rails server -e test -p 3001 -b '0.0.0.0'
+}
+
 _main() {
     echo "Running aquarium entrypoint script with arguments: $*"
 
@@ -42,6 +48,8 @@ _main() {
 
     if [ $1 = "development" ]; then
         _start_development_server
+    elif [ $1 = "test" ]; then
+        _start_test_server
     else
         # If the normal image startup flags were not given as arguments,
         # then exec whatever arguments were given

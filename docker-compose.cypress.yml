@@ -5,9 +5,9 @@
       build: ./end2end
       container_name: cypress
       depends_on: 
-        - frontend
+        - frontend_test
       environment:
-        - CYPRESS_BASE_URL=http://frontend:${FRONTEND_PUBLIC_PORT}
+        - CYPRESS_BASE_URL=http://frontend_test:${FRONTEND_TEST_PORT:-3001}
       command: npx cypress run
       volumes:
         - ./end2end:/app
