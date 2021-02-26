@@ -24,7 +24,7 @@ describe('Sample Types', () => {
       cy.url().should('eq', `${Cypress.config().baseUrl}/sample_types/new`);
     });
 
-    it.only('edit button is disabled when no sample types', () => {
+    it('edit button is disabled when no sample types', () => {
       cy.intercept(
         'GET',
         `${Cypress.env('apiUrl')}/sample_types`,

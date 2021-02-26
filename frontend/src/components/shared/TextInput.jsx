@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes, { object, string } from 'prop-types';
+import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core';
 
@@ -11,11 +11,11 @@ const useStyles = makeStyles((theme) => ({
 
 const TextInput = ({
   name,
-  testName,
-  onChange,
+  testName = name,
+  handleChange,
   value,
   required = false,
-  type = string,
+  type = 'text',
   autoFocus = false,
 }) => {
   const classes = useStyles();
@@ -24,12 +24,13 @@ const TextInput = ({
     <TextField
       name={name}
       key={name}
-      value={value}
-      onChange={(event) => onChange(event)}
+      defaultValue={value}
+      onBlur={handleChange}
       type={type}
       inputProps={{
         'aria-label': name,
         'data-cy': testName,
+        'data-testid': testName,
       }}
       required={required}
       fullWidth
@@ -42,9 +43,9 @@ const TextInput = ({
 
 TextInput.propTypes = {
   name: PropTypes.string.isRequired,
-  testName: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  value: PropTypes.oneOfType([string, object]).isRequired,
+  testName: PropTypes.string,
+  handleChange: PropTypes.func.isRequired,
+  value: PropTypes.string.isRequired,
   required: PropTypes.bool,
   type: PropTypes.string,
   autoFocus: PropTypes.bool,

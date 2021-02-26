@@ -11,18 +11,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LoadingBackdrop = ({ isLoading }) => {
+const LoadingSpinner = ({ isLoading }) => {
   const classes = useStyles();
 
   return (
-    <Backdrop className={classes.backdrop} open={isLoading} data-cy="ladoing-backdrop">
+    <Backdrop
+      className={classes.backdrop}
+      open={isLoading}
+      data-testid="loading"
+      role="progressbar"
+      aria-busy={isLoading}
+    >
       <CircularProgress color="inherit" />
     </Backdrop>
   );
 };
 
-LoadingBackdrop.propTypes = {
+LoadingSpinner.propTypes = {
   isLoading: PropTypes.bool.isRequired,
 };
 
-export default LoadingBackdrop;
+export default LoadingSpinner;

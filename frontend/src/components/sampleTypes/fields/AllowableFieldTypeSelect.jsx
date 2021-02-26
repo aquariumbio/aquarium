@@ -8,8 +8,8 @@ const AllowableFieldTypeSelect = ({
   sampleTypes, handleChange, fieldTypeIndex, fieldType,
 }) => (
   <>
-    {!!fieldType.allowable_field_types
-        && fieldType.allowable_field_types.map((aft, index) => (
+    {!!fieldType.allowable_field_types &&
+        fieldType.allowable_field_types.map((aft, index) => (
           <div style={{ display: 'block' }} key={utils.randString()}>
             <Select
               style={{ width: 250 }}

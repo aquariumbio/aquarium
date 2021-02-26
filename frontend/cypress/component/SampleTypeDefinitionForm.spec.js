@@ -2,7 +2,7 @@
 import React from 'react';
 import { mount } from '@cypress/react';
 import { MemoryRouter } from 'react-router-dom';
-import SampleTypeDefinitionForm from '../../src/components/sampleTypes/SampeTypeDefinitionForm';
+import SampleTypeDefinitionForm from '../../src/components/sampleTypes/SampeTypeForm';
 
 describe('Sample Type Definition Form', () => {
   describe('New', () => {

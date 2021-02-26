@@ -6,8 +6,9 @@
     },
     "extends": [
         "plugin:react/recommended",
+        "plugin:cypress/recommended",
         "airbnb",
-        "plugin:cypress/recommended"
+        "prettier"
     ],
     "parserOptions": {
         "ecmaFeatures": {
@@ -32,7 +33,7 @@
         ],
         "no-unused-expressions": [0, { "extensions": ["*spec.js"] }],
         "react/jsx-filename-extension": [0, { "extensions": ["*spec.js"] }],
-        "react/jsx-one-expression-per-line": "warn",
+        "react/jsx-one-expression-per-line": 0,
         "no-debugger": "warn",
         "no-console": "warn",
         "no-unused-vars": "warn",

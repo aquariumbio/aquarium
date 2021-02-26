@@ -1,25 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
+import TextInput from '../../shared/TextInput';
 
-const NameInput = ({ name, handleChange }) => (
+const NameInput = ({ name, handleChange, value }) => (
   <Grid item lg={2} data-cy="field-name-input-div">
-    <TextField
-      name="name"
-      fullWidth
-      value={name}
-      onChange={handleChange}
-      variant="outlined"
-      inputProps={{
-        'aria-label': 'field-name',
-        'data-cy': 'field-name-input',
-      }}
-    />
+    <TextInput name={name} value={value} handleChange={handleChange} />
   </Grid>
 );
 NameInput.propTypes = {
   name: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
 };
 

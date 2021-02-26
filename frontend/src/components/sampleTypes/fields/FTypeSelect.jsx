@@ -10,7 +10,7 @@ const FTypeSelect = ({ handleChange, ftype }) => (
       name="ftype"
       labelId="type-select-label"
       variant="outlined"
-      value={ftype}
+      defaultValue={ftype}
       onChange={handleChange}
       displayEmpty
       data-cy="ftype-select" // Clickable DOM element

@@ -14,7 +14,7 @@ const SampleOptionsInput = ({
   index,
 }) => (
   <Grid item lg={2} data-cy="samples-div">
-    {showSampleSelect ? (
+    {showSampleSelect() ? (
       <>
         <AllowableFieldTypeSelect
           sampleTypes={sampleTypes}
@@ -41,7 +41,7 @@ SampleOptionsInput.propTypes = {
   handleChange: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   // allowableFieldTypes: PropTypes.array.isRequired,
-  showSampleSelect: PropTypes.bool.isRequired,
+  showSampleSelect: PropTypes.func.isRequired,
   handleAddClick: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   sampleTypes: PropTypes.array.isRequired,

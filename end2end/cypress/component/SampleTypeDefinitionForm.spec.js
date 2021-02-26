@@ -2,7 +2,7 @@
 import React from 'react';
 import { mount } from '@cypress/react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import SampleTypeDefinitionForm from '../../../frontend/src/components/sampleTypes/SampeTypeDefinitionForm';
+import SampleTypeDefinitionForm from '../../../frontend/src/components/sampleTypes/SampeTypeForm';
 
 describe('Sample Type Definition Form', () => {
   describe('New', () => {

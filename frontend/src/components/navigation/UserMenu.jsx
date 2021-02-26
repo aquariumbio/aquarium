@@ -7,7 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Divider from '@material-ui/core/Divider';
-import tokensAPI from '../../helpers/api/tokens';
+import tokensAPI from '../../helpers/api/tokensAPI';
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
