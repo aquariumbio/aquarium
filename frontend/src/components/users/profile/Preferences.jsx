@@ -196,7 +196,7 @@ const Preferences = ({ setIsLoading, setAlertProps, id }) => {
 
           <StandardButton
             name="save"
-            testName="save-group"
+            testName="save"
             handleClick={handleSubmit}
             text="Save"
             type="submit"

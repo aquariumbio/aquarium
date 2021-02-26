@@ -62,17 +62,42 @@ describe('/users', () => {
     cy.intercept('POST', `http://localhost:3001/api/v3/users/${thisId}/update_info`).as('updateprofile')
 
     cy.visit(`/users/${thisId}/profile`);
+
+    // type email
     cy.get('input[name="email"]')
       .type("test@test.com")
       .should("have.value", "test@test.com");
 
+    // type phone
+    cy.get('input[name="phone"]')
+      .type("8005551212")
+      .should("have.value", "8005551212");
+
+
+    // hit reset - value should reset
+    cy.get(`[data-cy=reset]`).click()
+    cy.get('input[name="email"]')
+      .should("have.value", "");
+    cy.get('input[name="phone"]')
+      .should("have.value", "");
+
+    // type email
+    cy.get('input[name="email"]')
+      .type("test@test.com")
+      .should("have.value", "test@test.com");
+
+    // type phone
     cy.get('input[name="phone"]')
       .type("8005551212")
       .should("have.value", "8005551212");
 
     cy.get("form").submit()
     cy.wait('@updateprofile').should(({ request, response }) => {
-      expect(response.statusCode).to.eq(200)
+      // values should have changed
+      cy.get('input[name="email"]')
+        .should("have.value", "test@test.com");
+      cy.get('input[name="phone"]')
+        .should("have.value", "8005551212");
     })
   });
 
@@ -84,21 +109,28 @@ describe('/users', () => {
     // wait 1 sec, there should be a better way to do this
     cy.wait(1000)
     cy.get(`[data-cy="preferences"]`).click().then(() => {
-      // wait 1 sec, there should be a better way to do this
-      cy.wait(1000)
-
+      // type lab name
       cy.get('input[name="lab_name"]')
         .type("my lab")
         .should("have.value", "my lab");
 
-      // cy and material do not play well together.
-      // clicking the element triggers the toggle twice, and removing the .click() does nothing
-      // but at least it triggers the toggle.
+      // hit reset - value should reset
+      cy.get(`[data-cy=reset]`).click()
+      cy.get('input[name="lab_name"]')
+        .should("have.value", "");
+
+      // type lab name
+      cy.get('input[name="lab_name"]')
+        .type("my lab")
+        .should("have.value", "my lab");
+      // click toggle
       cy.get(`[data-cy=privatetoggle]`).click()
 
       cy.get("form").submit()
       cy.wait('@preferences').should(({ request, response }) => {
-        expect(response.statusCode).to.eq(200)
+        // values should have changed
+        cy.get('input[name="lab_name"]')
+          .should("have.value", "my lab");
       })
     });
   });
@@ -111,12 +143,13 @@ describe('/users', () => {
     // wait 1 sec, there should be a better way to do this
     cy.wait(1000)
     cy.get(`[data-cy="lab_agreement"]`).click().then(() => {
-      // wait 1 sec, there should be a better way to do this
-      cy.wait(1000)
-
       cy.get(`[data-cy="agree"]`).click().then(() => {
         cy.wait('@labagreement').should(({ request, response }) => {
-          expect(response.statusCode).to.eq(200)
+          // check that agreement button disappears
+          cy.get(`[data-cy="agree"]`).should('not.exist');
+
+          // check that agreed on appears
+          cy.contains('agreed on')
         })
       });
     });
@@ -126,16 +159,17 @@ describe('/users', () => {
   it('aquarium agreement', () => {
     cy.intercept('POST', `http://localhost:3001/api/v3/users/${thisId}/agreements/aquarium_agreement`).as('aquariumagreement')
 
-    cy.visit(`/users/${thisId}/profile`);
+    cy.visit(`/users/${thisId}/profile`)
     // wait 1 sec, there should be a better way to do this
     cy.wait(1000)
     cy.get(`[data-cy="aquarium_agreement"]`).click().then(() => {
-      // wait 1 sec, there should be a better way to do this
-      cy.wait(1000)
-
       cy.get(`[data-cy="agree"]`).click().then(() => {
         cy.wait('@aquariumagreement').should(({ request, response }) => {
-          expect(response.statusCode).to.eq(200)
+          // check that agreement button disappears
+          cy.get(`[data-cy="agree"]`).should('not.exist');
+
+          // check that agreed on appears
+          cy.contains('agreed on')
         })
       });
     });

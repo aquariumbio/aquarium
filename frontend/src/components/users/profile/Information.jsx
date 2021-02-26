@@ -71,8 +71,8 @@ const Information = ({ setIsLoading, setAlertProps, id }) => {
     // success
     const user = response.user;
     setUserName(user.name);
-    setUserEmail(user.email);
-    setUserPhone(user.phone);
+    setUserEmail(user.email ? user.email : '');
+    setUserPhone(user.phone ? user.phone : '');
   };
 
   useEffect(() => {
