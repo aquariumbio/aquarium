@@ -56,7 +56,7 @@ module Api
       # @!method index(token)
       # @param token [String] a token
       def index
-         # Check for any permissions
+        # Check for any permissions
         status, response = check_token_for_permission
         render json: response.to_json, status: status.to_sym and return if response[:error]
 

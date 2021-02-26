@@ -6,6 +6,6 @@ FactoryBot.define do
     name { 'Factory' }
     login { 'factory' }
     password { 'password' }
-    permission_ids {'.1.'}
+    permission_ids { '.1.' }
   end
 end

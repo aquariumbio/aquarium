@@ -44,4 +44,3 @@ group :development do
   gem 'yard', '~> 0.9.25'
   gem 'yard-activerecord', '~> 0.0.16'
 end
-

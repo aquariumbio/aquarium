@@ -6,10 +6,10 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 Permission.create([
-  {id: 1, name: 'admin',   sort: 1},
-  {id: 2, name: 'manage',  sort: 2},
-  {id: 3, name: 'run',     sort: 3},
-  {id: 4, name: 'design',  sort: 4},
-  {id: 5, name: 'develop', sort: 5},
-  {id: 6, name: 'retired', sort: 6},
-])
+                    { id: 1, name: 'admin', sort: 1 },
+                    { id: 2, name: 'manage',  sort: 2 },
+                    { id: 3, name: 'run',     sort: 3 },
+                    { id: 4, name: 'design',  sort: 4 },
+                    { id: 5, name: 'develop', sort: 5 },
+                    { id: 6, name: 'retired', sort: 6 },
+                  ])
