@@ -141,7 +141,7 @@ const ShowGroups = ({ groups }) => {
         {groups.map((group) => (
           <div className={`${classes.flex} ${classes.flexRow}`} key={`object_${group.id}`}>
             <Typography className={classes.flexCol1}>
-              <Link component={RouterLink} to={`/groups/${group.id}/show`}>{group.name}</Link>
+              <Link data-cy={`show_${group.id}`} component={RouterLink} to={`/groups/${group.id}/show`}>{group.name}</Link>
             </Typography>
             <Typography className={classes.flexCol3}>
               {group.description}

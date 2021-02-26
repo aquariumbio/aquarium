@@ -37,10 +37,14 @@ describe('/groups', () => {
 
     cy.get("form").submit()
     cy.wait('@newgroup').should(({ request, response }) => {
-      expect(response.statusCode).to.eq(201)
+      // wait for up to 3 seconds for the page to load
+      cy.location('pathname', {timeout: 3000}).should('eq', `/groups`);
 
       // save the id of the group just created
       thisId = response.body.group['id']
+
+      // show group link should exist
+      cy.get(`[data-cy="show_${thisId}"]`).should('exist');
     })
   });
 
@@ -54,7 +58,7 @@ describe('/groups', () => {
   });
 
   // edit the group
-  it('new group page', () => {
+  it('edit group page', () => {
     cy.intercept('POST', `http://localhost:3001/api/v3/groups/${thisId}/update`).as('editgroup')
 
     cy.visit(`/groups/${thisId}/edit`);
@@ -69,7 +73,11 @@ describe('/groups', () => {
 
     cy.get("form").submit()
     cy.wait('@editgroup').should(({ request, response }) => {
-      expect(response.statusCode).to.eq(200)
+      // wait for up to 3 seconds for the page to load
+      cy.location('pathname', {timeout: 3000}).should('eq', `/groups`);
+
+      // show group link should exist
+      cy.get(`[data-cy="show_${thisId}"]`).should('exist');
     })
   });
 
@@ -80,6 +88,7 @@ describe('/groups', () => {
     cy.get(`[data-cy="delete_${thisId}"]`).click().then(() => {
       // wait for up to 3 seconds for the page to load
       cy.location('pathname', {timeout: 3000}).should('eq', `/groups`);
+
       // group should no longer exist
       cy.get(`[data-cy="delete_${thisId}"]`).should('not.exist');
     });

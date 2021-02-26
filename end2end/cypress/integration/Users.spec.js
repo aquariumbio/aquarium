@@ -41,7 +41,8 @@ describe('/users', () => {
 
     cy.get("form").submit()
     cy.wait('@newuser').should(({ request, response }) => {
-      expect(response.statusCode).to.eq(201)
+      // wait for up to 3 seconds for the page to load
+      cy.location('pathname', {timeout: 3000}).should('eq', `/users`);
 
       // save the id of the user just created
       thisId = response.body.user['id']
