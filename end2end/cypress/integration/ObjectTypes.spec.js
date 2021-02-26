@@ -52,10 +52,15 @@ describe('/object_types', () => {
 
     cy.get("form").submit()
     cy.wait('@newobject_type').should(({ request, response }) => {
-      expect(response.statusCode).to.eq(201)
+      // NOTE: per v2 you stay on the same page after creating a new object type.  This should probably be changed.
+      // wait for up to 3 seconds for the page to load
+      cy.location('pathname', {timeout: 3000}).should('eq', `/object_types/new`);
 
       // save the id of the object_type just created
       thisId = response.body.object_type['id']
+
+      // show group link should exist
+      // cy.get(`[data-cy="show_${thisId}"]`).should('exist');
     })
   });
 
@@ -89,7 +94,12 @@ describe('/object_types', () => {
 
     cy.get("form").submit()
     cy.wait('@editobject_type').should(({ request, response }) => {
-      expect(response.statusCode).to.eq(200)
+      // NOTE: per v2 you stay on the same page after creating a new object type.  This should probably be changed.
+      // wait for up to 3 seconds for the page to load
+      cy.location('pathname', {timeout: 3000}).should('eq', `/object_types/${thisId}/edit`);
+
+      // show group link should exist
+      // cy.get(`[data-cy="show_${thisId}"]`).should('exist');
     })
   });
 

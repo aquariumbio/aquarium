@@ -133,7 +133,7 @@ const ShowWizards = ({ wizards }) => {
           <div className={`${classes.flex} ${classes.flexRow}`} key={`object_${wizard.id}`}>
             <Typography className={classes.flexCol1}>
               {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
-              <Link className={classes.pointer} onClick={() => alert('wizard page')}>{wizard.name}</Link>
+              <Link data-cy={`show_${wizard.id}`} className={classes.pointer} onClick={() => alert('wizard page')}>{wizard.name}</Link>
             </Typography>
 
             <Typography className={classes.flexCol3}>

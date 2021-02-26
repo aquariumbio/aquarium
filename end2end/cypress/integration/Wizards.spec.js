@@ -40,10 +40,14 @@ describe('/wizards', () => {
 
     cy.get("form").submit()
     cy.wait('@newwizard').should(({ request, response }) => {
-      expect(response.statusCode).to.eq(201)
+      // wait for up to 3 seconds for the page to load
+      cy.location('pathname', {timeout: 3000}).should('eq', `/wizards`);
 
       // save the id of the wizard just created
       thisId = response.body.wizard['id']
+
+      // show group link should exist
+      cy.get(`[data-cy="show_${thisId}"]`).should('exist');
     })
   });
 
@@ -57,7 +61,7 @@ describe('/wizards', () => {
   });
 
   // edit the wizard
-  it('new wizard page', () => {
+  it('edit wizard page', () => {
     cy.intercept('POST', `http://localhost:3001/api/v3/wizards/${thisId}/update`).as('editwizard')
 
     cy.visit(`/wizards/${thisId}/edit`);
@@ -72,7 +76,11 @@ describe('/wizards', () => {
 
     cy.get("form").submit()
     cy.wait('@editwizard').should(({ request, response }) => {
-      expect(response.statusCode).to.eq(200)
+      // wait for up to 3 seconds for the page to load
+      cy.location('pathname', {timeout: 3000}).should('eq', `/wizards`);
+
+      // show group link should exist
+      cy.get(`[data-cy="show_${thisId}"]`).should('exist');
     })
   });
 
