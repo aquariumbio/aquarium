@@ -8,7 +8,6 @@ const FTypeSelect = ({ handleChange, ftype }) => (
   <Grid item lg={1} data-cy="ftype-select-div">
     <Select
       name="ftype"
-      labelId="type-select-label"
       variant="outlined"
       defaultValue={ftype}
       onChange={handleChange}
@@ -28,19 +27,19 @@ const FTypeSelect = ({ handleChange, ftype }) => (
       }}
 
     >
-      <MenuItem value="" name="select-none" disabled>
+      <MenuItem value="" data-testid="select-none" disabled>
         {' Choose one '}
       </MenuItem>
-      <MenuItem value="string" name="select-string">
+      <MenuItem value="string" data-testid="select-string">
         string
       </MenuItem>
-      <MenuItem value="number" name="select-number">
+      <MenuItem value="number" data-testid="select-number">
         number
       </MenuItem>
-      <MenuItem value="url" name="select-url">
+      <MenuItem value="url" data-testid="select-url">
         url
       </MenuItem>
-      <MenuItem value="sample" name="select-sample">
+      <MenuItem value="sample" data-testid="select-sample">
         sample
       </MenuItem>
     </Select>

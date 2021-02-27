@@ -56,8 +56,9 @@ const SampleTypeFieldForm = ({
       container
       spacing={1}
       data-cy="field-inputs"
+      data-testid="field-inputs"
     >
-      <Grid item lg={2} data-cy="field-name-input-div">
+      <Grid item lg={2} data-cy="field-name-input-div" role="presentation">
         <TextInput name="name" handleChange={handleChange} value={fieldType.name} />
       </Grid>
 
@@ -82,7 +83,7 @@ const SampleTypeFieldForm = ({
         {showChoicesInput() ? (
           <TextInput name="choices" value={fieldType.choices} handleChange={handleChange} />
         ) : (
-            <Typography>N/A</Typography>
+            <Typography data-testid="NA-choices">N/A</Typography>
           )}
       </Grid>
 

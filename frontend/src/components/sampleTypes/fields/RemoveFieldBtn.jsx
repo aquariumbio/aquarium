@@ -9,6 +9,7 @@ const RemoveFieldBtn = ({ handleRemoveFieldClick, index }) => (
     <IconButton
       onClick={handleRemoveFieldClick(index)}
       data-cy="remove-field-btn"
+      aria-label="remove-field"
     >
       <CloseIcon />
     </IconButton>
