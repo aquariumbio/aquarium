@@ -46,7 +46,7 @@ class JsonController < ApplicationController
              end
 
     record.attributes.each do |name, _val|
-      record[name] = params[name]
+      record[name] = params[name.to_sym]
     end
 
     begin
@@ -66,7 +66,7 @@ class JsonController < ApplicationController
     if record.errors.empty?
       render json: record
     else
-      logger.into record.errors.full_messages.join(', ')
+      logger.info record.errors.full_messages.join(', ')
       render json: { errors: record.errors }, status: :unprocessable_entity
     end
 
