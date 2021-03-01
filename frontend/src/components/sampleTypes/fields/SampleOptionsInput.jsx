@@ -34,22 +34,18 @@ const SampleOptionsInput = ({
           </div>
         </>
       ) : (
-        <Typography>No sample types</Typography>
+        <Typography>No sample types</Typography> // no samples in db
       )} </>
     ) : (
-      <Typography data-testid="NA-samples">N/A</Typography>
+      <Typography data-testid="NA-samples">N/A</Typography> // ftype !== "samples"
     )}
   </Grid>
 );
 SampleOptionsInput.propTypes = {
   handleChange: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  // allowableFieldTypes: PropTypes.array.isRequired,
   showSampleSelect: PropTypes.func.isRequired,
   handleAddClick: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
   sampleTypes: PropTypes.array.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
   fieldType: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
 };

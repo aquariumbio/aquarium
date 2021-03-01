@@ -65,7 +65,7 @@ export default function App() {
     <>
       <ThemeProvider theme={theme}>
         <div name="app-container" className={classes.container} data-cy="app-container">
-          <LoadingBackdrop isLoading={isLoading} />
+          <LoadingSpinner isLoading={isLoading} />
 
           { /* Users cannot interact with the app if they do not have a token */
             !localStorage.getItem('token') &&
