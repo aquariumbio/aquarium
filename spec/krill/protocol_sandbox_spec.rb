@@ -305,7 +305,7 @@ RSpec.describe Krill::ProtocolSandbox do
       :operation_type,
       name: 'system_exit',
       category: 'testing',
-      protocol: 'class Protocol; def main; CSV.parse(\'one,two\'); end; end',
+      protocol: 'class Protocol; def main; REALLYSHOULDNTBETHERE.parse(\'one,two\'); end; end',
       user: test_user
     )
   end
@@ -321,7 +321,7 @@ RSpec.describe Krill::ProtocolSandbox do
     expect { sandbox = Krill::ProtocolSandbox.new(job: job, debug: true) }.not_to raise_error
     expect { sandbox.execute }.to raise_error do |error|
       expect(error).to be_a(Krill::KrillError)
-      expect(error.error_message).to eq('uninitialized constant Protocol::CSV')
+      expect(error.error_message).to eq('uninitialized constant Protocol::REALLYSHOULDNTBETHERE')
     end
 
   end
