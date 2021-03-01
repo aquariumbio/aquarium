@@ -62,6 +62,8 @@ RSpec.describe JsonController, type: :controller do
     end
   end
 
+
+
   context 'no method' do
     it 'should be unhappy' do
       post :index, as: :json
@@ -70,4 +72,22 @@ RSpec.describe JsonController, type: :controller do
   end
 
   it 'returns parts of collection if object_type is collection'
+
+  context 'save ' do
+    it 'simple type' do
+      params = {
+        model: {
+          model: 'SampleType',
+        },
+        name: 'dummy',
+        description: 'a dummy type for testing'
+      }
+      post :save, params, as: :json
+
+      expect(response.headers['Content-Type']).to eq('application/json; charset=utf-8')
+      expect(response.body).not_to be_nil
+      response_data = JSON.parse(response.body)
+      expect(response_data).not_to have_key('errors')
+    end
+  end
 end
