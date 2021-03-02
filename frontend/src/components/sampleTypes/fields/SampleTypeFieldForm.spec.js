@@ -1,5 +1,7 @@
 import React from 'react';
-import { render, fireEvent, screen, waitFor, wait, within } from '@testing-library/react';
+import {
+ render, fireEvent, screen, waitFor, wait, within, 
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import SampleTypeFieldForm from './SampleTypeFieldForm';
 
@@ -29,7 +31,7 @@ describe('SampleTypeFieldForm', () => {
         updateParentState={mockUpdateParentState}
         handleRemoveFieldClick={mockHandleRemoveFieldClick}
         handleAddAllowableFieldClick={mockHandleAddAllowableFieldClick}
-      />
+      />,
     ))
 
   // test that each field funcstions as expected
@@ -149,7 +151,7 @@ describe('SampleTypeFieldForm', () => {
             updateParentState={mockUpdateParentState}
             handleRemoveFieldClick={mockHandleRemoveFieldClick}
             handleAddAllowableFieldClick={mockHandleAddAllowableFieldClick}
-          />
+          />,
         );
 
         expect(screen.getByTestId('NA-samples')).toBeInTheDocument();
@@ -173,7 +175,7 @@ describe('SampleTypeFieldForm', () => {
           updateParentState={mockUpdateParentState}
           handleRemoveFieldClick={mockHandleRemoveFieldClick}
           handleAddAllowableFieldClick={mockHandleAddAllowableFieldClick}
-        />
+        />,
       );
 
       expect(screen.queryByTestId('NA-samples')).not.toBeInTheDocument();
@@ -194,7 +196,7 @@ describe('SampleTypeFieldForm', () => {
           updateParentState={mockUpdateParentState}
           handleRemoveFieldClick={mockHandleRemoveFieldClick}
           handleAddAllowableFieldClick={mockHandleAddAllowableFieldClick}
-        />
+        />,
       );
 
       const button = screen.getByRole('button', { name: 'Add option' });
@@ -218,7 +220,7 @@ describe('SampleTypeFieldForm', () => {
           updateParentState={mockUpdateParentState}
           handleRemoveFieldClick={mockHandleRemoveFieldClick}
           handleAddAllowableFieldClick={mockHandleAddAllowableFieldClick}
-        />
+        />,
       );
 
       expect(screen.queryByText('No sample types')).toBeInTheDocument();
@@ -251,7 +253,7 @@ describe('SampleTypeFieldForm', () => {
             updateParentState={mockUpdateParentState}
             handleRemoveFieldClick={mockHandleRemoveFieldClick}
             handleAddAllowableFieldClick={mockHandleAddAllowableFieldClick}
-          />
+          />,
         );
 
         expect(screen.getByTestId('NA-choices')).toBeInTheDocument();
@@ -272,7 +274,7 @@ describe('SampleTypeFieldForm', () => {
             updateParentState={mockUpdateParentState}
             handleRemoveFieldClick={mockHandleRemoveFieldClick}
             handleAddAllowableFieldClick={mockHandleAddAllowableFieldClick}
-          />
+          />,
         );
 
         expect(screen.getByTestId('NA-choices')).toBeInTheDocument();
@@ -294,7 +296,7 @@ describe('SampleTypeFieldForm', () => {
           updateParentState={mockUpdateParentState}
           handleRemoveFieldClick={mockHandleRemoveFieldClick}
           handleAddAllowableFieldClick={mockHandleAddAllowableFieldClick}
-        />
+        />,
       );
       expect(screen.queryByTestId('NA-choices')).not.toBeInTheDocument(); // use queryBy when testing the absence of an element
       expect(screen.getByRole('textbox', {name: 'choices'})).toBeInTheDocument();
@@ -313,7 +315,7 @@ describe('SampleTypeFieldForm', () => {
           updateParentState={mockUpdateParentState}
           handleRemoveFieldClick={mockHandleRemoveFieldClick}
           handleAddAllowableFieldClick={mockHandleAddAllowableFieldClick}
-        />
+        />,
       );
       expect(screen.queryByTestId('NA-choices')).not.toBeInTheDocument(); // use queryBy when testing the absence of an element
       expect(screen.getByRole('textbox', { name: 'choices' })).toBeInTheDocument();
@@ -332,7 +334,7 @@ describe('SampleTypeFieldForm', () => {
           updateParentState={mockUpdateParentState}
           handleRemoveFieldClick={mockHandleRemoveFieldClick}
           handleAddAllowableFieldClick={mockHandleAddAllowableFieldClick}
-        />
+        />,
       );
       const textbox = screen.getByRole('textbox', { name: 'choices' });
 

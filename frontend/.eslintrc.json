@@ -49,7 +49,8 @@
             }],
         "comma-dangle": "warn",
         "vars-on-top": "off",
-        "prefer-destructuring": "warn"
+        "prefer-destructuring": "warn",
+        "react/forbid-prop-types": "warn"
 
     }
 }
