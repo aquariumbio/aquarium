@@ -6,7 +6,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
-import samplesAPI from '../../helpers/api/samples';
+import samplesAPI from '../../helpers/api/samplesAPI';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -26,11 +26,7 @@ const SideBar = ({ sampleTypes, setCurrentSampleType, setIsLoading }) => {
     const response = await samplesAPI.getTypeById(id);
 
     // break if the HTTP call resulted in an error ("return false" from API.js)
-    // NOTE: the alert("break") is just there for testing.
-    //       whatever processing should be handled in API.js
-    //       we just need stop the system from trying to continue...
     if (!response) {
-      alert('break');
       return;
     }
 

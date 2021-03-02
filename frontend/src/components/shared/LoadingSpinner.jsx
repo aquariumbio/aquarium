@@ -9,21 +9,26 @@ const useStyles = makeStyles((theme) => ({
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff',
   },
-
 }));
 
-const LoadingBackdrop = React.forwardRef(({ isLoading }) => {
+const LoadingSpinner = ({ isLoading }) => {
   const classes = useStyles();
 
   return (
-    <Backdrop className={classes.backdrop} open={isLoading} data-cy="ladoing-backdrop">
+    <Backdrop
+      className={classes.backdrop}
+      open={isLoading}
+      data-testid="loading"
+      role="progressbar"
+      aria-busy={isLoading}
+    >
       <CircularProgress color="inherit" />
     </Backdrop>
   );
-});
+};
 
-export default LoadingBackdrop;
-
-LoadingBackdrop.propTypes = {
+LoadingSpinner.propTypes = {
   isLoading: PropTypes.bool.isRequired,
 };
+
+export default LoadingSpinner;

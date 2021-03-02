@@ -8,7 +8,7 @@ import Divider from '@material-ui/core/Divider';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Toolbar from '@material-ui/core/Toolbar';
-import samplesAPI from '../../helpers/api/samples';
+import samplesAPI from '../../helpers/api/samplesAPI';
 import SideBar from './SideBar';
 import ShowSampleType from './ShowSampleType';
 import { LinkButton, StandardButton } from '../shared/Buttons';
@@ -52,11 +52,7 @@ const SampleTypeDefinitions = ({ setIsLoading }) => {
       const response = await samplesAPI.getTypes();
 
       // break if the HTTP call resulted in an error ("return false" from API.js)
-      // NOTE: the alert("break") is just there for testing.
-      //       whatever processing should be handled in API.js
-      //       we just need stop the system from trying to continue...
       if (!response) {
-        alert('break');
         return;
       }
 
@@ -79,11 +75,7 @@ const SampleTypeDefinitions = ({ setIsLoading }) => {
     const response = await samplesAPI.delete(currentSampleType.id);
 
     // break if the HTTP call resulted in an error ("return false" from API.js)
-    // NOTE: the alert("break") is just there for testing.
-    //       whatever processing should be handled in API.js
-    //       we just need stop the system from trying to continue...
     if (!response) {
-      alert('break');
       return;
     }
 
@@ -123,6 +115,7 @@ const SampleTypeDefinitions = ({ setIsLoading }) => {
         open={alertProps.open}
         severity={alertProps.severity}
         message={alertProps.message}
+        setAlertProps={setAlertProps}
       />
 
       { sampleTypes && (

@@ -30,7 +30,14 @@ const useStyles = makeStyles((theme) => ({
 
 // Button with onClick hanlder
 export const StandardButton = ({
-  name, text, dark, dense, type, handleClick, testName, disabled,
+  name,
+  text,
+  handleClick,
+  dark=false,
+  dense=false,
+  type='button',
+  testName={name},
+  disabled=false,
 }) => {
   const classes = useStyles();
   const cname = dark ? classes.dark : classes.light;
@@ -56,7 +63,7 @@ StandardButton.propTypes = {
   dense: PropTypes.bool,
   type: PropTypes.string,
   handleClick: PropTypes.func.isRequired,
-  testName: PropTypes.string.isRequired,
+  testName: PropTypes.string,
   disabled: PropTypes.bool,
 };
 StandardButton.defaultProps = {
@@ -68,7 +75,13 @@ StandardButton.defaultProps = {
 
 // Button with routing, takes a link string
 export const LinkButton = ({
-  name, text, dark, dense, linkTo, testName, disabled,
+  name,
+  linkTo,
+  text,
+  dark = false,
+  dense = false,
+  testName = { name },
+  disabled = false,
 }) => {
   const classes = useStyles();
   const cname = dark ? classes.dark : classes.light;
@@ -92,7 +105,7 @@ LinkButton.propTypes = {
   name: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   linkTo: PropTypes.string.isRequired,
-  testName: PropTypes.string.isRequired,
+  testName: PropTypes.string,
   disabled: PropTypes.bool,
 };
 LinkButton.defaultProps = {
