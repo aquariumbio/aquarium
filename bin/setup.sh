@@ -42,12 +42,18 @@ _set_random() {
     fi
 }
 
+_get_timezone() {
+    if [[ -z ${timezone+x} ]]; then
+        timezone=`curl https://ipapi.co/timezone` 2> /dev/null
+    fi
+}
+
 _set_timezone() {
     local env_file=$1
     local variable='TZ'
     _has_variable $variable $env_file
     if [[ $? -gt 0 ]]; then
-        local timezone=`curl https://ipapi.co/timezone` 2> /dev/null
+        _get_timezone
         _set_variable $variable $timezone $env_file
     fi
 }
