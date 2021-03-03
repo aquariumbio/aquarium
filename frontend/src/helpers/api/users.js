@@ -12,6 +12,8 @@ usersAPI.getUsersByLetter = (letter) => axiosInstance
   .then((response) => response.data)
   .catch((error) => error);
 
+// NOTE: These two API calls are implemented on the backend but not yet used.
+//
 // usersAPI.getUserById = (id) => axiosInstance
 //   .get(`/users/${id}`)
 //   .then((response) => response.data)
@@ -56,9 +58,4 @@ usersAPI.updateAgreement = (agreement, id) => axiosInstance
   .then((response) => response.data)
   .catch((error) => error);
 
-// usersAPI.delete = (id) => axiosInstance
-//   .post(`/users/${id}/delete`)
-//   .then((response) => response.data)
-//   .catch((error) => error);
-//
 export default usersAPI;

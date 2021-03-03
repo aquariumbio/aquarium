@@ -14,9 +14,7 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Toolbar from '@material-ui/core/Toolbar';
 
-// import SideBar from './SideBar';
 import LoadingBackdrop from '../shared/LoadingBackdrop';
-// import ShowObjectTypesByHandler from './ShowObjectTypesByHandler';
 import { LinkButton, StandardButton } from '../shared/Buttons';
 import usersAPI from '../../helpers/api/users';
 import Information from './profile/Information';

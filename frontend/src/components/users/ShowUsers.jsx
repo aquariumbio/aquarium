@@ -125,20 +125,15 @@ const ShowUsers = ({ users, setIsLoading, setAlertProps, permissionsList, curren
     if (val === 'on') {
       // eslint-disable-next-line no-param-reassign, operator-assignment, prefer-template
       user.permission_ids = user.permission_ids + '6.';
-      setAlertProps({
-        message: val === 'on' ? 'retired' : 'un-retired',
-        severity: 'success',
-        open: true,
-      });
     } else {
       // eslint-disable-next-line no-param-reassign
       user.permission_ids = user.permission_ids.replace('.6.', '.');
-      setAlertProps({
-        message: val === 'on' ? 'retired' : 'un-retired',
-        severity: 'success',
-        open: true,
-      });
     }
+    setAlertProps({
+      message: val === 'on' ? 'retired' : 'un-retired',
+      severity: 'success',
+      open: true,
+    });
   };
 
   return (
