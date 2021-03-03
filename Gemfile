@@ -3,15 +3,15 @@
 source 'https://rubygems.org'
 
 # For bulk inserts (e.g. for loading a collection from a matrix)
-gem 'activerecord-import'
+gem 'activerecord-import', '>= 1.0.7'
 
 # Used to fake db during asset compilation in Dockerfile
-gem 'activerecord-nulldb-adapter'
+gem 'activerecord-nulldb-adapter', '>= 0.4.0'
 
 gem 'alphabetical_paginate'
 
 # Authentication and cross origin
-gem 'angular_rails_csrf', '2.1.1'
+gem 'angular_rails_csrf', '4.0.0'
 
 gem 'anemone', path: 'components/anemone'
 gem 'aquadoc', path: 'components/aquadoc'
@@ -43,7 +43,7 @@ gem 'protected_attributes_continued'
 
 gem 'rack-cors', '~> 1.0.5', require: 'rack/cors'
 
-gem 'rails', '4.2.11.3'
+gem 'rails', '6.0.3.5'
 
 gem 'redcarpet', '>= 3.5.1'
 
@@ -61,7 +61,7 @@ gem 'will_paginate'
 group :development do
   gem 'factory_bot_rails', '>= 5.2.0'
   gem 'ipaddress' # used to determine subnet for docker containers for web-console
-  gem 'rspec-rails', '>= 4.0.1'
+  gem 'rspec-rails', '>= 4.0.2'
   gem 'rspec-sorbet'
   gem 'rubocop'
   gem 'rubocop-rails'
