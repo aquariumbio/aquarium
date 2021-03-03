@@ -21,7 +21,7 @@ services:
       - .env_files/development/backend    
       - .env_files/development/timezone
     ports:
-      - "${BACKEND_PUBLIC_PORT:-3010}:3000"
+      - "${BACKEND_PUBLIC_PORT:-3010}:3000" # don't change the target port
     volumes:
       - ./backend:/aquarium
     networks:
@@ -36,10 +36,10 @@ services:
       - backend
     environment:
       - CHOKIDAR_USEPOLLING=true
-      - REACT_APP_BACKEND=backend
-      - REACT_APP_BACKEND_PORT=3000 # use internal port
+      - REACT_APP_BACKEND=localhost # must be localhost
+      - REACT_APP_BACKEND_PORT={BACKEND_PUBLIC_PORT:-3010}
     ports:
-      - "${FRONTEND_PUBLIC_PORT:-3000}:3000"
+      - "${FRONTEND_PUBLIC_PORT:-3000}:3000" # don't change the target port
     volumes:
       - './frontend:/app'
       - '/app/node_modules'
