@@ -39,21 +39,13 @@ axiosInstance.interceptors.response.use(
         break;
       case 401:
         if (window.location.pathname !== '/login') {
-          // IMPORTANT: I WOULD NOT DO THIS!
-          // 401 is for 'unauthorized'
-          // - you ONLY want to delete the token for 'session timeout'
-          //   (or just only delete the session token on logout
-          //    since the user will get a new token when they log back in anyway)
-          // - you can still have a valid token and hit some other page that is unauthorized
-          // - I would be careful about being cute here, it will bite us later
-          // - this is also a reason I wanted a UNIQUE return code for 'session timeout'...
-          if (currentSessionToken) {
+          // Delete the token if the error message is "Session timeout"
+          if (currentSessionToken && errorResponse.data.error === 'Session timeout') {
             axios.post('/token/delete');
             sessionStorage.clear('token');
           }
         }
-        /* TODO: HANDLE SESSION TIMEOUT
-           if (...pathname !== '/login' && message !== 'Session timeout') { OPEN LOGIN MODAL} */
+        // TODO: HANDLE SESSION TIMEOUT
         alert(`401: ${JSON.stringify(errorResponse.data)}`);
         break;
       case 403:
