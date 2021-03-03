@@ -2,11 +2,15 @@
 /* eslint-disable no-console */
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:3001/api/v3';
+const backend = process.env.REACT_APP_BACKEND;
+const backendPort = process.env.REACT_APP_BACKEND_PORT;
+const backendURL = `http://${backend}:${backendPort}/api/v3`;
+
+axios.defaults.baseURL = backendURL;
 
 // Axios instance we can import and use in our apis
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3001/api/v3',
+  baseURL: backendURL,
 });
 
 // For validation we need to send the token with every request to the backend

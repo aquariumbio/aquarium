@@ -1,0 +1,40 @@
+version: "3.7"
+services:
+  backend_test:
+    build:
+      context: ./backend
+      target: backend-development
+    image: backend-development:${AQUARIUM_VERSION:-edge}
+    command: ["test"]
+    env_file:
+      - .env_files/test/backend
+      - .env_files/test/timezone
+    ports:
+      - "${BACKEND_TEST_PORT:-3011}:3000"
+    volumes:
+      - ./backend:/aquarium
+
+  frontend_test:
+    build:
+      context: ./frontend
+      target: frontend-development
+    image: frontend-development:${AQUARIUM_VERSION:-edge}
+    depends_on: 
+      - backend_test
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_BACKEND=backend_test
+      - REACT_APP_BACKEND_PORT=3000 # use service port
+    ports:
+      - "${FRONTEND_TEST_PORT:-3001}:3000"
+    volumes:
+      - './frontend:/app'
+      - '/app/node_modules'
+     networks:
+      - aquarium_net
+  
+  # use development environment configuration
+  db:
+    env_file:
+      - .env_files/development/db
+      - .env_files/development/timezone
