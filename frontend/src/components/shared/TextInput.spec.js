@@ -4,21 +4,21 @@ import TextInput from './TextInput';
 
 describe('TextInput', () => {
   const testName = 'testInput';
-  const mockHandleChange = jest.fn()
+  const mockHandleChange = jest.fn();
   const testValue = '';
 
   it('has empty input when value is empty ', () => {
     const { getByTestId } = render(
-      <TextInput name={testName} value={testValue} handleChange={mockHandleChange} />,
+      <TextInput name={testName} value={testValue} handleChange={mockHandleChange} />
     );
 
     expect(getByTestId(testName).value).toBe('');
   });
 
-  it("triggers event handler on input change", () => {
+  it('triggers event handler on input change', () => {
     const userInput = 'testing user input';
     const { getByTestId, rerender } = render(
-      <TextInput name={testName} value={testValue} handleChange={mockHandleChange} />,
+      <TextInput name={testName} value={testValue} handleChange={mockHandleChange} />
     );
 
     fireEvent.change(getByTestId(testName), {

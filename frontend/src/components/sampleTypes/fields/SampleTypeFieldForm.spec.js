@@ -1,7 +1,5 @@
 import React from 'react';
-import {
- render, fireEvent, screen, waitFor, wait, within, 
-} from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import SampleTypeFieldForm from './SampleTypeFieldForm';
 
@@ -15,14 +13,14 @@ describe('SampleTypeFieldForm', () => {
     choices: '',
     allowableFieldTypes: [],
   };
-  const sampleTypes = [{name: 'sample-1'}, {name: 'sample-2'}];
+  const sampleTypes = [{ name: 'sample-1' }, { name: 'sample-2' }];
 
   // Mock prop functions
   const mockUpdateParentState = jest.fn();
   const mockHandleRemoveFieldClick = jest.fn();
   const mockHandleAddAllowableFieldClick = jest.fn();
 
-  const newFieldType = () => (
+  const newFieldType = () =>
     render(
       <SampleTypeFieldForm
         fieldType={emptyFieldType}
@@ -31,15 +29,15 @@ describe('SampleTypeFieldForm', () => {
         updateParentState={mockUpdateParentState}
         handleRemoveFieldClick={mockHandleRemoveFieldClick}
         handleAddAllowableFieldClick={mockHandleAddAllowableFieldClick}
-      />,
-    ))
+      />
+    );
 
   // test that each field funcstions as expected
   describe('name field', () => {
     it('should render an empty field when fieldType is empty (new field type)', () => {
       newFieldType();
 
-      expect(screen.getByRole('textbox', {name: 'name'}).value).toBe('');
+      expect(screen.getByRole('textbox', { name: 'name' }).value).toBe('');
     });
 
     it('should call updateParentState when the field is changed', () => {
@@ -102,29 +100,29 @@ describe('SampleTypeFieldForm', () => {
   });
 
   describe('Array Chekcbox', () => {
-   it('should be false for new field types', () => {
-     newFieldType();
+    it('should be false for new field types', () => {
+      newFieldType();
 
-     expect(screen.getByRole('checkbox', { name: 'Array' }).checked).toBeFalsy();
-   });
+      expect(screen.getByRole('checkbox', { name: 'Array' }).checked).toBeFalsy();
+    });
 
-   it('should call updateParentState when changed', () => {
-     newFieldType();
-     const checkbox = screen.getByRole('checkbox', { name: 'Array' });
+    it('should call updateParentState when changed', () => {
+      newFieldType();
+      const checkbox = screen.getByRole('checkbox', { name: 'Array' });
 
-     userEvent.click(checkbox);
+      userEvent.click(checkbox);
 
-     expect(mockUpdateParentState).toHaveBeenCalledTimes(1);
-   });
+      expect(mockUpdateParentState).toHaveBeenCalledTimes(1);
+    });
 
-   it('should be true when checked', () => {
-     newFieldType();
-     const checkbox = screen.getByRole('checkbox', { name: 'Array' });
+    it('should be true when checked', () => {
+      newFieldType();
+      const checkbox = screen.getByRole('checkbox', { name: 'Array' });
 
-     userEvent.click(checkbox);
+      userEvent.click(checkbox);
 
-     expect(checkbox.value).toBeFalsy();
-   });
+      expect(checkbox.value).toBeFalsy();
+    });
   });
 
   describe('sample options', () => {
@@ -151,15 +149,13 @@ describe('SampleTypeFieldForm', () => {
             updateParentState={mockUpdateParentState}
             handleRemoveFieldClick={mockHandleRemoveFieldClick}
             handleAddAllowableFieldClick={mockHandleAddAllowableFieldClick}
-          />,
+          />
         );
 
         expect(screen.getByTestId('NA-samples')).toBeInTheDocument();
         // use queryBy when testing the absence of an element
         expect(screen.queryByRole('button', { name: 'Add option' })).not.toBeInTheDocument();
       });
-
-
     });
 
     it('should show add field button when fieldType.ftype is "sample"', () => {
@@ -175,7 +171,7 @@ describe('SampleTypeFieldForm', () => {
           updateParentState={mockUpdateParentState}
           handleRemoveFieldClick={mockHandleRemoveFieldClick}
           handleAddAllowableFieldClick={mockHandleAddAllowableFieldClick}
-        />,
+        />
       );
 
       expect(screen.queryByTestId('NA-samples')).not.toBeInTheDocument();
@@ -196,7 +192,7 @@ describe('SampleTypeFieldForm', () => {
           updateParentState={mockUpdateParentState}
           handleRemoveFieldClick={mockHandleRemoveFieldClick}
           handleAddAllowableFieldClick={mockHandleAddAllowableFieldClick}
-        />,
+        />
       );
 
       const button = screen.getByRole('button', { name: 'Add option' });
@@ -220,7 +216,7 @@ describe('SampleTypeFieldForm', () => {
           updateParentState={mockUpdateParentState}
           handleRemoveFieldClick={mockHandleRemoveFieldClick}
           handleAddAllowableFieldClick={mockHandleAddAllowableFieldClick}
-        />,
+        />
       );
 
       expect(screen.queryByText('No sample types')).toBeInTheDocument();
@@ -253,7 +249,7 @@ describe('SampleTypeFieldForm', () => {
             updateParentState={mockUpdateParentState}
             handleRemoveFieldClick={mockHandleRemoveFieldClick}
             handleAddAllowableFieldClick={mockHandleAddAllowableFieldClick}
-          />,
+          />
         );
 
         expect(screen.getByTestId('NA-choices')).toBeInTheDocument();
@@ -274,7 +270,7 @@ describe('SampleTypeFieldForm', () => {
             updateParentState={mockUpdateParentState}
             handleRemoveFieldClick={mockHandleRemoveFieldClick}
             handleAddAllowableFieldClick={mockHandleAddAllowableFieldClick}
-          />,
+          />
         );
 
         expect(screen.getByTestId('NA-choices')).toBeInTheDocument();
@@ -287,7 +283,7 @@ describe('SampleTypeFieldForm', () => {
       const testFieldType = {
         ...emptyFieldType,
         ftype: 'string',
-      }
+      };
       render(
         <SampleTypeFieldForm
           fieldType={testFieldType}
@@ -296,10 +292,10 @@ describe('SampleTypeFieldForm', () => {
           updateParentState={mockUpdateParentState}
           handleRemoveFieldClick={mockHandleRemoveFieldClick}
           handleAddAllowableFieldClick={mockHandleAddAllowableFieldClick}
-        />,
+        />
       );
       expect(screen.queryByTestId('NA-choices')).not.toBeInTheDocument(); // use queryBy when testing the absence of an element
-      expect(screen.getByRole('textbox', {name: 'choices'})).toBeInTheDocument();
+      expect(screen.getByRole('textbox', { name: 'choices' })).toBeInTheDocument();
     });
 
     it('should show textfield when field type is "number"', () => {
@@ -315,7 +311,7 @@ describe('SampleTypeFieldForm', () => {
           updateParentState={mockUpdateParentState}
           handleRemoveFieldClick={mockHandleRemoveFieldClick}
           handleAddAllowableFieldClick={mockHandleAddAllowableFieldClick}
-        />,
+        />
       );
       expect(screen.queryByTestId('NA-choices')).not.toBeInTheDocument(); // use queryBy when testing the absence of an element
       expect(screen.getByRole('textbox', { name: 'choices' })).toBeInTheDocument();
@@ -334,7 +330,7 @@ describe('SampleTypeFieldForm', () => {
           updateParentState={mockUpdateParentState}
           handleRemoveFieldClick={mockHandleRemoveFieldClick}
           handleAddAllowableFieldClick={mockHandleAddAllowableFieldClick}
-        />,
+        />
       );
       const textbox = screen.getByRole('textbox', { name: 'choices' });
 
@@ -348,7 +344,7 @@ describe('SampleTypeFieldForm', () => {
   describe('remove button', () => {
     it('should exist on the page when rendered', () => {
       newFieldType();
-      expect(screen.getByRole('button', {name: 'remove-field'})).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'remove-field' })).toBeInTheDocument();
     });
 
     it('should call handleRemoveClick on click', () => {
@@ -365,7 +361,7 @@ describe('SampleTypeFieldForm', () => {
 
       waitFor(() => {
         expect(screen.queryByTestId('field-inputs')).not.toBeInTheDocument();
-      })
+      });
     });
-  })
+  });
 });
