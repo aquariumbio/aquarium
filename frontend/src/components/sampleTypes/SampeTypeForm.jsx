@@ -9,7 +9,7 @@ import Alert from '@material-ui/lab/Alert';
 import Divider from '@material-ui/core/Divider';
 import SampleTypeFieldForm from './fields/SampleTypeFieldForm';
 import FieldLabels from './fields/FieldLabels';
-import samplesAPI from '../../helpers/api/samples';
+import samplesAPI from '../../helpers/api/samplesAPI';
 import { StandardButton, LinkButton } from '../shared/Buttons';
 import utils from '../../helpers/utils';
 import AlertToast from '../shared/AlertToast';
@@ -35,12 +35,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const initialSampleType = {
-  id: null,
-  name: '',
-  description: '',
-};
-
 const newFieldType = {
   id: null,
   name: '',
@@ -51,17 +45,84 @@ const newFieldType = {
   allowable_field_types: [],
 };
 
+const initialSampleType = {
+  id: null,
+  name: '',
+  description: '',
+  fieldTypes: [newFieldType],
+  objectTypes: [],
+  inventory: null,
+};
+
 const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
   const classes = useStyles();
-  const [sampleTypeName, setSampleTypeName] = useState(initialSampleType.name);
-  const [sampleTypeDescription, setSampleTypeDescription] = useState(initialSampleType.description);
-  const [fieldTypes, setFieldTypes] = useState([newFieldType]);
-  const [sampleTypes, setSampleTypes] = useState([]);
-  const [objectTypes, setObjectTypes] = useState([]);
-  const [inventory, setInventory] = useState(0);
-  const [id, setId] = useState(null);
-  const [disableSubmit, setDisableSubmit] = useState(false);
-  const [alertProps, setAlertProps] = useState({});
+
+  const [state, setState] = useState({
+    sampleType: { ...initialSampleType },
+    sampleTypes: [],
+    alertProps: {},
+  });
+
+  const fetchDataNew = async () => {
+    // loading overlay - use delay (window.$timeout) to avoid screen flash on quick API return
+    const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
+
+    const response = await samplesAPI.getTypes();
+
+    // break if the HTTP call resulted in an error ("return false" from API.js)
+    if (!response) {
+      return;
+    }
+
+    // clear timeout and clear overlay
+    clearTimeout(loading);
+    setIsLoading(false);
+
+    // success
+    setState({
+      ...state,
+      sampleTypes: [
+        ...response.sample_types,
+      ],
+    });
+  };
+
+  const fetchDataEdit = async () => {
+    // loading overlay - delay by window.$timeout to avoid screen flash
+    const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
+
+    //  Make more than one API in parallel
+    //  Call both functions
+    const getAll = samplesAPI.getTypes();
+    const getCurrent = samplesAPI.getTypeById(match.params.id);
+
+    //  Await both responses
+    const responseGetAll = await getAll;
+    const responseGetCurrent = await getCurrent;
+
+    // break if either API call resulted in an error ("return false" from API.js)
+    if (!responseGetAll || !responseGetCurrent) {
+      return;
+    }
+
+    // clear timeout and clear overlay
+    clearTimeout(loading);
+    setIsLoading(false);
+
+    // success
+    setState({
+      ...state,
+      sampleType: {
+        ...state.sampleType,
+        id: responseGetCurrent.id,
+        name: responseGetCurrent.name,
+        description: responseGetCurrent.description,
+        inventory: responseGetCurrent.inventory,
+        fieldTypes: responseGetCurrent.field_types ? responseGetCurrent.field_types : [],
+        objectTypes: responseGetCurrent.object_types ? responseGetCurrent.object_types : [],
+      },
+    });
+  };
 
   /*  Get sample types top populate sample options menu
       We cannot use async directly in useEffect so we create an async function that we will call
@@ -70,95 +131,91 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
       We only want to fetch data when the component is mounted so we pass an empty array as the
       second argument to useEffect  */
   useEffect(() => {
-    const fetchDataNew = async () => {
-      // loading overlay - use delay (window.$timeout) to avoid screen flash on quick API return
-      const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
-
-      const response = await samplesAPI.getTypes();
-
-      // break if the HTTP call resulted in an error ("return false" from API.js)
-      if (!response) {
-        return;
-      }
-
-      // clear timeout and clear overlay
-      clearTimeout(loading);
-      setIsLoading(false);
-
-      // success
-      setSampleTypes(response.sample_types);
-    };
-
-    const fetchDataEdit = async () => {
-      // loading overlay - delay by window.$timeout to avoid screen flash
-      const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
-
-      //  Make more than one API in parallel
-      //  Call both functions
-      const getAll = samplesAPI.getTypes();
-      const getCurrent = samplesAPI.getTypeById(match.params.id);
-
-      //  Await both responses
-      const responseGetAll = await getAll;
-      const responseGetCurrent = await getCurrent;
-
-      // break if either API call resulted in an error ("return false" from API.js)
-      if (!responseGetAll || !responseGetCurrent) {
-        return;
-      }
-
-      // clear timeout and clear overlay
-      clearTimeout(loading);
-      setIsLoading(false);
-
-      // success
-      responseGetCurrent.field_types && setFieldTypes(responseGetCurrent.field_types);
-      setSampleTypeDescription(responseGetCurrent.description);
-      setSampleTypeName(responseGetCurrent.name);
-      responseGetCurrent.field_types && setObjectTypes(responseGetCurrent.object_types);
-      setInventory(responseGetCurrent.inventory);
-      setId(responseGetCurrent.id);
-    };
-
     match.params.id ? fetchDataEdit() : fetchDataNew();
   }, []);
 
-  /*  Update allowSubmit state if name and Description change
-      Disable submit if name or description are empty */
-  useEffect(() => {
-    setDisableSubmit(!sampleTypeName
-      || (!!sampleTypeName && !sampleTypeName.trim())
-      || !sampleTypeDescription
-      || (!!sampleTypeDescription && !sampleTypeDescription.trim()));
-  });
+  /*  Disable submit if name or description are empty */
+  const invalidName = !state.sampleType.name ||
+    (!!state.sampleType.name && !state.sampleType.name.trim());
+  const invalidDescription = !state.sampleType.description ||
+    (!!state.sampleType.description && !state.sampleType.description.trim());
+
+  const handleFieldChange = (e) => {
+    const { name, value } = e.target;
+
+    setState({
+      ...state,
+      sampleType: {
+        ...state.sampleType,
+        [name]: value,
+      },
+    });
+  };
 
   // Handle click add field button --> add new field type to end of current field types array
   const handleAddFieldClick = () => {
-    setFieldTypes([...fieldTypes, newFieldType]);
+    setState({
+      ...state,
+      sampleType: {
+        ...state.sampleType,
+        fieldTypes: [
+          ...state.sampleType.fieldTypes,
+          newFieldType,
+        ],
+      },
+    });
   };
 
   // Handle click add new sample to the end of the allowable fields array
   const handleAddAllowableFieldClick = (index) => {
-    const list = [...fieldTypes];
-    if (list[index].allowable_field_types === undefined) {
-      list[index].allowable_field_types = [];
+    const fieldTypes = [...state.sampleType.fieldTypes];
+    if (fieldTypes[index].allowable_field_types === undefined) {
+      fieldTypes[index].allowable_field_types = [];
     }
-    list[index].allowable_field_types.push({});
-    setFieldTypes(list);
+    fieldTypes[index].allowable_field_types.push({});
+
+    setState({
+      ...state,
+      sampleType: {
+        ...state.sampleType,
+        fieldTypes: [...fieldTypes],
+      },
+    });
   };
 
   // handle click event of the Remove button
   const handleRemoveFieldClick = (index) => {
-    const list = [...fieldTypes];
-    list.splice(index, 1);
-    setFieldTypes(list);
+    const fieldTypes = [...state.sampleType.fieldTypes];
+    fieldTypes.splice(index, 1);
+
+    setState({
+      ...state,
+      sampleType: {
+        ...state.sampleType,
+        fieldTypes: [...fieldTypes],
+      },
+    });
   };
 
   // handle field type input change
-  const handleFieldInputChange = (value, index) => {
-    const list = [...fieldTypes];
-    list[index] = value;
-    setFieldTypes(list);
+  const handleaNestedInputChange = (value, index) => {
+    const fieldTypes = [...state.sampleType.fieldTypes];
+
+    fieldTypes[index] = value;
+    setState({
+      ...state,
+      sampleType: {
+        ...state.sampleType,
+        fieldTypes: [...fieldTypes],
+      },
+    });
+  };
+
+  const setAlertProps = (alertProps) => {
+    setState({
+      ...state,
+      alertProps: { ...alertProps },
+    });
   };
 
   // Submit form with all data
@@ -166,28 +223,24 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
     event.preventDefault();
     const formData = {
       id: null,
-      name: sampleTypeName,
-      description: sampleTypeDescription,
-      field_types: fieldTypes,
+      name: state.sampleType.name,
+      description: state.sampleType.description,
+      field_types: state.sampleType.fieldTypes,
     };
 
     // We will have an id when we are editing a sample type
-    const update = !!id;
-    let alert;
+    const update = !!state.sampleType.id;
+    let alertProps;
 
     // loading overlay - delay by window.$timeout to avoid screen flash
     const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
 
     const response = update
-      ? await samplesAPI.update(formData, id)
+      ? await samplesAPI.update(formData, state.sampleType.id)
       : await samplesAPI.create(formData);
 
     // break if the HTTP call resulted in an error ("return false" from API.js)
-    // NOTE: the alert("break") is just there for testing.
-    //       whatever processing should be handled in API.js
-    //       we just need stop the system from trying to continue...
     if (!response) {
-      alert('break');
       return;
     }
 
@@ -198,8 +251,8 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
     // success
     const action = update ? 'updated' : 'saved';
     if (response.status === 201) {
-      alert = {
-        message: `${sampleTypeName} ${action}`,
+      alertProps = {
+        message: `${state.sampleType.name} ${action}`,
         severity: 'success',
         open: true,
       };
@@ -207,22 +260,22 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
 
     /*  Failure alert  */
     if (response.status === 200) {
-      alert = {
-        message: `Error: ${sampleTypeName} could not be ${action}. ${JSON.stringify(response.data.errors)}`,
+      alertProps = {
+        message: `Error: ${state.sampleType.name} could not be ${action}. ${JSON.stringify(response.data.errors)}`,
         severity: 'error',
         open: true,
       };
     }
 
-    setAlertProps(alert);
+    setAlertProps(alertProps);
   };
 
   return (
     <Container className={classes.root} maxWidth="xl" data-cy="sampe-type-definition-container">
       <AlertToast
-        open={alertProps.open}
-        severity={alertProps.severity}
-        message={alertProps.message}
+        open={state.alertProps.open}
+        severity={state.alertProps.severity}
+        message={state.alertProps.message}
         setAlertProps={setAlertProps}
       />
 
@@ -232,18 +285,20 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
         </Typography>
       )}
 
-      {id && (
+      {state.id && (
         <Typography variant="h1" align="center" className={classes.title}>
-          <u>{sampleTypeName}</u> Type Definition
+          <u>{state.sampleType.name}</u>
+          Type Definition
         </Typography>
       )}
 
-      {id && (
+      {state.id && (
         <>
           <Alert severity="info">Note: Changing a sample type can have far reaching effects! Edit with care.</Alert>
 
           <Typography variant="h2" align="center" className={classes.title}>
-            Editing Sample Type {id}
+            Editing Sample Type
+            {state.id}
           </Typography>
         </>
       )}
@@ -261,9 +316,9 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
         <TextField
           name="name"
           fullWidth
-          value={sampleTypeName}
+          value={state.sampleType.name}
           id="sample-type-name-input"
-          onChange={(event) => setSampleTypeName(event.target.value)}
+          onChange={(event) => handleFieldChange(event)}
           variant="outlined"
           autoFocus
           required
@@ -285,9 +340,9 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
         <TextField
           name="description"
           fullWidth
-          value={sampleTypeDescription}
+          value={state.sampleType.description}
           id="sample-type-description-input"
-          onChange={(event) => setSampleTypeDescription(event.target.value)}
+          onChange={(event) => handleFieldChange(event)}
           variant="outlined"
           type="string"
           required
@@ -297,28 +352,28 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
           }}
         />
 
-        {!!fieldTypes.length && (
+        {!!state.sampleType.fieldTypes.length && (
           <Grid
             container
             data-cy="fields-container"
           >
             <FieldLabels />
             { /* create array of field components */
-              fieldTypes.map((fieldType, index) => (
+              state.sampleType.fieldTypes.map((fieldType, index) => (
                 // React.Fragment instead of the shorthand <></> so we can use a key
                 <React.Fragment key={utils.randString()}>
                   <SampleTypeFieldForm
                     // Composite key of name & random string b/c we allow multiple selections
                     key={`${fieldType.name}-${utils.randString()}`}
                     fieldType={fieldType}
-                    sampleTypes={sampleTypes}
+                    sampleTypes={state.sampleTypes}
                     index={index}
-                    updateParentState={handleFieldInputChange}
+                    updateParentState={handleaNestedInputChange}
                     handleRemoveFieldClick={() => handleRemoveFieldClick}
                     handleAddAllowableFieldClick={handleAddAllowableFieldClick}
                   />
                   {/* Add divider below all but last fieldType */
-                    index !== fieldTypes.length - 1 ? (
+                    index !== state.sampleType.fieldTypes.length - 1 ? (
                       <Grid item xs={12}>
                         <Divider />
                       </Grid>
@@ -345,9 +400,8 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
           handleClick={handleSubmit}
           text="Save"
           type="submit"
-          disabled={disableSubmit}
+          disabled={invalidName || invalidDescription}
           dark
-
         />
 
         <LinkButton

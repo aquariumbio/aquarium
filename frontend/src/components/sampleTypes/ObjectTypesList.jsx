@@ -48,7 +48,6 @@ const ObjectTypesList = ({ objectTypes, sampleTypeId }) => {
           testName="add_object_type"
           text="Add"
           linkTo={`/object_types/new?sample_type_id=${sampleTypeId}`}
-          dense
         />
       </List>
     </>

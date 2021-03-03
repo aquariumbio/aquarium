@@ -19,27 +19,41 @@ function Alert(props) {
 }
 
 const AlertToast = (props) => {
+  const {
+    message,
+    severity,
+    open,
+    setAlertProps,
+  } = props
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
-  const [severity, setSeverity] = useState('info');
-  const [message, setMessage] = useState('');
+  const [state, setState] = useState({
+    open: false,
+    severity: 'info',
+    message: '',
+  });
 
   // Set state from props
   useEffect(() => {
-    setMessage(props.message);
-    setSeverity(props.severity);
-    setOpen(props.open);
+    setState({
+      message,
+      severity,
+      open,
+    })
   }, [props]);
 
   // Allow for manual closing
-  const handleClose = (event, reason) => {
+  const handleClose = (reason) => {
     if (reason === 'clickaway') {
       return;
     }
 
-    setOpen(false);
+    setState({
+      ...state,
+      open: false,
+    });
+
     // Clear alert props in parent to prevent the alert reopening
-    props.setAlertProps({});
+    setAlertProps({});
   };
 
   return (

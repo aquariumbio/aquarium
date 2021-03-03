@@ -25,10 +25,10 @@ import LocationWizardsPage from '../locationWizards/LocationWizardsPage';
 import LogsPage from '../logs/LogsPage';
 import Header from '../navigation/Header';
 import UserProfilePage from '../users/UserProfilePage';
-import SampleTypeDefinitionForm from '../sampleTypes/SampeTypeDefinitionForm';
+import SampleTypeDefinitionForm from '../sampleTypes/SampeTypeForm';
 import ImportWorkflowsPage from '../importWorkflows/ImportWorkflowsPage';
 import GroupsPage from '../groups/GroupsPage';
-import LoadingBackdrop from '../shared/LoadingBackdrop';
+import LoadingSpinner from '../shared/LoadingSpinner';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -65,13 +65,13 @@ export default function App() {
     <>
       <ThemeProvider theme={theme}>
         <div name="app-container" className={classes.container} data-cy="app-container">
-          <LoadingBackdrop isLoading={isLoading} />
+          <LoadingSpinner isLoading={isLoading} />
 
           { /* Users cannot interact with the app if they do not have a token */
-            !localStorage.getItem('token')
-            && <Redirect to="/login" />
+            !localStorage.getItem('token') &&
+            <Redirect to="/login" />
           }
-          { /* TODO: REDIRECT TO PROFILE PAGE IF USER HAS NOT SIGNED AGREENEMTNS */ }
+          { /* TODO: REDIRECT TO PROFILE PAGE IF USER HAS NOT SIGNED AGREEMENTS */ }
 
           <Switch>
             <Route path="/login" render={(props) => <LoginDialog setIsLoading={setIsLoading} {...props} />} />
