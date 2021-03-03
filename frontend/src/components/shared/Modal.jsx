@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
+import MuiModal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import PropTypes from 'prop-types';
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const StandardModal = ({ details }) => {
+const Modal = ({ details }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -32,11 +32,11 @@ const StandardModal = ({ details }) => {
   };
 
   return (
-    <div>
-      <button type="button" onClick={handleOpen}>
+    <div data-testid="modal-container">
+      <button type="button" onClick={handleOpen} data-testid="open-modal-btn">
         {details.btnText}
       </button>
-      <Modal
+      <MuiModal
         aria-labelledby={`${details.htmlId}-modal`}
         aria-describedby={`${details.htmlId}-description`}
         className={classes.modal}
@@ -47,6 +47,8 @@ const StandardModal = ({ details }) => {
         BackdropProps={{
           timeout: 500,
         }}
+        data-testid="modal"
+        role="dialog"
       >
         <Fade in={open}>
           <div className={classes.paper}>
@@ -56,14 +58,14 @@ const StandardModal = ({ details }) => {
             </p>
           </div>
         </Fade>
-      </Modal>
+      </MuiModal>
     </div>
   );
 };
 
-export default StandardModal;
+export default Modal;
 
-StandardModal.propTypes = {
+Modal.propTypes = {
   details: PropTypes.shape({
     title: PropTypes.string.isRequired,
     message: PropTypes.string.isRequired,
