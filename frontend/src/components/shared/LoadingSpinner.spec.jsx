@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 import LoadingSpinner from './LoadingSpinner';
 
 describe('Name of the group', () => {
@@ -18,6 +19,6 @@ describe('Name of the group', () => {
 
     const loadingSpinner = screen.getByTestId('loading');
     expect(loadingSpinner).toBeInTheDocument();
-    expect(loadingSpinner).toBeHidden();
+    expect(loadingSpinner).toHaveAttribute('aria-hidden', 'true');
   });
 });
