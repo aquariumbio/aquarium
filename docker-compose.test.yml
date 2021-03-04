@@ -1,3 +1,10 @@
+# Sets up frontend and backend services for testing.
+#
+# TODO: should this be combined with cypress compose file?
+#
+# Note: variables used here are set in .env file, while the other
+# environment variables in services are set in .env_files
+
 version: "3.7"
 services:
   backend_test:

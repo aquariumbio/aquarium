@@ -1,10 +1,5 @@
-# Development docker-compose file for aquarium
-#
-# Extends the base docker-compose.yml file with details for the development
-# environment.
-#
-# See the file docker-compose.yml for details on changing or resetting the
-# database.
+# Note that variables used here are set in .env file
+# environment variables in services are set in .env_files
 #
 
 version: "3.7"
