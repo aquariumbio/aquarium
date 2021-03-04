@@ -37,7 +37,7 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
       - REACT_APP_BACKEND=localhost # must be localhost
-      - REACT_APP_BACKEND_PORT={BACKEND_PUBLIC_PORT:-3010}
+      - REACT_APP_BACKEND_PORT=${BACKEND_PUBLIC_PORT:-3010}
     ports:
       - "${FRONTEND_PUBLIC_PORT:-3000}:3000" # don't change the target port
     volumes:
