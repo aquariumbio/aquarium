@@ -16,7 +16,7 @@ Cypress.Commands.add('login', () => {
 
   cy.request({
     method: 'POST',
-    url: `http://localhost:3001/api/v3/token/create?login=${login}&password=${password}`,
+    url: `http://${Cypress.env(BASE_API)}/api/v3/token/create?login=${login}&password=${password}`,
   })
     .then((resp) => {
       window.localStorage.setItem('token', resp.body.token);
@@ -27,7 +27,7 @@ Cypress.Commands.add('logout', () => {
 
   cy.request({
     method: 'POST',
-    url: `http://localhost:3001/api/v3/token/delete?token=${token}`,
+    url: `http://${Cypress.env(BASE_API)}/api/v3/token/delete?token=${token}`,
   })
     // eslint-disable-next-line no-unused-vars
     .then((resp) => {
