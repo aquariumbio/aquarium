@@ -39,7 +39,7 @@ _start_development_server() {
 _start_test_server() {
     echo "Starting test Rails server"
     rails db:migrate RAILS_ENV=test
-    # TODO: add rake task to reset the database similar to loading the seeds for rspec
+    RAILS_ENV=test rake db:seed:test_seeds
     exec rails server -e test -p 3000 -b '0.0.0.0'
 }
 
