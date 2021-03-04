@@ -2,6 +2,11 @@ import axiosInstance from './axiosInstance';
 
 const tokensAPI = {};
 
+tokensAPI.isPermission = (id) => axiosInstance
+  .get(`/token/get_user?permission_id=${id}`)
+  .then((response) => response.data)
+  .catch((error) => error);
+
 tokensAPI.isAuthenticated = async () => {
   let validToken = false;
 

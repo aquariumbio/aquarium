@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { withRouter } from 'react-router-dom';
 
@@ -8,9 +7,11 @@ import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Divider from '@material-ui/core/Divider';
+import createBrowserHistory from 'history/createBrowserHistory';
 
-const LeftHamburgerMenu = (props) => {
-  const { history } = props;
+const LeftHamburgerMenu = () => {
+  // allows force refresh when clicking on a hamburger menu item
+  const history = createBrowserHistory({ forceRefresh: true });
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -59,10 +60,10 @@ const LeftHamburgerMenu = (props) => {
         <MenuItem onClick={() => handleMenuClick('/sample_types')}>
           Sample Type Definitions
         </MenuItem>
-        <MenuItem onClick={() => handleMenuClick('/object_types')}>Containers</MenuItem>
+        <MenuItem onClick={() => handleMenuClick('/object_types')}>Object Types</MenuItem>
         <MenuItem onClick={() => handleMenuClick('/wizards')}>Location Wizards</MenuItem>
         <Divider />
-        <MenuItem onClick={() => handleMenuClick('/import)')}>Import Workflows</MenuItem>
+        <MenuItem onClick={() => handleMenuClick('/import')}>Import Workflows</MenuItem>
         <MenuItem onClick={() => handleMenuClick('/publish')}>Export Workflows</MenuItem>
         <Divider />
         <MenuItem component="a" href="http://klavinslab.org/aquarium">
@@ -74,8 +75,3 @@ const LeftHamburgerMenu = (props) => {
 };
 
 export default withRouter(LeftHamburgerMenu);
-
-LeftHamburgerMenu.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  history: PropTypes.object.isRequired,
-};

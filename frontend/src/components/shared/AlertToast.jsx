@@ -18,6 +18,10 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
+function raw(message) {
+  return { __html: message.replace(/\n/g, '<br>') };
+}
+
 const AlertToast = (props) => {
   const { message, severity, open, setAlertProps } = props;
   const classes = useStyles();
@@ -56,6 +60,7 @@ const AlertToast = (props) => {
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity={severity} data-cy="alert-toast">
           {message}
+          <span dangerouslySetInnerHTML={raw(message)} /> {/* TODO: is this necessary? */}
         </Alert>
       </Snackbar>
     </div>

@@ -40,9 +40,10 @@ axiosInstance.interceptors.response.use(
           break;
         case 401:
           if (window.location.pathname !== '/login') {
-            if (currentSessionToken) {
+            // Delete the token if the error message is "Session timeout"
+            if (currentSessionToken && data.error === 'Session timeout') {
               axios.post('/token/delete');
-              localStorage.clear('token');
+              sessionStorage.clear('token');
             }
           }
           /* TODO: HANDLE SESSION TIMEOUT
