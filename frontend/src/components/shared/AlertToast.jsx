@@ -55,12 +55,14 @@ const AlertToast = (props) => {
     setAlertProps({});
   };
 
+  /*  message is pretty printed JSON.stringify which includes \n line breaks raw changes \n line breaks to <br>
+      reaact ignores the <br> and requires us to use “dangerouslySetInnerHTML”
+      TODO: render form errors inline rather than as a list in the alert */
   return (
     <div className={classes.root}>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity={severity} data-cy="alert-toast">
-          {message}
-          <span dangerouslySetInnerHTML={raw(message)} /> {/* TODO: is this necessary? */}
+          <span dangerouslySetInnerHTML={raw(message)} />
         </Alert>
       </Snackbar>
     </div>

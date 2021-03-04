@@ -19,7 +19,12 @@ const useStyles = makeStyles(() => ({
 }));
 
 // eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid
-const SideBar = ({ objectTypeHandlers, setCurrentObjectTypeHandler, setCurrentObjectTypesByHandler, setIsLoading, setAlertProps }) => {
+const SideBar = ({
+  objectTypeHandlers,
+  setCurrentObjectTypeHandler,
+  setCurrentObjectTypesByHandler,
+  setIsLoading,
+}) => {
   const classes = useStyles();
 
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -75,12 +80,11 @@ SideBar.propTypes = {
     PropTypes.shape({
       id: PropTypes.number,
       handler: PropTypes.string,
-    }),
+    })
   ).isRequired,
   setCurrentObjectTypeHandler: PropTypes.func.isRequired,
   setCurrentObjectTypesByHandler: PropTypes.func.isRequired,
   setIsLoading: PropTypes.func.isRequired,
-  setAlertProps: PropTypes.func,
 };
 
 export default SideBar;
