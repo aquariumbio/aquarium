@@ -20,6 +20,8 @@ services:
       - "${BACKEND_TEST_PORT:-3011}:3000"
     volumes:
       - ./backend:/aquarium
+    networks:
+      - aquarium_net
 
   frontend_test:
     build:
@@ -37,7 +39,7 @@ services:
     volumes:
       - './frontend:/app'
       - '/app/node_modules'
-     networks:
+    networks:
       - aquarium_net
   
   # use development environment configuration
