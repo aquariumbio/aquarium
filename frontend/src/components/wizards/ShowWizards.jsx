@@ -110,7 +110,7 @@ const ShowWizards = ({ wizards }) => {
     if (!response) return;
 
     // success
-    sessionStorage.alert = JSON.stringify({
+    localStorage.alert = JSON.stringify({
       message: 'deleted',
       severity: 'success',
       open: true,

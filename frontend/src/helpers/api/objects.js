@@ -1,4 +1,4 @@
-import axiosInstance from '../API';
+import axiosInstance from './axiosInstance';
 
 const objectsAPI = {};
 

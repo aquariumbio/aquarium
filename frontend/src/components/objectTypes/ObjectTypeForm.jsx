@@ -12,8 +12,8 @@ import Alert from '@material-ui/lab/Alert';
 import Divider from '@material-ui/core/Divider';
 
 import objectsAPI from '../../helpers/api/objects';
-import samplesAPI from '../../helpers/api/samples';
-import tokensAPI from '../../helpers/api/tokens';
+import samplesAPI from '../../helpers/api/samplesAPI';
+import tokensAPI from '../../helpers/api/tokensAPI';
 import { StandardButton, LinkButton } from '../shared/Buttons';
 import utils from '../../helpers/utils';
 import AlertToast from '../shared/AlertToast';

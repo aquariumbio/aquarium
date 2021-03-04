@@ -43,7 +43,7 @@ axiosInstance.interceptors.response.use(
             // Delete the token if the error message is "Session timeout"
             if (currentSessionToken && data.error === 'Session timeout') {
               axios.post('/token/delete');
-              sessionStorage.clear('token');
+              localStorage.clear('token');
             }
           }
           /* TODO: HANDLE SESSION TIMEOUT

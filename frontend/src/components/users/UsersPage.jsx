@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router';
-import { Link } from 'react-router-dom';
+import { useHistory, link } from 'react-router-dom';
 import * as queryString from 'query-string';
 import PropTypes from 'prop-types';
 

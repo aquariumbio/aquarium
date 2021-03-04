@@ -11,7 +11,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 
 import { LinkButton, StandardButton } from '../../shared/Buttons';
 import usersAPI from '../../../helpers/api/users';
-import tokensAPI from '../../../helpers/api/tokens';
+import tokensAPI from '../../../helpers/api/tokensAPI';
 
 const useStyles = makeStyles((theme) => ({
   root: {},

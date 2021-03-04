@@ -16,7 +16,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 import objectsAPI from '../../helpers/api/objects';
 import wizardsAPI from '../../helpers/api/wizards';
-import tokensAPI from '../../helpers/api/tokens';
+import tokensAPI from '../../helpers/api/tokensAPI';
 import LoadingSpinner from '../shared/LoadingSpinner';
 import { StandardButton, LinkButton } from '../shared/Buttons';
 import utils from '../../helpers/utils';
@@ -153,8 +153,8 @@ const WizardForm = ({ setIsLoading, setAlertProps, match }) => {
     }
 
     // success
-    // pass alert popup in sessionStorage (does not work if pass as object, so pass as JSON string)
-    sessionStorage.alert = JSON.stringify({
+    // pass alert popup in localStorage (does not work if pass as object, so pass as JSON string)
+    localStorage.alert = JSON.stringify({
       message: id ? 'updated' : 'created',
       severity: 'success',
       open: true,

@@ -37,6 +37,9 @@
         "allowShortCircuit": true,
         "allowTernary": true
       }
-    ]
+    ],
+    "prefer-destructuring": "warn",
+    "no-useless-return":"warn",
+    "import/no-extraneous-dependencies": "warn"
   }
 }

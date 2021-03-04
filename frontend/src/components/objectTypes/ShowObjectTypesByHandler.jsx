@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useReducer } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { useHistory } from 'react-router';
+import React, { useState, useReducer } from 'react';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Typography from '@material-ui/core/Typography';
@@ -134,8 +133,8 @@ const ShowObjectTypesByHandler = ({ objectTypes, setIsLoading, setAlertProps }) 
     if (!response) return;
 
     // success
-    // pass alert popup in sessionStorage (does not work if pass as object, so pass as JSON string)
-    sessionStorage.alert = JSON.stringify({
+    // pass alert popup in localStorage (does not work if pass as object, so pass as JSON string)
+    localStorage.alert = JSON.stringify({
       message: response.message,
       severity: 'success',
       open: true,

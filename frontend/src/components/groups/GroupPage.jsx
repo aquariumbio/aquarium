@@ -9,7 +9,7 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Toolbar from '@material-ui/core/Toolbar';
 
 import { LinkButton, StandardButton } from '../shared/Buttons';
-import tokensAPI from '../../helpers/api/tokens';
+import tokensAPI from '../../helpers/api/tokensAPI';
 
 // Route: /object_types
 // Linked in LeftHamburgeMenu

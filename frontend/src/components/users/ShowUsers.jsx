@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 

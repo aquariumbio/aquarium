@@ -76,11 +76,12 @@ export default function App() {
         open={alertProps.open}
         severity={alertProps.severity}
         message={alertProps.message}
+        setAlertProps={setAlertProps}
       />
       <LoadingSpinner isLoading={isLoading} />
       <div name="app-container" className={classes.container} data-cy="app-container">
         { /* Users cannot interact with the app if they do not have a token */
-          !sessionStorage.getItem('token') && <Redirect to="/login" />
+          !localStorage.getItem('token') && <Redirect to="/login" />
         }
         { /* TODO: REDIRECT TO PROFILE PAGE IF USER HAS NOT SIGNED AGREENEMTNS */ }
 
