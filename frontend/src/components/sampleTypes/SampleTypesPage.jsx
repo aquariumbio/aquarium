@@ -47,7 +47,9 @@ const SampleTypeDefinitions = ({ setIsLoading }) => {
   useEffect(() => {
     const fetchData = async () => {
       // loading overlay - delay by window.$timeout to avoid screen flash
-      const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
+      const loading = setTimeout(() => {
+        setIsLoading(true);
+      }, window.$timeout);
 
       const response = await samplesAPI.getTypes();
 
@@ -70,7 +72,9 @@ const SampleTypeDefinitions = ({ setIsLoading }) => {
 
   const handleDelete = async () => {
     // loading overlay - delay by window.$timeout to avoid screen flash
-    const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
+    const loading = setTimeout(() => {
+      setIsLoading(true);
+    }, window.$timeout);
 
     const response = await samplesAPI.delete(currentSampleType.id);
 
@@ -118,7 +122,7 @@ const SampleTypeDefinitions = ({ setIsLoading }) => {
         setAlertProps={setAlertProps}
       />
 
-      { sampleTypes && (
+      {sampleTypes && (
         <Grid container className={classes.root}>
           {/* SIDE BAR */}
           <SideBar
@@ -128,8 +132,13 @@ const SampleTypeDefinitions = ({ setIsLoading }) => {
           />
 
           {/* MAIN CONTENT */}
-          <Grid item xs={10} name="sample-types-main-container" data-cy="sample-types-main-container" overflow="visible">
-
+          <Grid
+            item
+            xs={10}
+            name="sample-types-main-container"
+            data-cy="sample-types-main-container"
+            overflow="visible"
+          >
             <Toolbar className={classes.header}>
               <Breadcrumbs
                 separator={<NavigateNextIcon fontSize="small" />}
@@ -145,28 +154,28 @@ const SampleTypeDefinitions = ({ setIsLoading }) => {
                 </Typography>
               </Breadcrumbs>
               <div>
-                {currentSampleType
-                  ? (
-                    <>
-                      <LinkButton
-                        name="Edit Sample Type"
-                        testName="edit_sample_type_btn"
-                        text="Edit"
-                        type="button"
-                        linkTo={`/sample_types/${currentSampleType.id}/edit`}
-                        disabled={sampleTypes.length === 0}
-                      />
+                {currentSampleType ? (
+                  <>
+                    <LinkButton
+                      name="Edit Sample Type"
+                      testName="edit_sample_type_btn"
+                      text="Edit"
+                      type="button"
+                      linkTo={`/sample_types/${currentSampleType.id}/edit`}
+                      disabled={sampleTypes.length === 0}
+                    />
 
-                      <StandardButton
-                        name="Delete Sample Type"
-                        testName="delete_sample_type_btn"
-                        text="Delete"
-                        type="button"
-                        handleClick={handleDelete}
-                      />
-                    </>
-                  )
-                  : ''}
+                    <StandardButton
+                      name="Delete Sample Type"
+                      testName="delete_sample_type_btn"
+                      text="Delete"
+                      type="button"
+                      handleClick={handleDelete}
+                    />
+                  </>
+                ) : (
+                  ''
+                )}
                 <LinkButton
                   name="New Sample Type"
                   testName="new_sample_type_btn"
@@ -180,16 +189,13 @@ const SampleTypeDefinitions = ({ setIsLoading }) => {
 
             <Divider />
 
-            {currentSampleType.id && (
-              <ShowSampleType sampleType={currentSampleType} />
-            )}
+            {currentSampleType.id && <ShowSampleType sampleType={currentSampleType} />}
 
             {!sampleTypes.length && (
               <Typography variant="h6" component="h1">
                 No Sample Type Defnitions
               </Typography>
             )}
-
           </Grid>
         </Grid>
       )}

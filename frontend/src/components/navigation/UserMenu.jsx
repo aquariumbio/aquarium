@@ -60,16 +60,10 @@ const UserMenu = (props) => {
         open={!!anchorEl}
         onClose={() => setAnchorEl(null)}
       >
-        <MenuItem onClick={() => handleMenuClick('/users')}>
-          Profile
-        </MenuItem>
-        <MenuItem onClick={() => handleMenuClick('/invoices')}>
-          Invoices
-        </MenuItem>
+        <MenuItem onClick={() => handleMenuClick('/users')}>Profile</MenuItem>
+        <MenuItem onClick={() => handleMenuClick('/invoices')}>Invoices</MenuItem>
         <Divider />
-        <MenuItem onClick={handleSignOut}>
-          Sign Out
-        </MenuItem>
+        <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
       </Menu>
     </>
   );

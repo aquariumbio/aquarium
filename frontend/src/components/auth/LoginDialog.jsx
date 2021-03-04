@@ -108,7 +108,13 @@ const LoginDialog = ({ setIsLoading }) => {
 
       <Divider className={classes.divider} />
 
-      <form className={classes.form} noValidate autoComplete="off" name="login" onSubmit={handleSubmit}>
+      <form
+        className={classes.form}
+        noValidate
+        autoComplete="off"
+        name="login"
+        onSubmit={handleSubmit}
+      >
         <TextField
           name="login"
           className={classes.input}
@@ -136,10 +142,11 @@ const LoginDialog = ({ setIsLoading }) => {
           data-test="password"
         />
 
-        {loginErrors &&
-          <p>Invalid login/password combination</p>}
+        {loginErrors && <p>Invalid login/password combination</p>}
 
-        <Button className={classes.button} name="submit" type="submit">SIGN IN</Button>
+        <Button className={classes.button} name="submit" type="submit">
+          SIGN IN
+        </Button>
       </form>
     </div>
   );

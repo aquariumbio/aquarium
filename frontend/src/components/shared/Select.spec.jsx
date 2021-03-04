@@ -15,7 +15,7 @@ describe('Select', () => {
       name: 'Two',
       value: '2',
     },
-  ]
+  ];
 
   it('has false value when no option is selected ', () => {
     const { getByTestId } = render(
@@ -24,7 +24,7 @@ describe('Select', () => {
         handleChange={mockHandleChange}
         value={testValue}
         options={testOptions}
-      />,
+      />
     );
 
     expect(getByTestId('select-input').value).toBe('');
@@ -32,13 +32,13 @@ describe('Select', () => {
 
   it('triggers event handler on select', () => {
     const userInput = 'Two';
-    const {getByRole} = render(
+    const { getByRole } = render(
       <Select
         name={testName}
         handleChange={mockHandleChange}
         value={testValue}
         options={testOptions}
-      />,
+      />
     );
 
     fireEvent.mouseDown(getByRole('button')); // open menu
@@ -51,4 +51,4 @@ describe('Select', () => {
     fireEvent.click(listbox.getByText(userInput)); // select option
     expect(mockHandleChange).toBeCalledTimes(1);
   });
-})
+});

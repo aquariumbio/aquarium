@@ -30,12 +30,7 @@ const FieldLabels = () => {
   const classes = useStyles();
   return (
     // wrap in fragment to maintain grid layout when rendered in parent
-    <Grid
-      container
-      spacing={1}
-      className={classes.root}
-      data-cy="field-labels"
-    >
+    <Grid container spacing={1} className={classes.root} data-cy="field-labels">
       <Grid item lg={2} data-cy="field-name-label-div">
         <Typography variant="h4" className={classes.label}>
           Field Name

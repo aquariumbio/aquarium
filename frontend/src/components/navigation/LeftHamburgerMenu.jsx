@@ -25,11 +25,7 @@ const LeftHamburgerMenu = (props) => {
 
   return (
     <>
-      <IconButton
-        color="inherit"
-        aria-label="menu"
-        onClick={handleMenu}
-      >
+      <IconButton color="inherit" aria-label="menu" onClick={handleMenu}>
         <MenuIcon fontSize="large" />
       </IconButton>
       <Menu
@@ -60,14 +56,18 @@ const LeftHamburgerMenu = (props) => {
         <MenuItem onClick={() => handleMenuClick('/invoices')}>Invoices</MenuItem>
         <MenuItem onClick={() => handleMenuClick('/parameters')}>Parameters</MenuItem>
         <Divider />
-        <MenuItem onClick={() => handleMenuClick('/sample_types')}>Sample Type Definitions</MenuItem>
+        <MenuItem onClick={() => handleMenuClick('/sample_types')}>
+          Sample Type Definitions
+        </MenuItem>
         <MenuItem onClick={() => handleMenuClick('/object_types')}>Containers</MenuItem>
         <MenuItem onClick={() => handleMenuClick('/wizards')}>Location Wizards</MenuItem>
         <Divider />
         <MenuItem onClick={() => handleMenuClick('/import)')}>Import Workflows</MenuItem>
         <MenuItem onClick={() => handleMenuClick('/publish')}>Export Workflows</MenuItem>
         <Divider />
-        <MenuItem component="a" href="http://klavinslab.org/aquarium">Help</MenuItem>
+        <MenuItem component="a" href="http://klavinslab.org/aquarium">
+          Help
+        </MenuItem>
       </Menu>
     </>
   );

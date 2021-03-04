@@ -16,27 +16,30 @@ const SampleOptionsInput = ({
 }) => (
   <Grid item lg={2} data-cy="samples-div">
     {showSampleSelect() ? (
-      <> {sampleTypes.length > 0 ? (
-        <>
-          <AllowableFieldTypeSelect
-            sampleTypes={sampleTypes}
-            handleChange={handleChange}
-            fieldType={fieldType}
-            fieldTypeIndex={index}
-          />
-          <div style={{ display: 'block' }}>
-            <StandardButton
-              name="add-field-option-btn"
-              variant="outlined"
-              testName="add-field-option-btn"
-              handleClick={() => handleAddClick(index)}
-              text="Add option"
+      <>
+        {' '}
+        {sampleTypes.length > 0 ? (
+          <>
+            <AllowableFieldTypeSelect
+              sampleTypes={sampleTypes}
+              handleChange={handleChange}
+              fieldType={fieldType}
+              fieldTypeIndex={index}
             />
-          </div>
-        </>
-      ) : (
-        <Typography>No sample types</Typography> // no samples in db
-      )} </>
+            <div style={{ display: 'block' }}>
+              <StandardButton
+                name="add-field-option-btn"
+                variant="outlined"
+                testName="add-field-option-btn"
+                handleClick={() => handleAddClick(index)}
+                text="Add option"
+              />
+            </div>
+          </>
+        ) : (
+          <Typography>No sample types</Typography> // no samples in db
+        )}{' '}
+      </>
     ) : (
       <Typography data-testid="NA-samples">N/A</Typography> // ftype !== "samples"
     )}

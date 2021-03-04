@@ -31,9 +31,7 @@ const ShowSampleType = ({ sampleType }) => {
             {sampleType.description}
           </Typography>
 
-          {sampleType.field_types && (
-            <FieldTypesList fieldTypes={sampleType.field_types} />
-          )}
+          {sampleType.field_types && <FieldTypesList fieldTypes={sampleType.field_types} />}
 
           <Typography variant="body1" className={classes.inventory}>
             There are {sampleType.inventory}{' '}
@@ -43,15 +41,10 @@ const ShowSampleType = ({ sampleType }) => {
             in the inventory
           </Typography>
 
-          <ObjectTypesList
-            sampleTypeId={sampleType.id}
-            objectTypes={sampleType.object_types}
-          />
+          <ObjectTypesList sampleTypeId={sampleType.id} objectTypes={sampleType.object_types} />
         </CardContent>
       ) : (
-        <CardContent>
-          No Sample Type Selected
-        </CardContent>
+        <CardContent>No Sample Type Selected</CardContent>
       )}
     </Card>
   );
@@ -72,7 +65,7 @@ ShowSampleType.propTypes = {
             field_type_id: PropTypes.number,
             sample_type_id: PropTypes.number,
             name: PropTypes.string,
-          }),
+          })
         ),
         array: PropTypes.bool,
         choices: PropTypes.string,
@@ -89,16 +82,18 @@ ShowSampleType.propTypes = {
         role: null,
         routing: null,
         updated_at: PropTypes.string,
-      }),
+      })
     ),
     inventory: PropTypes.number,
-    field_types: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string,
-      type: PropTypes.string,
-      required: PropTypes.bool,
-      array: PropTypes.bool,
-      choices: PropTypes.string,
-    })),
+    field_types: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        type: PropTypes.string,
+        required: PropTypes.bool,
+        array: PropTypes.bool,
+        choices: PropTypes.string,
+      })
+    ),
   }).isRequired,
 };

@@ -1,7 +1,5 @@
 import React from 'react';
-import {
- render, fireEvent, screen, waitFor, 
-} from '@testing-library/react';
+import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import Modal from './Modal';
 
 describe('Modal', () => {
@@ -12,11 +10,12 @@ describe('Modal', () => {
     btnText: 'Push Me',
   };
 
-
   it('should renders with button', () => {
     const { getByRole } = render(<Modal details={testDetails} />);
 
-    expect(getByRole('button', { name: testDetails.btnText })).toHaveTextContent(testDetails.btnText);
+    expect(getByRole('button', { name: testDetails.btnText })).toHaveTextContent(
+      testDetails.btnText
+    );
 
     // Confirm modal content is not visible
     expect(screen.queryByText(testDetails.message)).toBeNull();
@@ -25,7 +24,7 @@ describe('Modal', () => {
   it('should trigger handle open on button press', async () => {
     const { getByRole } = render(<Modal details={testDetails} />);
 
-  //  click button to open modal
+    //  click button to open modal
     fireEvent.click(getByRole('button', { name: testDetails.btnText }));
 
     const modal = getByRole('dialog');
@@ -36,7 +35,6 @@ describe('Modal', () => {
       expect(modal).toHaveTextContent(testDetails.title);
       expect(modal).toHaveTextContent(testDetails.message);
     });
-
   });
 
   it('should remove modal from screen on escape', async () => {

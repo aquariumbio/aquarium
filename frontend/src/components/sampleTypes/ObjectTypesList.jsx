@@ -26,11 +26,7 @@ const ObjectTypesList = ({ objectTypes, sampleTypeId }) => {
       <Typography variant="h6" component="h2">
         Object Categories
       </Typography>
-      <List
-        aria-labelledby="object_types_list"
-        component="ul"
-        className={classes.list}
-      >
+      <List aria-labelledby="object_types_list" component="ul" className={classes.list}>
         {objectTypes.length ? (
           objectTypes.map((object) => (
             <li key={object.id}>
@@ -80,7 +76,7 @@ ObjectTypesList.propTypes = {
       prefix: PropTypes.string,
       rows: PropTypes.number,
       columns: PropTypes.number,
-    }),
+    })
   ).isRequired,
   sampleTypeId: PropTypes.number.isRequired,
 };

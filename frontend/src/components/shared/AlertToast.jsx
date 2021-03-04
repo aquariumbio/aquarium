@@ -19,12 +19,7 @@ function Alert(props) {
 }
 
 const AlertToast = (props) => {
-  const {
-    message,
-    severity,
-    open,
-    setAlertProps,
-  } = props
+  const { message, severity, open, setAlertProps } = props;
   const classes = useStyles();
   const [state, setState] = useState({
     open: false,
@@ -38,7 +33,7 @@ const AlertToast = (props) => {
       message,
       severity,
       open,
-    })
+    });
   }, [props]);
 
   // Allow for manual closing
@@ -60,7 +55,7 @@ const AlertToast = (props) => {
     <div className={classes.root}>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity={severity} data-cy="alert-toast">
-          { message }
+          {message}
         </Alert>
       </Snackbar>
     </div>

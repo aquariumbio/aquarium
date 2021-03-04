@@ -1,8 +1,8 @@
 import React from 'react';
-import {render, screen, fireEvent} from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
-import {StandardButton, LinkButton} from './Buttons';
+import { StandardButton, LinkButton } from './Buttons';
 
 describe('StandardButton', () => {
   it('should render with expected text', () => {
@@ -16,7 +16,7 @@ describe('StandardButton', () => {
     const mockHandleClick = jest.fn();
     render(<StandardButton name="test-button" text="Click Me!" handleClick={mockHandleClick} />);
 
-    fireEvent.click(screen.getByRole('button', {name: 'Click Me!'}));
+    fireEvent.click(screen.getByRole('button', { name: 'Click Me!' }));
 
     expect(mockHandleClick).toHaveBeenCalledTimes(1);
   });
@@ -32,12 +32,10 @@ describe('LinkButton', () => {
     render(
       <Router history={history}>
         <LinkButton name="test-link-button" text="Click Me!" linkTo="/test" />
-      </Router>,
+      </Router>
     );
 
-    expect(screen.getByRole('button', { name: 'Click Me!' }))
-      .toHaveAttribute('href','/test');
-
+    expect(screen.getByRole('button', { name: 'Click Me!' })).toHaveAttribute('href', '/test');
   });
 
   it('routes to a new route', async () => {
@@ -49,7 +47,7 @@ describe('LinkButton', () => {
     render(
       <Router history={history}>
         <LinkButton name="test-link-button" text="Click Me!" linkTo="/test" />
-      </Router>,
+      </Router>
     );
 
     fireEvent.click(screen.getByRole('button', { name: 'Click Me!' }));

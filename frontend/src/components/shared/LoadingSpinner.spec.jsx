@@ -8,16 +8,16 @@ describe('Name of the group', () => {
     render(<LoadingSpinner isLoading={testTrue} />);
 
     const loadingSpinner = screen.getByTestId('loading');
-      expect(loadingSpinner).toBeInTheDocument();
-      expect(loadingSpinner).toBeVisible();
+    expect(loadingSpinner).toBeInTheDocument();
+    expect(loadingSpinner).toBeVisible();
   });
 
   it('should be not visible when isLoading is false', async () => {
     const testFalse = false;
-      render(<LoadingSpinner isLoading={testFalse} />);
+    render(<LoadingSpinner isLoading={testFalse} />);
 
-      const loadingSpinner = screen.getByTestId('loading');
-      expect(loadingSpinner).toBeInTheDocument();
-      expect(loadingSpinner).toBeHidden;
+    const loadingSpinner = screen.getByTestId('loading');
+    expect(loadingSpinner).toBeInTheDocument();
+    expect(loadingSpinner).toBeHidden();
   });
 });

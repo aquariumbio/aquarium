@@ -67,50 +67,153 @@ export default function App() {
         <div name="app-container" className={classes.container} data-cy="app-container">
           <LoadingSpinner isLoading={isLoading} />
 
-          { /* Users cannot interact with the app if they do not have a token */
-            !localStorage.getItem('token') &&
-            <Redirect to="/login" />
+          {
+            /* Users cannot interact with the app if they do not have a token */
+            !localStorage.getItem('token') && <Redirect to="/login" />
           }
-          { /* TODO: REDIRECT TO PROFILE PAGE IF USER HAS NOT SIGNED AGREEMENTS */ }
+          {/* TODO: REDIRECT TO PROFILE PAGE IF USER HAS NOT SIGNED AGREEMENTS */}
 
           <Switch>
-            <Route path="/login" render={(props) => <LoginDialog setIsLoading={setIsLoading} {...props} />} />
+            <Route
+              path="/login"
+              render={(props) => <LoginDialog setIsLoading={setIsLoading} {...props} />}
+            />
             <>
               {/* Header should show on all pages except login */}
               <Header />
 
-              <Route exact path="/" render={(props) => <HomePage setIsLoading={setIsLoading} {...props} />} />
+              <Route
+                exact
+                path="/"
+                render={(props) => <HomePage setIsLoading={setIsLoading} {...props} />}
+              />
 
               {/* Left Hamburger Menu */}
-              <Route exact path="/users" render={(props) => <UsersPage setIsLoading={setIsLoading} {...props} />} />
+              <Route
+                exact
+                path="/users"
+                render={(props) => <UsersPage setIsLoading={setIsLoading} {...props} />}
+              />
 
-              <Route exact path="/sample_types" render={(props) => <SampleTypesPage setIsLoading={setIsLoading} {...props} />} />
-              <Route exact path="/sample_types/new" render={(props) => <SampleTypeDefinitionForm setIsLoading={setIsLoading} {...props} />} />
-              <Route exact path="/sample_types/:id/edit" render={(props) => <SampleTypeDefinitionForm setIsLoading={setIsLoading} {...props} />} />
+              <Route
+                exact
+                path="/sample_types"
+                render={(props) => <SampleTypesPage setIsLoading={setIsLoading} {...props} />}
+              />
+              <Route
+                exact
+                path="/sample_types/new"
+                render={(props) => (
+                  <SampleTypeDefinitionForm setIsLoading={setIsLoading} {...props} />
+                )}
+              />
+              <Route
+                exact
+                path="/sample_types/:id/edit"
+                render={(props) => (
+                  <SampleTypeDefinitionForm setIsLoading={setIsLoading} {...props} />
+                )}
+              />
 
-              <Route exact path="/announcements" render={(props) => <AnnouncementsPage setIsLoading={setIsLoading} {...props} />} />
-              <Route exact path="/budgets" render={(props) => <BudgetsPage setIsLoading={setIsLoading} {...props} />} />
-              <Route exact path="/object_types" render={(props) => <ContainersPage setIsLoading={setIsLoading} {...props} />} />
-              <Route exact path="/direct_purchase" render={(props) => <DirectPurchasePage setIsLoading={setIsLoading} {...props} />} />
-              <Route exact path="/import" render={(props) => <ImportWorkflowsPage setIsLoading={setIsLoading} {...props} />} />
-              <Route exact path="/publish" render={(props) => <ExportWorkflowsPage setIsLoading={setIsLoading} {...props} />} />
-              <Route exact path="/wizards" render={(props) => <LocationWizardsPage setIsLoading={setIsLoading} {...props} />} />
-              <Route exact path="/logs" render={(props) => <LogsPage setIsLoading={setIsLoading} {...props} />} />
-              <Route exact path="/parameters" render={(props) => <ParametersPage setIsLoading={setIsLoading} {...props} />} />
-              <Route exact path="/roles" render={(props) => <RolesPage setIsLoading={setIsLoading} {...props} />} />
-              <Route exact path="/groups" render={(props) => <GroupsPage setIsLoading={setIsLoading} {...props} />} />
+              <Route
+                exact
+                path="/announcements"
+                render={(props) => <AnnouncementsPage setIsLoading={setIsLoading} {...props} />}
+              />
+              <Route
+                exact
+                path="/budgets"
+                render={(props) => <BudgetsPage setIsLoading={setIsLoading} {...props} />}
+              />
+              <Route
+                exact
+                path="/object_types"
+                render={(props) => <ContainersPage setIsLoading={setIsLoading} {...props} />}
+              />
+              <Route
+                exact
+                path="/direct_purchase"
+                render={(props) => <DirectPurchasePage setIsLoading={setIsLoading} {...props} />}
+              />
+              <Route
+                exact
+                path="/import"
+                render={(props) => <ImportWorkflowsPage setIsLoading={setIsLoading} {...props} />}
+              />
+              <Route
+                exact
+                path="/publish"
+                render={(props) => <ExportWorkflowsPage setIsLoading={setIsLoading} {...props} />}
+              />
+              <Route
+                exact
+                path="/wizards"
+                render={(props) => <LocationWizardsPage setIsLoading={setIsLoading} {...props} />}
+              />
+              <Route
+                exact
+                path="/logs"
+                render={(props) => <LogsPage setIsLoading={setIsLoading} {...props} />}
+              />
+              <Route
+                exact
+                path="/parameters"
+                render={(props) => <ParametersPage setIsLoading={setIsLoading} {...props} />}
+              />
+              <Route
+                exact
+                path="/roles"
+                render={(props) => <RolesPage setIsLoading={setIsLoading} {...props} />}
+              />
+              <Route
+                exact
+                path="/groups"
+                render={(props) => <GroupsPage setIsLoading={setIsLoading} {...props} />}
+              />
 
               {/* Main Navigation tabs */}
-              <Route exact path="/manager" render={(props) => <ManagerPage setIsLoading={setIsLoading} {...props} />} />
-              <Route exact path="/launcher" render={(props) => <PlansPage setIsLoading={setIsLoading} {...props} />} />
-              <Route exact path="/samples" render={(props) => <SamplesPage setIsLoading={setIsLoading} {...props} />} />
-              <Route exact path="/developer" render={(props) => <DeveloperPage setIsLoading={setIsLoading} {...props} />} />
-              <Route exact path="/designer" render={(props) => <DesignerPage setIsLoading={setIsLoading} {...props} />} />
-              <Route exact path="/user" render={(props) => <UserMenu setIsLoading={setIsLoading} {...props} />} />
+              <Route
+                exact
+                path="/manager"
+                render={(props) => <ManagerPage setIsLoading={setIsLoading} {...props} />}
+              />
+              <Route
+                exact
+                path="/launcher"
+                render={(props) => <PlansPage setIsLoading={setIsLoading} {...props} />}
+              />
+              <Route
+                exact
+                path="/samples"
+                render={(props) => <SamplesPage setIsLoading={setIsLoading} {...props} />}
+              />
+              <Route
+                exact
+                path="/developer"
+                render={(props) => <DeveloperPage setIsLoading={setIsLoading} {...props} />}
+              />
+              <Route
+                exact
+                path="/designer"
+                render={(props) => <DesignerPage setIsLoading={setIsLoading} {...props} />}
+              />
+              <Route
+                exact
+                path="/user"
+                render={(props) => <UserMenu setIsLoading={setIsLoading} {...props} />}
+              />
 
               {/* Right user Menu */}
-              <Route exact path="/invoices" render={(props) => <InvoicesPage setIsLoading={setIsLoading} {...props} />} />
-              <Route exact path="/users/:id" render={(props) => <UserProfilePage setIsLoading={setIsLoading} {...props} />} />
+              <Route
+                exact
+                path="/invoices"
+                render={(props) => <InvoicesPage setIsLoading={setIsLoading} {...props} />}
+              />
+              <Route
+                exact
+                path="/users/:id"
+                render={(props) => <UserProfilePage setIsLoading={setIsLoading} {...props} />}
+              />
 
               {/* TODO: If no route matches redirect to home page */}
             </>

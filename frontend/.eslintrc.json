@@ -4,12 +4,7 @@
     "es2021": true,
     "jest": true
   },
-  "extends": [
-    "plugin:react/recommended",
-    "plugin:cypress/recommended",
-    "airbnb",
-    "plugin:prettier/recommended"
-  ],
+  "extends": ["plugin:react/recommended", "airbnb", "plugin:prettier/recommended"],
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -17,25 +12,9 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": ["react", "cypress"],
+  "plugins": ["react", "prettier"],
   "rules": {
     "prettier/prettier": "warn",
-    "import/no-extraneous-dependencies": [
-      "warn",
-      {
-        "devDependencies": true,
-        "optionalDependencies": false,
-        "peerDependencies": false
-      }
-    ],
-    "no-unused-expressions": [0, { "extensions": ["*spec.js"] }],
-    "react/jsx-filename-extension": [0, { "extensions": ["*spec.js"] }],
-    "react/jsx-one-expression-per-line": 0,
-    "no-debugger": "warn",
-    "no-console": "warn",
-    "no-unused-vars": "warn",
-    "react/require-default-props": [0],
-    "no-useless-return": "warn",
     "operator-linebreak": [
       "warn",
       "after",
@@ -44,6 +23,19 @@
           "?": "before",
           ":": "before"
         }
+      }
+    ],
+    "react/require-default-props": 1,
+    "no-unused-vars": "warn",
+    "react/jsx-one-expression-per-line": 0,
+    "no-debugger": "warn",
+    "no-console": "warn",
+    "react/jsx-filename-extension": 1,
+    "no-unused-expressions": [
+      1,
+      {
+        "allowShortCircuit": true,
+        "allowTernary": true
       }
     ]
   }
