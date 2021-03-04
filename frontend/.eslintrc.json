@@ -1,11 +1,14 @@
 {
     "env": {
         "browser": true,
-        "es2021": true
+        "es2021": true,
+        "jest": true
     },
     "extends": [
         "plugin:react/recommended",
-        "airbnb"
+        "plugin:cypress/recommended",
+        "airbnb",
+        "prettier"
     ],
     "parserOptions": {
         "ecmaFeatures": {
@@ -15,9 +18,39 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "react",
+        "cypress"
     ],
     "rules": {
-        "jsx-quotes": ["error", "prefer-double"]
+        "jsx-quotes": ["warn", "prefer-double"],
+        "import/no-extraneous-dependencies": [
+          "warn",
+          {
+            "devDependencies": true,
+            "optionalDependencies": false,
+            "peerDependencies": false
+          }
+        ],
+        "no-unused-expressions": [0, { "extensions": ["*spec.js"] }],
+        "react/jsx-filename-extension": [0, { "extensions": ["*spec.js"] }],
+        "react/jsx-one-expression-per-line": 0,
+        "no-debugger": "warn",
+        "no-console": "warn",
+        "no-unused-vars": "warn",
+        "object-curly-newline": "warn",
+        "react/require-default-props": [0],
+        "no-useless-return": "warn",
+        "operator-linebreak":["warn", "after",
+            {
+                "overrides": {
+                    "?": "before",
+                    ":": "before"
+                }
+            }],
+        "comma-dangle": "warn",
+        "vars-on-top": "off",
+        "prefer-destructuring": "warn",
+        "react/forbid-prop-types": "warn"
+
     }
 }

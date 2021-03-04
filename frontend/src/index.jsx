@@ -3,14 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import { BrowserRouter as Router } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import axios from 'axios';
-import App from './components/app/App';
 import reportWebVitals from './reportWebVitals';
+import App from './components/app/App';
 
-axios.defaults.baseURL = 'http://localhost:3001/api/v3/';
+// default setTimeout delay before showing loading spinner
+window.$timeout = 200;
 
 ReactDOM.render(
-  // eslint-disable-next-line react/jsx-filename-extension
   <React.StrictMode>
     <Router>
       <CssBaseline />
@@ -20,6 +19,8 @@ ReactDOM.render(
   document.getElementById('root'),
 );
 
+// Set minimum screen width
+document.getElementById('root').style.minWidth = '1280px';
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
