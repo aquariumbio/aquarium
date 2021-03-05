@@ -32,8 +32,8 @@ describe('/login', () => {
         expect(win.localStorage.token).to.be.undefined;
       });
 
-    cy.get('[data-test=username]').type('gnomicostest ');
-    cy.get('[data-test=password]').type('aquarium123');
+    cy.get('[data-test=username]').type('neptune ');
+    cy.get('[data-test=password]').type('aquarium');
     cy.get('form').contains('SIGN IN').click();
     cy.url().should('eq', `${Cypress.config().baseUrl}/`);
 
