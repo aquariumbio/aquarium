@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 /* disabling forbidden prop spreading for react-router-dom */
 /* eslint-disable react/jsx-props-no-spreading */
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
