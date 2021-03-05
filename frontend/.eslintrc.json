@@ -16,7 +16,7 @@
   "rules": {
     "prettier/prettier": "warn",
     "operator-linebreak": [
-      "warn",
+      "error",
       "after",
       {
         "overrides": {
@@ -26,7 +26,6 @@
       }
     ],
     "react/require-default-props": 1,
-    "no-unused-vars": "warn",
     "react/jsx-one-expression-per-line": 0,
     "no-debugger": "warn",
     "no-console": "warn",
@@ -39,7 +38,6 @@
       }
     ],
     "prefer-destructuring": "warn",
-    "no-useless-return":"warn",
-    "import/no-extraneous-dependencies": "warn"
+    "no-useless-return": "warn"
   }
 }
