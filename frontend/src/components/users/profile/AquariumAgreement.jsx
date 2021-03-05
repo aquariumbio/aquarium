@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
 import Divider from '@material-ui/core/Divider';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
@@ -55,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// eslint-disable-next-line no-unused-vars
 const AquariumAgreement = ({ setIsLoading, setAlertProps, id }) => {
   const classes = useStyles();
 
@@ -67,7 +67,7 @@ const AquariumAgreement = ({ setIsLoading, setAlertProps, id }) => {
     if (!response) return;
 
     // success
-    const user = response.user;
+    const { user } = response;
     setUserName(user.name);
     setAquariumAgreement(user.aquarium_agreement === '1' || user.aquarium_agreement === 'true');
   };
@@ -107,29 +107,19 @@ const AquariumAgreement = ({ setIsLoading, setAlertProps, id }) => {
         </Breadcrumbs>
 
         <div>
-          <LinkButton
-            name="All"
-            testName="all"
-            text="All"
-            type="button"
-            linkTo="/users"
-          />
+          <LinkButton name="All" testName="all" text="All" type="button" linkTo="/users" />
         </div>
       </Toolbar>
 
       <Divider />
 
       <div className={classes.wrapper}>
-        <Typography>
-          Agreement
-        </Typography>
+        <Typography>Agreement</Typography>
 
         <Divider style={{ marginTop: '0px' }} />
 
         {aquariumAgreement ? (
-          <Typography>
-            ___ agreed on ___
-          </Typography>
+          <Typography>___ agreed on ___</Typography>
         ) : (
           <StandardButton
             name="agree"
@@ -146,7 +136,7 @@ const AquariumAgreement = ({ setIsLoading, setAlertProps, id }) => {
 
 AquariumAgreement.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
-  setAlertProps: PropTypes.func,
+  sssetAlertProps: PropTypes.func.isRequired,
   id: PropTypes.isRequired,
 };
 

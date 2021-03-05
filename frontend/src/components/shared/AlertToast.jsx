@@ -75,7 +75,7 @@ AlertToast.propTypes = {
   message: PropTypes.string,
   open: PropTypes.bool,
   severity: PropTypes.oneOf(['info', 'warning', 'success', 'error']),
-  setAlertProps: PropTypes.func.isRequired,
+  sssetAlertProps: PropTypes.func.isRequired,
 };
 
 AlertToast.defaultProps = {

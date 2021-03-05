@@ -118,7 +118,7 @@ const Statistics = ({ setIsLoading, setAlertProps, id }) => {
 
 Statistics.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
-  setAlertProps: PropTypes.func,
+  ssetAlertProps: PropTypes.func.isRequired,
   id: PropTypes.isRequired,
 };
 

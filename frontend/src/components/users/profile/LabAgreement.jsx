@@ -145,7 +145,7 @@ const LabAgreement = ({ setIsLoading, setAlertProps, id }) => {
 
 LabAgreement.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
-  setAlertProps: PropTypes.func,
+  ssetAlertProps: PropTypes.func.isRequired,
   id: PropTypes.isRequired,
 };
 

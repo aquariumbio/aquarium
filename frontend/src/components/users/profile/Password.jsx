@@ -187,7 +187,7 @@ const Password = ({ setIsLoading, setAlertProps, id }) => {
 
 Password.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
-  setAlertProps: PropTypes.func,
+  ssetAlertProps: PropTypes.func.isRequired,
   id: PropTypes.isRequired,
 };
 

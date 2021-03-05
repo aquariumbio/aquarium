@@ -210,7 +210,7 @@ const ShowObjectTypesByHandler = ({ objectTypes, setIsLoading, setAlertProps }) 
 ShowObjectTypesByHandler.propTypes = {
   objectTypes: PropTypes.isRequired,
   setIsLoading: PropTypes.func.isRequired,
-  setAlertProps: PropTypes.func,
+  ssetAlertProps: PropTypes.func.isRequired,
 };
 
 export default ShowObjectTypesByHandler;

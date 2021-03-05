@@ -224,7 +224,7 @@ const GroupForm = ({ setIsLoading, setAlertProps, match }) => {
 
 GroupForm.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
-  setAlertProps: PropTypes.func,
+  ssetAlertProps: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.objectOf(PropTypes.string),
     path: PropTypes.string,
