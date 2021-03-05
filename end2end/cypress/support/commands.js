@@ -10,9 +10,10 @@
 //
 //
 // -- This is a parent command --
+
 Cypress.Commands.add('login', () => {
-  const login = 'gnomicostest';
-  const password = 'aquarium123';
+  const login = 'marikotest';
+  const password = 'aquarium';
 
   cy.request({
     method: 'POST',
@@ -22,6 +23,7 @@ Cypress.Commands.add('login', () => {
       window.localStorage.setItem('token', resp.body.token);
     });
 });
+
 Cypress.Commands.add('logout', () => {
   const token = window.localStorage.getItem('token');
 
