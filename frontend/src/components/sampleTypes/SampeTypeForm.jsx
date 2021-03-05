@@ -264,7 +264,7 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
     if (response.status === 200) {
       alertProps = {
         message: `Error: ${state.sampleType.name} could not be ${action}. ${JSON.stringify(
-          response.data.errors
+          response.data.errors,
         )}`,
         severity: 'error',
         open: true,

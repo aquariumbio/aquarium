@@ -81,7 +81,7 @@ SideBar.propTypes = {
       object_types: PropTypes.object,
       inventory: PropTypes.number,
       field_types: PropTypes.object,
-    })
+    }),
   ).isRequired,
   setCurrentSampleType: PropTypes.func.isRequired,
 };

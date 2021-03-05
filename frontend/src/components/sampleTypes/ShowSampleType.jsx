@@ -65,7 +65,7 @@ ShowSampleType.propTypes = {
             field_type_id: PropTypes.number,
             sample_type_id: PropTypes.number,
             name: PropTypes.string,
-          })
+          }),
         ),
         array: PropTypes.bool,
         choices: PropTypes.string,
@@ -82,7 +82,7 @@ ShowSampleType.propTypes = {
         role: null,
         routing: null,
         updated_at: PropTypes.string,
-      })
+      }),
     ),
     inventory: PropTypes.number,
     field_types: PropTypes.arrayOf(
@@ -93,7 +93,7 @@ ShowSampleType.propTypes = {
         required: PropTypes.bool,
         array: PropTypes.bool,
         choices: PropTypes.string,
-      })
+      }),
     ),
   }).isRequired,
 };

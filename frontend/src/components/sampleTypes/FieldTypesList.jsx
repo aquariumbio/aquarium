@@ -15,15 +15,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // Display allowable field types (samples)
-const AftList = ({ allowableFieldTypes }) =>
-  allowableFieldTypes
-    .map((aft) => (
-      /* Use component prop on material ui Link to integrate with react router dom */
-      <Link key={aft.id} component={RouterLink} to={`/sample_types/${aft.id}`}>
-        {aft.name}
-      </Link>
-    ))
-    .reduce((prev, curr) => [prev, ' | ', curr]);
+const AftList = ({ allowableFieldTypes }) => allowableFieldTypes
+  .map((aft) => (
+    /* Use component prop on material ui Link to integrate with react router dom */
+    <Link key={aft.id} component={RouterLink} to={`/sample_types/${aft.id}`}>
+      {aft.name}
+    </Link>
+  ))
+  .reduce((prev, curr) => [prev, ' | ', curr]);
 
 // Given an array of field types display as a list
 const FieldTypesList = ({ fieldTypes }) => {
@@ -67,9 +66,9 @@ FieldTypesList.propTypes = {
           field_type_id: PropTypes.number,
           sample_type_id: PropTypes.number,
           name: PropTypes.string,
-        })
+        }),
       ),
-    })
+    }),
   ),
 };
 

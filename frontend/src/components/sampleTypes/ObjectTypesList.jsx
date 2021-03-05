@@ -76,7 +76,7 @@ ObjectTypesList.propTypes = {
       prefix: PropTypes.string,
       rows: PropTypes.number,
       columns: PropTypes.number,
-    })
+    }),
   ).isRequired,
   sampleTypeId: PropTypes.number.isRequired,
 };

@@ -4,6 +4,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import utils from '../../../helpers/utils';
 
+// eslint-disable-next-line object-curly-newline
 const AllowableFieldTypeSelect = ({ sampleTypes, handleChange, fieldTypeIndex, fieldType }) => (
   <>
     {!!fieldType.allowable_field_types &&
