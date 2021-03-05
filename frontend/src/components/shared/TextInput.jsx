@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// eslint-disable-next-line object-curly-newline
 const TextInput = ({ name, testName, handleChange, value, required, type, autoFocus }) => {
   const classes = useStyles();
 

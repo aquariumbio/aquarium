@@ -136,7 +136,7 @@ const AquariumAgreement = ({ setIsLoading, setAlertProps, id }) => {
 
 AquariumAgreement.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
-  sssetAlertProps: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func.isRequired,
   id: PropTypes.isRequired,
 };
 

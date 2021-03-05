@@ -23,6 +23,7 @@ function raw(message) {
 }
 
 const AlertToast = (props) => {
+  // eslint-disable-next-line object-curly-newline
   const { message, severity, open, setAlertProps } = props;
   const classes = useStyles();
   const [state, setState] = useState({
@@ -55,8 +56,9 @@ const AlertToast = (props) => {
     setAlertProps({});
   };
 
-  /*  message is pretty printed JSON.stringify which includes \n line breaks raw changes \n line breaks to <br>
-      reaact ignores the <br> and requires us to use “dangerouslySetInnerHTML”
+  /*  message is pretty printed JSON.stringify which includes \n line breaks
+      raw changes \n line breaks to <br>
+      reaact requires us to use “dangerouslySetInnerHTML”
       TODO: render form errors inline rather than as a list in the alert */
   return (
     <div className={classes.root}>
@@ -75,7 +77,7 @@ AlertToast.propTypes = {
   message: PropTypes.string,
   open: PropTypes.bool,
   severity: PropTypes.oneOf(['info', 'warning', 'success', 'error']),
-  sssetAlertProps: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func.isRequired,
 };
 
 AlertToast.defaultProps = {

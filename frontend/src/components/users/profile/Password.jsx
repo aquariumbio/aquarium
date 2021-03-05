@@ -55,11 +55,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// eslint-disable-next-line no-unused-vars
 const Password = ({ setIsLoading, setAlertProps, id }) => {
   const classes = useStyles();
 
   const [userName, setUserName] = useState('');
+  // eslint-disable-next-line no-unused-vars
   const [password, setPassword] = useState('');
+  // eslint-disable-next-line no-unused-vars
   const [password2, setPassword2] = useState('');
 
   const init = async () => {
@@ -82,9 +85,9 @@ const Password = ({ setIsLoading, setAlertProps, id }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     // set formData
-    const form = document.querySelector('form');
-    const data = new FormData(form);
-    const formData = Object.fromEntries(data);
+    // const form = document.querySelector('form');
+    // const data = new FormData(form);
+    // const formData = Object.fromEntries(data);
 
     alert('TODO');
   };
@@ -187,7 +190,7 @@ const Password = ({ setIsLoading, setAlertProps, id }) => {
 
 Password.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
-  ssetAlertProps: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func.isRequired,
   id: PropTypes.isRequired,
 };
 

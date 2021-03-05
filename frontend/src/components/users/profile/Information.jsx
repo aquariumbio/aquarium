@@ -55,10 +55,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// eslint-disable-next-line no-unused-vars
 const Information = ({ setIsLoading, setAlertProps, id }) => {
   const classes = useStyles();
 
-  const [userReset, setUserReset] = useState();
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [userPhone, setUserPhone] = useState('');
@@ -243,7 +243,7 @@ const Information = ({ setIsLoading, setAlertProps, id }) => {
 
 Information.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
-  ssetAlertProps: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func.isRequired,
   id: PropTypes.isRequired,
 };
 

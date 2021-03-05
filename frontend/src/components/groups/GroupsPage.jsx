@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import * as queryString from 'query-string';
 import PropTypes from 'prop-types';
 
@@ -14,7 +15,6 @@ import Button from '@material-ui/core/Button';
 import ShowGroups from './ShowGroups';
 import { LinkButton } from '../shared/Buttons';
 import groupsAPI from '../../helpers/api/groups';
-import permissionsAPI from '../../helpers/api/permissions';
 
 // Route: /object_types
 // Linked in LeftHamburgeMenu
@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// eslint-disable-next-line no-unused-vars
 const GroupsPage = ({ setIsLoading, setAlertProps, match }) => {
   const classes = useStyles();
   const history = useHistory();
@@ -167,7 +168,7 @@ const GroupsPage = ({ setIsLoading, setAlertProps, match }) => {
 
 GroupsPage.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
-  ssetAlertProps: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.objectOf(PropTypes.string),
     path: PropTypes.string,

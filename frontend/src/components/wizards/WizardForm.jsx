@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 
@@ -6,21 +6,11 @@ import { makeStyles } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import MenuItem from '@material-ui/core/MenuItem';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import Grid from '@material-ui/core/Grid';
-import Alert from '@material-ui/lab/Alert';
 import Divider from '@material-ui/core/Divider';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 
-import objectsAPI from '../../helpers/api/objects';
 import wizardsAPI from '../../helpers/api/wizards';
 import tokensAPI from '../../helpers/api/tokensAPI';
-import LoadingSpinner from '../shared/LoadingSpinner';
 import { StandardButton, LinkButton } from '../shared/Buttons';
-import utils from '../../helpers/utils';
-import AlertToast from '../shared/AlertToast';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -55,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// eslint-disable-next-line no-unused-vars
 const WizardForm = ({ setIsLoading, setAlertProps, match }) => {
   const classes = useStyles();
   const [disableSubmit, setDisableSubmit] = useState(false);
@@ -104,7 +95,7 @@ const WizardForm = ({ setIsLoading, setAlertProps, match }) => {
   useEffect(() => {
     setDisableSubmit(
       !wizardName.trim() ||
-      !wizardDescription.trim()
+      !wizardDescription.trim(),
     );
   });
 
@@ -364,7 +355,7 @@ const WizardForm = ({ setIsLoading, setAlertProps, match }) => {
 
 WizardForm.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
-  ssetAlertProps: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.objectOf(PropTypes.string),
     path: PropTypes.string,

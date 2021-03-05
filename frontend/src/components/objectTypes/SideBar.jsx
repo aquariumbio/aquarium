@@ -80,7 +80,7 @@ SideBar.propTypes = {
     PropTypes.shape({
       id: PropTypes.number,
       handler: PropTypes.string,
-    })
+    }),
   ).isRequired,
   setCurrentObjectTypeHandler: PropTypes.func.isRequired,
   setCurrentObjectTypesByHandler: PropTypes.func.isRequired,

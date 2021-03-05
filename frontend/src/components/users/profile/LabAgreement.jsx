@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
 import Divider from '@material-ui/core/Divider';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
@@ -55,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// eslint-disable-next-line no-unused-vars
 const LabAgreement = ({ setIsLoading, setAlertProps, id }) => {
   const classes = useStyles();
 
@@ -145,7 +145,7 @@ const LabAgreement = ({ setIsLoading, setAlertProps, id }) => {
 
 LabAgreement.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
-  ssetAlertProps: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func.isRequired,
   id: PropTypes.isRequired,
 };
 

@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// eslint-disable-next-line no-unused-vars
 const GroupPage = ({ setIsLoading, setAlertProps, match }) => {
   const classes = useStyles();
 
@@ -108,7 +109,7 @@ const GroupPage = ({ setIsLoading, setAlertProps, match }) => {
 
 GroupPage.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
-  ssetAlertProps: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.objectOf(PropTypes.string),
     path: PropTypes.string,

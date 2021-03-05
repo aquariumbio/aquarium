@@ -61,6 +61,6 @@ axiosInstance.interceptors.response.use(
       }
       return false;
     }
-  }
+  },
 );
 export default axiosInstance;

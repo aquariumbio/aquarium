@@ -32,7 +32,7 @@ describe('LinkButton', () => {
     render(
       <Router history={history}>
         <LinkButton name="test-link-button" text="Click Me!" linkTo="/test" />
-      </Router>
+      </Router>,
     );
 
     expect(screen.getByRole('button', { name: 'Click Me!' })).toHaveAttribute('href', '/test');
@@ -47,7 +47,7 @@ describe('LinkButton', () => {
     render(
       <Router history={history}>
         <LinkButton name="test-link-button" text="Click Me!" linkTo="/test" />
-      </Router>
+      </Router>,
     );
 
     fireEvent.click(screen.getByRole('button', { name: 'Click Me!' }));

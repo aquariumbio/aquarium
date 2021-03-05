@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -6,22 +6,13 @@ import { makeStyles } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import MenuItem from '@material-ui/core/MenuItem';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import Grid from '@material-ui/core/Grid';
-import Alert from '@material-ui/lab/Alert';
 import Divider from '@material-ui/core/Divider';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
-import objectsAPI from '../../helpers/api/objects';
 import usersAPI from '../../helpers/api/users';
 import permissionsAPI from '../../helpers/api/permissions';
-import tokensAPI from '../../helpers/api/tokensAPI';
-import LoadingSpinner from '../shared/LoadingSpinner';
 import { StandardButton, LinkButton } from '../shared/Buttons';
-import utils from '../../helpers/utils';
-import AlertToast from '../shared/AlertToast';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -56,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// eslint-disable-next-line no-unused-vars
 const UserForm = ({ setIsLoading, setAlertProps, match }) => {
   const classes = useStyles();
   const history = useHistory();
@@ -85,7 +77,7 @@ const UserForm = ({ setIsLoading, setAlertProps, match }) => {
     setDisableSubmit(
       !userName.trim() ||
       !userLogin.trim() ||
-      !userPassword
+      !userPassword,
     );
   });
 
@@ -264,7 +256,7 @@ const UserForm = ({ setIsLoading, setAlertProps, match }) => {
 
 UserForm.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
-  ssetAlertProps: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.objectOf(PropTypes.string),
     path: PropTypes.string,

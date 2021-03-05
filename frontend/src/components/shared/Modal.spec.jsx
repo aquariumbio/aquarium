@@ -1,4 +1,5 @@
 import React from 'react';
+// eslint-disable-next-line object-curly-newline
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import Modal from './Modal';
 
@@ -14,7 +15,7 @@ describe('Modal', () => {
     const { getByRole } = render(<Modal details={testDetails} />);
 
     expect(getByRole('button', { name: testDetails.btnText })).toHaveTextContent(
-      testDetails.btnText
+      testDetails.btnText,
     );
 
     // Confirm modal content is not visible

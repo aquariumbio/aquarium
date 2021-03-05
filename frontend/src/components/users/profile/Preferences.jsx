@@ -58,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// eslint-disable-next-line no-unused-vars
 const Preferences = ({ setIsLoading, setAlertProps, id }) => {
   const classes = useStyles();
 
@@ -210,7 +211,7 @@ const Preferences = ({ setIsLoading, setAlertProps, id }) => {
 
 Preferences.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
-  ssetAlertProps: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func.isRequired,
   id: PropTypes.isRequired,
 };
 

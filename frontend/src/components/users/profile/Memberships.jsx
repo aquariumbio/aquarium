@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
 import Divider from '@material-ui/core/Divider';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Toolbar from '@material-ui/core/Toolbar';
 
-import { LinkButton, StandardButton } from '../../shared/Buttons';
+import { LinkButton } from '../../shared/Buttons';
 import usersAPI from '../../../helpers/api/users';
 
 const useStyles = makeStyles((theme) => ({
@@ -55,11 +54,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// eslint-disable-next-line no-unused-vars
 const Memberships = ({ setIsLoading, setAlertProps, id }) => {
   const classes = useStyles();
 
   const [userName, setUserName] = useState('');
-  const [memberships, setMemberships] = useState({});
 
   useEffect(() => {
     const init = async () => {
@@ -117,7 +116,7 @@ const Memberships = ({ setIsLoading, setAlertProps, id }) => {
 
 Memberships.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
-  ssetAlertProps: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func.isRequired,
   id: PropTypes.isRequired,
 };
 

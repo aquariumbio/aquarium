@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import MuiSelect from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
+// eslint-disable-next-line object-curly-newline
 const Select = ({ name, handleChange, value, options }) => (
   <MuiSelect
     name={name}
@@ -49,7 +50,7 @@ Select.propTypes = {
     PropTypes.shape({
       name: PropTypes.string,
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object]),
-    })
+    }),
   ).isRequired,
 };
 

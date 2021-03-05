@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core';
@@ -7,16 +7,12 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import Grid from '@material-ui/core/Grid';
 import Alert from '@material-ui/lab/Alert';
 import Divider from '@material-ui/core/Divider';
 
 import objectsAPI from '../../helpers/api/objects';
 import samplesAPI from '../../helpers/api/samplesAPI';
-import tokensAPI from '../../helpers/api/tokensAPI';
 import { StandardButton, LinkButton } from '../shared/Buttons';
-import utils from '../../helpers/utils';
-import AlertToast from '../shared/AlertToast';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -51,12 +47,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// eslint-disable-next-line no-unused-vars
 const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
   const classes = useStyles();
 
   const [disableSubmit, setDisableSubmit] = useState(false);
   const [sampleTypes, setSampleTypes] = useState([]);
-  const [fieldTypes, setFieldTypes] = useState([]);
 
   // form variables
   const [id, setId] = useState(null);
@@ -78,7 +74,6 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
   const [objectTypeCleanup, setObjectTypeCleanup] = useState('');
   const [objectTypeData, setObjectTypeData] = useState('');
   const [objectTypeVendor, setObjectTypeVendor] = useState('');
-  const ref = useRef();
 
   useEffect(() => {
     const initNew = async () => {
@@ -138,31 +133,15 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
   useEffect(() => {
     setDisableSubmit(
       !objectTypeName.trim() ||
-        !objectTypeDescription.trim() ||
-        !objectTypeUnit ||
-        !objectTypeCost ||
-        !objectTypeHandler.trim() ||
-        objectTypeMin < 0 ||
-        objectTypeMax < 0 ||
-        objectTypeMin > objectTypeMax
+      !objectTypeDescription.trim() ||
+      !objectTypeUnit ||
+      !objectTypeCost ||
+      !objectTypeHandler.trim() ||
+      objectTypeMin < 0 ||
+      objectTypeMax < 0 ||
+      objectTypeMin > objectTypeMax,
     );
   });
-
-  // handle click event of the Remove button
-  const handleRemoveFieldClick = (index) => {
-    const list = [...fieldTypes];
-
-    list.splice(index, 1);
-    setFieldTypes(list);
-  };
-
-  // handle field type input change
-  const handleFieldInputChange = (value, index) => {
-    const list = [...fieldTypes];
-
-    list[index] = value;
-    setFieldTypes(list);
-  };
 
   // Submit form with all data
   const handleSubmit = async (event) => {

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Link as RouterLink, useHistory } from 'react-router-dom';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment';
 import PropTypes from 'prop-types';
 
 import Typography from '@material-ui/core/Typography';
-import ListItem from '@material-ui/core/ListItem';
 import { makeStyles } from '@material-ui/core';
 import Link from '@material-ui/core/Link';
 
@@ -105,6 +105,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// eslint-disable-next-line no-unused-vars, object-curly-newline
 const ShowUsers = ({ users, setIsLoading, setAlertProps, permissionsList, currentLetter }) => {
   const classes = useStyles();
   const keyRetired = Object.keys(permissionsList).find((key) => permissionsList[key] === 'retired');
@@ -178,7 +179,7 @@ ShowUsers.propTypes = {
   permissionsList: PropTypes.isRequired,
   currentLetter: PropTypes.isRequired,
   setIsLoading: PropTypes.func.isRequired,
-  ssetAlertProps: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.objectOf(PropTypes.string),
     path: PropTypes.string,

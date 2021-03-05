@@ -1,5 +1,5 @@
 import React, { useState, useReducer } from 'react';
-import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Typography from '@material-ui/core/Typography';
@@ -113,6 +113,7 @@ const handleToggles = (id, toggleId, setToggleIds, triggerUpdate) => {
   triggerUpdate();
 };
 
+// eslint-disable-next-line no-unused-vars
 const ShowObjectTypesByHandler = ({ objectTypes, setIsLoading, setAlertProps }) => {
   // NOTE: regarding toggleIds and triggerUpdate
   // eslint-disable-next-line max-len
@@ -126,7 +127,6 @@ const ShowObjectTypesByHandler = ({ objectTypes, setIsLoading, setAlertProps }) 
   const [, triggerUpdate] = useReducer(x => !x, false);
 
   const classes = useStyles();
-  const history = useHistory();
 
   const handleDelete = async (id) => {
     const response = await objectsAPI.delete(id);
@@ -210,7 +210,7 @@ const ShowObjectTypesByHandler = ({ objectTypes, setIsLoading, setAlertProps }) 
 ShowObjectTypesByHandler.propTypes = {
   objectTypes: PropTypes.isRequired,
   setIsLoading: PropTypes.func.isRequired,
-  ssetAlertProps: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func.isRequired,
 };
 
 export default ShowObjectTypesByHandler;

@@ -24,7 +24,7 @@ describe('Select', () => {
         handleChange={mockHandleChange}
         value={testValue}
         options={testOptions}
-      />
+      />,
     );
 
     expect(getByTestId('select-input').value).toBe('');
@@ -38,7 +38,7 @@ describe('Select', () => {
         handleChange={mockHandleChange}
         value={testValue}
         options={testOptions}
-      />
+      />,
     );
 
     fireEvent.mouseDown(getByRole('button')); // open menu

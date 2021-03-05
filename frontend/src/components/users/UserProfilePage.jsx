@@ -2,20 +2,13 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import Toolbar from '@material-ui/core/Toolbar';
 
-import LoadingSpinner from '../shared/LoadingSpinner';
-import { LinkButton, StandardButton } from '../shared/Buttons';
 import usersAPI from '../../helpers/api/users';
 import Information from './profile/Information';
 import Statistics from './profile/Statistics';
@@ -40,6 +33,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+// eslint-disable-next-line no-unused-vars
 const UserProfilePage = ({ setIsLoading, setAlertProps, match }) => {
   const classes = useStyles();
   const userId = match.params.id;
@@ -78,7 +72,7 @@ const UserProfilePage = ({ setIsLoading, setAlertProps, match }) => {
                   key="information"
                   data-cy="information"
                   selected="true"
-                  onClick={(event) => setCurrentPage('information')}
+                  onClick={() => setCurrentPage('information')}
                 >
                   <ListItemText primary="Information" primaryTypographyProps={{ noWrap: true }} />
                 </ListItem>
@@ -164,7 +158,7 @@ const UserProfilePage = ({ setIsLoading, setAlertProps, match }) => {
 
 UserProfilePage.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
-  ssetAlertProps: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.objectOf(PropTypes.string),
     path: PropTypes.string,

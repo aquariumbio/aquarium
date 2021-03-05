@@ -8,7 +8,7 @@ describe('TextInput', () => {
 
   it('has empty input when value is empty ', () => {
     const { getByTestId } = render(
-      <TextInput name="Text Input" value={testValue} handleChange={mockHandleChange} />
+      <TextInput name="Text Input" value={testValue} handleChange={mockHandleChange} />,
     );
 
     expect(getByTestId('Text Input').value).toBe('');
@@ -17,7 +17,7 @@ describe('TextInput', () => {
   it('triggers event handler on input change', () => {
     const userInput = 'testing user input';
     const { getByTestId, rerender } = render(
-      <TextInput name="Text Input" value={testValue} handleChange={mockHandleChange} />
+      <TextInput name="Text Input" value={testValue} handleChange={mockHandleChange} />,
     );
 
     fireEvent.change(getByTestId('Text Input'), {

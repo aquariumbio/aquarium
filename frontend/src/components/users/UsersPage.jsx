@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory, link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import * as queryString from 'query-string';
 import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
@@ -13,7 +13,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 
 import ShowUsers from './ShowUsers';
-import { LinkButton, StandardButton } from '../shared/Buttons';
+import { LinkButton } from '../shared/Buttons';
 import usersAPI from '../../helpers/api/users';
 import permissionsAPI from '../../helpers/api/permissions';
 
@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// eslint-disable-next-line no-unused-vars
 const UsersPage = ({ setIsLoading, setAlertProps, match }) => {
   const classes = useStyles();
   const history = useHistory();
@@ -186,7 +187,7 @@ const UsersPage = ({ setIsLoading, setAlertProps, match }) => {
 
 UsersPage.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
-  ssetAlertProps: PropTypes.func.isRequired,
+  setAlertProps: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.objectOf(PropTypes.string),
     path: PropTypes.string,

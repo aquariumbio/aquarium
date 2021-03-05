@@ -10,9 +10,8 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Toolbar from '@material-ui/core/Toolbar';
 
 import SideBar from './SideBar';
-import LoadingSpinner from '../shared/LoadingSpinner';
 import ShowObjectTypesByHandler from './ShowObjectTypesByHandler';
-import { LinkButton, StandardButton } from '../shared/Buttons';
+import { LinkButton } from '../shared/Buttons';
 import objectsAPI from '../../helpers/api/objects';
 
 // Route: /object_types
@@ -30,6 +29,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+// eslint-disable-next-line no-unused-vars
 const ObjectTypesPage = ({ setIsLoading, setAlertProps }) => {
   const classes = useStyles();
 
