@@ -42,8 +42,3 @@ services:
     networks:
       - aquarium_net
   
-  # use development environment configuration
-  db:
-    env_file:
-      - .env_files/development/db
-      - .env_files/development/timezone
