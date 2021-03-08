@@ -18,13 +18,13 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
+function raw(message) {
+  return { __html: message.replace(/\n/g, '<br>') };
+}
+
 const AlertToast = (props) => {
-  const {
-    message,
-    severity,
-    open,
-    setAlertProps,
-  } = props
+  // eslint-disable-next-line object-curly-newline
+  const { message, severity, open, setAlertProps } = props;
   const classes = useStyles();
   const [state, setState] = useState({
     open: false,
@@ -38,7 +38,7 @@ const AlertToast = (props) => {
       message,
       severity,
       open,
-    })
+    });
   }, [props]);
 
   // Allow for manual closing
@@ -56,11 +56,15 @@ const AlertToast = (props) => {
     setAlertProps({});
   };
 
+  /*  message is pretty printed JSON.stringify which includes \n line breaks
+      raw changes \n line breaks to <br>
+      reaact requires us to use “dangerouslySetInnerHTML”
+      TODO: render form errors inline rather than as a list in the alert */
   return (
     <div className={classes.root}>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity={severity} data-cy="alert-toast">
-          { message }
+          <span dangerouslySetInnerHTML={raw(message)} />
         </Alert>
       </Snackbar>
     </div>

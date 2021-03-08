@@ -9,15 +9,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TextInput = ({
-  name,
-  testName = name,
-  handleChange,
-  value,
-  required = false,
-  type = 'text',
-  autoFocus = false,
-}) => {
+// eslint-disable-next-line object-curly-newline
+const TextInput = ({ name, testName, handleChange, value, required, type, autoFocus }) => {
   const classes = useStyles();
 
   return (
@@ -43,12 +36,19 @@ const TextInput = ({
 
 TextInput.propTypes = {
   name: PropTypes.string.isRequired,
-  testName: PropTypes.string,
   handleChange: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
   required: PropTypes.bool,
   type: PropTypes.string,
   autoFocus: PropTypes.bool,
+  testName: PropTypes.string,
+};
+
+TextInput.defaultProps = {
+  required: false,
+  type: 'text',
+  autoFocus: false,
+  testName: 'Text Input',
 };
 
 export default TextInput;

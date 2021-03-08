@@ -16,9 +16,9 @@ class User < ActiveRecord::Base
     User.select("id, name, login, created_at, permission_ids").order(:name)
   end
 
-  # Return all users beginning with first letterl ('*' as non-alphanumeric wildcard).
+  # Return all users beginning with first letter l ('*' as non-alphanumeric wildcard).
   #
-  # @return all users beginning with first letterl ('*' as non-alphanumeric wildcard)
+  # @return all users beginning with first letter l ('*' as non-alphanumeric wildcard)
   def self.find_by_first_letter(l)
     if l == "*"
       sql = "select id, name, login, created_at, permission_ids from users where (name regexp '^[^a-zA-Z].*') order by name"
@@ -110,7 +110,7 @@ class User < ActiveRecord::Base
   # Update a user's info (information tab)
   #
   # @param user_data [Hash] the user
-  # return the user
+  # return the user with extended info
   def update_info(user_data)
     valid = true
 
@@ -131,8 +131,8 @@ class User < ActiveRecord::Base
     UserProfile.set_user_profile(self.id, "email", email)
     UserProfile.set_user_profile(self.id, "phone", phone)
 
-    # Remove password_digest from return value
-    return { user: self }, :ok
+    # Return user with extended info
+    return { user: User.find_id_show_info(self.id) }, :ok
   end
 
   # Update a user's permissions (permissions tab)
@@ -173,7 +173,7 @@ class User < ActiveRecord::Base
     return { user: self }, :ok
   end
 
-  # Validate a token for an optional permission_id and return the user
+  # Validate a token for an optional permission_id and return the user with extended info
   #
   # @param options [Hash] options
   # @param[permission_id] [Int] an optional permission_id (default to 0 for any permission)
@@ -190,9 +190,9 @@ class User < ActiveRecord::Base
     wheres = sanitize_sql(['ut.token = ? and ut.ip = ?', option_token, option_ip])
 
     sql = "
-        select u.id, u.name, u.login, u.permission_ids, ut.timenow
+        select u.*, ut.timenow
         from user_tokens ut
-        inner join users u on u.id = ut.user_id
+        inner join view_users u on u.id = ut.user_id
         where #{wheres}
         limit 1
       "
@@ -257,7 +257,6 @@ class User < ActiveRecord::Base
   # Check whether user has permission_id
   #
   # @param permission_id [Int] the permission_id to check
-  # @param target_id [Int] the user_id of the user being updated
   # @return true
   def permission?(permission_id)
     Permission.ok?(permission_ids, permission_id)

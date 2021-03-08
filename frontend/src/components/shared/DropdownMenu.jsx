@@ -22,11 +22,7 @@ const DropdownMenu = (props) => {
 
   return (
     <>
-      <IconButton
-        color="inherit"
-        aria-label="menu"
-        onClick={handleMenu}
-      >
+      <IconButton color="inherit" aria-label="menu" onClick={handleMenu}>
         <MenuIcon fontSize="large" />
       </IconButton>
       <Menu
@@ -45,17 +41,15 @@ const DropdownMenu = (props) => {
         open={open}
         onClose={() => setAnchorEl(null)}
       >
-        {
-          menuItems.map((menuItem) => {
-            const { menuTitle, pageURL } = menuItem;
+        {menuItems.map((menuItem) => {
+          const { menuTitle, pageURL } = menuItem;
 
-            return (
-              <MenuItem key={menuTitle} onClick={() => handleMenuClick(pageURL)}>
-                {menuTitle}
-              </MenuItem>
-            );
-          })
-        }
+          return (
+            <MenuItem key={menuTitle} onClick={() => handleMenuClick(pageURL)}>
+              {menuTitle}
+            </MenuItem>
+          );
+        })}
       </Menu>
     </>
   );

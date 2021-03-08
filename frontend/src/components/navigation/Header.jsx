@@ -30,7 +30,6 @@ const mainNavItems = [
     menuTitle: 'DEVELOPER',
     pageURL: '/developer',
   },
-
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -52,7 +51,6 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
     color: '#fff',
     justifyContent: 'flex-end',
-
   },
   logo: {
     color: '#00ff22',
@@ -60,7 +58,6 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 'bold',
     height: '20pt',
     lineHeight: '20pt',
-
   },
 }));
 
@@ -101,7 +98,6 @@ const Header = (props) => {
               >
                 {menuTitle}
               </IconButton>
-
             );
           })}
           <UserMenu />

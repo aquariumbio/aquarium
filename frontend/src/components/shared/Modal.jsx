@@ -53,9 +53,7 @@ const Modal = ({ details }) => {
         <Fade in={open}>
           <div className={classes.paper}>
             <h2 id={`${details.htmlId}-modal`}>{details.title}</h2>
-            <p id={`${details.htmlId}-description`}>
-              {details.message}
-            </p>
+            <p id={`${details.htmlId}-description`}>{details.message}</p>
           </div>
         </Fade>
       </MuiModal>

@@ -1,56 +1,42 @@
 {
-    "env": {
-        "browser": true,
-        "es2021": true,
-        "jest": true
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "jest": true
+  },
+  "extends": ["plugin:react/recommended", "airbnb"],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
     },
-    "extends": [
-        "plugin:react/recommended",
-        "plugin:cypress/recommended",
-        "airbnb",
-        "prettier"
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": ["react"],
+  "rules": {
+    "operator-linebreak": [
+      "error",
+      "after",
+      {
+        "overrides": {
+          "?": "before",
+          ":": "before"
+        }
+      }
     ],
-    "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": true
-        },
-        "ecmaVersion": 12,
-        "sourceType": "module"
-    },
-    "plugins": [
-        "react",
-        "cypress"
+    "react/require-default-props": 1,
+    "react/jsx-one-expression-per-line": 0,
+    "no-debugger": "warn",
+    "no-console": "warn",
+    "react/jsx-filename-extension": 1,
+    "no-unused-expressions": [
+      1,
+      {
+        "allowShortCircuit": true,
+        "allowTernary": true
+      }
     ],
-    "rules": {
-        "jsx-quotes": ["warn", "prefer-double"],
-        "import/no-extraneous-dependencies": [
-          "warn",
-          {
-            "devDependencies": true,
-            "optionalDependencies": false,
-            "peerDependencies": false
-          }
-        ],
-        "no-unused-expressions": [0, { "extensions": ["*spec.js"] }],
-        "react/jsx-filename-extension": [0, { "extensions": ["*spec.js"] }],
-        "react/jsx-one-expression-per-line": 0,
-        "no-debugger": "warn",
-        "no-console": "warn",
-        "no-unused-vars": "warn",
-        "object-curly-newline": "warn",
-        "react/require-default-props": [0],
-        "no-useless-return": "warn",
-        "operator-linebreak":["warn", "after",
-            {
-                "overrides": {
-                    "?": "before",
-                    ":": "before"
-                }
-            }],
-        "comma-dangle": "warn",
-        "vars-on-top": "off",
-        "prefer-destructuring": "warn",
-        "react/forbid-prop-types": "warn"
-
-    }
+    "prefer-destructuring": "warn",
+    "no-useless-return": "warn"
+  }
 }

@@ -50,6 +50,12 @@ module Api
       #       name: <name>,
       #       login: <login>,
       #       permission_ids: <permission_ids>
+      #       email: <email>,
+      #       phone: <phone>,
+      #       lab_agreement: <lab_agreement>,
+      #       aquarium_agreement: <aquarium_agreement>,
+      #       new_samples_private: <new_samples_private>,
+      #       lab_name: <lab_name>
       #     }
       #   }
       #
@@ -77,7 +83,8 @@ module Api
         user_token.timenow = timenow
         user_token.save
 
-        render json: { token: token, user: { id: user.id, name: user.name, login: user.login, permission_ids: user.permission_ids } }.to_json, status: :ok
+         # Return token and user with extended info
+        render json: { token: token, user: User.find_id_show_info(user.id) }.to_json, status: :ok
       end
 
       # Remove a token or optionally all tokens associated with this user.
@@ -125,6 +132,12 @@ module Api
       #       name: <name>,
       #       login: <login>,
       #       permission_ids: <permission_ids>
+      #       email: <email>,
+      #       phone: <phone>,
+      #       lab_agreement: <lab_agreement>,
+      #       aquarium_agreement: <aquarium_agreement>,
+      #       new_samples_private: <new_samples_private>,
+      #       lab_name: <lab_name>
       #     }
       #   }
       #

@@ -1,0 +1,5 @@
+{
+  "prettier-airbnb-config": true,
+  "printWidth": 100,
+  "singleQuote": true
+}
