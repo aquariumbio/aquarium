@@ -82,7 +82,7 @@ export default function App() {
         { /* Users cannot interact with the app if they do not have a token */
           !localStorage.getItem('token') && <Redirect to="/login" />
         }
-        { /* TODO: REDIRECT TO PROFILE PAGE IF USER HAS NOT SIGNED AGREENEMTNS */ }
+        { /* TODO: REDIRECT TO PROFILE PAGE IF USER HAS NOT SIGNED AGREEMENTS */ }
 
         <Switch>
           <Route path="/login" render={(props) => <LoginDialog setIsLoading={setIsLoading} {...props} />} />
