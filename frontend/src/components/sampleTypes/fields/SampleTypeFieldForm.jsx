@@ -18,7 +18,6 @@ const SampleTypeFieldForm = ({
   handleAddAllowableFieldClick,
   sampleTypes,
 }) => {
-
   const showSampleSelect = () => fieldType.ftype === 'sample';
   const showChoicesInput = () => fieldType.ftype === 'string' || fieldType.ftype === 'number';
 
@@ -27,7 +26,8 @@ const SampleTypeFieldForm = ({
   // Trim our values to ensure strings don't have leading and trailing white space.
   const handleChange = (event) => {
     const { name } = event.target;
-    const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value.trim();
+    const value =
+      event.target.type === 'checkbox' ? event.target.checked : event.target.value.trim();
     const fieldTypeObj = { ...fieldType };
     fieldTypeObj[name] = value;
     updateParentState(fieldTypeObj, index);
@@ -52,22 +52,14 @@ const SampleTypeFieldForm = ({
 
   return (
     // wrap in fragment to maintain grid layout when rendered in parent
-    <Grid
-      container
-      spacing={1}
-      data-cy="field-inputs"
-      data-testid="field-inputs"
-    >
+    <Grid container spacing={1} data-cy="field-inputs" data-testid="field-inputs">
       <Grid item lg={2} data-cy="field-name-input-div" role="presentation">
         <TextInput name="name" handleChange={handleChange} value={fieldType.name} />
       </Grid>
 
       <FTypeSelect handleChange={handleChange} ftype={fieldType.ftype} />
 
-      <RequiredCheckbox
-        required={fieldType.required}
-        handleChange={handleChange}
-      />
+      <RequiredCheckbox required={fieldType.required} handleChange={handleChange} />
 
       <ArrayCheckbox array={fieldType.array} handleChange={handleChange} />
 
@@ -83,14 +75,11 @@ const SampleTypeFieldForm = ({
         {showChoicesInput() ? (
           <TextInput name="choices" value={fieldType.choices} handleChange={handleChange} />
         ) : (
-            <Typography data-testid="NA-choices">N/A</Typography>
-          )}
+          <Typography data-testid="NA-choices">N/A</Typography>
+        )}
       </Grid>
 
-      <RemoveFieldBtn
-        handleRemoveFieldClick={handleRemoveFieldClick}
-        index={index}
-      />
+      <RemoveFieldBtn handleRemoveFieldClick={handleRemoveFieldClick} index={index} />
     </Grid>
   );
 };

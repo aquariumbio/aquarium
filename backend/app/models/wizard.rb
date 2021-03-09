@@ -1,5 +1,6 @@
 # wizards table
 class Wizard < ActiveRecord::Base
+
   validates :name,        presence: true
   validates :description, presence: true
 
@@ -8,6 +9,18 @@ class Wizard < ActiveRecord::Base
   # @return all wizards
   def self.find_all
     Wizard.order(:name)
+  end
+
+  # Return all wizards beginning with first letter l ('*' as non-alphanumeric wildcard).
+  #
+  # @return all wizards beginning with first letter l ('*' as non-alphanumeric wildcard)
+  def self.find_by_first_letter(l)
+    if l == "*"
+      sql = "select * from wizards where (name regexp '^[^a-zA-Z].*') order by name"
+    else
+      sql = "select * from wizards where name like '#{l}%' order by name"
+    end
+    Wizard.find_by_sql sql
   end
 
   # Return a specific wizard.

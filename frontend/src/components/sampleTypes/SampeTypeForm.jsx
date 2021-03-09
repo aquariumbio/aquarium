@@ -65,7 +65,9 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
 
   const fetchDataNew = async () => {
     // loading overlay - use delay (window.$timeout) to avoid screen flash on quick API return
-    const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
+    const loading = setTimeout(() => {
+      setIsLoading(true);
+    }, window.$timeout);
 
     const response = await samplesAPI.getTypes();
 
@@ -81,15 +83,15 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
     // success
     setState({
       ...state,
-      sampleTypes: [
-        ...response.sample_types,
-      ],
+      sampleTypes: [...response.sample_types],
     });
   };
 
   const fetchDataEdit = async () => {
     // loading overlay - delay by window.$timeout to avoid screen flash
-    const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
+    const loading = setTimeout(() => {
+      setIsLoading(true);
+    }, window.$timeout);
 
     //  Make more than one API in parallel
     //  Call both functions
@@ -135,9 +137,10 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
   }, []);
 
   /*  Disable submit if name or description are empty */
-  const invalidName = !state.sampleType.name ||
-    (!!state.sampleType.name && !state.sampleType.name.trim());
-  const invalidDescription = !state.sampleType.description ||
+  const invalidName =
+    !state.sampleType.name || (!!state.sampleType.name && !state.sampleType.name.trim());
+  const invalidDescription =
+    !state.sampleType.description ||
     (!!state.sampleType.description && !state.sampleType.description.trim());
 
   const handleFieldChange = (e) => {
@@ -158,10 +161,7 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
       ...state,
       sampleType: {
         ...state.sampleType,
-        fieldTypes: [
-          ...state.sampleType.fieldTypes,
-          newFieldType,
-        ],
+        fieldTypes: [...state.sampleType.fieldTypes, newFieldType],
       },
     });
   };
@@ -233,7 +233,9 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
     let alertProps;
 
     // loading overlay - delay by window.$timeout to avoid screen flash
-    const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
+    const loading = setTimeout(() => {
+      setIsLoading(true);
+    }, window.$timeout);
 
     const response = update
       ? await samplesAPI.update(formData, state.sampleType.id)
@@ -261,7 +263,9 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
     /*  Failure alert  */
     if (response.status === 200) {
       alertProps = {
-        message: `Error: ${state.sampleType.name} could not be ${action}. ${JSON.stringify(response.data.errors)}`,
+        message: `Error: ${state.sampleType.name} could not be ${action}. ${JSON.stringify(
+          response.data.errors,
+        )}`,
         severity: 'error',
         open: true,
       };
@@ -294,7 +298,9 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
 
       {state.id && (
         <>
-          <Alert severity="info">Note: Changing a sample type can have far reaching effects! Edit with care.</Alert>
+          <Alert severity="info">
+            Note: Changing a sample type can have far reaching effects! Edit with care.
+          </Alert>
 
           <Typography variant="h2" align="center" className={classes.title}>
             Editing Sample Type
@@ -305,7 +311,11 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
 
       <Typography align="right">* field is required</Typography>
 
-      <form name="sampe-type-definition-form" data-cy="sampe-type-definition-form" onSubmit={handleSubmit}>
+      <form
+        name="sampe-type-definition-form"
+        data-cy="sampe-type-definition-form"
+        onSubmit={handleSubmit}
+      >
         <Typography variant="h4" className={classes.inputName} display="inline">
           Name
         </Typography>
@@ -353,12 +363,10 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
         />
 
         {!!state.sampleType.fieldTypes.length && (
-          <Grid
-            container
-            data-cy="fields-container"
-          >
+          <Grid container data-cy="fields-container">
             <FieldLabels />
-            { /* create array of field components */
+            {
+              /* create array of field components */
               state.sampleType.fieldTypes.map((fieldType, index) => (
                 // React.Fragment instead of the shorthand <></> so we can use a key
                 <React.Fragment key={utils.randString()}>
@@ -372,12 +380,15 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
                     handleRemoveFieldClick={() => handleRemoveFieldClick}
                     handleAddAllowableFieldClick={handleAddAllowableFieldClick}
                   />
-                  {/* Add divider below all but last fieldType */
+                  {
+                    /* Add divider below all but last fieldType */
                     index !== state.sampleType.fieldTypes.length - 1 ? (
                       <Grid item xs={12}>
                         <Divider />
                       </Grid>
-                    ) : <></>
+                    ) : (
+                      <></>
+                    )
                   }
                 </React.Fragment>
               ))
@@ -404,12 +415,7 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
           dark
         />
 
-        <LinkButton
-          name="back"
-          testName="back"
-          text="All"
-          linkTo="/sample_types"
-        />
+        <LinkButton name="back" testName="back" text="All" linkTo="/sample_types" />
       </form>
     </Container>
   );

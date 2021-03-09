@@ -21,7 +21,9 @@ const SideBar = ({ sampleTypes, setCurrentSampleType, setIsLoading }) => {
 
   const fetchData = async (id) => {
     // loading overlay - delay by 300ms to avoid screen flash
-    const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
+    const loading = setTimeout(() => {
+      setIsLoading(true);
+    }, window.$timeout);
 
     const response = await samplesAPI.getTypeById(id);
 

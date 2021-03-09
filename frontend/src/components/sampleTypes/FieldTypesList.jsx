@@ -42,7 +42,7 @@ const FieldTypesList = ({ fieldTypes }) => {
           ) : (
             field.ftype
           )}
-          {field.choices && <Typography display="inline">: [ {field.choices} ]</Typography>}
+          {field.choices && <Typography display="inline">: [{field.choices} ]</Typography>}
         </li>
       ))}
     </List>

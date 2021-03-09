@@ -64,7 +64,8 @@ module Api
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get wizards
-        wizards = Wizard.find_all
+        letter = Input.letter(params[:letter])
+        wizards = letter ? Wizard.find_by_first_letter(letter) : Wizard.find_all
 
         render json: { wizards: wizards }.to_json, status: :ok
       end

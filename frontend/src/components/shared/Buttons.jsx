@@ -33,11 +33,11 @@ export const StandardButton = ({
   name,
   text,
   handleClick,
-  dark=false,
-  dense=false,
-  type='button',
-  testName={name},
-  disabled=false,
+  dark = false,
+  dense = false,
+  type = 'button',
+  testName = { name },
+  disabled = false,
 }) => {
   const classes = useStyles();
   const cname = dark ? classes.dark : classes.light;
@@ -71,6 +71,7 @@ StandardButton.defaultProps = {
   type: 'button',
   dense: false,
   disabled: false,
+  testName: 'StandardButton',
 };
 
 // Button with routing, takes a link string
@@ -112,4 +113,5 @@ LinkButton.defaultProps = {
   dark: false,
   dense: false,
   disabled: false,
+  testName: 'LinkButton',
 };

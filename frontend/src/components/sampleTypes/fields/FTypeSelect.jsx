@@ -25,7 +25,6 @@ const FTypeSelect = ({ handleChange, ftype }) => (
         },
         getContentAnchorEl: null,
       }}
-
     >
       <MenuItem value="" data-testid="select-none" disabled>
         {' Choose one '}

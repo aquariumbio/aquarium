@@ -45,9 +45,4 @@ describe('/sample_types', () => {
       cy.get('[data-cy="edit_sample_type_btn"]').should('have.attr', 'aria-disabled', 'true');
     });
   });
-
-  it('has place holder header', () => {
-    cy.visit('/sample_types');
-    cy.contains('h1', 'Sample Types');
-  });
 });
