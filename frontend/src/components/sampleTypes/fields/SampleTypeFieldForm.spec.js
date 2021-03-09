@@ -1,6 +1,6 @@
 import React from 'react';
 import {
- render, fireEvent, screen, waitFor, wait, within, 
+ render, screen, waitFor, within, 
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import SampleTypeFieldForm from './SampleTypeFieldForm';
