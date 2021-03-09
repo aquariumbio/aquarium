@@ -1,4 +1,7 @@
 {
+  "env": {
+    "API_URL": "localhost:3011"
+  },
   "reporter": "junit",
   "reporterOptions": {
     "mochaFile": "cypress/results/output.xml"
