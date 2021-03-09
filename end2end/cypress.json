@@ -1,6 +1,6 @@
 {
   "env": {
-    "API_URL": "localhost:3011"
+    "API_URL": "http://localhost:3011"
   },
   "reporter": "junit",
   "reporterOptions": {
