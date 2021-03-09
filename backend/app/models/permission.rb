@@ -48,6 +48,16 @@ class Permission < ActiveRecord::Base
     end
   end
 
+  # Cache manage id.
+  #
+  # @return manage_id
+  def self.manage_id(clear_cache = false)
+    Rails.cache.delete 'manage_id' if clear_cache
+    Rails.cache.fetch 'manage_id' do
+      Permission.permission_ids.key('manage')
+    end
+  end
+
   # Cache retired id.
   #
   # @return retired_id

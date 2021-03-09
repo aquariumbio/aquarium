@@ -33,6 +33,7 @@ import GroupsPage from '../groups/GroupsPage';
 import LoadingSpinner from '../shared/LoadingSpinner';
 import GroupPage from '../groups/GroupPage';
 import GroupForm from '../groups/GroupForm';
+import JobsPage from '../jobs/JobsPage';
 import AlertToast from '../shared/AlertToast';
 
 const useStyles = makeStyles(() => ({
@@ -123,6 +124,8 @@ export default function App() {
             <Route exact path="/roles" render={(props) => <RolesPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
 
             {/* Main Navigation tabs */}
+            <Route exact path="/jobs" render={(props) => <JobsPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+
             <Route exact path="/manager" render={(props) => <ManagerPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
             <Route exact path="/launcher" render={(props) => <PlansPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
             <Route exact path="/samples" render={(props) => <SamplesPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
