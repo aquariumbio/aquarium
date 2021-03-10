@@ -20,8 +20,8 @@ services:
     image: mysql:5.7
     restart: always
     env_file:
-      - .env_files/development/db
-      - .env_files/development/timezone
+      - .env_files/test/db
+      - .env_files/test/timezone
     ports:
       - "${DB_PUBLIC_PORT:-3307}:3306"
     volumes:
