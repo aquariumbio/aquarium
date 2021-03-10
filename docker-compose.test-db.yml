@@ -1,0 +1,10 @@
+# Sets up frontend and backend services for testing.
+# this file is needed due to excessive cleverness in which the test services
+# can use either the db or db_test services, and those need configuration
+
+version: "3.7"
+services:
+  db:
+    env_file:
+      - .env_files/test/db
+      - .env_files/test/timezone
