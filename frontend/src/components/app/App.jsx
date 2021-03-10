@@ -24,6 +24,7 @@ import ExportWorkflowsPage from '../exportWorkflows/ExportWorkflowsPage';
 import InvoicesPage from '../invoices/InvoicesPage';
 import WizardsPage from '../wizards/WizardsPage';
 import WizardForm from '../wizards/WizardForm';
+import WizardPage from '../wizards/WizardPage';
 import LogsPage from '../logs/LogsPage';
 import Header from '../navigation/Header';
 import UserProfilePage from '../users/UserProfilePage';
@@ -109,6 +110,7 @@ export default function App() {
 
             <Route exact path="/wizards" render={(props) => <WizardsPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
             <Route exact path="/wizards/new" render={(props) => <WizardForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+            <Route exact path="/wizards/:id/show" render={(props) => <WizardPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
             <Route exact path="/wizards/:id/edit" render={(props) => <WizardForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
 
             <Route exact path="/object_types" render={(props) => <ObjectTypesPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />

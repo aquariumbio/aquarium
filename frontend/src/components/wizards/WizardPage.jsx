@@ -8,14 +8,10 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Toolbar from '@material-ui/core/Toolbar';
 import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
 
 import SideBar from './SideBar';
 import { LinkButton } from '../shared/Buttons';
-import groupsAPI from '../../helpers/api/groups';
-
-// Route: /object_types
-// Linked in LeftHamburgeMenu
+import wizardsAPI from '../../helpers/api/wizards';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -121,35 +117,42 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const GroupPage = ({ setIsLoading, setAlertProps, match }) => {
+const WizardPage = ({ setIsLoading, setAlertProps, match }) => {
   const classes = useStyles();
-  const [groupMembers, setGroupMembers] = useState([]);
-  const [groupName, setGroupName] = useState('');
   const id = match.params.id;
+  const [wizardObject, setWizardObject] = useState({});
+  const [wizardName, setWizardName] = useState('');
+  // const [wizardDescription, setWizardDescription] = useState('');
+  const [wizardSpecification, setWizardSpecification] = useState();
 
-  const init = async () => {
-    // wrap the API call
-    const response = await groupsAPI.getGroupById(id);
-    if (!response) return;
-
-    // success
-    setGroupName(response.group.name);
-    setGroupMembers(response.members);
+  // eslint-disable-next-line arrow-body-style
+  const renderRanges = (specification) => {
+    return (
+      <div>
+        {specification.fields['0'].name}.{specification.fields['1'].name}.{specification.fields['2'].name}:
+        [0, {specification.fields['0'].capacity === '-1' ? (<span>&infin;</span>) : specification.fields['0'].capacity}]
+        [0, {specification.fields['1'].capacity === '-1' ? (<span>&infin;</span>) : specification.fields['1'].capacity}]
+        [0, {specification.fields['2'].capacity === '-1' ? (<span>&infin;</span>) : specification.fields['2'].capacity}]
+      </div>
+    );
   };
 
-  // initialize to all and get permissions
   useEffect(() => {
-    init();
+    const init = async (thisid) => {
+      // wrap the API call
+      const response = await wizardsAPI.getWizardById(thisid);
+      if (!response) return;
+
+      // success
+      const wizard = response.wizard;
+      setWizardObject(wizard);
+      setWizardName(wizard.name);
+      // setWizardDescription(wizard.description);
+      setWizardSpecification(wizard.specification);
+    };
+
+    init(id);
   }, []);
-
-  const handleRemove = async (userId) => {
-    // wrap the API call
-    const response = await groupsAPI.removeMember(id, userId);
-    if (!response) return;
-
-    // success
-    init();
-  };
 
   return (
     <>
@@ -161,21 +164,30 @@ const GroupPage = ({ setIsLoading, setAlertProps, match }) => {
           data-cy="page-title"
         >
           <Typography display="inline" variant="h6" component="h1">
-            Groups
+            Wizards
           </Typography>
           <Typography display="inline" variant="h6" component="h1">
-            {groupName}
+            {wizardName}
           </Typography>
         </Breadcrumbs>
 
         <div>
           <LinkButton
-            name="All Groups"
-            testName="all_groups_button"
-            text="All Groups"
+            name="Edit"
+            testName="edit_button"
+            text="Edit"
             light
             type="button"
-            linkTo="/groups"
+            linkTo={`/wizards/${id}/edit`}
+          />
+
+          <LinkButton
+            name="All Wizards"
+            testName="all_wizards_button"
+            text="All Wizards"
+            light
+            type="button"
+            linkTo="/wizards"
           />
         </div>
       </Toolbar>
@@ -187,45 +199,21 @@ const GroupPage = ({ setIsLoading, setAlertProps, match }) => {
         <SideBar
           setIsLoading={setIsLoading}
           setAlertProps={setAlertProps}
-          id={id}
-          refresh={init}
+          wizardObject={wizardObject}
         />
 
         {/* MAIN CONTENT */}
         <Grid item xs={9} name="main-container" data-cy="main-container" overflow="visible">
-          <div className={classes.flexWrapper}>
-            <div className={`${classes.flex} ${classes.flexTitle}`}>
-              <Typography className={classes.flexCol1}><b>Name</b></Typography>
-              <Typography className={classes.flexCol1}><b>Login</b></Typography>
-              <Typography className={classes.flexColAutoHidden}>Remove</Typography>
-            </div>
+          Boxes managed by {wizardName}
 
-            {groupMembers ? (
-              groupMembers.map((member) => (
-                <div className={`${classes.flex} ${classes.flexRow}`} key={`member_${member.id}`}>
-                  <Typography className={classes.flexCol1}>
-                    {member.name}
-                  </Typography>
-                  <Typography className={classes.flexCol1}>
-                    {member.login}
-                  </Typography>
-                  <Typography className={classes.flexColAuto}>
-                    {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
-                    <Link data-cy={`remove_${member.id}`} className={classes.pointer} onClick={() => handleRemove(member.id)}>Remove</Link>
-                  </Typography>
-                </div>
-              ))
-            ) : (
-              ''
-            )}
-          </div>
+          {wizardSpecification ? renderRanges(JSON.parse(wizardSpecification)) : 'loading'}
         </Grid>
       </Grid>
     </>
   );
 };
 
-GroupPage.propTypes = {
+WizardPage.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
   setAlertProps: PropTypes.func,
   match: PropTypes.shape({
@@ -236,4 +224,4 @@ GroupPage.propTypes = {
   }).isRequired,
 };
 
-export default GroupPage;
+export default WizardPage;
