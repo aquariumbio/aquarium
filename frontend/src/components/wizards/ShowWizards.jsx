@@ -110,7 +110,7 @@ const ShowWizards = ({ wizards }) => {
     if (!response) return;
 
     // success
-    localStorage.alert = JSON.stringify({
+    sessionStorage.alert = JSON.stringify({
       message: 'deleted',
       severity: 'success',
       open: true,
@@ -119,12 +119,34 @@ const ShowWizards = ({ wizards }) => {
     window.location.reload();
   };
 
+  const renderRanges = (specification) => {
+    console.log('came here');
+    return (
+      <div>
+        [0, {specification.fields['0'].capacity === '-1' ? (<span>&infin;</span>) : specification.fields['0'].capacity}]<br />
+        [0, {specification.fields['1'].capacity === '-1' ? (<span>&infin;</span>) : specification.fields['1'].capacity}]<br />
+        [0, {specification.fields['2'].capacity === '-1' ? (<span>&infin;</span>) : specification.fields['2'].capacity}]<br />
+      </div>
+    );
+  };
+
+  const renderForm = (specification) => {
+    console.log('came here');
+    return (
+      <div>
+        {specification.fields['0'].name}.{specification.fields['1'].name}.{specification.fields['2'].name}
+      </div>
+    );
+  };
+
   return (
     <>
       <div className={classes.flexWrapper}>
         <div className={`${classes.flex} ${classes.flexTitle}`}>
           <Typography className={classes.flexCol1}><b>Name</b></Typography>
           <Typography className={classes.flexCol3}><b>Description</b></Typography>
+          <Typography className={classes.flexCol2}><b>Form</b></Typography>
+          <Typography className={classes.flexCol1}><b>Ranges</b></Typography>
           <Typography className={classes.flexColAutoHidden}>Edit</Typography>
           <Typography className={classes.flexColAutoHidden}>Delete</Typography>
         </div>
@@ -133,11 +155,19 @@ const ShowWizards = ({ wizards }) => {
           <div className={`${classes.flex} ${classes.flexRow}`} key={`object_${wizard.id}`}>
             <Typography className={classes.flexCol1}>
               {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
-              <Link data-cy={`show_${wizard.id}`} className={classes.pointer} onClick={() => alert('wizard page')}>{wizard.name}</Link>
+              <Link data-cy={`edit_${wizard.id}`} component={RouterLink} to={`/wizards/${wizard.id}/show`}>{wizard.name}</Link>
             </Typography>
 
             <Typography className={classes.flexCol3}>
               {wizard.description}
+            </Typography>
+
+            <Typography className={classes.flexCol2}>
+              {renderForm(JSON.parse(wizard.specification))}
+            </Typography>
+
+            <Typography className={classes.flexCol1}>
+              {renderRanges(JSON.parse(wizard.specification))}
             </Typography>
 
             <Typography className={classes.flexColAuto}>
