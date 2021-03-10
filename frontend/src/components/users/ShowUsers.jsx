@@ -124,10 +124,10 @@ const ShowUsers = ({ users, setIsLoading, setAlertProps, permissionsList, curren
     // success
     if (val === 'on') {
       // eslint-disable-next-line no-param-reassign, operator-assignment, prefer-template
-      user.permission_ids = user.permission_ids + '6.';
+      user.permission_ids = user.permission_ids + `${keyRetired}.`;
     } else {
       // eslint-disable-next-line no-param-reassign
-      user.permission_ids = user.permission_ids.replace('.6.', '.');
+      user.permission_ids = user.permission_ids.replace(`.${keyRetired}.`, '.');
     }
     setAlertProps({
       message: val === 'on' ? 'retired' : 'un-retired',
