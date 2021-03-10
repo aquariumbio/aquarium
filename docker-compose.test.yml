@@ -34,8 +34,6 @@ services:
       - .env_files/test/timezone
     environment:
       - CHOKIDAR_USEPOLLING=true
-      - REACT_APP_BACKEND=backend_test
-      - REACT_APP_BACKEND_PORT=3000 # use service port
     ports:
       - "${FRONTEND_TEST_PORT:-3001}:3000"
     volumes:

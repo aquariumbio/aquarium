@@ -8,3 +8,8 @@ services:
     env_file:
       - .env_files/test/db
       - .env_files/test/timezone
+
+  frontend_test:
+    environment: 
+      - REACT_APP_BACKEND=localhost
+      - REACT_APP_BACKEND_PORT=3011 

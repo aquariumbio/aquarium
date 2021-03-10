@@ -30,6 +30,11 @@ services:
     networks:
       - aquarium_net
 
+  frontend_test:
+    environment: 
+      - REACT_APP_BACKEND=backend_test
+      - REACT_APP_BACKEND_PORT=3000 # use service port
+
   backend_test:
     environment:
       - DB_HOST=db_test
