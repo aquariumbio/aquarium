@@ -29,6 +29,8 @@ services:
     image: frontend-development:${AQUARIUM_VERSION:-edge}
     depends_on:
       - backend
+    env_file: 
+      - env_files/development/timezone
     environment:
       - CHOKIDAR_USEPOLLING=true
       - REACT_APP_BACKEND=localhost # must be localhost
