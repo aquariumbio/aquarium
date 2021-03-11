@@ -6,8 +6,10 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import { withRouter } from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
 import UserMenu from './UserMenu';
 import LeftHamburgerMenu from './LeftHamburgerMenu';
+import { HomeButton } from '../shared/Buttons';
 
 const mainNavItems = [
   {
@@ -74,15 +76,7 @@ const Header = (props) => {
       <Toolbar>
         <LeftHamburgerMenu />
 
-        <IconButton
-          edge="start"
-          className={classes.logo}
-          color="inherit"
-          aria-label="home"
-          onClick={() => handleButtonClick('/')}
-        >
-          AQUARIUM
-        </IconButton>
+        <HomeButton />
 
         <div className={classes.headerOptions}>
           {mainNavItems.map((menuItem) => {
@@ -96,7 +90,9 @@ const Header = (props) => {
                 aria-label={menuItem}
                 onClick={() => handleButtonClick(pageURL)}
               >
-                {menuTitle}
+                <Typography>
+                  {menuTitle}
+                </Typography>
               </IconButton>
             );
           })}
