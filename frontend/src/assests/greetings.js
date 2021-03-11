@@ -1,0 +1,25 @@
+const greetings = {
+  French: 'Bonjour',
+  Spanish: 'Hola',
+  Russian: 'Privet',
+  Chinese: 'Nǐ hǎo',
+  Italian: 'Ciao',
+  Japanese: 'Konnichiwa',
+  German: 'Guten Tag',
+  Portuguese: 'Olá',
+  Korean: 'Anyoung',
+  Arabic: 'Ahlan',
+  Danish: 'Hej',
+  Swahili: 'Habari',
+  Dutch: 'Hoi',
+  Greek: 'Yassou',
+  Polish: 'Cześć',
+  Indonesian: 'Halo',
+  Hindi: 'Namaste',
+  Turkish: 'Selam',
+  Hebrew: 'Shalom',
+  Swedish: 'Tjena',
+  Norwegian: 'God dag',
+};
+
+export default greetings;
