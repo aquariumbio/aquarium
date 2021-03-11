@@ -7,15 +7,24 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Divider from '@material-ui/core/Divider';
+import Typography from '@material-ui/core/Typography';
 import tokensAPI from '../../helpers/api/tokensAPI';
+import utils from '../../helpers/utils';
+import greetings from '../../assests/greetings';
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2),
-    color: '#00ff22',
     fontSize: '1rem',
   },
 }));
+
+const UserGreeting = () => {
+  const userName = (localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')).name) || 'User';
+  const greeting = utils.randObjVal(greetings);
+
+  return <Typography>{greeting} {userName}!</Typography>;
+};
 
 const UserMenu = (props) => {
   const { history } = props;
@@ -42,7 +51,7 @@ const UserMenu = (props) => {
         aria-label="menu"
         onClick={(e) => setAnchorEl(e.currentTarget)}
       >
-        ● USER
+        <UserGreeting />
       </IconButton>
       <Menu
         id="user-menu"
