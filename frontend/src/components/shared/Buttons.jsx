@@ -119,6 +119,7 @@ LinkButton.defaultProps = {
 export const HomeButton = () => (
   <Button
     name="home"
+    aria-label="home"
     component={RouterLink}
     to="/"
   >
