@@ -51,6 +51,7 @@ const theme = createMuiTheme({
       dark: '#003962',
       contrastText: '#fff',
     },
+    disabled: '#ddd',
   },
   typography: {
     fontFamily: [
@@ -62,6 +63,11 @@ const theme = createMuiTheme({
     MuiDivider: {
       root: {
         margin: '16px 0px',
+      },
+    },
+    MuiAppBar: {
+      colorPrimary: {
+        backgroundColor: '#fff',
       },
     },
   },
@@ -132,11 +138,11 @@ export default function App() {
             {/* Main Navigation tabs */}
             <Route exact path="/jobs" render={(props) => <JobsPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
 
-            <Route exact path="/manager" render={(props) => <ManagerPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+            <Route exact path="/manage" render={(props) => <ManagerPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
             <Route exact path="/launcher" render={(props) => <PlansPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
             <Route exact path="/samples" render={(props) => <SamplesPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
-            <Route exact path="/developer" render={(props) => <DeveloperPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
-            <Route exact path="/designer" render={(props) => <DesignerPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+            <Route exact path="/develop" render={(props) => <DeveloperPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+            <Route exact path="/design" render={(props) => <DesignerPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
             <Route exact path="/user/profile" render={(props) => <UserMenu setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
 
             {/* Right user Menu */}
