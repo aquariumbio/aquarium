@@ -52,6 +52,12 @@ const theme = createMuiTheme({
       contrastText: '#fff',
     },
   },
+  typography: {
+    fontFamily: [
+      'Lato',
+      'sans-serif',
+    ].join(','),
+  },
   overrides: {
     MuiDivider: {
       root: {
