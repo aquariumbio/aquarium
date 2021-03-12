@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_18_000010) do
+ActiveRecord::Schema.define(version: 2021_03_01_000000) do
 
   create_table "account_logs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "row1"
@@ -338,7 +338,7 @@ ActiveRecord::Schema.define(version: 2020_12_18_000010) do
   end
 
   create_table "permissions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
-    t.string "name", null: false
+    t.string "name", default: "", null: false
     t.integer "sort"
     t.datetime "created_at"
     t.datetime "updated_at"
