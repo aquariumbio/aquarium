@@ -15,18 +15,13 @@ Permission.create([
                   ])
 
 # Cannot use User.create because the method is overridden
-# User.create([
-#   {id: 1, name: 'Factory', login: 'user_1', password_digest: '$2a$04$t1STwkRNJWV35R8Sd6eGKu841QubzwdDY6Rysz55cel2xA4WikwH6', permission_ids: '.1.'},
-#   {id: 2, name: 'Factory', login: 'user_2', password_digest: '$2a$04$YFitBLDLIyzxOonLuB4Rd.3yPVj75r/3.uLw1ylq9geavOvsfhY4a', permission_ids: '.2.3.'},
-#   {id: 3, name: 'Factory', login: 'user_3', password_digest: '$2a$04$6Y3URfFd8d2ENBD00O7OLe/sAgXw13pNWyP/v9eyqIfOvjh/26/7y', permission_ids: '.1.6.'},
-# ])
-
 timenow = (Time.now.utc).to_s[0, 19]
 sql = "
   INSERT INTO `users` (`id`, `name`, `login`, `created_at`, `updated_at`, `password_digest`, `remember_token`, `admin`, `key`, `permission_ids`)
   VALUES
-    (1, 'Factory', 'user_1', '#{timenow}', '#{timenow}', '$2a$04$t1STwkRNJWV35R8Sd6eGKu841QubzwdDY6Rysz55cel2xA4WikwH6', NULL, 0, NULL, '.1.'),
-    (2, 'Factory', 'user_2', '#{timenow}', '#{timenow}', '$2a$04$YFitBLDLIyzxOonLuB4Rd.3yPVj75r/3.uLw1ylq9geavOvsfhY4a', NULL, 0, NULL, '.2.3.'),
-    (3, 'Factory', 'user_3', '#{timenow}', '#{timenow}', '$2a$04$6Y3URfFd8d2ENBD00O7OLe/sAgXw13pNWyP/v9eyqIfOvjh/26/7y', NULL, 0, NULL, '.1.6.');
+    (1, 'user_admin', 'user_admin', '#{timenow}', '#{timenow}', '$2a$12$7OSsbeNoRkx1pgALaVE/Ru5hcVmZxVKoCoMg/MTJnsRwqfH/34Nfm', NULL, 0, NULL, '.1.'),
+    (2, 'user_manage', 'user_manage', '#{timenow}', '#{timenow}', '$2a$12$QpQTu72pwuFTTnrnAGCVwewpd4oFWl3fxGZAIaQG12fI54G.14VOy', NULL, 0, NULL, '.2.'),
+    (3, 'user_run', 'user_run', '#{timenow}', '#{timenow}', '$2a$12$4ZOrJDTUdC22e/XbhvVwbuLTlRSgxqBhX1/lyD5lITk.QCeqdnTdq', NULL, 0, NULL, '.3.'),
+    (4, 'user_design', 'user_design', '#{timenow}', '#{timenow}', '$2a$12$MGLq.g4I9AVSdaG1q196BuDLTysBUfJocXTsWpJmVktycSAjfRo8a', NULL, 0, NULL, '.4.'),
+    (5, 'user_develop', 'user_develop', '#{timenow}', '#{timenow}', '$2a$12$2w7.1JYbSot6pORrivoQ9O2TFfN1TK5dzwyWf9E7a5M6TFLOiNN36', NULL, 0, NULL, '.5.');
 "
-User.connection.execute sql

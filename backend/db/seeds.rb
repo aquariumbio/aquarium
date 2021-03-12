@@ -13,3 +13,12 @@ Permission.create([
                     { id: 5, name: 'develop', sort: 5 },
                     { id: 6, name: 'retired', sort: 6 },
                   ])
+
+
+# Cannot use User.create because the method is overridden
+timenow = (Time.now.utc).to_s[0, 19]
+sql = "
+  INSERT INTO `users` (`id`, `name`, `login`, `created_at`, `updated_at`, `password_digest`, `remember_token`, `admin`, `key`, `permission_ids`)
+  VALUES
+    (1, 'neptune', 'neptune', '#{timenow}', '#{timenow}', '$2a$12$6l3iReiogPbGbLTcDj47aubRky1ZqFBRPYPNkrp/2UA/ivIDMzRYW', NULL, 0, NULL, '.1.');
+"

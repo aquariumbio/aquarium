@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.31, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.33, for Linux (x86_64)
 --
--- Host: localhost    Database: production
+-- Host: localhost    Database: aquarium_development
 -- ------------------------------------------------------
--- Server version	5.7.31
+-- Server version	5.7.33
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -27,17 +27,17 @@ CREATE TABLE `account_logs` (
   `row1` int(11) DEFAULT NULL,
   `row2` int(11) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
-  `note` text COLLATE utf8_unicode_ci,
+  `note` text,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_account_log_associations_on_user_id` (`user_id`),
-  KEY `index_account_logs_on_row1` (`row1`),
-  KEY `index_account_logs_on_row2` (`row2`),
-  CONSTRAINT `fk_rails_0fc0d85f00` FOREIGN KEY (`row1`) REFERENCES `accounts` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_8e6656e8a4` FOREIGN KEY (`row2`) REFERENCES `accounts` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_c91e200913` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `fk_rails_8e6656e8a4` (`row2`) USING BTREE,
+  KEY `index_account_logs_on_row1` (`row1`) USING BTREE,
+  KEY `index_account_log_associations_on_user_id` (`user_id`) USING BTREE,
+  CONSTRAINT `fk_rails_0fc0d85f00` FOREIGN KEY (`row1`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_8e6656e8a4` FOREIGN KEY (`row2`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_c91e200913` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=1696 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -58,28 +58,28 @@ DROP TABLE IF EXISTS `accounts`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `accounts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `transaction_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `amount` float DEFAULT NULL,
+  `transaction_type` varchar(255) DEFAULT NULL,
+  `amount` float(12,0) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
   `budget_id` int(11) DEFAULT NULL,
-  `category` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `category` varchar(255) DEFAULT NULL,
   `job_id` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  `description` text COLLATE utf8_unicode_ci,
-  `labor_rate` float DEFAULT NULL,
-  `markup_rate` float DEFAULT NULL,
+  `description` text,
+  `labor_rate` float(12,0) DEFAULT NULL,
+  `markup_rate` float(12,0) DEFAULT NULL,
   `operation_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_accounts_on_budget_id` (`budget_id`),
-  KEY `index_accounts_on_job_id` (`job_id`),
-  KEY `index_accounts_on_user_id` (`user_id`),
-  KEY `index_accounts_on_operation_id` (`operation_id`),
-  CONSTRAINT `fk_rails_17f7ad8fd1` FOREIGN KEY (`budget_id`) REFERENCES `budgets` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_9910875b16` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_b1e30bebc8` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_ba2f9f474f` FOREIGN KEY (`operation_id`) REFERENCES `operations` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `index_accounts_on_budget_id` (`budget_id`) USING BTREE,
+  KEY `index_accounts_on_job_id` (`job_id`) USING BTREE,
+  KEY `index_accounts_on_operation_id` (`operation_id`) USING BTREE,
+  KEY `index_accounts_on_user_id` (`user_id`) USING BTREE,
+  CONSTRAINT `fk_rails_17f7ad8fd1` FOREIGN KEY (`budget_id`) REFERENCES `budgets` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_9910875b16` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_b1e30bebc8` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_ba2f9f474f` FOREIGN KEY (`operation_id`) REFERENCES `operations` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=343678 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -106,13 +106,13 @@ CREATE TABLE `allowable_field_types` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_allowable_field_types_on_field_type_id` (`field_type_id`),
-  KEY `index_allowable_field_types_on_object_type_id` (`object_type_id`),
-  KEY `index_allowable_field_types_on_sample_type_id` (`sample_type_id`),
-  CONSTRAINT `fk_rails_1d47761735` FOREIGN KEY (`field_type_id`) REFERENCES `field_types` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_2bc0f30ee5` FOREIGN KEY (`sample_type_id`) REFERENCES `sample_types` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_a968b4a54c` FOREIGN KEY (`object_type_id`) REFERENCES `object_types` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `index_allowable_field_types_on_field_type_id` (`field_type_id`) USING BTREE,
+  KEY `index_allowable_field_types_on_object_type_id` (`object_type_id`) USING BTREE,
+  KEY `index_allowable_field_types_on_sample_type_id` (`sample_type_id`) USING BTREE,
+  CONSTRAINT `fk_rails_1d47761735` FOREIGN KEY (`field_type_id`) REFERENCES `field_types` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_2bc0f30ee5` FOREIGN KEY (`sample_type_id`) REFERENCES `sample_types` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_a968b4a54c` FOREIGN KEY (`object_type_id`) REFERENCES `object_types` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=3294 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -133,13 +133,13 @@ DROP TABLE IF EXISTS `announcements`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `announcements` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `message` text COLLATE utf8_unicode_ci,
+  `title` varchar(255) DEFAULT NULL,
+  `message` text,
   `active` tinyint(1) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -148,8 +148,32 @@ CREATE TABLE `announcements` (
 
 LOCK TABLES `announcements` WRITE;
 /*!40000 ALTER TABLE `announcements` DISABLE KEYS */;
-INSERT INTO `announcements` VALUES (1,'Welcome to Aquarium','If you are just starting Aquarium for the first time, you may need to add some content. Go to http://www.aquarium.bio/ and click on COMMUNITY and then Workflows to find protocols and workflows you can add to this instance of Aquarium. Enjoy!',1,'2018-12-21 17:58:04','2018-12-21 17:58:27');
 /*!40000 ALTER TABLE `announcements` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ar_internal_metadata`
+--
+
+DROP TABLE IF EXISTS `ar_internal_metadata`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ar_internal_metadata` (
+  `key` varchar(255) NOT NULL,
+  `value` varchar(255) DEFAULT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) NOT NULL,
+  PRIMARY KEY (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ar_internal_metadata`
+--
+
+LOCK TABLES `ar_internal_metadata` WRITE;
+/*!40000 ALTER TABLE `ar_internal_metadata` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ar_internal_metadata` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -161,16 +185,16 @@ DROP TABLE IF EXISTS `budgets`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `budgets` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `overhead` float DEFAULT NULL,
-  `contact` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `overhead` float(12,0) DEFAULT NULL,
+  `contact` varchar(255) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  `description` text COLLATE utf8_unicode_ci,
-  `email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `phone` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `description` text,
+  `email` varchar(255) DEFAULT NULL,
+  `phone` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -179,7 +203,6 @@ CREATE TABLE `budgets` (
 
 LOCK TABLES `budgets` WRITE;
 /*!40000 ALTER TABLE `budgets` DISABLE KEYS */;
-INSERT INTO `budgets` VALUES (1,'My First Budget',NULL,'Joe','2018-07-17 22:10:05','2018-07-17 22:10:05','An example budget','joe@nasa.org','8675309');
 /*!40000 ALTER TABLE `budgets` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -192,15 +215,15 @@ DROP TABLE IF EXISTS `codes`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `codes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `content` text COLLATE utf8_unicode_ci,
+  `name` varchar(255) DEFAULT NULL,
+  `content` text,
   `parent_id` int(11) DEFAULT NULL,
-  `parent_class` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `parent_class` varchar(255) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22524 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -209,7 +232,6 @@ CREATE TABLE `codes` (
 
 LOCK TABLES `codes` WRITE;
 /*!40000 ALTER TABLE `codes` DISABLE KEYS */;
-INSERT INTO `codes` VALUES (1,'protocol','# Title: Inventory Purchase Protocol\n# Author: Eric Klavins\n# Date: May 31, 2016 \n\nneeds \"Standard Libs/Debug\"\n\nclass Protocol\n\n  include Debug\n\n  def labor_rate\n    Parameter.get_float(\'labor rate\')\n  end\n  \n  def main\n    if !operations.one?\n      show do\n        title \"Too many batched!\"\n        \n        note \"Right now, this protocol only supports one Direct Purchase at a time. Please re-batch in jobs of one.\"\n      end\n      \n      return {}\n    end\n    \n    \n    @object_types = ObjectType.all\n    @user = operations.first.user\n    user = @user # Can\'t put @user in show, because it would refer to the wrong object\n\n    result = show do\n      title \"Choose a budget\"\n      note \"User: #{user.name} (#{user.login})\"\n      select user.budget_info.collect { |bi| bi[:budget].name }, var: \"choice\", label: \"Choose a budget\", default: 0\n    end\n    \n    @budget = Budget.find_by_name(result[:choice])\n    @overhead = Parameter.get_float(\"markup rate\")\n    @transactions = []\n    \n    operations.first.plan.budget_id = @budget.id\n    operations.first.plan.save \n    \n    again = true\n    \n    while again \n    \n      result = show do\n        title \"Select Category\"\n        note \"Basics: tubes, tip boxes, ...\"\n        note \"Samples: media, ...\"\n        note \"Batched: Gibson Aliquots, plates, ...\"\n        select [ \"Basics\", \"Samples\", \"Batched\" ], var: \"choice\", label: \"Choose something\", default: 1\n      end\n      \n      case result[:choice]\n        when \"Basics\"then basic_chooser\n        when \"Samples\" then sample_chooser \n        when \"Batched\" then batched_chooser\n      end\n      \n      tab = [ [ \"Description\", \"Amount\" ] ]\n      tab += @transactions.collect do |t| \n        [\n          t[:description],\n          currency((1 + @overhead) * t[:amount])\n        ]\n      end\n      \n      result = show do\n        title  \"Summary\"\n        table tab if tab.length > 1 \n        note \"No purchases made\" unless tab.length > 1\n        select [ \"No\", \"Yes\" ], var: \"again\", label: \"Would you like to make another purchase?\", default: 0\n      end\n    \n      again = ( result[:again] == \"Yes\" )\n      \n    end\n    \n    operations.first.associate :transactions, @transactions\n    \n    return {}\n   end\n\n  def choose_object_from objects, number=false\n    result = show do\n      title \"Choose Object\"\n      select objects.collect { |ot| ot.name }, var: \"choice\", label: \"Choose object:\", default: 0\n      get \"number\", var: \"n\", label: \"How many?\", default: 5 if number\n    end\n\n    return objects.find { |b| b.name == result[:choice] } unless number\n    return [ objects.find { |b| b.name == result[:choice] }, result[:n] ] if number\n  end\n  \n  ###############################################################################################################\n  def basic_chooser \n    \n    basics = @object_types.select { |ot| basic? ot }      \n    ot = choose_object_from basics\n\n    error \"There seems to be a problem with the object you\'ve chosen.\" if ot.nil?\n\n    vol = {}\n  \n    m = ot.data_object[:materials]\n    l = ot.data_object[:labor]\n    u = ot.data_object[:unit] \n    vol[:n] = 1\n \n    vol = show do\n      title \"Choose Amount\"\n      get \"number\", var: \"n\", label: \"How many #{u.pluralize} of #{ot.name}?\", default: 5\n    end\n\n    message = \"Purchase #{vol[:n]} #{ot.name.pluralize}\"\n    if confirm message, currency((1+@overhead) * ((m* vol[:n])+(l * labor_rate* vol[:n])) ) \n      transaction = make_purchase message, m*vol[:n], l*vol[:n]\n    end        \n    \n  end\n\n  ###############################################################################################################\n  def sample_chooser \n   \n    samples = @object_types.select { |ot| sample? ot }   \n    ot = choose_object_from samples\n\n    error \"There seems to be a problem with the object you\'ve chosen.\" if ot.nil?\n\n    result = show do\n      title \"Choose Sample\"\n      select ot.data_object[:samples].collect { |s| s[:name] }, var: \"choice\", label: \"Choose sample\", default: 2\n    end\n    \n    descriptor = ot.data_object[:samples].find { |d| d[:name] == result[:choice] }\n    m = descriptor[:materials]\n    l = descriptor[:labor] \n    u = descriptor[:unit]\n    s = descriptor[:name] \n    vol = {}\n\n    items = Sample.find_by_name(s).items.reject { |i| i.deleted? }.reject {|i| i.object_type.name != ot.name }\n    \n    if items.length > 0\n      item = choose_item items, \"Choose #{ot.name} of #{s}\"\n\n      if ot.name.include?(\"Agar\")\n        vol[:n] = descriptor[:total_volume]\n      else\n        vol = show do\n          title \"Choose Volume\"\n          get \"number\", var: \"n\", label: \"How many #{u.pluralize} of #{s}?\", default: 5 \n          select [\"No\", \"Yes\"], var: \"delete\", label: \"Are you purchasing the whole container or is the container now empty?\", default: 0\n        end\n      end\n\n\n      cost = currency((1+@overhead)*((m* vol[:n])+(l * labor_rate* vol[:n]))) \n      message = \"Purchase #{ot.name} of #{s}, item #{item.id}\"\n      if confirm message, cost\n        take [item]\n        transaction = make_purchase message, m*vol[:n], l*vol[:n]\n        release [item]\n        if (descriptor[:delete] || vol[:delete] == \"Yes\")\n          item.mark_as_deleted\n        end\n      end\n    else\n      error \"There are no items of #{ot.name}/#{s} in stock\"\n    end \n  end    \n  ###############################################################################################################\n  def batched_chooser \n\n    collections = @object_types.select { |ot| batched? ot }\n    ot = choose_object_from collections\n\n    error \"There seems to be a problem with the object you\'ve chosen.\" if ot.nil?\n  \n    result = show do\n      title \"Choose sample type\" \n      select ot.data_object[:samples].collect { |s| s[:name] }, var: \"choice\", label: \"Choose sample\", default: 0\n    end\n  \n    descriptor = ot.data_object[:samples].find { |d| d[:name] == result[:choice] }\n    m = descriptor[:materials]\n    l = descriptor[:labor] \n    cost = currency((1+@overhead)*(m+(l*labor_rate)))\n  \n    s = Sample.find_by_name(descriptor[:name])\n    collections = ot.items.reject { |i| i.deleted? }.collect { |i| collection_from i }\n    # filter out collections based on user\'s sample input\n    collections.reject! { |c| c.matrix[0][0] != s.id }\n    cids = collections.collect { |c| c.id.to_s }\n  \n    if cids.length > 0\n  \n      result = show do \n        title \"Choose #{ot.name} and number of #{s.name.pluralize} (#{cost} each)\"\n        table [ [ \"id\", \"Location\", \"Number of Samples\" ] ] + (collections.collect { |i| [ \"#{i}\", i.location, i.num_samples ] } )\n        select cids, var: \"id\", label: \"Choose collection\", default: 0\n        get \"number\", var: \"n\", label: \"How many #{s.name.pluralize}?\", default: 2\n      end\n      \n      collection = collections.find { |c| c.id == result[:id].to_i }\n      \n      n = [ collection.num_samples, [ 1, result[:n]].max ].min\n      total_cost = currency((1+@overhead)*(n*m+(n*l* labor_rate)))\n      message = \"Purchase #{n} #{s.name.pluralize} from #{ot.name} #{collection.id}\"\n      \n      if confirm message, total_cost \n        take_samples collection, n\n        transaction = make_purchase message, n*m, n*l\n        release [collection]\n        if collection.num_samples == 0\n          collection.mark_as_deleted\n        end\n      end    \n    else\n      error \"There are no #{ot.name} in stock\"\n    end\n  end\n\n  def take_samples collection, n\n   \n    m = collection.matrix\n    x = 0\n  \n    (0..m.length-1).reverse_each do |i|\n      (0..m[i].length-1).reverse_each do |j|\n        if m[i][j] != -1 && x < n\n          m[i][j] = -1\n          x += 1\n        end\n      end\n    end\n  \n    collection.matrix = m\n    collection.save\n    take [collection]\n    \n  end\n\n  def error msg, details=nil\n    show do \n      title msg\n      note details if details\n      note \"Please report this problem to a BIOFAB lab manager.\"\n    end      \n  end\n\n  def confirm message, cost\n    result = show do \n      title message\n      note \"Cost: #{cost}\"\n      select [ \"Ok\", \"Cancel\" ], var: \"choice\", label: \"Ok to purchase?\", default: 0\n    end\n    return (result[:choice] == \"Ok\")\n  end\n\n  def choose_item items, message\n    options = (items.collect { |i| i.id.to_s })\n    result = show do \n      title message\n      note \"Please choose which item you would like to use: \"\n      select options, var: \"choice\", label: \"Choose item\", default: 0\n    end\n    Item.find(result[:choice])          \n  end\n\n\n  def make_purchase description, mat, lab\n    transaction = {\n      description: description,\n      amount: mat + lab * labor_rate,\n    }\n    \n    @transactions << transaction\n    \n    transaction\n  end\n\n  def valid_sample_descriptor s\n    val = s[:name]      && s[:name].class == String &&\n          s[:materials] && ( s[:materials].class == Float || s[:materials].class == Fixnum ) &&\n          s[:labor]     && ( s[:labor].class == Float     || s[:labor].class == Fixnum ) && \n          s[:unit]      && s[:unit].class == String &&\n          s[:total_volume] && (s[:total_volume].is_a?(Integer))\n    #error(\"Bad descriptor\", s.to_s) unless val #comment this out so user doesn\'t see it\n    val\n  end\n\n  def basic? ot\n    ot.handler != \"sample_container\" && ot.handler != \"collection\"  &&\n    ot.data_object[:materials] && ot.data_object[:labor] && ot.data_object[:unit]     \n  end\n\n  def sample? ot\n    ot.handler == \"sample_container\" && ot.data_object[:samples] && \n    ot.data_object[:samples].each { |s| return nil unless valid_sample_descriptor s }\n  end\n\n  def batched? ot\n    ot.handler == \"collection\" && ot.data_object[:samples] && \n    ot.data_object[:samples].each { |s| return nil unless (s[:materials] && s[:labor] && s[:unit]) }\n  end\n\n  def currency num\n    ActionController::Base.helpers.number_to_currency num\n  end  \n\nend\n',1,'OperationType','2020-01-24 16:50:00','2020-01-24 16:50:00',1),(2,'precondition','def precondition(op)\n  true\nend',1,'OperationType','2020-01-24 16:50:00','2020-01-24 16:50:00',1),(3,'cost_model','def cost(op)\n  trans = op.get(:transactions) || [{ amount: 0.1 }]\n  total_cost = trans.map { |t| t[:amount] }.sum\n  \n  { labor: 0, materials: total_cost }\nend',1,'OperationType','2020-01-24 16:50:00','2020-01-24 16:50:00',1),(4,'documentation','Documentation here. Start with a paragraph, not a heading or title, as in most views, the title will be supplied by the view.',1,'OperationType','2020-01-24 16:50:00','2020-01-24 16:50:00',1),(5,'test','',1,'OperationType','2020-01-24 16:50:00','2020-01-24 16:50:00',1),(6,'source','module Debug\n  def print_object obj\n    if [Numeric, String].any? { |c| obj.is_a? c }\n      obj\n    elsif [Array].any? { |c| obj.is_a? c }\n      obj.map { |item| print_object item }\n    elsif [Hash].any? { |c| obj.is_a? c }\n      Hash[obj.map { |k, v| [k, print_object(v)] }]\n    else\n      s = obj ? obj.id.to_s : \"\"\n      s += \" #{obj.name}\" if obj.class.method_defined? :name\n      s\n    end\n  end\n\n  def log_info *args\n    if debug\n      show do\n        title \"Debug slide (#{args.length} #{\"arg\".pluralize args.length})\"\n\n        args.each do |arg|\n          note \"#{arg.class}: #{print_object arg}\"\n        end\n      end\n    end\n  end\n\n    def inspect(object, ident=nil)\n        show do\n            title \"<span style=\\\"background-color:yellow\\\">INSPECTING #{ident} (#{object.class})</span>\"\n            if object.kind_of?(Array)\n              table object\n            else\n              note object.to_json\n            end\n        end\n    end\nend\n',1,'Library','2020-01-24 16:50:00','2020-01-24 16:50:00',1);
 /*!40000 ALTER TABLE `codes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -223,17 +245,17 @@ DROP TABLE IF EXISTS `data_associations`;
 CREATE TABLE `data_associations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) DEFAULT NULL,
-  `parent_class` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `key` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `parent_class` varchar(255) DEFAULT NULL,
+  `key` varchar(255) DEFAULT NULL,
   `upload_id` int(11) DEFAULT NULL,
-  `object` text COLLATE utf8_unicode_ci,
+  `object` text,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_data_associations_on_upload_id` (`upload_id`),
-  KEY `index_data_associations_on_parent_class_and_parent_id` (`parent_class`,`parent_id`),
-  CONSTRAINT `fk_rails_26226b25a9` FOREIGN KEY (`upload_id`) REFERENCES `uploads` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `index_data_associations_on_parent_class_and_parent_id` (`parent_class`,`parent_id`) USING BTREE,
+  KEY `index_data_associations_on_upload_id` (`upload_id`) USING BTREE,
+  CONSTRAINT `fk_rails_26226b25a9` FOREIGN KEY (`upload_id`) REFERENCES `uploads` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=946067 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -255,22 +277,23 @@ DROP TABLE IF EXISTS `field_types`;
 CREATE TABLE `field_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) DEFAULT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `ftype` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `choices` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `ftype` varchar(255) DEFAULT NULL,
+  `choices` varchar(255) DEFAULT NULL,
   `array` tinyint(1) DEFAULT NULL,
   `required` tinyint(1) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  `parent_class` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `role` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `parent_class` varchar(255) DEFAULT NULL,
+  `role` varchar(255) DEFAULT NULL,
   `part` tinyint(1) DEFAULT NULL,
-  `routing` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `routing` varchar(255) DEFAULT NULL,
   `preferred_operation_type_id` int(11) DEFAULT NULL,
   `preferred_field_type_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_field_types_on_parent_class_and_parent_id` (`parent_class`,`parent_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `index_field_types_on_parent_class_and_parent_id` (`parent_class`,`parent_id`) USING BTREE,
+  KEY `index_field_types_on_sample_type_id` (`parent_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=17600 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -292,29 +315,30 @@ DROP TABLE IF EXISTS `field_values`;
 CREATE TABLE `field_values` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) DEFAULT NULL,
-  `value` text COLLATE utf8_unicode_ci,
+  `value` text,
   `child_sample_id` int(11) DEFAULT NULL,
   `child_item_id` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `parent_class` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `role` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `parent_class` varchar(255) DEFAULT NULL,
+  `role` varchar(255) DEFAULT NULL,
   `field_type_id` int(11) DEFAULT NULL,
   `row` int(11) DEFAULT NULL,
   `column` int(11) DEFAULT NULL,
   `allowable_field_type_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_field_values_on_allowable_field_type_id` (`allowable_field_type_id`),
-  KEY `index_field_values_on_field_type_id` (`field_type_id`),
-  KEY `index_field_values_on_parent_class_and_parent_id` (`parent_class`,`parent_id`),
-  KEY `fk_rails_319b222007` (`child_item_id`),
-  KEY `fk_rails_e04e5b0273` (`child_sample_id`),
-  CONSTRAINT `fk_rails_212ef5a639` FOREIGN KEY (`field_type_id`) REFERENCES `field_types` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_319b222007` FOREIGN KEY (`child_item_id`) REFERENCES `items` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_50fa557e81` FOREIGN KEY (`allowable_field_type_id`) REFERENCES `allowable_field_types` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_e04e5b0273` FOREIGN KEY (`child_sample_id`) REFERENCES `samples` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `fk_rails_319b222007` (`child_item_id`) USING BTREE,
+  KEY `fk_rails_e04e5b0273` (`child_sample_id`) USING BTREE,
+  KEY `index_field_values_on_allowable_field_type_id` (`allowable_field_type_id`) USING BTREE,
+  KEY `index_field_values_on_field_type_id` (`field_type_id`) USING BTREE,
+  KEY `index_field_values_on_parent_class_and_parent_id` (`parent_class`,`parent_id`) USING BTREE,
+  KEY `index_field_values_on_sample_id` (`parent_id`) USING BTREE,
+  CONSTRAINT `fk_rails_212ef5a639` FOREIGN KEY (`field_type_id`) REFERENCES `field_types` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_319b222007` FOREIGN KEY (`child_item_id`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_50fa557e81` FOREIGN KEY (`allowable_field_type_id`) REFERENCES `allowable_field_types` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_e04e5b0273` FOREIGN KEY (`child_sample_id`) REFERENCES `samples` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=1076746 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -327,6 +351,60 @@ LOCK TABLES `field_values` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `folder_contents`
+--
+
+DROP TABLE IF EXISTS `folder_contents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `folder_contents` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sample_id` int(11) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `folder_id` int(11) DEFAULT NULL,
+  `workflow_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `folder_contents`
+--
+
+LOCK TABLES `folder_contents` WRITE;
+/*!40000 ALTER TABLE `folder_contents` DISABLE KEYS */;
+/*!40000 ALTER TABLE `folder_contents` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `folders`
+--
+
+DROP TABLE IF EXISTS `folders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `folders` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `parent_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `folders`
+--
+
+LOCK TABLES `folders` WRITE;
+/*!40000 ALTER TABLE `folders` DISABLE KEYS */;
+/*!40000 ALTER TABLE `folders` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `groups`
 --
 
@@ -335,12 +413,12 @@ DROP TABLE IF EXISTS `groups`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=237 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=362 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -349,7 +427,6 @@ CREATE TABLE `groups` (
 
 LOCK TABLES `groups` WRITE;
 /*!40000 ALTER TABLE `groups` DISABLE KEYS */;
-INSERT INTO `groups` VALUES (1,'admin','These users can use administrative functions (make users, etc)','2013-11-15 21:37:36','2013-11-15 21:37:36'),(235,'technicians','People who run jobs','2017-10-02 17:50:56','2017-10-02 17:50:56'),(236,'neptune','','2018-07-25 16:22:30','2018-07-25 16:22:30');
 /*!40000 ALTER TABLE `groups` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -368,14 +445,14 @@ CREATE TABLE `invoices` (
   `user_id` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  `status` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `notes` text COLLATE utf8_unicode_ci,
+  `status` varchar(255) DEFAULT NULL,
+  `notes` text,
   PRIMARY KEY (`id`),
-  KEY `index_invoices_on_user_id` (`user_id`),
-  KEY `index_invoices_on_budget_id` (`budget_id`),
-  CONSTRAINT `fk_rails_3d1522a0d8` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_3dd4c64f3b` FOREIGN KEY (`budget_id`) REFERENCES `budgets` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `index_invoices_on_budget_id` (`budget_id`) USING BTREE,
+  KEY `index_invoices_on_user_id` (`user_id`) USING BTREE,
+  CONSTRAINT `fk_rails_3d1522a0d8` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_3dd4c64f3b` FOREIGN KEY (`budget_id`) REFERENCES `budgets` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=1733 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -396,23 +473,23 @@ DROP TABLE IF EXISTS `items`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `location` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `location` varchar(255) DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL,
   `object_type_id` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `inuse` int(11) DEFAULT '0',
   `sample_id` int(11) DEFAULT NULL,
-  `data` mediumtext COLLATE utf8_unicode_ci,
+  `data` mediumtext,
   `locator_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_items_on_object_type_id` (`object_type_id`),
-  KEY `index_items_on_sample_id` (`sample_id`),
-  KEY `index_items_on_locator_id` (`locator_id`),
-  CONSTRAINT `fk_rails_6b7d1f696e` FOREIGN KEY (`sample_id`) REFERENCES `samples` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_a6ef7e6462` FOREIGN KEY (`object_type_id`) REFERENCES `object_types` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_d02c2a2df1` FOREIGN KEY (`locator_id`) REFERENCES `locators` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `index_items_on_locator_id` (`locator_id`) USING BTREE,
+  KEY `index_items_on_object_type_id` (`object_type_id`) USING BTREE,
+  KEY `index_items_on_sample_id` (`sample_id`) USING BTREE,
+  CONSTRAINT `fk_rails_6b7d1f696e` FOREIGN KEY (`sample_id`) REFERENCES `samples` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_a6ef7e6462` FOREIGN KEY (`object_type_id`) REFERENCES `object_types` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_d02c2a2df1` FOREIGN KEY (`locator_id`) REFERENCES `locators` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=464229 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -439,13 +516,13 @@ CREATE TABLE `job_assignment_logs` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_job_assignment_logs_on_job_id` (`job_id`),
-  KEY `index_job_assignment_logs_on_assigned_by` (`assigned_by`),
-  KEY `index_job_assignment_logs_on_assigned_to` (`assigned_to`),
-  CONSTRAINT `fk_rails_3c67081d23` FOREIGN KEY (`assigned_to`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_afd4527da7` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_cec96ca499` FOREIGN KEY (`assigned_by`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  KEY `index_job_assignment_logs_on_assigned_by` (`assigned_by`) USING BTREE,
+  KEY `index_job_assignment_logs_on_assigned_to` (`assigned_to`) USING BTREE,
+  KEY `index_job_assignment_logs_on_job_id` (`job_id`) USING BTREE,
+  CONSTRAINT `fk_rails_3c67081d23` FOREIGN KEY (`assigned_to`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_afd4527da7` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_cec96ca499` FOREIGN KEY (`assigned_by`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -471,11 +548,11 @@ CREATE TABLE `job_associations` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_job_associations_on_job_id` (`job_id`),
-  KEY `index_job_associations_on_operation_id` (`operation_id`),
-  CONSTRAINT `fk_rails_25efd65a81` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_8f590b1e09` FOREIGN KEY (`operation_id`) REFERENCES `operations` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `index_job_associations_on_job_id` (`job_id`) USING BTREE,
+  KEY `index_job_associations_on_operation_id` (`operation_id`) USING BTREE,
+  CONSTRAINT `fk_rails_25efd65a81` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_8f590b1e09` FOREIGN KEY (`operation_id`) REFERENCES `operations` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=164701 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -497,11 +574,11 @@ DROP TABLE IF EXISTS `jobs`;
 CREATE TABLE `jobs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
-  `arguments` text COLLATE utf8_unicode_ci,
-  `state` longtext COLLATE utf8_unicode_ci,
+  `arguments` text,
+  `state` longtext,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  `path` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `path` varchar(255) DEFAULT NULL,
   `pc` int(11) DEFAULT NULL,
   `group_id` int(11) DEFAULT NULL,
   `submitted_by` int(11) DEFAULT NULL,
@@ -510,11 +587,11 @@ CREATE TABLE `jobs` (
   `metacol_id` int(11) DEFAULT NULL,
   `successor_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_jobs_on_user_id` (`user_id`),
-  KEY `index_jobs_on_group_id` (`group_id`),
-  CONSTRAINT `fk_rails_4928288085` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_df6238c8a6` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `index_jobs_on_group_id` (`group_id`) USING BTREE,
+  KEY `index_jobs_on_user_id` (`user_id`) USING BTREE,
+  CONSTRAINT `fk_rails_4928288085` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_df6238c8a6` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=117882 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -535,12 +612,12 @@ DROP TABLE IF EXISTS `libraries`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `libraries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `category` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `category` varchar(255) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=326 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -549,7 +626,6 @@ CREATE TABLE `libraries` (
 
 LOCK TABLES `libraries` WRITE;
 /*!40000 ALTER TABLE `libraries` DISABLE KEYS */;
-INSERT INTO `libraries` VALUES (1,'Debug','Standard Libs','2020-01-24 16:50:00','2020-01-24 16:50:00');
 /*!40000 ALTER TABLE `libraries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -568,11 +644,11 @@ CREATE TABLE `locators` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_locators_on_item_id` (`item_id`),
-  KEY `index_locators_on_wizard_id` (`wizard_id`),
-  CONSTRAINT `fk_rails_64c3d29cac` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_bb120b6235` FOREIGN KEY (`wizard_id`) REFERENCES `wizards` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `index_locators_on_item_id` (`item_id`) USING BTREE,
+  KEY `index_locators_on_wizard_id` (`wizard_id`) USING BTREE,
+  CONSTRAINT `fk_rails_64c3d29cac` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_bb120b6235` FOREIGN KEY (`wizard_id`) REFERENCES `wizards` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=67792 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -595,16 +671,16 @@ CREATE TABLE `logs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `job_id` int(11) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
-  `entry_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `data` text COLLATE utf8_unicode_ci,
+  `entry_type` varchar(255) DEFAULT NULL,
+  `data` text,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_logs_on_job_id` (`job_id`),
-  KEY `index_logs_on_user_id` (`user_id`),
-  CONSTRAINT `fk_rails_81ff90ed92` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_8fc980bf44` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `index_logs_on_job_id` (`job_id`) USING BTREE,
+  KEY `index_logs_on_user_id` (`user_id`) USING BTREE,
+  CONSTRAINT `fk_rails_81ff90ed92` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_8fc980bf44` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=147772 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -630,11 +706,11 @@ CREATE TABLE `memberships` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_memberships_on_group_id` (`group_id`),
-  KEY `index_memberships_on_user_id` (`user_id`),
-  CONSTRAINT `fk_rails_99326fb65d` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_aaf389f138` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=543 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `index_memberships_on_group_id` (`group_id`) USING BTREE,
+  KEY `index_memberships_on_user_id` (`user_id`) USING BTREE,
+  CONSTRAINT `fk_rails_99326fb65d` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_aaf389f138` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=841 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -643,7 +719,6 @@ CREATE TABLE `memberships` (
 
 LOCK TABLES `memberships` WRITE;
 /*!40000 ALTER TABLE `memberships` DISABLE KEYS */;
-INSERT INTO `memberships` VALUES (541,1,1,'2017-10-02 16:21:25','2017-10-02 16:21:25'),(542,1,235,'2017-10-02 17:50:59','2017-10-02 17:50:59');
 /*!40000 ALTER TABLE `memberships` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -656,28 +731,28 @@ DROP TABLE IF EXISTS `object_types`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `object_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
   `min` int(11) DEFAULT NULL,
   `max` int(11) DEFAULT NULL,
-  `handler` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `safety` text COLLATE utf8_unicode_ci,
-  `cleanup` text COLLATE utf8_unicode_ci,
-  `data` text COLLATE utf8_unicode_ci,
-  `vendor` text COLLATE utf8_unicode_ci,
+  `handler` varchar(255) DEFAULT NULL,
+  `safety` text,
+  `cleanup` text,
+  `data` text,
+  `vendor` text,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  `unit` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `cost` float DEFAULT NULL,
-  `release_method` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `release_description` text COLLATE utf8_unicode_ci,
+  `unit` varchar(255) DEFAULT NULL,
+  `cost` float(12,0) DEFAULT NULL,
+  `release_method` varchar(255) DEFAULT NULL,
+  `release_description` text,
   `sample_type_id` int(11) DEFAULT NULL,
-  `image` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `prefix` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `prefix` varchar(255) DEFAULT NULL,
   `rows` int(11) DEFAULT NULL,
   `columns` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=867 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -686,7 +761,6 @@ CREATE TABLE `object_types` (
 
 LOCK TABLES `object_types` WRITE;
 /*!40000 ALTER TABLE `object_types` DISABLE KEYS */;
-INSERT INTO `object_types` VALUES (1,'__Part','Part of a collection',0,1,'sample_container','No safety information','No cleanup information','No data','No vendor information','2018-12-21 17:59:09','2018-12-21 17:59:09','part',0.01,'return','',NULL,'','',NULL,NULL),(2,'Orphan','Part of a collection',0,1,'part','No safety information','No cleanup information','No data','No vendor information','2018-12-21 17:59:09','2018-12-21 17:59:09','part',0.01,'return','',NULL,'','',NULL,NULL);
 /*!40000 ALTER TABLE `object_types` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -699,15 +773,15 @@ DROP TABLE IF EXISTS `operation_types`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `operation_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `category` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `category` varchar(255) DEFAULT NULL,
   `deployed` tinyint(1) DEFAULT NULL,
   `on_the_fly` tinyint(1) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_operation_types_on_category_and_name` (`category`,`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=841 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -716,7 +790,6 @@ CREATE TABLE `operation_types` (
 
 LOCK TABLES `operation_types` WRITE;
 /*!40000 ALTER TABLE `operation_types` DISABLE KEYS */;
-INSERT INTO `operation_types` VALUES (1,'Direct Purchase','Misc.',1,1,'2020-01-24 16:50:00','2020-01-24 16:50:00');
 /*!40000 ALTER TABLE `operation_types` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -730,19 +803,19 @@ DROP TABLE IF EXISTS `operations`;
 CREATE TABLE `operations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `operation_type_id` int(11) DEFAULT NULL,
-  `status` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  `x` float DEFAULT NULL,
-  `y` float DEFAULT NULL,
+  `x` float(12,0) DEFAULT NULL,
+  `y` float(12,0) DEFAULT NULL,
   `parent_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_operations_on_operation_type_id` (`operation_type_id`),
-  KEY `index_operations_on_user_id` (`user_id`),
-  CONSTRAINT `fk_rails_10e3ccbd52` FOREIGN KEY (`operation_type_id`) REFERENCES `operation_types` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_63fbf4e94e` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `index_operations_on_operation_type_id` (`operation_type_id`) USING BTREE,
+  KEY `index_operations_on_user_id` (`user_id`) USING BTREE,
+  CONSTRAINT `fk_rails_10e3ccbd52` FOREIGN KEY (`operation_type_id`) REFERENCES `operation_types` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_63fbf4e94e` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=293209 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -763,14 +836,13 @@ DROP TABLE IF EXISTS `parameters`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `parameters` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `key` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `value` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `key` varchar(255) DEFAULT NULL,
+  `value` varchar(255) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  `description` text COLLATE utf8_unicode_ci,
-  `user_id` int(11) DEFAULT NULL,
+  `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1190 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -779,8 +851,34 @@ CREATE TABLE `parameters` (
 
 LOCK TABLES `parameters` WRITE;
 /*!40000 ALTER TABLE `parameters` DISABLE KEYS */;
-INSERT INTO `parameters` VALUES (1,'email','joe@nasa.org','2018-10-31 22:44:56','2018-10-31 22:44:56',NULL,1),(2,'phone','8675309','2018-10-31 22:44:56','2018-10-31 22:44:56',NULL,1),(3,'lab_agreement',NULL,'2018-10-31 22:44:56','2018-10-31 22:44:56',NULL,1),(4,'aquarium',NULL,'2018-10-31 22:44:56','2018-10-31 22:44:56',NULL,1),(5,'Make new samples private',NULL,'2018-10-31 22:44:56','2018-10-31 22:44:56',NULL,1),(6,'Lab Name',NULL,'2018-10-31 22:44:57','2018-10-31 22:44:57',NULL,1),(7,'email','joe@nasa.org','2018-10-31 22:45:00','2018-10-31 22:45:00',NULL,1),(8,'phone','8675309','2018-10-31 22:45:00','2018-10-31 22:45:00',NULL,1),(9,'lab_agreement','true','2018-10-31 22:45:00','2018-10-31 22:45:00',NULL,1),(10,'aquarium','true','2018-10-31 22:45:00','2018-10-31 22:45:02',NULL,1),(11,'Make new samples private',NULL,'2018-10-31 22:45:00','2018-10-31 22:45:00',NULL,1),(12,'Lab Name',NULL,'2018-10-31 22:45:00','2018-10-31 22:45:00',NULL,1);
 /*!40000 ALTER TABLE `parameters` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `parameters_bak`
+--
+
+DROP TABLE IF EXISTS `parameters_bak`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `parameters_bak` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `key` varchar(255) DEFAULT NULL,
+  `value` varchar(255) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `description` text,
+  `user_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `parameters_bak`
+--
+
+LOCK TABLES `parameters_bak` WRITE;
+/*!40000 ALTER TABLE `parameters_bak` DISABLE KEYS */;
+/*!40000 ALTER TABLE `parameters_bak` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -800,10 +898,10 @@ CREATE TABLE `part_associations` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_part_associations_on_collection_id_and_row_and_column` (`collection_id`,`row`,`column`),
-  KEY `index_part_associations_on_part_id` (`part_id`),
-  CONSTRAINT `fk_rails_39a9c3d5bb` FOREIGN KEY (`part_id`) REFERENCES `items` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_f889cf647d` FOREIGN KEY (`collection_id`) REFERENCES `items` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  KEY `index_part_associations_on_part_id` (`part_id`) USING BTREE,
+  CONSTRAINT `fk_rails_39a9c3d5bb` FOREIGN KEY (`part_id`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_f889cf647d` FOREIGN KEY (`collection_id`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=219407 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -813,6 +911,33 @@ CREATE TABLE `part_associations` (
 LOCK TABLES `part_associations` WRITE;
 /*!40000 ALTER TABLE `part_associations` DISABLE KEYS */;
 /*!40000 ALTER TABLE `part_associations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `permissions`
+--
+
+DROP TABLE IF EXISTS `permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `permissions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `sort` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_permissions_on_name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `permissions`
+--
+
+LOCK TABLES `permissions` WRITE;
+/*!40000 ALTER TABLE `permissions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -829,11 +954,11 @@ CREATE TABLE `plan_associations` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_plan_associations_on_operation_id` (`operation_id`),
-  KEY `index_plan_associations_on_plan_id` (`plan_id`),
-  CONSTRAINT `fk_rails_5ca5742cd9` FOREIGN KEY (`plan_id`) REFERENCES `plans` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_c36597dd79` FOREIGN KEY (`operation_id`) REFERENCES `operations` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `index_plan_associations_on_operation_id` (`operation_id`) USING BTREE,
+  KEY `index_plan_associations_on_plan_id` (`plan_id`) USING BTREE,
+  CONSTRAINT `fk_rails_5ca5742cd9` FOREIGN KEY (`plan_id`) REFERENCES `plans` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_c36597dd79` FOREIGN KEY (`operation_id`) REFERENCES `operations` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=278654 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -858,17 +983,17 @@ CREATE TABLE `plans` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `budget_id` int(11) DEFAULT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `status` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `cost_limit` float DEFAULT NULL,
-  `folder` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `layout` text COLLATE utf8_unicode_ci,
+  `name` varchar(255) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `cost_limit` float(12,0) DEFAULT NULL,
+  `folder` varchar(255) DEFAULT NULL,
+  `layout` text,
   PRIMARY KEY (`id`),
-  KEY `index_plans_on_user_id` (`user_id`),
-  KEY `index_plans_on_budget_id` (`budget_id`),
-  CONSTRAINT `fk_rails_45da853770` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_55f7cff6c3` FOREIGN KEY (`budget_id`) REFERENCES `budgets` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `index_plans_on_budget_id` (`budget_id`) USING BTREE,
+  KEY `index_plans_on_user_id` (`user_id`) USING BTREE,
+  CONSTRAINT `fk_rails_45da853770` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_55f7cff6c3` FOREIGN KEY (`budget_id`) REFERENCES `budgets` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=40396 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -889,12 +1014,12 @@ DROP TABLE IF EXISTS `sample_types`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sample_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -915,20 +1040,20 @@ DROP TABLE IF EXISTS `samples`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `samples` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
   `sample_type_id` int(11) DEFAULT NULL,
-  `project` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `project` varchar(255) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `user_id` int(11) DEFAULT NULL,
-  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `data` text COLLATE utf8_unicode_ci,
+  `description` varchar(255) DEFAULT NULL,
+  `data` text,
   PRIMARY KEY (`id`),
-  KEY `index_samples_on_sample_type_id` (`sample_type_id`),
-  KEY `index_samples_on_user_id` (`user_id`),
-  CONSTRAINT `fk_rails_8e0800c2e2` FOREIGN KEY (`sample_type_id`) REFERENCES `sample_types` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_d699eb2564` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `index_samples_on_sample_type_id` (`sample_type_id`) USING BTREE,
+  KEY `index_samples_on_user_id` (`user_id`) USING BTREE,
+  CONSTRAINT `fk_rails_8e0800c2e2` FOREIGN KEY (`sample_type_id`) REFERENCES `sample_types` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_d699eb2564` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=34484 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -948,9 +1073,9 @@ DROP TABLE IF EXISTS `schema_migrations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `schema_migrations` (
-  `version` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `version` varchar(255) NOT NULL,
   UNIQUE KEY `unique_schema_migrations` (`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -959,7 +1084,7 @@ CREATE TABLE `schema_migrations` (
 
 LOCK TABLES `schema_migrations` WRITE;
 /*!40000 ALTER TABLE `schema_migrations` DISABLE KEYS */;
-INSERT INTO `schema_migrations` VALUES ('20131029153603'),('20131029153634'),('20131111143554'),('20131111143621'),('20131113172448'),('20131113181345'),('20131119164152'),('20131119164208'),('20131122032927'),('20131223192901'),('20140131235419'),('20140404201838'),('20140404201900'),('20140404204258'),('20140408224245'),('20140428213241'),('20140507230919'),('20140508203643'),('20140513225335'),('20140616190537'),('20140714220057'),('20140907220135'),('20150124195318'),('20150124201744'),('20150129213358'),('20150129221830'),('20150212051010'),('20150212051027'),('20150213173621'),('20150222153442'),('20150326202149'),('20150405154727'),('20150515160553'),('20150515160619'),('20150719221125'),('20150719221226'),('20150719221253'),('20150719223053'),('20150720044538'),('20150828232337'),('20150923014954'),('20150923015030'),('20150923184243'),('20150924044044'),('20150926162327'),('20151027164741'),('20151029034310'),('20151118210640'),('20151203054202'),('20160128203950'),('20160128205317'),('20160128205943'),('20160129021809'),('20160129164244'),('20160129165100'),('20160330023703'),('20160330033810'),('20160330185947'),('20160330190634'),('20160411130601'),('20160411131711'),('20160412010529'),('20160427043024'),('20160427043546'),('20160429232330'),('20160429232408'),('20160429232434'),('20160430000308'),('20160430152749'),('20160514044605'),('20160526204339'),('20160607162741'),('20160615161649'),('20160720211005'),('20161113203042'),('20161219172133'),('20170330173426'),('20170421231924'),('20170426225719'),('20170504211619'),('20170504212208'),('20170604165355'),('20170627173019'),('20170725190809'),('20170729024546'),('20170806145525'),('20170813203843'),('20171103151518'),('20180509200425'),('20180529204642'),('20180809012224'),('20181221174622'),('20200810000000'),('20200810000001'),('20200910000000');
+INSERT INTO `schema_migrations` VALUES ('20201030000000'),('20201218000000'),('20201218000010'),('20210301000000');
 /*!40000 ALTER TABLE `schema_migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -973,16 +1098,16 @@ DROP TABLE IF EXISTS `timings`;
 CREATE TABLE `timings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) DEFAULT NULL,
-  `parent_class` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `days` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `parent_class` varchar(255) DEFAULT NULL,
+  `days` varchar(255) DEFAULT NULL,
   `start` int(11) DEFAULT NULL,
   `stop` int(11) DEFAULT NULL,
   `active` tinyint(1) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_timings_on_parent_class_and_parent_id` (`parent_class`,`parent_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `index_timings_on_parent_class_and_parent_id` (`parent_class`,`parent_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=147 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1004,16 +1129,16 @@ DROP TABLE IF EXISTS `uploads`;
 CREATE TABLE `uploads` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `job_id` int(11) DEFAULT NULL,
-  `upload_file_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `upload_content_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `upload_file_name` varchar(255) DEFAULT NULL,
+  `upload_content_type` varchar(255) DEFAULT NULL,
   `upload_file_size` int(11) DEFAULT NULL,
   `upload_updated_at` datetime DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_uploads_on_job_id` (`job_id`),
-  CONSTRAINT `fk_rails_76093eb5d3` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `index_uploads_on_job_id` (`job_id`) USING BTREE,
+  CONSTRAINT `fk_rails_76093eb5d3` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=42397 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1036,16 +1161,16 @@ CREATE TABLE `user_budget_associations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
   `budget_id` int(11) DEFAULT NULL,
-  `quota` float DEFAULT NULL,
+  `quota` float(12,0) DEFAULT NULL,
   `disabled` tinyint(1) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_user_budget_associations_on_budget_id` (`budget_id`),
-  KEY `index_user_budget_associations_on_user_id` (`user_id`),
-  CONSTRAINT `fk_rails_a2966bc54b` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_f1322363b9` FOREIGN KEY (`budget_id`) REFERENCES `budgets` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `index_user_budget_associations_on_budget_id` (`budget_id`) USING BTREE,
+  KEY `index_user_budget_associations_on_user_id` (`user_id`) USING BTREE,
+  CONSTRAINT `fk_rails_a2966bc54b` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_f1322363b9` FOREIGN KEY (`budget_id`) REFERENCES `budgets` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=376 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1054,8 +1179,65 @@ CREATE TABLE `user_budget_associations` (
 
 LOCK TABLES `user_budget_associations` WRITE;
 /*!40000 ALTER TABLE `user_budget_associations` DISABLE KEYS */;
-INSERT INTO `user_budget_associations` VALUES (1,1,1,1000,0,'2018-07-17 22:10:10','2018-07-17 22:10:10');
 /*!40000 ALTER TABLE `user_budget_associations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_profiles`
+--
+
+DROP TABLE IF EXISTS `user_profiles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_profiles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `key` varchar(255) DEFAULT NULL,
+  `value` varchar(255) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_user_profiles_on_user_id` (`user_id`),
+  CONSTRAINT `fk_rails_87a6352e58` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1746 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_profiles`
+--
+
+LOCK TABLES `user_profiles` WRITE;
+/*!40000 ALTER TABLE `user_profiles` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_profiles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_tokens`
+--
+
+DROP TABLE IF EXISTS `user_tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_tokens` (
+  `user_id` int(11) NOT NULL,
+  `token` varchar(128) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `ip` varchar(18) NOT NULL,
+  `timenow` datetime NOT NULL,
+  PRIMARY KEY (`ip`,`token`),
+  KEY `fk_rails_e0a9c15abb` (`user_id`),
+  CONSTRAINT `fk_rails_e0a9c15abb` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_tokens`
+--
+
+LOCK TABLES `user_tokens` WRITE;
+/*!40000 ALTER TABLE `user_tokens` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_tokens` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1067,18 +1249,19 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `login` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `login` varchar(255) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  `password_digest` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `remember_token` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `password_digest` varchar(255) DEFAULT NULL,
+  `remember_token` varchar(255) DEFAULT NULL,
   `admin` tinyint(1) DEFAULT '0',
-  `key` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `key` varchar(255) DEFAULT NULL,
+  `permission_ids` varchar(255) DEFAULT '.',
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_login` (`login`),
-  KEY `index_users_on_remember_token` (`remember_token`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `index_users_on_remember_token` (`remember_token`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=338 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1087,9 +1270,20 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Joe Neptune','neptune','2013-06-16 17:26:54','2017-10-19 04:59:18','$2a$10$HxgxLX5/ITcYpII1InAL1.jUYAiHk/rMftHniPJVvauy43VDoo8yW','TYmoWfyV42AL7dSoYcgmug',1,'VHzz9IW3xnNx8O3cA_P0rKsUWmTVH_Qz9mHKqgE-hNI');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Temporary table structure for view `view_job_assignment_logs`
+--
+
+DROP TABLE IF EXISTS `view_job_assignment_logs`;
+/*!50001 DROP VIEW IF EXISTS `view_job_assignment_logs`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `view_job_assignment_logs` AS SELECT
+ 1 AS `id`*/;
+SET character_set_client = @saved_cs_client;
 
 --
 -- Temporary table structure for view `view_job_assignments`
@@ -1099,7 +1293,7 @@ DROP TABLE IF EXISTS `view_job_assignments`;
 /*!50001 DROP VIEW IF EXISTS `view_job_assignments`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `view_job_assignments` AS SELECT 
+/*!50001 CREATE VIEW `view_job_assignments` AS SELECT
  1 AS `id`,
  1 AS `job_id`,
  1 AS `assigned_by`,
@@ -1121,7 +1315,7 @@ DROP TABLE IF EXISTS `view_job_associations`;
 /*!50001 DROP VIEW IF EXISTS `view_job_associations`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `view_job_associations` AS SELECT 
+/*!50001 CREATE VIEW `view_job_associations` AS SELECT
  1 AS `job_id`,
  1 AS `n`*/;
 SET character_set_client = @saved_cs_client;
@@ -1134,11 +1328,36 @@ DROP TABLE IF EXISTS `view_job_operation_types`;
 /*!50001 DROP VIEW IF EXISTS `view_job_operation_types`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `view_job_operation_types` AS SELECT 
+/*!50001 CREATE VIEW `view_job_operation_types` AS SELECT
  1 AS `job_id`,
+ 1 AS `pc`,
+ 1 AS `created_at`,
+ 1 AS `updated_at`,
  1 AS `operation_type_id`,
  1 AS `name`,
- 1 AS `category`*/;
+ 1 AS `category`,
+ 1 AS `deployed`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `view_users`
+--
+
+DROP TABLE IF EXISTS `view_users`;
+/*!50001 DROP VIEW IF EXISTS `view_users`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `view_users` AS SELECT
+ 1 AS `id`,
+ 1 AS `name`,
+ 1 AS `login`,
+ 1 AS `permission_ids`,
+ 1 AS `email`,
+ 1 AS `phone`,
+ 1 AS `lab_agreement`,
+ 1 AS `aquarium_agreement`,
+ 1 AS `new_samples_private`,
+ 1 AS `lab_name`*/;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -1156,11 +1375,11 @@ CREATE TABLE `wires` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_wires_on_from_id` (`from_id`),
-  KEY `index_wires_on_to_id` (`to_id`),
-  CONSTRAINT `fk_rails_1073ab769d` FOREIGN KEY (`to_id`) REFERENCES `field_values` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_rails_684cde68aa` FOREIGN KEY (`from_id`) REFERENCES `field_values` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `index_wires_on_from_id` (`from_id`) USING BTREE,
+  KEY `index_wires_on_to_id` (`to_id`) USING BTREE,
+  CONSTRAINT `fk_rails_1073ab769d` FOREIGN KEY (`to_id`) REFERENCES `field_values` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_684cde68aa` FOREIGN KEY (`from_id`) REFERENCES `field_values` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=218090 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1181,13 +1400,13 @@ DROP TABLE IF EXISTS `wizards`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `wizards` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `specification` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `specification` varchar(255) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1214,7 +1433,7 @@ CREATE TABLE `workers` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1223,9 +1442,26 @@ CREATE TABLE `workers` (
 
 LOCK TABLES `workers` WRITE;
 /*!40000 ALTER TABLE `workers` DISABLE KEYS */;
-INSERT INTO `workers` VALUES (1,'publisher',NULL,'running','2018-11-16 16:09:14','2018-11-16 16:09:14'),(2,'publisher',NULL,'done','2018-11-16 16:10:31','2018-11-16 16:11:22'),(3,'publisher',NULL,'done','2018-11-16 16:11:16','2018-11-16 16:12:03'),(4,'publisher',NULL,'done','2018-11-16 16:15:00','2018-11-16 16:15:39'),(5,'publisher',NULL,'done','2018-11-16 16:16:19','2018-11-16 16:17:11'),(6,'publisher',NULL,'done','2018-11-16 16:19:23','2018-11-16 16:19:56'),(7,'publisher',NULL,'done','2018-11-16 17:45:28','2018-11-16 17:45:45'),(8,'publisher',NULL,'done','2018-11-16 17:48:08','2018-11-16 17:48:18'),(9,'publisher',NULL,'done','2018-11-16 18:43:18','2018-11-16 18:43:39'),(10,'publisher',NULL,'done','2018-11-16 18:46:03','2018-11-16 18:46:17'),(11,'publisher','undefined method `join\' for nil:NilClass\nDid you mean?  JSON','error','2018-11-16 18:48:41','2018-11-16 18:48:47'),(12,'publisher','undefined method `join\' for nil:NilClass\nDid you mean?  JSON','error','2018-11-16 18:54:15','2018-11-16 18:54:21'),(13,'publisher','undefined method `join\' for nil:NilClass\nDid you mean?  JSON','error','2018-11-16 18:55:55','2018-11-16 18:56:00'),(14,'publisher','undefined method `join\' for nil:NilClass\nDid you mean?  JSON','error','2018-11-16 19:01:31','2018-11-16 19:01:35'),(15,'publisher','undefined method `join\' for nil:NilClass\nDid you mean?  JSON','error','2018-11-16 19:02:46','2018-11-16 19:02:51'),(16,'publisher',NULL,'running','2018-11-16 19:08:07','2018-11-16 19:08:07'),(17,'publisher',NULL,'running','2018-11-16 19:14:15','2018-11-16 19:14:15'),(18,'publisher','undefined method `join\' for nil:NilClass\nDid you mean?  JSON: (erb):21:in `make_index\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `eval\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `block in result\'','error','2018-11-16 19:21:57','2018-11-16 19:22:02'),(19,'publisher','undefined method `join\' for nil:NilClass\nDid you mean?  JSON: (erb):21:in `make_index\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `eval\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `block in result\'','error','2018-11-16 19:24:08','2018-11-16 19:24:14'),(20,'publisher','undefined method `join\' for nil:NilClass\nDid you mean?  JSON: (erb):21:in `make_index\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `eval\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `block in result\'','error','2018-11-16 19:27:22','2018-11-16 19:27:28'),(21,'publisher','undefined method `join\' for nil:NilClass\nDid you mean?  JSON: (erb):21:in `make_index\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `eval\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `block in result\'','error','2018-11-16 19:30:01','2018-11-16 19:30:07'),(22,'publisher','undefined method `join\' for nil:NilClass\nDid you mean?  JSON: (erb):21:in `make_index\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `eval\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `block in result\'','error','2018-11-16 19:33:00','2018-11-16 19:33:05'),(23,'publisher',NULL,'done','2018-11-16 19:34:25','2018-11-16 19:34:39'),(24,'publisher',NULL,'done','2018-11-16 19:35:54','2018-11-16 19:36:09'),(25,'publisher','undefined method `each\' for nil:NilClass: (erb):20:in `make_about_md\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `eval\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `block in result\'','error','2018-11-16 20:41:04','2018-11-16 20:41:09'),(26,'publisher','undefined method `each\' for nil:NilClass: (erb):20:in `make_about_md\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `eval\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `block in result\'','error','2018-11-16 20:45:28','2018-11-16 20:45:33'),(27,'publisher','undefined method `each\' for nil:NilClass: (erb):13:in `make_about_md\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `eval\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `block in result\'','error','2018-11-16 20:47:12','2018-11-16 20:47:16'),(28,'publisher',NULL,'done','2018-11-16 20:48:39','2018-11-16 20:48:55'),(29,'publisher',NULL,'done','2018-11-16 20:53:35','2018-11-16 20:53:50'),(30,'publisher',NULL,'done','2018-11-16 20:54:37','2018-11-16 20:54:51'),(31,'publisher',NULL,'done','2018-11-16 20:55:41','2018-11-16 20:55:56'),(32,'publisher',NULL,'done','2018-11-16 21:58:44','2018-11-16 21:58:58'),(33,'publisher',NULL,'running','2018-11-16 22:02:27','2018-11-16 22:02:27'),(34,'publisher','undefined local variable or method `zipname\' for #<Aquadoc::Render:0x00007ffe86a82230>: (erb):5:in `make_about_md\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `eval\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb','error','2018-11-16 22:07:51','2018-11-16 22:07:56'),(35,'publisher',NULL,'done','2018-11-16 22:09:37','2018-11-16 22:09:48'),(36,'publisher',NULL,'done','2018-11-16 22:12:31','2018-11-16 22:12:51'),(37,'publisher',NULL,'done','2018-11-16 22:17:24','2018-11-16 22:17:51'),(38,'publisher',NULL,'done','2018-11-16 22:22:22','2018-11-16 22:22:33'),(39,'publisher',NULL,'done','2018-11-27 23:09:12','2018-11-27 23:10:09'),(40,'publisher',NULL,'done','2018-11-27 23:28:01','2018-11-27 23:28:36'),(41,'publisher',NULL,'done','2018-11-27 23:30:47','2018-11-27 23:31:14'),(42,'publisher',NULL,'done','2018-11-27 23:34:57','2018-11-27 23:35:13'),(43,'publisher',NULL,'done','2018-11-27 23:36:23','2018-11-27 23:36:51'),(44,'publisher',NULL,'done','2018-11-27 23:41:27','2018-11-27 23:42:18'),(45,'publisher',NULL,'done','2018-12-12 18:29:44','2018-12-12 18:31:08'),(46,'publisher',NULL,'done','2018-12-17 21:35:41','2018-12-17 21:36:01'),(47,'publisher',NULL,'done','2018-12-17 21:45:33','2018-12-17 21:45:52'),(48,'publisher',NULL,'done','2018-12-17 22:15:09','2018-12-17 22:15:29'),(49,'publisher',NULL,'done','2018-12-17 22:30:15','2018-12-17 22:30:33'),(50,'publisher',NULL,'done','2018-12-17 22:37:31','2018-12-17 22:37:51'),(51,'publisher',NULL,'done','2018-12-17 22:48:07','2018-12-17 22:48:14'),(52,'publisher',NULL,'done','2018-12-17 23:11:22','2018-12-17 23:11:40');
 /*!40000 ALTER TABLE `workers` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Final view structure for view `view_job_assignment_logs`
+--
+
+/*!50001 DROP VIEW IF EXISTS `view_job_assignment_logs`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`aquarium`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_job_assignment_logs` AS select max(`job_assignment_logs`.`id`) AS `id` from `job_assignment_logs` group by `job_assignment_logs`.`job_id` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 
 --
 -- Final view structure for view `view_job_assignments`
@@ -1235,12 +1471,12 @@ UNLOCK TABLES;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`aquarium`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `view_job_assignments` AS select `jal`.`id` AS `id`,`jal`.`job_id` AS `job_id`,`jal`.`assigned_by` AS `assigned_by`,`jal`.`assigned_to` AS `assigned_to`,`jal`.`created_at` AS `created_at`,`jal`.`updated_at` AS `updated_at`,`j`.`pc` AS `pc`,`ub`.`name` AS `by_name`,`ub`.`login` AS `by_login`,`ut`.`name` AS `to_name`,`ut`.`login` AS `to_login` from ((((`production`.`job_assignment_logs` `jal` join (select max(`production`.`job_assignment_logs`.`id`) AS `id` from `production`.`job_assignment_logs` group by `production`.`job_assignment_logs`.`job_id`) `ij` on((`ij`.`id` = `jal`.`id`))) join `production`.`jobs` `j` on((`j`.`id` = `jal`.`job_id`))) join `production`.`users` `ub` on((`ub`.`id` = `jal`.`assigned_by`))) join `production`.`users` `ut` on((`ut`.`id` = `jal`.`assigned_to`))) */;
+/*!50001 VIEW `view_job_assignments` AS select `jal`.`id` AS `id`,`jal`.`job_id` AS `job_id`,`jal`.`assigned_by` AS `assigned_by`,`jal`.`assigned_to` AS `assigned_to`,`jal`.`created_at` AS `created_at`,`jal`.`updated_at` AS `updated_at`,`j`.`pc` AS `pc`,`ub`.`name` AS `by_name`,`ub`.`login` AS `by_login`,`ut`.`name` AS `to_name`,`ut`.`login` AS `to_login` from ((((`job_assignment_logs` `jal` join `view_job_assignment_logs` `vjal` on((`vjal`.`id` = `jal`.`id`))) join `jobs` `j` on((`j`.`id` = `jal`.`job_id`))) join `users` `ub` on((`ub`.`id` = `jal`.`assigned_by`))) join `users` `ut` on((`ut`.`id` = `jal`.`assigned_to`))) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -1253,9 +1489,9 @@ UNLOCK TABLES;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`aquarium`@`%` SQL SECURITY DEFINER */
 /*!50001 VIEW `view_job_associations` AS select `ja`.`job_id` AS `job_id`,count(0) AS `n` from `job_associations` `ja` group by `ja`.`job_id` */;
@@ -1271,12 +1507,30 @@ UNLOCK TABLES;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`aquarium`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_job_operation_types` AS select distinct `j`.`id` AS `job_id`,`j`.`pc` AS `pc`,`j`.`created_at` AS `created_at`,`j`.`updated_at` AS `updated_at`,`ot`.`id` AS `operation_type_id`,`ot`.`name` AS `name`,`ot`.`category` AS `category`,`ot`.`deployed` AS `deployed` from (((`jobs` `j` join `job_associations` `ja` on((`ja`.`job_id` = `j`.`id`))) join `operations` `o` on((`o`.`id` = `ja`.`operation_id`))) join `operation_types` `ot` on((`ot`.`id` = `o`.`operation_type_id`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `view_users`
+--
+
+/*!50001 DROP VIEW IF EXISTS `view_users`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
 /*!50001 SET character_set_client      = utf8 */;
 /*!50001 SET character_set_results     = utf8 */;
 /*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`aquarium`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `view_job_operation_types` AS select distinct `ja`.`job_id` AS `job_id`,`o`.`operation_type_id` AS `operation_type_id`,`ot`.`name` AS `name`,`ot`.`category` AS `category` from ((`job_associations` `ja` join `operations` `o` on((`o`.`id` = `ja`.`operation_id`))) join `operation_types` `ot` on((`ot`.`id` = `o`.`operation_type_id`))) */;
+/*!50001 VIEW `view_users` AS select `u`.`id` AS `id`,`u`.`name` AS `name`,`u`.`login` AS `login`,`u`.`permission_ids` AS `permission_ids`,`up_email`.`value` AS `email`,`up_phone`.`value` AS `phone`,`up_lab`.`value` AS `lab_agreement`,`up_aquarium`.`value` AS `aquarium_agreement`,`up_private`.`value` AS `new_samples_private`,`up_labname`.`value` AS `lab_name` from ((((((`users` `u` left join `user_profiles` `up_email` on(((`up_email`.`user_id` = `u`.`id`) and (`up_email`.`key` = 'email')))) left join `user_profiles` `up_phone` on(((`up_phone`.`user_id` = `u`.`id`) and (`up_phone`.`key` = 'phone')))) left join `user_profiles` `up_lab` on(((`up_lab`.`user_id` = `u`.`id`) and (`up_lab`.`key` = 'lab_agreement')))) left join `user_profiles` `up_aquarium` on(((`up_aquarium`.`user_id` = `u`.`id`) and (`up_aquarium`.`key` = 'aquarium_agreement')))) left join `user_profiles` `up_private` on(((`up_private`.`user_id` = `u`.`id`) and (`up_private`.`key` = 'new_samples_private')))) left join `user_profiles` `up_labname` on(((`up_labname`.`user_id` = `u`.`id`) and (`up_labname`.`key` = 'lab_name')))) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -1290,4 +1544,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-10-15 16:46:50
+-- Dump completed on 2021-03-12 15:32:19
