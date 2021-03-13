@@ -23,5 +23,7 @@ sql = "
     (2, 'user_manage', 'user_manage', '#{timenow}', '#{timenow}', '$2a$12$QpQTu72pwuFTTnrnAGCVwewpd4oFWl3fxGZAIaQG12fI54G.14VOy', NULL, 0, NULL, '.2.'),
     (3, 'user_run', 'user_run', '#{timenow}', '#{timenow}', '$2a$12$4ZOrJDTUdC22e/XbhvVwbuLTlRSgxqBhX1/lyD5lITk.QCeqdnTdq', NULL, 0, NULL, '.3.'),
     (4, 'user_design', 'user_design', '#{timenow}', '#{timenow}', '$2a$12$MGLq.g4I9AVSdaG1q196BuDLTysBUfJocXTsWpJmVktycSAjfRo8a', NULL, 0, NULL, '.4.'),
-    (5, 'user_develop', 'user_develop', '#{timenow}', '#{timenow}', '$2a$12$2w7.1JYbSot6pORrivoQ9O2TFfN1TK5dzwyWf9E7a5M6TFLOiNN36', NULL, 0, NULL, '.5.');
+    (5, 'user_develop', 'user_develop', '#{timenow}', '#{timenow}', '$2a$12$2w7.1JYbSot6pORrivoQ9O2TFfN1TK5dzwyWf9E7a5M6TFLOiNN36', NULL, 0, NULL, '.5.'),
+    (6, 'user_retired', 'user_retired', '#{timenow}', '#{timenow}', '$2a$12$XkO1mbW4.bjNzDTijEYnyuVBmMA5mwBEgy9TKclL4L89CzFnlb92y', NULL, 0, NULL, '.1.2.3.4.5.6.');
 "
+User.connection.execute sql
