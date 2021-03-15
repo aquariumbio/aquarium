@@ -1084,7 +1084,7 @@ CREATE TABLE `schema_migrations` (
 
 LOCK TABLES `schema_migrations` WRITE;
 /*!40000 ALTER TABLE `schema_migrations` DISABLE KEYS */;
-INSERT INTO `schema_migrations` VALUES ('20201030000000'),('20201218000000'),('20201218000010'),('20210301000000');
+INSERT INTO `schema_migrations` VALUES ('20201030000000'),('20201218000000');
 /*!40000 ALTER TABLE `schema_migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
