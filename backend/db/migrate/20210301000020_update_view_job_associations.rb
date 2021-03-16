@@ -4,7 +4,7 @@ class UpdateViewJobAssociations < ActiveRecord::Migration[4.2]
   def change
     # Remove current view
     execute <<-SQL
-      drop view view_job_associations
+      drop view if exists view_job_associations
     SQL
 
     # Replace view

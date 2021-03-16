@@ -4,7 +4,7 @@ class CreateViewUsers < ActiveRecord::Migration[4.2]
   def change
     # Remove current view
     execute <<-SQL
-      drop view view_users
+      drop view if exists view_users
     SQL
 
     # Replace view
