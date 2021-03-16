@@ -1,6 +1,5 @@
 # jobs table
 class Job < ActiveRecord::Base
-
   # Get job counts by job status (regardless of operation status)
   #
   # return job counts by job status (regardless of operation status)
@@ -98,7 +97,7 @@ class Job < ActiveRecord::Base
     # custom SQL query
     # include protocol + job id + operations count + created date
     sql = "
-      select jot.*, nn.n as 'operations_count'
+      select jot.job_id as 'id', jot.*, nn.n as 'operations_count'
       from view_job_operation_types jot
       inner join view_job_associations nn on nn.job_id = jot.job_id
       left join view_job_assignments ja on ja.job_id = jot.job_id
@@ -116,7 +115,7 @@ class Job < ActiveRecord::Base
     # custom SQL query
     # include assigned to + priority (future) + protocol + job id + operations count + status + progress (future) + started
     sql = "
-      select ja.to_name, ja.to_login, jot.*, nn.n as 'operations_count'
+      select ja.to_name, ja.to_login, jot.job_id as 'id', jot.*, nn.n as 'operations_count'
       from view_job_operation_types jot
       inner join view_job_associations nn on nn.job_id = jot.job_id
       inner join view_job_assignments ja on ja.job_id = jot.job_id
@@ -148,7 +147,7 @@ class Job < ActiveRecord::Base
     # custom SQL query
     # include assigned to + assigned date + started + finished + protocol + job id + operations count
     sql = "
-      select ja.to_name, ja.to_login, ja.created_at as 'assigned_date', jot.*, nn.n as 'operations_count'
+      select ja.to_name, ja.to_login, ja.created_at as 'assigned_date', jot.job_id as 'id', jot.*, nn.n as 'operations_count'
       from view_job_operation_types jot
       inner join view_job_associations nn on nn.job_id = jot.job_id
       left join view_job_assignments ja on ja.job_id = jot.job_id
