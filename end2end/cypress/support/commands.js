@@ -12,8 +12,8 @@
 // -- This is a parent command --
 
 Cypress.Commands.add('login', () => {
-  const login = 'neptune';
-  const password = 'aquarium';
+  const login = 'test_user';
+  const password = 'aquarium123';
 
   cy.request({
     method: 'POST',
