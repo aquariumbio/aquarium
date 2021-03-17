@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # field_types table
 class FieldType < ActiveRecord::Base
   # Create a field type

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # budgets table
 class Budget < ActiveRecord::Base
   validates :name,        presence: true

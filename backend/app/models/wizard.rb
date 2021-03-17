@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # wizards table
 class Wizard < ActiveRecord::Base
 

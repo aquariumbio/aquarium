@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # object_types table
 class ObjectType < ActiveRecord::Base
   validates :name,             presence: true, uniqueness: { case_sensitive: false }

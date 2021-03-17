@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # allowable_field_types table
 class AllowableFieldType < ActiveRecord::Base
   # Create an allowable field type

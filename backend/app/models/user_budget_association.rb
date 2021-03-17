@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # user_budget_associations table
 class UserBudgetAssociation < ActiveRecord::Base
   validates :user_id,   presence: true
