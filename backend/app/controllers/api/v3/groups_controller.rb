@@ -143,7 +143,7 @@ module Api
         params_group = params[:group] || {}
 
         # Create group
-        group, errors = Group.create(params_group)
+        group, errors = Group.create_from(params_group)
         render json: { errors: errors }.to_json, status: :ok and return if !group
 
         render json: { group: group }.to_json, status: :created
