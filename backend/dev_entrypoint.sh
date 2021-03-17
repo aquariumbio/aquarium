@@ -31,8 +31,8 @@ _clean_up_stray_server() {
 # Starts the develoment server.
 _start_development_server() {
     echo "Starting development Rails server"
-    rails db:migrate RAILS_ENV=test
     rails db:migrate RAILS_ENV=development
+    rails db:structure:load RAILS_ENV=test
     exec rails server -e development -p 3000 -b '0.0.0.0'
 }
 
@@ -40,8 +40,8 @@ _start_development_server() {
 _start_test_server() {
     echo "Starting test Rails server"
     rails db:environment:set RAILS_ENV=test
-    rails db:reset RAILS_ENV=test
-    rails db:seed:user_seeds RAILS_ENV=test
+    rails db:structure:load RAILS_ENV=test
+    rails db:seed:test_seeds RAILS_ENV=test
     exec rails server -e test -p 3000 -b '0.0.0.0'
 }
 
