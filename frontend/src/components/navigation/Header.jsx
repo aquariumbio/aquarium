@@ -85,7 +85,7 @@ const Header = ({ location }) => {
   });
 
   return (
-    <AppBar position="sticky" className={classes.root} component="nav">
+    <AppBar position="fixed" className={classes.root} component="nav">
       <Toolbar>
         <div className={classes.headerOptions}>
           <LeftHamburgerMenu />

@@ -63,6 +63,7 @@ const theme = createMuiTheme({
 const useStyles = makeStyles(() => ({
   root: {
     width: '100%',
+    height: '100%',
     overflow: 'auto',
     backgroundColor: '#fff',
   },
