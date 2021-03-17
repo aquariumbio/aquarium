@@ -11,7 +11,4 @@ namespace :db do
 end
 
 # USAGE:
-# docker-compose exec backend env RAILS_ENV=test rake db:seed:<filename_without_extension>
-#
-# FOR EXAMPLE
 # docker-compose exec backend env RAILS_ENV=test rake db:seed:test_seeds

@@ -42,7 +42,7 @@ class Budget < ActiveRecord::Base
   # @option budget[:email] [String] the email
   # @option budget[:phone] [String] the phone
   # return the budget
-  def self.create(budget)
+  def self.create_from(budget)
     # Read the parameters
     name = Input.text(budget[:name])
     description = Input.text(budget[:description])

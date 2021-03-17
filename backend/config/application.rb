@@ -40,5 +40,8 @@ module V3
         resource '*', :headers => :any, :methods => [:post]
       end
     end
+
+    # use structure dump instead of schema dump
+    config.active_record.schema_format = :sql
   end
 end

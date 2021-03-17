@@ -59,7 +59,7 @@ class ObjectType < ActiveRecord::Base
   # @option object_type[:vendor] [String] the vendor information
   # @option object_type[:image] [String] the image (TODO)
   # return the object type
-  def self.create(object_type)
+  def self.create_from(object_type)
     name = Input.text(object_type[:name])
     description = Input.text(object_type[:description])
     prefix = Input.text(object_type[:prefix])
