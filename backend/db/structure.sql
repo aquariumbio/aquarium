@@ -835,12 +835,12 @@ CREATE TABLE `workers` (
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8mb4 */;
-/*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`aquarium`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `view_job_assignments` AS select `jal`.`id` AS `id`,`jal`.`job_id` AS `job_id`,`jal`.`assigned_by` AS `assigned_by`,`jal`.`assigned_to` AS `assigned_to`,`jal`.`created_at` AS `created_at`,`jal`.`updated_at` AS `updated_at`,`j`.`pc` AS `pc`,`ub`.`name` AS `by_name`,`ub`.`login` AS `by_login`,`ut`.`name` AS `to_name`,`ut`.`login` AS `to_login` from ((((`job_assignment_logs` `jal` join `view_job_assignment_logs` `vjal` on((`vjal`.`id` = `jal`.`id`))) join `jobs` `j` on((`j`.`id` = `jal`.`job_id`))) join `users` `ub` on((`ub`.`id` = `jal`.`assigned_by`))) join `users` `ut` on((`ut`.`id` = `jal`.`assigned_to`))) */;
+/*!50001 VIEW `view_job_assignments` AS select `jal`.`id` AS `id`,`jal`.`job_id` AS `job_id`,`jal`.`assigned_by` AS `assigned_by`,`jal`.`assigned_to` AS `assigned_to`,`jal`.`created_at` AS `created_at`,`jal`.`updated_at` AS `updated_at`,`j`.`pc` AS `pc`,`ub`.`name` AS `by_name`,`ub`.`login` AS `by_login`,`ut`.`name` AS `to_name`,`ut`.`login` AS `to_login` from ((((`aquarium_development`.`job_assignment_logs` `jal` join (select max(`aquarium_development`.`job_assignment_logs`.`id`) AS `id` from `aquarium_development`.`job_assignment_logs` group by `aquarium_development`.`job_assignment_logs`.`job_id`) `ij` on((`ij`.`id` = `jal`.`id`))) join `aquarium_development`.`jobs` `j` on((`j`.`id` = `jal`.`job_id`))) join `aquarium_development`.`users` `ub` on((`ub`.`id` = `jal`.`assigned_by`))) join `aquarium_development`.`users` `ut` on((`ut`.`id` = `jal`.`assigned_to`))) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -849,9 +849,9 @@ CREATE TABLE `workers` (
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8mb4 */;
-/*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`aquarium`@`%` SQL SECURITY DEFINER */
 /*!50001 VIEW `view_job_associations` AS select `ja`.`job_id` AS `job_id`,count(0) AS `n` from `job_associations` `ja` group by `ja`.`job_id` */;
@@ -863,9 +863,9 @@ CREATE TABLE `workers` (
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8mb4 */;
-/*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`aquarium`@`%` SQL SECURITY DEFINER */
 /*!50001 VIEW `view_job_operation_types` AS select distinct `j`.`id` AS `job_id`,`j`.`pc` AS `pc`,`j`.`created_at` AS `created_at`,`j`.`updated_at` AS `updated_at`,`ot`.`id` AS `operation_type_id`,`ot`.`name` AS `name`,`ot`.`category` AS `category`,`ot`.`deployed` AS `deployed` from (((`jobs` `j` join `job_associations` `ja` on((`ja`.`job_id` = `j`.`id`))) join `operations` `o` on((`o`.`id` = `ja`.`operation_id`))) join `operation_types` `ot` on((`ot`.`id` = `o`.`operation_type_id`))) */;
@@ -898,6 +898,10 @@ CREATE TABLE `workers` (
 
 INSERT INTO `schema_migrations` (version) VALUES
 ('20201030000000'),
-('20201218000000');
+('20201218000000'),
+('20201218000010'),
+('20210301000000'),
+('20210301000010'),
+('20210301000020');
 
 
