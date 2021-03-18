@@ -456,8 +456,97 @@ module Api
         render json: { message: "Job deleted" }.to_json, status: :ok
       end
 
-      def by_operation
-        # show assigned to + started + finished + protocol + job id + operations count
+      # get 'api/v3/jobs/category/:category'
+      def category
+        # Check for manage permissions
+        status, response = check_token_for_permission(Permission.manage_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # get status, default to 'pending'
+        status = case params[:status]
+        when 'error'
+          'error'
+        when 'waiting'
+          'waiting'
+        when 'deferred'
+          'deferred'
+        when 'delayed'
+          'delayed'
+        else
+          'pending'
+        end
+
+        category = Input.text(params[:category]) || ''
+
+        # Get operation_types
+        sql = "
+          select ot.name, count(*) as 'n'
+          from operation_types ot
+          inner join operations o on o.operation_type_id = ot.id
+          where ot.category = ? and o.status = ?
+          group by ot.name
+          order by ot.name
+        "
+        operation_types = OperationType.find_by_sql [sql, category, status]
+
+        return if !operation_types[0]
+
+        # Get operations for first operation_type = operation_typs[0].name
+        sql = "
+          select o.id, pa.plan_id, u.name, o.status, o.updated_at
+          from operation_types ot
+          inner join operations o on o.operation_type_id = ot.id
+          inner join plan_associations pa on pa.operation_id = o.id
+          inner join users u on u.id = o.user_id
+          where ot.name = ? and o.status = ?
+          order by o.updated_at desc
+        "
+        operations = Operation.find_by_sql [sql, operation_types[0].name, status]
+
+        render json: { operations: operations }.to_json, status: :ok
+      end
+
+      # get 'api/v3/jobs/category/:category/:operation_type'
+      def operation_type
+        # Check for manage permissions
+        status, response = check_token_for_permission(Permission.manage_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # get status, default to 'pending'
+        status = case params[:status]
+        when 'error'
+          'error'
+        when 'waiting'
+          'waiting'
+        when 'deferred'
+          'deferred'
+        when 'delayed'
+          'delayed'
+        else
+          'pending'
+        end
+
+        category = Input.text(params[:category]) || ''
+
+        operation_type = Input.text(params[:operation_type]) || ''
+
+        # Get operations for first operation_type = operation_typs[0].name
+        sql = "
+          select o.id, pa.plan_id, u.name, o.status, o.updated_at
+          from operation_types ot
+          inner join operations o on o.operation_type_id = ot.id
+          inner join plan_associations pa on pa.operation_id = o.id
+          inner join users u on u.id = o.user_id
+          where ot.name = ? and o.status = ?
+          order by o.updated_at desc
+        "
+        operations = Operation.find_by_sql [sql, operation_type, status]
+
+        render json: { operations: operations }.to_json, status: :ok
+      end
+
+      # post 'api/v3/jobs/:id/remove/:operation_id'
+      def remove
 
       end
 
