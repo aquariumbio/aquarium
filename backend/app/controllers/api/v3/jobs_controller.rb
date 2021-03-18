@@ -444,7 +444,7 @@ module Api
         job = Job.find_by(id: id)
         render json: { error: "Job not found" }.to_json, status: :not_found and return if !job
 
-        # Delete job
+        # Check job status
         render json: { error: "Job must be not started" }.to_json, status: :unauthorized and return if job.pc != -1
 
         # reset operations to 'pending'
@@ -547,7 +547,41 @@ module Api
 
       # post 'api/v3/jobs/:id/remove/:operation_id'
       def remove
+        # Check for manage permissions
+        status, response = check_token_for_permission(Permission.manage_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
 
+        # Get job
+        id = Input.int(params[:id])
+        job = Job.find_by(id: id)
+        render json: { error: "Job not found" }.to_json, status: :not_found and return if !job
+
+        # Check job status
+        render json: { error: "Job must be not started" }.to_json, status: :unauthorized and return if job.pc != -1
+
+        # Get operation (and verify that it is in the job)
+        operation_id = Input.int(params[:operation_id])
+        sql = "
+          select o.*
+          from operations o
+          inner join job_associations ja on ja.job_id = #{job.id} and ja.operation_id = #{operation_id}
+          where o.id = #{operation_id}
+        "
+        operation = (Operation.find_by_sql sql)[0]
+        render json: { error: "Operation not found" }.to_json, status: :not_found and return if !operation
+
+        # Check operation status
+        render json: { error: "Operation must be scheduled" }.to_json, status: :unauthorized and return if operation.status != 'scheduled'
+
+        # remove operation from job
+        sql = "delete from job_associations where job_id = #{job.id} and operation_id = #{operation_id} limit 1"
+        JobAssociation.connection.execute sql
+
+        # update the operation status
+        sql = "update operations set status = 'pending' where id = #{operation_id} limit 1"
+        Operation.connection.execute sql
+
+        render json: { message: "Operation removed" }.to_json, status: :ok
       end
 
       private
