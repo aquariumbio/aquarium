@@ -337,7 +337,7 @@ module Api
         # Get job
         @id = Input.int(params[:id])
         job = Job.find_by(id: @id)
-        render json: { job: nil }.to_json, status: :not_found and return if !job
+        render json: { error: "Job not found" }.to_json, status: :not_found and return if !job
 
         @by = response[:user]['id'].to_i
         @to = params[:to_id].to_i
@@ -354,7 +354,7 @@ module Api
         # Get job
         @id = Input.int(params[:id])
         job = Job.find_by(id: @id)
-        render json: { job: nil }.to_json, status: :not_found and return if !job
+        render json: { error: "Job not found" }.to_json, status: :not_found and return if !job
 
         @by = response[:user]['id'].to_i
         @to = nil
@@ -442,7 +442,7 @@ module Api
         # Get job
         id = Input.int(params[:id])
         job = Job.find_by(id: id)
-        render json: { job: nil }.to_json, status: :not_found and return if !job
+        render json: { error: "Job not found" }.to_json, status: :not_found and return if !job
 
         # Delete job
         render json: { error: "Job must be not started" }.to_json, status: :unauthorized and return if job.pc != -1
@@ -503,7 +503,7 @@ module Api
         "
         operations = Operation.find_by_sql [sql, operation_types[0].name, status]
 
-        render json: { operations: operations }.to_json, status: :ok
+        render json: { operation_types: operation_types, operations: operations }.to_json, status: :ok
       end
 
       # get 'api/v3/jobs/category/:category/:operation_type'

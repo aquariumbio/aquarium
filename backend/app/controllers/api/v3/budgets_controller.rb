@@ -100,7 +100,7 @@ module Api
         # Get budget
         id = Input.int(params[:id])
         budget = Budget.find_id(id)
-        render json: { budget: nil }.to_json, status: :not_found and return if !budget
+        render json: { error: "Budget not found" }.to_json, status: :not_found and return if !budget
 
         render json: { budget: budget }.to_json, status: :ok
       end
@@ -185,7 +185,7 @@ module Api
         # Get budget
         id = Input.int(params[:id])
         budget = Budget.find_id(id)
-        render json: { budget: nil }.to_json, status: :not_found and return if !budget
+        render json: { error: "Budget not found" }.to_json, status: :not_found and return if !budget
 
         # Read budget parameter
         params_budget = params[:budget] || {}
@@ -234,12 +234,12 @@ module Api
         # Get budget
         id = Input.int(params[:id])
         budget = Budget.find_id(id)
-        render json: { user_budget: nil }.to_json, status: :not_found and return if !budget
+        render json: { error: "User Budget not found" }.to_json, status: :not_found and return if !budget
 
         # Get user
         user_id = Input.int(params[:user_id])
         user = User.find_id(id)
-        render json: { user_budget: nil }.to_json, status: :not_found and return if !user
+        render json: { error: "User Budget not found" }.to_json, status: :not_found and return if !user
 
         # Get quota
         quota = Input.float(params[:quota])
@@ -284,12 +284,12 @@ module Api
         budget_id = Input.int(params[:id])
         user_budget_id = Input.int(params[:user_budget_id])
         user_budget = UserBudgetAssociation.find_id(user_budget_id, budget_id)
-        render json: { user_budget: nil }.to_json, status: :not_found and return if !user_budget
+        render json: { error: "User Budget not found" }.to_json, status: :not_found and return if !user_budget
 
         # Delete user_budget
         user_budget.delete
 
-        render json: { message: "UserBudget deleted" }.to_json, status: :ok
+        render json: { message: "User Budget deleted" }.to_json, status: :ok
       end
     end
   end
