@@ -363,7 +363,7 @@ module Api
         new_job_assignment_log
       end
 
-      def create_new
+      def create
         # Check for manage permissions
         status, response = check_token_for_permission(Permission.manage_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
@@ -377,10 +377,15 @@ module Api
           operation_ids << operation_id
         end
 
+        # Get pending operations
         sql = "select id, operation_type_id from operations where id in ( #{operation_ids.join(',')} ) and status = 'pending'"
         operations = Operation.find_by_sql sql
         render json: { error: "No pending operations selected" }.to_json, status: :unauthorized and return if operations.length == 0
 
+        # Check that operation_type_ids are the sasme
+        sql = "select distinct operation_type_id from operations where id in ( #{operation_ids.join(',')} ) and status = 'pending'"
+        distinct = Operation.find_by_sql sql
+        render json: { error: "Cannot combine operations with different operation types" }.to_json, status: :unauthorized and return if distinct.length > 1
 
         timenow = Time.now.utc
         state = [
@@ -429,7 +434,7 @@ module Api
 
       end
 
-      def delete_job
+      def delete
         # Check for manage permissions
         status, response = check_token_for_permission(Permission.manage_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
