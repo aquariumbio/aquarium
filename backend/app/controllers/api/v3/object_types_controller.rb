@@ -45,7 +45,7 @@ module Api
       #   {
       #     handlers: [
       #       {
-      #         id: <null>,
+      #         id: null,
       #         handler: <handler>
       #       },
       #       ...

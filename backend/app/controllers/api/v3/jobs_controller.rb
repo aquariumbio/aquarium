@@ -329,6 +329,32 @@ module Api
         render json: {operations: operations}, status: :ok
       end
 
+      # Assigns a job to a user
+      #
+      # <b>API Call:</b>
+      #   GET: /api/v3/jobs/<id>/assign
+      #   {
+      #     token: <token>
+      #     to_id: <to_id>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     job_assignment_log: {
+      #       id: <id>,
+      #       job_id: <job_id>,
+      #       assigned_by: <assigned_by>,
+      #       assigned_to: <assigned_to>,
+      #       created_at: <created_at>,
+      #       updated_at: <updated_at>
+      #     }
+      #   }
+      #
+      # @!method assign(id, token, to_id)
+      # @param id [Int] the id of the job
+      # @param token [String] a token
+      # @param to_id [Int] the id of the assigned_to user
       def assign
         # Check for manage permissions
         status, response = check_token_for_permission(Permission.manage_id)
@@ -346,6 +372,30 @@ module Api
         new_job_assignment_log
       end
 
+      # Unassigns a job
+      #
+      # <b>API Call:</b>
+      #   GET: /api/v3/jobs/<id>/unassign
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     job_assignment_log: {
+      #       id: <id>,
+      #       job_id: <job_id>,
+      #       assigned_by: <assigned_by>,
+      #       assigned_to: null,
+      #       created_at: <created_at>,
+      #       updated_at: <updated_at>
+      #     }
+      #   }
+      #
+      # @!method unassign(id, token)
+      # @param id [Int] the id of the job
+      # @param token [String] a token
       def unassign
         # Check for manage permissions
         status, response = check_token_for_permission(Permission.manage_id)
@@ -363,6 +413,48 @@ module Api
         new_job_assignment_log
       end
 
+      # Creates a job
+      #
+      # <b>API Call:</b>
+      #   GET: /api/v3/jobs/create
+      #   {
+      #     token: <token>,
+      #     operation_ids[]: <operation_id>,
+      #     operation_ids[]: <operation_id>,
+      #     ...
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     job: {
+      #       id: <___>,
+      #       user_id: <___>,
+      #       arguments: null,
+      #       state: [
+      #         {
+      #           operation: "initialize",
+      #           arguments: {
+      #             operation_type_id: <operation_type_id>,
+      #             time: <timenow>
+      #           }
+      #         }
+      #       ]
+      #       created_at: <created_at>,
+      #       updated_at: <updated_at>,
+      #       path: "operation.rb",
+      #       pc: -1,
+      #       group_id: null,
+      #       submitted_by: <submitted_by>,
+      #       desired_start_time: <timenow>,
+      #       latest_start_time: <timenow + 1.hour>,
+      #       metacol_id: null,
+      #       successor_id: null
+      #     }
+      #   }
+      # @!method create(token, operation_ids[])
+      # @param token [String] a token
+      # @param operation_ids [Array] the list of operation_ids
       def create
         # Check for manage permissions
         status, response = check_token_for_permission(Permission.manage_id)
@@ -434,6 +526,23 @@ module Api
 
       end
 
+      # Deletes a job
+      #
+      # <b>API Call:</b>
+      #   GET: /api/v3/jobs/<id>/delete
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     message: "Job deleted"
+      #   }
+      #
+      # @!method delete(id, token)
+      # @param id [Int] the id of the job
+      # @param token [String] a token
       def delete
         # Check for manage permissions
         status, response = check_token_for_permission(Permission.manage_id)
@@ -456,7 +565,43 @@ module Api
         render json: { message: "Job deleted" }.to_json, status: :ok
       end
 
-      # get 'api/v3/jobs/category/:category'
+      # Returns operation_types for a given category and operations with a given status for the first operation_type
+      #
+      # <b>API Call:</b>
+      #   GET: api/v3/jobs/category/:category
+      #   {
+      #     token: <token>,
+      #     status: <status>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     operation_types: [
+      #       {
+      #         id: null,
+      #         name: <name>,
+      #         n: <n>
+      #       },
+      #       ...
+      #     ],
+      #     <first_operation_type>: {
+      #       operations: [
+      #         {
+      #           id: <id>,
+      #           status: <status>,
+      #           updated_at: <updated_at>,
+      #           plan_id: <plan_id>,
+      #           name: <name>
+      #         },
+      #         ...
+      #       ]
+      #     }
+      #
+      # @!method category(token, category, status)
+      # @param token [String] a token
+      # @param category [String] category of operations_types
+      # @param status [String] status of operations
       def category
         # Check for manage permissions
         status, response = check_token_for_permission(Permission.manage_id)
@@ -480,11 +625,11 @@ module Api
 
         # Get operation_types
         sql = "
-          select ot.name, count(*) as 'n'
+          select ot.id, ot.name, count(*) as 'n'
           from operation_types ot
           inner join operations o on o.operation_type_id = ot.id
           where ot.category = ? and o.status = ?
-          group by ot.name
+          group by ot.id
           order by ot.name
         "
         operation_types = OperationType.find_by_sql [sql, category, status]
@@ -503,10 +648,38 @@ module Api
         "
         operations = Operation.find_by_sql [sql, operation_types[0].name, status]
 
-        render json: { operation_types: operation_types, operations: operations }.to_json, status: :ok
+        render json: { operation_types: operation_types, operation_types[0].name => { operations: operations } }.to_json, status: :ok
       end
 
-      # get 'api/v3/jobs/category/:category/:operation_type'
+      # Returns operations with a given status for a given category and a given operation_type
+      #
+      # <b>API Call:</b>
+      #   GET: api/v3/jobs/category/:category/:operation_type
+      #   {
+      #     token: <token>,
+      #     status: <status>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     operations: [
+      #       {
+      #         id: <id>,
+      #         status: <status>,
+      #         updated_at: <updated_at>,
+      #         plan_id: <plan_id>,
+      #         name: <name>
+      #       },
+      #       ...
+      #     ]
+      #   }
+      #
+      # @!method operation_type(token, category, operation_type, status)
+      # @param token [String] a token
+      # @param category [String] category of operations_types
+      # @param operation_type [String] specific operations_type
+      # @param status [String] status of operations
       def operation_type
         # Check for manage permissions
         status, response = check_token_for_permission(Permission.manage_id)
@@ -537,15 +710,32 @@ module Api
           inner join operations o on o.operation_type_id = ot.id
           inner join plan_associations pa on pa.operation_id = o.id
           inner join users u on u.id = o.user_id
-          where ot.name = ? and o.status = ?
+          where ot.category = ? and ot.name = ? and o.status = ?
           order by o.updated_at desc
         "
-        operations = Operation.find_by_sql [sql, operation_type, status]
+        operations = Operation.find_by_sql [sql, category, operation_type, status]
 
         render json: { operations: operations }.to_json, status: :ok
       end
 
-      # post 'api/v3/jobs/:id/remove/:operation_id'
+      # Remove an operation from a job
+      #
+      # <b>API Call:</b>
+      #   GET: /api/v3/jobs/<id>/remove/<operation_id>
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     message: "Operation removed"
+      #   }
+      #
+      # @!method remove(id, operation_id, token)
+      # @param id [Int] the id of the job
+      # @param operation_id [Int] the operation_id of the operation
+      # @param token [String] a token
       def remove
         # Check for manage permissions
         status, response = check_token_for_permission(Permission.manage_id)
@@ -580,6 +770,8 @@ module Api
         # update the operation status
         sql = "update operations set status = 'pending' where id = #{operation_id} limit 1"
         Operation.connection.execute sql
+
+        # NOTE: may want to remove the job if there are no operations left in the job
 
         render json: { message: "Operation removed" }.to_json, status: :ok
       end

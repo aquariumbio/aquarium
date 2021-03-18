@@ -287,7 +287,7 @@ module Api
       # Delete a membership.
       #
       # <b>API Call:</b>
-      #   POST: 'api/v3/groups/<id>/delete_membership/<membership_id>
+      #   POST: 'api/v3/groups/<id>/delete_membership/<user_id>
       #   {
       #     token: <token>
       #     id: <group_id>,
