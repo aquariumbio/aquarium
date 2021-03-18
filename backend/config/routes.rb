@@ -100,10 +100,11 @@ Rails.application.routes.draw do
   get  'api/v3/jobs/unassigned',                   to: 'api/v3/jobs#unassigned'
   get  'api/v3/jobs/finished',                     to: 'api/v3/jobs#finished'
 #   get  'api/v3/jobs/by_operation',                 to: 'api/v3/jobs#by_operation'
+  post 'api/v3/jobs/create_new',                   to: 'api/v3/jobs#create_new'
   get  'api/v3/jobs/:id/show',                     to: 'api/v3/jobs#show'
-#   post 'api/v3/jobs/:id/assign',                   to: 'api/v3/jobs#assign'
-#   post 'api/v3/jobs/:id/unassign',                 to: 'api/v3/jobs#unassign'
-#   post 'api/v3/jobs/:id/delete',                   to: 'api/v3/jobs#delete'
+  post 'api/v3/jobs/:id/assign',                   to: 'api/v3/jobs#assign'
+  post 'api/v3/jobs/:id/unassign',                 to: 'api/v3/jobs#unassign'
+  post 'api/v3/jobs/:id/delete_job',               to: 'api/v3/jobs#delete_job'
 
 
 end

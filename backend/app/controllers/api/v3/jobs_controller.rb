@@ -267,7 +267,6 @@ module Api
       # @param id [Int] the id of the job
       # @param token [String] a token
       def show
-        # get job details = plan + input / output + udpated + client + op id + status
         # Check for manage permissions
         status, response = check_token_for_permission(Permission.manage_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
@@ -327,25 +326,152 @@ module Api
         ### TODO: MOVE TO MODEL
         ### <<<<<<
 
-        render json: {operations: operations}
+        render json: {operations: operations}, status: :ok
       end
 
       def assign
+        # Check for manage permissions
+        status, response = check_token_for_permission(Permission.manage_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
 
+        # Get job
+        @id = Input.int(params[:id])
+        job = Job.find_by(id: @id)
+        render json: { job: nil }.to_json, status: :not_found and return if !job
+
+        @by = response[:user]['id'].to_i
+        @to = params[:to_id].to_i
+
+        # Create assignment
+        new_job_assignment_log
       end
 
       def unassign
+        # Check for manage permissions
+        status, response = check_token_for_permission(Permission.manage_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # Get job
+        @id = Input.int(params[:id])
+        job = Job.find_by(id: @id)
+        render json: { job: nil }.to_json, status: :not_found and return if !job
+
+        @by = response[:user]['id'].to_i
+        @to = nil
+
+        # Create assignment
+        new_job_assignment_log
+      end
+
+      def create_new
+        # Check for manage permissions
+        status, response = check_token_for_permission(Permission.manage_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        ### >>>>>>
+        ### TODO: MOVE TO MODEL
+
+        # Get operations that are 'pending'
+        operation_ids = [0]
+        params[:operation_ids].each do |operation_id|
+          operation_ids << operation_id
+        end
+
+        sql = "select id, operation_type_id from operations where id in ( #{operation_ids.join(',')} ) and status = 'pending'"
+        operations = Operation.find_by_sql sql
+        render json: { error: "No pending operations selected" }.to_json, status: :unauthorized and return if operations.length == 0
+
+
+        timenow = Time.now.utc
+        state = [
+          {
+            'operation' => 'initialize',
+            'arguments' => {
+              'operation_type_id' => operations[0].operation_type_id,
+              'time' => timenow
+            }
+          }
+        ]
+
+        # create the job
+        job_new = Job.new
+        job_new.user_id = response[:user]['id'].to_i
+        job_new.path = 'operation.rb'
+        job_new.pc = -1
+        job_new.state = state.to_json
+        job_new.group_id = nil # this was technicians
+        job_new.submitted_by = response[:user]['id'].to_i
+        job_new.desired_start_time = timenow
+        job_new.latest_start_time = timenow + 1.hour
+        job_new.created_at = timenow
+        job_new.updated_at = timenow
+        job_new.save
+
+        # create the job associations
+        pending_ids = []
+        operations.each do |operation|
+          pending_ids << operation.id
+
+          job_assocation_new = JobAssociation.new
+          job_assocation_new.job_id = job_new.id
+          job_assocation_new.operation_id = operation.id
+          job_assocation_new.save
+        end
+
+        # update the operation statuses
+        sql = "update operations set status = 'scheduled' where id in ( #{pending_ids.join(',')} )"
+        Operation.connection.execute sql
+
+        render json: { job: job_new }.to_json, status: :ok
+        ### TODO: MOVE TO MODEL
+        ### <<<<<<
+
 
       end
 
-      def delete
+      def delete_job
+        # Check for manage permissions
+        status, response = check_token_for_permission(Permission.manage_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
 
+        # Get job
+        id = Input.int(params[:id])
+        job = Job.find_by(id: id)
+        render json: { job: nil }.to_json, status: :not_found and return if !job
+
+        # Delete job
+        render json: { error: "Job must be not started" }.to_json, status: :unauthorized and return if job.pc != -1
+
+        # reset operations to 'pending'
+        sql = "update operations set status = 'pending' where id in ( select operation_id from job_associations where job_id = #{job.id} )"
+        Operation.connection.execute sql
+
+        # delete job (will automatically delete job_associations using foreign keys)
+        job.delete
+        render json: { message: "Job deleted" }.to_json, status: :ok
       end
 
       def by_operation
         # show assigned to + started + finished + protocol + job id + operations count
 
       end
+
+      private
+
+      def new_job_assignment_log
+        jal = JobAssignmentLog.new
+        jal.job_id = @id
+        jal.assigned_by = @by
+        jal.assigned_to = @to
+
+        render json: { errors: jal.errors }, status: :unauthorized and return unless jal.valid?
+
+        jal.save!
+
+        render json: { job_assignment_log: jal}, status: :ok
+      end
     end
   end
 end
+
+
