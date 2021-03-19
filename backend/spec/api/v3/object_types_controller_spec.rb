@@ -9,7 +9,7 @@ RSpec.describe Api::V3::ObjectTypesController, type: :request do
       @object_type_ids = []
       @sample_type_ids = []
 
-      post "#{@create_url}?login=user_1&password=password"
+      post "#{@create_url}?login=user_1&password=aquarium123"
       response_body = JSON.parse(response.body)
       @token_1 << response_body["token"]
     end

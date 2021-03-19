@@ -8,7 +8,7 @@ class AllowableFieldType < ActiveRecord::Base
   # @param allowable_field_type [Hash] the allowable field type
   # @option allowable_field_type[:sample_type_id] [Int] the id of the (allowable) sample type
   # @return true
-  def self.create(field_type_id, allowable_field_type)
+  def self.create_this(field_type_id, allowable_field_type)
     sample_type_id = Input.int(allowable_field_type[:sample_type_id])
     sql = "select * from sample_types where id = #{sample_type_id} limit 1"
 

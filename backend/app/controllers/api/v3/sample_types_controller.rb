@@ -281,7 +281,7 @@ module Api
         params_sample_type = params[:sample_type] || {}
 
         # Create sample type
-        sample_type, errors = SampleType.create(params_sample_type)
+        sample_type, errors = SampleType.create_this(params_sample_type)
         render json: { errors: errors }.to_json, status: :ok and return if !sample_type
 
         render json: { sample_type: sample_type }.to_json, status: :created

@@ -214,7 +214,7 @@ module Api
         params_user = params[:user] || {}
 
         # Create user
-        user, errors = User.create(params_user)
+        user, errors = User.create_this(params_user)
         render json: { errors: errors }.to_json, status: :ok and return if !user
 
         render json: { user: user }.to_json, status: :created

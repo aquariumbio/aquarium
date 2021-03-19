@@ -144,7 +144,7 @@ module Api
         params_wizard = params[:wizard] || {}
 
         # Create wizard
-        wizard, errors = Wizard.create(params_wizard)
+        wizard, errors = Wizard.create_this(params_wizard)
         render json: { errors: errors }.to_json, status: :ok and return if !wizard
 
         render json: { wizard: wizard }.to_json, status: :created

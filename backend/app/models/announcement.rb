@@ -27,7 +27,7 @@ class Announcement < ActiveRecord::Base
   # @option announcement[:message] [String] the message
   # @option announcement[:active] [String] active - interpreted as Boolen
   # return the announcement
-  def self.create(announcement)
+  def self.create_this(announcement)
     # Read the parameters
     title = Input.text(announcement[:title])
     message = Input.text(announcement[:message])
