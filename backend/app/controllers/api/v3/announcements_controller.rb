@@ -143,7 +143,7 @@ module Api
         params_announcement = params[:announcement] || {}
 
         # Create announcement
-        announcement, errors = Announcement.create(params_announcement)
+        announcement, errors = Announcement.create_this(params_announcement)
         render json: { errors: errors }.to_json, status: :ok and return if !announcement
 
         render json: { announcement: announcement }.to_json, status: :created
@@ -188,7 +188,7 @@ module Api
         # Get announcement
         id = Input.int(params[:id])
         announcement = Announcement.find_id(id)
-        render json: { announcement: nil }.to_json, status: :not_found and return if !announcement
+        render json: { error: "Announcement not found" }.to_json, status: :not_found and return if !announcement
 
         # Read announcement parameter
         params_announcement = params[:announcement] || {}
@@ -225,7 +225,7 @@ module Api
         # Get announcement
         id = Input.int(params[:id])
         announcement = Announcement.find_id(id)
-        render json: { announcement: nil }.to_json, status: :not_found and return if !announcement
+        render json: { error: "Announcement not found" }.to_json, status: :not_found and return if !announcement
 
         # Delete announcement
         announcement.delete

@@ -114,7 +114,7 @@ module Api
         status, response = check_token_for_permission(Permission.manage_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # get unassigned jobs
+        # Get unassigned jobs
         unassigned = Job.unassigned_jobs
 
         render json: {jobs: unassigned}.to_json, status: :ok
@@ -157,7 +157,7 @@ module Api
         status, response = check_token_for_permission(Permission.manage_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # get assigned jobs
+        # Get assigned jobs
         assigned = Job.assigned_jobs
 
         render json: {jobs: assigned}.to_json, status: :ok
@@ -201,10 +201,10 @@ module Api
         status, response = check_token_for_permission(Permission.manage_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        # get seven_days flag
+        # Read seven_days flag
         seven_days = Input.boolean(params[:seven_days])
 
-        # get assigned jobs
+        # Get assigned jobs
         finished = Job.finished_jobs(seven_days)
 
         render json: {jobs: finished}.to_json, status: :ok
@@ -267,85 +267,452 @@ module Api
       # @param id [Int] the id of the job
       # @param token [String] a token
       def show
-        # get job details = plan + input / output + udpated + client + op id + status
         # Check for manage permissions
         status, response = check_token_for_permission(Permission.manage_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        ### >>>>>>
-        ### TODO: MOVE TO MODEL
         id = params[:id].to_i
 
-        # get list of <plan_id, updated_at, user.name, operation_id, status> for each job
-        # multiple operations per job
-        # one plan per operation
-        # one user per operation
-        # order by operation.upated_at desc, operation.id desc
-        sql = "
-          select ja.id, ja.operation_id, o.updated_at, o.status, pa.plan_id, u.name
-          from jobs j
-          inner join job_associations ja on ja.job_id = j.id
-          inner join operations o on o.id = ja.operation_id
-          inner join plan_associations pa on pa.operation_id = o.id
-          inner join users u on u.id = o.user_id
-          where j.id = #{id}
-          order by o.updated_at desc, o.id desc
-        "
-        job_operations = JobAssociation.find_by_sql sql
+        # get operations in job
+        job_operations = JobAssociation.job_operations(id)
 
         operations = []
         job_operations.each do |jo|
           operation_id = jo.operation_id
 
-          sql = "
-            select fv.id, fv.role, fv.name, s.id as 'sample_id', s.name as 'sample_name', ot.name as 'object_type_name'
-            from field_values fv
-            left join samples s on s.id = fv.child_sample_id
-            left join items i on i.id = fv.child_item_id
-            left join object_types ot on ot.id = i.object_type_id
-            where parent_class = 'Operation' and parent_id = #{operation_id}
-            order by fv.role = 'input', fv.name, fv.id
-          "
-          outputs_inputs = FieldValue.find_by_sql sql
+          # get outputs and inputs for operation
+          outputs, inputs = FieldValue.outputs_inputs(operation_id)
 
-          outputs = []
-          inputs = []
-          outputs_inputs.each do |oi|
-            oi.role == 'input' ? inputs << oi : outputs << oi
-          end
-
-          sql = "
-            select id, object
-            from data_associations
-            where parent_class = 'Operation' and parent_id = #{operation_id}
-            order by updated_at desc, id desc
-          "
-          data_associations = DataAssociation.find_by_sql sql
+          # get data_associations for operation
+          data_associations = DataAssociation.data_associations(operation_id)
 
           operations << {id: jo.id, operation_id: jo.operation_id, updated_at: jo.updated_at, status: jo.status, plan_id: jo.plan_id, inputs: inputs, outputs: outputs, data_associations: data_associations}
         end
-        ### TODO: MOVE TO MODEL
-        ### <<<<<<
 
-        render json: {operations: operations}
+        render json: {operations: operations}, status: :ok
       end
 
+      # Assigns a job to a user
+      #
+      # <b>API Call:</b>
+      #   GET: /api/v3/jobs/<id>/assign
+      #   {
+      #     token: <token>
+      #     to_id: <to_id>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     job_assignment_log: {
+      #       id: <id>,
+      #       job_id: <job_id>,
+      #       assigned_by: <assigned_by>,
+      #       assigned_to: <assigned_to>,
+      #       created_at: <created_at>,
+      #       updated_at: <updated_at>
+      #     }
+      #   }
+      #
+      # @!method assign(id, token, to_id)
+      # @param id [Int] the id of the job
+      # @param token [String] a token
+      # @param to_id [Int] the id of the assigned_to user
       def assign
+        # Check for manage permissions
+        status, response = check_token_for_permission(Permission.manage_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
 
+        # Get job
+        @id = Input.int(params[:id])
+        job = Job.find_by(id: @id)
+        render json: { error: "Job not found" }.to_json, status: :not_found and return if !job
+
+        @by = response[:user]['id'].to_i
+        @to = params[:to_id].to_i
+
+        # Create assignment
+        new_job_assignment_log
       end
 
+      # Unassigns a job
+      #
+      # <b>API Call:</b>
+      #   GET: /api/v3/jobs/<id>/unassign
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     job_assignment_log: {
+      #       id: <id>,
+      #       job_id: <job_id>,
+      #       assigned_by: <assigned_by>,
+      #       assigned_to: null,
+      #       created_at: <created_at>,
+      #       updated_at: <updated_at>
+      #     }
+      #   }
+      #
+      # @!method unassign(id, token)
+      # @param id [Int] the id of the job
+      # @param token [String] a token
       def unassign
+        # Check for manage permissions
+        status, response = check_token_for_permission(Permission.manage_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
 
+        # Get job
+        @id = Input.int(params[:id])
+        job = Job.find_by(id: @id)
+        render json: { error: "Job not found" }.to_json, status: :not_found and return if !job
+
+        @by = response[:user]['id'].to_i
+        @to = nil
+
+        # Create assignment
+        new_job_assignment_log
       end
 
+      # Creates a job
+      #
+      # <b>API Call:</b>
+      #   GET: /api/v3/jobs/create
+      #   {
+      #     token: <token>,
+      #     operation_ids[]: <operation_id>,
+      #     operation_ids[]: <operation_id>,
+      #     ...
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     job: {
+      #       id: <___>,
+      #       user_id: <___>,
+      #       arguments: null,
+      #       state: [
+      #         {
+      #           operation: "initialize",
+      #           arguments: {
+      #             operation_type_id: <operation_type_id>,
+      #             time: <timenow>
+      #           }
+      #         }
+      #       ]
+      #       created_at: <created_at>,
+      #       updated_at: <updated_at>,
+      #       path: "operation.rb",
+      #       pc: -1,
+      #       group_id: null,
+      #       submitted_by: <submitted_by>,
+      #       desired_start_time: <timenow>,
+      #       latest_start_time: <timenow + 1.hour>,
+      #       metacol_id: null,
+      #       successor_id: null
+      #     }
+      #   }
+      # @!method create(token, operation_ids[])
+      # @param token [String] a token
+      # @param operation_ids [Array] the list of operation_ids
+      def create
+        # Check for manage permissions
+        status, response = check_token_for_permission(Permission.manage_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # Read operation ids
+        operation_ids = [0]
+        params[:operation_ids].each do |operation_id|
+          operation_ids << operation_id
+        end
+
+        # Get pending operations
+        operations = Operation.pending_operations(operation_ids)
+        render json: { error: "No pending operations selected" }.to_json, status: :unauthorized and return if operations.length == 0
+
+        # Check that operation_type_ids are the same
+        distinct = Operation.distinct_operation_types(operation_ids, 'pending')
+        render json: { error: "Cannot combine operations with different operation types" }.to_json, status: :unauthorized and return if distinct.length > 1
+
+        # Set the state for the job
+        # Set timenow so that the time matches created_at and updated_at for the job
+        timenow = Time.now.utc
+        state = [
+          {
+            'operation' => 'initialize',
+            'arguments' => {
+              'operation_type_id' => operations[0].operation_type_id,
+              'time' => timenow
+            }
+          }
+        ]
+
+        # create the job
+        job = Job.create({
+          user_id: response[:user]['id'].to_i,
+          path: 'operation.rb',
+          pc: -1,
+          state: state.to_json,
+          group_id: nil, # this was technicians
+          submitted_by: response[:user]['id'].to_i,
+          desired_start_time: timenow,
+          latest_start_time: timenow + 1.hour,
+          created_at: timenow,
+          updated_at: timenow
+        })
+
+        # create the job associations
+        pending_ids = []
+        operations.each do |operation|
+          pending_ids << operation.id
+
+          job_assocation = JobAssociation.create({
+            job_id: job.id,
+            operation_id: operation.id
+          })
+        end
+
+        Operation.set_status_for_ids('scheduled', pending_ids)
+
+        render json: { job: job }.to_json, status: :ok
+      end
+
+      # Deletes a job
+      #
+      # <b>API Call:</b>
+      #   GET: /api/v3/jobs/<id>/delete
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     message: "Job deleted"
+      #   }
+      #
+      # @!method delete(id, token)
+      # @param id [Int] the id of the job
+      # @param token [String] a token
       def delete
+        # Check for manage permissions
+        status, response = check_token_for_permission(Permission.manage_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
 
+        # Get job
+        id = Input.int(params[:id])
+        job = Job.find_by(id: id)
+        render json: { error: "Job not found" }.to_json, status: :not_found and return if !job
+
+        # Check job status
+        render json: { error: "Job must be not started" }.to_json, status: :unauthorized and return if job.pc != -1
+
+        # reset operations to 'pending'
+        Operation.set_status_for_job('pending', job.id)
+
+        # delete job (will automatically delete job_associations using foreign keys)
+        job.delete
+        render json: { message: "Job deleted" }.to_json, status: :ok
       end
 
-      def by_operation
-        # show assigned to + started + finished + protocol + job id + operations count
+      # Returns operation_types for a given category and operations with a given status for the first operation_type
+      #
+      # <b>API Call:</b>
+      #   GET: api/v3/jobs/category/:category
+      #   {
+      #     token: <token>,
+      #     status: <status>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     operation_types: [
+      #       {
+      #         id: null,
+      #         name: <name>,
+      #         n: <n>
+      #       },
+      #       ...
+      #     ],
+      #     <first_operation_type>: {
+      #       operations: [
+      #         {
+      #           id: <id>,
+      #           status: <status>,
+      #           updated_at: <updated_at>,
+      #           plan_id: <plan_id>,
+      #           name: <name>
+      #         },
+      #         ...
+      #       ]
+      #     }
+      #
+      # @!method category(token, category, status)
+      # @param token [String] a token
+      # @param category [String] category of operations_types
+      # @param status [String] status of operations
+      def category
+        # Check for manage permissions
+        status, response = check_token_for_permission(Permission.manage_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
 
+        # Read category
+        category = Input.text(params[:category]) || ''
+
+        # Read status, default to 'pending'
+        status = case params[:status]
+        when 'error'
+          'error'
+        when 'waiting'
+          'waiting'
+        when 'deferred'
+          'deferred'
+        when 'delayed'
+          'delayed'
+        else
+          'pending'
+        end
+
+        # Get operation_types for selected category, status
+        operation_types = OperationType.operation_types(category, status)
+        render json: { error: "No operation types" }.to_json, status: :not_found and return if !operation_types[0]
+
+        # Get operations for first operation_type = operation_typs[0].name and status
+        operations = Operation.operations_for_category_type_status(category, operation_types[0].name, status)
+
+        render json: { operation_types: operation_types, operation_types[0].name => { operations: operations } }.to_json, status: :ok
+      end
+
+      # Returns operations with a given status for a given category and a given operation_type
+      #
+      # <b>API Call:</b>
+      #   GET: api/v3/jobs/category/:category/:operation_type
+      #   {
+      #     token: <token>,
+      #     status: <status>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     operations: [
+      #       {
+      #         id: <id>,
+      #         status: <status>,
+      #         updated_at: <updated_at>,
+      #         plan_id: <plan_id>,
+      #         name: <name>
+      #       },
+      #       ...
+      #     ]
+      #   }
+      #
+      # @!method operation_type(token, category, operation_type, status)
+      # @param token [String] a token
+      # @param category [String] category of operations_types
+      # @param operation_type [String] specific operations_type
+      # @param status [String] status of operations
+      def operation_type
+        # Check for manage permissions
+        status, response = check_token_for_permission(Permission.manage_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # Read category
+        category = Input.text(params[:category]) || ''
+
+        # Read status, default to 'pending'
+        status = case params[:status]
+        when 'error'
+          'error'
+        when 'waiting'
+          'waiting'
+        when 'deferred'
+          'deferred'
+        when 'delayed'
+          'delayed'
+        else
+          'pending'
+        end
+
+        # Read operation type
+        operation_type = Input.text(params[:operation_type]) || ''
+
+        # Get operations for category, type, and status
+        operations = Operation.operations_for_category_type_status(category, operation_type, status)
+
+        render json: { operations: operations }.to_json, status: :ok
+      end
+
+      # Remove an operation from a job
+      #
+      # <b>API Call:</b>
+      #   GET: /api/v3/jobs/<id>/remove/<operation_id>
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     message: "Operation removed"
+      #   }
+      #
+      # @!method remove(id, operation_id, token)
+      # @param id [Int] the id of the job
+      # @param operation_id [Int] the operation_id of the operation
+      # @param token [String] a token
+      def remove
+        # Check for manage permissions
+        status, response = check_token_for_permission(Permission.manage_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # Get job
+        id = Input.int(params[:id])
+        job = Job.find_by(id: id)
+        render json: { error: "Job not found" }.to_json, status: :not_found and return if !job
+
+        # Check job status
+        render json: { error: "Job must be not started" }.to_json, status: :unauthorized and return if job.pc != -1
+
+        # Get operation (and verify that it is in the job)
+        operation_id = Input.int(params[:operation_id])
+        operation = Operation.operation_from_job(operation_id, job.id)
+        render json: { error: "Operation not found" }.to_json, status: :not_found and return if !operation
+
+        # Check operation status
+        render json: { error: "Operation must be scheduled" }.to_json, status: :unauthorized and return if operation.status != 'scheduled'
+
+        # remove operation from job
+        JobAssociation.remove_operation_from_job(operation_id, job.id)
+
+        # update the operation status
+        Operation.set_status_for_ids('pending', [operation_id])
+
+        # NOTE: may want to remove the job if there are no operations left in the job
+
+        render json: { message: "Operation removed" }.to_json, status: :ok
+      end
+
+      private
+
+      def new_job_assignment_log
+        jal = JobAssignmentLog.new
+        jal.job_id = @id
+        jal.assigned_by = @by
+        jal.assigned_to = @to
+
+        render json: { errors: jal.errors }, status: :unauthorized and return unless jal.valid?
+
+        jal.save!
+
+        render json: { job_assignment_log: jal}, status: :ok
       end
     end
   end
 end
+
+

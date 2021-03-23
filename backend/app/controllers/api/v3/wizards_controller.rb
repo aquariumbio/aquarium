@@ -144,7 +144,7 @@ module Api
         params_wizard = params[:wizard] || {}
 
         # Create wizard
-        wizard, errors = Wizard.create(params_wizard)
+        wizard, errors = Wizard.create_this(params_wizard)
         render json: { errors: errors }.to_json, status: :ok and return if !wizard
 
         render json: { wizard: wizard }.to_json, status: :created
@@ -189,7 +189,7 @@ module Api
         # Get wizard
         id = Input.int(params[:id])
         wizard = Wizard.find_id(id)
-        render json: { wizard: nil }.to_json, status: :not_found and return if !wizard
+        render json: { error: "Wizzard not found" }.to_json, status: :not_found and return if !wizard
 
         # Read wizard parameter
         params_wizard = params[:wizard] || {}
@@ -226,7 +226,7 @@ module Api
         # Get wizard
         id = Input.int(params[:id])
         wizard = Wizard.find_id(id)
-        render json: { wizard: nil }.to_json, status: :not_found and return if !wizard
+        render json: { error: "Wizzard not found" }.to_json, status: :not_found and return if !wizard
 
         # Delete wizard
         wizard.delete

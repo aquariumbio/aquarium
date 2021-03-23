@@ -95,15 +95,17 @@ Rails.application.routes.draw do
   post 'api/v3/wizards/:id/delete',                to: 'api/v3/wizards#delete'
 
   # Jobs
-  get  'api/v3/jobs/counts',                       to: 'api/v3/jobs#counts'
-  get  'api/v3/jobs/assigned',                     to: 'api/v3/jobs#assigned'
-  get  'api/v3/jobs/unassigned',                   to: 'api/v3/jobs#unassigned'
-  get  'api/v3/jobs/finished',                     to: 'api/v3/jobs#finished'
-#   get  'api/v3/jobs/by_operation',                 to: 'api/v3/jobs#by_operation'
-  get  'api/v3/jobs/:id/show',                     to: 'api/v3/jobs#show'
-#   post 'api/v3/jobs/:id/assign',                   to: 'api/v3/jobs#assign'
-#   post 'api/v3/jobs/:id/unassign',                 to: 'api/v3/jobs#unassign'
-#   post 'api/v3/jobs/:id/delete',                   to: 'api/v3/jobs#delete'
-
+  get  'api/v3/jobs/counts',                                    to: 'api/v3/jobs#counts'
+  get  'api/v3/jobs/assigned',                                  to: 'api/v3/jobs#assigned'
+  get  'api/v3/jobs/unassigned',                                to: 'api/v3/jobs#unassigned'
+  get  'api/v3/jobs/finished',                                  to: 'api/v3/jobs#finished'
+  get  'api/v3/jobs/category/:category',                        to: 'api/v3/jobs#category'
+  get  'api/v3/jobs/category/:category/:operation_type',        to: 'api/v3/jobs#operation_type'
+  post 'api/v3/jobs/create',                                    to: 'api/v3/jobs#create'
+  get  'api/v3/jobs/:id/show',                                  to: 'api/v3/jobs#show'
+  post 'api/v3/jobs/:id/assign',                                to: 'api/v3/jobs#assign'
+  post 'api/v3/jobs/:id/unassign',                              to: 'api/v3/jobs#unassign'
+  post 'api/v3/jobs/:id/delete',                                to: 'api/v3/jobs#delete'
+  post 'api/v3/jobs/:id/remove/:operation_id',                  to: 'api/v3/jobs#remove'
 
 end

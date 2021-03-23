@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # jobs table
 class Job < ActiveRecord::Base
   # Get job counts by job status (regardless of operation status)
@@ -97,7 +99,7 @@ class Job < ActiveRecord::Base
     # custom SQL query
     # include protocol + job id + operations count + created date
     sql = "
-      select jot.job_id as 'id', jot.*, nn.n as 'operations_count'
+      select jot.*, nn.n as 'operations_count'
       from view_job_operation_types jot
       inner join view_job_associations nn on nn.job_id = jot.job_id
       left join view_job_assignments ja on ja.job_id = jot.job_id
@@ -105,7 +107,7 @@ class Job < ActiveRecord::Base
       and ja.id is null
       order by jot.created_at desc
     "
-    unassigned = Job.find_by_sql sql
+    unassigned = IdString.find_by_sql sql
   end
 
   # Get assigned jobs that have operations and that are not finished
@@ -115,14 +117,14 @@ class Job < ActiveRecord::Base
     # custom SQL query
     # include assigned to + priority (future) + protocol + job id + operations count + status + progress (future) + started
     sql = "
-      select ja.to_name, ja.to_login, jot.job_id as 'id', jot.*, nn.n as 'operations_count'
+      select ja.to_name, ja.to_login, jot.*, nn.n as 'operations_count'
       from view_job_operation_types jot
       inner join view_job_associations nn on nn.job_id = jot.job_id
       inner join view_job_assignments ja on ja.job_id = jot.job_id
       where jot.pc != -2
       order by jot.created_at desc
     "
-    assigned = Job.find_by_sql sql
+    assigned = IdString.find_by_sql sql
   end
 
   # Get finished jobs that have operations
@@ -147,7 +149,7 @@ class Job < ActiveRecord::Base
     # custom SQL query
     # include assigned to + assigned date + started + finished + protocol + job id + operations count
     sql = "
-      select ja.to_name, ja.to_login, ja.created_at as 'assigned_date', jot.job_id as 'id', jot.*, nn.n as 'operations_count'
+      select ja.to_name, ja.to_login, ja.created_at as 'assigned_date', jot.*, nn.n as 'operations_count'
       from view_job_operation_types jot
       inner join view_job_associations nn on nn.job_id = jot.job_id
       left join view_job_assignments ja on ja.job_id = jot.job_id
@@ -155,7 +157,7 @@ class Job < ActiveRecord::Base
       order by jot.updated_at desc
       limit 100
     "
-    finished = Job.find_by_sql sql
+    finished = IdString.find_by_sql sql
   end
 
 end

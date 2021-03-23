@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # field_types table
 class FieldType < ActiveRecord::Base
   # Create a field type
@@ -32,7 +34,7 @@ class FieldType < ActiveRecord::Base
     # Save allowable field types if the field type is "sample"
     if ftype == "sample" and field_type[:allowable_field_types].kind_of?(Array)
       field_type[:allowable_field_types].each do |aft|
-        AllowableFieldType.create(field_type_new.id, aft)
+        AllowableFieldType.create_this(field_type_new.id, aft)
       end
     end
 

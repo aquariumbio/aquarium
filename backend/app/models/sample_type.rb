@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # sample_types table
 class SampleType < ActiveRecord::Base
   validates :name,        presence: true, uniqueness: { case_sensitive: false }
@@ -69,7 +71,7 @@ class SampleType < ActiveRecord::Base
   # @option sample_type[:description] [String] the description of the sample type
   # @option sample_type[:field_types] [Hash] the field_type attributes associated with the sample type
   # @return the sample type
-  def self.create(sample_type)
+  def self.create_this(sample_type)
     name = Input.text(sample_type[:name])
     description = Input.text(sample_type[:description])
 

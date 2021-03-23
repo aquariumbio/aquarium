@@ -141,7 +141,7 @@ module Api
         params_parameter = params[:parameter] || {}
 
         # Create parameter
-        parameter, errors = Parameter.create(params_parameter)
+        parameter, errors = Parameter.create_this(params_parameter)
         render json: { errors: errors }.to_json, status: :ok and return if !parameter
 
         render json: { parameter: parameter }.to_json, status: :created
@@ -186,7 +186,7 @@ module Api
         # Get parameter
         id = Input.int(params[:id])
         parameter = Parameter.find_id(id)
-        render json: { parameter: nil }.to_json, status: :not_found and return if !parameter
+        render json: { error: "Parameter not found" }.to_json, status: :not_found and return if !parameter
 
         # Read parameter parameter
         params_parameter = params[:parameter] || {}
@@ -223,7 +223,7 @@ module Api
         # Get parameter
         id = Input.int(params[:id])
         parameter = Parameter.find_id(id)
-        render json: { parameter: nil }.to_json, status: :not_found and return if !parameter
+        render json: { error: "Parameter not found" }.to_json, status: :not_found and return if !parameter
 
         # Delete parameter
         parameter.delete
