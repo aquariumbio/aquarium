@@ -15,7 +15,7 @@ import greetings from '../../assests/greetings';
 const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2),
-    fontSize: '1rem',
+    fontSize: '16px',
     color: '#000',
   },
 }));
@@ -24,7 +24,7 @@ const UserGreeting = () => {
   const userName = (localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')).name) || 'User';
   const greeting = utils.randObjVal(greetings);
 
-  return <Typography>{greeting} {userName}!</Typography>;
+  return <Typography style={{ fontSize: '16px' }}>{greeting} {userName}!</Typography>;
 };
 
 const UserMenu = (props) => {
@@ -46,6 +46,7 @@ const UserMenu = (props) => {
   return (
     <>
       <IconButton
+        id="user-menu-button"
         edge="start"
         className={classes.menuButton}
         color="inherit"

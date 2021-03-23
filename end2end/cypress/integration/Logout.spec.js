@@ -16,7 +16,7 @@ describe('/logout', () => {
         // eslint-disable-next-line no-unused-expressions
         expect(token).to.exist;
       });
-    cy.contains('button', 'USER').click();
+    cy.contains('button', '!').click();
     cy.contains('Sign Out').click();
     cy.url().should('contain', '/login');
     cy.window()

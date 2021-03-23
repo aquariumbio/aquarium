@@ -57,16 +57,29 @@ const theme = createMuiTheme({
         backgroundColor: '#fff',
       },
     },
+    MuiTypography: {
+      body1: {
+        fontSize: '12px',
+      },
+    },
   },
 });
 
 const useStyles = makeStyles(() => ({
   root: {
     width: '100%',
-    height: '100%',
     overflow: 'auto',
     backgroundColor: '#fff',
   },
+  content: {
+    width: '100%',
+    marginTop: '72px',
+    marginLeft: '20px',
+    marginRight: '20px',
+    overflowX: 'auto',
+    overflowY: 'hidden',
+  },
+
 }));
 
 export default function App() {
@@ -80,14 +93,15 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <AlertToast
-        open={alertProps.open}
-        severity={alertProps.severity}
-        message={alertProps.message}
-        setAlertProps={setAlertProps}
-      />
-      <LoadingSpinner isLoading={isLoading} />
       <div name="app-container" className={classes.root} data-cy="app-container">
+        <AlertToast
+          open={alertProps.open}
+          severity={alertProps.severity}
+          message={alertProps.message}
+          setAlertProps={setAlertProps}
+        />
+        <LoadingSpinner isLoading={isLoading} />
+
         { /* Users cannot interact with the app if they do not have a token */
           !localStorage.getItem('token') && <Redirect to="/login" />
         }
@@ -99,7 +113,7 @@ export default function App() {
             {/* Header should show on all pages except login */}
             <Header />
 
-            <div style={{ marginTop: '72px' }}> {/* Pages should sit below the nav bar */}
+            <div name="page-content" className={classes.content}> {/* Pages should sit below the nav bar */}
               <Route exact path="/" render={(props) => <HomePage setIsLoading={setIsLoading} {...props} />} />
 
               {/* Left Hamburger Menu */}
