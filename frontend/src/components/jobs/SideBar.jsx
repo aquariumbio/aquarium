@@ -68,7 +68,7 @@ const SideBar = ({
       aria-labelledby="jobs-page-navigation"
       className={classes.root}
     >
-      <ListItem>
+      <ListItem key="jobs">
         <ListItemText primary="Jobs" className={classes.label} />
       </ListItem>
 
@@ -77,9 +77,10 @@ const SideBar = ({
         onClick={(event) => handleListItemClick(event, 'unassigned')}
         selected={value === 'unassigned'}
         id="unassigned"
+        key="unassigned"
       >
-        <Typography component="body1" noWrap>Unassigned</Typography>
-        <Typography component="body2" className={classes.count}>{`(${jobCounts.unassigned})`}</Typography>
+        <Typography noWrap>Unassigned</Typography>
+        <Typography className={classes.count}>{`(${jobCounts.unassigned})`}</Typography>
       </ListItem>
 
       <ListItem
@@ -87,9 +88,10 @@ const SideBar = ({
         onClick={(event) => handleListItemClick(event, 'assigned')}
         selected={value === 'assigned'}
         id="assigned"
+        key="assigned"
       >
-        <Typography component="body1" noWrap>Assigned</Typography>
-        <Typography component="body2" className={classes.count}>{`(${jobCounts.assigned})`}</Typography>
+        <Typography noWrap>Assigned</Typography>
+        <Typography className={classes.count}>{`(${jobCounts.assigned})`}</Typography>
       </ListItem>
 
       <ListItem
@@ -97,12 +99,13 @@ const SideBar = ({
         onClick={(event) => handleListItemClick(event, 'finished')}
         selected={value === 'finished'}
         id="finished"
+        key="finished"
       >
-        <Typography component="body1" noWrap>Finished</Typography>
-        <Typography component="body2" className={classes.count}>{`(${jobCounts.finished})`}</Typography>
+        <Typography noWrap>Finished</Typography>
+        <Typography className={classes.count}>{`(${jobCounts.finished})`}</Typography>
       </ListItem>
 
-      <ListItem>
+      <ListItem key="operations">
         <ListItemText primary="Operations" className={classes.label} />
       </ListItem>
 
@@ -112,30 +115,32 @@ const SideBar = ({
           onClick={(event) => handleListItemClick(event, index + 3)}
           selected={value === index + 3}
           id="operations-list"
+          key={key}
         >
-          <Typography component="body1" noWrap>{key}</Typography>
-          <Typography component="body2" className={classes.count}>{`(${activeCounts[`${key}`]})`}</Typography>
+          <Typography noWrap>{key}</Typography>
+          <Typography className={classes.count}>{`(${activeCounts[`${key}`]})`}</Typography>
         </ListItem>
       ))}
 
-      <ListItem button onClick={handleOpen} id="inactive">
+      <ListItem button onClick={handleOpen} id="inactive" key="inactive">
         <ListItemIcon>
           {open ? <ExpandLess /> : <ExpandMore />}
         </ListItemIcon>
-        <Typography component="body1" noWrap>Inactive</Typography>
+        <Typography noWrap>Inactive</Typography>
       </ListItem>
 
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding className={classes.list} id="inactive-list">
+        <List disablePadding className={classes.list} id="inactive-list">
           {inactive.map((key, count, index) => (
             <ListItem
               button
               className={classes.nested}
+              key={key}
               onClick={(event) => handleListItemClick(event, index + 3 + activeCounts.length)}
               selected={value === index + 3 + activeCounts.length}
             >
-              <Typography component="body1" noWrap>{key}</Typography>
-              <Typography component="body2" className={classes.count}>{count}</Typography>
+              <Typography noWrap>{key}</Typography>
+              <Typography className={classes.count}>{count}</Typography>
             </ListItem>
           ))}
         </List>
@@ -145,12 +150,16 @@ const SideBar = ({
 };
 
 SideBar.propTypes = {
-  jobCounts: PropTypes.isRequired,
-  activeCounts: PropTypes.isRequired,
-  inactive: PropTypes.isRequired,
-  value: PropTypes.isRequired,
-  setValue: PropTypes.isRequired,
-  setOperationType: PropTypes.isRequired,
+  jobCounts: PropTypes.shape({
+    assigned: PropTypes.number,
+    unassigned: PropTypes.number,
+    finished: PropTypes.number,
+  }).isRequired,
+  activeCounts: PropTypes.objectOf(PropTypes.number).isRequired,
+  inactive: PropTypes.arrayOf(PropTypes.string).isRequired,
+  value: PropTypes.string.isRequired,
+  setValue: PropTypes.func.isRequired,
+  // setOperationType: PropTypes.func.isRequired,
 };
 
 export default SideBar;
