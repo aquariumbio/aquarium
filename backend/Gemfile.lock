@@ -1,3 +1,8 @@
+PATH
+  remote: local
+  specs:
+    mimemagic (0.3.5)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -92,7 +97,6 @@ GEM
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
     method_source (1.0.0)
-    mimemagic (0.3.5)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
     minitest (5.14.2)
@@ -216,6 +220,7 @@ DEPENDENCIES
   database_cleaner-active_record
   factory_bot_rails
   listen (~> 3.2)
+  mimemagic (= 0.3.5)!
   mysql2 (>= 0.4.4)
   puma (~> 4.1)
   rack-cors
