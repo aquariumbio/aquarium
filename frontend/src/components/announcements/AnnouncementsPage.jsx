@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef, useState, useEffect } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import API from '../../helpers/API';
@@ -26,240 +26,155 @@ import AddIcon from '@material-ui/icons/Add';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
 import Divider from '@material-ui/core/Divider';
+import CreateAnnouncementButton from './CreateAnnouncementButton';
+import CreateAnnouncementDialog from './CreateAnnouncementDialog';
+import AnnouncementsTable from './AnnouncementsTable';
 axios.defaults.baseURL = 'http://localhost:3001/api/v3/';
 
 const tableIcons = {
-  Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-  Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-  Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-  Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-  DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-  Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-  Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
-  Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
-  FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-  LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-  NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-  PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
-  ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-  Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
-  SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
-  ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
+    Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+    Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+    Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+    Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+    DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+    Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+    Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
+    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+    PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
+    ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+    Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+    SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
+    ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
+    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
 const useStyles = makeStyles((theme) => ({
-  menuButton: {
-    marginRight: theme.spacing(2),
-    color: '#00ff22',
-    fontSize: '1rem',
-  },
-  dialog: {
-    width: '100%',
-  },
-  cancelButton: {
-    marginLeft: 'auto',
-  },
-  confirmButton: {
-    color: theme.palette.common.white,
-    backgroundColor: '#065683',
-    '&:hover': {
-      backgroundColor: '#065683',
+    menuButton: {
+        marginRight: theme.spacing(2),
+        color: '#00ff22',
+        fontSize: '1rem',
     },
-    margin: theme.spacing(1),
-  },
-  closeIcon: {
-    padding: theme.spacing(1),
-    marginLeft: theme.spacing(30),
-  },
-  field: {
-    marginTop: theme.spacing(3),
-  },
+    dialog: {
+        width: '100%',
+    },
+    cancelButton: {
+        marginLeft: 'auto',
+    },
+    confirmButton: {
+        color: theme.palette.common.white,
+        backgroundColor: '#065683',
+        '&:hover': {
+            backgroundColor: '#065683',
+        },
+        margin: theme.spacing(1),
+    },
+    closeIcon: {
+        padding: theme.spacing(1),
+        marginLeft: theme.spacing(30),
+    },
+    field: {
+        marginTop: theme.spacing(3),
+    },
 }));
 
 const AnnouncementsPage = () => {
-  const classes = useStyles();
-  const [show, setShow] = useState(false);
-  const [rowData, setRowData] = useState([
-    {
-      id: 0, title: 'test', message: 'This is a test announcement', active: true,
-    },
-  ]);
-  const [error, setError] = useState(null);
-  const [title, setTitle] = useState(null);
-  const [message, setMessage] = useState(null);
-  const [active, setActive] = useState(null);
+    const classes = useStyles();
+    const [show, setShow] = useState(false);
+    const [rowData, setRowData] = useState([]);
+    const [error, setError] = useState(null);
+    const [title, setTitle] = useState(null);
+    const [message, setMessage] = useState(null);
+    const [active, setActive] = useState(null);
 
-  const currentSessionToken = sessionStorage.getItem('token');
-   
-  const handleGetAnnouncements = async () => {
-    var announcementsData = await API.announcements.getAllAnnouncements();
-    console.log(announcementsData);
-    setRowData((rowData) => [
-      ...rowData,
-      ...announcementsData
-    ])
-  }
+    const currentSessionToken = sessionStorage.getItem('token');
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+    useEffect(() => {
+        const handleGetAnnouncements = async () => {
+            var announcementsData = await API.announcements.getAllAnnouncements();
+            setRowData(announcementsData)
+        }
 
-  const handleCreateAnnouncement = () => {
-    setRowData((rowData) => [
-      ...rowData,
-      {
-        id: rowData.length + 1, title: title, message: message, active: active,
-      },
-    ]);
-  };
+        handleGetAnnouncements();
+    }, []);
 
-  const handleTitle = (event) => {
-    setTitle(event.target.value);
-  };
 
-  const handleMessage = (event) => {
-    setMessage(event.target.value);
-  };
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
-  const handleActive = (event) => {
-    setActive(event.target.value);
-  };
+    const handleCreateAnnouncement = async () => {
+        var response = await API.announcements.createAnnouncement(
+            {
+                "announcement": {
+                    "title": title,
+                    "message": message,
+                    "active": active
+                }
+            }
+        )
+        setRowData((rowData) => [
+            ...rowData,
+            {
+                id: rowData.length + 1, title: title, message: message, active: active,
+            },
+        ]);
+    };
 
-  const CustomTypography = withStyles(() => ({
-    h3: {
-      color: '#05486E',
-    },
-  }))(Typography);
+    const handleTitle = (event) => {
+        setTitle(event.target.value);
+    };
 
-  return (
-    <>
-      <MenuIcon
-        edge="start"
-        className={classes.menuButton}
-        color="inherit"
-        aria-label="menu"
-      />
-      <Paper elevation={3}>
-        <Button
-          className={classes.createButton}
-          onClick={handleGetAnnouncements}
-          variant="contained"
-        >
-          <AddIcon className={classes.addIcon} />
-          Create Announcement
-        </Button>
-        {show
-          ? (
-            <Dialog open={show} onClose={handleClose} className={classes.dialog}>
-              <form onSubmit={handleGetAnnouncements}>
-                <DialogTitle className={classes.title}>
-                  <Grid container spacing={20}>
-                    <Grid item md={6} xs={12}>
-                      <CustomTypography align="left" gutterBottom variant="h3">
-                        Create Announement
-                      </CustomTypography>
-                    </Grid>
-                    <Grid item md={6} xs={12}>
-                      <IconButton
-                        className={classes.closeIcon}
-                        onClick={handleClose}
-                        aria-label="close"
-                      >
-                        <CloseIcon />
-                      </IconButton>
-                    </Grid>
-                  </Grid>
-                </DialogTitle>
-                <DialogContent>
-                  <TextField
-                    required
-                    className={classes.field}
-                    fullWidth
-                    label="Title"
-                    name="Title"
-                    onChange={handleTitle}
-                    placeholder="Input title"
-                    variant="outlined"
-                  />
-                  <TextField
-                    required
-                    className={classes.field}
-                    fullWidth
-                    label="Message"
-                    name="Message"
-                    onChange={handleMessage}
-                    placeholder="Input message"
-                    variant="outlined"
-                  />
-                  <TextField
-                    required
-                    className={classes.field}
-                    fullWidth
-                    select
-                    SelectProps={{
-                      native: true,
-                    }}
-                    label="Active"
-                    onChange={handleActive}
-                    placeholder="Select state"
-                    variant="outlined"
-                  >
-                    <option value="true" />
-                    <option value="false" />
-                  </TextField>
-                </DialogContent>
-                <Divider />
-                <DialogActions>
-                  <Button
-                    className={classes.cancelButton}
-                    onClick={handleClose}
-                    variant="contained"
-                  >
-                    Cancel
-            </Button>
-                  <Button
-                    className={classes.confirmButton}
-                    type="submit"
-                    variant="contained"
-                  >
-                    Create
-            </Button>
-                </DialogActions>
-              </form>
-            </Dialog>
-          ) :
-          null}
+    const handleMessage = (event) => {
+        setMessage(event.target.value);
+    };
 
-        <MaterialTable
-          icons={tableIcons}
-          title="Announcements"
-          columns={[
-            { title: 'Id', field: 'id' },
-            { title: 'Title', field: 'title' },
-            { title: 'Message', field: 'message' },
-            { title: 'Active', field: 'active' },
-          ]}
-          data={rowData}
-          actions={[
-            rowData => ({
-              icon: 'delete',
-              tooltip: 'Delete User',
-              onClick: (event, rowData) => alert('You want to delete ' + rowData.message),
-            })
-          ]}
-          options={{
-            actionsColumnIndex: -1
-          }}
-        />
-      </Paper>
-    </>
-  );
+    const handleActive = (event) => {
+        console.log(event.target.value)
+        setActive(event.target.value);
+    };
+
+    const handleDelete = async (event, row) => {
+        confirm('You want to delete ' + row.title)
+        console.log(rowData.id)
+        var announcementsData = await API.announcements.deleteAnnouncement(row.id);
+        //setRowData(announcementsData)
+        setRowData(rowData.filter(item => item.id !== rowData.id));
+    }
+
+    
+
+    return (
+        <>
+            <Paper elevation={3}>
+                <CreateAnnouncementButton handleShow={handleShow} />
+                {show ?
+                    <CreateAnnouncementDialog
+                        show={show}
+                        handleClose={handleClose}
+                        handleCreateAnnouncement={handleCreateAnnouncement}
+                        handleTitle={handleTitle}
+                        handleMessage={handleMessage}
+                        handleActive={handleActive}
+                    />
+                    :
+                    null}
+
+                <AnnouncementsTable
+                rowData={rowData}
+                setRowData={setRowData}
+                />
+            </Paper>
+        </>
+    );
 };
 
 export default AnnouncementsPage;

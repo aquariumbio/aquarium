@@ -111,11 +111,11 @@ const getSpecificAnnouncement = (announcementID) => (
 
 // Post Announcements
 const createAnnouncement = (FormData) => (
+  
   axios
-    .post('/announcements/create', {
+    .post('/announcements/create', FormData, {
       params: {
         token: currentSessionToken,
-        data: FormData,
       },
     })
     .then((response) => response.data)
@@ -125,15 +125,28 @@ const createAnnouncement = (FormData) => (
 // Post Announcements
 const updateAnnouncement = (announcementID, FormData) => (
   axios
-    .post(`/announcements/${announcementID}/update`, {
+    .post(`/announcements/${announcementID}/update`, FormData, {
       params: {
         token: currentSessionToken,
-        data: FormData,
       },
     })
     .then((response) => response.data)
     .catch((error) => error)
 );
+
+// Delete Announcements
+
+const deleteAnnouncement = (announcementID) => (
+  axios
+    .post(`/announcements/${announcementID}/delete`, {}, {
+      params: {
+        token: currentSessionToken,
+      },
+    })
+    .then((response) => response.data)
+    .catch((error) => error)
+);
+
 
 const API = {
   tokens: {
@@ -144,8 +157,9 @@ const API = {
   announcements: {
     getAllAnnouncements,
     getSpecificAnnouncement,
-    create: createAnnouncement,
+    createAnnouncement,
     updateAnnouncement,
+    deleteAnnouncement
   },
 };
 
