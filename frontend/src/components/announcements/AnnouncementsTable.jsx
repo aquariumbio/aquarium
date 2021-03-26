@@ -76,6 +76,7 @@ const AnnouncementsTable = ({ rowData, setRowData }) => {
         options={{
           actionsColumnIndex: -1,
           paging: true,
+          pageSizeOptions:[5,10,15,20],
           pageSize: 10,       // make initial page size
           emptyRowsWhenPaging: true,   //to make page size fix in case of less data rows
           headerStyle: { position: 'sticky', top: 0 },
