@@ -1,8 +1,7 @@
 /* eslint-disable */
-import React, { forwardRef, useState, useEffect } from 'react';
-import announcementsAPI from '../../helpers/api/announcementsAPI.js';
-import { makeStyles } from '@material-ui/core/styles';
-import MaterialTable from 'material-table';
+import React, { forwardRef, useState } from 'react';
+import announcementsAPI from '../../helpers/api/announcementsAPI';
+import MaterialTable, { MTableBodyRow } from 'material-table';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -40,12 +39,13 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-const useStyles = makeStyles((theme) => ({
-
-}));
-
 const AnnouncementsTable = ({ rowData, setRowData }) => {
-  const classes = useStyles();
+  const [hoveringOver, setHoveringOver] = useState("");
+
+  const handleRowHover = (event, propsData) => setHoveringOver(propsData.index);
+
+  const handleRowHoverLeave = (event, propsData) => setHoveringOver("");
+
   return (
 
     <MaterialTable
@@ -58,26 +58,32 @@ const AnnouncementsTable = ({ rowData, setRowData }) => {
         { title: 'Active', field: 'active' },
       ]}
       data={rowData}
-      // actions={[
-      //   rowData => ({
-      //     icon: <DeleteOutline/>,
-      //     tooltip: 'Delete User',
-      //     onClick: (event, rowData) => handleDelete(event, rowData),
-      //   })
-      // ]}
       options={{
-        actionsColumnIndex: -1
+        actionsColumnIndex: -1,
+        paging: true,
+        pageSize: 10,       // make initial page size
+        emptyRowsWhenPaging: true,   //to make page size fix in case of less data rows
+        headerStyle: { position: 'sticky', top: 0 },
+        maxBodyHeight: '80vh',
+        minBodyHeight: '80vh',
+        rowStyle: rowData => ({
+          backgroundColor:
+            rowData.tableData.id === hoveringOver ? "#d2f8d2" : ""
+        })
       }}
-
+      localization={{ body: { editRow: { deleteText: 'Are you sure you want to delete this announcement?' } } }}
+      components={{
+        Row: props => {
+          return (
+            <MTableBodyRow
+              {...props}
+              onMouseEnter={e => handleRowHover(e, props)}
+              onMouseLeave={e => handleRowHoverLeave(e, props)}
+            />
+          );
+        }
+      }}
       editable={{
-        // onRowAdd: newData =>
-        //   new Promise((resolve, reject) => {
-        //     setTimeout(() => {
-        //       setRowData([...rowData, newData]);
-
-        //       resolve();
-        //     }, 1000)
-        //   }),
         onRowUpdate: (newData, oldData) =>
           new Promise((resolve, reject) => {
             setTimeout(async () => {
@@ -121,6 +127,6 @@ AnnouncementsTable.propTypes = {
     message: PropTypes.string,
     active: PropTypes.bool
   })).isRequired,
-  setRowData:PropTypes.func.isRequired
-}
+  setRowData: PropTypes.func.isRequired,
+};
 export default AnnouncementsTable;
