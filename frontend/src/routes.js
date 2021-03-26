@@ -6,6 +6,7 @@ import ManagerPage from './components/manager/ManagerPage';
 import SamplesPage from './components/samples/SamplesPage';
 import DeveloperPage from './components/developer/DeveloperPage';
 import DesignerPage from './components/designer/DesignerPage';
+import AnnouncementsPage from './components/announcements/AnnouncementsPage';
 
 const routes = [
   {
@@ -74,12 +75,12 @@ const routes = [
   //   exact: true,
   //   component: <div>Roles</div>
   // },
-  // {
-  //   title: "Announcements",
-  //   path: "/announcements",
-  //   exact: true,
-  //   component: <div>Announcements</div>
-  // },
+  {
+    title: 'Announcements',
+    path: '/announcements',
+    exact: true,
+    component: AnnouncementsPage,
+  },
   // {
   //   title: "Budgets",
   //   path: "/budgets",
