@@ -8,6 +8,10 @@ const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(2),
   },
+  createButton: {
+    backgroundColor: '#136390',
+    color: 'white',
+  },
 }));
 
 const CreateAnnouncementButton = ({ handleShow }) => {

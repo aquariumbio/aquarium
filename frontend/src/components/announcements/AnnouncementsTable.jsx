@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { forwardRef, useState } from 'react';
 import announcementsAPI from '../../helpers/api/announcementsAPI';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import MaterialTable, { MTableBodyRow } from 'material-table';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -40,84 +41,87 @@ const tableIcons = {
 };
 
 const AnnouncementsTable = ({ rowData, setRowData }) => {
-  const [hoveringOver, setHoveringOver] = useState("");
-
-  const handleRowHover = (event, propsData) => setHoveringOver(propsData.index);
-
-  const handleRowHoverLeave = (event, propsData) => setHoveringOver("");
+  const theme = createMuiTheme({
+    palette: {
+      primary: {
+        main: '#136390',
+      },
+      secondary: {
+        main: '#136390',
+      },
+    },
+    overrides: {
+      MuiTableRow: {
+        root: {
+          "&:hover": {
+            backgroundColor: '#d2f8d2'
+          }
+        }
+      }
+    }
+  });
 
   return (
+    <MuiThemeProvider theme={theme}>
+      <MaterialTable
+        icons={tableIcons}
+        title="Announcements"
+        columns={[
+          { title: 'Id', field: 'id', editable: 'never' },
+          { title: 'Title', field: 'title' },
+          { title: 'Message', field: 'message' },
+          { title: 'Active', field: 'active', type: 'boolean', render: rowData => (rowData.active ? "true" : "false"), },
+        ]}
+        data={rowData}
+        options={{
+          actionsColumnIndex: -1,
+          paging: true,
+          pageSize: 10,       // make initial page size
+          emptyRowsWhenPaging: true,   //to make page size fix in case of less data rows
+          headerStyle: { position: 'sticky', top: 0 },
+          maxBodyHeight: '80vh',
+          minBodyHeight: '80vh',
+          rowStyle: {
+            height: '5rem',
+          }
+        }}
+        localization={{ body: { editRow: { deleteText: 'Are you sure you want to delete this announcement?' } } }}
+        editable={{
+          onRowUpdate: (newData, oldData) =>
+            new Promise((resolve, reject) => {
+              setTimeout(async () => {
+                const response = await announcementsAPI.updateAnnouncement(oldData.id, newData);
+                if (response.announcement !== null) {
+                  const dataUpdate = [...rowData];
+                  const index = oldData.tableData.id;
+                  dataUpdate[index] = newData;
+                  setRowData([...dataUpdate]);
+                } else {
+                  alert("There was an error updating Announcement #" + oldData.id + " " + oldData.title)
+                }
+                resolve();
+              }, 1000)
 
-    <MaterialTable
-      icons={tableIcons}
-      title="Announcements"
-      columns={[
-        { title: 'Id', field: 'id' },
-        { title: 'Title', field: 'title' },
-        { title: 'Message', field: 'message' },
-        { title: 'Active', field: 'active' },
-      ]}
-      data={rowData}
-      options={{
-        actionsColumnIndex: -1,
-        paging: true,
-        pageSize: 10,       // make initial page size
-        emptyRowsWhenPaging: true,   //to make page size fix in case of less data rows
-        headerStyle: { position: 'sticky', top: 0 },
-        maxBodyHeight: '80vh',
-        minBodyHeight: '80vh',
-        rowStyle: rowData => ({
-          backgroundColor:
-            rowData.tableData.id === hoveringOver ? "#d2f8d2" : ""
-        })
-      }}
-      localization={{ body: { editRow: { deleteText: 'Are you sure you want to delete this announcement?' } } }}
-      components={{
-        Row: props => {
-          return (
-            <MTableBodyRow
-              {...props}
-              onMouseEnter={e => handleRowHover(e, props)}
-              onMouseLeave={e => handleRowHoverLeave(e, props)}
-            />
-          );
-        }
-      }}
-      editable={{
-        onRowUpdate: (newData, oldData) =>
-          new Promise((resolve, reject) => {
-            setTimeout(async () => {
-              const response = await announcementsAPI.updateAnnouncement(oldData.id, newData);
-              if (response.announcement !== null) {
-                const dataUpdate = [...rowData];
-                const index = oldData.tableData.id;
-                dataUpdate[index] = newData;
-                setRowData([...dataUpdate]);
-              } else {
-                alert("There was an error updating Announcement #" + oldData.id + " " + oldData.title)
-              }
-              resolve();
-            }, 1000)
+            }),
+          onRowDelete: oldData =>
+            new Promise((resolve, reject) => {
 
-          }),
-        onRowDelete: oldData =>
-          new Promise((resolve, reject) => {
-
-            setTimeout(async () => {
-              const response = await announcementsAPI.deleteAnnouncement(oldData.id);
-              if (response.message == "Announcement deleted") {
-                const dataDelete = [...rowData];
-                const index = oldData.tableData.id;
-                dataDelete.splice(index, 1);
-                setRowData([...dataDelete]);
-              } else {
-                alert("There was an error deleting Announcement #" + oldData.id + " " + oldData.title)
-              }
-              resolve()
-            }, 1000)
-          }),
-      }}
-    />
+              setTimeout(async () => {
+                const response = await announcementsAPI.deleteAnnouncement(oldData.id);
+                if (response.message == "Announcement deleted") {
+                  const dataDelete = [...rowData];
+                  const index = oldData.tableData.id;
+                  dataDelete.splice(index, 1);
+                  setRowData([...dataDelete]);
+                } else {
+                  alert("There was an error deleting Announcement #" + oldData.id + " " + oldData.title)
+                }
+                resolve()
+              }, 1000)
+            }),
+        }}
+      />
+    </MuiThemeProvider>
   );
 };
 

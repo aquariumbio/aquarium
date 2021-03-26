@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
   checkBoxGrid: {
     textAlign: 'center',
   },
+  buttonBox: {
+    textAlign: 'center',
+  },
 }));
 
 const CreateAnnouncementDialog = ({
@@ -94,7 +97,7 @@ const CreateAnnouncementDialog = ({
             labelPlacement="start"
           />
         </Box>
-        <Box>
+        <Box className={classes.buttonBox}>
           <CreateAnnouncementButton />
         </Box>
       </Box>
