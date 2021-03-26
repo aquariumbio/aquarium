@@ -41,7 +41,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     sample_types: [
       #       {
@@ -118,21 +118,21 @@ module Api
       # @param token [String] a token
       def index
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get list
         list = SampleType.find_all
-        render json: { sample_types: nil,  }.to_json, status: :ok and return if list.length == 0
+        render json: { sample_types: [] }.to_json, status: :ok and return if list.length == 0
 
         # Get details of first sample type in list
         details = SampleType.details(list[0].id)
-        details = details.update({ id: list[0].id, name: list[0].name })
+        details = details.update({ id: list[0].id, name: list[0].name, description: list[0].description })
 
         render json: {
           sample_types: list,
           first: details
-         }.to_json, status: :ok
+        }.to_json, status: :ok
       end
 
       # Returns details for a specific sample type.
@@ -144,7 +144,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     sample_type: {
       #       id: <sample_type_id>,
@@ -211,14 +211,14 @@ module Api
       # @param id [Int] the id of the sample type
       def show
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         id = Input.int(params[:id])
 
         # Get sample type
         sample_type = SampleType.find_id(id)
-        render json: { sample_type: nil  }.to_json, status: :ok and return if !sample_type
+        render json: { sample_type: nil }.to_json, status: :not_found and return if !sample_type
 
         # Get details for sample type
         details = SampleType.details(id)
@@ -232,7 +232,7 @@ module Api
       # Create a new sample type.
       #
       # <b>API Call:</b>
-      #   GET: /api/v3/sample_types/create
+      #   POST: /api/v3/sample_types/create
       #   {
       #     token: <token>,
       #     sample_type: {
@@ -258,7 +258,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 201
+      #   STATUS_CODE: 201
       #   {
       #     sample_type: {
       #       id: <sample_type_id>,
@@ -274,7 +274,7 @@ module Api
       # @param sample_type [Hash] the sample_type
       def create
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Read sample type parameter
@@ -294,10 +294,10 @@ module Api
       # @param sample_type [Hash] the sample type
       # @return the sample type
 
-      # Update an sample_type.
+      # Update a sample_type.
       #
       # <b>API Call:</b>
-      #   GET: /api/v3/sample_types/<id>/update
+      #   POST: /api/v3/sample_types/<id>/update
       #   {
       #     token: <token>
       #     id: <sample_type_id>,
@@ -326,7 +326,7 @@ module Api
       #   }
       #
       # <b>API Return Success:</b>
-      #   STATUS CODE: 200
+      #   STATUS_CODE: 200
       #   {
       #     sample_type: {
       #       id: <sample_type_id>,
@@ -343,13 +343,13 @@ module Api
       # @param sample_type [Hash] the sample_type
       def update
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get sample type
         id = Input.int(params[:id])
         sample_type = SampleType.find_id(id)
-        render json: { sample_type: nil }.to_json, status: :ok and return if !sample_type
+        render json: { sample_type: nil }.to_json, status: :not_found and return if !sample_type
 
         # Read sample type parameter
         params_sample_type = params[:sample_type] || {}
@@ -380,23 +380,22 @@ module Api
       # @param id [Int] the id of the sample type
       def delete
         # Check for admin permissions
-        status, response = check_token_for_permission(1)
+        status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         id = Input.int(params[:id])
 
         # Get sample type
         sample = SampleType.find_id(id)
-        render json: { sample_type: nil  }.to_json, status: :ok and return if !sample
+        render json: { sample_type: nil }.to_json, status: :not_found and return if !sample
 
         # Delete sample type and related items that do not have foreign keys
         sample.delete_sample_type
 
         render json: {
           message: "Sample type deleted"
-         }.to_json, status: :ok
+        }.to_json, status: :ok
       end
-
     end
   end
 end

@@ -5,6 +5,7 @@ FROM cypress/base:14.15.0
 WORKDIR /app
 
 COPY package.json package-lock.json ./
+RUN npm install
 
 # by setting CI environment variable we switch the Cypress install messages
 # to small "started / finished" and avoid 1000s of lines of progress messages

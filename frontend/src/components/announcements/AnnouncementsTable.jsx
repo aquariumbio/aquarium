@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { forwardRef, useState, useEffect } from 'react';
-import API from '../../helpers/API';
+import announcementsAPI from '../../helpers/api/announcementsAPI.js';
 import { makeStyles } from '@material-ui/core/styles';
 import MaterialTable from 'material-table';
 import AddBox from '@material-ui/icons/AddBox';
@@ -81,7 +81,7 @@ const AnnouncementsTable = ({ rowData, setRowData }) => {
         onRowUpdate: (newData, oldData) =>
           new Promise((resolve, reject) => {
             setTimeout(async () => {
-              const response = await API.announcements.updateAnnouncement(oldData.id, newData);
+              const response = await announcementsAPI.updateAnnouncement(oldData.id, newData);
               if (response.announcement !== null) {
                 const dataUpdate = [...rowData];
                 const index = oldData.tableData.id;
@@ -98,7 +98,7 @@ const AnnouncementsTable = ({ rowData, setRowData }) => {
           new Promise((resolve, reject) => {
 
             setTimeout(async () => {
-              const response = await API.announcements.deleteAnnouncement(oldData.id);
+              const response = await announcementsAPI.deleteAnnouncement(oldData.id);
               if (response.message == "Announcement deleted") {
                 const dataDelete = [...rowData];
                 const index = oldData.tableData.id;

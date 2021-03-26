@@ -1,13 +1,11 @@
 // TODO: ADD PROP-TYPES
 /* eslint-disable react/prop-types */
 import React from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { withRouter } from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
-import DropdownMenu from '../shared/DropdownMenu';
 import UserMenu from './UserMenu';
 import LeftHamburgerMenu from './LeftHamburgerMenu';
 
@@ -32,7 +30,6 @@ const mainNavItems = [
     menuTitle: 'DEVELOPER',
     pageURL: '/developer',
   },
-
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -54,7 +51,6 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
     color: '#fff',
     justifyContent: 'flex-end',
-
   },
   logo: {
     color: '#00ff22',
@@ -62,66 +58,52 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 'bold',
     height: '20pt',
     lineHeight: '20pt',
-
   },
 }));
 
 const Header = (props) => {
   const { history } = props;
   const classes = useStyles();
-  const theme = useTheme();
-  const isMediumScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleButtonClick = (pageURL) => {
     history.push(pageURL);
   };
 
   return (
-    <div>
-      <AppBar position="static" className={classes.root}>
-        <Toolbar>
-          <LeftHamburgerMenu />
+    <AppBar position="static" className={classes.root} component="nav">
+      <Toolbar>
+        <LeftHamburgerMenu />
 
-          <IconButton
-            edge="start"
-            className={classes.logo}
-            color="inherit"
-            aria-label="home"
-            onClick={() => handleButtonClick('/')}
-          >
-            AQUARIUM
-          </IconButton>
+        <IconButton
+          edge="start"
+          className={classes.logo}
+          color="inherit"
+          aria-label="home"
+          onClick={() => handleButtonClick('/')}
+        >
+          AQUARIUM
+        </IconButton>
 
-          {isMediumScreen ? (
-            <div className={classes.headerOptions}>
-
-              <DropdownMenu className={classes.menuButton} menuItems={mainNavItems} />
-              <UserMenu />
-            </div>
-          ) : (
-            <div className={classes.headerOptions}>
-              {mainNavItems.map((menuItem) => {
-                const { menuTitle, pageURL } = menuItem;
-                return (
-                  <IconButton
-                    key={menuTitle}
-                    edge="start"
-                    className={classes.menuButton}
-                    color="inherit"
-                    aria-label={menuItem}
-                    onClick={() => handleButtonClick(pageURL)}
-                  >
-                    {menuTitle}
-                  </IconButton>
-
-                );
-              })}
-              <UserMenu />
-            </div>
-          )}
-        </Toolbar>
-      </AppBar>
-    </div>
+        <div className={classes.headerOptions}>
+          {mainNavItems.map((menuItem) => {
+            const { menuTitle, pageURL } = menuItem;
+            return (
+              <IconButton
+                key={menuTitle}
+                edge="start"
+                className={classes.menuButton}
+                color="inherit"
+                aria-label={menuItem}
+                onClick={() => handleButtonClick(pageURL)}
+              >
+                {menuTitle}
+              </IconButton>
+            );
+          })}
+          <UserMenu />
+        </div>
+      </Toolbar>
+    </AppBar>
   );
 };
 

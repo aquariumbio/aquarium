@@ -2,7 +2,7 @@
 import React, { forwardRef, useState, useEffect } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import API from '../../helpers/API';
+import announcementsAPI from '../../helpers/api/announcementsAPI.js';
 import MenuIcon from '@material-ui/icons/Menu';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import MaterialTable from 'material-table';
@@ -100,7 +100,7 @@ const AnnouncementsPage = () => {
 
     useEffect(() => {
         const handleGetAnnouncements = async () => {
-            var announcementsData = await API.announcements.getAllAnnouncements();
+            var announcementsData = await announcementsAPI.getAllAnnouncements();
             setRowData(announcementsData)
         }
 
@@ -112,7 +112,7 @@ const AnnouncementsPage = () => {
     const handleShow = () => setShow(true);
 
     const handleCreateAnnouncement = async () => {
-        var response = await API.announcements.createAnnouncement(
+        var response = await announcementsAPI.createAnnouncement(
             {
                 "announcement": {
                     "title": title,
@@ -145,7 +145,7 @@ const AnnouncementsPage = () => {
     const handleDelete = async (event, row) => {
         confirm('You want to delete ' + row.title)
         console.log(rowData.id)
-        var announcementsData = await API.announcements.deleteAnnouncement(row.id);
+        var announcementsData = await announcementsAPI.deleteAnnouncement(row.id);
         //setRowData(announcementsData)
         setRowData(rowData.filter(item => item.id !== rowData.id));
     }

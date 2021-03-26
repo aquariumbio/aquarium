@@ -7,7 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Divider from '@material-ui/core/Divider';
-import API from '../../helpers/API';
+import tokensAPI from '../../helpers/api/tokensAPI';
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -26,14 +26,13 @@ const UserMenu = (props) => {
 
   const handleSignOut = (event) => {
     event.preventDefault();
-    API.signOut(setLogOutError);
+    tokensAPI.signOut(setLogOutError);
   };
 
   const handleMenuClick = (pageURL) => {
     history.push(pageURL);
     setAnchorEl(null);
   };
-
   return (
     <>
       <IconButton
@@ -61,16 +60,10 @@ const UserMenu = (props) => {
         open={!!anchorEl}
         onClose={() => setAnchorEl(null)}
       >
-        <MenuItem onClick={() => handleMenuClick('/users')}>
-          Profile
-        </MenuItem>
-        <MenuItem onClick={() => handleMenuClick('/invoices')}>
-          Invoices
-        </MenuItem>
+        <MenuItem onClick={() => handleMenuClick('/profile')}>Profile</MenuItem>
+        <MenuItem onClick={() => handleMenuClick('/invoices')}>Invoices</MenuItem>
         <Divider />
-        <MenuItem onClick={handleSignOut}>
-          Sign Out
-        </MenuItem>
+        <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
       </Menu>
     </>
   );

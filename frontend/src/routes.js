@@ -140,7 +140,6 @@ const routes = [
     path: '/',
     forceRefresh: true,
     component: Home,
-
   },
 ];
 

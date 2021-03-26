@@ -10,8 +10,9 @@
 //
 //
 // -- This is a parent command --
+
 Cypress.Commands.add('login', () => {
-  const login = 'marikotest';
+  const login = 'neptune';
   const password = 'aquarium';
 
   cy.request({
@@ -19,11 +20,12 @@ Cypress.Commands.add('login', () => {
     url: `http://localhost:3001/api/v3/token/create?login=${login}&password=${password}`,
   })
     .then((resp) => {
-      window.sessionStorage.setItem('token', resp.body.data.token);
+      window.localStorage.setItem('token', resp.body.token);
     });
 });
+
 Cypress.Commands.add('logout', () => {
-  const token = window.sessionStorage.getItem('token');
+  const token = window.localStorage.getItem('token');
 
   cy.request({
     method: 'POST',
@@ -31,7 +33,7 @@ Cypress.Commands.add('logout', () => {
   })
     // eslint-disable-next-line no-unused-vars
     .then((resp) => {
-      window.sessionStorage.clear();
+      window.localStorage.clear();
     });
 });
 //

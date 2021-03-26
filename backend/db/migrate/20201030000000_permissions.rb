@@ -1,6 +1,5 @@
 # typed: false
 class Permissions < ActiveRecord::Migration[4.2]
-
   def change
     add_column :users, :permission_ids, :string, :default => "."
 
@@ -13,7 +12,7 @@ class Permissions < ActiveRecord::Migration[4.2]
     end
 
     change_column_null :permissions, :name, false
-    add_index :permissions, :name, unique: true     if !index_exists?(:permissions, :name)
+    add_index :permissions, :name, unique: true if !index_exists?(:permissions, :name)
 
     # POPULATE ROLES TABLE
     execute <<-SQL
@@ -41,5 +40,4 @@ class Permissions < ActiveRecord::Migration[4.2]
     add_index       :user_tokens, :user_id                     if !index_exists?(:plans, :budget_id)
     add_foreign_key :user_tokens, :users, on_delete: :cascade  rescue nil
   end
-
 end

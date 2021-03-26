@@ -1,6 +1,6 @@
 describe('/login', () => {
   beforeEach(() => {
-    window.sessionStorage.clear();
+    window.localStorage.clear();
     cy.visit('/login');
   });
 
@@ -19,35 +19,34 @@ describe('/login', () => {
   });
 
   it('requires valid username and password', () => {
-    cy.get('[data-test=username]').type('marikoa');
+    cy.get('[data-test=username]').type('wantthistofail');
     cy.get('[data-test=password]').type('invalid');
-    cy.get('form').contains('SIGN IN').click();
-    cy.get('p').should('contain', 'Invalid login/password combination');
+    cy.get('form').contains('SIGN IN').click().then(() => {
+      cy.get('p').should('contain', 'Invalid login/password combination');
+    });
   });
 
   it('navigates to / on successful login', () => {
     cy.window()
       .then((win) => {
-      // eslint-disable-next-line no-unused-expressions
-        expect(win.sessionStorage.token).to.be.undefined;
+        expect(win.localStorage.token).to.be.undefined;
       });
 
-    cy.get('[data-test=username]').type('marikotest');
+    cy.get('[data-test=username]').type('neptune ');
     cy.get('[data-test=password]').type('aquarium');
     cy.get('form').contains('SIGN IN').click();
-    cy.url().should('eq', `${Cypress.env('baseUrl')}/`);
+    cy.url().should('eq', `${Cypress.config().baseUrl}/`);
 
     let token;
 
     cy.window()
       .then((win) => {
-        token = win.sessionStorage.token;
+        token = win.localStorage.token;
       })
       .then(() => {
-        // eslint-disable-next-line no-unused-expressions
         expect(token).to.exist;
       });
   });
 
-  // TODO: test sessionStorage for token after login
+  // TODO: test localStorage for token after login
 });

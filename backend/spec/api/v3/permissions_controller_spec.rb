@@ -2,24 +2,24 @@ require 'rails_helper'
 
 RSpec.describe Api::V3::PermissionsController, type: :request do
   describe 'api' do
-
     # Sign in users
     before :each do
+      @create_url = "/api/v3/token/create"
       @token_1 = []
       @token_2 = []
       @token_3 = []
 
-      post "/api/v3/token/create?login=user_1&password=password"
-      resp = JSON.parse(response.body)
-      @token_1 << resp["token"]
+      post "#{@create_url}?login=user_1&password=password"
+      response_body = JSON.parse(response.body)
+      @token_1 << response_body["token"]
 
-      post "/api/v3/token/create?login=user_2&password=password"
-      resp = JSON.parse(response.body)
-      @token_2 << resp["token"]
+      post "#{@create_url}?login=user_2&password=password"
+      response_body = JSON.parse(response.body)
+      @token_2 << response_body["token"]
 
-      post "/api/v3/token/create?login=user_3&password=password"
-      resp = JSON.parse(response.body)
-      @token_3 << resp["token"]
+      post "#{@create_url}?login=user_3&password=password"
+      response_body = JSON.parse(response.body)
+      @token_3 << response_body["token"]
     end
 
     # Invalid get roles
@@ -44,6 +44,5 @@ RSpec.describe Api::V3::PermissionsController, type: :request do
       get "/api/v3/permissions?token=#{@token_2[0]}"
       expect(response).to have_http_status 200
     end
-
   end
 end
