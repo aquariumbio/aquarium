@@ -119,16 +119,16 @@ class User < ActiveRecord::Base
 
   def up_to_date
 
-    return false if parameters.empty?
-
-    email  = parameters.find { |p| p.key == 'email' && p.value && !p.value.empty? }
-    phone  = parameters.find { |p| p.key == 'phone' && p.value && !p.value.empty? }
-    # TODO: remove lab name specific variables and parameter
-    lab = parameters.find { |p| p.key == 'lab_agreement' && p.value && p.value == 'true' }
-    aq = parameters.find { |p| p.key == 'aquarium' && p.value && p.value == 'true' }
-
-    !email.nil? && !phone.nil? && !lab.nil? && !aq.nil?
-
+#     return false if parameters.empty?
+#
+#     email  = parameters.find { |p| p.key == 'email' && p.value && !p.value.empty? }
+#     phone  = parameters.find { |p| p.key == 'phone' && p.value && !p.value.empty? }
+#     # TODO: remove lab name specific variables and parameter
+#     lab = parameters.find { |p| p.key == 'lab_agreement' && p.value && p.value == 'true' }
+#     aq = parameters.find { |p| p.key == 'aquarium' && p.value && p.value == 'true' }
+#
+#     !email.nil? && !phone.nil? && !lab.nil? && !aq.nil?
+    true
   end
 
   def email_address

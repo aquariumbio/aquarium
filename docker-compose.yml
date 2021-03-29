@@ -14,7 +14,7 @@ services:
       S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY}
       S3_REGION: ${S3_REGION}
       SECRET_KEY_BASE: ${SECRET_KEY_BASE}
-      TECH_DASHBOARD: ${TECH_DASHBOARD}  
+      TECH_DASHBOARD: ${TECH_DASHBOARD}
       TZ: ${TIMEZONE}
     volumes:
       - ./db:/aquarium/db
@@ -76,12 +76,12 @@ services:
     environment:
       MINIO_ACCESS_KEY: ${S3_ID}
       MINIO_SECRET_KEY: ${S3_SECRET_ACCESS_KEY}
-      MINIO_REGION: ${S3_REGION} 
+      MINIO_REGION: ${S3_REGION}
     networks:
       - aquarium_net
 
   createbucket:
-    image: minio/mc:latest
+    image: minio/mc:RELEASE.2020-11-25T23-04-07Z
     depends_on:
       - s3
     entrypoint: >

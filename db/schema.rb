@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200910000000) do
+ActiveRecord::Schema.define(version: 20210301000000) do
 
   create_table "account_logs", force: :cascade do |t|
     t.integer  "row1",       limit: 4
@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(version: 20200910000000) do
   end
 
   add_index "account_logs", ["row1"], name: "index_account_logs_on_row1", using: :btree
-  add_index "account_logs", ["row2"], name: "index_account_logs_on_row2", using: :btree
+  add_index "account_logs", ["row2"], name: "fk_rails_8e6656e8a4", using: :btree
   add_index "account_logs", ["user_id"], name: "index_account_log_associations_on_user_id", using: :btree
 
   create_table "accounts", force: :cascade do |t|
@@ -118,6 +118,7 @@ ActiveRecord::Schema.define(version: 20200910000000) do
   end
 
   add_index "field_types", ["parent_class", "parent_id"], name: "index_field_types_on_parent_class_and_parent_id", using: :btree
+  add_index "field_types", ["parent_id"], name: "index_field_types_on_sample_type_id", using: :btree
 
   create_table "field_values", force: :cascade do |t|
     t.integer  "parent_id",               limit: 4
@@ -140,12 +141,32 @@ ActiveRecord::Schema.define(version: 20200910000000) do
   add_index "field_values", ["child_sample_id"], name: "fk_rails_e04e5b0273", using: :btree
   add_index "field_values", ["field_type_id"], name: "index_field_values_on_field_type_id", using: :btree
   add_index "field_values", ["parent_class", "parent_id"], name: "index_field_values_on_parent_class_and_parent_id", using: :btree
+  add_index "field_values", ["parent_id"], name: "index_field_values_on_sample_id", using: :btree
+
+  create_table "folder_contents", force: :cascade do |t|
+    t.integer  "sample_id",   limit: 4
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+    t.integer  "folder_id",   limit: 4
+    t.integer  "workflow_id", limit: 4
+  end
+
+  create_table "folders", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.integer  "user_id",    limit: 4
+    t.integer  "parent_id",  limit: 4
+  end
 
   create_table "groups", force: :cascade do |t|
     t.string   "name",        limit: 255
     t.string   "description", limit: 255
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+  end
+
+  create_table "id_strings", force: :cascade do |t|
   end
 
   create_table "invoices", force: :cascade do |t|
@@ -313,6 +334,15 @@ ActiveRecord::Schema.define(version: 20200910000000) do
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
     t.text     "description", limit: 65535
+  end
+
+  create_table "parameters_bak", id: false, force: :cascade do |t|
+    t.integer  "id",          limit: 4,     default: 0, null: false
+    t.string   "key",         limit: 255
+    t.string   "value",       limit: 255
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.text     "description", limit: 65535
     t.integer  "user_id",     limit: 4
   end
 
@@ -327,6 +357,15 @@ ActiveRecord::Schema.define(version: 20200910000000) do
 
   add_index "part_associations", ["collection_id", "row", "column"], name: "index_part_associations_on_collection_id_and_row_and_column", unique: true, using: :btree
   add_index "part_associations", ["part_id"], name: "index_part_associations_on_part_id", using: :btree
+
+  create_table "permissions", force: :cascade do |t|
+    t.string   "name",       limit: 255, default: "", null: false
+    t.integer  "sort",       limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "permissions", ["name"], name: "index_permissions_on_name", unique: true, using: :btree
 
   create_table "plan_associations", force: :cascade do |t|
     t.integer  "plan_id",      limit: 4
@@ -411,6 +450,27 @@ ActiveRecord::Schema.define(version: 20200910000000) do
   add_index "user_budget_associations", ["budget_id"], name: "index_user_budget_associations_on_budget_id", using: :btree
   add_index "user_budget_associations", ["user_id"], name: "index_user_budget_associations_on_user_id", using: :btree
 
+  create_table "user_profiles", force: :cascade do |t|
+    t.string   "key",        limit: 255
+    t.string   "value",      limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.integer  "user_id",    limit: 4
+  end
+
+  add_index "user_profiles", ["user_id"], name: "index_user_profiles_on_user_id", using: :btree
+
+  create_table "user_tokens", id: false, force: :cascade do |t|
+    t.integer  "user_id",    limit: 4,   null: false
+    t.string   "token",      limit: 128, null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.string   "ip",         limit: 18,  null: false
+    t.datetime "timenow",                null: false
+  end
+
+  add_index "user_tokens", ["user_id"], name: "fk_rails_e0a9c15abb", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "name",            limit: 255
     t.string   "login",           limit: 255
@@ -420,6 +480,7 @@ ActiveRecord::Schema.define(version: 20200910000000) do
     t.string   "remember_token",  limit: 255
     t.boolean  "admin",                       default: false
     t.string   "key",             limit: 255
+    t.string   "permission_ids",  limit: 255, default: "."
   end
 
   add_index "users", ["login"], name: "index_users_on_login", unique: true, using: :btree
@@ -445,10 +506,28 @@ ActiveRecord::Schema.define(version: 20200910000000) do
   end
 
   create_table "view_job_operation_types", id: false, force: :cascade do |t|
-    t.integer "job_id",            limit: 4
-    t.integer "operation_type_id", limit: 4
-    t.string  "name",              limit: 255
-    t.string  "category",          limit: 255
+    t.integer  "job_id",            limit: 4,   default: 0, null: false
+    t.integer  "pc",                limit: 4
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.integer  "operation_type_id", limit: 4,   default: 0, null: false
+    t.string   "name",              limit: 255
+    t.string   "category",          limit: 255
+    t.boolean  "deployed"
+    t.string   "id",                limit: 23
+  end
+
+  create_table "view_users", id: false, force: :cascade do |t|
+    t.integer "id",                  limit: 4,   default: 0,   null: false
+    t.string  "name",                limit: 255
+    t.string  "login",               limit: 255
+    t.string  "permission_ids",      limit: 255, default: "."
+    t.string  "email",               limit: 255
+    t.string  "phone",               limit: 255
+    t.string  "lab_agreement",       limit: 255
+    t.string  "aquarium_agreement",  limit: 255
+    t.string  "new_samples_private", limit: 255
+    t.string  "lab_name",            limit: 255
   end
 
   create_table "wires", force: :cascade do |t|
@@ -524,6 +603,8 @@ ActiveRecord::Schema.define(version: 20200910000000) do
   add_foreign_key "uploads", "jobs", on_delete: :cascade
   add_foreign_key "user_budget_associations", "budgets", on_delete: :cascade
   add_foreign_key "user_budget_associations", "users", on_delete: :cascade
+  add_foreign_key "user_profiles", "users", on_delete: :cascade
+  add_foreign_key "user_tokens", "users", on_delete: :cascade
   add_foreign_key "wires", "field_values", column: "from_id", on_delete: :cascade
   add_foreign_key "wires", "field_values", column: "to_id", on_delete: :cascade
 end
