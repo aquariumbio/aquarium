@@ -1,0 +1,56 @@
+NOTES: To run independently (instead of pointing to a v3 database...)
+
+1. run the v3 migrations
+----------
+- this will not have to be done if we start with a v3 database
+----------
+
+  docker-compose exec app rake db:migrate
+
+
+2. set user.permission_ids (used in v3) to reflect the groups (used in v2)
+----------
+- admin group = admin permissions (OK to hardcode here as '1')
+- technicians group = run  (OK to hardcode here as '3')
+- retired group = retired  (OK to hardcode here as '6')
+----------
+- IMPORTANT: in v2_hybrid when we manage these 3 groups we also need to sync those changes with the user.permission_ids field
+----------
+- NOTE: we want to set up the equivalent as a migration file (probably without hardcoded numbers) when a user upgrades from v2 to v3
+----------
+
+  update users set permissions = '.'
+
+  ;
+
+  update users set permission_ids = concat(permission_ids,'1.') where id in (
+    select user_id from memberships m
+    inner join groups g on g.id = m.group_id
+    where g.name = 'admin'
+  )
+
+  ;
+
+  update users set permission_ids = concat(permission_ids,'3.') where id in (
+    select user_id from memberships m
+    inner join groups g on g.id = m.group_id
+    where g.name = 'technicians'
+  )
+
+  ;
+
+  update users set permission_ids = concat(permission_ids,'6.') where id in (
+    select user_id from memberships m
+    inner join groups g on g.id = m.group_id
+    where g.name = 'retired'
+  )
+
+
+3. We are ignoring the user initialization requirements
+   (they are inconsequential for internal testing/development of the primary app functionality)
+----------
+- add an email address
+- add a phone number
+- agree to the lab agreement
+- agree to the aquarium agreement
+----------
