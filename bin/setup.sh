@@ -67,6 +67,7 @@ _create_compose_config() {
     _set_variable 'FRONTEND_TEST_PORT' '3001' $env_file    
     _set_variable 'BACKEND_TEST_PORT' '3011' $env_file
     _set_variable 'DB_PUBLIC_PORT' '3307' $env_file
+    _set_variable 'DB_TEST_PUBLIC_PORT' '3317' $env_file
 }
 
 _create_config() {
