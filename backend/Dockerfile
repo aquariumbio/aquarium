@@ -49,11 +49,12 @@ FROM ruby:${RUBY_VERSION}-alpine${ALPINE_VERSION}} AS aquarium-backend
 
 RUN apk add --update --no-cache \
     mysql-client \
+    netcat-openbsd \
     tzdata \
  && mkdir /aquarium \
  && gem update --system
 
- WORKDIR /aquarium
+WORKDIR /aquarium
 
 # pull gems
 COPY --from=backend-builder /usr/local/bundle/ /usr/local/bundle/
@@ -62,6 +63,9 @@ ENV PATH $GEM_HOME/bin:$GEM_HOME/gems/bin:$PATH
 
 # pull app
 COPY --from=backend-builder /aquarium /aquarium
+
+# Make wait-for executable
+RUN ["chmod", "+x", "/aquarium/wait-for"]
 
 ENV RAILS_ENV=production
 ENV RACK_ENV=production
