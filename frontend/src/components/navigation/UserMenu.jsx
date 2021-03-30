@@ -7,10 +7,8 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
 import tokensAPI from '../../helpers/api/tokensAPI';
-import utils from '../../helpers/utils';
-import greetings from '../../assests/greetings';
+import UserGreeting from './UserGreeting';
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -19,13 +17,6 @@ const useStyles = makeStyles((theme) => ({
     color: '#000',
   },
 }));
-
-const UserGreeting = () => {
-  const userName = (localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')).name) || 'User';
-  const greeting = utils.randObjVal(greetings);
-
-  return <Typography style={{ fontSize: '16px' }}>{greeting} {userName}!</Typography>;
-};
 
 const UserMenu = (props) => {
   const { history } = props;

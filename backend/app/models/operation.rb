@@ -24,15 +24,33 @@ class Operation < ActiveRecord::Base
       order by o.updated_at desc
     "
     operations = Operation.find_by_sql [sql, category, type, status]
+
+    # Loop on operations to get details
+    # NOTE: This is a big N+1 problem
+    results = []
+    operations.each do |o|
+      operation_id = o.id
+
+      # get outputs and inputs for operation
+      outputs, inputs = FieldValue.outputs_inputs(operation_id)
+
+      # get data_associations for operation
+      data_associations = DataAssociation.data_associations(operation_id)
+
+      results << {id: o.id, plan_id: o.plan_id, name: o.name, status: o.status, updated_at: o.updated_at, inputs: inputs, outputs: outputs, data_associations: data_associations}
+    end
+    results
   end
 
   def self.set_status_for_ids(status, ids)
-    sql = "update operations set status = '#{status}' where id in ( #{ids.join(',')} )"
+    set = sanitize_sql(['status = ?', status])
+    sql = "update operations set #{set} where id in ( #{ids.join(',')} )"
     Operation.connection.execute sql
   end
 
   def self.set_status_for_job(status, job_id)
-    sql = "update operations set status = '#{status}' where id in ( select operation_id from job_associations where job_id = #{job_id} )"
+    set = sanitize_sql(['status = ?', status])
+    sql = "update operations set #{set} where id in ( select operation_id from job_associations where job_id = #{job_id} )"
     Operation.connection.execute sql
   end
 
