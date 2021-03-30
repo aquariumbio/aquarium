@@ -1,0 +1,28 @@
+version: "3.5"
+services:
+  backend:
+    build:
+      context: ./backend
+      target: aquarium-backend
+    image: aquarium-backend:${AQUARIUM_VERSION:-edge}
+    env_file: 
+      - .env_files/production/backend
+      - .env_files/development/timezone
+
+  frontend:
+    build:
+      context: ./backend
+      target: aquarium-frontend
+    image: aquarium-frontend:${AQUARIUM_VERSION:-edge}
+    # TODO: do we need node_modules?
+
+  db:
+    env_file: 
+      - .env_files/production/db
+      - .env_files/production/timezone
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./docker/mysql_init/:/docker-entrypoint-initdb.d/:ro
+
+volumes:
+  db_data:
