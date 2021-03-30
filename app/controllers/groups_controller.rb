@@ -39,6 +39,18 @@ class GroupsController < ApplicationController
         @group.add(u)
         # flash[:notice] = "Added #{u.login} to #{@group.name}."
 
+        ### HACK TO UPDATE PERMISSIONS
+        if @group.name == "admin"
+          u.permission_ids = u.permission_ids + "#{Permission.admin_id}."
+          u.save
+        elsif @group.name == "technicians"
+          u.permission_ids = u.permission_ids + "#{Permission.run_id}."
+          u.save
+        elsif @group.name == "retired"
+          u.permission_ids = u.permission_ids + "#{Permission.retired_id}."
+          u.save
+        end
+
       end
 
     end
@@ -48,7 +60,22 @@ class GroupsController < ApplicationController
 
       m = Membership.find_by(user_id: params[:drop_user], group_id: @group.id)
 
-      m.destroy if m
+      if m
+        m.destroy
+
+        ### HACK TO UPDATE PERMISSIONS
+        u = User.find(params[:drop_user])
+        if @group.name == "admin"
+          u.permission_ids = u.permission_ids.sub(".#{Permission.admin_id}.",".")
+          u.save
+        elsif @group.name == "technicians"
+          u.permission_ids = u.permission_ids.sub(".#{Permission.run_id}.",".")
+          u.save
+        elsif @group.name == "retired"
+          u.permission_ids = u.permission_ids.sub(".#{Permission.retired_id}.",".")
+          u.save
+        end
+      end
 
     end
 
