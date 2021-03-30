@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core';
 
-// import jobsAPI from '../../helpers/api/jobs';
+// import jobsAPI from '../../helpers/api/jobsAPI';
 
 const useStyles = makeStyles((theme) => ({
   root: {

@@ -7,8 +7,8 @@ import SideBar from './SideBar';
 import ShowAssigned from './ShowAssigned';
 import ShowUnassigned from './ShowUnassigned';
 import ShowFinished from './ShowFinished';
-// import ShowByOperation from './ShowByOperation';
-import jobsAPI from '../../helpers/api/jobs';
+import ShowByOperation from './ShowByOperation';
+import jobsAPI from '../../helpers/api/jobsAPI';
 
 function TabPanel(props) {
   const {
@@ -48,7 +48,7 @@ const useStyles = makeStyles(() => ({
 const JobsPage = ({ setIsLoading, setAlertProps }) => {
   const classes = useStyles();
 
-  // const [operationType, setOperationType] = useState();
+  const [operationType, setOperationType] = useState();
   const [jobCounts, setJobCounts] = useState({});
   const [activeCounts, setActiveCounts] = useState({});
   const [inactive, setInactive] = useState([]);
@@ -77,7 +77,7 @@ const JobsPage = ({ setIsLoading, setAlertProps }) => {
         inactive={inactive}
         value={value}
         setValue={setValue}
-        // setOperationType={setOperationType}
+        setOperationType={setOperationType}
         setIsLoading={setIsLoading}
         setAlertProps={setAlertProps}
       />
@@ -97,8 +97,9 @@ const JobsPage = ({ setIsLoading, setAlertProps }) => {
           <ShowFinished setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
         </TabPanel>
 
-        {/* list === 'Operation' &&
-          <ShowByOperation setIsLoading={setIsLoading} setAlertProps={setAlertProps} /> */}
+        <TabPanel id="pending-operations-panel" value={value} index={2} page="operations">
+          <ShowByOperation setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
+        </TabPanel>
       </div>
     </div>
   );

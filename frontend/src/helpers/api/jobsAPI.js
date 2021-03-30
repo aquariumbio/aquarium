@@ -27,4 +27,9 @@ jobsAPI.getJob = (id) => axiosInstance
   .then((response) => response.data)
   .catch((error) => error);
 
+jobsAPI.getOperationsByCategoryAndStatus = (category, status = 'pending') => axiosInstance
+  .get(`/jobs/category/${category}/status=${status}`)
+  .then((response) => response.data)
+  .catch((error) => error);
+
 export default jobsAPI;
