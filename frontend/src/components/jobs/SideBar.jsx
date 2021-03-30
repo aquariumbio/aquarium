@@ -159,7 +159,7 @@ SideBar.propTypes = {
   inactive: PropTypes.arrayOf(PropTypes.string).isRequired,
   value: PropTypes.string.isRequired,
   setValue: PropTypes.func.isRequired,
-  // setOperationType: PropTypes.func.isRequired,
+  setOperationType: PropTypes.func.isRequired,
 };
 
 export default SideBar;
