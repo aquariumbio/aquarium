@@ -33,3 +33,38 @@ COPY . ./
 # include entrypoint scripts for starting Aquarium and Krill
 RUN chmod +x dev_entrypoint.sh
 ENTRYPOINT [ "/aquarium/dev_entrypoint.sh" ]
+
+
+# Temporary stage for building production environment based on development
+FROM backend-development AS backend-builder
+
+# Clean up from build
+RUN rm -rf /usr/local/bundle/cache/*.gem \
+ && find /usr/local/bundle/gems/ -name "*.c" -delete \
+ && find /usr/local/bundle/gems/ -name "*.o" -delete
+
+
+# Production stage
+FROM ruby:${RUBY_VERSION}-alpine${ALPINE_VERSION}} AS aquarium-backend
+
+RUN apk add --update --no-cache \
+    mysql-client \
+    tzdata \
+ && mkdir /aquarium \
+ && gem update --system
+
+ WORKDIR /aquarium
+
+# pull gems
+COPY --from=backend-builder /usr/local/bundle/ /usr/local/bundle/
+ENV GEM_HOME="/usr/local/bundle"
+ENV PATH $GEM_HOME/bin:$GEM_HOME/gems/bin:$PATH
+
+# pull app
+COPY --from=backend-builder /aquarium /aquarium
+
+ENV RAILS_ENV=production
+ENV RACK_ENV=production
+
+ENTRYPOINT [ "/aquarium/entrypoint.sh" ]
+CMD ["bin/rails", "s", "-b", "0.0.0.0"]
