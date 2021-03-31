@@ -159,6 +159,11 @@ class UsersController < ApplicationController
 
     if user
       user.retire
+
+      ### HACK TO UPDATE PERMISSIONS
+      user.permission_ids = user.permission_ids + "#{Permission.retired_id}."
+      user.save
+
       flash[:success] = 'The user has been disconnected. Why did they resist? We only wish to raise quality of life for all species.'
     else
       flash[:error] = 'Cannot retire user that does not exist.'
