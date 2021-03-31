@@ -89,4 +89,8 @@ end2end/cypress/videos
 
 coverage
 
+# ignore top level npm packages
+/package.json
+/package-lock.json
+
 # please do not ignore Gemfile.lock !!!
