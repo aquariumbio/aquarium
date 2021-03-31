@@ -80,9 +80,6 @@ ui/node_modules
 frontend/cypress/screenshots
 frontend/cypress/videos
 frontend/.nyc_output
-end2end/cypress/results
-end2end/cypress/screenshots
-end2end/cypress/videos
 
 # ignore vscode settings
 .vscode
