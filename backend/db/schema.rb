@@ -159,6 +159,9 @@ ActiveRecord::Schema.define(version: 2021_03_01_000000) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "id_strings", id: :string, default: "", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  end
+
   create_table "invoices", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "year"
     t.integer "month"
@@ -338,7 +341,7 @@ ActiveRecord::Schema.define(version: 2021_03_01_000000) do
   end
 
   create_table "permissions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
-    t.string "name", default: "", null: false
+    t.string "name", null: false
     t.integer "sort"
     t.datetime "created_at"
     t.datetime "updated_at"
