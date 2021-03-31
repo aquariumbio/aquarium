@@ -28,7 +28,7 @@ class Parameter < ActiveRecord::Base
   # @option parameter[:value] [String] the value
   # @option parameter[:description] [String] description - interpreted as Boolen
   # return the parameter
-  def self.create_this(parameter)
+  def self.create_from(parameter)
     # Read the parameters
     key = Input.text(parameter[:key])
     value = Input.text(parameter[:value])

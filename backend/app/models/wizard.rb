@@ -40,7 +40,7 @@ class Wizard < ActiveRecord::Base
   # @option wizard[:description] [String] the description
   # @option wizard[:specification] [String] the specification
   # return the wizard
-  def self.create_this(wizard)
+  def self.create_from(wizard)
     # Read the parameters
     name = Input.text(wizard[:name])
     description = Input.text(wizard[:description])

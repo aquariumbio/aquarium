@@ -141,7 +141,7 @@ module Api
         params_parameter = params[:parameter] || {}
 
         # Create parameter
-        parameter, errors = Parameter.create_this(params_parameter)
+        parameter, errors = Parameter.create_from(params_parameter)
         render json: { errors: errors }.to_json, status: :ok and return if !parameter
 
         render json: { parameter: parameter }.to_json, status: :created

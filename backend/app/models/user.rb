@@ -68,7 +68,7 @@ class User < ActiveRecord::Base
   # @option user[:login] [String] the login
   # @option user[:permission_ids] [Array] the permission_ids
   # return the user
-  def self.create_this(user)
+  def self.create_from(user)
     # Read the parameters
     name = Input.text_field(user[:name])
     login = Input.text_field(user[:login])
