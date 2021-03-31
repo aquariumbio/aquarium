@@ -129,10 +129,8 @@ module Api
 
         jal.save!
 
-        render json: { job_assignment_log: jal}, status: :ok
+        render json: { job_assignment_log: jal }, status: :ok
       end
     end
   end
 end
-
-

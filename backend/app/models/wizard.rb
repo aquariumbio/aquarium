@@ -2,7 +2,6 @@
 
 # wizards table
 class Wizard < ActiveRecord::Base
-
   validates :name,        presence: true
   validates :description, presence: true
 

@@ -83,7 +83,7 @@ module Api
         user_token.timenow = timenow
         user_token.save
 
-         # Return token and user with extended info
+        # Return token and user with extended info
         render json: { token: token, user: User.find_id_show_info(user.id) }.to_json, status: :ok
       end
 

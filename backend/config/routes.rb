@@ -107,5 +107,4 @@ Rails.application.routes.draw do
   post 'api/v3/jobs/:id/unassign',                              to: 'api/v3/job_assignments#unassign'
   post 'api/v3/jobs/:id/delete',                                to: 'api/v3/jobs#delete'
   post 'api/v3/jobs/:id/remove/:operation_id',                  to: 'api/v3/jobs#remove'
-
 end

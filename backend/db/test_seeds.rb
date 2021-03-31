@@ -15,7 +15,7 @@ Permission.create([
                   ])
 
 User.create([
-  {id: 1, name: 'Factory', login: 'user_1', password: 'aquarium123', permission_ids: '.1.'},
-  {id: 2, name: 'Factory', login: 'user_2', password: 'aquarium123', permission_ids: '.2.3.'},
-  {id: 3, name: 'Factory', login: 'user_3', password: 'aquarium123', permission_ids: '.1.6.'},
-])
+              { id: 1, name: 'Factory', login: 'user_1', password: 'aquarium123', permission_ids: '.1.' },
+              { id: 2, name: 'Factory', login: 'user_2', password: 'aquarium123', permission_ids: '.2.3.' },
+              { id: 3, name: 'Factory', login: 'user_3', password: 'aquarium123', permission_ids: '.1.6.' },
+            ])

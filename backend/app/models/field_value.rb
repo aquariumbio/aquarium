@@ -2,7 +2,6 @@
 
 # field_values table
 class FieldValue < ActiveRecord::Base
-
   # get outputs and inputs for an operation
   def self.outputs_inputs(operation_id)
     sql = "
@@ -24,5 +23,4 @@ class FieldValue < ActiveRecord::Base
 
     return outputs, inputs
   end
-
 end

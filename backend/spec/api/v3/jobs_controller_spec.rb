@@ -56,7 +56,6 @@ RSpec.describe Api::V3::JobsController, type: :request do
 
     # Dummy tests to replace with real tests later
     it "dummy_tests" do
-
       # Insert dummy data into database.
       # Easier to use direct SQL Query exported from development_database instead of ActiveRecord because this is just temporary for the tests
       sql = "

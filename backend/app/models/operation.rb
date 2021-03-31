@@ -2,7 +2,6 @@
 
 # operations table
 class Operation < ActiveRecord::Base
-
   def self.pending_operations(operation_ids)
     sql = "select id, operation_type_id from operations where id in ( #{operation_ids.join(',')} ) and status = 'pending'"
     operations = Operation.find_by_sql sql
@@ -37,7 +36,7 @@ class Operation < ActiveRecord::Base
       # get data_associations for operation
       data_associations = DataAssociation.data_associations(operation_id)
 
-      results << {id: o.id, plan_id: o.plan_id, name: o.name, status: o.status, updated_at: o.updated_at, inputs: inputs, outputs: outputs, data_associations: data_associations}
+      results << { id: o.id, plan_id: o.plan_id, name: o.name, status: o.status, updated_at: o.updated_at, inputs: inputs, outputs: outputs, data_associations: data_associations }
     end
     results
   end
@@ -63,5 +62,4 @@ class Operation < ActiveRecord::Base
     "
     operation = (Operation.find_by_sql sql)[0]
   end
-
 end

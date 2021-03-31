@@ -2,5 +2,4 @@
 
 # id_strings table
 class IdString < ActiveRecord::Base
-
 end

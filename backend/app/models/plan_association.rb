@@ -2,5 +2,4 @@
 
 # plan_associations table
 class PlanAssociation < ActiveRecord::Base
-
 end
