@@ -49,5 +49,8 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  config.hosts << "aquarium"
+  # Allow requests from any domain (for development environment)
+  # See
+  # https://blog.saeloun.com/2019/10/31/rails-6-adds-guard-against-dns-rebinding-attacks.html
+  config.hosts = nil
 end

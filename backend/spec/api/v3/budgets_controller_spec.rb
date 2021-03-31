@@ -6,7 +6,7 @@ RSpec.describe Api::V3::BudgetsController, type: :request do
     before :all do
       @token_1 = []
 
-      post "/api/v3/token/create?login=user_1&password=password"
+      post "/api/v3/token/create?login=user_admin&password=aquarium123"
       resp = JSON.parse(response.body)
       @token_1 << resp["token"]
 

@@ -1,27 +1,22 @@
-# TODO: change to env files from directory
+# Note that variables used here are set in .env file
+# environment variables in services are set in .env_files
 
-version: "3.5"
+version: "3.7"
 services:
-  backend:
-    volumes:
-      - ./backend/db:/aquarium/db
-      - ./backend/log:/aquarium/log
-    networks:
-      - aquarium_net
-    depends_on:
-      - db
-
-  frontend:
-    depends_on:
-      - backend
-    networks:
-      - aquarium_net
 
   db:
     image: mysql:5.7
     restart: always
+    ports:
+      - "${DB_PUBLIC_PORT:-3307}:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./docker/mysql_init/:/docker-entrypoint-initdb.d/:ro
     networks:
       - aquarium_net
 
 networks:
   aquarium_net:
+
+volumes:
+  db_data:

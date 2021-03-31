@@ -142,7 +142,7 @@ module Api
         params_budget = params[:budget] || {}
 
         # Create budget
-        budget, errors = Budget.create(params_budget)
+        budget, errors = Budget.create_from(params_budget)
         render json: { errors: errors }.to_json, status: :ok and return if !budget
 
         render json: { budget: budget }.to_json, status: :created

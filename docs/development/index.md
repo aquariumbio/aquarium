@@ -16,13 +16,13 @@ Everyone else should visit the installation page on [Aquarium.bio](https://www.a
 
 2. Get Aquarium with the command
 
-   ```bash
+   ```shell
    gh repo clone aquariumbio/aquarium
    ```
 
 3. Initialize the environment
 
-   ```bash
+   ```shell
    cd aquarium
    bash ./bin/setup.sh
    ```
@@ -33,13 +33,13 @@ The following commands will allow you to run Aquarium in Rails development mode 
 
 1. **Build** the docker images with
 
-   ```bash
+   ```shell
    docker-compose build
    ```
 
 2. **Start** Aquarium in development mode with
 
-   ```bash
+   ```shell
    docker-compose up
    ```
 
@@ -47,7 +47,7 @@ The following commands will allow you to run Aquarium in Rails development mode 
 
 3. **Stop** the Aquarium services, by typing `ctrl-c` followed by
 
-   ```bash
+   ```shell
    docker-compose down
    ```
 
@@ -61,19 +61,19 @@ The following commands will allow you to run Aquarium in Rails development mode 
 
 To run commands within the running Aquarium container, precede each command with
 
-```bash
+```shell
 docker-compose exec backend
 ```
 
 For instance, you can run the Rails console with the command
 
-```bash
+```shell
 docker-compose exec backend rails c
 ```
 
 And, you can also run an interactive shell within the Aquarium container with the command
 
-```bash
+```shell
 docker-compose exec backend /bin/sh
 ```
 
@@ -81,14 +81,14 @@ which allows you to work within the container.
 
 For commands that don't require that Aquarium is running, using a command starting with
 
-```bash
+```shell
 docker-compose run --rm backend
 ```
 
 will create a temporary container.
 This can be useful for running single commands such as
 
-```bash
+```shell
 docker-compose run --rm backend rspec
 ```
 
@@ -101,7 +101,7 @@ More details on the docker-compose commands can be found [here](https://docs.doc
 The `bin/setup.sh` script that we ran when [getting started](#getting-started) creates a set of files that sets the environment variables used when running Aquarium with `docker-compose`.
 These files are stored in a directory `.env_files` that is organized, roughly, by Rails environment and service
 
-```bash
+```shell
 .env_files
 |-- development
 |   |-- backend
@@ -138,7 +138,7 @@ Specifically, all SQL files in the `docker/mysql_int` directory will be loaded i
 This will include the first time you run `docker-compose up` after either cloning the repository or [deleting the database volume](#deleting-the-database-volume).
 The initial configuration has two files
 
-```bash
+```shell
 docker
 `-- mysql_init
     |-- create_aquarium_test.sql # script to create the aquarium_test database
@@ -156,7 +156,7 @@ The steps to switch the database are:
 2. If the name of the new database is different than the name of the current database, you need to change the database name with the `bin/dbrename.sh` script.
    For example, to change the name to `drosophila_husbandry`, use the command
 
-   ```bash
+   ```shell
    ./bin/dbrename.sh development drosophila_husbandry
    ```
 
@@ -177,7 +177,7 @@ The steps to switch the database are:
 
 To make database dump, run the following
 
-```bash
+```shell
 docker-compose up -d db
 bash bin/dbdump.sh development
 docker-compose down
@@ -190,13 +190,13 @@ This will create a SQL dump for the database name in the `.env_files/development
 The Aquarium database files are stored in a named volume managed by Docker.
 You can see what volumes exist by running
 
-```bash
+```shell
 docker volume ls
 ```
 
 The volume for the database files will be named `aquarium_db_data` (provided you cloned into the directory `aquarium`), and can be removed with the command
 
-```bash
+```shell
 docker volume rm aquarium_db_data
 ```
 
@@ -206,7 +206,7 @@ docker volume rm aquarium_db_data
 
 Then copy the dump of the database that you want to use to the default location:
 
-```bash
+```shell
 cp replacement_dump.sql docker/mysql_init/
 ```
 
@@ -215,9 +215,10 @@ See the migration instructions below.
 
 ## Migrating the Database
 
-```bash
+```shell
 docker-compose up -d
 docker-compose exec backend env RAILS_ENV=development rake db:migrate
+docker-compose exec backend env RAILS_ENV=test rake db:migrate
 docker-compose down
 ```
 
@@ -230,7 +231,7 @@ It is possible to run more than one Aquarium instance, but there can be complica
 - public ports conflicts – the default values for the public ports will be the same for each instance configured with `bin/setup.sh`.
   When running two versions of v3, the solution is to change the environment variables in the `.env` files.
   See below for [running v2 and v3](#running-v2-and-v3) together.
-- service name conflicts – when starting a service Docker-Compose uses the parent directory and the service name to name the running container.
+- service name conflicts – when starting a service, Docker-Compose uses the parent directory and the service name to name the running container.
   If you have two clones named `aquarium` and run both at the same time, you will have name conflicts.
   The simplest solution is to name the clone directories differently.
 - docker image name conflicts – images are managed system wide, so if you have two clones and are working with two v3 versions simultaneously the image built by each will have the same name as the other.
@@ -243,7 +244,7 @@ There are scenarios where you might need to run an instance of v2 and v3.
 
 1. Run the following commands to get a new clone with v2:
 
-   ```bash
+   ```shell
    gh repo clone aquariumbio/aquarium legacy-aquarium
    cd legacy-aquarium
    bash ./setup.sh
@@ -251,7 +252,7 @@ There are scenarios where you might need to run an instance of v2 and v3.
 
 2. Until v3 is complete, you will likely want to run either `master` or `staging`.
    If using `staging`, checkout that branch `git checkout staging`.
-   The highest numbered `v2.x` will also be the most recent v2 release.
+   The highest numbered `aq_2.x` branch will also be the most recent v2 release.
 
 3. Edit the `legacy-aquarium/.env` file and set `APP_PUBLIC_PORT`, `S3_PUBLIC_PORT` and `EXTERNAL_DB_PORT` so they do not conflict with the values of the following variables in the `aquarium/.env` file:
    `FRONTEND_PUBLIC_PORT`,
@@ -260,9 +261,9 @@ There are scenarios where you might need to run an instance of v2 and v3.
 
 ## Testing Aquarium
 
-### Running Tests
+### Running Backend Tests
 
-```bash
+```shell
 docker-compose run --rm backend rspec
 ```
 
@@ -270,12 +271,38 @@ Some of the tests do intentionally raise exceptions, so do not be concerned if t
 
 Test coverage is captured by simplecov in the file `coverage/index.html`.
 
+### Running Cypress Tests
 
-### Running Frontend tests
+1. End-to-end Cypress tests can be run the script
 
-```bash
-docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.cypress.yml up --abort-on-container-exit --exit-code-from e2e
-```
+   ```shell
+   ./bin/run-cypress.sh
+   ```
+
+   This script will run all tests in `end2end/cypress` and then stop.
+   It _should_ be possible to run this side-by-side when running Aquarium normally.
+
+2. Aquarium can be brought up using the test database.
+   Start the system with
+
+   ```shell
+   ./bin/aquarium-test.sh up
+   ```
+
+   and shutdown the system with
+
+   ```shell
+   ./bin/aquarium-test.sh down
+   ```
+
+   This script can also run other docker-compose commands, since it is a shorthand for running docker-compose with a string of `-f` arguments.
+
+   When configuring cypress-open to work with this configuration, the frontend is exposed as localhost:3001 and the backend as localhost:3011.
+   The ports can be set by changing the values of `FRONTEND_TEST_PORT` and `BACKEND_TEST_PORT` in the `.env` file (after you run `./bin/setup.sh`).
+
+   It is not possible to run Aquarium this way and also run the end-to-end tests using the `run-cypress.sh` script because they share configuration.
+
+In both cases, the test database is seeded when `backend/dev_entrypoint.sh` runs; using seeds from `backend/db/seeds.rb` and `backend/db/user_seeds.rb`.
 
 ### Adding Tests
 
@@ -294,14 +321,14 @@ The Aquarium repository is setup to use [RuboCop](https://rubocop.readthedocs.io
 
 When you make changes to Aquarium code, run the command
 
-```bash
+```shell
 docker-compose run --rm backend rubocop -x
 ```
 
 to fix layout issues.
 Then run the command
 
-```bash
+```shell
 docker-compose run --rm backend rubocop
 ```
 
@@ -326,7 +353,7 @@ _Note_: Some fixes may not be possible without affecting the Krill library for p
 
 This command will regenerate the `.rubocop_todo.yml` file
 
-```bash
+```shell
 docker-compose run -rm backend rubocop --auto-gen-config
 ```
 
@@ -384,14 +411,13 @@ But, there are many more [tags](http://www.rubydoc.info/gems/yard/file/docs/Tags
 
 Running the command
 
-```bash
+```shell
 yardoc
 ```
 
 will generate the documentation and write it to the directory `docs/api`.
 This location is determined by the file `.yardopts` in the project repository.
 This file also limits the API to code used in Krill the protocol development language.
-
 
 The command
 
@@ -410,19 +436,19 @@ Keep it up-to-date if you change something that affects Aquarium development.
 
 1. Start the container
 
-   ```bash
+   ```shell
    docker-compose up -d
    ```
 
 2. Open a shell in the Aquarium container
 
-   ```bash
+   ```shell
    docker-compose exec backend /bin/sh
    ```
 
 3. Upgrade gems
 
-   ```bash
+   ```shell
    bundle update
    ```
 
@@ -430,14 +456,14 @@ Keep it up-to-date if you change something that affects Aquarium development.
 
 5. Update interface files for Sorbet type checking
 
-   ```bash
+   ```shell
    bundle exec rake rails_rbi:all
    srb rbi update
    ```
 
 6. Make sure that the system type checks
 
-   ```bash
+   ```shell
    srb tc
    ```
 
@@ -445,7 +471,7 @@ Keep it up-to-date if you change something that affects Aquarium development.
 
 8. Update Javascript dependencies
 
-   ```bash
+   ```shell
    yarn upgrade
    ```
 
@@ -453,13 +479,13 @@ Keep it up-to-date if you change something that affects Aquarium development.
 
 10. Exit container shell
 
-    ```bash
+    ```shell
     exit
     ```
 
 11. Stop the container
 
-    ```bash
+    ```shell
     docker-compose down
     ```
 
@@ -467,19 +493,19 @@ Keep it up-to-date if you change something that affects Aquarium development.
 
 1.  Ensure that your clone is up to date
 
-    ```bash
+    ```shell
     git pull
     ```
 
 2.  Build image to make sure that dependencies are up-to-date
 
-    ```bash
+    ```shell
     docker-compose build backend
     ```
 
 3.  Make sure Rails tests pass
 
-    ```bash
+    ```shell
     docker-compose up -d
     docker-compose exec backend rspec
     docker-compose down
@@ -491,7 +517,7 @@ Keep it up-to-date if you change something that affects Aquarium development.
 
 4.  Run type checks
 
-    ```bash
+    ```shell
     docker-compose run -rm backend srb tc
     ```
 
@@ -499,13 +525,13 @@ Keep it up-to-date if you change something that affects Aquarium development.
 
 5.  Fix any layout problems
 
-    ```bash
+    ```shell
     docker-compose run --rm backend rubocop -x
     ```
 
 6.  Run `rubocop`
 
-    ```bash
+    ```shell
     docker-compose run --rm backend rubocop
     ```
 
@@ -513,7 +539,7 @@ Keep it up-to-date if you change something that affects Aquarium development.
 
 7.  Update RuboCop TODO file
 
-    ```bash
+    ```shell
     docker-compose run -rm backend rubocop --auto-gen-config
     ```
 
@@ -525,19 +551,19 @@ Keep it up-to-date if you change something that affects Aquarium development.
 
 11. Update API documentation by running
 
-    ```bash
+    ```shell
     docker-compose run --rm backend yard
     ```
 
 12. Update `CHANGE_LOG`
 
-    ```bash
+    ```shell
     git log v$OLDVERSION..
     ```
 
 13. Ensure all changes have been committed and pushed.
 
-    ```bash
+    ```shell
     git status && git log --branches --not --remotes
     ```
 
@@ -545,7 +571,7 @@ Keep it up-to-date if you change something that affects Aquarium development.
 
 14. Create a tag for the new version:
 
-    ```bash
+    ```shell
     git tag -a v$NEWVERSION -m "Aquarium version $NEWVERSION"
     git push --tags
     ```
@@ -561,7 +587,7 @@ Keep it up-to-date if you change something that affects Aquarium development.
 
 17. Push image to Docker Hub
 
-    ```bash
+    ```shell
     bash ./aquarium.sh build
     docker push aquariumbio/aquarium:v$NEWVERSION
     ```
@@ -572,7 +598,7 @@ Keep it up-to-date if you change something that affects Aquarium development.
 
 Files:
 
-```bash
+```shell
 aquarium
 `-- backend
     |-- Dockerfile                    # defines the image for Aquarium
@@ -593,7 +619,7 @@ The entrypoint script determines how the image starts up.
 
 Files:
 
-```bash
+```shell
 aquarium
 |-- .env                          # docker-compose environment file (see setup.sh)
 |-- .env_files                    # environment variable settings (see setup.sh)
@@ -646,7 +672,7 @@ This should match the timezone for your database.
 
 Files:
 
-```bash
+```shell
 aquarium
 |-- biofab-eula.yml               # example of end user license agreement for a lab
 `-- instance.yml                  # (optional) specifies instance
@@ -717,7 +743,7 @@ the aquarium service:
 
 Files:
 
-```bash
+```shell
 aquarium
 .
 |-- bin
