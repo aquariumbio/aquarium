@@ -596,7 +596,7 @@ module Api
 
         # Get operation (and verify that it is in the job)
         operation_id = Input.int(params[:operation_id])
-        operation = Operation.operation_from_job(operation_id, job.id)
+        operation = Operation.find_by(id: operation_id)
         render json: { error: "Operation not found" }.to_json, status: :not_found and return if !operation
 
         # Check operation status

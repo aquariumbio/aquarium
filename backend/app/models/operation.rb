@@ -52,14 +52,4 @@ class Operation < ActiveRecord::Base
     sql = "update operations set #{set} where id in ( select operation_id from job_associations where job_id = #{job_id} )"
     Operation.connection.execute sql
   end
-
-  def self.operation_from_job(operation_id, job_id)
-    sql = "
-      select o.*
-      from operations o
-      inner join job_associations ja on ja.job_id = #{job_id} and ja.operation_id = #{operation_id}
-      where o.id = #{operation_id}
-    "
-    operation = (Operation.find_by_sql sql)[0]
-  end
 end
