@@ -1,4 +1,5 @@
 var thisId
+var userId
 
 describe('/groups', () => {
   beforeEach(() => {
@@ -79,6 +80,42 @@ describe('/groups', () => {
       // show group link should exist
       cy.get(`[data-cy="show_${thisId}"]`).should('exist');
     })
+  });
+
+  // visit the group detail page
+  it('visit group page', () => {
+    cy.intercept('POST', `http://localhost:3001/api/v3/groups/${thisId}/show`).as('showgroup')
+
+    cy.visit(`/groups/${thisId}/show`);
+    cy.contains('div', 'Add Member');
+  });
+
+  // add member to the group
+  it('add member', () => {
+    userId = window.localStorage.getItem('userId')
+
+    // add member
+    cy.visit(`/groups/${thisId}/show`);
+    // click on dropdown
+    cy.get("#user-id-input").click().then(() => {
+      // click on option
+      cy.get(`[data-value="${userId}"]`).click().then(() => {
+        cy.contains('div', 'neptune');
+      })
+    })
+
+  });
+
+  // remove member from the group
+  it('remove member', () => {
+    userId = window.localStorage.getItem('userId')
+
+    cy.visit(`/groups/${thisId}/show`);
+    // remove member
+    cy.get(`[data-cy="remove_${userId}"]`).click().then(() => {
+      // the member should no longer exist
+      cy.get(`[data-cy="remove_${userId}"]`).should('not.exist');
+    });
   });
 
   // delete group
