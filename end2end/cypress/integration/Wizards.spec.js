@@ -51,12 +51,14 @@ describe('/wizards', () => {
     })
   });
 
-  // click edit wizard
-  it('edit wizard', () => {
+  // wizard details page
+  it('show wizard', () => {
     cy.visit('/wizards');
-    cy.get(`[data-cy="edit_${thisId}"]`).click().then(() => {
+    cy.get(`[data-cy="show_${thisId}"]`).click().then(() => {
       // wait for up to 3 seconds for the page to load
-      cy.location('pathname', {timeout: 3000}).should('eq', `/wizards/${thisId}/edit`);
+      cy.location('pathname', {timeout: 3000}).should('eq', `/wizards/${thisId}/show`);
+
+      cy.contains('div', 'Containers managed by name')
     });
   });
 
