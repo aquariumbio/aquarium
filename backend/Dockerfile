@@ -1,7 +1,8 @@
 ARG RUBY_VERSION=2.7.2
 ARG ALPINE_VERSION=3.12
 
-# A ruby-alpine image for development
+# Build development image
+#
 FROM ruby:${RUBY_VERSION}-alpine${ALPINE_VERSION} AS backend-development
 
 # throw errors if Gemfile has been modified since Gemfile.lock
@@ -40,6 +41,7 @@ ENTRYPOINT [ "/aquarium/dev_entrypoint.sh" ]
 
 
 # Temporary stage for building production environment based on development
+#
 FROM backend-development AS backend-builder
 
 # Clean up from build
@@ -49,6 +51,7 @@ RUN rm -rf /usr/local/bundle/cache/*.gem \
 
 
 # Production stage
+#
 FROM ruby:${RUBY_VERSION}-alpine${ALPINE_VERSION}} AS aquarium-backend
 
 RUN apk add --update --no-cache \
@@ -68,7 +71,7 @@ ENV PATH $GEM_HOME/bin:$GEM_HOME/gems/bin:$PATH
 # pull app
 COPY --from=backend-builder /aquarium /aquarium
 
-# Make wait-for executable
+# Make the wait-for script executable
 RUN ["chmod", "+x", "/aquarium/wait-for"]
 
 ENV RAILS_ENV=production
