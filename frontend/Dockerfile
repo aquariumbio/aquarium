@@ -1,23 +1,37 @@
-# pull official base image
+# Set versions for base images
 ARG NODE_VERSION=14.15.1
 ARG ALPINE_VERSION=3.12
+ARG NGINX_VERSION=1.18.0
 
+# Build development image
+#
 FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION} AS frontend-development
-
-# set working directory
 WORKDIR /app
-
-# add `/app/node_modules/.bin` to $PATH
 ENV PATH /app/node_modules/.bin:$PATH
 
-# install app dependencies
 COPY package.json package-lock.json ./
 
 RUN npm install \
- && npm install react-scripts@3.4.1 -g
+ && npm install react-scripts@4.0.3 -g
 
-# add app
 COPY . ./
 
-# start app
 CMD ["npm", "start"]
+
+# Temporary building stage
+#
+FROM frontend-development AS frontend-builder
+RUN npm run build
+
+# Build production image
+#
+FROM nginx:${NGINX_VERSION}-alpine${ALPINE_VERSION} AS aquarium-frontend
+
+COPY --from=frontend-builder /app/build /usr/share/nginx/html
+
+RUN rm /etc/nginx/conf.d/default.conf
+COPY nginx/nginx.conf /etc/nginx/conf.d
+
+EXPOSE 3000
+
+CMD ["nginx", "-g", "daemon off;"]
