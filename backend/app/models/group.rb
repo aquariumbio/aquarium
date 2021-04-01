@@ -36,7 +36,7 @@ class Group < ActiveRecord::Base
   # @option group[:name] [String] the name
   # @option group[:description] [String] the description
   # return the group
-  def self.create(group)
+  def self.create_from(group)
     # Read the parameters
     name = Input.text(group[:name])
     description = Input.text(group[:description])

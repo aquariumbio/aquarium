@@ -143,7 +143,7 @@ module Api
         params_announcement = params[:announcement] || {}
 
         # Create announcement
-        announcement, errors = Announcement.create(params_announcement)
+        announcement, errors = Announcement.create_from(params_announcement)
         render json: { errors: errors }.to_json, status: :ok and return if !announcement
 
         render json: { announcement: announcement }.to_json, status: :created

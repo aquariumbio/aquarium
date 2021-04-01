@@ -24,6 +24,10 @@ ENV PATH $GEM_HOME/bin:$GEM_HOME/gems/bin:$PATH
 # Install gems needed by Aquarium
 COPY Gemfile Gemfile.lock ./
 
+# Woraround for Rails dependency on mimemagic 0.3.5
+RUN mkdir -p /aquarium/local
+COPY local/mimemagic-0.3.5.gem ./local/mimemagic-0.3.5.gem
+
 RUN gem update --system \
   && gem install bundler \
   && bundle install --jobs 20 --retry 5
