@@ -1,7 +1,7 @@
 # Set versions for base images
 ARG NODE_VERSION=14.15.1
 ARG ALPINE_VERSION=3.12
-ARG NGINX_VERSION=1.18.0
+ARG NGINX_VERSION=stable
 
 # Build development image
 #
@@ -30,7 +30,7 @@ FROM nginx:${NGINX_VERSION}-alpine${ALPINE_VERSION} AS aquarium-frontend
 COPY --from=frontend-builder /app/build /usr/share/nginx/html
 
 RUN rm /etc/nginx/conf.d/default.conf
-COPY nginx/nginx.conf /etc/nginx/conf.d
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 3000
 
