@@ -13,7 +13,7 @@ services:
 
   frontend:
     build:
-      context: ./backend
+      context: ./frontend
       target: aquarium-frontend
     image: aquarium-frontend:${AQUARIUM_VERSION:-edge}
     networks:
@@ -24,20 +24,21 @@ services:
       - .env_files/production/db
       - .env_files/production/timezone
 
-  db-migrator:
-    image: aquarium-backend:${AQUARIUM_VERSION:-edge}
-    command: [ "./wait-for", "--timeout=300", "db:3306", "--", "bin/rails", "db:migrate" ]
-    env_file:
-      - .env_files/production/db
-      - .env_files/production/timezone
-    depends_on:
-      - db
-    networks:
-        - aquarium_net
+  # db-migrator:
+  #   image: aquarium-backend:${AQUARIUM_VERSION:-edge}
+  #   command: [ "./wait-for.sh", "--timeout=300", "db:3306", "--", "bin/rails", "db:migrate" ]
+  #   env_file:
+  #     - .env_files/production/db
+  #     - .env_files/production/timezone
+  #   depends_on:
+  #     - db
+  #   networks:
+  #       - aquarium_net
 
   web:
     build:
       context: ./nginx
+      target: aquarium-nginx
     image: aquarium-nginx:${AQUARIUM_VERSION:-edge}
     ports:
       - "${APP_PUBLIC_PORT:-80}:80"
