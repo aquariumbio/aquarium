@@ -18,7 +18,7 @@ _clean_up_stray_server() {
 
 # Wait for database to start.
 _wait_for_database() {
-    echo "waiting for database to respond"
+    echo "Waiting for database to respond"
     while ! nc -z ${DB_HOST:-'db'} ${DB_PORT:-3306}; do
         sleep 1 # wait for 1 second before check again
     done
