@@ -35,6 +35,7 @@ describe('/login', () => {
     cy.get('[data-test=username]').type('neptune ');
     cy.get('[data-test=password]').type('aquarium');
     cy.get('form').contains('SIGN IN').click();
+    // TODO: this is timing out on end2end w/in Docker
     cy.url().should('eq', `${Cypress.config().baseUrl}/`);
 
     let token;
