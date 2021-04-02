@@ -12,4 +12,4 @@ services:
   frontend_test:
     environment: 
       - REACT_APP_BACKEND=localhost
-      - REACT_APP_BACKEND_PORT=3011 
+      - REACT_APP_BACKEND_PORT=${BACKEND_TEST_PORT:-3011} 
