@@ -23,7 +23,7 @@ describe('/groups', () => {
 
   // new group page
   it('new group page', () => {
-    cy.intercept('POST', 'http://localhost:3001/api/v3/groups/create').as('newgroup')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/groups/create`).as('newgroup')
 
     cy.visit('/groups/new');
     cy.contains('h1', 'New Group');
@@ -59,7 +59,7 @@ describe('/groups', () => {
 
   // edit the group
   it('edit group page', () => {
-    cy.intercept('POST', `http://localhost:3001/api/v3/groups/${thisId}/update`).as('editgroup')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/groups/${thisId}/update`).as('editgroup')
 
     cy.visit(`/groups/${thisId}/edit`);
     cy.contains('h2', `Edit Group ${thisId}`);
