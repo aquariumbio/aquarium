@@ -8,21 +8,41 @@ services:
     env_file: 
       - .env_files/production/backend
       - .env_files/development/timezone
+    networks:
+      - aquarium_net
 
   frontend:
     build:
       context: ./backend
       target: aquarium-frontend
     image: aquarium-frontend:${AQUARIUM_VERSION:-edge}
-    # TODO: do we need node_modules?
+    networks:
+      - aquarium_net
 
   db:
     env_file: 
       - .env_files/production/db
       - .env_files/production/timezone
-    volumes:
-      - db_data:/var/lib/mysql
-      - ./docker/mysql_init/:/docker-entrypoint-initdb.d/:ro
 
-volumes:
-  db_data:
+  db-migrator:
+    image: aquarium-backend:${AQUARIUM_VERSION:-edge}
+    command: [ "./wait-for", "--timeout=300", "db:3306", "--", "bin/rails", "db:migrate" ]
+    env_file:
+      - .env_files/production/db
+      - .env_files/production/timezone
+    depends_on:
+      - db
+    networks:
+        - aquarium_net
+
+  web:
+    build:
+      context: ./nginx
+    image: aquarium-nginx:${AQUARIUM_VERSION:-edge}
+    ports:
+      - "${APP_PUBLIC_PORT:-80}:80"
+    networks:
+      - aquarium_net
+    depends_on:
+      - backend
+      - frontend
