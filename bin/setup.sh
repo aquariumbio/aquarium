@@ -46,8 +46,8 @@ _get_timezone() {
     if [[ -z ${timezone+x} ]]; then
         timezone=`curl https://ipapi.co/timezone` 2> /dev/null
     fi
-    
-    if [[ timezone =~ 'error' ]]; then
+
+    if [[ ${timezone} =~ 'error' ]]; then
         echo 'Error getting timezone'
         timezone='America/Los_Angeles'
         echo 'Using ${timezone}'
