@@ -36,7 +36,7 @@ RUN gem update --system \
 COPY . ./
 
 # include entrypoint scripts for starting Aquarium and Krill
-RUN chmod +x dev_entrypoint.sh
+RUN ["chmod", "+x", "/aquarium/dev_entrypoint.sh"]
 ENTRYPOINT [ "/aquarium/dev_entrypoint.sh" ]
 
 
@@ -52,7 +52,7 @@ RUN rm -rf /usr/local/bundle/cache/*.gem \
 
 # Production stage
 #
-FROM ruby:${RUBY_VERSION}-alpine${ALPINE_VERSION}} AS aquarium-backend
+FROM ruby:${RUBY_VERSION}-alpine${ALPINE_VERSION} AS aquarium-backend
 
 RUN apk add --update --no-cache \
     mysql-client \
@@ -71,11 +71,12 @@ ENV PATH $GEM_HOME/bin:$GEM_HOME/gems/bin:$PATH
 # pull app
 COPY --from=backend-builder /aquarium /aquarium
 
-# Make the wait-for script executable
-RUN ["chmod", "+x", "/aquarium/wait-for"]
-
 ENV RAILS_ENV=production
 ENV RACK_ENV=production
+
+# Make scripts executable
+RUN ["chmod", "+x", "/aquarium/wait-for.sh"] \
+ && ["chmod", "+x", "/aquarium/entrypoint.sh"]
 
 ENTRYPOINT [ "/aquarium/entrypoint.sh" ]
 CMD ["bin/rails", "s", "-b", "0.0.0.0"]
