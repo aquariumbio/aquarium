@@ -73,6 +73,7 @@ COPY --from=backend-builder /aquarium /aquarium
 
 ENV RAILS_ENV=production
 ENV RACK_ENV=production
+ENV RAILS_LOG_TO_STDOUT=true
 
 # Make scripts executable
 RUN ["chmod", "+x", "/aquarium/wait-for.sh"] \
