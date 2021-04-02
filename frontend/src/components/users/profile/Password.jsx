@@ -60,9 +60,7 @@ const Password = ({ setIsLoading, setAlertProps, id }) => {
   const classes = useStyles();
 
   const [userName, setUserName] = useState('');
-  // eslint-disable-next-line no-unused-vars
-  const [password, setPassword] = useState('');
-  // eslint-disable-next-line no-unused-vars
+  const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
 
   const init = async () => {
@@ -73,8 +71,6 @@ const Password = ({ setIsLoading, setAlertProps, id }) => {
     // success
     const user = response.user;
     setUserName(user.name);
-    setPassword(user.name);
-    setPassword2(user.email);
   };
 
   useEffect(() => {
@@ -84,12 +80,35 @@ const Password = ({ setIsLoading, setAlertProps, id }) => {
   // Submit form with all data
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // set formData
-    // const form = document.querySelector('form');
-    // const data = new FormData(form);
-    // const formData = Object.fromEntries(data);
 
-    alert('TODO');
+    // set formData
+    const form = document.querySelector('form');
+    const data = new FormData(form);
+    const formData = Object.fromEntries(data);
+
+    const response = await usersAPI.updatePassword(formData, id);
+    if (!response) return;
+
+    // process errors
+    const errors = response.errors;
+    if (errors) {
+      setAlertProps({
+        message: JSON.stringify(errors, null, 2),
+        severity: 'error',
+        open: true,
+      });
+      return;
+    }
+
+    // success
+    // pass alert popup in localStorage (does not work if pass as object, so pass as JSON string)
+    setPassword1('');
+    setPassword2('');
+    setAlertProps({
+      message: 'Password updated',
+      severity: 'success',
+      open: true,
+    });
   };
 
   return (
@@ -134,18 +153,18 @@ const Password = ({ setIsLoading, setAlertProps, id }) => {
           </Typography>
 
           <TextField
-            name="password"
+            name="password1"
             fullWidth
-            value=""
-            id="password-input"
-            onChange={(event) => setPassword(event.target.value)}
+            value={password1}
+            id="password1-input"
+            onChange={(event) => setPassword1(event.target.value)}
             variant="outlined"
             autoFocus
             required
-            type="string"
+            type="password"
             inputProps={{
-              'aria-label': 'password-input',
-              'data-cy': 'password-input',
+              'aria-label': 'password1-input',
+              'data-cy': 'password1-input',
             }}
             className={classes.spaceBelow}
           />
@@ -160,11 +179,11 @@ const Password = ({ setIsLoading, setAlertProps, id }) => {
           <TextField
             name="password2"
             fullWidth
-            value=""
+            value={password2}
             id="password2-input"
             onChange={(event) => setPassword2(event.target.value)}
             variant="outlined"
-            type="string"
+            type="password"
             required
             inputProps={{
               'aria-label': 'password2-input',

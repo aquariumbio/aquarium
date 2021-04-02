@@ -48,6 +48,13 @@ usersAPI.updateInfo = (FormData, id) => axiosInstance
   .then((response) => response.data)
   .catch((error) => error);
 
+usersAPI.updatePassword = (FormData, id) => axiosInstance
+  .post(`/users/${id}/update_password`, {
+    user: FormData,
+  })
+  .then((response) => response.data)
+  .catch((error) => error);
+
 usersAPI.updatePreferences = (formData, id) => axiosInstance
   .post(`/users/${id}/preferences`, formData)
   .then((response) => response.data)

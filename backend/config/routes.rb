@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   get  'api/v3/users/:id/show_info',               to: 'api/v3/users#show_info'
   get  'api/v3/users/:id/groups',                  to: 'api/v3/users#groups'
   post 'api/v3/users/:id/update_info',             to: 'api/v3/users#update_info'
+  post 'api/v3/users/:id/update_password',         to: 'api/v3/users#update_password'
   post 'api/v3/users/:id/update_permissions',      to: 'api/v3/users#update_permissions'
   post 'api/v3/users/:id/agreements/:agreement',   to: 'api/v3/users#agreements', constraints: { agreement: /lab_agreement|aquarium_agreement/ }
   post 'api/v3/users/:id/preferences',             to: 'api/v3/users#preferences'
