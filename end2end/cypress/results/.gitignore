@@ -1,0 +1,5 @@
+# Directory for cyress output
+# Ignore any output files
+*
+# but keep this file to include the directory
+!.gitignore

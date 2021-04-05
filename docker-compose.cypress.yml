@@ -1,15 +1,46 @@
-  version: "3.5"
-  services:
-    e2e:
-      image: cypress
-      build: ./end2end
-      container_name: cypress
-      depends_on:
-        - frontend
-      environment:
-        - CYPRESS_baseURL=http://localhost:${FRONTEND_PUBLIC_PORT}
-      command: npx cypress run
-      volumes:
-        - ./end2end:/app
-      networks:
-        - aquarium_net
+version: "3.7"
+services:
+  e2e:
+    image: cypress
+    build: ./end2end
+    container_name: cypress
+    depends_on: 
+      - frontend_test
+    environment:
+      - CYPRESS_BASE_URL=http://frontend_test:3000
+      - CYPRESS_API_URL=http://backend_test:3000
+    command: npx cypress run
+    ipc: host
+    volumes:
+      - ./end2end:/app
+    networks:
+      - aquarium_net
+
+  db_test:
+    image: mysql:5.7
+    restart: always
+    env_file:
+      - .env_files/test/db
+      - .env_files/test/timezone
+    ports:
+      - "${DB_TEST_PUBLIC_PORT:-3317}:3306"
+    volumes:
+      - test_db_data:/var/lib/mysql
+      - ./docker/mysql_init/:/docker-entrypoint-initdb.d/:ro
+    networks:
+      - aquarium_net
+
+  frontend_test:
+    environment: 
+      - REACT_APP_BACKEND=backend_test
+      - REACT_APP_BACKEND_PORT=3000 # use service port
+
+  backend_test:
+    environment:
+      - DB_HOST=db_test
+
+networks:
+  aquarium_net:
+
+volumes:
+  test_db_data:

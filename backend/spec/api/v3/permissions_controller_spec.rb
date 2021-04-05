@@ -9,15 +9,15 @@ RSpec.describe Api::V3::PermissionsController, type: :request do
       @token_2 = []
       @token_3 = []
 
-      post "#{@create_url}?login=user_1&password=aquarium123"
+      post "#{@create_url}?login=user_admin&password=aquarium123"
       response_body = JSON.parse(response.body)
       @token_1 << response_body["token"]
 
-      post "#{@create_url}?login=user_2&password=aquarium123"
+      post "#{@create_url}?login=user_manage&password=aquarium123"
       response_body = JSON.parse(response.body)
       @token_2 << response_body["token"]
 
-      post "#{@create_url}?login=user_3&password=aquarium123"
+      post "#{@create_url}?login=user_retired&password=aquarium123"
       response_body = JSON.parse(response.body)
       @token_3 << response_body["token"]
     end

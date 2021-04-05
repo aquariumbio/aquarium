@@ -17,7 +17,7 @@ RSpec.describe Api::V3::TokenController, type: :request do
     # Sign in 3 times
     it "sign_in_3_times" do
       # Sign in and set token
-      post "#{@create_url}?login=user_1&password=aquarium123"
+      post "#{@create_url}?login=user_admin&password=aquarium123"
       expect(response).to have_http_status 200
 
       response_body = JSON.parse(response.body)
@@ -25,7 +25,7 @@ RSpec.describe Api::V3::TokenController, type: :request do
       @token_1 << token
 
       # Sign in and set token
-      post "#{@create_url}?login=user_1&password=aquarium123"
+      post "#{@create_url}?login=user_admin&password=aquarium123"
       expect(response).to have_http_status 200
 
       response_body = JSON.parse(response.body)
@@ -33,7 +33,7 @@ RSpec.describe Api::V3::TokenController, type: :request do
       @token_1 << token
 
       # Sign in and set token
-      post "#{@create_url}?login=user_1&password=aquarium123"
+      post "#{@create_url}?login=user_admin&password=aquarium123"
       expect(response).to have_http_status 200
 
       response_body = JSON.parse(response.body)

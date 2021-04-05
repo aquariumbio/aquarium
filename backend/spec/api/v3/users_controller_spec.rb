@@ -9,15 +9,15 @@ RSpec.describe Api::V3::UsersController, type: :request do
       @token_2 = []
       @token_3 = []
 
-      post "#{@create_url}?login=user_1&password=aquarium123"
+      post "#{@create_url}?login=user_admin&password=aquarium123"
       response_body = JSON.parse(response.body)
       @token_1 << response_body["token"]
 
-      post "#{@create_url}?login=user_2&password=aquarium123"
+      post "#{@create_url}?login=user_manage&password=aquarium123"
       response_body = JSON.parse(response.body)
       @token_2 << response_body["token"]
 
-      post "#{@create_url}?login=user_3&password=aquarium123"
+      post "#{@create_url}?login=user_retired&password=aquarium123"
       response_body = JSON.parse(response.body)
       @token_3 << response_body["token"]
 
@@ -133,13 +133,13 @@ RSpec.describe Api::V3::UsersController, type: :request do
 
     # Get users by fist letter
     it "get_users_first_letter" do
-      get "/api/v3/users?token=#{@token_1[0]}&letter=f"
+      get "/api/v3/users?token=#{@token_1[0]}&letter=u"
       expect(response).to have_http_status 200
 
       # Check
       response_body = JSON.parse(response.body)
       users = response_body["users"]
-      expect(users[0]["name"]).to eq "Factory"
+      expect(users[0]["name"]).to eq "user_admin"
     end
 
     # Get users by fist letter none
