@@ -84,7 +84,7 @@ describe('/groups', () => {
 
   // visit the group detail page
   it('visit group page', () => {
-    cy.intercept('POST', `http://localhost:3001/api/v3/groups/${thisId}/show`).as('showgroup')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/groups/${thisId}/show`).as('showgroup')
 
     cy.visit(`/groups/${thisId}/show`);
     cy.contains('div', 'Add Member');
@@ -100,7 +100,7 @@ describe('/groups', () => {
     cy.get("#user-id-input").click().then(() => {
       // click on option
       cy.get(`[data-value="${userId}"]`).click().then(() => {
-        cy.contains('div', 'neptune');
+        cy.contains('div', 'test_user');
       })
     })
 

@@ -229,7 +229,7 @@ const Information = ({ setIsLoading, setAlertProps, id }) => {
 
           <StandardButton
             name="save"
-            testName="save-group"
+            testName="save-info"
             handleClick={handleSubmit}
             text="Save"
             type="submit"

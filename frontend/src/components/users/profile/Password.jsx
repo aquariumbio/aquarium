@@ -195,7 +195,7 @@ const Password = ({ setIsLoading, setAlertProps, id }) => {
 
           <StandardButton
             name="save"
-            testName="save-group"
+            testName="save-password"
             handleClick={handleSubmit}
             text="Change Password"
             type="submit"
