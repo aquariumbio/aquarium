@@ -24,17 +24,6 @@ _wait_for_database() {
     done
 }
 
-# Add AWS ECS local domain to container resolv.conf
-# See https://github.com/docker/ecs-plugin
-#
-_add_ecs_namespace() {
-    if [ "${LOCALDOMAIN}" != ""  ]; then
-        echo "Adding ECS local domain to resolv.conf"
-        echo "search ${LOCALDOMAIN}" >> /etc/resolv.conf
-    fi
-}
-
-
 # Folds the license file into 80 columns, strips off the markdown header, and
 # sends the result to standard output.
 _show_license() {
@@ -50,8 +39,7 @@ _main() {
     
     _clean_up_stray_server
     _wait_for_database
-    _add_ecs_namespace()
-    _show_license()
+    _show_license
 
     exec "$@"
 }
