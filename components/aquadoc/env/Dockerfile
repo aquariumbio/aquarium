@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:groovy-20210325
 
 RUN apt-get update && \
     apt-get install -y apt-utils && \
