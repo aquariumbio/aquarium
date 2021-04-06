@@ -11,8 +11,6 @@ describe('/wizards', () => {
 
   // wizard page
   it('wizard page', () => {
-    cy.intercept('GET', '/wizards/new').as('newwizard')
-
     cy.visit('/wizards');
     cy.contains('h1', 'All');
     cy.get('[data-cy="new_wizard_btn"]').click().then(() => {
@@ -23,7 +21,7 @@ describe('/wizards', () => {
 
   // new wizard page
   it('new wizard page', () => {
-    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/wizards/create`).as('newwizard')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/wizards/create?*`).as('newwizard')
 
     cy.visit('/wizards/new');
     cy.contains('h1', 'New Wizard');
@@ -64,7 +62,7 @@ describe('/wizards', () => {
 
   // edit the wizard
   it('edit wizard page', () => {
-    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/wizards/${thisId}/update`).as('editwizard')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/wizards/${thisId}/update?*`).as('editwizard')
 
     cy.visit(`/wizards/${thisId}/edit`);
     cy.contains('h2', `Edit Wizard ${thisId}`);

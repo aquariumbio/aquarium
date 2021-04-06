@@ -12,8 +12,6 @@ describe('/users', () => {
 
   // user page
   it('user page', () => {
-    cy.intercept('GET', '/users/new').as('newuser')
-
     cy.visit('/users');
     cy.contains('h1', 'All');
     cy.get('[data-cy="new_user_btn"]').click().then(() => {
@@ -24,7 +22,7 @@ describe('/users', () => {
 
   // new user page
   it('new user page', () => {
-    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/create`).as('newuser')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/create?*`).as('newuser')
 
     cy.visit('/users/new');
     cy.contains('h1', 'New User');
@@ -61,7 +59,7 @@ describe('/users', () => {
 
   // edit the user profile
   it('user profile page', () => {
-    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${newUserId}/update_info`).as('updateprofile')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${newUserId}/update_info?*`).as('updateprofile')
 
     cy.visit(`/users/${newUserId}/profile`);
 
@@ -105,7 +103,7 @@ describe('/users', () => {
 
   // edit preferences
   it('edit preferences', () => {
-    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${newUserId}/preferences`).as('preferences')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${newUserId}/preferences?*`).as('preferences')
 
     cy.visit(`/users/${newUserId}/profile`);
     // wait 1 sec, there should be a better way to do this
@@ -139,7 +137,7 @@ describe('/users', () => {
 
   // change password (and change back)
   it('change password', () => {
-    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${newUserId}/update_password`).as('password')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${newUserId}/update_password?*`).as('password')
 
     cy.visit(`/users/${newUserId}/profile`);
     // wait 1 sec, there should be a better way to do this
@@ -176,7 +174,7 @@ describe('/users', () => {
 
   // click lab agreement
   it('lab agreement', () => {
-    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${newUserId}/agreements/lab_agreement`).as('labagreement')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${newUserId}/agreements/lab_agreement?*`).as('labagreement')
 
     cy.visit(`/users/${newUserId}/profile`);
     // wait 1 sec, there should be a better way to do this
@@ -196,7 +194,7 @@ describe('/users', () => {
 
   // click aquarium agreement
   it('aquarium agreement', () => {
-    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${newUserId}/agreements/aquarium_agreement`).as('aquariumagreement')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${newUserId}/agreements/aquarium_agreement?*`).as('aquariumagreement')
 
     cy.visit(`/users/${newUserId}/profile`)
     // wait 1 sec, there should be a better way to do this
