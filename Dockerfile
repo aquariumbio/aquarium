@@ -22,6 +22,7 @@ RUN apk add --update --no-cache \
     nodejs-npm \
     openjdk8-jre \
     openssl \
+    shared-mime-info \
     sqlite-dev \
     tzdata \
     wget \
@@ -103,6 +104,7 @@ RUN apk add --update --no-cache \
     iptables \
     mariadb-dev \
     mysql-client \
+    shared-mime-info \
     tzdata \
  # make app directory
  && mkdir /aquarium \
