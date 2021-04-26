@@ -64,6 +64,9 @@ const useStyles = makeStyles(() => ({
       fontSize: '1rem',
     },
   },
+  headerOptions: {
+    display: 'inline-flex',
+  },
 }));
 
 const Header = ({ location }) => {

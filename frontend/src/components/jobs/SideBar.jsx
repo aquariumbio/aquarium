@@ -15,6 +15,8 @@ const useStyles = makeStyles(() => ({
   root: {
     minWidth: '120px',
     marginTop: '75px',
+    height: '80vh',
+    overflowX: 'auto',
     '& .Mui-selected': {
       background: 'rgba(64, 222, 253, 0.13)',
     },

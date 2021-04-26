@@ -46,6 +46,9 @@ const useStyles = makeStyles(() => ({
     marginTop: '23px',
     marginLeft: '20px',
     width: '100%',
+    height: '80vh',
+    overflowY: 'auto',
+    overflowX: 'hidden',
   },
 
   divider: {
@@ -108,17 +111,29 @@ const JobsPage = ({ setIsLoading, setAlertProps }) => {
           )}
         </div>
 
-        <TabPanel id="unassigned-jobs-table" value={value} index={0} page="unassigned">
+        {value === 'unassigned' && (
           <ShowUnassigned setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
-        </TabPanel>
+        )}
 
-        <TabPanel id="assigned-jobs-table" value={value} index={1} page="assigned">
+        {value === 'assigned' && (
           <ShowAssigned setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
-        </TabPanel>
+        )}
 
-        <TabPanel id="finished-jobs-table" value={value} index={2} page="finished">
+        {value === 'finished' && (
           <ShowFinished setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
-        </TabPanel>
+        )}
+
+        {/* <TabPanel id="unassigned-jobs-table" value={value} index={0} page="unassigned">
+          <ShowUnassigned setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
+        </TabPanel> */}
+
+        {/* <TabPanel id="assigned-jobs-table" value={value} index={1} page="assigned">
+          <ShowAssigned setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
+        </TabPanel> */}
+
+        {/* <TabPanel id="finished-jobs-table" value={value} index={2} page="finished">
+          <ShowFinished setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
+        </TabPanel> */}
 
         { value === 'categories' && (
           <ShowByOperation

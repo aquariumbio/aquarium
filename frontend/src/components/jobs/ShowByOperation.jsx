@@ -47,8 +47,6 @@ const ShowByOperation = ({
   category,
   operationType,
   setOperationType,
-  setIsLoading,
-  setAlertProps,
 }) => {
   const classes = useStyles();
 
@@ -136,8 +134,6 @@ ShowByOperation.propTypes = {
   category: string.isRequired,
   operationType: string.isRequired,
   setOperationType: func.isRequired,
-  setIsLoading: func.isRequired,
-  setAlertProps: func.isRequired,
 };
 
 export default ShowByOperation;
