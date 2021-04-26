@@ -27,8 +27,13 @@ jobsAPI.getJob = (id) => axiosInstance
   .then((response) => response.data)
   .catch((error) => error);
 
-jobsAPI.getOperationsByCategoryAndStatus = (category, status = 'pending') => axiosInstance
-  .get(`/jobs/category/${category}/status=${status}`)
+jobsAPI.getCategoryByStatus = (category, status = 'pending') => axiosInstance
+  .get(`/jobs/category/${category}?status=${status}`)
+  .then((response) => response.data)
+  .catch((error) => error);
+
+jobsAPI.getOperationTypeByCategoryAndStatus = (operationType, category, status = 'pending') => axiosInstance
+  .get(`/jobs/category/${category}/${operationType}?status=${status}`)
   .then((response) => response.data)
   .catch((error) => error);
 

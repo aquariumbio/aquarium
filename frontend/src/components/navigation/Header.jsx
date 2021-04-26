@@ -22,7 +22,7 @@ const pages = [
   },
   {
     title: 'Manage',
-    url: '/manage',
+    url: '/jobs',
   },
   {
     title: 'Samples',
@@ -38,7 +38,10 @@ const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
     height: '74px',
-    borderBottom: '3px solid #ddd',
+    borderBottom: '1px solid #ddd',
+    '& .MuiPaper': {
+      boxShadow: 'none',
+    },
     '& .MuiToolbar-regular': {
       display: 'flex',
       justifyContent: 'space-between',

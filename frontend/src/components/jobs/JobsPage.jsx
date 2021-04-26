@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-
 import { makeStyles } from '@material-ui/core';
-import Divider from '@material-ui/core/Divider';
 import SideBar from './SideBar';
 import ShowAssigned from './ShowAssigned';
 import ShowUnassigned from './ShowUnassigned';
 import ShowFinished from './ShowFinished';
 import ShowByOperation from './ShowByOperation';
 import jobsAPI from '../../helpers/api/jobsAPI';
+import HorizontalNavList from './HorizontalNavList';
 
 function TabPanel(props) {
   const {
@@ -38,21 +37,33 @@ const useStyles = makeStyles(() => ({
     display: 'inline-flex',
     width: '98%',
   },
+
+  whiteSpace: {
+    height: '90px',
+  },
+
   main: {
     marginTop: '23px',
     marginLeft: '20px',
     width: '100%',
+  },
+
+  divider: {
+    marginTop: '0',
   },
 }));
 
 const JobsPage = ({ setIsLoading, setAlertProps }) => {
   const classes = useStyles();
 
-  const [operationType, setOperationType] = useState();
+  const [value, setValue] = useState('unassigned');
   const [jobCounts, setJobCounts] = useState({});
   const [activeCounts, setActiveCounts] = useState({});
   const [inactive, setInactive] = useState([]);
-  const [value, setValue] = useState('unassigned');
+
+  const [category, setCategory] = useState('');
+  const [operationState, setOperationState] = useState('Pending');
+  const [operationType, setOperationType] = useState('');
 
   useEffect(() => {
     const init = async () => {
@@ -71,19 +82,31 @@ const JobsPage = ({ setIsLoading, setAlertProps }) => {
 
   return (
     <div className={classes.root}>
+
+      {/* Jobs & Operations */}
       <SideBar
         jobCounts={jobCounts}
         activeCounts={activeCounts}
         inactive={inactive}
         value={value}
         setValue={setValue}
-        setOperationType={setOperationType}
-        setIsLoading={setIsLoading}
-        setAlertProps={setAlertProps}
+        category={category}
+        setCategory={setCategory}
       />
 
       <div className={classes.main} name="object-types-main-container" data-cy="object-types-main-container">
-        <Divider />
+        <div className={classes.whiteSpace}>
+          {value === 'categories' && (
+
+            // Operation states
+            <HorizontalNavList
+              name="operation-state-nav"
+              list={[{ name: 'Pending' }]}
+              value={operationState}
+              setValue={setOperationState}
+            />
+          )}
+        </div>
 
         <TabPanel id="unassigned-jobs-table" value={value} index={0} page="unassigned">
           <ShowUnassigned setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
@@ -97,9 +120,13 @@ const JobsPage = ({ setIsLoading, setAlertProps }) => {
           <ShowFinished setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
         </TabPanel>
 
-        <TabPanel id="pending-operations-panel" value={value} index={2} page="operations">
-          <ShowByOperation setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
-        </TabPanel>
+        { value === 'categories' && (
+          <ShowByOperation
+            category={category}
+            operationType={operationType}
+            setOperationType={setOperationType}
+          />
+        )}
       </div>
     </div>
   );

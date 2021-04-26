@@ -13,7 +13,8 @@ import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles(() => ({
   root: {
-    width: '120px',
+    minWidth: '120px',
+    marginTop: '75px',
     '& .Mui-selected': {
       background: 'rgba(64, 222, 253, 0.13)',
     },
@@ -47,7 +48,8 @@ const SideBar = ({
   inactive,
   value,
   setValue,
-  setOperationType,
+  category,
+  setCategory,
 }) => {
   const classes = useStyles();
 
@@ -55,6 +57,12 @@ const SideBar = ({
 
   const handleListItemClick = (event, page) => {
     setValue(page);
+    setCategory('');
+  };
+
+  const handleOperationClick = (event, catName) => {
+    setValue('categories');
+    setCategory(catName);
   };
 
   const handleOpen = () => {
@@ -105,16 +113,16 @@ const SideBar = ({
         <Typography className={classes.count}>{`(${jobCounts.finished})`}</Typography>
       </ListItem>
 
-      <ListItem key="operations">
+      <ListItem key="categories">
         <ListItemText primary="Operations" className={classes.label} />
       </ListItem>
 
-      {Object.keys(activeCounts).map((key, index) => (
+      {Object.keys(activeCounts).map((key) => (
         <ListItem
           button
-          onClick={(event) => handleListItemClick(event, index + 3)}
-          selected={value === index + 3}
-          id="operations-list"
+          onClick={(event) => handleOperationClick(event, key)}
+          selected={category === key}
+          id="category-list"
           key={key}
         >
           <Typography noWrap>{key}</Typography>
@@ -131,13 +139,13 @@ const SideBar = ({
 
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List disablePadding className={classes.list} id="inactive-list">
-          {inactive.map((key, count, index) => (
+          {inactive.map((key, count) => (
             <ListItem
               button
               className={classes.nested}
               key={key}
-              onClick={(event) => handleListItemClick(event, index + 3 + activeCounts.length)}
-              selected={value === index + 3 + activeCounts.length}
+              onClick={(event) => handleListItemClick(event)}
+              selected={value === key}
             >
               <Typography noWrap>{key}</Typography>
               <Typography className={classes.count}>{count}</Typography>
@@ -159,7 +167,8 @@ SideBar.propTypes = {
   inactive: PropTypes.arrayOf(PropTypes.string).isRequired,
   value: PropTypes.string.isRequired,
   setValue: PropTypes.func.isRequired,
-  setOperationType: PropTypes.func.isRequired,
+  category: PropTypes.string.isRequired,
+  setCategory: PropTypes.func.isRequired,
 };
 
 export default SideBar;

@@ -1,30 +1,24 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core';
-import Collapse from '@material-ui/core/Collapse';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: '170px',
-    minWidth: '120px',
-    paddingTop: '0px',
+    display: 'inline-block',
+    backgroundColor: theme.palette.background.paper,
+    '& .MuiList-root': {
+      display: 'inline-flex',
+    },
     '& .Mui-selected': {
-      background: 'rgba(64, 222, 253, 0.13)',
+      borderBottom: '5px solid #6FC1FF',
+      background: theme.palette.background.paper,
     },
     '& .MuiListItemIcon-root': {
       maxWidth: '45px',
-    },
-    '& .MuiListItem-gutters': {
-      paddingRight: '0px',
     },
   },
 
@@ -34,30 +28,18 @@ const useStyles = makeStyles(() => ({
     color: 'rgba(0, 0, 0, 0.87)',
   },
 
-  label: {
-    opacity: '0.7',
-    textTransform: 'uppercase',
-    borderBottom: '1px #DDD solid',
-    color: '#333',
-    fontWeight: '300',
-  },
-
-  divider: {
-    marginTop: '0',
-  },
 }));
 
-// eslint-disable-next-line no-unused-vars
-const VerticalNavList = ({
+const HorizontalNavList = ({
   name,
   list,
   value,
-  setOperationType,
+  setValue,
 }) => {
   const classes = useStyles();
 
   const handleListItemClick = (event, page) => {
-    setOperationType(page);
+    setValue(page);
   };
 
   return (
@@ -65,8 +47,6 @@ const VerticalNavList = ({
       aria-label={`${name}-nav`}
       className={classes.root}
     >
-      <Divider className={classes.divider} />
-
       {list !== undefined && list.map((li) => (
         <ListItem
           button
@@ -82,11 +62,11 @@ const VerticalNavList = ({
   );
 };
 
-VerticalNavList.propTypes = {
+HorizontalNavList.propTypes = {
   name: PropTypes.string.isRequired,
   list: PropTypes.arrayOf(PropTypes.object).isRequired,
   value: PropTypes.string.isRequired,
-  setOperationType: PropTypes.func.isRequired,
+  setValue: PropTypes.func.isRequired,
 };
 
-export default VerticalNavList;
+export default HorizontalNavList;
