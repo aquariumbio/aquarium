@@ -37,4 +37,11 @@ jobsAPI.getOperationTypeByCategoryAndStatus = (operationType, category, status =
   .then((response) => response.data)
   .catch((error) => error);
 
+jobsAPI.create = (operationIds) => axiosInstance
+  .post('/jobs/create', {
+    operation_ids: [...operationIds],
+  })
+  .then((response) => response.data)
+  .catch((error) => error);
+
 export default jobsAPI;
