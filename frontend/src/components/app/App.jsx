@@ -40,9 +40,9 @@ import WindowDimensionsProvider from '../../WindowDimensionsProvider';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      light: '#5290c1',
-      main: '#136390',
-      dark: '#003962',
+      light: '#6ab7ff',
+      main: '#0B88FB',
+      dark: '#005cc7',
       contrastText: '#fff',
     },
     disabled: '#ddd',
