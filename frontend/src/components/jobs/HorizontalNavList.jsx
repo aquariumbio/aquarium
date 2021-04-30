@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 
   count: {
     fontSize: '0.625rem',
-    marginLeft: '1px',
+    marginLeft: '2px',
     color: 'rgba(0, 0, 0, 0.87)',
   },
 
@@ -35,6 +35,7 @@ const HorizontalNavList = ({
   list,
   value,
   setValue,
+  count,
 }) => {
   const classes = useStyles();
 
@@ -54,7 +55,8 @@ const HorizontalNavList = ({
           selected={value === li.name}
           key={li.name}
         >
-          <ListItemText primary={li.name} primaryTypographyProps={{ noWrap: true }} />
+          <Typography noWrap>{li.name}</Typography>
+          {!!count && <Typography className={classes.count}>({count})</Typography>}
         </ListItem>
       ))}
 
@@ -67,6 +69,7 @@ HorizontalNavList.propTypes = {
   list: PropTypes.arrayOf(PropTypes.object).isRequired,
   value: PropTypes.string.isRequired,
   setValue: PropTypes.func.isRequired,
+  count: PropTypes.number.isRequired,
 };
 
 export default HorizontalNavList;
