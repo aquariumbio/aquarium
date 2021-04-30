@@ -30,7 +30,7 @@ const useStyles = makeStyles(() => ({
 
   count: {
     fontSize: '0.625rem',
-    marginLeft: '1px',
+    marginLeft: '2px',
     color: 'rgba(0, 0, 0, 0.87)',
   },
 

@@ -14,8 +14,7 @@ import Divider from '@material-ui/core/Divider';
 
 const useStyles = makeStyles(() => ({
   root: {
-    maxWidth: '170px',
-    minWidth: '120px',
+    minWidth: '170px',
     paddingTop: '0px',
     '& .Mui-selected': {
       background: 'rgba(64, 222, 253, 0.13)',
@@ -30,7 +29,7 @@ const useStyles = makeStyles(() => ({
 
   count: {
     fontSize: '0.625rem',
-    marginLeft: '1px',
+    marginLeft: '2px',
     color: 'rgba(0, 0, 0, 0.87)',
   },
 
@@ -74,7 +73,8 @@ const VerticalNavList = ({
           selected={value === li.name}
           key={li.name}
         >
-          <ListItemText primary={li.name} primaryTypographyProps={{ noWrap: true }} />
+          <Typography noWrap>{li.name} </Typography>
+          <Typography className={classes.count}>({li.n})</Typography>
         </ListItem>
       ))}
 
