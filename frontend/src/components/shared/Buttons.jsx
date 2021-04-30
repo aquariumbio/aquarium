@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { Link as RouterLink } from 'react-router-dom';
+import AttachFileIcon from '@material-ui/icons/AttachFile';
 
 const useStyles = makeStyles((theme) => ({
   dark: {
@@ -19,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
   light: {
     backgroundColor: 'rgb(255, 255, 255)',
     color: theme.palette.primary.main,
-    boxShadow: '0 2px 5px 0 rgba(0,0,0,.26)',
     margin: `${theme.spacing(2)}px ${theme.spacing(2)}px ${theme.spacing(2)}px 0px `,
   },
 
@@ -38,10 +38,15 @@ export const StandardButton = ({
   type = 'button',
   testName = { name },
   disabled = false,
+  icon = false,
+  variant,
 }) => {
   const classes = useStyles();
   const cname = dark ? classes.dark : classes.light;
   const noMargin = dense ? classes.dense : '';
+  const validIcons = {
+    attach: <AttachFileIcon />,
+  };
 
   return (
     <Button
@@ -51,6 +56,9 @@ export const StandardButton = ({
       onClick={handleClick}
       data-cy={testName}
       disabled={disabled}
+      color="primary"
+      startIcon={validIcons[icon]}
+      variant={variant}
     >
       {text}
     </Button>
@@ -65,6 +73,9 @@ StandardButton.propTypes = {
   handleClick: PropTypes.func.isRequired,
   testName: PropTypes.string,
   disabled: PropTypes.bool,
+  icon: PropTypes.bool,
+  variant: PropTypes.oneOf(['contained', 'outlined', 'text']),
+
 };
 StandardButton.defaultProps = {
   dark: false,
@@ -72,6 +83,8 @@ StandardButton.defaultProps = {
   dense: false,
   disabled: false,
   testName: 'StandardButton',
+  icon: false,
+  variant: 'outlined',
 };
 
 // Button with routing, takes a link string
