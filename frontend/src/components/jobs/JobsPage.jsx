@@ -9,29 +9,6 @@ import ShowByOperation from './ShowByOperation';
 import jobsAPI from '../../helpers/api/jobsAPI';
 import HorizontalNavList from './HorizontalNavList';
 
-function TabPanel(props) {
-  const {
-    children, value, page, id,
-  } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== page}
-      id={id}
-    >
-      {children}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node.isRequired,
-  value: PropTypes.isRequired,
-  page: PropTypes.string.isRequired,
-  id: PropTypes.isRequired,
-};
-
 const useStyles = makeStyles(() => ({
   root: {
     display: 'inline-flex',
@@ -67,6 +44,7 @@ const JobsPage = ({ setIsLoading, setAlertProps }) => {
   const [category, setCategory] = useState('');
   const [operationState, setOperationState] = useState('Pending');
   const [operationType, setOperationType] = useState('');
+  const [pendingCount, setPendingCount] = useState();
 
   useEffect(() => {
     const init = async () => {
@@ -107,6 +85,7 @@ const JobsPage = ({ setIsLoading, setAlertProps }) => {
               list={[{ name: 'Pending' }]}
               value={operationState}
               setValue={setOperationState}
+              count={pendingCount}
             />
           )}
         </div>
@@ -123,23 +102,13 @@ const JobsPage = ({ setIsLoading, setAlertProps }) => {
           <ShowFinished setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
         )}
 
-        {/* <TabPanel id="unassigned-jobs-table" value={value} index={0} page="unassigned">
-          <ShowUnassigned setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
-        </TabPanel> */}
-
-        {/* <TabPanel id="assigned-jobs-table" value={value} index={1} page="assigned">
-          <ShowAssigned setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
-        </TabPanel> */}
-
-        {/* <TabPanel id="finished-jobs-table" value={value} index={2} page="finished">
-          <ShowFinished setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
-        </TabPanel> */}
-
         { value === 'categories' && (
           <ShowByOperation
             category={category}
             operationType={operationType}
             setOperationType={setOperationType}
+            setPendingCount={setPendingCount}
+            setAlertProps={setAlertProps}
           />
         )}
       </div>
