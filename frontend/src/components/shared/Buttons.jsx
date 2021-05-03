@@ -115,3 +115,14 @@ LinkButton.defaultProps = {
   disabled: false,
   testName: 'LinkButton',
 };
+
+export const HomeButton = () => (
+  <Button
+    name="home"
+    aria-label="home"
+    component={RouterLink}
+    to="/"
+  >
+    <img src={`${process.env.PUBLIC_URL}AQ-Brandmark.png`} alt="logo" width="40" height="40" />
+  </Button>
+);

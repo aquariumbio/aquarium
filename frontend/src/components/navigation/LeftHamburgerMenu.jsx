@@ -26,8 +26,8 @@ const LeftHamburgerMenu = () => {
 
   return (
     <>
-      <IconButton color="inherit" aria-label="menu" onClick={handleMenu}>
-        <MenuIcon fontSize="large" />
+      <IconButton aria-label="menu" color="disabled" size="medium" onClick={handleMenu}>
+        <MenuIcon color="inherit" fontSize="inherit" />
       </IconButton>
       <Menu
         id="menu-appbar"

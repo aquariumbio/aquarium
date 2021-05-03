@@ -242,6 +242,14 @@ CREATE TABLE `groups` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `id_strings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `id_strings` (
+  `id` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `invoices`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -745,7 +753,8 @@ SET character_set_client = utf8;
   `operation_type_id` tinyint NOT NULL,
   `name` tinyint NOT NULL,
   `category` tinyint NOT NULL,
-  `deployed` tinyint NOT NULL
+  `deployed` tinyint NOT NULL,
+  `id` tinyint NOT NULL
 ) ENGINE=MyISAM */;
 SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `view_users`;
@@ -846,7 +855,7 @@ CREATE TABLE `workers` (
 /*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`aquarium`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `view_job_operation_types` AS select distinct `j`.`id` AS `job_id`,`j`.`pc` AS `pc`,`j`.`created_at` AS `created_at`,`j`.`updated_at` AS `updated_at`,`ot`.`id` AS `operation_type_id`,`ot`.`name` AS `name`,`ot`.`category` AS `category`,`ot`.`deployed` AS `deployed` from (((`jobs` `j` join `job_associations` `ja` on((`ja`.`job_id` = `j`.`id`))) join `operations` `o` on((`o`.`id` = `ja`.`operation_id`))) join `operation_types` `ot` on((`ot`.`id` = `o`.`operation_type_id`))) */;
+/*!50001 VIEW `view_job_operation_types` AS select distinct `j`.`id` AS `job_id`,`j`.`pc` AS `pc`,`j`.`created_at` AS `created_at`,`j`.`updated_at` AS `updated_at`,`ot`.`id` AS `operation_type_id`,`ot`.`name` AS `name`,`ot`.`category` AS `category`,`ot`.`deployed` AS `deployed`,concat(`j`.`id`,'-',`ot`.`id`) AS `id` from (((`jobs` `j` join `job_associations` `ja` on((`ja`.`job_id` = `j`.`id`))) join `operations` `o` on((`o`.`id` = `ja`.`operation_id`))) join `operation_types` `ot` on((`ot`.`id` = `o`.`operation_type_id`))) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;

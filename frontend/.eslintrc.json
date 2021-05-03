@@ -37,6 +37,7 @@
       }
     ],
     "prefer-destructuring": "warn",
-    "no-useless-return": "warn"
+    "no-useless-return": "warn",
+    "no-unused-vars": "warn"
   }
 }
