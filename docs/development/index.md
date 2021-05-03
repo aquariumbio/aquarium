@@ -388,21 +388,31 @@ Keep it up-to-date if you change something that affects Aquarium development.
 
 9.  (Make sure JS linting passes)
 
-10. Update the version number in `package.json` and `config/initializers/version.rb` to the new version number.
+10. Update the version number in
 
-11. Update API documentation by running
+    - `package.json`
+    - `config/initializers/version.rb`
+    - `setup.sh` (and either regenerate or edit the `.env` file)
+
+11. Update zenodo meta data:
+
+    - version numbers in `description`, `title`, and `url` under `related identifiers`
+    - publication date
+    - add any "creators"
+
+12. Update API documentation by running
 
     ```bash
     docker-compose run --rm app yard
     ```
 
-12. Update `CHANGE_LOG`
+13. Update `CHANGE_LOG`
 
     ```bash
     git log v$OLDVERSION..
     ```
 
-13. Ensure all changes have been committed and pushed.
+14. Ensure all changes have been committed and pushed.
 
     ```bash
     git status && git log --branches --not --remotes
@@ -410,28 +420,44 @@ Keep it up-to-date if you change something that affects Aquarium development.
 
     Commit and push any changes found.
 
-14. Create a tag for the new version:
+15. Create a tag for the new version:
 
     ```bash
     git tag -a v$NEWVERSION -m "Aquarium version $NEWVERSION"
     git push --tags
     ```
 
-15. [Create a release on github](https://help.github.com/articles/creating-releases/).
+16. [Create a release on github](https://help.github.com/articles/creating-releases/).
     Visit the [Aquarium releases page](https://github.com/klavinslab/aquarium/releases).
 
     - Click "Tags".
     - Click "add release notes" for the new tag, use the change log as the release notes.
     - Click "publish release".
 
-16. (Update zenodo entry)
-
-17. Push image to Docker Hub
+17. Build Docker image (be sure that version number in `.env` matches the `$NEWVERSION`)
 
     ```bash
     bash ./aquarium.sh build
-    docker push aquariumbio/aquarium:v$NEWVERSION
     ```
+
+18. Scan image
+
+    ```bash
+    snyk container test aquariumbio/aquarium:$NEWVERSION --file=./Dockerfile
+    ```
+
+    fix any issues identified, rebuild the image and rescan.
+    It may not be possible to resolve all of the identified issues.
+
+19. Push image to Docker Hub
+
+    ```bash
+    docker push aquariumbio/aquarium:$NEWVERSION
+    docker tag aquariumbio/aquarium:$NEWVERSION aquariumbio/aquarium:latest
+    docker push aquariumbio/aquarium:latest
+    ```
+
+You should run `docker system prune` after the snyk scan.
 
 ## Aquarium Configuration
 

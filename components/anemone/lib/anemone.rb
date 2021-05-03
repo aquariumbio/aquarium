@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# typed: strong
+# typed: strict
 
 require 'anemone/version'
 require 'anemone/model'

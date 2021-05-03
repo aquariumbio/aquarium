@@ -117,6 +117,7 @@ module Krill
       puts "Stopping job #{@sandbox.job.id}"
 
       @thread.kill
+      ActiveRecord::Base.clear_active_connections!
       @mutex.synchronize { @thread_status.running = false }
     end
 

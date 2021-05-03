@@ -17,7 +17,18 @@
                  style="margin: 0">
         </th>
         <th>Plan</th>
-        <th class="output">Input/Output</th>
+        <th class="output">
+          Output/(
+          <md-switch class="md-primary"
+            md-invert md-no-ink
+            aria-label="Switch No Ink"
+            ng-model="show_inputs"
+            style="display: inline-flex; margin: 0 0">
+            <b>Inputs</b>
+          </md-switch>
+          )
+        </th>
+        <th ng-show="status == 'error' || status == 'done'">Job(s)</th> <!--  Show Jobs column with links when viewing completed jobs (have status of error or done)  -->
         <th>Last Updated</th>
         <th>Client</th>
         <th>Op ID</th>
@@ -53,11 +64,10 @@
               <span ng-if="$first"  class="data-col-1"><b>out:</b></span>
               <span ng-if="!$first" class="data-col-1">&nbsp;</span>
 
-              <span class="data-col-2">{{fv.name}}:</span>
+              <span class="data-col-2">{{fv.name}}: {{fv.object_type}}</span>
 
               <span ng-if="fv.sample" class="data-col-3">
                 <a href="/browser?sid={{fv.sample.id}}" target="samples">{{fv.sample.id}}: {{fv.sample.name}}</a>
-                <span ng-if="fv.item.object_type"> as {{fv.item.object_type.name}}</span>
                 <span ng-if="fv.child_item_id" >
                   (
                     <div ng-if="fv.child_item_id && !fv.is_part"
@@ -77,41 +87,52 @@
             </li>
 
             <li ng-repeat="fv in op.field_values | filter: { role: 'input' } track by $index"
-                style="display: inline-flex; flex-direction: row; align-items: flex-start;">
-              <span ng-if="$first"  class="data-col-1"><b>in:</b></span>
+                ng-style="{'display': (show_inputs) ? 'inline-flex' : 'none'}"
+                style="flex-direction: row; align-items: flex-start;"
+                class="inputs">
+              <span ng-if="$first" class="data-col-1" ><b>in:</b></span>
               <span ng-if="!$first" class="data-col-1">&nbsp;</span>
+                <span class="data-col-2">{{fv.name}}: {{fv.object_type}}</span>
 
-              <span class="data-col-2">{{fv.name}}:</span>
-
-              <span ng-if="fv.sample" class="data-col-3">
-                <a href="/browser?sid={{fv.sample.id}}" target="samples">{{fv.sample.id}}: {{fv.sample.name}}</a>
-                <span ng-if="fv.child_item_id" >
-                  (
-                    <div ng-if="fv.child_item_id && !fv.is_part"
-                         item="fv.item"
-                         container="fv.item.object_type"
-                         sample="fv.sample"></div>
-                    <div ng-if="fv.child_item_id && fv.is_part"
-                         item="fv.part"
-                         container="fv.part.object_type"
-                         sample="fv.part.sample"
-                         collection="fv.item"
-                         row="fv.row"
-                         column=fv.column></div>
-                  )
+                <span ng-if="fv.sample" class="data-col-3">
+                  <a href="/browser?sid={{fv.sample.id}}" target="samples">{{fv.sample.id}}: {{fv.sample.name}}</a>
+                  <span ng-if="fv.child_item_id" >
+                    (
+                      <div ng-if="fv.child_item_id && !fv.is_part"
+                           item="fv.item"
+                           container="fv.item.object_type"
+                           sample="fv.sample"></div>
+                      <div ng-if="fv.child_item_id && fv.is_part"
+                           item="fv.part"
+                           container="fv.part.object_type"
+                           sample="fv.part.sample"
+                           collection="fv.item"
+                           row="fv.row"
+                           column=fv.column></div>
+                    )
+                  </span>
                 </span>
-              </span>
-              <!-- TODO: BREAK TO NEW LINE -->
-              <span ng-if="fv.value" class="data-col-3" style="color: black !important">{{fv.value}}</span>
+                <!-- TODO: BREAK TO NEW LINE -->
+                <span ng-if="fv.value" class="data-col-3" style="color: black !important">{{fv.value}}</span>
             </li>
             <li ng-repeat="da in op.data_associations"
-                style="display: inline-flex; flex-direction: row; align-items: flex-start;">
+                ng-style="{'display': (show_inputs) ? 'inline-flex' : 'none'}"
+                style="flex-direction: row; align-items: flex-start;"
+               class="data_associations">
               <span class="data-col-1">&nbsp;</span>
               <span ng-if="da.key" class="data-col-2">{{da.key}}:</span>
               <span ng-if="da.value" class="data-col-3">{{da.value}}</span>
             </li>
           </ul>
         </td>
+
+        <!--  Show Jobs column with links when viewing completed jobs (have status of error or done)  -->
+         <td ng-show="status == 'error' || status == 'done'">
+            <div ng-if="op.jobs.length > 0" ng-repeat="job in op.jobs">
+              <a href="/jobs/{{job.id}}">{{job.id}}</a> (<span>{{job.status}}</span>)
+            </div>
+            <div ng-if="op.jobs.length == 0">--</div>
+          </td>
 
         <td>{{ op.updated_at | naturalDate }}</td> <!-- Last Updated -->
 

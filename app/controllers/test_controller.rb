@@ -26,6 +26,18 @@ class TestController < ApplicationController
       return
     end
 
+    unless operation_type.test?
+      response.error('No test found')
+              .more(
+                error_type: 'error',
+                exception_backtrace: [],
+                backtrace: [],
+                log: []
+              )
+      render json: response, status: :ok
+      return
+    end
+
     begin
       test = ProtocolTestEngine.run(
         operation_type: operation_type,

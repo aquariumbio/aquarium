@@ -44,13 +44,14 @@ services:
   web:
     command: [nginx-debug, "-g", "daemon off;"]
     ports:
-      - "3000:3000"
+      - "${DEV_PUBLIC_PORT:-3000}:3000"
+      - "${S3_PUBLIC_PORT:-9000}:9000"
     volumes:
       - ./docker/nginx.development.conf:/etc/nginx/conf.d/default.conf:ro
 
   db:
     ports:
-      - "3307:3306"
+      - "${EXTERNAL_DB_PORT:-3307}:3306"
     volumes:
       - ./data/db/development:/var/lib/mysql
       - ./docker/mysql_init/dump.sql:/docker-entrypoint-initdb.d/dump.sql

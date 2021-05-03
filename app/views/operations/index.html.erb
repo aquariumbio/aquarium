@@ -1,6 +1,6 @@
 <% provide(:title,  "Manager" ) %>
 <%= render partial: "/items/template" %>
-<%= render partial: 'operation_list' %> 
+<%= render partial: 'operation_list' %>
 <%= render partial: '/operations/operation_list_report' %>
 
 <%= content_for :class do %>operations<% end %>
@@ -11,216 +11,167 @@
 
 <%= content_for :sidebar do %>
 
-  <div layout='column'>
-    <%= render partial: 'sidebar' %> 
-  </div>
+<div layout='column'>
+  <%= render partial: 'sidebar' %>
+</div>
 
 <% end %>
 
 <%= content_for :specific_title do %>
 
-  <span ng-if="current.selected_user && current.filter_user && !current.activity_report.selected">
-    &rang; {{current.selected_user.name}}
-  </span>
+<span ng-if="current.selected_user && current.filter_user && !current.activity_report.selected">
+  &rang; {{current.selected_user.name}}
+</span>
 
-  <span ng-if="current.activity_report.selected">
-    &rang; Activity Report &rang; {{current.activity_report.date|date}}
-  </span>
+<span ng-if="current.activity_report.selected">
+  &rang; Activity Report &rang; {{current.activity_report.date|date}}
+</span>
 
 
-  <% if current_user && current_user.is_admin %>
-    <div ng-if="!current.activity_report.selected">
-      <md-button aria-label="Schedule"
-                class='md-raised md-primary'
-                ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
-                ng-disabled="disable_batch_button()"
-                ng-click="batch(current.operation_type)"
-                data-manager-action="schedule"
-                id="batch-btn">
-        <ng-md-icon icon="attach_file" size="16" aria-label="schedule" style="fill: #fff; display: inline-flex; vertical-align: middle;"></ng-md-icon>
-        <span style="display: inline-flex; vertical-align: middle;">Create Job</span>
-      </md-button>
-    
-      <md-button ng-if="current.status === 'scheduled'"
-                class='md-raised md-primary'
-                ng-click="unschedule(current.operation_type)"
-                ng-disabled="disable_batch_button()"
-                aria-lable="Unschedule"
-                data-manager-job-action="Remove operataion"
-                id="remove-btn">
-        <ng-md-icon icon="remove_circle_outline" aria-label="Remove operation" style="fill: #fff; display: inline-flex; vertical-align: middle;"></ng-md-icon>
-        <span style="display: inline-flex; vertical-align: middle;">Remove</span>
-      </md-button>
+<% if current_user && current_user.is_admin %>
+<div ng-if="!current.activity_report.selected">
+  <md-button aria-label="Schedule" class='md-raised md-primary' ng-if="!current.operation_type.on_the_fly && current.status == 'pending'" ng-disabled="disable_batch_button()" ng-click="batch(current.operation_type)" data-manager-action="schedule" id="batch-btn">
+    <ng-md-icon icon="attach_file" size="16" aria-label="schedule" style="fill: #fff; display: inline-flex; vertical-align: middle;"></ng-md-icon>
+    <span style="display: inline-flex; vertical-align: middle;">Create Job</span>
+  </md-button>
 
-      
+  <md-button ng-if="current.status === 'scheduled'" class='md-raised md-primary' ng-click="unschedule(current.operation_type)" ng-disabled="disable_batch_button()" aria-lable="Unschedule" data-manager-job-action="Remove operataion" id="remove-btn">
+    <ng-md-icon icon="remove_circle_outline" aria-label="Remove operation" style="fill: #fff; display: inline-flex; vertical-align: middle;"></ng-md-icon>
+    <span style="display: inline-flex; vertical-align: middle;">Remove</span>
+  </md-button>
 
-      <md-button ng-if="current.status == 'error'"
-                aria-label="Retry" 
-                class='md-raised md-primary'
-                ng-click="retry(current.operation_type)"
-                data-manager-action="retry">
-        Retry
-      </md-button>
-    </div>
-  <% end %>
+
+
+  <md-button ng-if="current.status == 'error'" aria-label="Retry" class='md-raised md-primary' ng-click="retry(current.operation_type)" data-manager-action="retry">
+    Retry
+  </md-button>
+</div>
+<% end %>
 <% end %>
 
 
 <%= content_for :action1 do %>
-  <% if current_user && current_user.is_admin %>
-    <md-button class="md-raised md-primary"
-              ng-click="step_all()"
-              ng-disabled="current.stepping"
-              data-manager-action="step all"
-              aria-label="Step All">
-      <ng-md-icon icon="refresh" size="16" aria-label="Step All" style="fill: #fff; display: inline-flex; vertical-align: middle;"></ng-md-icon>
-      <span style="display: inline-flex; vertical-align: middle;">STEP ALL</span>
-      <span ng-if="current.stepping">
-        <md-progress-linear class="md-hue-2" md-diameter="20px" style="display: inline-block">
-        </md-progress-linear>       
-      </span>
-    </md-button> 
-  <% end %>
+<% if current_user && current_user.is_admin %>
+<md-button class="md-raised md-primary" ng-click="step_all()" ng-disabled="current.stepping" data-manager-action="step all" aria-label="Step All">
+  <ng-md-icon icon="refresh" size="16" aria-label="Step All" style="fill: #fff; display: inline-flex; vertical-align: middle;"></ng-md-icon>
+  <span style="display: inline-flex; vertical-align: middle;">STEP ALL</span>
+  <span ng-if="current.stepping">
+    <md-progress-linear class="md-hue-2" md-diameter="20px" style="display: inline-block">
+    </md-progress-linear>
+  </span>
+</md-button>
+<% end %>
 
-  <md-button ng-if="current.activity_report.selected"
-            ng-click="decrement_date()"
-            data-manager-action="prev">PREV</md-button> 
+<md-button ng-if="current.activity_report.selected" ng-click="decrement_date()" data-manager-action="prev">PREV</md-button>
 <% end %>
 
 <%= content_for :action2 do %>
-  <md-button ng-if="current.activity_report.selected"
-             ng-click="increment_date()"
-             data-manager-action="next">NEXT</md-button> 
+<md-button ng-if="current.activity_report.selected" ng-click="increment_date()" data-manager-action="next">NEXT</md-button>
 <% end %>
 
 <%= content_for :main do %>
 
-   <%= render partial: '/data_associations/template' %> 
+<%= render partial: '/data_associations/template' %>
 
-   <div ng-if="!current.activity_report.selected">
+<div ng-if="!current.activity_report.selected">
 
-     <div class='timing md-subhead timing-info'
-          ng-if="current.operation_type.timing && current.operation_type.timing.active">
-          Usually Scheduled {{current.operation_type.timing.as_string}}
-     </div>
-
-
-    <oplist ng-if="current.operation_type && current.status != 'scheduled' && current.status != 'running'"
-            operationtype="current.operation_type"
-            operations="current.operation_type.operations"
-            status="current.status">
-    </oplist>
-
-    <md-content ng-if="current.operation_type && current.status == 'scheduled' || current.status == 'running'">
-
-      <div ng-if="jobs.length > 0" ng-repeat="job_id in jobs" class='job'  style='margin: 16px'>
-
-        <md-toolbar class='job-toolbar'>
-          <div class='md-toolbar-tools'>
-            <h2 flex md-truncate style="color: #eee;">
-              {{current.operation_type.name}} - Job <a href="/jobs/{{job_id}}">{{job_id}}</a>
-              <span ng-if="job_assignments[job_id] != undefined"> - Assigned to {{job_assignments[job_id].to_name}} </span>
-              <span ng-if="debugging_job_id == job_id">
-                <md-progress-circular class="md-hue-2" md-diameter="20px" style="display: inline-block">
-                </md-progress-circular> 
-              </span>
-            </h2>
-          
-            <% if current_user && current_user.is_admin %>
-              <md-button ng-if="current.status != 'running'"
-                         class='md-icon-button md-light'
-                         ng-href="/krill/start?job={{job_id}}"
-                         aria-lable="Run"
-                         data-manager-job-action="run">
-                <md-tooltip md-direction="bottom">Run</md-tooltip>
-                <ng-md-icon class="md-light" icon="play_circle_outline" size="24" aria-label="run"></ng-md-icon>
-              </md-button>
-
-              <md-menu > <!-- Technician assignment menu -->
-                <md-button ng-click="$mdMenu.open($event)" 
-                           class='md-icon-button'
-                           aria-label="Open assignment menu">
-                  <md-tooltip md-direction="bottom">Assign</md-tooltip>
-                  <ng-md-icon class="md-light" icon="assignment_ind" size="24" aria-label="Open assignment menu"></ng-md-icon>
-                </md-button>
-
-                <md-menu-content width="4"  class="scrollable flex" style="padding-top: 0;">
-                  <div style="background-color: #fff; position: absolute; z-index: 1; width: 100%;">
-                    <h1 class="md-title" style="text-align: left; margin-left: 26px;">Assign Job</h1>
-                  </div>
-                  
-                  <md-radio-group ng-show="current.technicians.length > 1" ng-model="selectedTech" class="md-primary" style="z-index: 0; margin-top: 62px; margin-bottom: 30px;">
-                      <md-radio-button ng-repeat="tech in current.technicians"
-                                        ng-value="tech" 
-                                        style="margin-left: 26px">
-                          {{ tech['name'] }} (Jobs: {{tech['job_count'] || 0}} )
-                      </md-radio-button>
-                  </md-radio-group>
-
-                  <div ng-show="current.technicians.length > 1"
-                       style="position: absolute; right: 0px; bottom: 0px; display: flex; justify-content: flex-end; z-index:1; width:100%; background-color: #fff;">
-                    <md-button ng-click="$mdMenu.close($event)" 
-                               class="md-primary"
-                               aria-label="Close assignment menu"
-                               style="min-width: auto;  font-size: small; padding: 0;">
-                      Cancel
-                    </md-button>
-                    <md-button ng-click="unassign_job(job_id)" 
-                               class="md-primary"
-                               aria-label="Unassign technician from job"
-                               ng-disabled="disable_unassign(job_id)"
-                               style="min-width: auto;  font-size: small; padding: 0;">
-                      Unassign
-                    </md-button>
-                    <md-button ng-click="assign_job(selectedTech['id'], selectedTech['name'], job_id)" 
-                               class="md-primary"
-                               aria-label="Assign technician to job"
-                               ng-disabled="disable_assign(selectedTech)"
-                               style="min-width: auto;  font-size: small; padding: 0;">
-                      OK
-                    </md-button>
-                  </div>
-                  <p ng-show="current.technicians.length < 1" style="margin-top: 62px; margin-left: 24px;"> No Technicians </p>
-
-                </md-menu-content>
-              </md-menu>
-
-              <% if Bioturk::Application.config.debug_tools %>
-                <md-button ng-if="current.status != 'running'"
-                           class='md-icon-button'
-                           ng-click="debug(current.operation_type,job_id)"
-                           aria-lable="Debug"
-                           data-manager-job-action="debug">
-                  <md-tooltip md-direction="bottom">Debug</md-tooltip>
-                  <ng-md-icon class="md-light" icon="bug_report" size="24" aria-label="Debug"></ng-md-icon>
-                </md-button>
-              <% end %>
-              
-            <% end %>
-          </div>
-
-        </md-toolbar>
-
-        <oplist operation_type="current.operation_type"
-                operations="current.operation_type.operations"
-                status="current.status" 
-                jobid="job_id">
-        </oplist>
-
-      </div>
-
-      <h1 class="md-title" ng-if="jobs.length == 0">No {{current.status}} operations</h1>
-
-      <h1 class="md-title" ng-if="!jobs">Loading operations ...</h1>    
-
-    </md-content>
-
-    <h1 class='md-title' ng-if="!current.operation_type">No operations selected</h1>
-
+  <div class='timing md-subhead timing-info' ng-if="current.operation_type.timing && current.operation_type.timing.active">
+    Usually Scheduled {{current.operation_type.timing.as_string}}
   </div>
 
-  <div ng-if="current.activity_report.selected">  
-    <%= render partial: "job_report" %>
-  </div>
+  <!--  Show operations listed individually -->
+  <oplist ng-if="current.operation_type && current.status != 'scheduled' && current.status != 'running'" operationtype="current.operation_type" operations="current.operation_type.operations" status="current.status">
+  </oplist>
+
+  <!--  Show operations grouped into Jobs
+        Operations that have status scheduled or running should be batched into jobs.  -->
+  <md-content ng-if="current.operation_type && current.status == 'scheduled' || current.status == 'running'">
+
+    <div ng-if="jobs.length > 0" ng-repeat="job_id in jobs" class='job' style='margin: 16px'>
+
+      <md-toolbar class='job-toolbar'>
+        <div class='md-toolbar-tools'>
+          <h2 flex md-truncate style="color: #eee;">
+            <a href="/jobs/{{job_id}}" class="title-link">Job {{job_id}}: {{current.operation_type.name}}</a>
+            <span ng-if=" job_assignments[job_id] !=undefined"> - Assigned to {{job_assignments[job_id].to_name}} </span>
+            <span ng-if="debugging_job_id == job_id">
+              <md-progress-circular class="md-hue-2" md-diameter="20px" style="display: inline-block">
+              </md-progress-circular>
+            </span>
+          </h2>
+
+          <% if current_user && current_user.is_admin %>
+          <md-button ng-if="current.status != 'running'" class='md-icon-button md-light' ng-href="/krill/start?job={{job_id}}" aria-lable="Run" data-manager-job-action="run">
+            <md-tooltip md-direction="bottom">Run</md-tooltip>
+            <ng-md-icon class="md-light" icon="play_circle_outline" size="24" aria-label="run"></ng-md-icon>
+          </md-button>
+
+          <md-menu>
+            <!-- Technician assignment menu -->
+            <md-button ng-click="$mdMenu.open($event)" class='md-icon-button' aria-label="Open assignment menu">
+              <md-tooltip md-direction="bottom">Assign</md-tooltip>
+              <ng-md-icon class="md-light" icon="assignment_ind" size="24" aria-label="Open assignment menu"></ng-md-icon>
+            </md-button>
+
+            <md-menu-content width="4" class="scrollable flex" style="padding-top: 0;">
+              <div style="background-color: #fff; position: absolute; z-index: 1; width: 100%;">
+                <h1 class="md-title" style="text-align: left; margin-left: 26px;">Assign Job</h1>
+              </div>
+
+              <md-radio-group ng-show="current.technicians.length > 0" ng-model="selectedTech" class="md-primary" style="z-index: 0; margin-top: 62px; margin-bottom: 30px;">
+                <!-- HACK: Using onclick b/c ng-click closes the modal w/o submitting.
+                           Using jquery to further get around angularjs default behaviors. -->
+                <md-radio-button ng-repeat="tech in current.technicians" ng-value="tech" style="margin-left: 26px" class="assign_{{job_id}}" ok_button="ok_{{job_id}}" onclick="$(this).addClass('md-checked');
+                                                 $('#'+$(this).attr('ok_button')).removeAttr('disabled')">
+                  {{ tech['name'] }} (Jobs: {{tech['job_count'] || 0}} )
+                </md-radio-button>
+              </md-radio-group>
+
+              <div ng-show="current.technicians.length > 0" style="position: absolute; right: 0px; bottom: 0px; display: flex; justify-content: flex-end; z-index:1; width:100%; background-color: #fff;">
+                <md-button ng-click="$mdMenu.close($event)" class="md-primary" aria-label="Close assignment menu" style="min-width: auto;  font-size: small; padding: 0;">
+                  Cancel
+                </md-button>
+                <md-button ng-click="unassign_job(job_id)" class="md-primary" aria-label="Unassign technician from job" ng-disabled="disable_unassign(job_id)" style="min-width: auto;  font-size: small; padding: 0;">
+                  Unassign
+                </md-button>
+                <md-button ng-click="assign_job(selectedTech['id'], selectedTech['name'], job_id)" id="ok_{{job_id}}" class="md-primary" aria-label="Assign technician to job" ng-disabled="disable_assign(selectedTech)" style="min-width: auto;  font-size: small; padding: 0;">
+                  OK
+                </md-button>
+              </div>
+              <p ng-show="current.technicians.length < 1" style="margin-top: 62px; margin-left: 24px;"> No Technicians </p>
+
+            </md-menu-content>
+          </md-menu>
+
+          <% if Bioturk::Application.config.debug_tools %>
+          <md-button ng-if="current.status != 'running'" class='md-icon-button' ng-click="debug(current.operation_type,job_id)" aria-lable="Debug" data-manager-job-action="debug">
+            <md-tooltip md-direction="bottom">Debug</md-tooltip>
+            <ng-md-icon class="md-light" icon="bug_report" size="24" aria-label="Debug"></ng-md-icon>
+          </md-button>
+          <% end %>
+
+          <% end %>
+        </div>
+
+      </md-toolbar>
+
+      <oplist operation_type="current.operation_type" operations="current.operation_type.operations" status="current.status" jobid="job_id">
+      </oplist>
+
+    </div>
+
+    <h1 class="md-title" ng-if="jobs.length == 0">No {{current.status}} operations</h1>
+
+    <h1 class="md-title" ng-if="!jobs">Loading operations ...</h1>
+
+  </md-content>
+
+  <h1 class='md-title' ng-if="!current.operation_type">No operations selected</h1>
+
+</div>
+
+<div ng-if="current.activity_report.selected">
+  <%= render partial: "job_report" %>
+</div>
 
 <% end %>

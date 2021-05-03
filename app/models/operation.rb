@@ -342,6 +342,8 @@ class Operation < ActiveRecord::Base
   end
 
   def nominal_cost
+    return 0 unless operation_type.cost_model?
+
     begin
       operation_type.cost_model.load(binding: empty_binding)
     rescue ScriptError, StandardError => e
@@ -383,7 +385,12 @@ class Operation < ActiveRecord::Base
   end
 
   def precondition_value
-    result = true
+    unless operation_type.precondition?
+      message = "No precondition found for #{operation_type.name} (id: #{id})"
+      Rails.logger.info message
+      plan.associate 'Precondition load error', message
+      return false
+    end
 
     begin
       operation_type.precondition.load(binding: empty_binding)
@@ -391,23 +398,23 @@ class Operation < ActiveRecord::Base
       # Raise "Error loading precondition for #{operation_type.name}: " + e.to_s
       Rails.logger.info "Error loading precondition for #{operation_type.name} (id: #{id})"
       plan.associate 'Precondition load error', e.message.to_s + ': ' + e.backtrace[0].to_s.sub('(eval)', 'line')
+      return false
     end
 
     begin
-      result = precondition(self)
+      precondition(self)
     rescue SystemStackError, ScriptError, StandardError => e
       Rails.logger.info "PRECONDITION FOR OPERATION #{id} CRASHED"
       plan.associate 'Precondition Evaluation Error', e.message.to_s + ': ' + e.backtrace[0].to_s.sub('(eval)', 'line')
-      result = false # default if there is no precondition or it crashes
+      false
     end
 
-    result
   end
 
   def add_successor(opts)
     ot = OperationType.find_by(name: opts[:type])
 
-    op = ot.operations.create(
+    op = ot.create_operation(
       status: 'waiting',
       user_id: user_id
     )

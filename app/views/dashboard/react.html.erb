@@ -7,7 +7,7 @@
   class TechnicianDashboard extends React.Component {
     constructor(props) {
       super(props);
-      this.state = { 
+      this.state = {
         isLoading: true,
         hasError: false,
         readyJobs: [],
@@ -48,10 +48,10 @@
       }
       return (
         <div className="tech_dashboard">
-          <div className="left_nav"> 
+          <div className="left_nav">
             <div className="btn_block">
               <div className={`btn_cont ${ this.state.viewReadyJobs ? "selected" : "" }`}
-                   onClick={() => this.handleClick(true)}> 
+                   onClick={() => this.handleClick(true)}>
                 <button id="ready_jobs_btn"
                         className="view_select_btn">
                     READY
@@ -62,7 +62,7 @@
               </div>
               <div className={`btn_cont ${ !this.state.viewReadyJobs ? "selected" : "" }`}
                     onClick={() => this.handleClick(false)}>
-                  <button id="running_jobs_btn" 
+                  <button id="running_jobs_btn"
                           className="view_select_btn">
                     RUNNING
                   </button>
@@ -74,8 +74,8 @@
             <div className="page_title">Jobs</div>
           </div>
 
-          { this.state.viewReadyJobs ? 
-              AssignedJobsTable(this.state.readyJobs, this.state.viewReadyJobs) : 
+          { this.state.viewReadyJobs ?
+              AssignedJobsTable(this.state.readyJobs, this.state.viewReadyJobs) :
               AssignedJobsTable(this.state.runningJobs, this.state.viewReadyJobs)
           }
         </div>
@@ -131,13 +131,14 @@
 
   function TechDashTableRow( key, job ) {
     let assigned = `${new Date(job.assigned_at).toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric", hour12: true })}, ${naturalDate(job.assigned_at)}`;
+    let start_time;
     if (job.pc == 0){
       let job_state = JSON.parse(job.state).filter(obj => {
         return obj.operation === "initialize"
       });
-      let start_time = `${new Date(job_state[0].time).toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric", hour12:true})}, ${naturalDate(job_state[0].time)}`;
+      start_time = `${new Date(job_state[0].time).toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric", hour12:true})}, ${naturalDate(job_state[0].time)}`;
     }
-    
+
     return (
       <div key={key} className={`tech_dash_row active-job fflex_resp fflex_row ${key === 0 ? "first_row" : ""}`} >
         <div className="job-id fflex_col" fflex_content="Job">
@@ -149,8 +150,8 @@
         <div className="job-operations fflex_col" fflex_content="Operations"> {job.operation_count}</div>
         <div className="job-created fflex_col" fflex_content="Created"> {job.created_at ? naturalDate(job.created_at): "-"}</div>
         <div className="job-assigned-time fflex_col" fflex_content="Assigned">{ job.assigned_at ? assigned : "-"}</div>
-        { job.pc === 0 && <div className="job-assigned-time fflex_col" fflex_content="Started">{ started }</div> }
-        
+        { job.pc === 0 && <div className="job-assigned-time fflex_col" fflex_content="Started">{ start_time }</div> }
+
       </div>
     )
   }

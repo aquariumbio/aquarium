@@ -56,7 +56,7 @@ module Marshall
   def self.operation(x)
 
     ot = OperationType.find(x[:operation_type_id])
-    op = ot.operations.create status: 'planning', user_id: @@user.id, x: x[:x], y: x[:y], parent_id: x[:parent_id]
+    op = ot.create_operation(status: 'planning', user_id: @@user.id, x: x[:x], y: x[:y], parent_id: x[:parent_id])
 
     if x[:field_values]
       x[:field_values].each do |fv|

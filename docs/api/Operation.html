@@ -1411,13 +1411,6 @@ will use once launched.</p>
       <pre class="lines">
 
 
-407
-408
-409
-410
-411
-412
-413
 414
 415
 416
@@ -1438,15 +1431,22 @@ will use once launched.</p>
 431
 432
 433
-434</pre>
+434
+435
+436
+437
+438
+439
+440
+441</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 407</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 414</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_add_successor'>add_successor</span><span class='lparen'>(</span><span class='id identifier rubyid_opts'>opts</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_ot'>ot</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="OperationType.html" title="OperationType (class)">OperationType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by'>find_by</span><span class='lparen'>(</span><span class='label'>name:</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:type</span><span class='rbracket'>]</span><span class='rparen'>)</span>
 
-  <span class='id identifier rubyid_op'>op</span> <span class='op'>=</span> <span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_operations'>operations</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span><span class='lparen'>(</span>
+  <span class='id identifier rubyid_op'>op</span> <span class='op'>=</span> <span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_create_operation'>create_operation</span><span class='lparen'>(</span>
     <span class='label'>status:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>waiting</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
     <span class='label'>user_id:</span> <span class='id identifier rubyid_user_id'>user_id</span>
   <span class='rparen'>)</span>
@@ -2156,13 +2156,13 @@ will use once launched.</p>
       <pre class="lines">
 
 
-365
-366
 367
-368</pre>
+368
+369
+370</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 365</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 367</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_input_data'>input_data</span><span class='lparen'>(</span><span class='id identifier rubyid_input_name'>input_name</span><span class='comma'>,</span> <span class='id identifier rubyid_data_name'>data_name</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_fv'>fv</span> <span class='op'>=</span> <span class='id identifier rubyid_input'>input</span><span class='lparen'>(</span><span class='id identifier rubyid_input_name'>input_name</span><span class='rparen'>)</span>
@@ -2263,23 +2263,23 @@ will use once launched.</p>
       <pre class="lines">
 
 
-439
-440
-441
-442
-443
-444
-445
 446
 447
 448
 449
 450
 451
-452</pre>
+452
+453
+454
+455
+456
+457
+458
+459</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 439</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 446</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_leaf?'>leaf?</span>
 
@@ -2396,12 +2396,16 @@ will use once launched.</p>
 360
 361
 362
-363</pre>
+363
+364
+365</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 344</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_nominal_cost'>nominal_cost</span>
+  <span class='kw'>return</span> <span class='int'>0</span> <span class='kw'>unless</span> <span class='id identifier rubyid_operation_type'>operation_type</span><span class='period'>.</span><span class='id identifier rubyid_cost_model?'>cost_model?</span>
+
   <span class='kw'>begin</span>
     <span class='id identifier rubyid_operation_type'>operation_type</span><span class='period'>.</span><span class='id identifier rubyid_cost_model'>cost_model</span><span class='period'>.</span><span class='id identifier rubyid_load'>load</span><span class='lparen'>(</span><span class='label'>binding:</span> <span class='id identifier rubyid_empty_binding'>empty_binding</span><span class='rparen'>)</span>
   <span class='kw'>rescue</span> <span class='const'>ScriptError</span><span class='comma'>,</span> <span class='const'>StandardError</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
@@ -2638,13 +2642,13 @@ will use once launched.</p>
       <pre class="lines">
 
 
-370
-371
 372
-373</pre>
+373
+374
+375</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 370</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 372</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_output_data'>output_data</span><span class='lparen'>(</span><span class='id identifier rubyid_output_name'>output_name</span><span class='comma'>,</span> <span class='id identifier rubyid_data_name'>data_name</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_fv'>fv</span> <span class='op'>=</span> <span class='id identifier rubyid_output'>output</span><span class='lparen'>(</span><span class='id identifier rubyid_output_name'>output_name</span><span class='rparen'>)</span>
@@ -2937,8 +2941,6 @@ will use once launched.</p>
       <pre class="lines">
 
 
-385
-386
 387
 388
 389
@@ -2957,13 +2959,25 @@ will use once launched.</p>
 402
 403
 404
-405</pre>
+405
+406
+407
+408
+409
+410
+411
+412</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 385</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 387</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_precondition_value'>precondition_value</span>
-  <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='kw'>true</span>
+  <span class='kw'>unless</span> <span class='id identifier rubyid_operation_type'>operation_type</span><span class='period'>.</span><span class='id identifier rubyid_precondition?'>precondition?</span>
+    <span class='id identifier rubyid_message'>message</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>No precondition found for </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_operation_type'>operation_type</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'> (id: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span>
+    <span class='const'>Rails</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span> <span class='id identifier rubyid_message'>message</span>
+    <span class='id identifier rubyid_plan'>plan</span><span class='period'>.</span><span class='id identifier rubyid_associate'>associate</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Precondition load error</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_message'>message</span>
+    <span class='kw'>return</span> <span class='kw'>false</span>
+  <span class='kw'>end</span>
 
   <span class='kw'>begin</span>
     <span class='id identifier rubyid_operation_type'>operation_type</span><span class='period'>.</span><span class='id identifier rubyid_precondition'>precondition</span><span class='period'>.</span><span class='id identifier rubyid_load'>load</span><span class='lparen'>(</span><span class='label'>binding:</span> <span class='id identifier rubyid_empty_binding'>empty_binding</span><span class='rparen'>)</span>
@@ -2971,17 +2985,17 @@ will use once launched.</p>
     <span class='comment'># Raise &quot;Error loading precondition for #{operation_type.name}: &quot; + e.to_s
 </span>    <span class='const'>Rails</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Error loading precondition for </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_operation_type'>operation_type</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'> (id: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span>
     <span class='id identifier rubyid_plan'>plan</span><span class='period'>.</span><span class='id identifier rubyid_associate'>associate</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Precondition load error</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='op'>+</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>: </span><span class='tstring_end'>&#39;</span></span> <span class='op'>+</span> <span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_backtrace'>backtrace</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_sub'>sub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>(eval)</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>line</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+    <span class='kw'>return</span> <span class='kw'>false</span>
   <span class='kw'>end</span>
 
   <span class='kw'>begin</span>
-    <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='id identifier rubyid_precondition'>precondition</span><span class='lparen'>(</span><span class='kw'>self</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_precondition'>precondition</span><span class='lparen'>(</span><span class='kw'>self</span><span class='rparen'>)</span>
   <span class='kw'>rescue</span> <span class='const'>SystemStackError</span><span class='comma'>,</span> <span class='const'>ScriptError</span><span class='comma'>,</span> <span class='const'>StandardError</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
     <span class='const'>Rails</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>PRECONDITION FOR OPERATION </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'> CRASHED</span><span class='tstring_end'>&quot;</span></span>
     <span class='id identifier rubyid_plan'>plan</span><span class='period'>.</span><span class='id identifier rubyid_associate'>associate</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Precondition Evaluation Error</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='op'>+</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>: </span><span class='tstring_end'>&#39;</span></span> <span class='op'>+</span> <span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_backtrace'>backtrace</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_sub'>sub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>(eval)</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>line</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='kw'>false</span> <span class='comment'># default if there is no precondition or it crashes
-</span>  <span class='kw'>end</span>
+    <span class='kw'>false</span>
+  <span class='kw'>end</span>
 
-  <span class='id identifier rubyid_result'>result</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -3246,13 +3260,13 @@ will use once launched.</p>
       <pre class="lines">
 
 
-375
-376
 377
-378</pre>
+378
+379
+380</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 375</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 377</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_input_data'>set_input_data</span><span class='lparen'>(</span><span class='id identifier rubyid_input_name'>input_name</span><span class='comma'>,</span> <span class='id identifier rubyid_data_name'>data_name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_fv'>fv</span> <span class='op'>=</span> <span class='id identifier rubyid_input'>input</span><span class='lparen'>(</span><span class='id identifier rubyid_input_name'>input_name</span><span class='rparen'>)</span>
@@ -3366,13 +3380,13 @@ will use once launched.</p>
       <pre class="lines">
 
 
-380
-381
 382
-383</pre>
+383
+384
+385</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 380</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 382</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_output_data'>set_output_data</span><span class='lparen'>(</span><span class='id identifier rubyid_output_name'>output_name</span><span class='comma'>,</span> <span class='id identifier rubyid_data_name'>data_name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_fv'>fv</span> <span class='op'>=</span> <span class='id identifier rubyid_output'>output</span><span class='lparen'>(</span><span class='id identifier rubyid_output_name'>output_name</span><span class='rparen'>)</span>
@@ -3556,13 +3570,13 @@ will use once launched.</p>
       <pre class="lines">
 
 
-454
-455
-456
-457</pre>
+461
+462
+463
+464</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 454</span>
+      <pre class="code"><span class="info file"># File 'app/models/operation.rb', line 461</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_temporary'>temporary</span>
   <span class='ivar'>@temporary</span> <span class='op'>||=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
@@ -3904,9 +3918,9 @@ will use once launched.</p>
 </div>
 
       <div id="footer">
-  Generated on Fri Sep  4 12:32:31 2020 by
+  Generated on Fri Feb  5 09:54:11 2021 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.25 (ruby-2.6.5).
+  0.9.26 (ruby-2.6.6).
 </div>
 
     </div>

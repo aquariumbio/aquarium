@@ -162,7 +162,7 @@ RSpec.describe ProtocolDebugEngine do
   end
 
   def make_operation(operation_type:, user_id:)
-    operation_type.operations.create(
+    operation_type.create_operation(
       status: 'pending',
       user_id: user_id
     )

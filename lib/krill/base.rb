@@ -21,6 +21,10 @@ module Krill
       finish_show(page)
     end
 
+    def partial_show
+      ShowBlock.new(self).run(&Proc.new)
+    end
+
     def finish_show(page)
 
       # increment pc

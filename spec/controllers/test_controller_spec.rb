@@ -193,4 +193,30 @@ RSpec.describe TestController, type: :controller do
     expect(response_hash[:message]).to eq("undefined local variable or method `adffd'")
   end
 
+  let(:missing_test) do
+    create(
+      :operation_type,
+      name: 'missing test protocol',
+      category: 'testing',
+      protocol: 'class Protocol; def main; show { title \'blah\'; }; end; end',
+      test: '',
+      user: test_user
+    )
+  end
+
+  it 'missing test should have error' do
+    cookies[token_name] = User.find(1).remember_token
+
+    get :run, id: missing_test.id
+
+    response_hash = JSON.parse(@response.body, symbolize_names: true)
+
+    expect(response_hash[:result]).to eq('error')
+    expect(response_hash[:error_type]).to eq('error')
+    expect(response_hash[:message]).to eq('No test found')
+    expect(response_hash[:backtrace]).to be_empty
+    expect(response_hash[:exception_backtrace]).to be_empty
+    expect(response_hash[:log]).to be_empty
+  end
+
 end

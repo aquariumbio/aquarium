@@ -1,3 +1,4 @@
+# typed: false
 module DevOnly
   class Engine < ::Rails::Engine
     isolate_namespace DevOnly

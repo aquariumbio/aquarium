@@ -205,7 +205,7 @@ class OperationTypesController < ApplicationController
     return [] if tops.blank?
 
     tops.collect do |test_op|
-      op = ot.operations.create(status: 'pending', user_id: test_op[:user_id])
+      op = ot.create_operation(status: 'pending', user_id: test_op[:user_id])
 
       (ot.inputs + ot.outputs).each do |io|
         values = test_op[:field_values].select do |fv|

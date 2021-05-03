@@ -28,6 +28,8 @@ module Krill
     def initialize(job:, debug: false, mutex: nil, thread_status: nil)
       @job = job
       operation_type = @job.operation_type
+      raise MissingCodeError.new(operation_type: operation_type, component_name: 'protocol') unless operation_type.protocol?
+
       base_class_prefix = 'KrillProtocolBase'
       namespace_prefix = 'ExecutionNamespace'
       suffix = generate_suffix(length: 32, prefix: base_class_prefix)
@@ -181,6 +183,15 @@ module Krill
         if match
           loc = match.begin(0) - 1
           messages.append(line[0..loc])
+          next
+        end
+
+        # strip namespace from uninitialized constant error
+        protocol_pattern = Regexp.new("(uninitialized constant) #{@namespace}::(Protocol::\.+)$")
+        match = line.match(protocol_pattern)
+        if match
+          message, symbol = match.captures
+          messages.append("#{message} #{symbol}")
           next
         end
 

@@ -127,10 +127,10 @@ module Job::GeneratedAttributeMethods
   sig { returns(T::Boolean) }
   def updated_at?; end
 
-  sig { returns(T.nilable(String)) }
+  sig { returns(T.nilable(Integer)) }
   def user_id; end
 
-  sig { params(value: T.nilable(String)).void }
+  sig { params(value: T.nilable(Integer)).void }
   def user_id=(value); end
 
   sig { returns(T::Boolean) }
@@ -145,6 +145,18 @@ module Job::GeneratedAssociationMethods
 
   sig { params(value: ::Group).void }
   def group=(value); end
+
+  sig { returns(T.nilable(::ViewJobAssignment)) }
+  def job_assignment; end
+
+  sig { params(value: T.nilable(::ViewJobAssignment)).void }
+  def job_assignment=(value); end
+
+  sig { returns(::JobAssignmentLog::ActiveRecord_Associations_CollectionProxy) }
+  def job_assignment_logs; end
+
+  sig { params(value: T.any(T::Array[::JobAssignmentLog], ::JobAssignmentLog::ActiveRecord_Associations_CollectionProxy)).void }
+  def job_assignment_logs=(value); end
 
   sig { returns(::JobAssociation::ActiveRecord_Associations_CollectionProxy) }
   def job_associations; end

@@ -32,10 +32,10 @@
             </md-menu-item>
             <md-menu-item>
               <md-button href="/groups">Groups</md-button>
-            </md-menu-item>          
+            </md-menu-item>
             <md-menu-item>
               <md-button href="/announcements">Announcements</md-button>
-            </md-menu-item>            
+            </md-menu-item>
 
             <md-menu-divider></md-menu-divider>
 
@@ -56,7 +56,7 @@
             </md-menu-item>
             <md-menu-item>
               <md-button href="/object_types">Containers</md-button>
-            </md-menu-item>            
+            </md-menu-item>
             <md-menu-item>
               <md-button href="/wizards">Location Wizards</md-button>
             </md-menu-item>
@@ -65,15 +65,15 @@
 
             <md-menu-item>
               <md-button href="/import">Import Workflows</md-button>
-            </md-menu-item>     
+            </md-menu-item>
 
             <md-menu-item>
-              <md-button href="/publish">Export Workflows</md-button>              
-            </md-menu-item>                         
+              <md-button href="/publish">Export Workflows</md-button>
+            </md-menu-item>
 
           <% end %>
 
-          <md-menu-divider></md-menu-divider>          
+          <md-menu-divider></md-menu-divider>
 
           <md-menu-item>
             <md-button href="http://klavinslab.org/aquarium" class="dropdown-toggle" target='documentation'>Help</md-button>
@@ -81,7 +81,7 @@
 
         </md-menu-content>
 
-      </md-menu> 
+      </md-menu>
 
       <div class="aq2-logo" layout="column" flex md-truncate>
         <div class='top'>
@@ -94,7 +94,7 @@
         </div>
       </div>
 
-      <md-button href="/plans" aria-label="Designer" 
+      <md-button href="/plans" aria-label="Designer"
                  class="main-button <%= yield(:title) == 'Designer' ? 'underlined' : '' %>">
         <%= link_to "Designer", plans_path %>
       </md-button>
@@ -112,32 +112,33 @@
         </md-button>
       <% end %>
 
-      <md-button href="/operations" aria-label="Manager"
-                 class="main-button <%= yield(:title) == 'Manager' ? 'underlined' : '' %>">
-        <%= link_to "Manager", operations_path %>
-      </md-button>      
+      <% if current_user && current_user.is_admin %>
+        <md-button href="/operations" aria-label="Manager"
+                   class="main-button <%= yield(:title) == 'Manager' ? 'underlined' : '' %>">
+          <%= link_to "Manager", operations_path %>
+        </md-button>
+      <% end %>
 
       <md-button href="/browser" aria-label="Samples"
                  class="main-button <%= yield(:title) == 'Samples' ? 'underlined' : '' %>">
         <%= link_to "Samples", browser_path %>
       </md-button>
 
-      <% if current_user && current_user.is_admin %>        
-
+      <% if current_user && current_user.is_admin %>
         <md-button href="/operation_types" aria-label="Developer"
                    class="main-button <%= yield(:title) == 'Developer' ? 'underlined' : '' %>">
           <%= link_to "Developer", operation_types_path %>
         </md-button>
 
-      <% end %>      
+      <% end %>
 
-      <md-menu> 
+      <md-menu>
 
         <md-button class="login"
-                   ng-click="openMenu($mdMenu, $event)" 
+                   ng-click="openMenu($mdMenu, $event)"
                    aria-label="<%= current_user.login %>"
                    id="user-specific-button">
-          &#x25CF; <%= current_user.login %>          
+          &#x25CF; <%= current_user.login %>
         </md-button>
 
         <md-menu-content width="3" class="scrollable">
@@ -147,13 +148,13 @@
           <md-menu-item>
             <md-button href="/invoices" id="invoices-button">Invoices</md-button>
           </md-menu-item>
-          <md-menu-divider></md-menu-divider>          
+          <md-menu-divider></md-menu-divider>
           <md-menu-item>
             <md-button href="/signout" data-method="delete" id="signout-button">Signout</md-button>
-          </md-menu-item>         
+          </md-menu-item>
         </md-menu-content>
 
-      </md-menu> 
+      </md-menu>
 
     </div>
 

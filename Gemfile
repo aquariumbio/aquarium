@@ -17,7 +17,7 @@ gem 'anemone', path: 'components/anemone'
 gem 'aquadoc', path: 'components/aquadoc'
 
 # For uploads and cloud storage
-gem 'aws-sdk', '< 2.0'
+gem 'aws-sdk', '>= 1.67.0', '< 2.0'
 gem 'aws-sdk-s3'
 
 # For email
@@ -44,10 +44,13 @@ gem 'protected_attributes_continued'
 gem 'rack-cors', '~> 1.0.5', require: 'rack/cors'
 
 gem 'rails', '4.2.11.3'
+gem 'mimemagic', '> 0.3.5'
 
-gem 'redcarpet'
+gem 'redcarpet', '>= 3.5.1'
 
-gem 'sassc-rails'
+gem 'ruby-units'
+
+gem 'sassc-rails', '>= 2.1.2'
 
 gem 'tzinfo-data'
 
@@ -57,18 +60,17 @@ gem 'where-or'
 gem 'will_paginate'
 
 group :development do
-  gem 'factory_bot_rails'
+  gem 'factory_bot_rails', '>= 5.2.0'
   gem 'ipaddress' # used to determine subnet for docker containers for web-console
-  gem 'rspec-rails'
+  gem 'rspec-rails', '>= 4.0.1'
   gem 'rspec-sorbet'
   gem 'rubocop'
   gem 'rubocop-rails'
   gem 'rubocop-sorbet'
   gem 'simplecov', require: false
-  gem 'web-console', '~> 3.0'
+  gem 'web-console', '~> 3.3', '>= 3.3.0'
   gem 'yard', '>= 0.9.20'
   gem 'yard-activerecord'
-  gem 'dev_only', path: 'components/dev_only'
 end
 
 group :development, :test do

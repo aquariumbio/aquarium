@@ -64,10 +64,10 @@ module Log::GeneratedAttributeMethods
   sig { returns(T::Boolean) }
   def updated_at?; end
 
-  sig { returns(T.nilable(String)) }
+  sig { returns(T.nilable(Integer)) }
   def user_id; end
 
-  sig { params(value: T.nilable(String)).void }
+  sig { params(value: T.nilable(Integer)).void }
   def user_id=(value); end
 
   sig { returns(T::Boolean) }

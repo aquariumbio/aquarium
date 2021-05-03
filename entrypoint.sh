@@ -101,6 +101,7 @@ _start_development_server() {
 
 # Starts the krill server using the rails environment passed as an argument.
 _start_krill_server() {
+    _fix_local_minio_ip
     _add_ecs_namespace()
     echo "Starting $1 Krill runner"
     exec rails runner -e $1 "Krill::Server.new.run(${KRILL_PORT:-3500})"

@@ -122,4 +122,25 @@ RSpec.describe ProtocolTestEngine do
   it 'test with bad variable name should return a syntax error' do
     expect { ProtocolTestEngine.run(operation_type: bad_name_protocol_test, user: test_user) }.to raise_error(KrillTestError)
   end
+
+  let(:bad_property_test) do
+    create(
+      :operation_type,
+      name: 'bad property protocol test',
+      category: 'testing',
+      protocol: 'class Protocol;     def main;        show do;          title \'blah\';          note operations.first.input(\'blah\').item.id;        end;      end;    end',
+      inputs: [{ name: 'blah', sample_type: 'DummySampleType', object_type: 'DummyObjectType' }],
+      user: test_user,
+      test: 'class ProtocolTest < ProtocolTestBase;      def setup;          add_operation.with_input(\'blah\', Sample.find_by(name:\'DummySample\')).with_property(\'bad_name\', 1);      end;      def analyze;          log(\'Hello from Nemo\');          assert_equal(@backtrace.last[:operation], \'complete\');      end;        end'
+    )
+  end
+  it 'test with invalid property should return an error' do
+    skip('fieldvalue errors not handled in a way that makes this easy')
+    expect { ProtocolTestEngine.run(operation_type: bad_property_test, user: test_user) }.to raise_error do |error|
+      expect(error).to be_a(KrillTestError)
+      expect(error.message).to eq('Error during test')
+      # TODO: check error.error type
+      # TODO: check error.error_message
+    end
+  end
 end

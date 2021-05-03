@@ -119,7 +119,7 @@ class Plan < ActiveRecord::Base
 
     # Make new operations from old ones
     operations.each do |op|
-      new_op = op.operation_type.operations.create status: 'planning', user_id: op.user_id
+      new_op = op.operation_type.create_operation(status: 'planning', user_id: op.user_id)
       op.field_values.each do |fv|
         new_fv = FieldValue.new(
           name: fv.name,

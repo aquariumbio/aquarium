@@ -44,6 +44,7 @@ module Krill
       @base = base
       @parts = []
     end
+    attr_reader :parts
 
     # Put the string s at the top of the page. Usually only called once in a given call to show.
     # @param str [String]
@@ -132,6 +133,15 @@ module Krill
     # @return [void]
     def item(i)
       @parts.push(take: i)
+    end
+
+    # Copy the content of the given {ShowBlock} into this block.
+    # 
+    # Note: inserting the contents of a block may result in a badly formed show block.
+    #
+    # @param block [ShowBlock] the block to copy from
+    def insert(block)
+      @parts.concat(block.parts)
     end
 
     # This is deprecated

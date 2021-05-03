@@ -1088,6 +1088,62 @@ module GeneratedUrlHelpers
   sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
   def users_password_url(*args, **kwargs); end
 
+  # Sigs for route /dashboard/manager(.:format)
+  sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
+  def dashboard_manager_path(*args, **kwargs); end
+
+  sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
+  def dashboard_manager_url(*args, **kwargs); end
+
+  # Sigs for route /dashboard/technician(.:format)
+  sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
+  def dashboard_technician_path(*args, **kwargs); end
+
+  sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
+  def dashboard_technician_url(*args, **kwargs); end
+
+  # Sigs for route /dashboard(.:format)
+  sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
+  def dashboard_path(*args, **kwargs); end
+
+  sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
+  def dashboard_url(*args, **kwargs); end
+
+  # Sigs for route /react(.:format)
+  sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
+  def react_path(*args, **kwargs); end
+
+  sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
+  def react_url(*args, **kwargs); end
+
+  # Sigs for route /api/v2/users(.:format)
+  sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
+  def api_v2_users_path(*args, **kwargs); end
+
+  sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
+  def api_v2_users_url(*args, **kwargs); end
+
+  # Sigs for route /api/v2/jobs(.:format)
+  sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
+  def api_v2_jobs_path(*args, **kwargs); end
+
+  sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
+  def api_v2_jobs_url(*args, **kwargs); end
+
+  # Sigs for route /api/v2/dashboard(.:format)
+  sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
+  def api_v2_dashboard_path(*args, **kwargs); end
+
+  sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
+  def api_v2_dashboard_url(*args, **kwargs); end
+
+  # Sigs for route /api/v2/groups(.:format)
+  sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
+  def api_v2_groups_path(*args, **kwargs); end
+
+  sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
+  def api_v2_groups_url(*args, **kwargs); end
+
   # Sigs for route /users/:user_id/change_password(.:format)
   sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
   def user_change_password_path(*args, **kwargs); end
