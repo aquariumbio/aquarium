@@ -1,4 +1,4 @@
-ARG RUBY_VERSION=2.6.6
+ARG RUBY_VERSION=2.6.7
 ARG ALPINE_VERSION=3.13
 
 # A ruby-alpine image for development
