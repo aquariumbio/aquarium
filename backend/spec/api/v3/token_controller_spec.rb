@@ -10,7 +10,7 @@ RSpec.describe Api::V3::TokenController, type: :request do
 
     # Sign in
     it "invalid_sign_in" do
-      post "#{@create_url}?login=user_1&password=wrong_password"
+      post "#{@create_url}?login=user_admin&password=wrong_password"
       expect(response).to have_http_status 401
     end
 

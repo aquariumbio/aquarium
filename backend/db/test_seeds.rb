@@ -20,4 +20,3 @@ User.create( id:5, name: 'user_develop', login: 'user_develop', password: 'aquar
 User.create( id:6, name: 'user_retired', login: 'user_retired', password: 'aquarium123', permission_ids: '.1.2.3.4.5.6.') unless User.find_by(login: 'user_retired')
 User.create( id:7, name: 'test_user', login: 'test_user', password: 'aquarium123', permission_ids: '.1.') unless User.find_by(login: 'test_user')
 
-

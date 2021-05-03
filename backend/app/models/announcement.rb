@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # announcements table
 class Announcement < ActiveRecord::Base
   validates :title,      presence: true

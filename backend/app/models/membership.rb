@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # memberships table
 class Membership < ActiveRecord::Base
   validates :user_id,   presence: true

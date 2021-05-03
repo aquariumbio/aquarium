@@ -1,6 +1,6 @@
 var thisId
 
-describe('/users', () => {
+describe.skip('/users', () => {
   beforeEach(() => {
     cy.login();
   });

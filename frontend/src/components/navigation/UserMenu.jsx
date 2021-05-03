@@ -8,12 +8,13 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Divider from '@material-ui/core/Divider';
 import tokensAPI from '../../helpers/api/tokensAPI';
+import UserGreeting from './UserGreeting';
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2),
-    color: '#00ff22',
-    fontSize: '1rem',
+    fontSize: '16px',
+    color: '#000',
   },
 }));
 
@@ -36,13 +37,14 @@ const UserMenu = (props) => {
   return (
     <>
       <IconButton
+        id="user-menu-button"
         edge="start"
         className={classes.menuButton}
         color="inherit"
         aria-label="menu"
         onClick={(e) => setAnchorEl(e.currentTarget)}
       >
-        ● USER
+        <UserGreeting />
       </IconButton>
       <Menu
         id="user-menu"
