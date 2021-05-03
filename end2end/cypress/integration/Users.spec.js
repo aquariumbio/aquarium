@@ -1,6 +1,6 @@
 var thisId
 
-describe.skip('/users', () => {
+describe('/users', () => {
   beforeEach(() => {
     cy.login();
   });
@@ -31,9 +31,12 @@ describe.skip('/users', () => {
       .type("name")
       .should("have.value", "name");
 
+
+    // Use random string b/c login must be unique and users cannot be deleted
+    const login = Math.random().toString(36).substr(7);
     cy.get('input[name="login"]')
-      .type("login")
-      .should("have.value", "login");
+      .type(login)
+      .should("have.value", login);
 
     cy.get('input[name="password"]')
       .type("aquarium123")
