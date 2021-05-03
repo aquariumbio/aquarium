@@ -114,14 +114,25 @@ const ShowByOperation = ({
       );
     }
 
-    setAlertProps({
-      message: `Job #${response.job.id} is waiting for assignment in Unassigned`,
-      severity: 'success',
-      open: true,
-    });
+    // If the operation type still has operations keep the current selected operation
+    debugger;
+
+    const indexOfCurrent = operations.findIndex((item) => item.name === operationType);
+    if (operations[indexOfCurrent].n > checked.length) {
+      const updateOperations = operations;
+      updateOperations[operationType].n = operations[indexOfCurrent].n - checked.length;
+      setOperations(updateOperations);
+    } else {
+      init();
+    }
     setChecked([]);
-    init();
-    return true;
+    return (
+      setAlertProps({
+        message: `Job #${response.job.id} is waiting for assignment in Unassigned`,
+        severity: 'success',
+        open: true,
+      })
+    );
   };
 
   if (!operationTypes) {
