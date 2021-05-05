@@ -88,6 +88,14 @@ module Api
       #       created_at: <datetime>,
       #       updated_at: <datetime>
       #     }
+      #     members: [
+      #       {
+      #         id: <user_id>,
+      #         name: <name>,
+      #         login: <login>,
+      #       },
+      #       ...
+      #     ]
       #   }
       #
       # @!method show(token, id)
@@ -103,7 +111,10 @@ module Api
         group = Group.find_id(id)
         render json: { group: nil }.to_json, status: :not_found and return if !group
 
-        render json: { group: group }.to_json, status: :ok
+        # Get members
+        members = Membership.group_members(id)
+
+        render json: { group: group, members: members }.to_json, status: :ok
       end
 
       # Create a new group.

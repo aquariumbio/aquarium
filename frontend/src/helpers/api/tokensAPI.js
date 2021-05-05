@@ -13,7 +13,6 @@ tokensAPI.isAuthenticated = async () => {
   await axiosInstance
     .get('/token/get_user')
     .then((response) => {
-      localStorage.setItem('user', JSON.parse(response.data));
       validToken = true;
     })
     .catch((error) => error);
@@ -34,6 +33,7 @@ tokensAPI.signIn = async (login, password, setLoginError) => {
       const [data] = [response.data];
       setLoginError();
       localStorage.setItem('token', data.token);
+      localStorage.setItem('userId', data.user.id);
       signInSuccessful = true;
       window.location.reload();
     })

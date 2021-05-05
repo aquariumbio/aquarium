@@ -102,8 +102,62 @@ module Api
         # Get wizard
         id = Input.int(params[:id])
         wizard = Wizard.find_id(id)
+        render json: { wizard: nil }.to_json, status: :not_found and return if !wizard
 
-        render json: { wizard: wizard }.to_json, status: :ok
+        box = params[:box]
+        items, box = wizard.items(box)
+
+        render json: { wizard: {
+                         id: id,
+                         name: wizard.name,
+                         description: wizard.description ,
+                         specification: wizard.specification,
+                         containers: wizard.containers,
+                         boxes: wizard.boxes,
+                       },
+                       items: items,
+                       box: box
+                     }.to_json, status: :ok
+      end
+
+      # Returns a specific wizard.
+      #
+      # <b>API Call:</b>
+      #   GET: /api/v3/wizards/<id>/box/<box_id>
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     wizard: {
+      #       id: <wizard_id>,
+      #       name: <name>,
+      #       description: <description>,
+      #       specification: <specification>,
+      #       created_at: <datetime>,
+      #       updated_at: <datetime>
+      #     }
+      #   }
+      #
+      # @!method show(token, id, box_id)
+      # @param token [String] a token
+      # @param id [Int] the id of the wizard
+      # @param box_id [Int] the id of the box
+      def box
+        # Check for admin permissions
+        status, response = check_token_for_permission(Permission.admin_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # Get wizard
+        id = Input.int(params[:id])
+        wizard = Wizard.find_id(id)
+        render json: { wizard: nil }.to_json, status: :not_found and return if !wizard
+
+        box = params[:box]
+        items, box = wizard.items(box)
+        render json: { items: items, box: box }.to_json, status: :ok
       end
 
       # Create a new wizard.

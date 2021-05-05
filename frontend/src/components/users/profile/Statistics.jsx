@@ -107,9 +107,11 @@ const Statistics = ({ setIsLoading, setAlertProps, id }) => {
       <Divider />
 
       <div className={classes.wrapper}>
-        <Typography>
+        <Typography variant="h4">
           Statistics
         </Typography>
+
+        <Divider />
       </div>
     </>
   );

@@ -158,6 +158,12 @@ const Preferences = ({ setIsLoading, setAlertProps, id }) => {
       <Divider />
 
       <div className={classes.wrapper}>
+        <Typography variant="h4">
+          Preferences
+        </Typography>
+
+        <Divider />
+
         <form id="information-form" name="information-form" data-cy="information-form" onSubmit={handleSubmit}>
           <FormGroup>
             <FormControlLabel
@@ -165,6 +171,8 @@ const Preferences = ({ setIsLoading, setAlertProps, id }) => {
               label="Make new samples private"
             />
           </FormGroup>
+
+          <br />
 
           <Typography variant="h4" className={classes.inputName} display="inline">
             Lab Name

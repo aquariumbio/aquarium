@@ -270,6 +270,55 @@ module Api
         render json: response.to_json, status: status
       end
 
+      # Update a user's password.
+      #
+      # <b>API Call:</b>
+      #   POST: /api/v3/users/<id>/update_info
+      #   {
+      #     token: <token>
+      #     id: <user_id>,
+      #     user: {
+      #       password1: <password1>
+      #       password2: <password2>
+      #     }
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     user: {
+      #       id: <user_id>,
+      #       name: <name>,
+      #       login: <login>,
+      #       permission_ids: <permission_ids>
+      #     }
+      #   }
+      #
+      # @!method update_info(token, id, user)
+      # @param token [String] a token
+      # @param id [Int] the id of the user
+      # @param user [Hash] the user
+      def update_password
+        # Check token for any permissions
+        status, response = check_token_for_permission
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # If not oneself then check token for admin permissions
+        params_user_id = Input.int(params[:id])
+        if response[:user]["id"] != params_user_id
+          status, response = check_token_for_permission(Permission.admin_id)
+          render json: response.to_json, status: status.to_sym and return if response[:error]
+        end
+
+        # get the user
+        user = User.find_id(params_user_id)
+        return [{ error: 'Invalid' }, :unauthorized] unless user
+
+        params_user = params[:user] || {}
+        response, status = user.update_password(params_user)
+        render json: response.to_json, status: status
+      end
+
       # Update a user's permissions
       #
       # <b>API Call:</b>
@@ -298,7 +347,7 @@ module Api
       # @param id [Int] the id of the user
       # @param user [Hash] the user
       def update_permissions
-        # Check for admin permissions <or> self
+        # Check for admin permissions
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 

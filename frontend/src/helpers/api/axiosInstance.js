@@ -29,9 +29,8 @@ axiosInstance.interceptors.request.use((config) => {
   return newConfig;
 });
 
-// TODO: REPLACE ALL ALERTS WITH PROPER HANDLING
-/* Use interceptors to handle error responses generalized by status code
-   We can customize the response using the pathname */
+// TODO: Replace javascript with React components
+// (need to be able to refer to the parent component here)
 axiosInstance.interceptors.response.use(
   (response) => response,
   // eslint-disable-next-line consistent-return
@@ -40,28 +39,25 @@ axiosInstance.interceptors.response.use(
     if (status) {
       switch (status) {
         case 400:
-          alert(`${status}: ${data.message}`);
+          // Show the error message modal
+          showError(`${status}: ${data.message}`)
           break;
         case 401:
-          if (window.location.pathname !== '/login') {
-            // Delete the token if the error message is "Session timeout"
-            if (currentSessionToken && data.error === 'Session timeout') {
-              axios.post('/token/delete');
-              localStorage.clear('token');
-            }
-          }
-          /* TODO: HANDLE SESSION TIMEOUT
-             if (...pathname !== '/login' && data !== 'Session timeout') { OPEN LOGIN MODAL} */
+          // The token is either expired or does not exist
+          // In either case put up the modal to re-login
+          showModal();
           break;
         case 403:
-          // TODO: HANDLE PERMISSIONS
-          alert(`${status}: ${data.message} - Insufficient permissions`);
+          // Show the error message modal
+          showError(`${status}: ${data.message}`)
           break;
         case 404:
-          alert(`${status}: ${data.message}`);
+          // Show the error message modal
+          showError(`${status}: ${data.message}`)
           break;
         default:
-          alert(`${status}: ${data.message}`);
+          // Show the error message modal
+          showError(`${status}: ${data.message}`)
       }
       return false;
     }

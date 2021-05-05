@@ -32,13 +32,13 @@ const useStyles = makeStyles((theme) => ({
   /* Title row */
   flexTitle: {
     padding: '8px 0',
-    borderBottom: '2px solid #c0c0c0',
+    borderBottom: '2px solid #ccc',
   },
 
   /* Data Row */
   flexRow: {
     padding: '8px 0',
-    borderBottom: '1px solid #c0c0c0',
+    borderBottom: '1px solid #ccc',
     '&:hover': {
       boxShadow: '0 0 3px 0 rgba(0, 0, 0, 0.8)',
     },
@@ -110,7 +110,7 @@ const ShowWizards = ({ wizards }) => {
     if (!response) return;
 
     // success
-    localStorage.alert = JSON.stringify({
+    sessionStorage.alert = JSON.stringify({
       message: 'deleted',
       severity: 'success',
       open: true,
@@ -119,12 +119,37 @@ const ShowWizards = ({ wizards }) => {
     window.location.reload();
   };
 
+  const renderRanges = (specification) => {
+    var max0 = specification.fields['0'].capacity > 0 ? (specification.fields['0'].capacity - 1) : (<span>&infin;</span>)
+    var max1 = specification.fields['1'].capacity > 0 ? (specification.fields['1'].capacity - 1) : (<span>&infin;</span>)
+    var max2 = specification.fields['2'].capacity > 0 ? (specification.fields['2'].capacity - 1) : (<span>&infin;</span>)
+
+    return (
+      <div>
+        [0,{max0}]
+        [0,{max1}]
+        [0,{max2}]
+      </div>
+    );
+  };
+
+  const renderForm = (specification) => {
+    console.log('came here');
+    return (
+      <div>
+        {specification.fields['0'].name}.{specification.fields['1'].name}.{specification.fields['2'].name}
+      </div>
+    );
+  };
+
   return (
     <>
       <div className={classes.flexWrapper}>
         <div className={`${classes.flex} ${classes.flexTitle}`}>
           <Typography className={classes.flexCol1}><b>Name</b></Typography>
           <Typography className={classes.flexCol3}><b>Description</b></Typography>
+          <Typography className={classes.flexCol2}><b>Form</b></Typography>
+          <Typography className={classes.flexCol1}><b>Ranges</b></Typography>
           <Typography className={classes.flexColAutoHidden}>Edit</Typography>
           <Typography className={classes.flexColAutoHidden}>Delete</Typography>
         </div>
@@ -133,11 +158,19 @@ const ShowWizards = ({ wizards }) => {
           <div className={`${classes.flex} ${classes.flexRow}`} key={`object_${wizard.id}`}>
             <Typography className={classes.flexCol1}>
               {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
-              <Link data-cy={`show_${wizard.id}`} className={classes.pointer} onClick={() => alert('wizard page')}>{wizard.name}</Link>
+              <Link data-cy={`show_${wizard.id}`} component={RouterLink} to={`/wizards/${wizard.id}/show`}>{wizard.name}</Link>
             </Typography>
 
             <Typography className={classes.flexCol3}>
               {wizard.description}
+            </Typography>
+
+            <Typography className={classes.flexCol2}>
+              {renderForm(JSON.parse(wizard.specification))}
+            </Typography>
+
+            <Typography className={classes.flexCol1}>
+              {renderRanges(JSON.parse(wizard.specification))}
             </Typography>
 
             <Typography className={classes.flexColAuto}>

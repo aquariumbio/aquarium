@@ -11,8 +11,6 @@ describe('/wizards', () => {
 
   // wizard page
   it('wizard page', () => {
-    cy.intercept('GET', '/wizards/new').as('newwizard')
-
     cy.visit('/wizards');
     cy.contains('h1', 'All');
     cy.get('[data-cy="new_wizard_btn"]').click().then(() => {
@@ -23,7 +21,7 @@ describe('/wizards', () => {
 
   // new wizard page
   it('new wizard page', () => {
-    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/wizards/create`).as('newwizard')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/wizards/create?*`).as('newwizard')
 
     cy.visit('/wizards/new');
     cy.contains('h1', 'New Wizard');
@@ -51,18 +49,20 @@ describe('/wizards', () => {
     })
   });
 
-  // click edit wizard
-  it('edit wizard', () => {
+  // wizard details page
+  it('show wizard', () => {
     cy.visit('/wizards');
-    cy.get(`[data-cy="edit_${thisId}"]`).click().then(() => {
+    cy.get(`[data-cy="show_${thisId}"]`).click().then(() => {
       // wait for up to 3 seconds for the page to load
-      cy.location('pathname', {timeout: 3000}).should('eq', `/wizards/${thisId}/edit`);
+      cy.location('pathname', {timeout: 3000}).should('eq', `/wizards/${thisId}/show`);
+
+      cy.contains('div', 'Containers managed by name')
     });
   });
 
   // edit the wizard
   it('edit wizard page', () => {
-    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/wizards/${thisId}/update`).as('editwizard')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/wizards/${thisId}/update?*`).as('editwizard')
 
     cy.visit(`/wizards/${thisId}/edit`);
     cy.contains('h2', `Edit Wizard ${thisId}`);

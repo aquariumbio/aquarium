@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   get  'api/v3/users/:id/show_info',               to: 'api/v3/users#show_info'
   get  'api/v3/users/:id/groups',                  to: 'api/v3/users#groups'
   post 'api/v3/users/:id/update_info',             to: 'api/v3/users#update_info'
+  post 'api/v3/users/:id/update_password',         to: 'api/v3/users#update_password'
   post 'api/v3/users/:id/update_permissions',      to: 'api/v3/users#update_permissions'
   post 'api/v3/users/:id/agreements/:agreement',   to: 'api/v3/users#agreements', constraints: { agreement: /lab_agreement|aquarium_agreement/ }
   post 'api/v3/users/:id/preferences',             to: 'api/v3/users#preferences'
@@ -45,7 +46,7 @@ Rails.application.routes.draw do
   get  'api/v3/groups/:id',                                     to: 'api/v3/groups#show'
   post 'api/v3/groups/:id/update',                              to: 'api/v3/groups#update'
   post 'api/v3/groups/:id/delete',                              to: 'api/v3/groups#delete'
-  post 'api/v3/groups/:id/create_membership',                   to: 'api/v3/groups#create_membership'
+  post 'api/v3/groups/:id/create_membership/:user_id',          to: 'api/v3/groups#create_membership'
   post 'api/v3/groups/:id/delete_membership/:user_id',          to: 'api/v3/groups#delete_membership'
 
   # Announcements
@@ -91,6 +92,28 @@ Rails.application.routes.draw do
   get  'api/v3/wizards',                           to: 'api/v3/wizards#index'
   post 'api/v3/wizards/create',                    to: 'api/v3/wizards#create'
   get  'api/v3/wizards/:id',                       to: 'api/v3/wizards#show'
+  get  'api/v3/wizards/:id/box',                   to: 'api/v3/wizards#box'
   post 'api/v3/wizards/:id/update',                to: 'api/v3/wizards#update'
   post 'api/v3/wizards/:id/delete',                to: 'api/v3/wizards#delete'
+
+  # Jobs
+  get  'api/v3/jobs/counts',                       to: 'api/v3/jobs#counts'
+  get  'api/v3/jobs/assigned',                     to: 'api/v3/jobs#assigned'
+  get  'api/v3/jobs/unassigned',                   to: 'api/v3/jobs#unassigned'
+  get  'api/v3/jobs/finished',                     to: 'api/v3/jobs#finished'
+#   get  'api/v3/jobs/operations',                   to: 'api/v3/jobs#operations'
+#   get  'api/v3/jobs/:id/show',                     to: 'api/v3/jobs#show'
+#   post 'api/v3/jobs/:id/assign',                   to: 'api/v3/jobs#assign'
+#   post 'api/v3/jobs/:id/unassign',                 to: 'api/v3/jobs#unassign'
+#   post 'api/v3/jobs/:id/delete',                   to: 'api/v3/jobs#delete'
+
+  # Samples
+  get  'api/v3/set_search_text',                   to: 'api/v3/samples#set_search_text'
+  get  'api/v3/samples',                           to: 'api/v3/samples#index'
+#   post 'api/v3/sample/create',                     to: 'api/v3/sample#create'
+  get  'api/v3/samples/:id',                       to: 'api/v3/samples#show'
+#   post 'api/v3/sample/:id/update',                 to: 'api/v3/sample#update'
+#   post 'api/v3/sample/:id/discard',                to: 'api/v3/sample#discard'
+
+
 end

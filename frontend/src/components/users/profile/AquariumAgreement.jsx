@@ -114,9 +114,11 @@ const AquariumAgreement = ({ setIsLoading, setAlertProps, id }) => {
       <Divider />
 
       <div className={classes.wrapper}>
-        <Typography>Agreement</Typography>
+        <Typography variant="h4">
+          Aquarium Agreement
+        </Typography>
 
-        <Divider style={{ marginTop: '0px' }} />
+        <Divider />
 
         {aquariumAgreement ? (
           <Typography>___ agreed on ___</Typography>

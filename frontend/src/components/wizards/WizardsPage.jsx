@@ -89,13 +89,13 @@ const WizardsPage = ({ setIsLoading, setAlertProps, match }) => {
       setCurrentLetter('All');
       setCurrentWizards(response.wizards);
     }
-
-    // screen does not refresh (we do not want it to) because only query parameters change
-    // allows user to hit refresh to reload
-    history.push('/wizards');
   };
 
   const fetchLetter = async (letter) => {
+    // allows user to hit refresh to reload the page
+    // change before calling the API so the URL persists if the token has timed out
+    history.push(`/wizards?letter=${letter}`.toLowerCase());
+
     // wrap the API call
     const response = await wizardsAPI.getWizardsByLetter(letter);
     if (!response) return;
@@ -105,10 +105,6 @@ const WizardsPage = ({ setIsLoading, setAlertProps, match }) => {
       setCurrentLetter(letter.toUpperCase());
       setCurrentWizards(response.wizards);
     }
-
-    // screen does not refresh (we do not want it to) because only query parameters change
-    // allows user to hit refresh to reload
-    history.push(`/wizards?letter=${letter}`.toLowerCase());
   };
 
   return (

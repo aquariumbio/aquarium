@@ -125,6 +125,9 @@ module Api
         list = SampleType.find_all
         render json: { sample_types: [] }.to_json, status: :ok and return if list.length == 0
 
+        # Return list only
+        render json: { sample_types: list }.to_json, status: :ok and return if params[:list_only].to_i == 1
+
         # Get details of first sample type in list
         details = SampleType.details(list[0].id)
         details = details.update({ id: list[0].id, name: list[0].name, description: list[0].description })
@@ -133,6 +136,7 @@ module Api
           sample_types: list,
           first: details
         }.to_json, status: :ok
+
       end
 
       # Returns details for a specific sample type.

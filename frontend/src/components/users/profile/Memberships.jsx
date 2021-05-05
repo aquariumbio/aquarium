@@ -10,6 +10,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 
 import { LinkButton } from '../../shared/Buttons';
 import usersAPI from '../../../helpers/api/users';
+import ShowMemerships from './ShowMemerships';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -59,6 +60,7 @@ const Memberships = ({ setIsLoading, setAlertProps, id }) => {
   const classes = useStyles();
 
   const [userName, setUserName] = useState('');
+  const [groups, setGroups] = useState('');
 
   useEffect(() => {
     const init = async () => {
@@ -69,6 +71,13 @@ const Memberships = ({ setIsLoading, setAlertProps, id }) => {
       // success
       const user = response.user;
       setUserName(user.name);
+
+      // wrap the API call
+      const responses = await usersAPI.getGroups(id);
+      if (!responses) return;
+
+      // success
+      setGroups(responses.groups);
     };
 
     init();
@@ -108,7 +117,16 @@ const Memberships = ({ setIsLoading, setAlertProps, id }) => {
       <Divider />
 
       <div className={classes.wrapper}>
-        Memberships
+        <Typography variant="h4">
+          Memberships
+        </Typography>
+
+        <Divider />
+
+        {groups
+          /* eslint-disable-next-line max-len */
+          ? <ShowMemerships groups={groups} setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
+          : 'nothing here'}
       </div>
     </>
   );

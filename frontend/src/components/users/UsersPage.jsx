@@ -60,13 +60,13 @@ const UsersPage = ({ setIsLoading, setAlertProps, match }) => {
       setCurrentLetter('All');
       setCurrentUsers(response.users);
     }
-
-    // screen does not refresh (we do not want it to) because only query parameters change
-    // allows user to hit refresh to reload
-    history.push('/users');
   };
 
   const fetchLetter = async (letter) => {
+    // allows user to hit refresh to reload the page
+    // change before calling the API so the URL persists if the token has timed out
+    history.push(`/users?letter=${letter}`.toLowerCase());
+
     // wrap the API call
     const response = await usersAPI.getUsersByLetter(letter);
     if (!response) return;
@@ -76,10 +76,6 @@ const UsersPage = ({ setIsLoading, setAlertProps, match }) => {
       setCurrentLetter(letter.toUpperCase());
       setCurrentUsers(response.users);
     }
-
-    // screen does not refresh (we do not want it to) because only query parameters change
-    // allows user to hit refresh to reload
-    history.push(`/users?letter=${letter}`.toLowerCase());
   };
 
   // initialize users and get permissions

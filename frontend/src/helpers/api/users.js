@@ -41,8 +41,27 @@ usersAPI.getProfile = (id) => axiosInstance
   .then((response) => response.data)
   .catch((error) => error);
 
+usersAPI.getGroups = (id) => axiosInstance
+  .get(`/users/${id}/groups`)
+  .then((response) => response.data)
+  .catch((error) => error);
+
 usersAPI.updateInfo = (FormData, id) => axiosInstance
   .post(`/users/${id}/update_info`, {
+    user: FormData,
+  })
+  .then((response) => response.data)
+  .catch((error) => error);
+
+usersAPI.updatePermissions = (FormData, id) => axiosInstance
+  .post(`/users/${id}/update_permissions`, {
+    user: FormData,
+  })
+  .then((response) => response.data)
+  .catch((error) => error);
+
+usersAPI.updatePassword = (FormData, id) => axiosInstance
+  .post(`/users/${id}/update_password`, {
     user: FormData,
   })
   .then((response) => response.data)

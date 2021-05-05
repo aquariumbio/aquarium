@@ -30,7 +30,7 @@ const ObjectTypesList = ({ objectTypes, sampleTypeId }) => {
         {objectTypes.length ? (
           objectTypes.map((object) => (
             <li key={object.id}>
-              <Link component={RouterLink} to={`/object_types/${object.id}`}>
+              <Link component={RouterLink} to={`/object_types/${object.id}/show`}>
                 <b>{object.name}</b>
               </Link>
               : {object.description}

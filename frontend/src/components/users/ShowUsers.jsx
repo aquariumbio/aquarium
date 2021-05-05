@@ -35,13 +35,13 @@ const useStyles = makeStyles((theme) => ({
   /* Title row */
   flexTitle: {
     padding: '8px 0',
-    borderBottom: '2px solid #c0c0c0',
+    borderBottom: '2px solid #ccc',
   },
 
   /* Data Row */
   flexRow: {
     padding: '8px 0',
-    borderBottom: '1px solid #c0c0c0',
+    borderBottom: '1px solid #ccc',
     '&:hover': {
       boxShadow: '0 0 3px 0 rgba(0, 0, 0, 0.8)',
     },

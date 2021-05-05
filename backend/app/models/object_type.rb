@@ -11,9 +11,17 @@ class ObjectType < ActiveRecord::Base
   # Return a specific object type.
   #
   # @param id [Int] the id of the object type
-  # @return the object types
+  # @return the object type plus the location wizard id
   def self.find_id(id)
-    ObjectType.find_by(id: id)
+    sql = "
+      select ot.*, w.id as 'wizard_id', st.name as 'sample_type'
+      from object_types ot
+      left join wizards w on w.name = ot.prefix
+      left join sample_types st on st.id = ot.sample_type_id
+      where ot.id = #{id.to_i}
+      limit 1
+    "
+    (ObjectType.find_by_sql sql)[0]
   end
 
   # Return all object types.
@@ -32,7 +40,12 @@ class ObjectType < ActiveRecord::Base
   def self.find_by_handler(handler)
     wheres = sanitize_sql(['handler = ?', handler])
     sql = "
-      select * from object_types where #{wheres} order by name
+      select ot.*, w.id as 'wizard_id', st.name as 'sample_type'
+      from object_types ot
+      left join wizards w on w.name = ot.prefix
+      left join sample_types st on st.id = ot.sample_type_id
+      where #{wheres}
+      order by name
     "
     ObjectType.find_by_sql sql
   end

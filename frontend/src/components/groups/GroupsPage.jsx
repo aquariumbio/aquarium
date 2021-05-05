@@ -58,13 +58,13 @@ const GroupsPage = ({ setIsLoading, setAlertProps, match }) => {
       setCurrentLetter('All');
       setCurrentGroups(response.groups);
     }
-
-    // screen does not refresh (we do not want it to) because only query parameters change
-    // allows user to hit refresh to reload
-    history.push('/groups');
   };
 
   const fetchLetter = async (letter) => {
+    // allows user to hit refresh to reload the page
+    // change before calling the API so the URL persists if the token has timed out
+    history.push(`/groups?letter=${letter}`.toLowerCase());
+
     // wrap the API call
     const response = await groupsAPI.getGroupsByLetter(letter);
     if (!response) return;
@@ -74,10 +74,6 @@ const GroupsPage = ({ setIsLoading, setAlertProps, match }) => {
       setCurrentLetter(letter.toUpperCase());
       setCurrentGroups(response.groups);
     }
-
-    // screen does not refresh (we do not want it to) because only query parameters change
-    // allows user to hit refresh to reload
-    history.push(`/groups?letter=${letter}`.toLowerCase());
   };
 
   // initialize to all and get permissions

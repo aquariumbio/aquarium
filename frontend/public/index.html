@@ -25,8 +25,27 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>React App</title>
+    <!-- public scripts -->
+    <script>
+      function showModal() {
+        document.getElementById('error_toast').style.display = 'none';
+        if (window.location.pathname != '/login')
+          document.getElementById('login_modal').style.display = 'block';
+      }
+
+      function showError(message) {
+        document.getElementById('login_modal').style.display = 'none';
+        document.getElementById('error_toast').style.display = 'block';
+        document.getElementById('error_toast_message').innerHTML = message;
+      }
+
+      function closeError() {
+        document.getElementById('error_toast').style.display = 'none';
+        document.getElementById('error_toast_message').innerHTML = '';
+      }
+    </script>
   </head>
-  <body>
+  <body style="overflow-y:scroll">
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <!--

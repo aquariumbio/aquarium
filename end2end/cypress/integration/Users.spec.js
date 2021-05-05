@@ -1,4 +1,5 @@
-var thisId
+var newUserId
+var newUserLogin
 
 describe('/users', () => {
   beforeEach(() => {
@@ -11,8 +12,6 @@ describe('/users', () => {
 
   // user page
   it('user page', () => {
-    cy.intercept('GET', '/users/new').as('newuser')
-
     cy.visit('/users');
     cy.contains('h1', 'All');
     cy.get('[data-cy="new_user_btn"]').click().then(() => {
@@ -23,7 +22,7 @@ describe('/users', () => {
 
   // new user page
   it('new user page', () => {
-    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/create`).as('newuser')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/create?*`).as('newuser')
 
     cy.visit('/users/new');
     cy.contains('h1', 'New User');
@@ -31,9 +30,10 @@ describe('/users', () => {
       .type("name")
       .should("have.value", "name");
 
+    newUserLogin = "login-"+Math.floor((Math.random() * 1000000) + 1);
     cy.get('input[name="login"]')
-      .type("login")
-      .should("have.value", "login");
+      .type(`${newUserLogin}`)
+      .should("have.value", `${newUserLogin}`);
 
     cy.get('input[name="password"]')
       .type("aquarium123")
@@ -43,26 +43,25 @@ describe('/users', () => {
     cy.wait('@newuser').should(({ request, response }) => {
       // wait for up to 3 seconds for the page to load
       cy.location('pathname', {timeout: 3000}).should('eq', `/users`);
-
       // save the id of the user just created
-      thisId = response.body.user['id']
+      newUserId = response.body.user['id']
     })
   });
 
   // click edit user
   it('user profile', () => {
     cy.visit('/users');
-    cy.get(`[data-cy="show_${thisId}"]`).click().then(() => {
+    cy.get(`[data-cy="show_${newUserId}"]`).click().then(() => {
       // wait for up to 3 seconds for the page to load
-      cy.location('pathname', {timeout: 3000}).should('eq', `/users/${thisId}/profile`);
+      cy.location('pathname', {timeout: 3000}).should('eq', `/users/${newUserId}/profile`);
     });
   });
 
   // edit the user profile
   it('user profile page', () => {
-    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${thisId}/update_info`).as('updateprofile')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${newUserId}/update_info?*`).as('updateprofile')
 
-    cy.visit(`/users/${thisId}/profile`);
+    cy.visit(`/users/${newUserId}/profile`);
 
     // type email
     cy.get('input[name="email"]')
@@ -102,11 +101,48 @@ describe('/users', () => {
     })
   });
 
+  // edit permissions
+  it('edit permissions', () => {
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${newUserId}/update_permissions?*`).as('permissions')
+
+    cy.visit(`/users/${newUserId}/profile`);
+    // wait 1 sec, there should be a better way to do this
+    cy.wait(1000)
+    cy.get(`[data-cy="permissions"]`).click().then(() => {
+      // check first checkbox
+      cy.get('[type="checkbox"]')
+        .first()
+        .check()
+        .should('be.checked');
+
+      // hit reset - admin checkbox should reset
+      cy.get(`[data-cy=reset]`).click()
+      cy.get('[type="checkbox"]')
+        .first()
+        .should('not.be.checked');
+
+      // check admin checkbox
+      cy.get('[type="checkbox"]')
+        .first()
+        .check()
+        .should('be.checked');
+
+      // submit form
+      cy.get("form").submit()
+      cy.wait('@permissions').should(({ request, response }) => {
+        // admin should be checked
+        cy.get('[type="checkbox"]')
+          .first()
+          .should('be.checked');
+      })
+    });
+  });
+
   // edit preferences
   it('edit preferences', () => {
-    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${thisId}/preferences`).as('preferences')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${newUserId}/preferences?*`).as('preferences')
 
-    cy.visit(`/users/${thisId}/profile`);
+    cy.visit(`/users/${newUserId}/profile`);
     // wait 1 sec, there should be a better way to do this
     cy.wait(1000)
     cy.get(`[data-cy="preferences"]`).click().then(() => {
@@ -136,11 +172,48 @@ describe('/users', () => {
     });
   });
 
+  // change password (and change back)
+  it('change password', () => {
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${newUserId}/update_password?*`).as('password')
+
+    cy.visit(`/users/${newUserId}/profile`);
+    // wait 1 sec, there should be a better way to do this
+    cy.wait(1000)
+    cy.get(`[data-cy="password"]`).click().then(() => {
+      // type new password
+      cy.get('input[name="password1"]')
+        .type("password123")
+        .should("have.value", "password123");
+
+      // type new password
+      cy.get('input[name="password2"]')
+        .type("password123")
+        .should("have.value", "password123");
+
+      cy.get(`[data-cy="save-password"]`).click().then(() => {
+        cy.wait('@password').should(({ request, response }) => {
+          // logout and log back in with new password
+          cy.logout();
+
+          // log in as the new user with the new password
+          cy.visit('/login');
+          cy.get('[data-test=username]').type(`${newUserLogin}`);
+          cy.get('[data-test=password]').type('password123');
+          cy.get('form').contains('SIGN IN').click();
+
+          // should be logged in
+          cy.location('pathname', {timeout: 3000}).should('eq', '/');
+        });
+      });
+    });
+
+  });
+
   // click lab agreement
   it('lab agreement', () => {
-    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${thisId}/agreements/lab_agreement`).as('labagreement')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${newUserId}/agreements/lab_agreement?*`).as('labagreement')
 
-    cy.visit(`/users/${thisId}/profile`);
+    cy.visit(`/users/${newUserId}/profile`);
     // wait 1 sec, there should be a better way to do this
     cy.wait(1000)
     cy.get(`[data-cy="lab_agreement"]`).click().then(() => {
@@ -158,9 +231,9 @@ describe('/users', () => {
 
   // click aquarium agreement
   it('aquarium agreement', () => {
-    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${thisId}/agreements/aquarium_agreement`).as('aquariumagreement')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${newUserId}/agreements/aquarium_agreement?*`).as('aquariumagreement')
 
-    cy.visit(`/users/${thisId}/profile`)
+    cy.visit(`/users/${newUserId}/profile`)
     // wait 1 sec, there should be a better way to do this
     cy.wait(1000)
     cy.get(`[data-cy="aquarium_agreement"]`).click().then(() => {
@@ -176,5 +249,4 @@ describe('/users', () => {
     });
   });
 
-//  IMPORTANT: Delete the user manually <or> reset the test DB after each (you cannot delete a user in Aquarium)
 });

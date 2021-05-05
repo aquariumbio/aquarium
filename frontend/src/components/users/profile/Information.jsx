@@ -148,6 +148,12 @@ const Information = ({ setIsLoading, setAlertProps, id }) => {
       <Divider />
 
       <div className={classes.wrapper}>
+        <Typography variant="h4">
+          Information
+        </Typography>
+
+        <Divider />
+
         <form id="information-form" name="information-form" data-cy="information-form" onSubmit={handleSubmit}>
           <Typography variant="h4" className={classes.inputName} display="inline">
             Name
@@ -229,7 +235,7 @@ const Information = ({ setIsLoading, setAlertProps, id }) => {
 
           <StandardButton
             name="save"
-            testName="save-group"
+            testName="save-info"
             handleClick={handleSubmit}
             text="Save"
             type="submit"

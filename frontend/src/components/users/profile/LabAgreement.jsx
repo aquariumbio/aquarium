@@ -103,7 +103,7 @@ const LabAgreement = ({ setIsLoading, setAlertProps, id }) => {
             {userName}
           </Typography>
           <Typography display="inline" variant="h6" component="h1">
-            LabAgreement
+            Lab Agreement
           </Typography>
         </Breadcrumbs>
 
@@ -121,10 +121,12 @@ const LabAgreement = ({ setIsLoading, setAlertProps, id }) => {
       <Divider />
 
       <div className={classes.wrapper}>
-        <Typography>
-          Agreement
+        <Typography variant="h4">
+          Lab Agreement
         </Typography>
-        <Divider style={{ marginTop: '0px' }} />
+
+        <Divider />
+
         {labAgreement ? (
           <Typography>
             ___ agreed on ___
