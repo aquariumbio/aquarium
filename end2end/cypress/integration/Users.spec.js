@@ -23,7 +23,7 @@ describe('/users', () => {
 
   // new user page
   it('new user page', () => {
-    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/create`).as('newuser')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/create?*`).as('newuser')
 
     cy.visit('/users/new');
     cy.contains('h1', 'New User');
@@ -63,7 +63,7 @@ describe('/users', () => {
 
   // edit the user profile
   it('user profile page', () => {
-    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${thisId}/update_info`).as('updateprofile')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${thisId}/update_info?*`).as('updateprofile')
 
     cy.visit(`/users/${thisId}/profile`);
 
@@ -107,7 +107,7 @@ describe('/users', () => {
 
   // edit preferences
   it('edit preferences', () => {
-    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${thisId}/preferences`).as('preferences')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${thisId}/preferences?*`).as('preferences')
 
     cy.visit(`/users/${thisId}/profile`);
     // wait 1 sec, there should be a better way to do this
@@ -141,7 +141,7 @@ describe('/users', () => {
 
   // click lab agreement
   it('lab agreement', () => {
-    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${thisId}/agreements/lab_agreement`).as('labagreement')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${thisId}/agreements/lab_agreement?*`).as('labagreement')
 
     cy.visit(`/users/${thisId}/profile`);
     // wait 1 sec, there should be a better way to do this
@@ -161,7 +161,7 @@ describe('/users', () => {
 
   // click aquarium agreement
   it('aquarium agreement', () => {
-    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${thisId}/agreements/aquarium_agreement`).as('aquariumagreement')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/users/${thisId}/agreements/aquarium_agreement?*`).as('aquariumagreement')
 
     cy.visit(`/users/${thisId}/profile`)
     // wait 1 sec, there should be a better way to do this
