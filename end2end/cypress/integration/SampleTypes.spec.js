@@ -13,7 +13,6 @@ describe('/sample_types', () => {
       cy.get('[data-cy="edit_sample_type_btn"]');
       cy.get('[data-cy="new_sample_type_btn"]');
       cy.get('[data-cy="delete_sample_type_btn"]');
-      cy.get('[data-cy="show-sample-type"]');
     });
 
     it('navigates to new form using new button', () => {

@@ -32,8 +32,8 @@ describe('/login', () => {
         expect(win.localStorage.token).to.be.undefined;
       });
 
-    cy.get('[data-test=username]').type('neptune ');
-    cy.get('[data-test=password]').type('aquarium');
+    cy.get('[data-test=username]').type('test_user ');
+    cy.get('[data-test=password]').type('aquarium123');
     cy.get('form').contains('SIGN IN').click();
     // TODO: this is timing out on end2end w/in Docker
     cy.url().should('eq', `${Cypress.config().baseUrl}/`);
