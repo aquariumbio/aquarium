@@ -69,7 +69,10 @@ class SampleTypesController < ApplicationController
     else
       render json: { errors: st.errors }
     end
-
+  
+  rescue StandardError => e
+    logger.error("Error creating sample type: #{e}")
+    render json: {errors: e.to_s}, status: :internal_server_error
   end
 
   # PUT /sample_types/1
