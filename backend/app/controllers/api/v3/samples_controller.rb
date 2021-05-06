@@ -85,21 +85,40 @@ module Api
       # <b>API Call:</b>
       #   GET: /api/v3/sample_types
       #   {
-      #     token: <token>
+      #     token: <token>,
+      #     page: <page>,
+      #     words: <words>,
+      #     sample_type_id: <sample_type_id>,
+      #     user_id: <user_id>
       #   }
       #
       # <b>API Return Success:</b>
       #   STATUS_CODE: 200
       #   {
+      #     page: <page>,
+      #     count: <countt>,
+      #     pages: <pages>,
       #     samples: [
       #       {
       #         id: <sample_id>,
-      #         ___: <___>,
-      #         ___: <___>,
-      #         ___: [
+      #         name: <name>,
+      #         description: <description>,
+      #         sample_type: <sample_type>,
+      #         user_name: <user_name>,
+      #         login: <login>,
+      #         type: <type>,
+      #         created_at: <created_at>,
+      #         item_ids: [
+      #           <item_id>,
+      #           ...
+      #         ],
+      #         fields: [
       #           {
-      #             id: <___id>,
-      #             ___ : <___>
+      #             type: <type>,
+      #             name: <name>,
+      #             value: <value>,
+      #             child_sample_id: <child_sample_id,
+      #             child_sample_name: <child_sample_name>
       #           },
       #           ...
       #         ]
@@ -108,8 +127,12 @@ module Api
       #     ]
       #   }
       #
-      # @!method index(token)
+      # @!method index(token, page, words, sample_tpye_id, user_id)
       # @param token [String] a token
+      # @param page [Int] the page to return
+      # @param words [String] search words / sample:<sample_id> / item:<item_id>
+      # @param sample_type_id [Int] the id of the sample type to search
+      # @param user_id [Int] the id of the sample owner to search
       def index
         # Check for admin permissions
         status, response = check_token_for_permission(Permission.admin_id)
@@ -219,27 +242,41 @@ module Api
       #   GET: /api/v3/sample_types/<id>
       #   {
       #     token: <token>
+      #     id: <id>
       #   }
       #
       # <b>API Return Success:</b>
       #   STATUS_CODE: 200
       #   {
       #     sample: {
-      #       id: <sample_id>,
-      #       ___: <___>,
-      #       ___: <___>,
-      #       ___: [
+      #       id: <___>,
+      #       name: <___>,
+      #       description: <___>,
+      #       sample_type: <___>,
+      #       user_name: <___>,
+      #       login: <___>,
+      #       type: <___>,
+      #       created_at: <___>,
+      #       item_ids: [
+      #         <item_id>,
+      #         ...
+      #       ],
+      #       fields: [
       #         {
-      #           id: <___id>,
-      #           ___ : <___>
+      #           type: string,
+      #           name: Restriction Enzyme(s),
+      #           value: ,
+      #           child_sample_id: null,
+      #           child_sample_name: null
       #         },
-      #       }
+      #         ...
+      #       ]
       #     }
       #   }
       #
       # @!method show(token, id)
       # @param token [String] a token
-      # @param id [Int] the id of the sample type
+      # @param id [Int] the id of the sample
       def show
         # Check for admin permissions
         status, response = check_token_for_permission(Permission.admin_id)

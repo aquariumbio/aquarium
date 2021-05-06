@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 
@@ -141,6 +142,10 @@ const useStyles = makeStyles(() => ({
     display: 'none',
   },
 
+  mt8: {
+    marginTop: '8px',
+  },
+
   center: {
     textAlign: 'center',
   },
@@ -276,6 +281,7 @@ const handleToggles = (id, toggleIds, setToggleIds, triggerUpdate) => {
 // eslint-disable-next-line no-unused-vars
 const SamplePage = ({ setIsLoading, setAlertProps, match }) => {
   const classes = useStyles();
+  const history = useHistory();
 
   const id = match.params.id;
   const [sample, setSample] = useState();
@@ -321,174 +327,194 @@ const SamplePage = ({ setIsLoading, setAlertProps, match }) => {
   }, []);
 
   return (
-    <div className={classes.box}>
-      <Grid container>
-        {/* METADATA */}
-        <Grid
-          item
-          xs={3}
-        >
-          {sample ? (
-            <>
-              <img src='/beaker.png' className={classes.logoImage}/>
-              <div className={classes.logoText}>
-                {sample.sample_type}
-              </div>
-              <div className={classes.logoSubText}>
-                {sample.user_name} ({sample.login})
-              </div>
-              <div className={classes.flexCardLabel}>
-                NAME
-              </div>
-              <div className={classes.flexCardText}>
-                {sample.name || <span className={classes.info}>-</span>}
-              </div>
+    <div className={`${classes.wrapper} ${classes.mt8}`}>
+      <div className={classes.header}>
+        <Typography className={`${classes.searchBox} ${classes.mr24}`}>
+          Sample: {sample ? sample.name : ''}
+        </Typography>
 
-              <div className={classes.flexCardLabel}>
-                DESCRIPTION
-              </div>
-              <div className={classes.flexCardText}>
-                {sample.description || <span className={classes.info}>-</span>}
-              </div>
+        <Typography>
+          <StandardButton
+            name="Back"
+            testName="back"
+            text="Back"
+            type="button"
+            handleClick = {() => {history.goBack()}}
+          />
+        </Typography>
+      </div>
 
-              {sample.fields.map((k) => (
-                <>
-                  <div className={`${classes.flexCardLabel} ${classes[`${k.type}`]}`}>
-                    {k.name}
-                  </div>
-                  <div className={classes.flexCardText}>
-                    { /* TODO: THIS IS REALLY UGLY... */ }
-                    {k.value || (k.child_sample_id ? <span>{k.child_sample_id}: {k.child_sample_name}</span> : <span className={classes.info}>-</span>)}
-                  </div>
-                </>
-              ))}
+      <Divider />
 
-              <div className={classes.flexCardLabel}>
-                Items
-              </div>
-              <div className={`{classes.flexCardText} {classes.mt8}`}>
-                {sample.item_ids.map((k) => (
-                  <div>{k}</div>
+      <div className={classes.box}>
+        <Grid container>
+          {/* METADATA */}
+          <Grid
+            item
+            xs={3}
+          >
+            {sample ? (
+              <div className={classes.relative}>
+                <img src='/beaker.png' className={classes.logoImage}/>
+                <div className={classes.logoText}>
+                  {sample.sample_type}
+                </div>
+                <div className={classes.logoSubText}>
+                  {sample.user_name} ({sample.login})
+                </div>
+                <div className={classes.flexCardLabel}>
+                  NAME
+                </div>
+                <div className={classes.flexCardText}>
+                  {sample.name || <span className={classes.info}>-</span>}
+                </div>
+
+                <div className={classes.flexCardLabel}>
+                  DESCRIPTION
+                </div>
+                <div className={classes.flexCardText}>
+                  {sample.description || <span className={classes.info}>-</span>}
+                </div>
+
+                {sample.fields.map((k) => (
+                  <>
+                    <div className={`${classes.flexCardLabel} ${classes[`${k.type}`]}`}>
+                      {k.name}
+                    </div>
+                    <div className={classes.flexCardText}>
+                      { /* TODO: THIS IS REALLY UGLY... */ }
+                      {k.value || (k.child_sample_id ? <span>{k.child_sample_id}: {k.child_sample_name}</span> : <span className={classes.info}>-</span>)}
+                    </div>
+                  </>
                 ))}
+
+                <div className={classes.flexCardLabel}>
+                  Items
+                </div>
+                <div className={`{classes.flexCardText} {classes.mt8}`}>
+                  {sample.item_ids.map((k) => (
+                    <div>{k}</div>
+                  ))}
+                </div>
               </div>
-            </>
-          ) : (
-            <>
-              loading...
-            </>
-          )}
-        </Grid>
+            ) : (
+              <>
+                loading...
+              </>
+            )}
+          </Grid>
 
-        {/* INVNETORY */}
-        <Grid
-          item
-          xs={9}
-        >
+          {/* INVNETORY */}
+          <Grid
+            item
+            xs={9}
+          >
 
-            <div className={classes.flexWrapper}>
-              <div className={`${classes.flex} ${classes.flexTitle}`}>
-                <Typography className={`${classes.flexColFixed40} ${classes.center}`}>
-                  <b>+</b>
-                </Typography>
-                <Typography className={classes.flexCol4}>
-                  <b>Object Type</b>
-                </Typography>
-                <Typography className={`${classes.flexCol1} ${classes.right}`}>
-                  <b>In Inventory</b>
-                </Typography>
-                <Typography className={`${classes.flexCol1} ${classes.right}`}>
-                  <b>Discarded</b>
-                </Typography>
-                <Typography className={`${classes.flexCol1} ${classes.mtm7} ${classes.relative}`}>
-                  <Typography className={`${classes.absolute} ${classes.hide}`}>
-                    <FormGroup className={ Object.values(toggleIds).indexOf(true) == -1 ? classes.hide : classes.show }>
-                      <FormControlLabel
-                        control={<Switch checked={showDeleted} onChange={handleChange} />}
-                        label={<span style={{ fontSize: '13px' }}>{showDeleted ? 'Hide' : 'Show'}</span>}
-                      />
-                    </FormGroup>
+              <div className={classes.flexWrapper}>
+                <div className={`${classes.flex} ${classes.flexTitle}`}>
+                  <Typography className={`${classes.flexColFixed40} ${classes.center}`}>
+                    <b>+</b>
                   </Typography>
-                </Typography>
-              </div>
-
-              <div className={classes.flexBottom}>
-              {inventory.map((group,index) => (
-                <>
-                <div className={`${classes.flex} ${toggleIds[index] ? classes.flexRowSel : classes.flexRow}`}  key={`index_${index}`} >
-                  <Typography className={`${classes.flexColFixed40} ${classes.center} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index, toggleIds, setToggleIds, triggerUpdate)}>
-                    &#x2195;
+                  <Typography className={classes.flexCol4}>
+                    <b>Object Type</b>
                   </Typography>
-                  <Typography className={`${classes.flexCol4} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index, toggleIds, setToggleIds, triggerUpdate)}>
-                    {group.type}
+                  <Typography className={`${classes.flexCol1} ${classes.right}`}>
+                    <b>In Inventory</b>
                   </Typography>
-                  <Typography className={`${classes.flexCol1} ${classes.right} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index, toggleIds, setToggleIds, triggerUpdate)}>
-                    {group.count_inventory}
+                  <Typography className={`${classes.flexCol1} ${classes.right}`}>
+                    <b>Discarded</b>
                   </Typography>
-                  <Typography className={`${classes.flexCol1} ${classes.right} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index, toggleIds, setToggleIds, triggerUpdate)}>
-                    {group.count_deleted}
-                  </Typography>
-                  <Typography className={`${classes.flexCol1} ${classes.mtm8} ${classes.relative}`}>
-                    <Typography className={`${classes.absolute}`}>
-                      <FormGroup className={ toggleIds[index] ? classes.show : classes.hide }>
+                  <Typography className={`${classes.flexCol1} ${classes.mtm7} ${classes.relative}`}>
+                    <Typography className={`${classes.absolute} ${classes.hide}`}>
+                      <FormGroup className={ Object.values(toggleIds).indexOf(true) == -1 ? classes.hide : classes.show }>
                         <FormControlLabel
-                          control={<Switch onChange={handleToggle} name={`checked_${index}`} />}
-                          label={<span style={{ fontSize: '13px' }}>Discarded</span>}
+                          control={<Switch checked={showDeleted} onChange={handleChange} />}
+                          label={<span style={{ fontSize: '13px' }}>{showDeleted ? 'Hide' : 'Show'}</span>}
                         />
                       </FormGroup>
                     </Typography>
                   </Typography>
                 </div>
-                <div className={toggleIds[index] ? classes.show : classes.hide}>
-                  {group.data.map((item) => (
-                    <div className = {item.location == 'deleted' ? ( state[`checked_${index}`] ? classes.show : classes.hide ) : ''}>
-                    <div className={`${classes.flex} ${classes.flexRowSub}`}>
-                      <div className={`${classes.flexColFixed40} ${classes.center}`}>
-                        &nbsp;
-                      </div>
-                      <div className={classes.flexCol1}>
-                        {item.item_id}
-                      </div>
-                      <div className={classes.flexCol1}>
-                        {item.location}
-                      </div>
-                      <div className={classes.flexCol4}>
-                        {item.collections ? (
-                          <div>
-                            collection:
-                            {item.collections.map((collection) => (
-                              <>
-                               {' '}[{collection.row},{collection.column}]
-                              </>
-                            ))}
-                          </div>
-                        ) : (
-                          ''
-                        )}
-                        {item.key_values ? (
-                          item.key_values.map((kv) => (
-                            <div>
-                             <b>{kv.key}</b>:{' '}
-                             {kv.upload_id ? kv.upload_file_name : (typeof JSON.parse(kv.object)[`${kv.key}`] == "object" ? JSON.stringify(JSON.parse(kv.object)[`${kv.key}`]) : JSON.parse(kv.object)[`${kv.key}`]) }
-                            </div>
-                          ))
-                        ) : (
-                          ''
-                        )}
-                      </div>
-                      <div className={classes.flexCol1}>
-                        {item.date.substr(0,10)}
-                      </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                </>
-              ))}
-              </div>
 
-          </div>
+                <div className={classes.flexBottom}>
+                {inventory.map((group,index) => (
+                  <>
+                  <div className={`${classes.flex} ${toggleIds[index] ? classes.flexRowSel : classes.flexRow}`}  key={`index_${index}`} >
+                    <Typography className={`${classes.flexColFixed40} ${classes.center} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index, toggleIds, setToggleIds, triggerUpdate)}>
+                      &#x2195;
+                    </Typography>
+                    <Typography className={`${classes.flexCol4} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index, toggleIds, setToggleIds, triggerUpdate)}>
+                      {group.type}
+                    </Typography>
+                    <Typography className={`${classes.flexCol1} ${classes.right} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index, toggleIds, setToggleIds, triggerUpdate)}>
+                      {group.count_inventory}
+                    </Typography>
+                    <Typography className={`${classes.flexCol1} ${classes.right} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index, toggleIds, setToggleIds, triggerUpdate)}>
+                      {group.count_deleted}
+                    </Typography>
+                    <Typography className={`${classes.flexCol1} ${classes.mtm8} ${classes.relative}`}>
+                      <Typography className={`${classes.absolute}`}>
+                        <FormGroup className={ toggleIds[index] ? classes.show : classes.hide }>
+                          <FormControlLabel
+                            control={<Switch onChange={handleToggle} name={`checked_${index}`} />}
+                            label={<span style={{ fontSize: '13px' }}>Discarded</span>}
+                          />
+                        </FormGroup>
+                      </Typography>
+                    </Typography>
+                  </div>
+                  <div className={toggleIds[index] ? classes.show : classes.hide}>
+                    {group.data.map((item) => (
+                      <div className = {item.location == 'deleted' ? ( state[`checked_${index}`] ? classes.show : classes.hide ) : ''}>
+                      <div className={`${classes.flex} ${classes.flexRowSub}`}>
+                        <div className={`${classes.flexColFixed40} ${classes.center}`}>
+                          &nbsp;
+                        </div>
+                        <div className={classes.flexCol1}>
+                          {item.item_id}
+                        </div>
+                        <div className={classes.flexCol1}>
+                          {item.location}
+                        </div>
+                        <div className={classes.flexCol4}>
+                          {item.collections ? (
+                            <div>
+                              collection:
+                              {item.collections.map((collection) => (
+                                <>
+                                 {' '}[{collection.row},{collection.column}]
+                                </>
+                              ))}
+                            </div>
+                          ) : (
+                            ''
+                          )}
+                          {item.key_values ? (
+                            item.key_values.map((kv) => (
+                              <div>
+                               <b>{kv.key}</b>:{' '}
+                               {kv.upload_id ? kv.upload_file_name : (typeof JSON.parse(kv.object)[`${kv.key}`] == "object" ? JSON.stringify(JSON.parse(kv.object)[`${kv.key}`]) : JSON.parse(kv.object)[`${kv.key}`]) }
+                              </div>
+                            ))
+                          ) : (
+                            ''
+                          )}
+                        </div>
+                        <div className={classes.flexCol1}>
+                          {item.date.substr(0,10)}
+                        </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  </>
+                ))}
+                </div>
+
+            </div>
+          </Grid>
         </Grid>
-      </Grid>
+      </div>
     </div>
   );
 };
