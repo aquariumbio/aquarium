@@ -189,7 +189,7 @@ const SampleTypeDefinitions = ({ setIsLoading }) => {
 
             <Divider />
 
-            {currentSampleType.id && <ShowSampleType sampleType={currentSampleType} />}
+            {currentSampleType && currentSampleType.id ? <ShowSampleType sampleType={currentSampleType} /> : ''}
 
             {!sampleTypes.length && (
               <Typography variant="h6" component="h1">
