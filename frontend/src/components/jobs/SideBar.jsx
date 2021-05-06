@@ -7,43 +7,55 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
 
-const useStyles = makeStyles(() => ({
-  root: {
+const useStyles = makeStyles((theme) => ({
+  container: {
     minWidth: '120px',
     marginTop: '75px',
-    height: '80vh',
-    overflowX: 'auto',
+    overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column',
+    paddingBottom: '25px',
+  },
+
+  root: {
+    backgroundColor: theme.palette.background.paper,
+    position: 'relative',
+    color: 'rgba(0, 0, 0, 0.87)',
+
     '& .Mui-selected': {
       background: 'rgba(64, 222, 253, 0.13)',
     },
     '& .MuiListItemIcon-root': {
       maxWidth: '45px',
     },
-    '& .MuiListItem-gutters': {
-      paddingRight: '0px',
-    },
+  },
+
+  joblist: {
+    overflow: 'visible',
+  },
+
+  categoryList: {
+    flexGrow: 1,
+    overflow: 'overlay',
+    marginTop: theme.spacing(3),
   },
 
   count: {
-    fontSize: '0.625rem',
     marginLeft: '2px',
-    color: 'rgba(0, 0, 0, 0.87)',
   },
 
   label: {
-    opacity: '0.7',
-    textTransform: 'uppercase',
     borderBottom: '1px #DDD solid',
-    color: '#333',
-    fontWeight: '300',
+    color: '#333333',
+    display: 'flex',
   },
 }));
 
-// eslint-disable-next-line no-unused-vars
 const SideBar = ({
   jobCounts,
   activeCounts,
@@ -55,10 +67,10 @@ const SideBar = ({
 }) => {
   const classes = useStyles();
 
-  const [open, setOpen] = useState(false);
+  const [expand, setExpand] = useState(false);
 
-  const handleListItemClick = (event, page) => {
-    setValue(page);
+  const handleJobStateClick = (event, jobState) => {
+    setValue(jobState);
     setCategory('');
   };
 
@@ -67,95 +79,103 @@ const SideBar = ({
     setCategory(catName);
   };
 
-  const handleOpen = () => {
-    setOpen(!open);
+  const handleExpand = () => {
+    setExpand(!expand);
   };
 
   return (
-    <List
-      id="jobs-vertical-nav"
-      component="nav"
-      aria-labelledby="jobs-page-navigation"
-      className={classes.root}
-    >
-      <ListItem key="jobs">
-        <ListItemText primary="Jobs" className={classes.label} />
-      </ListItem>
-
-      <ListItem
-        button
-        onClick={(event) => handleListItemClick(event, 'unassigned')}
-        selected={value === 'unassigned'}
-        id="unassigned"
-        key="unassigned"
+    <div className={classes.container}>
+      <List
+        role="tablist"
+        aria-label="job-states"
+        className={`${classes.root} ${classes.joblist}`}
       >
-        <Typography noWrap>Unassigned</Typography>
-        <Typography className={classes.count}>{`(${jobCounts.unassigned})`}</Typography>
-      </ListItem>
+        <ListSubheader key="categories" className={classes.label}>
+          <ListItemText primary="JOBS" />
+        </ListSubheader>
 
-      <ListItem
-        button
-        onClick={(event) => handleListItemClick(event, 'assigned')}
-        selected={value === 'assigned'}
-        id="assigned"
-        key="assigned"
-      >
-        <Typography noWrap>Assigned</Typography>
-        <Typography className={classes.count}>{`(${jobCounts.assigned})`}</Typography>
-      </ListItem>
-
-      <ListItem
-        button
-        onClick={(event) => handleListItemClick(event, 'finished')}
-        selected={value === 'finished'}
-        id="finished"
-        key="finished"
-      >
-        <Typography noWrap>Finished</Typography>
-        <Typography className={classes.count}>{`(${jobCounts.finished})`}</Typography>
-      </ListItem>
-
-      <ListItem key="categories">
-        <ListItemText primary="Operations" className={classes.label} />
-      </ListItem>
-
-      {Object.keys(activeCounts).map((key) => (
         <ListItem
-          button
-          onClick={(event) => handleOperationClick(event, key)}
-          selected={category === key}
-          id="category-list"
-          key={key}
+          role="tab"
+          onClick={(event) => handleJobStateClick(event, 'unassigned')}
+          selected={value === 'unassigned'}
+          id="unassigned"
+          key="unassigned"
         >
-          <Typography noWrap>{key}</Typography>
-          <Typography className={classes.count}>{`(${activeCounts[`${key}`]})`}</Typography>
+          <Typography variant="body1" noWrap>Unassigned</Typography>
+          <Typography variant="body2" className={classes.count}>{`(${jobCounts.unassigned})`}</Typography>
         </ListItem>
-      ))}
 
-      <ListItem button onClick={handleOpen} id="inactive" key="inactive">
-        <ListItemIcon>
-          {open ? <ExpandLess /> : <ExpandMore />}
-        </ListItemIcon>
-        <Typography noWrap>Inactive</Typography>
-      </ListItem>
+        <ListItem
+          role="tab"
+          onClick={(event) => handleJobStateClick(event, 'assigned')}
+          selected={value === 'assigned'}
+          id="assigned"
+          key="assigned"
+        >
+          <Typography variant="body1" noWrap>Assigned</Typography>
+          <Typography variant="body2" className={classes.count}>{`(${jobCounts.assigned})`}</Typography>
+        </ListItem>
 
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List disablePadding className={classes.list} id="inactive-list">
+        <ListItem
+          role="tab"
+          onClick={(event) => handleJobStateClick(event, 'finished')}
+          selected={value === 'finished'}
+          id="finished"
+          key="finished"
+        >
+          <Typography variant="body1" noWrap>Finished</Typography>
+          <Typography variant="body2" className={classes.count}>{`(${jobCounts.finished})`}</Typography>
+        </ListItem>
+      </List>
+
+      <List
+        role="tablist"
+        aria-label="categories"
+        className={`${classes.root} ${classes.categoryList}`}
+        subheader={<li />}
+        disablePadding
+      >
+        <ListSubheader key="categories" className={classes.label}>
+          <ListItemText primary="OPERATIONS" />
+        </ListSubheader>
+
+        {Object.keys(activeCounts).map((key) => (
+          <ListItem
+            role="tab"
+            onClick={(event) => handleOperationClick(event, key)}
+            selected={category === key}
+            id="category-list"
+            key={key}
+          >
+            <Typography variant="body1" noWrap>{key}</Typography>
+            <Typography variant="body2" className={classes.count}>{`(${activeCounts[`${key}`]})`}</Typography>
+          </ListItem>
+        ))}
+
+        <ListSubheader variant="button" role="button" disableGutters className={classes.label} onClick={handleExpand} id="inactive" key="inactive">
+          <ListItemIcon>{expand ? <ExpandLess /> : <ExpandMore />}</ListItemIcon>
+          <ListItemText primary="Inactive" />
+        </ListSubheader>
+
+        <Collapse in={expand} timeout="auto" unmountOnExit>
+          {/* <List disableGutters disablePadding className={classes.list} id="inactive-list"> */}
           {inactive.map((key, count) => (
             <ListItem
+              role="tab"
               button
               className={classes.nested}
               key={key}
-              onClick={(event) => handleListItemClick(event)}
+              onClick={(event) => handleJobStateClick(event)}
               selected={value === key}
             >
-              <Typography noWrap>{key}</Typography>
-              <Typography className={classes.count}>{count}</Typography>
+              <Typography variant="body1" noWrap>{key}</Typography>
+              <Typography variant="body2" className={classes.count}>{count}</Typography>
             </ListItem>
           ))}
-        </List>
-      </Collapse>
-    </List>
+          {/* </List> */}
+        </Collapse>
+      </List>
+    </div>
   );
 };
 

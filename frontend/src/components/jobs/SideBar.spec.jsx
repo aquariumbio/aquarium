@@ -1,5 +1,7 @@
 import React from 'react';
-import { render, screen, waitForElementToBeRemoved } from '@testing-library/react';
+import {
+  render, screen, waitForElementToBeRemoved, within,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import SideBar from './SideBar';
 
@@ -10,7 +12,7 @@ describe('SideBar', () => {
     finished: 28122,
   };
 
-  const mockActiveCounts = {
+  const mockActiveCategories = {
     Cloning: 7613,
     'Cloning Sandbox': 599,
     'Control Blocks': 12,
@@ -19,59 +21,71 @@ describe('SideBar', () => {
     'Misc.': 331,
   };
 
-  const mockInactive = [
+  const mockInactiveCategories = [
     'Agrobacterium work',
     'Induction - High Throughput',
     'Misc. (old)',
   ];
   const mockValue = 'unassigned';
   const mockSetValue = jest.fn();
+  const mockCategory = '';
+  const mockSetCategory = jest.fn();
 
   const sideBar = () => render(
     <SideBar
       jobCounts={mockJobCounts}
-      activeCounts={mockActiveCounts}
-      inactive={mockInactive}
+      activeCounts={mockActiveCategories}
+      inactive={mockInactiveCategories}
       value={mockValue}
       setValue={mockSetValue}
+      category={mockCategory}
+      setCategory={mockSetCategory}
     />,
   );
 
   it('should render with expected assigned job counts', () => {
     sideBar();
 
-    screen.getByRole('button', { name: /assigned \(7\)/i });
+    screen.getByRole('tab', { name: /assigned \(7\)/i });
   });
 
   it('should render with expected unassigned job counts selected', () => {
     sideBar();
 
-    expect(screen.getByRole('button', { name: /unassigned \(190\)/i })).toHaveClass('Mui-selected');
+    expect(screen.getByRole('tab', { name: /unassigned \(190\)/i })).toHaveClass('Mui-selected');
   });
 
   it('should render with expected finished job counts', () => {
     sideBar();
 
-    screen.getByRole('button', { name: /finished \(28122\)/i });
+    screen.getByRole('tab', { name: /finished \(28122\)/i });
   });
 
   it('should render with expected operations', () => {
     sideBar();
 
-    screen.getByRole('button', { name: /Cloning \(7613\)/i });
-    screen.getByRole('button', { name: /Cloning Sandbox \(599\)/i });
-    screen.getByRole('button', { name: /Flow Cytometry \(68\)/i });
-    screen.getByRole('button', { name: /Control Blocks \(12\)/i });
-    screen.getByRole('button', { name: /High Throughput Culturing \(43\)/i });
-    screen.getByRole('button', { name: /Misc. \(331\)/i });
+    screen.getByRole('tab', { name: /Cloning \(7613\)/i });
+    screen.getByRole('tab', { name: /Cloning Sandbox \(599\)/i });
+    screen.getByRole('tab', { name: /Flow Cytometry \(68\)/i });
+    screen.getByRole('tab', { name: /Control Blocks \(12\)/i });
+    screen.getByRole('tab', { name: /High Throughput Culturing \(43\)/i });
+    screen.getByRole('tab', { name: /Misc. \(331\)/i });
   });
 
-  it('should call setValue on button click', () => {
+  it('should call setValue on tab click', () => {
     sideBar();
 
-    userEvent.click(screen.getByRole('button', { name: /Assigned/ }));
+    userEvent.click(screen.getByRole('tab', { name: /Assigned/ }));
 
     expect(mockSetValue).toHaveBeenCalledTimes(1);
+  });
+
+  it('should call setCategory on tab click', () => {
+    sideBar();
+
+    userEvent.click(screen.getByRole('tab', { name: /Assigned/ }));
+
+    expect(mockSetCategory).toHaveBeenCalledTimes(1);
   });
 
   it('should render with collapsed inactive list', () => {
@@ -79,9 +93,9 @@ describe('SideBar', () => {
 
     screen.getByRole('button', { name: /inactive/i });
 
-    expect(screen.queryByRole('button', { name: /Agrobacterium work/i })).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /Induction - High Throughput/i })).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /Misc. \(old\)/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('tab', { name: /Agrobacterium work/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('tab', { name: /Induction - High Throughput/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('tab', { name: /Misc. \(old\)/i })).not.toBeInTheDocument();
   });
 
   it('should inactive list should open on fist click then close on next click', async () => {
@@ -89,14 +103,43 @@ describe('SideBar', () => {
 
     userEvent.click(screen.getByRole('button', { name: /inactive/i }));
 
-    screen.getByRole('button', { name: /Agrobacterium work/i });
-    screen.getByRole('button', { name: /Induction - High Throughput/i });
-    screen.getByRole('button', { name: /Misc. \(old\)/i });
+    screen.getByRole('tab', { name: /Agrobacterium work/i });
+    screen.getByRole('tab', { name: /Induction - High Throughput/i });
+    screen.getByRole('tab', { name: /Misc. \(old\)/i });
 
     userEvent.click(screen.getByRole('button', { name: /inactive/i }));
 
-    await waitForElementToBeRemoved(screen.queryByRole('button', { name: /Agrobacterium work/i }));
-    expect(screen.queryByRole('button', { name: /Induction - High Throughput/i })).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /Misc. \(old\)/i })).not.toBeInTheDocument();
+    await waitForElementToBeRemoved(screen.queryByRole('tab', { name: /Agrobacterium work/i }));
+    expect(screen.queryByRole('tab', { name: /Induction - High Throughput/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('tab', { name: /Misc. \(old\)/i })).not.toBeInTheDocument();
+  });
+
+  describe('no active jobs', () => {
+    const testSidebar = () => render(
+      <SideBar
+        jobCounts={mockJobCounts}
+        activeCounts={{}}
+        inactive={mockInactiveCategories}
+        value={mockValue}
+        setValue={mockSetValue}
+        category={mockCategory}
+        setCategory={mockSetCategory}
+      />,
+    );
+    it('should not have any category tabs, inactive list is collapsed', () => {
+      testSidebar();
+      const tablist = screen.getByRole('tablist', { name: /categories/ });
+      const tabs = within(tablist).queryByRole('tab');
+      expect(tabs).not.toBeInTheDocument();
+    });
+
+    it('should have category tabs, inactive list is expanded', () => {
+      testSidebar();
+      const tablist = screen.getByRole('tablist', { name: /categories/ });
+      userEvent.click(screen.getByRole('button', { name: /inactive/i }));
+
+      const tabs = within(tablist).getAllByRole('tab');
+      expect(tabs.length).toBeGreaterThan(0);
+    });
   });
 });
