@@ -138,102 +138,19 @@ module Api
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        samples = []
-        per_page = 24
-        ands = []
+        page = Input.int(params[:page])
+        words = Input.text(params[:words])
+        sample_type_id = Input.int(params[:sample_type_id])
+        user_id = Input.int(params[:user_id])
 
-        page = params[:page].to_i
-        page = 1 if page < 1
+        results = Sample.search({
+          page: page,
+          words: words,
+          sample_type_id: sample_type_id,
+          user_id: user_id
+        })
+        render json: results.to_json, status: :ok
 
-        # Generate ands for sql query
-        words = params[:words].to_s
-        if words[0,7]=="sample:"
-          # search sample id only
-          this_id = words[7,words.length].strip.split(' ')[0]
-          if this_id == this_id.to_i.to_s
-            ands << "id = #{this_id}"
-          else
-            ands << "0"
-          end
-        elsif words[0,5]=="item:"
-          # search item id only
-          this_id = words[5,words.length].strip.split(' ')[0]
-          if this_id == this_id.to_i.to_s
-            ands << "item_ids like '%.#{this_id}.%'"
-          else
-            ands << "0"
-          end
-        else
-          ands << "1"
-
-          # sample_type_id
-          sample_type_id = Input.int(params[:sample_type_id])
-          ands << "sample_type_id = #{sample_type_id}" if sample_type_id != 0
-
-          # user_id
-          user_id = Input.int(params[:user_id])
-          ands << "user_id = #{user_id}" if user_id != 0
-
-          # seasrch words
-          words = words.split(' ')
-          words.each do |word|
-            ands << "search_text like '%#{word.gsub('\'','\\\'').gsub('_','\\_').gsub('%','\\%')}%'"
-          end
-        end
-
-        # Get count
-        sql = "select count(*) from samples where #{ands.join(' and ')}"
-        count = Sample.count_by_sql sql
-        render json: { page: 1, count: 0, pages: 0, samples: samples}.to_json, status: :ok and return if count == 0
-
-        pages = (1.0 * count / per_page).ceil()
-        page = pages if page > pages
-
-        # Get samples
-        sql = "select id from samples where #{ands.join(' and ')} order by id desc limit #{per_page} offset #{(page-1) * per_page}"
-        list = Sample.find_by_sql sql
-
-        if list.length != 0
-          ids = []
-          list.each do |l|
-            ids << l.id
-          end
-          sql = "select * from view_samples where id in (#{ids.join(',')}) order by id desc, ft_sort, ft_name, fv_id"
-          sample_data = Sample.find_by_sql sql
-
-          # loop through results and create objects to pass to the view
-          this_id = 0
-          new_sample = {}
-          fields = []
-          sample_data.each do |sample|
-            if sample.id != this_id
-              # initialize new sample
-              sids = sample.item_ids
-              samples << {
-                id: sample.id,
-                name: sample.name,
-                description: sample.description,
-                sample_type: sample.sample_type.upcase,
-                user_name: sample.user_name,
-                login: sample.login,
-                type: sample.ft_type,
-                created_at: sample.created_at,
-                item_ids: sids[1,sids.length-2].to_s.split("."),
-                fields: []
-              }
-
-              # set this_id
-              this_id = sample.id
-            end
-
-            # update fields for current sample
-            if sample.ft_id
-              samples[-1][:fields] << {type: sample.ft_type, name: sample.ft_name, value: sample.fv_value, child_sample_id: sample.child_sample_id, child_sample_name: sample.child_sample_name}
-            end
-          end
-
-        end
-        render json: { page: page, count: count, pages: (1.0 * count / per_page).ceil(), samples: samples }.to_json, status: :ok
       end
 
       # Returns details for a specific sample.
