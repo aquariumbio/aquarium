@@ -222,7 +222,7 @@ module Api
 
         # Get sample type
         sample_type = SampleType.find_id(id)
-        render json: { sample_type: nil }.to_json, status: :not_found and return if !sample_type
+        render json: { error: "Sample Type not found" }.to_json, status: :not_found and return if !sample_type
 
         # Get details for sample type
         details = SampleType.details(id)
@@ -353,7 +353,7 @@ module Api
         # Get sample type
         id = Input.int(params[:id])
         sample_type = SampleType.find_id(id)
-        render json: { sample_type: nil }.to_json, status: :not_found and return if !sample_type
+        render json: { error: "Sample Type not found" }.to_json, status: :not_found and return if !sample_type
 
         # Read sample type parameter
         params_sample_type = params[:sample_type] || {}
@@ -391,7 +391,7 @@ module Api
 
         # Get sample type
         sample = SampleType.find_id(id)
-        render json: { sample_type: nil }.to_json, status: :not_found and return if !sample
+        render json: { error: "Sample Type not found" }.to_json, status: :not_found and return if !sample
 
         # Delete sample type and related items that do not have foreign keys
         sample.delete_sample_type

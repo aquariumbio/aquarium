@@ -30,7 +30,8 @@ describe('/users', () => {
       .type("name")
       .should("have.value", "name");
 
-    newUserLogin = "login-"+Math.floor((Math.random() * 1000000) + 1);
+    // Use random string b/c login must be unique and users cannot be deleted
+    newUserLogin = "login-"+Math.random().toString(36).substr(7);
     cy.get('input[name="login"]')
       .type(`${newUserLogin}`)
       .should("have.value", `${newUserLogin}`);

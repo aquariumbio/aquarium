@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
-import { StandardButton, LinkButton } from './Buttons';
+import { StandardButton, LinkButton, HomeButton } from './Buttons';
 
 describe('StandardButton', () => {
   it('should render with expected text', () => {
@@ -53,5 +53,37 @@ describe('LinkButton', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Click Me!' }));
 
     expect(history.push).toHaveBeenCalledWith('/test');
+  });
+
+  describe('Home button', () => {
+    it('should render with logo', () => {
+      const history = createMemoryHistory();
+
+      render(
+        <Router history={history}>
+          <HomeButton />
+        </Router>,
+      );
+      expect(screen.queryByRole('img', { name: 'logo' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'home' })).toHaveAttribute('href', '/');
+    });
+
+    it('should route to home on click', () => {
+      const history = createMemoryHistory();
+
+      // mock push function
+      history.push = jest.fn();
+
+      render(
+        <Router history={history}>
+          <HomeButton />
+        </Router>,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: 'home' }));
+
+      expect(screen.getByRole('button', { name: 'home' })).toHaveAttribute('href', '/');
+      expect(history.push).toHaveBeenCalledWith('/');
+    });
   });
 });

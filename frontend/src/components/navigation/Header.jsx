@@ -1,107 +1,122 @@
 // TODO: ADD PROP-TYPES
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import { withRouter } from 'react-router-dom';
-import IconButton from '@material-ui/core/IconButton';
+import { withRouter, Link as RouterLink } from 'react-router-dom';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import UserMenu from './UserMenu';
 import LeftHamburgerMenu from './LeftHamburgerMenu';
+import { HomeButton } from '../shared/Buttons';
 
-const mainNavItems = [
+const pages = [
   {
-    menuTitle: 'PLAN',
-    pageURL: '/plans',
+    title: 'Design',
+    url: '/design',
   },
   {
-    menuTitle: 'SAMPLES',
-    pageURL: '/samples',
+    title: 'Develop',
+    url: '/develop',
   },
   {
-    menuTitle: 'MANAGER',
-    pageURL: '/manager',
+    title: 'Manage',
+    url: '/manage',
   },
   {
-    menuTitle: 'DESIGNER',
-    pageURL: '/designer',
+    title: 'Samples',
+    url: '/samples',
   },
   {
-    menuTitle: 'DEVELOPER',
-    pageURL: '/developer',
+    title: 'Plans',
+    url: '/plans',
   },
 ];
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(3),
-    color: '#fff',
-    fontSize: '1rem',
-  },
-  title: {
-    [theme.breakpoints.down('xs')]: {
-      flexGrow: 1,
+    height: '74px',
+    borderBottom: '3px solid #ddd',
+    '& .MuiToolbar-regular': {
+      display: 'flex',
+      justifyContent: 'space-between',
     },
-  },
-  headerOptions: {
-    display: 'flex',
-    flex: 1,
-    color: '#fff',
-    justifyContent: 'flex-end',
-  },
-  logo: {
-    color: '#00ff22',
-    fontSize: '22pt',
-    fontWeight: 'bold',
-    height: '20pt',
-    lineHeight: '20pt',
+    '& .MuiTabs-root': {
+      display: 'inline-flex',
+      '& .MuiTab-textColorPrimary': {
+        color: '#000',
+        '& .Mui-selected': {
+          color: '#000',
+        },
+      },
+      '& .MuiTabs-indicator': {
+        backgroundColor: '#2399cc',
+      },
+    },
+
+    '& .MuiTab-root': {
+      textTransform: 'none',
+      fontSize: '1rem',
+    },
   },
 }));
 
-const Header = (props) => {
-  const { history } = props;
+const Header = ({ location }) => {
   const classes = useStyles();
+  const [value, setValue] = useState(false);
 
-  const handleButtonClick = (pageURL) => {
-    history.push(pageURL);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
   };
 
+  useEffect(() => {
+    const page = location.pathname.split('/')[1];
+    const tabSelected = pages.findIndex((item) => item.title.toUpperCase() === page.toUpperCase());
+
+    if (tabSelected === -1) {
+      // Remove selected indicator when route does not match tabbed pages
+      setValue(false);
+    } else if (value !== tabSelected) {
+      // Set tab on inital load
+      setValue(tabSelected);
+    }
+  });
+
   return (
-    <AppBar position="static" className={classes.root} component="nav">
+    <AppBar position="fixed" className={classes.root} component="nav">
       <Toolbar>
-        <LeftHamburgerMenu />
-
-        <IconButton
-          edge="start"
-          className={classes.logo}
-          color="inherit"
-          aria-label="home"
-          onClick={() => handleButtonClick('/')}
-        >
-          AQUARIUM
-        </IconButton>
-
         <div className={classes.headerOptions}>
-          {mainNavItems.map((menuItem) => {
-            const { menuTitle, pageURL } = menuItem;
-            return (
-              <IconButton
-                key={menuTitle}
-                edge="start"
-                className={classes.menuButton}
-                color="inherit"
-                aria-label={menuItem}
-                onClick={() => handleButtonClick(pageURL)}
-              >
-                {menuTitle}
-              </IconButton>
-            );
-          })}
-          <UserMenu />
+          <LeftHamburgerMenu />
+
+          <HomeButton />
+
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            indicatorColor="primary"
+            textColor="primary"
+          >
+            {pages.map((menuItem) => {
+              const { title, url } = menuItem;
+              return (
+                <Tab
+                  key={title}
+                  label={title}
+                  to={url}
+                  component={RouterLink}
+                >
+                  {title}
+                </Tab>
+              );
+            })}
+          </Tabs>
+
         </div>
+
+        <UserMenu />
+
       </Toolbar>
     </AppBar>
   );

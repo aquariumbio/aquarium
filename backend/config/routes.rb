@@ -97,23 +97,25 @@ Rails.application.routes.draw do
   post 'api/v3/wizards/:id/delete',                to: 'api/v3/wizards#delete'
 
   # Jobs
-  get  'api/v3/jobs/counts',                       to: 'api/v3/jobs#counts'
-  get  'api/v3/jobs/assigned',                     to: 'api/v3/jobs#assigned'
-  get  'api/v3/jobs/unassigned',                   to: 'api/v3/jobs#unassigned'
-  get  'api/v3/jobs/finished',                     to: 'api/v3/jobs#finished'
-#   get  'api/v3/jobs/operations',                   to: 'api/v3/jobs#operations'
-#   get  'api/v3/jobs/:id/show',                     to: 'api/v3/jobs#show'
-#   post 'api/v3/jobs/:id/assign',                   to: 'api/v3/jobs#assign'
-#   post 'api/v3/jobs/:id/unassign',                 to: 'api/v3/jobs#unassign'
-#   post 'api/v3/jobs/:id/delete',                   to: 'api/v3/jobs#delete'
+  get  'api/v3/jobs/counts',                                    to: 'api/v3/jobs#counts'
+  get  'api/v3/jobs/assigned',                                  to: 'api/v3/jobs#assigned'
+  get  'api/v3/jobs/unassigned',                                to: 'api/v3/jobs#unassigned'
+  get  'api/v3/jobs/finished',                                  to: 'api/v3/jobs#finished'
+  get  'api/v3/jobs/category/:category',                        to: 'api/v3/jobs#category'
+  get  'api/v3/jobs/category/:category/:operation_type',        to: 'api/v3/jobs#operation_type'
+  post 'api/v3/jobs/create',                                    to: 'api/v3/jobs#create'
+  get  'api/v3/jobs/:id/show',                                  to: 'api/v3/jobs#show'
+  post 'api/v3/jobs/:id/assign',                                to: 'api/v3/job_assignments#assign'
+  post 'api/v3/jobs/:id/unassign',                              to: 'api/v3/job_assignments#unassign'
+  post 'api/v3/jobs/:id/delete',                                to: 'api/v3/jobs#delete'
+  post 'api/v3/jobs/:id/remove/:operation_id',                  to: 'api/v3/jobs#remove'
 
   # Samples
   get  'api/v3/set_search_text',                   to: 'api/v3/samples#set_search_text'
   get  'api/v3/samples',                           to: 'api/v3/samples#index'
-#   post 'api/v3/sample/create',                     to: 'api/v3/sample#create'
+  # post 'api/v3/sample/create',                     to: 'api/v3/sample#create'
   get  'api/v3/samples/:id',                       to: 'api/v3/samples#show'
-#   post 'api/v3/sample/:id/update',                 to: 'api/v3/sample#update'
-#   post 'api/v3/sample/:id/discard',                to: 'api/v3/sample#discard'
-
+  # post 'api/v3/sample/:id/update',                 to: 'api/v3/sample#update'
+  # post 'api/v3/sample/:id/discard',                to: 'api/v3/sample#discard'
 
 end

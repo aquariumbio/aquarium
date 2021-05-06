@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # groups table
 class Group < ActiveRecord::Base
   validates :name,        presence: true
