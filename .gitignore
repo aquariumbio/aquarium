@@ -90,4 +90,7 @@ coverage
 /package.json
 /package-lock.json
 
+# ignore snyk config (I think)
+.dccache
+
 # please do not ignore Gemfile.lock !!!
