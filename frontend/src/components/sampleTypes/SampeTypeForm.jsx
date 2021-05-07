@@ -64,21 +64,12 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
   });
 
   const fetchDataNew = async () => {
-    // loading overlay - use delay (window.$timeout) to avoid screen flash on quick API return
-    const loading = setTimeout(() => {
-      setIsLoading(true);
-    }, window.$timeout);
-
+    // wrap the API call with the spinner
+    const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
     const response = await samplesAPI.getTypes();
-
-    // break if the HTTP call resulted in an error ("return false" from API.js)
-    if (!response) {
-      return;
-    }
-
-    // clear timeout and clear overlay
     clearTimeout(loading);
     setIsLoading(false);
+    if (!response) return;
 
     // success
     setState({
@@ -88,28 +79,15 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
   };
 
   const fetchDataEdit = async () => {
-    // loading overlay - delay by window.$timeout to avoid screen flash
-    const loading = setTimeout(() => {
-      setIsLoading(true);
-    }, window.$timeout);
-
-    //  Make more than one API in parallel
-    //  Call both functions
+    // wrap the API call with the spinner
+    const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
     const getAll = samplesAPI.getTypes();
     const getCurrent = samplesAPI.getTypeById(match.params.id);
-
-    //  Await both responses
     const responseGetAll = await getAll;
     const responseGetCurrent = await getCurrent;
-
-    // break if either API call resulted in an error ("return false" from API.js)
-    if (!responseGetAll || !responseGetCurrent) {
-      return;
-    }
-
-    // clear timeout and clear overlay
     clearTimeout(loading);
     setIsLoading(false);
+    if (!responseGetAll || !responseGetCurrent) return;
 
     // success
     setState({
@@ -232,23 +210,14 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
     const update = !!state.sampleType.id;
     let alertProps;
 
-    // loading overlay - delay by window.$timeout to avoid screen flash
-    const loading = setTimeout(() => {
-      setIsLoading(true);
-    }, window.$timeout);
-
+    // wrap the API call with the spinner
+    const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
     const response = update
       ? await samplesAPI.update(formData, state.sampleType.id)
       : await samplesAPI.create(formData);
-
-    // break if the HTTP call resulted in an error ("return false" from API.js)
-    if (!response) {
-      return;
-    }
-
-    // clear timeout and clear overlay
     clearTimeout(loading);
     setIsLoading(false);
+    if (!response) return;
 
     // success
     const action = update ? 'updated' : 'saved';

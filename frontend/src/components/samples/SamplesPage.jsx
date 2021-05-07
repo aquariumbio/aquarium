@@ -201,7 +201,7 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
       setPage(pagenum);
 
       // wrap the API call with the spinner
-      const loading = setTimeout(() => { setIsLoading(true); }, 500);
+      const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
       const response = await sampleAPI.getSamples(words, sampletypeid, createdbyid, pagenum);
       clearTimeout(loading);
       setIsLoading(false);
