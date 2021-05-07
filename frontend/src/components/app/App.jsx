@@ -40,6 +40,9 @@ import Interceptor from '../shared/Interceptor';
 import SamplesPage from '../samples/SamplesPage';
 import SamplePage from '../samples/SamplePage';
 
+// default setTimeout delay before showing loading spinner
+window.$timeout = 500;
+
 const theme = createMuiTheme({
   palette: {
     primary: {

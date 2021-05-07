@@ -3,7 +3,6 @@ class Sample < ActiveRecord::Base
   validates :name,        presence: true, uniqueness: { case_sensitive: false }
   validates :description, presence: true
 
-
   # Return search results
   def self.search(options)
     # read parameters
@@ -29,7 +28,7 @@ class Sample < ActiveRecord::Base
       # search item id only
       this_id = words[5,words.length].strip.split(' ')[0]
       if this_id == this_id.to_i.to_s
-        ands << "item_ids like '%.#{this_id}.%'"
+        ands << "id = (select sample_id from items where id = #{this_id})"
       else
         ands << "0"
       end
@@ -45,7 +44,7 @@ class Sample < ActiveRecord::Base
       # seasrch words
       words = words.split(' ')
       words.each do |word|
-        ands << "search_text like '%#{word.gsub('\'','\\\'').gsub('_','\\_').gsub('%','\\%')}%'"
+        ands << "search_text like '%#{word.gsub('\'','\\\'').gsub('_','\\_').gsub('%','\\%')}%'" if word.length > 1
       end
     end
 
@@ -110,6 +109,141 @@ class Sample < ActiveRecord::Base
     return { page: page, count: count, pages: (1.0 * count / per_page).ceil(), samples: samples }
   end
 
+  # Return sample + inventory data
+  def self.get_sample(id)
+    # get all field values
+    sql = "select * from view_samples where id = #{id} order by ft_sort, ft_name, fv_id"
+    sample_data = Sample.find_by_sql sql
+    return nil, nil if sample_data.length == 0
+
+    # initialize new_sample
+    this_sample = sample_data[0]
+    sids = this_sample.item_ids
+    sample = {
+      id: this_sample.id,
+      name: this_sample.name,
+      description: this_sample.description,
+      sample_type: this_sample.sample_type.upcase,
+      user_name: this_sample.user_name,
+      login: this_sample.login,
+      type: this_sample.ft_type,
+      created_at: this_sample.created_at,
+      item_ids: sids[1,sids.length-2].to_s.split("."),
+      fields: []
+    }
+
+    # loop through field values and append to sample.fields array
+    sample_data.each do |s|
+      sample[:fields] << {type: s.ft_type, name: s.ft_name, value: s.fv_value, child_sample_id: s.child_sample_id, child_sample_name: s.child_sample_name}
+    end
+
+    # get items + collections from inventory
+    # NOTES:
+    # - collection_id could appear multilpe times
+    sql = "
+      select *
+      from view_inventories
+      where id = #{id}
+      order by collection_id is not null, collection_type, item_type, collection_id, item_id
+    "
+    inventory_data = Sample.find_by_sql sql
+
+    # create hash of items / collections
+    # NOTES:
+    # - single row for items
+    # - multiple rows for collections (one for each instance in the collection)
+    # - create empty array for data_associations (key_values)
+    # - counts for type_id (either item or collection)
+    ids = [0]
+    inv = {}
+    this_id = nil
+    this_data = nil
+    inventory_data.each do |s|
+      id = s.collection_id || s.item_id
+      if id != this_id
+        this_id = id
+        if s.collection_id
+          ids << s.collection_id
+          this_data = {
+            item_id: this_id,
+            type_id: s.collection_type_id,
+            type: s.collection_type,
+            location: s.collection_location,
+            date: s.collection_date,
+            collections: [{row: s.row, column: s.column}],
+            key_values: []
+          }
+        else
+          ids << s.item_id
+          this_data = {
+            item_id: this_id,
+            type_id: s.item_type_id,
+            type: s.item_type,
+            location: s.item_location,
+            date: s.item_date,
+            key_values: []
+          }
+        end
+      else
+        this_data[:collections] << {row: s.row, column: s.column}
+      end
+      inv = inv.update({this_id => this_data})
+    end
+
+    # get data assocations for items/collections
+    # NOTES:
+    # - for collection ids, sometimes the parent_class is an item, sometimes it is a collection
+    #   (see sample 36319 and sample 36382)
+    sql = "
+      select da.*, u.upload_file_name, u.upload_content_type
+      from data_associations da
+      left join uploads u on u.id = da.upload_id
+      where parent_id in (#{ids.join(',')}) and parent_class in ('Item', 'Collection')
+      order by parent_id, updated_at desc
+    "
+    data_associations = DataAssociation.find_by_sql sql
+
+    # loop through data_associations and set values
+    # NOTES
+    # - if multiple parent_id / parent_class / key then only take the latest
+    this_parent_id = nil
+    this_parent_class = nil
+    this_key = nil
+    data_associations.each do |da|
+      if this_parent_id != da.parent_id || this_parent_class != da.parent_class || this_key != da.key
+        this_parent_id = da.parent_id
+        this_parent_class = da.parent_class
+        this_key = da.key
+
+        # add data_associations
+        inv[this_parent_id][:key_values] << {uid: da.id, key: this_key, object: da.object, upload_id: da.upload_id, upload_file_name: da.upload_file_name, upload_content_type: da.upload_content_type}
+      end
+    end
+
+    # roll up lists of data_associations
+    wip = {}
+    this_type_id = nil
+    inv.each do |k,v|
+      if this_id != v[:type_id]
+        this_id = v[:type_id]
+        wip = wip.update({ this_id => { type_id: this_id, type: v[:type], count_inventory: 0, count_deleted: 0, data: [] } })
+      end
+      wip[this_id][:data] << v
+      if v[:location] == 'deleted'
+        wip[this_id][:count_deleted] += 1
+      else
+        wip[this_id][:count_inventory] += 1
+      end
+    end
+
+    # only return data
+    inventory = []
+    wip.each do |k,v|
+      inventory << v
+    end
+
+    return sample, inventory
+  end
 
 #   # Return all samples.
 #   #

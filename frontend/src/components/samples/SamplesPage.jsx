@@ -190,8 +190,7 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
   const [sampleId, setSampleId] = useState(0);
 
   const goSearch = async (sampletypeid, createdbyid, sampleid, pagenum) => {
-    const words = (' '+search+' ').replace(/ +/g,' ').replace(/ \S /g,' ').trim()
-//     const newpage = (words != searchWords || sampletypeid != sampleTypeId || createdbyid != createdById) ? 1 : page
+    const words = (search).replace(/ +/g,' ').trim()
 
     if (words != searchWords || sampletypeid != sampleTypeId || createdbyid != createdById || pagenum != page) {
       if (words != searchWords || sampletypeid != sampleTypeId || createdbyid != createdById) pagenum = 1
@@ -201,8 +200,11 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
       setSampleId(sampleid);
       setPage(pagenum);
 
-      // wrap the API call
+      // wrap the API call with the spinner
+      const loading = setTimeout(() => { setIsLoading(true); }, 500);
       const response = await sampleAPI.getSamples(words, sampletypeid, createdbyid, pagenum);
+      clearTimeout(loading);
+      setIsLoading(false);
       if (!response) return;
 
       // success

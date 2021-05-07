@@ -6,9 +6,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import reportWebVitals from './reportWebVitals';
 import App from './components/app/App';
 
-// default setTimeout delay before showing loading spinner
-window.$timeout = 200;
-
 ReactDOM.render(
   <React.StrictMode>
     <Router>
