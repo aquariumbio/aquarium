@@ -69,6 +69,7 @@ const Interceptor = ({ setAlertProps }) => {
   };
 
   const handleCloseError = () => {
+    // eslint-disable-next-line no-undef
     closeError();
   };
 

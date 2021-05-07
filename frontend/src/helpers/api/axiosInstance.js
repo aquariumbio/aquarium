@@ -40,24 +40,29 @@ axiosInstance.interceptors.response.use(
       switch (status) {
         case 400:
           // Show the error message modal
-          showError(`${status}: ${data.message}`)
+          // eslint-disable-next-line no-undef
+          showError(`${status}: ${data.message}`);
           break;
         case 401:
           // The token is either expired or does not exist
           // In either case put up the modal to re-login
+          // eslint-disable-next-line no-undef
           showModal();
           break;
         case 403:
           // Show the error message modal
-          showError(`${status}: ${data.message}`)
+          // eslint-disable-next-line no-undef
+          showError(`${status}: ${data.message}`);
           break;
         case 404:
           // Show the error message modal
-          showError(`${status}: ${data.message}`)
+          // eslint-disable-next-line no-undef
+          showError(`${status}: ${data.message}`);
           break;
         default:
           // Show the error message modal
-          showError(`${status}: ${data.message}`)
+          // eslint-disable-next-line no-undef
+          showError(`${status}: ${data.message}`);
       }
       return false;
     }
