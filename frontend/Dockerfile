@@ -21,6 +21,8 @@ CMD ["npm", "start"]
 # Temporary building stage
 #
 FROM frontend-development AS frontend-builder
+ENV REACT_APP_BACKEND=localhost
+ENV REACT_APP_BACKEND_PORT=80
 RUN npm run build
 
 # Build production image
