@@ -86,6 +86,9 @@ frontend/.nyc_output
 
 coverage
 
+# ignore snyk config
+.dccache
+
 # ignore top level npm packages
 /package.json
 /package-lock.json
