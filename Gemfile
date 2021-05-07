@@ -11,7 +11,7 @@ gem 'activerecord-nulldb-adapter'
 gem 'alphabetical_paginate'
 
 # Authentication and cross origin
-gem 'angular_rails_csrf', '2.1.1'
+gem 'angular_rails_csrf', '3.1.0'
 
 gem 'anemone', path: 'components/anemone'
 gem 'aquadoc', path: 'components/aquadoc'
@@ -43,7 +43,7 @@ gem 'protected_attributes_continued'
 
 gem 'rack-cors', '~> 1.0.5', require: 'rack/cors'
 
-gem 'rails', '4.2.11.3'
+gem 'rails', '5.2.4.6'
 gem 'mimemagic', '> 0.3.5'
 
 gem 'redcarpet', '>= 3.5.1'
@@ -62,7 +62,7 @@ gem 'will_paginate'
 group :development do
   gem 'factory_bot_rails', '>= 5.2.0'
   gem 'ipaddress' # used to determine subnet for docker containers for web-console
-  gem 'rspec-rails', '>= 4.0.1'
+  gem 'rspec-rails', '>= 4.1.2'
   gem 'rspec-sorbet'
   gem 'rubocop'
   gem 'rubocop-rails'
