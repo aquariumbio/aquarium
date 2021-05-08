@@ -91,7 +91,7 @@ const Preferences = ({ setIsLoading, setAlertProps, id }) => {
     event.preventDefault();
 
     // set formData
-    const form = document.querySelector('form');
+    const form = document.querySelector('#preferences-form');
     const data = new FormData(form);
     const formData = Object.fromEntries(data);
 
@@ -164,7 +164,7 @@ const Preferences = ({ setIsLoading, setAlertProps, id }) => {
 
         <Divider />
 
-        <form id="information-form" name="information-form" data-cy="information-form" onSubmit={handleSubmit}>
+        <form id="preferences-form" name="preferences-form" data-cy="preferences-form" onSubmit={handleSubmit}>
           <FormGroup>
             <FormControlLabel
               control={<Switch data-cy="privatetoggle" checked={samplesPrivate} onChange={toggleChecked} />}

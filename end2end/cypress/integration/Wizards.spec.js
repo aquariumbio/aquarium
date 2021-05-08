@@ -36,7 +36,7 @@ describe('/wizards', () => {
     // not worried about field names here
     // they are just sent to the backend as a json string
 
-    cy.get("form").submit()
+    cy.get("#wizard-form").submit()
     cy.wait('@newwizard').should(({ request, response }) => {
       // wait for up to 3 seconds for the page to load
       cy.location('pathname', {timeout: 3000}).should('eq', `/wizards`);
@@ -74,7 +74,7 @@ describe('/wizards', () => {
       .type("2")
       .should("have.value", "description2");
 
-    cy.get("form").submit()
+    cy.get("#wizard-form").submit()
     cy.wait('@editwizard').should(({ request, response }) => {
       // wait for up to 3 seconds for the page to load
       cy.location('pathname', {timeout: 3000}).should('eq', `/wizards`);

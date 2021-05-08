@@ -95,7 +95,7 @@ const GroupForm = ({ setIsLoading, setAlertProps, match }) => {
     event.preventDefault();
 
     // set formData
-    const form = document.querySelector('form');
+    const form = document.querySelector('#group-form');
     const data = new FormData(form);
     const formData = Object.fromEntries(data);
 

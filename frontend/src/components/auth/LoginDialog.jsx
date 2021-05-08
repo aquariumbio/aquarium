@@ -112,7 +112,8 @@ const LoginDialog = ({ setIsLoading }) => {
         className={classes.form}
         noValidate
         autoComplete="off"
-        name="login"
+        id="login-form"
+        name="login-form"
         onSubmit={handleSubmit}
       >
         <TextField

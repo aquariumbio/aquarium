@@ -84,7 +84,7 @@ const Information = ({ setIsLoading, setAlertProps, id }) => {
     event.preventDefault();
 
     // set formData
-    const form = document.querySelector('form');
+    const form = document.querySelector('#information-form');
     const data = new FormData(form);
     const formData = Object.fromEntries(data);
 

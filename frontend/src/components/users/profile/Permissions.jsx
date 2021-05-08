@@ -121,7 +121,7 @@ const UserForm = ({ setIsLoading, setAlertProps, id }) => {
     event.preventDefault();
 
     // set formData
-    const form = document.querySelector('form');
+    const form = document.querySelector('#permissions-form');
     const data = new FormData(form);
     const formData = Object.fromEntries(data);
 
@@ -204,7 +204,7 @@ const UserForm = ({ setIsLoading, setAlertProps, id }) => {
 
         <Divider />
 
-        <form id="user-form" name="user-form" data-cy="user-form" onSubmit={handleSubmit}>
+        <form id="permissions-form" name="permissions-form" data-cy="permissions-form" onSubmit={handleSubmit}>
           {// Add permissions checkboxes
            //   - Use ids for each checkbox instead of names
            //   - Build array of permission_ids on the fly when submit the form

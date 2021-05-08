@@ -34,7 +34,7 @@ describe('/groups', () => {
       .type("description")
       .should("have.value", "description");
 
-    cy.get("form").submit()
+    cy.get("#group-form").submit()
     cy.wait('@newgroup').should(({ request, response }) => {
       // wait for up to 3 seconds for the page to load
       cy.location('pathname', {timeout: 3000}).should('eq', `/groups`);
@@ -70,7 +70,7 @@ describe('/groups', () => {
       .type("2")
       .should("have.value", "description2");
 
-    cy.get("form").submit()
+    cy.get("#group-form").submit()
     cy.wait('@editgroup').should(({ request, response }) => {
       // wait for up to 3 seconds for the page to load
       cy.location('pathname', {timeout: 3000}).should('eq', `/groups`);

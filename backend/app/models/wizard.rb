@@ -92,7 +92,7 @@ class Wizard < ActiveRecord::Base
   # Return the items for the specified box.
   #
   # @return items
-  def items(box = '0.0')
+  def items(boxname)
     # get items per box, assume infinite if <= 0
     # get boxes per section, assume infinite if <= 0
     spec = JSON.parse(self.specification)
@@ -104,7 +104,7 @@ class Wizard < ActiveRecord::Base
     boxes_per_section = 0 if boxes_per_section < 0
 
     # get section + box
-    section_box = box.split('.')
+    section_box = boxname.to_s.split('.')
     section = section_box[-2].to_i
     box = section_box[-1].to_i
 

@@ -78,10 +78,10 @@ const Interceptor = ({ setAlertProps }) => {
       {/* modal login */}
       <div id='login_modal' className={classes.modal_wrapper}>
         <div className={classes.modal_content}>
-          <form
+        <form
             noValidate
             autoComplete="off"
-            name="login"
+            name="login-modal-form"
             onSubmit={handleSubmit}
           >
             <Typography>
@@ -94,13 +94,13 @@ const Interceptor = ({ setAlertProps }) => {
               className={classes.input}
               required
               autoFocus
-              id="login"
+              id="login-modal"
               label="Login"
               type="text"
               variant="outlined"
               value={login}
               onChange={(event) => setLogin(event.target.value)}
-              data-test="username"
+              data-test="username-modal"
             />
             <br />
             <br />
@@ -108,13 +108,13 @@ const Interceptor = ({ setAlertProps }) => {
               name="password"
               className={classes.input}
               required
-              id="password"
+              id="password-modal"
               label="Password"
               type="password"
               variant="outlined"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              data-test="password"
+              data-test="password-modal"
             />
             <br />
             {loginErrors && <p>Invalid login/password combination</p>}

@@ -148,7 +148,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
     event.preventDefault();
 
     // set formData
-    const form = document.querySelector('form');
+    const form = document.querySelector('#object-type-form');
     const data = new FormData(form);
     const formData = Object.fromEntries(data);
 
@@ -198,8 +198,9 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
       <Typography align="right">* field is required</Typography>
 
       <form
-        name="sampe-type-definition-form"
-        data-cy="sampe-type-definition-form"
+        id="object-type-form"
+        name="object-type-form"
+        data-cy="object-type-form"
         onSubmit={handleSubmit}
       >
         <Typography variant="h4" className={classes.inputName} display="inline">

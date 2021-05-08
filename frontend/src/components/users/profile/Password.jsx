@@ -82,7 +82,7 @@ const Password = ({ setIsLoading, setAlertProps, id }) => {
     event.preventDefault();
 
     // set formData
-    const form = document.querySelector('form');
+    const form = document.querySelector('#password-form');
     const data = new FormData(form);
     const formData = Object.fromEntries(data);
 
@@ -150,7 +150,7 @@ const Password = ({ setIsLoading, setAlertProps, id }) => {
 
         <Divider />
 
-        <form id="information-form" name="information-form" data-cy="information-form" onSubmit={handleSubmit}>
+        <form id="password-form" name="password-form" data-cy="password-form" onSubmit={handleSubmit}>
           <Typography variant="h4" className={classes.inputName} display="inline">
             New Password
           </Typography>

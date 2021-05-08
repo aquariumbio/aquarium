@@ -26,21 +26,21 @@ describe('/users', () => {
 
     cy.visit('/users/new');
     cy.contains('h1', 'New User');
-    cy.get('input[name="name"]')
+    cy.get('input[id="user-name-input"]')
       .type("name")
       .should("have.value", "name");
 
     // Use random string b/c login must be unique and users cannot be deleted
     newUserLogin = "login-"+Math.random().toString(36).substr(7);
-    cy.get('input[name="login"]')
+    cy.get('input[id="user-login-input"]')
       .type(`${newUserLogin}`)
       .should("have.value", `${newUserLogin}`);
 
-    cy.get('input[name="password"]')
+    cy.get('input[id="user-password-input"]')
       .type("aquarium123")
       .should("have.value", "aquarium123");
 
-    cy.get("form").submit()
+    cy.get("#user-form").submit()
     cy.wait('@newuser').should(({ request, response }) => {
       // wait for up to 3 seconds for the page to load
       cy.location('pathname', {timeout: 3000}).should('eq', `/users`);
@@ -92,7 +92,7 @@ describe('/users', () => {
       .type("8005551212")
       .should("have.value", "8005551212");
 
-    cy.get("form").submit()
+    cy.get("#information-form").submit()
     cy.wait('@updateprofile').should(({ request, response }) => {
       // values should have changed
       cy.get('input[name="email"]')
@@ -129,7 +129,7 @@ describe('/users', () => {
         .should('be.checked');
 
       // submit form
-      cy.get("form").submit()
+      cy.get("#permissions-form").submit()
       cy.wait('@permissions').should(({ request, response }) => {
         // admin should be checked
         cy.get('[type="checkbox"]')
@@ -164,7 +164,7 @@ describe('/users', () => {
       // click toggle
       cy.get(`[data-cy=privatetoggle]`).click()
 
-      cy.get("form").submit()
+      cy.get("#preferences-form").submit()
       cy.wait('@preferences').should(({ request, response }) => {
         // values should have changed
         cy.get('input[name="lab_name"]')
@@ -200,7 +200,7 @@ describe('/users', () => {
           cy.visit('/login');
           cy.get('[data-test=username]').type(`${newUserLogin}`);
           cy.get('[data-test=password]').type('password123');
-          cy.get('form').contains('SIGN IN').click();
+          cy.get('#login-form').contains('SIGN IN').click();
 
           // should be logged in
           cy.location('pathname', {timeout: 3000}).should('eq', '/');

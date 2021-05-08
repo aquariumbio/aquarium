@@ -104,7 +104,7 @@ const WizardForm = ({ setIsLoading, setAlertProps, match }) => {
     event.preventDefault();
 
     // set formData
-    const form = document.querySelector('form');
+    const form = document.querySelector('#wizard-form');
     const data = new FormData(form);
     const formData = Object.fromEntries(data);
 

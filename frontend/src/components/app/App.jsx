@@ -116,6 +116,8 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
+      {/* Session Timeout / Unexpected Error popup */}
+      <Interceptor setAlertProps={setAlertProps} />
       <div name="app-container" className={classes.root} data-cy="app-container">
         <AlertToast
           open={alertProps.open}
@@ -194,10 +196,6 @@ export default function App() {
           </>
         </Switch>
       </div>
-      {/* Session Timeout / Unexpected Error popup */}
-      {/* Put last for now so it is not the first form on the page */}
-      {/* TOOD: refactor it so that it is not a form and move it to the top */}
-      <Interceptor setAlertProps={setAlertProps} />
     </ThemeProvider>
   );
 }
