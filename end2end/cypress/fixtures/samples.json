@@ -1,0 +1,164 @@
+{
+  "page": 1,
+  "count": 3,
+  "pages": 1,
+  "samples": [
+    {
+      "id": 36319,
+      "name": "Twist pool template for Payload PCR",
+      "description": "twist template",
+      "sample_type": "FRAGMENT",
+      "user_name": "Nick Cardozo",
+      "login": "nickc94",
+      "type": "string",
+      "created_at": "2021-03-03T21:53:27.000Z",
+      "item_ids": [
+        "510028",
+        "510469",
+        "510022",
+        "510185",
+        "510631",
+        "510183",
+        "510594",
+        "510110",
+        "510484",
+        "36357",
+        "510029",
+        "510465",
+        "510470"
+      ],
+      "fields": [
+        {
+          "type": "string",
+          "name": "Restriction Enzyme(s)",
+          "value": "",
+          "child_sample_id": null,
+          "child_sample_name": null
+        },
+        {
+          "type": "string",
+          "name": "Yeast Marker",
+          "value": "",
+          "child_sample_id": null,
+          "child_sample_name": null
+        },
+        {
+          "type": "number",
+          "name": "Length",
+          "value": "150.0",
+          "child_sample_id": null,
+          "child_sample_name": null
+        },
+        {
+          "type": "url",
+          "name": "Sequence",
+          "value": "http://please.link.your.sequences.com",
+          "child_sample_id": null,
+          "child_sample_name": null
+        },
+        {
+          "type": "sample",
+          "name": "Forward Primer",
+          "value": null,
+          "child_sample_id": 36317,
+          "child_sample_name": "Cas9_payload_F"
+        },
+        {
+          "type": "sample",
+          "name": "Fragment Mix Array",
+          "value": null,
+          "child_sample_id": null,
+          "child_sample_name": null
+        },
+        {
+          "type": "sample",
+          "name": "Reverse Primer",
+          "value": null,
+          "child_sample_id": 36316,
+          "child_sample_name": "Cas9_payload_R"
+        },
+        {
+          "type": "sample",
+          "name": "Template",
+          "value": null,
+          "child_sample_id": null,
+          "child_sample_name": null
+        }
+      ]
+    },
+    {
+      "id": 36317,
+      "name": "Cas9_payload_F",
+      "description": "Forward primer for Payload PCR",
+      "sample_type": "PRIMER",
+      "user_name": "Nick Cardozo",
+      "login": "nickc94",
+      "type": "string",
+      "created_at": "2021-03-03T21:49:48.000Z",
+      "item_ids": [
+        "510025",
+        "510020"
+      ],
+      "fields": [
+        {
+          "type": "string",
+          "name": "Anneal Sequence",
+          "value": "",
+          "child_sample_id": null,
+          "child_sample_name": null
+        },
+        {
+          "type": "string",
+          "name": "Overhang Sequence",
+          "value": "",
+          "child_sample_id": null,
+          "child_sample_name": null
+        },
+        {
+          "type": "number",
+          "name": "T Anneal",
+          "value": "56.0",
+          "child_sample_id": null,
+          "child_sample_name": null
+        }
+      ]
+    },
+    {
+      "id": 36316,
+      "name": "Cas9_payload_R",
+      "description": "Reverse primer for Payload PCR",
+      "sample_type": "PRIMER",
+      "user_name": "Nick Cardozo",
+      "login": "nickc94",
+      "type": "string",
+      "created_at": "2021-03-03T21:49:48.000Z",
+      "item_ids": [
+        "510026",
+        "510019"
+      ],
+      "fields": [
+        {
+          "type": "string",
+          "name": "Anneal Sequence",
+          "value": "",
+          "child_sample_id": null,
+          "child_sample_name": null
+        },
+        {
+          "type": "string",
+          "name": "Overhang Sequence",
+          "value": "",
+          "child_sample_id": null,
+          "child_sample_name": null
+        },
+        {
+          "type": "number",
+          "name": "T Anneal",
+          "value": "56.0",
+          "child_sample_id": null,
+          "child_sample_name": null
+        }
+      ]
+    }
+  ]
+}
