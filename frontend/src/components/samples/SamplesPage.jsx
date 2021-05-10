@@ -362,14 +362,14 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
             <span className={classes.mr16}>
               <button className={`${classes.pointer} ${page == 1 ? classes.hidden : classes.visible}`} onClick={() => handlePage(page-1)}>&lt; Prev</button>
             </span>
-            <span className={classes.width200}>
+            <span className={`${classes.width200} ${pages == 0 ? classes.hidden : classes.visible}`}>
               Page {page} of {pages}
             </span>
             <span className={classes.ml16}>
-              <button className={`${classes.pointer} ${page == pages ? classes.hidden : classes.visible}`} onClick={() => handlePage(page+1)}>Next ></button>
+              <button className={`${classes.pointer} ${page >= pages ? classes.hidden : classes.visible}`} onClick={() => handlePage(page+1)}>Next ></button>
             </span>
             <span className={classes.ml16}>
-              <button className={`${classes.pointer} ${page == pages ? classes.hidden : classes.visible}`} onClick={() => handlePage(pages)}>Last</button>
+              <button className={`${classes.pointer} ${page >= pages ? classes.hidden : classes.visible}`} onClick={() => handlePage(pages)}>Last</button>
             </span>
           </div>
         </p>

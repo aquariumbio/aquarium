@@ -724,7 +724,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_login` (`login`),
   KEY `index_users_on_remember_token` (`remember_token`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=344 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=345 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `view_inventories`;
 /*!50001 DROP VIEW IF EXISTS `view_inventories`*/;
@@ -857,7 +857,7 @@ CREATE TABLE `wizards` (
   `updated_at` datetime NOT NULL,
   `description` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `workers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
