@@ -45,12 +45,14 @@ const HorizontalNavList = ({
 
   return (
     <List
-      aria-label={`${name}-nav`}
+      aria-label={`${name}-tablist`}
+      role="tablist"
       className={classes.root}
     >
       {list !== undefined && list.map((li) => (
         <ListItem
           button
+          role="tab"
           onClick={(event) => handleListItemClick(event, li.name)}
           selected={value === li.name}
           key={li.name}

@@ -1,14 +1,10 @@
-import React, { useState, useEffect, useReducer } from 'react';
-import PropTypes from 'prop-types';
-
+import React from 'react';
+import {
+  string, arrayOf, shape, func, object,
+} from 'prop-types';
 import { makeStyles } from '@material-ui/core';
-import Collapse from '@material-ui/core/Collapse';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 
@@ -51,26 +47,31 @@ const VerticalNavList = ({
   name,
   list,
   value,
-  setOperationType,
+  getOperations,
 }) => {
   const classes = useStyles();
 
-  const handleListItemClick = (event, page) => {
-    setOperationType(page);
+  const handleListItemClick = (page) => {
+    getOperations(page);
   };
 
+  if (list.length < 1) {
+    return <Typography>No Operations</Typography>;
+  }
   return (
     <List
-      aria-label={`${name}-nav`}
+      aria-label={`${name}-tablist`}
       className={classes.root}
+      role="tablist"
     >
       <Divider className={classes.divider} />
 
       {list !== undefined && list.map((li) => (
         <ListItem
           button
+          role="tab"
           onClick={(event) => handleListItemClick(event, li.name)}
-          selected={value === li.name}
+          selected={value.name === li.name}
           key={li.name}
         >
           <Typography noWrap>{li.name} </Typography>
@@ -83,10 +84,11 @@ const VerticalNavList = ({
 };
 
 VerticalNavList.propTypes = {
-  name: PropTypes.string.isRequired,
-  list: PropTypes.arrayOf(PropTypes.object).isRequired,
-  value: PropTypes.string.isRequired,
-  setOperationType: PropTypes.func.isRequired,
+  name: string.isRequired,
+  list: arrayOf(shape({ name: string })).isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  value: object.isRequired,
+  getOperations: func.isRequired,
 };
 
 export default VerticalNavList;

@@ -12,7 +12,9 @@ import HorizontalNavList from './HorizontalNavList';
 const useStyles = makeStyles(() => ({
   root: {
     display: 'inline-flex',
-    width: '98%',
+    width: '100%',
+    height: 'calc(100vh - 75px)',
+
   },
 
   whiteSpace: {
@@ -20,10 +22,10 @@ const useStyles = makeStyles(() => ({
   },
 
   main: {
-    marginTop: '23px',
+    marginTop: '25px',
     marginLeft: '20px',
     width: '100%',
-    height: '80vh',
+    height: 'calc(100vh - 125px)',
     overflowY: 'auto',
     overflowX: 'hidden',
   },
@@ -43,7 +45,7 @@ const JobsPage = ({ setIsLoading, setAlertProps }) => {
 
   const [category, setCategory] = useState('');
   const [operationState, setOperationState] = useState('Pending');
-  const [operationType, setOperationType] = useState('');
+  const [operationType, setOperationType] = useState({});
   const [pendingCount, setPendingCount] = useState();
 
   useEffect(() => {

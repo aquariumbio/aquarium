@@ -20,12 +20,10 @@ const SideBar = ({ sampleTypes, setCurrentSampleType, setIsLoading }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const fetchData = async (id) => {
-    // loading overlay - delay by 300ms to avoid screen flash
-    const loading = setTimeout(() => {
-      setIsLoading(true);
-    }, window.$timeout);
+    setIsLoading(true);
 
     const response = await samplesAPI.getTypeById(id);
+    setIsLoading(false);
 
     // break if the HTTP call resulted in an error ("return false" from API.js)
     if (!response) {
@@ -33,7 +31,6 @@ const SideBar = ({ sampleTypes, setCurrentSampleType, setIsLoading }) => {
     }
 
     // clear timeout and clear overlay
-    clearTimeout(loading);
     setIsLoading(false);
 
     // success
