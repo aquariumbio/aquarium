@@ -21,6 +21,7 @@ ReactDOM.render(
 
 // Set minimum screen width
 document.getElementById('root').style.minWidth = '1280px';
+document.getElementById('root').style.width = '100vw';
 document.getElementById('root').style.height = '100vh';
 document.getElementById('root').style.overflow = 'hidden';
 

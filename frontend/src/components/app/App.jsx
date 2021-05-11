@@ -1,6 +1,6 @@
 /* disabling forbidden prop spreading for react-router-dom */
 /* eslint-disable react/jsx-props-no-spreading */
-import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import React, { useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import AnnouncementsPage from '../announcements/AnnouncementsPage';
@@ -36,47 +36,20 @@ import GroupForm from '../groups/GroupForm';
 import JobsPage from '../jobs/JobsPage';
 import AlertToast from '../shared/AlertToast';
 import WindowDimensionsProvider from '../../WindowDimensionsProvider';
-
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      light: '#6ab7ff',
-      main: '#0B88FB',
-      dark: '#005cc7',
-      contrastText: '#fff',
-    },
-    disabled: '#ddd',
-  },
-  overrides: {
-    MuiDivider: {
-      root: {
-        margin: '16px 0px',
-      },
-    },
-    MuiAppBar: {
-      colorPrimary: {
-        backgroundColor: '#fff',
-      },
-    },
-    MuiTypography: {
-      body1: {
-        fontSize: '12px',
-      },
-    },
-  },
-});
+import theme from '../../theme';
 
 const useStyles = makeStyles(() => ({
   root: {
-    width: '100vw',
+    width: '100%',
+    minWidth: '1280px',
+    height: '100%',
     overflow: 'hidden',
     backgroundColor: '#fff',
   },
   content: {
-    width: '100%',
-    marginTop: '72px',
-    marginLeft: '20px',
-    marginRight: '20px',
+    marginTop: '75px',
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
     overflowX: 'auto',
     overflowY: 'hidden',
   },
@@ -86,24 +59,23 @@ const useStyles = makeStyles(() => ({
 export default function App() {
   const classes = useStyles();
 
-  // isLoading overlay - initialize to "false" and manage in individual components
+  // manage in individual components
   const [isLoading, setIsLoading] = useState(false);
-
-  // AlertToast popup - initialize to "false" and manage in individual components
   const [alertProps, setAlertProps] = useState({});
 
   return (
     <ThemeProvider theme={theme}>
       <WindowDimensionsProvider>
-        <div name="app-container" className={classes.root} data-cy="app-container">
-          <AlertToast
-            open={alertProps.open}
-            severity={alertProps.severity}
-            message={alertProps.message}
-            setAlertProps={setAlertProps}
-          />
-          <LoadingSpinner isLoading={isLoading} />
+        <AlertToast
+          open={alertProps.open}
+          severity={alertProps.severity}
+          message={alertProps.message}
+          setAlertProps={setAlertProps}
+        />
 
+        {isLoading && <LoadingSpinner />}
+
+        <div name="app-container" className={classes.root} data-cy="app-container">
           { /* Users cannot interact with the app if they do not have a token */
           !localStorage.getItem('token') && <Redirect to="/login" />
         }
