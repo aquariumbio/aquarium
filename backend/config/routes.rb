@@ -103,9 +103,8 @@ Rails.application.routes.draw do
   get  'api/v3/jobs/category/:category/:operation_type',        to: 'api/v3/jobs#operation_type'
   post 'api/v3/jobs/create',                                    to: 'api/v3/jobs#create'
   get  'api/v3/jobs/:id/show',                                  to: 'api/v3/jobs#show'
-  post 'api/v3/jobs/:id/assign',                                to: 'api/v3/jobs#assign'
-  post 'api/v3/jobs/:id/unassign',                              to: 'api/v3/jobs#unassign'
+  post 'api/v3/jobs/:id/assign',                                to: 'api/v3/job_assignments#assign'
+  post 'api/v3/jobs/:id/unassign',                              to: 'api/v3/job_assignments#unassign'
   post 'api/v3/jobs/:id/delete',                                to: 'api/v3/jobs#delete'
   post 'api/v3/jobs/:id/remove/:operation_id',                  to: 'api/v3/jobs#remove'
-
 end

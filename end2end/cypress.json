@@ -1,11 +1,11 @@
 {
-  "baseUrl": "http://localhost:3000",
+  "baseUrl": "http://localhost:3001",
   "env": {
-    "apiUrl": "http://localhost:3001/api/v3"
+    "API_URL": "http://localhost:3011"
   },
   "reporter": "junit",
   "reporterOptions": {
-    "mochaFile": "cypress/results/output.xml"
+    "mochaFile": "cypress/results/output-[hash].xml"
   },
   "viewportWidth": 1280
 }

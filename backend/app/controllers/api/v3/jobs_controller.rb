@@ -76,7 +76,7 @@ module Api
         # Get counts by operation type
         operations = Job.counts_by_operation_type
 
-        render json: {counts: {jobs: jobs, operations: operations}}.to_json, status: :ok
+        render json: { counts: { jobs: jobs, operations: operations } }.to_json, status: :ok
       end
 
       # Returns unassigned jobs that have operations
@@ -117,7 +117,7 @@ module Api
         # Get unassigned jobs
         unassigned = Job.unassigned_jobs
 
-        render json: {jobs: unassigned}.to_json, status: :ok
+        render json: { jobs: unassigned }.to_json, status: :ok
       end
 
       # Returns assigned jobs that have operations
@@ -160,7 +160,7 @@ module Api
         # Get assigned jobs
         assigned = Job.assigned_jobs
 
-        render json: {jobs: assigned}.to_json, status: :ok
+        render json: { jobs: assigned }.to_json, status: :ok
       end
 
       # Returns finished jobs that have operations
@@ -207,7 +207,7 @@ module Api
         # Get assigned jobs
         finished = Job.finished_jobs(seven_days)
 
-        render json: {jobs: finished}.to_json, status: :ok
+        render json: { jobs: finished }.to_json, status: :ok
       end
 
       # Returns operations for a job id
@@ -286,94 +286,10 @@ module Api
           # get data_associations for operation
           data_associations = DataAssociation.data_associations(operation_id)
 
-          operations << {id: jo.id, operation_id: jo.operation_id, updated_at: jo.updated_at, status: jo.status, plan_id: jo.plan_id, inputs: inputs, outputs: outputs, data_associations: data_associations}
+          operations << { id: jo.id, operation_id: jo.operation_id, updated_at: jo.updated_at, status: jo.status, plan_id: jo.plan_id, inputs: inputs, outputs: outputs, data_associations: data_associations }
         end
 
-        render json: {operations: operations}, status: :ok
-      end
-
-      # Assigns a job to a user
-      #
-      # <b>API Call:</b>
-      #   GET: /api/v3/jobs/<id>/assign
-      #   {
-      #     token: <token>
-      #     to_id: <to_id>
-      #   }
-      #
-      # <b>API Return Success:</b>
-      #   STATUS_CODE: 200
-      #   {
-      #     job_assignment_log: {
-      #       id: <id>,
-      #       job_id: <job_id>,
-      #       assigned_by: <assigned_by>,
-      #       assigned_to: <assigned_to>,
-      #       created_at: <created_at>,
-      #       updated_at: <updated_at>
-      #     }
-      #   }
-      #
-      # @!method assign(id, token, to_id)
-      # @param id [Int] the id of the job
-      # @param token [String] a token
-      # @param to_id [Int] the id of the assigned_to user
-      def assign
-        # Check for manage permissions
-        status, response = check_token_for_permission(Permission.manage_id)
-        render json: response.to_json, status: status.to_sym and return if response[:error]
-
-        # Get job
-        @id = Input.int(params[:id])
-        job = Job.find_by(id: @id)
-        render json: { error: "Job not found" }.to_json, status: :not_found and return if !job
-
-        @by = response[:user]['id'].to_i
-        @to = params[:to_id].to_i
-
-        # Create assignment
-        new_job_assignment_log
-      end
-
-      # Unassigns a job
-      #
-      # <b>API Call:</b>
-      #   GET: /api/v3/jobs/<id>/unassign
-      #   {
-      #     token: <token>
-      #   }
-      #
-      # <b>API Return Success:</b>
-      #   STATUS_CODE: 200
-      #   {
-      #     job_assignment_log: {
-      #       id: <id>,
-      #       job_id: <job_id>,
-      #       assigned_by: <assigned_by>,
-      #       assigned_to: null,
-      #       created_at: <created_at>,
-      #       updated_at: <updated_at>
-      #     }
-      #   }
-      #
-      # @!method unassign(id, token)
-      # @param id [Int] the id of the job
-      # @param token [String] a token
-      def unassign
-        # Check for manage permissions
-        status, response = check_token_for_permission(Permission.manage_id)
-        render json: response.to_json, status: status.to_sym and return if response[:error]
-
-        # Get job
-        @id = Input.int(params[:id])
-        job = Job.find_by(id: @id)
-        render json: { error: "Job not found" }.to_json, status: :not_found and return if !job
-
-        @by = response[:user]['id'].to_i
-        @to = nil
-
-        # Create assignment
-        new_job_assignment_log
+        render json: { operations: operations }, status: :ok
       end
 
       # Creates a job
@@ -452,17 +368,17 @@ module Api
 
         # create the job
         job = Job.create({
-          user_id: response[:user]['id'].to_i,
-          path: 'operation.rb',
-          pc: -1,
-          state: state.to_json,
-          group_id: nil, # this was technicians
-          submitted_by: response[:user]['id'].to_i,
-          desired_start_time: timenow,
-          latest_start_time: timenow + 1.hour,
-          created_at: timenow,
-          updated_at: timenow
-        })
+                           user_id: response[:user]['id'].to_i,
+                           path: 'operation.rb',
+                           pc: -1,
+                           state: state.to_json,
+                           group_id: nil, # this was technicians
+                           submitted_by: response[:user]['id'].to_i,
+                           desired_start_time: timenow,
+                           latest_start_time: timenow + 1.hour,
+                           created_at: timenow,
+                           updated_at: timenow
+                         })
 
         # create the job associations
         pending_ids = []
@@ -470,9 +386,9 @@ module Api
           pending_ids << operation.id
 
           job_assocation = JobAssociation.create({
-            job_id: job.id,
-            operation_id: operation.id
-          })
+                                                   job_id: job.id,
+                                                   operation_id: operation.id
+                                                 })
         end
 
         Operation.set_status_for_ids('scheduled', pending_ids)
@@ -565,17 +481,17 @@ module Api
 
         # Read status, default to 'pending'
         status = case params[:status]
-        when 'error'
-          'error'
-        when 'waiting'
-          'waiting'
-        when 'deferred'
-          'deferred'
-        when 'delayed'
-          'delayed'
-        else
-          'pending'
-        end
+                 when 'error'
+                   'error'
+                 when 'waiting'
+                   'waiting'
+                 when 'deferred'
+                   'deferred'
+                 when 'delayed'
+                   'delayed'
+                 else
+                   'pending'
+                 end
 
         # Get operation_types for selected category, status
         operation_types = OperationType.operation_types(category, status)
@@ -626,17 +542,17 @@ module Api
 
         # Read status, default to 'pending'
         status = case params[:status]
-        when 'error'
-          'error'
-        when 'waiting'
-          'waiting'
-        when 'deferred'
-          'deferred'
-        when 'delayed'
-          'delayed'
-        else
-          'pending'
-        end
+                 when 'error'
+                   'error'
+                 when 'waiting'
+                   'waiting'
+                 when 'deferred'
+                   'deferred'
+                 when 'delayed'
+                   'delayed'
+                 else
+                   'pending'
+                 end
 
         # Read operation type
         operation_type = Input.text(params[:operation_type]) || ''
@@ -680,7 +596,7 @@ module Api
 
         # Get operation (and verify that it is in the job)
         operation_id = Input.int(params[:operation_id])
-        operation = Operation.operation_from_job(operation_id, job.id)
+        operation = Operation.find_by(id: operation_id)
         render json: { error: "Operation not found" }.to_json, status: :not_found and return if !operation
 
         # Check operation status
@@ -696,23 +612,6 @@ module Api
 
         render json: { message: "Operation removed" }.to_json, status: :ok
       end
-
-      private
-
-      def new_job_assignment_log
-        jal = JobAssignmentLog.new
-        jal.job_id = @id
-        jal.assigned_by = @by
-        jal.assigned_to = @to
-
-        render json: { errors: jal.errors }, status: :unauthorized and return unless jal.valid?
-
-        jal.save!
-
-        render json: { job_assignment_log: jal}, status: :ok
-      end
     end
   end
 end
-
-

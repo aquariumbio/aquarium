@@ -2,7 +2,12 @@
 class CreateViewUsers < ActiveRecord::Migration[4.2]
   # View used to get extended user data (including parameters)
   def change
-    # VIEW - CURRENT JOB ASSIGNMENT
+    # Remove current view
+    execute <<-SQL
+      drop view if exists view_users
+    SQL
+
+    # Replace view
     execute <<-SQL
       create view view_users as
       select

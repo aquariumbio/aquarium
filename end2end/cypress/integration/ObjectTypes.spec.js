@@ -24,7 +24,7 @@ describe('/object_types', () => {
 
   // new object_type page
   it('new object_type page', () => {
-    cy.intercept('POST', 'http://localhost:3001/api/v3/object_types/create').as('newobject_type')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/object_types/create?*`).as('newobject_type')
 
     cy.visit('/object_types/new');
     cy.contains('h1', 'New Object Type');
@@ -80,7 +80,7 @@ describe('/object_types', () => {
 
   // edit the object_type
   it('edit object_type page', () => {
-    cy.intercept('POST', `http://localhost:3001/api/v3/object_types/${thisId}/update`).as('editobject_type')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/object_types/${thisId}/update?*`).as('editobject_type')
 
     cy.visit(`/object_types/${thisId}/edit`);
     cy.contains('h2', `Edit Object Type ${thisId}`);

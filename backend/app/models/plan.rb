@@ -2,5 +2,4 @@
 
 # plans table
 class Plan < ActiveRecord::Base
-
 end

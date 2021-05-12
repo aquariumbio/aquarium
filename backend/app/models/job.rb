@@ -65,7 +65,7 @@ class Job < ActiveRecord::Base
     list = []
     categories.each do |c|
       # escape any single quotes in category names
-      list << c.category.gsub("'","\\\\'")
+      list << c.category.gsub("'", "\\\\'")
     end
     puts list.join(',')
 
@@ -80,7 +80,7 @@ class Job < ActiveRecord::Base
     # populate counts by active operation type
     active = {}
     categories.each do |c|
-      active = active.update({c.category => c.count})
+      active = active.update({ c.category => c.count })
     end
 
     # list inactive operation types
@@ -89,7 +89,7 @@ class Job < ActiveRecord::Base
       inactive << i.category
     end
 
-    return {active: active, inactive: inactive}
+    return { active: active, inactive: inactive }
   end
 
   # Get unassigned jobs that have operations and that are not finished
@@ -132,7 +132,6 @@ class Job < ActiveRecord::Base
   # @param seven_days [Boolean] flag for jobs finished in last 7 days
   # return finished jobs
   def self.finished_jobs(seven_days)
-
     # calculate time if seven_days flag is set
     ands = ""
     if seven_days
@@ -143,7 +142,7 @@ class Job < ActiveRecord::Base
       # beginning of the day 7 days ago in UTC time
       temp = Time.new(temp.year, temp.month, temp.day, 0, 0, 0, temp.utc_offset).in_time_zone('UTC')
 
-      ands += "and jot.updated_at >= '#{temp.to_s[0,19]}'"
+      ands += "and jot.updated_at >= '#{temp.to_s[0, 19]}'"
     end
 
     # custom SQL query
@@ -159,5 +158,4 @@ class Job < ActiveRecord::Base
     "
     finished = IdString.find_by_sql sql
   end
-
 end

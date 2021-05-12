@@ -2,7 +2,6 @@
 
 # operations table
 class Operation < ActiveRecord::Base
-
   def self.pending_operations(operation_ids)
     sql = "select id, operation_type_id from operations where id in ( #{operation_ids.join(',')} ) and status = 'pending'"
     operations = Operation.find_by_sql sql
@@ -37,7 +36,7 @@ class Operation < ActiveRecord::Base
       # get data_associations for operation
       data_associations = DataAssociation.data_associations(operation_id)
 
-      results << {id: o.id, plan_id: o.plan_id, name: o.name, status: o.status, updated_at: o.updated_at, inputs: inputs, outputs: outputs, data_associations: data_associations}
+      results << { id: o.id, plan_id: o.plan_id, name: o.name, status: o.status, updated_at: o.updated_at, inputs: inputs, outputs: outputs, data_associations: data_associations }
     end
     results
   end
@@ -53,15 +52,4 @@ class Operation < ActiveRecord::Base
     sql = "update operations set #{set} where id in ( select operation_id from job_associations where job_id = #{job_id} )"
     Operation.connection.execute sql
   end
-
-  def self.operation_from_job(operation_id, job_id)
-    sql = "
-      select o.*
-      from operations o
-      inner join job_associations ja on ja.job_id = #{job_id} and ja.operation_id = #{operation_id}
-      where o.id = #{operation_id}
-    "
-    operation = (Operation.find_by_sql sql)[0]
-  end
-
 end

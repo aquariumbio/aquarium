@@ -2,7 +2,6 @@
 
 # job_associations table
 class JobAssociation < ActiveRecord::Base
-
   # get list of <plan_id, updated_at, user.name, operation_id, status> for each job
   # multiple operations per job
   # one plan per operation
@@ -26,5 +25,4 @@ class JobAssociation < ActiveRecord::Base
     sql = "delete from job_associations where job_id = #{job_id} and operation_id = #{operation_id} limit 1"
     JobAssociation.connection.execute sql
   end
-
 end

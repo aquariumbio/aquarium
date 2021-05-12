@@ -31,7 +31,17 @@ _clean_up_stray_server() {
 # Starts the develoment server.
 _start_development_server() {
     echo "Starting development Rails server"
-    exec rails server -e development -p 3001 -b '0.0.0.0'
+    rails db:migrate RAILS_ENV=development
+    exec rails server -e development -p 3000 -b '0.0.0.0'
+}
+
+# Starts server with test environment for end-to-end testing
+_start_test_server() {
+    echo "Starting test Rails server"
+    rails db:environment:set RAILS_ENV=test
+    rails db:structure:load RAILS_ENV=test
+    rails db:seed:test_seeds RAILS_ENV=test
+    exec rails server -e test -p 3000 -b '0.0.0.0'
 }
 
 _main() {
@@ -42,6 +52,8 @@ _main() {
 
     if [ $1 = "development" ]; then
         _start_development_server
+    elif [ $1 = "test" ]; then
+        _start_test_server
     else
         # If the normal image startup flags were not given as arguments,
         # then exec whatever arguments were given

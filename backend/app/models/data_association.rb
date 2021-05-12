@@ -2,7 +2,6 @@
 
 # data_associations table
 class DataAssociation < ActiveRecord::Base
-
   # get data_associations for operation
   def self.data_associations(operation_id)
     sql = "
@@ -13,5 +12,4 @@ class DataAssociation < ActiveRecord::Base
     "
     data_associations = DataAssociation.find_by_sql sql
   end
-
 end

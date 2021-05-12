@@ -7,7 +7,7 @@ RSpec.describe Api::V3::JobsController, type: :request do
       @create_url = "/api/v3/token/create"
       @token_1 = []
 
-      post "#{@create_url}?login=user_1&password=aquarium123"
+      post "#{@create_url}?login=user_admin&password=aquarium123"
       response_body = JSON.parse(response.body)
       @token_1 << response_body["token"]
 
@@ -56,7 +56,6 @@ RSpec.describe Api::V3::JobsController, type: :request do
 
     # Dummy tests to replace with real tests later
     it "dummy_tests" do
-
       # Insert dummy data into database.
       # Easier to use direct SQL Query exported from development_database instead of ActiveRecord because this is just temporary for the tests
       sql = "

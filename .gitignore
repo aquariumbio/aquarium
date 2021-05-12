@@ -80,13 +80,17 @@ ui/node_modules
 frontend/cypress/screenshots
 frontend/cypress/videos
 frontend/.nyc_output
-end2end/cypress/results
-end2end/cypress/screenshots
-end2end/cypress/videos
 
 # ignore vscode settings
 .vscode
 
 coverage
+
+# ignore snyk config
+.dccache
+
+# ignore top level npm packages
+/package.json
+/package-lock.json
 
 # please do not ignore Gemfile.lock !!!

@@ -23,7 +23,7 @@ describe('/wizards', () => {
 
   // new wizard page
   it('new wizard page', () => {
-    cy.intercept('POST', 'http://localhost:3001/api/v3/wizards/create').as('newwizard')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/wizards/create?*`).as('newwizard')
 
     cy.visit('/wizards/new');
     cy.contains('h1', 'New Wizard');
@@ -62,7 +62,7 @@ describe('/wizards', () => {
 
   // edit the wizard
   it('edit wizard page', () => {
-    cy.intercept('POST', `http://localhost:3001/api/v3/wizards/${thisId}/update`).as('editwizard')
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/wizards/${thisId}/update?*`).as('editwizard')
 
     cy.visit(`/wizards/${thisId}/edit`);
     cy.contains('h2', `Edit Wizard ${thisId}`);

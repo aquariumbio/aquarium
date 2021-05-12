@@ -2,7 +2,6 @@
 
 # operation_types table
 class OperationType < ActiveRecord::Base
-
   def self.operation_types(category, status)
     sql = "
       select ot.id, ot.name, count(*) as 'n'
@@ -14,5 +13,4 @@ class OperationType < ActiveRecord::Base
     "
     operation_types = OperationType.find_by_sql [sql, category, status]
   end
-
 end
