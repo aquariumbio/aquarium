@@ -80,6 +80,46 @@ module Api
         end
       end
 
+      # INITIALIZE FIELD_TYPE_ID IN FIELD_VALUES TABLE
+      # (THESE ARE MOSTLY NULL, THEY SHOULD BE THE IDS)
+      def set_field_type_ids
+        # NOTE: run in background in case it times out
+        background = fork do
+          # Get field type ids by sample type
+          sql = "
+            select ft.id, ft.name, ft.parent_id, ft.parent_class
+            from field_types ft
+            where ft.parent_class = 'SampleType'
+          "
+          list = FieldType.find_by_sql sql
+
+          list.each do |ll|
+            # get list of field values that match this field type (by sample_type_id and field_type_name)
+            # NOTE: want to sanitize ll.name
+            sql = "
+              select fv.id
+              from field_values fv
+              inner join samples s on s.id = fv.parent_id and fv.parent_class = 'Sample'
+              where s.sample_type_id = #{ll.parent_id} and fv.name = '#{ll.name}'
+            "
+            temp = FieldValue.find_by_sql sql
+            ids = [0]
+            temp.each do |t|
+              ids << t.id
+            end
+
+            sql = "update field_values set field_type_id = #{ll.id} where id in (#{ids.join(',')})"
+            FieldValue.connection.execute sql
+          end
+        end
+        Process.detach(background)
+
+        # NOTE:  SQL Query to get field values that could not be mapped
+        # "select * from field_values where parent_class = 'Sample' and field_type_id is null"
+
+      end
+
+
       # Searches samples
       #
       # <b>API Call:</b>
@@ -242,7 +282,7 @@ end
 # inner join users u on u.id = s.user_id
 # left join field_types ft on ft.parent_id = s.sample_type_id and ft.parent_class = 'SampleType'
 # left join field_type_sorts fts on fts.ftype = ft.ftype
-# left join field_values fv on fv.parent_id = s.id and fv.parent_class = 'Sample' and fv.name = ft.name
+# left join field_values fv on fv.parent_id = s.id and fv.parent_class = 'Sample' and fv.field_type_id = ft.id
 # left join samples ss on ss.id = fv.child_sample_id
 # ;
 #
@@ -263,4 +303,3 @@ end
 # left join object_types ott on ott.id = ii.object_type_id
 # ;
 #
-

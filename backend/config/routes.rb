@@ -111,11 +111,13 @@ Rails.application.routes.draw do
   post 'api/v3/jobs/:id/remove/:operation_id',                  to: 'api/v3/jobs#remove'
 
   # Samples
-  get  'api/v3/set_search_text',                   to: 'api/v3/samples#set_search_text'
   get  'api/v3/samples',                           to: 'api/v3/samples#index'
   # post 'api/v3/sample/create',                     to: 'api/v3/sample#create'
   get  'api/v3/samples/:id',                       to: 'api/v3/samples#show'
   # post 'api/v3/sample/:id/update',                 to: 'api/v3/sample#update'
   # post 'api/v3/sample/:id/discard',                to: 'api/v3/sample#discard'
 
+  # Initialize columns in db
+  get  'api/v3/set_search_text',                   to: 'api/v3/samples#set_search_text'
+  get  'api/v3/set_field_type_ids',                to: 'api/v3/samples#set_field_type_ids'
 end
