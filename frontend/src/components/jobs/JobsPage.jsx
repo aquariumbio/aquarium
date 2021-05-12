@@ -12,13 +12,13 @@ import HorizontalNavList from './HorizontalNavList';
 const useStyles = makeStyles(() => ({
   root: {
     display: 'inline-flex',
-    width: '100%',
+    width: '100vw',
     height: 'calc(100vh - 75px)',
 
   },
 
   whiteSpace: {
-    height: '90px',
+    height: '88px',
   },
 
   main: {

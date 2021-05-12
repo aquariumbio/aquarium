@@ -34,14 +34,11 @@ const pages = [
   },
 ];
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     height: '74px',
     borderBottom: '1px solid #ddd',
-    '& .MuiPaper': {
-      boxShadow: 'none',
-    },
     '& .MuiToolbar-regular': {
       display: 'flex',
       justifyContent: 'space-between',
@@ -58,14 +55,20 @@ const useStyles = makeStyles(() => ({
         backgroundColor: '#2399cc',
       },
     },
-
-    '& .MuiTab-root': {
-      textTransform: 'none',
-      fontSize: '1rem',
-    },
   },
   headerOptions: {
     display: 'inline-flex',
+  },
+  tablist: {
+    maxWidth: '450px',
+  },
+  tab: {
+    textTransform: 'none',
+    fontSize: '1rem',
+    [theme.breakpoints.up('sm')]: {
+      maxWidth: '100px',
+      minWidth: '80px',
+    },
   },
 }));
 
@@ -91,8 +94,8 @@ const Header = ({ location }) => {
   });
 
   return (
-    <AppBar position="fixed" className={classes.root} component="nav">
-      <Toolbar>
+    <AppBar position="fixed" elevation={0} className={classes.root} component="header">
+      <Toolbar disableGutters>
         <div className={classes.headerOptions}>
           <LeftHamburgerMenu />
 
@@ -103,6 +106,7 @@ const Header = ({ location }) => {
             onChange={handleChange}
             indicatorColor="primary"
             textColor="primary"
+            className={classes.tablist}
           >
             {pages.map((menuItem) => {
               const { title, url } = menuItem;
@@ -112,6 +116,7 @@ const Header = ({ location }) => {
                   label={title}
                   to={url}
                   component={RouterLink}
+                  className={classes.tab}
                 >
                   {title}
                 </Tab>

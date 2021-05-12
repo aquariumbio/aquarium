@@ -88,6 +88,7 @@ const SideBar = ({
       <List
         role="tablist"
         aria-label="job-states"
+        data-cy="job-states-tablist"
         className={`${classes.root} ${classes.joblist}`}
       >
         <ListSubheader key="categories" className={classes.label}>

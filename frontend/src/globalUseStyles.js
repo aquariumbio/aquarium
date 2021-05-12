@@ -8,16 +8,16 @@ const globalUseStyles = makeStyles((theme) => ({
     position: 'relative',
   },
   flexWrapper: {
-    padding: '0 16px',
+    padding: `0 ${theme.spacing(2)}px`,
   },
   /* Title row */
   flexTitle: {
-    padding: '8px 0',
+    padding: `${theme.spacing(1)}px 0`,
     borderBottom: '2px solid #c0c0c0',
     fontWeight: 'bold',
   },
   flexRow: {
-    padding: '8px 0',
+    padding: `${theme.spacing(1)}px 0`,
     borderBottom: '1px solid #c0c0c0',
     '&:hover': {
       boxShadow: '0 0 3px 0 rgba(0, 0, 0, 0.8)',
@@ -28,44 +28,44 @@ const globalUseStyles = makeStyles((theme) => ({
   },
   flexCol1: {
     flex: '1 1 0',
-    marginRight: '8px',
-    paddingLeft: '8px',
+    marginRight: `${theme.spacing(1)}px`,
+    paddingLeftt: `${theme.spacing(1)}px`,
     minWidth: '0',
   },
 
   flexCol2: {
     flex: '2 1 0',
-    marginRight: '8px',
-    paddingLeft: '8px',
+    marginRight: `${theme.spacing(1)}px`,
+    paddingLeftt: `${theme.spacing(1)}px`,
     minWidth: '0',
   },
 
   flexCol3: {
     flex: '3 1 0',
-    marginRight: '8px',
-    paddingLeft: '8px',
+    marginRight: `${theme.spacing(1)}px`,
+    paddingLeftt: `${theme.spacing(1)}px`,
     minWidth: '0',
   },
 
   flexCol4: {
     flex: '4 1 0',
-    marginRight: '8px',
-    paddingLeft: '8px',
+    marginRight: `${theme.spacing(1)}px`,
+    paddingLeftt: `${theme.spacing(1)}px`,
     minWidth: '0',
   },
 
   flexColAuto: {
     width: 'auto',
-    marginRight: '8px',
-    paddingLeft: '8px',
+    marginRight: `${theme.spacing(1)}px`,
+    paddingLeftt: `${theme.spacing(1)}px`,
     minWidth: '0',
   },
 
   /* Use to scale and hide columns in the title row */
   flexColAutoHidden: {
     width: 'auto',
-    marginRight: '8px',
-    paddingLeft: '8px',
+    marginRight: `${theme.spacing(1)}px`,
+    paddingLeftt: `${theme.spacing(1)}px`,
     minWidth: '0',
     visibility: 'hidden',
   },

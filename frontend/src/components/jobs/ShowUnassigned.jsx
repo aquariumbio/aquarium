@@ -1,55 +1,22 @@
 import React, { useState, useEffect } from 'react';
-
-import { DataGrid } from '@material-ui/data-grid';
 import { makeStyles } from '@material-ui/core';
-
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+import globalUseSyles from '../../globalUseStyles';
+import { useWindowDimensions } from '../../WindowDimensionsProvider';
 import jobsAPI from '../../helpers/api/jobsAPI';
-
-const unassignedColumns = [
-  {
-    field: 'name',
-    headerName: 'Protocol',
-    flex: 2,
-  },
-  {
-    field: 'job_id',
-    headerName: 'Job',
-    flex: 1,
-  },
-  {
-    field: 'operations_count',
-    headerName: 'Operations',
-    flex: 1,
-  },
-  {
-    field: 'created_at',
-    headerName: 'Started',
-    sortable: false,
-    valueFormatter: (params) => (params.getValue('pc') === '-1' ? '-' : params.getValue('created_at').substring(0, 16).replace('T', ' ')),
-    flex: 1,
-  },
-];
 
 const useStyles = makeStyles({
   root: {
-    minWidth: '1085px',
-    fontSize: '12px',
-    '& .MuiDataGrid-colCellTitle': {
-      fontWeight: 700,
-    },
-    '& .cellValue': {
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-    },
-    '& .MuiDataGrid-root': {
-      border: 'none',
-    },
+    height: 'calc(100% - 64px)',
+    width: '100%',
   },
 });
 
 const ShowUnassigned = () => {
   const classes = useStyles();
+  const globalClasses = globalUseSyles();
+  const { tablet } = useWindowDimensions();
 
   const [jobs, setJobs] = useState([]);
 
@@ -65,17 +32,44 @@ const ShowUnassigned = () => {
     init();
   }, []);
 
+  const rows = () => {
+    if (!jobs) {
+      return <div> No unassigned jobs</div>;
+    }
+
+    return (
+      jobs.map((job) => (
+        <div className={`${globalClasses.flex} ${globalClasses.flexRow}`} key={`job_${job.id}`}>
+          <div className={`${globalClasses.flexCol2}`}>
+            <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{job.name}</Typography>
+          </div>
+          <div className={`${globalClasses.flexCol1}`}>
+            <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{job.job_id}</Typography>
+          </div>
+          <div className={`${globalClasses.flexCol1}`}>
+            <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{job.operations_count}</Typography>
+          </div>
+          <div className={`${globalClasses.flexCol1}`}>
+            <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{job.created_at ? job.created_at.substring(0, 16).replace('T', ' ') : '-'}</Typography>
+          </div>
+        </div>
+      ))
+    );
+  };
+
   return (
-    <DataGrid
-      columns={unassignedColumns}
-      rows={jobs}
-      className={classes.root}
-      disableColumnMenu
-      disableColumnSelector
-      disableSelectionOnClick
-      autoHeight
-      hideFooter
-    />
+    <>
+      <Divider style={{ marginTop: '0' }} />
+      <div role="grid" aria-label="unassigned-jobs" className={`${globalClasses.flexWrapper} ${classes.root}`} data-cy="unassigned-jobs">
+        <div className={`${globalClasses.flex} ${globalClasses.flexTitle}`}>
+          <div className={`${globalClasses.flexCol2}`}>Protocol</div>
+          <div className={`${globalClasses.flexCol1}`}>Job</div>
+          <div className={`${globalClasses.flexCol1}`}>Operations</div>
+          <div className={`${globalClasses.flexCol1}`}>Started</div>
+        </div>
+        {rows()}
+      </div>
+    </>
   );
 };
 
