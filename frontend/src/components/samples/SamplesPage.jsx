@@ -379,7 +379,7 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
       <div className={classes.flexCardWrapper}>
         <div className={classes.flex}>
           {samples.map((sample) => (
-            <div className={classes.flexCard25} onClick={() => handleClick(sample.id)}>
+            <div className={classes.flexCard25} onClick={() => handleClick(sample.id)} cy={`sample-${sample.id}`}>
               <img src='/beaker.png' className={classes.logoImage}/>
               <div className={classes.logoText}>
                 {sample.id}: {sample.sample_type}

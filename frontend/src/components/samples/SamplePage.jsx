@@ -439,11 +439,11 @@ const SamplePage = ({ setIsLoading, setAlertProps, match }) => {
                 <div className={classes.flexBottom}>
                 {inventory.map((group,index) => (
                   <>
-                  <div className={`${classes.flex} ${toggleIds[index] ? classes.flexRowSel : classes.flexRow}`}  key={`index_${index}`} >
+                  <div className={`${classes.flex} ${toggleIds[index] ? classes.flexRowSel : classes.flexRow}`}  key={`index_${index}`}>
                     <Typography className={`${classes.flexColFixed40} ${classes.center} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index, toggleIds, setToggleIds, triggerUpdate)}>
                       &#x2195;
                     </Typography>
-                    <Typography className={`${classes.flexCol4} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index, toggleIds, setToggleIds, triggerUpdate)}>
+                    <Typography className={`${classes.flexCol4} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index, toggleIds, setToggleIds, triggerUpdate)} cy={`group-${group.type_id}`}>
                       {group.type}
                     </Typography>
                     <Typography className={`${classes.flexCol1} ${classes.right} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index, toggleIds, setToggleIds, triggerUpdate)}>
@@ -458,6 +458,7 @@ const SamplePage = ({ setIsLoading, setAlertProps, match }) => {
                           <FormControlLabel
                             control={<Switch onChange={handleToggle} name={`checked_${index}`} />}
                             label={<span style={{ fontSize: '13px' }}>Discarded</span>}
+                            cy={`toggle-${group.type_id}`}
                           />
                         </FormGroup>
                       </Typography>
@@ -470,7 +471,7 @@ const SamplePage = ({ setIsLoading, setAlertProps, match }) => {
                         <div className={`${classes.flexColFixed40} ${classes.center}`}>
                           &nbsp;
                         </div>
-                        <div className={classes.flexCol1}>
+                        <div className={classes.flexCol1} cy={`item-${item.item_id}`}>
                           {item.item_id}
                         </div>
                         <div className={classes.flexCol1}>
