@@ -38,7 +38,6 @@ import JobsPage from '../jobs/JobsPage';
 import AlertToast from '../shared/AlertToast';
 import Interceptor from '../shared/Interceptor';
 import SamplesPage from '../samples/SamplesPage';
-import SamplePage from '../samples/SamplePage';
 
 // default setTimeout delay before showing loading spinner
 window.$timeout = 500;
@@ -175,7 +174,6 @@ export default function App() {
 
               {/* Samples tab */}
               <Route exact path="/samples" render={(props) => <SamplesPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
-              <Route exact path="/samples/:id" render={(props) => <SamplePage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
 
               {/* Main Navigation tabs */}
               <Route exact path="/jobs" render={(props) => <JobsPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />

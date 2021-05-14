@@ -32,6 +32,22 @@ class Sample < ActiveRecord::Base
       else
         ands << "0"
       end
+    elsif words[0,2]=="s:"
+      # search sample id only
+      this_id = words[2,words.length].strip.split(' ')[0]
+      if this_id == this_id.to_i.to_s
+        ands << "id = #{this_id}"
+      else
+        ands << "0"
+      end
+    elsif words[0,2]=="i:"
+      # search item id only
+      this_id = words[2,words.length].strip.split(' ')[0]
+      if this_id == this_id.to_i.to_s
+        ands << "id = (select sample_id from items where id = #{this_id})"
+      else
+        ands << "0"
+      end
     else
       ands << "1"
 

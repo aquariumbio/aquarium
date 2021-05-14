@@ -23,9 +23,9 @@ import sampleAPI from '../../helpers/api/sample';
 
 const useStyles = makeStyles(() => ({
   box: {
-    margin: '24px',
     border: '1px solid black',
     padding: '16px',
+    marginTop: '24px',
   },
 
   /* flex */
@@ -61,9 +61,6 @@ const useStyles = makeStyles(() => ({
     borderTop: '1px solid #ccc',
     borderLeft: '1px solid  #ccc',
     borderRight: '1px solid  #ccc',
-    '&:hover': {
-      backgroundColor: '#eee',
-    },
   },
 
   flexRowSel: {
@@ -72,6 +69,15 @@ const useStyles = makeStyles(() => ({
     borderLeft: '1px solid  #ccc',
     borderRight: '1px solid  #ccc',
     backgroundColor: '#d6e9ff',
+  },
+
+  /* Data Row */
+  flexTitleSub: {
+    padding: '4px 0',
+    borderTop: '1px solid #ccc',
+    borderLeft: '1px solid  #ccc',
+    borderRight: '1px solid  #ccc',
+    fontWeight: 'bold',
   },
 
   /* Data Row */
@@ -113,8 +119,8 @@ const useStyles = makeStyles(() => ({
 
   flexColAuto: {
     width: 'auto',
-    paddingRight: '8px',
-    paddingLeft: '8px',
+    paddingRight: '24px',
+    paddingLeft: '24px',
     minWidth: '0',
   },
 
@@ -125,15 +131,6 @@ const useStyles = makeStyles(() => ({
     minWidth: '0',
   },
 
-  /* Use to scale and hide columns in the title row */
-  flexColAutoHidden: {
-    width: 'auto',
-    paddingRight: '8px',
-    paddingLeft: '8px',
-    minWidth: '0',
-    visibility: 'hidden',
-  },
-
   show: {
     display: 'block',
   },
@@ -142,8 +139,16 @@ const useStyles = makeStyles(() => ({
     display: 'none',
   },
 
-  mt8: {
-    marginTop: '8px',
+  visible: {
+    visibility: 'visible',
+  },
+
+  hidden: {
+    visibility: 'hidden',
+  },
+
+  mt16: {
+    marginTop: '16px',
   },
 
   center: {
@@ -183,7 +188,7 @@ const useStyles = makeStyles(() => ({
 
   flexCard25: {
     flex: '0 0 22%',
-    marginRight: '1.5%',
+    paddingRight: '1.5%',
     marginLeft: '1.5%',
     minWidth: '0',
     border: '1px solid black',
@@ -279,11 +284,11 @@ const handleToggles = (id, toggleIds, setToggleIds, triggerUpdate) => {
 };
 
 // eslint-disable-next-line no-unused-vars
-const SamplePage = ({ setIsLoading, setAlertProps, match }) => {
+const SampleOverlay = ({ showSample, setShowSample }) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const id = match.params.id;
+  const id = showSample;
   const [sample, setSample] = useState();
   const [inventory, setInventory] = useState([]);
   const [items, setItems] = useState([1,2,3]);
@@ -327,19 +332,15 @@ const SamplePage = ({ setIsLoading, setAlertProps, match }) => {
   }, []);
 
   return (
-    <div className={`${classes.wrapper} ${classes.mt8}`}>
+    <div className={`${classes.wrapper} ${classes.mt16}`}>
       <div className={classes.header}>
-        <Typography className={`${classes.searchBox} ${classes.mr24}`}>
-          Sample: {sample ? sample.name : ''}
-        </Typography>
-
         <Typography>
           <StandardButton
-            name="Back"
-            testName="back"
-            text="Back"
+            name="Close"
+            testName="Close"
+            text="Close"
             type="button"
-            handleClick = {() => {history.goBack()}}
+            handleClick = {() => {setShowSample(false)}}
           />
         </Typography>
       </div>
@@ -388,13 +389,8 @@ const SamplePage = ({ setIsLoading, setAlertProps, match }) => {
                   </>
                 ))}
 
-                <div className={classes.flexCardLabel}>
-                  Items
-                </div>
-                <div className={`{classes.flexCardText} {classes.mt8}`}>
-                  {sample.item_ids.map((k) => (
-                    <div>{k}</div>
-                  ))}
+                <div className=''>
+                  Added {sample.created_at.substr(0,10)}
                 </div>
               </div>
             ) : (
@@ -424,6 +420,9 @@ const SamplePage = ({ setIsLoading, setAlertProps, match }) => {
                   <Typography className={`${classes.flexCol1} ${classes.right}`}>
                     <b>Discarded</b>
                   </Typography>
+                  <Typography className={`${classes.flexColFixed40} ${classes.center} ${classes.hidden}`}>
+                    &nbsp;
+                  </Typography>
                   <Typography className={`${classes.flexCol1} ${classes.mtm7} ${classes.relative}`}>
                     <Typography className={`${classes.absolute} ${classes.hide}`}>
                       <FormGroup className={ Object.values(toggleIds).indexOf(true) == -1 ? classes.hide : classes.show }>
@@ -452,6 +451,9 @@ const SamplePage = ({ setIsLoading, setAlertProps, match }) => {
                     <Typography className={`${classes.flexCol1} ${classes.right} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index, toggleIds, setToggleIds, triggerUpdate)}>
                       {group.count_deleted}
                     </Typography>
+                    <Typography className={`${classes.flexColFixed40} ${classes.center} ${classes.hidden}`}>
+                      &nbsp;
+                    </Typography>
                     <Typography className={`${classes.flexCol1} ${classes.mtm8} ${classes.relative}`}>
                       <Typography className={`${classes.absolute}`}>
                         <FormGroup className={ toggleIds[index] ? classes.show : classes.hide }>
@@ -464,46 +466,44 @@ const SamplePage = ({ setIsLoading, setAlertProps, match }) => {
                       </Typography>
                     </Typography>
                   </div>
+
                   <div className={toggleIds[index] ? classes.show : classes.hide}>
+                    <div className={`${classes.flex} ${classes.flexTitleSub}`}>
+                      <div className={`${classes.flexColFixed40} ${classes.center}`}>
+                        &nbsp;
+                      </div>
+                      <div className={classes.flexCol1}>
+                        Item #
+                      </div>
+                      <div className={classes.flexCol1}>
+                        Location
+                      </div>
+                      <div className={`${classes.flexCol1} ${classes.right}`}>
+                        Added
+                      </div>
+                      <div className={classes.flexColAuto}>
+                        <span className={classes.hidden}>&#128465;</span>
+                      </div>
+                    </div>
+
                     {group.data.map((item) => (
                       <div className = {item.location == 'deleted' ? ( state[`checked_${index}`] ? classes.show : classes.hide ) : ''}>
-                      <div className={`${classes.flex} ${classes.flexRowSub}`}>
-                        <div className={`${classes.flexColFixed40} ${classes.center}`}>
-                          &nbsp;
-                        </div>
-                        <div className={classes.flexCol1} cy={`item-${item.item_id}`}>
-                          {item.item_id}
-                        </div>
-                        <div className={classes.flexCol1}>
-                          {item.location}
-                        </div>
-                        <div className={classes.flexCol4}>
-                          {item.collections ? (
-                            <div>
-                              collection:
-                              {item.collections.map((collection) => (
-                                <>
-                                 {' '}[{collection.row},{collection.column}]
-                                </>
-                              ))}
-                            </div>
-                          ) : (
-                            ''
-                          )}
-                          {item.key_values ? (
-                            item.key_values.map((kv) => (
-                              <div>
-                               <b>{kv.key}</b>:{' '}
-                               {kv.upload_id ? kv.upload_file_name : (typeof JSON.parse(kv.object)[`${kv.key}`] == "object" ? JSON.stringify(JSON.parse(kv.object)[`${kv.key}`]) : JSON.parse(kv.object)[`${kv.key}`]) }
-                              </div>
-                            ))
-                          ) : (
-                            ''
-                          )}
-                        </div>
-                        <div className={classes.flexCol1}>
-                          {item.date.substr(0,10)}
-                        </div>
+                        <div className={`${classes.flex} ${classes.flexRowSub}`}>
+                          <div className={`${classes.flexColFixed40} ${classes.center}`}>
+                            &nbsp;
+                          </div>
+                          <div className={classes.flexCol1} cy={`item-${item.item_id}`}>
+                            {item.item_id}
+                          </div>
+                          <div className={classes.flexCol1}>
+                            {item.location}
+                          </div>
+                          <div className={`${classes.flexCol1} ${classes.right}`}>
+                            {item.date.substr(0,10)}
+                          </div>
+                          <div className={classes.flexColAuto}>
+                            <span className={item.location == 'deleted' ? classes.hidden : classes.visible}>&#128465;</span>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -517,18 +517,12 @@ const SamplePage = ({ setIsLoading, setAlertProps, match }) => {
         </Grid>
       </div>
     </div>
+
   );
 };
 
-SamplePage.propTypes = {
-  setIsLoading: PropTypes.func.isRequired,
-  setAlertProps: PropTypes,
-  match: PropTypes.shape({
-    params: PropTypes.objectOf(PropTypes.string),
-    path: PropTypes.string,
-    url: PropTypes.string,
-    isExact: PropTypes.bool,
-  }).isRequired,
+SampleOverlay.propTypes = {
+  showSample: PropTypes.isRequired,
 };
 
-export default SamplePage;
+export default SampleOverlay;
