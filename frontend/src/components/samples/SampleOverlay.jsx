@@ -25,7 +25,6 @@ const useStyles = makeStyles(() => ({
   box: {
     border: '1px solid black',
     padding: '16px',
-    marginTop: '24px',
   },
 
   /* flex */
@@ -215,46 +214,53 @@ const useStyles = makeStyles(() => ({
     wordBreak: 'break-all',
   },
 
-  wrapper: {
-    padding: '0 24px',
-  },
-
   logoImage: {
     position: 'absolute',
   },
 
-  logoText: {
-    marginLeft: '40px',
-    lineHeight: '30px',
-    fontSize: '18px',
+  logoPopout: {
+    position: 'absolute',
+    width: '24px',
+    right: '8px',
+    textAlign: 'right',
+    fontSize: '20px',
+    fontWeight: 'bold',
+    cursor: 'pointer',
+
+    '&:hover': {
+      textDecoration: 'none',
+    }
   },
 
-  logoSubText: {
+  logoText: {
     marginLeft: '40px',
-    lineHeight: '10px',
-    fontSize: '12px',
-    color: '#aaa',
+    marginRight: '32px',
     marginBottom: '16px',
   },
 
-  string: {
-    color: '#358235',
+  textTitle: {
+    fontSize: '18px',
+    marginBottom: '4px',
   },
 
-  number: {
-    color: '#358235',
+  mb4: {
+    marginBottom: '4px',
   },
 
-  url: {
-    color: '#966306',
+  mb8: {
+    marginBottom: '8px',
   },
 
-  sample: {
-    color: '#353582',
+  mb16: {
+    marginBottom: '16px',
   },
 
-  info: {
-    color: '#aaa',
+  textBold: {
+    fontWeight: 'bold',
+  },
+
+  textInfo: {
+    color: '#333',
   },
 
   relative: {
@@ -288,7 +294,6 @@ const SampleOverlay = ({ showSample, setShowSample }) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const id = showSample;
   const [sample, setSample] = useState();
   const [inventory, setInventory] = useState([]);
   const [items, setItems] = useState([1,2,3]);
@@ -320,7 +325,7 @@ const SampleOverlay = ({ showSample, setShowSample }) => {
   useEffect(() => {
     const init = async () => {
       // wrap the API call
-      const response = await sampleAPI.getById(id);
+      const response = await sampleAPI.getById(showSample);
       if (!response) return;
 
       // success
@@ -331,21 +336,24 @@ const SampleOverlay = ({ showSample, setShowSample }) => {
     init();
   }, []);
 
-  return (
-    <div className={`${classes.wrapper} ${classes.mt16}`}>
-      <div className={classes.header}>
-        <Typography>
-          <StandardButton
-            name="Close"
-            testName="Close"
-            text="Close"
-            type="button"
-            handleClick = {() => {setShowSample(false)}}
-          />
-        </Typography>
-      </div>
+  const handleClick = async (id) => {
+    // wrap the API call
+    const response = await sampleAPI.getById(id);
+    if (!response) return;
 
-      <Divider />
+    // success
+    setSample(response.sample);
+    setInventory(response.inventory);
+  }
+
+  return (
+    <>
+
+      <Typography>
+        <p className={classes.right}>
+          <button className={classes.pointer} onClick={() => {setShowSample(false)}}>Close</button>
+        </p>
+      </Typography>
 
       <div className={classes.box}>
         <Grid container>
@@ -356,42 +364,68 @@ const SampleOverlay = ({ showSample, setShowSample }) => {
           >
             {sample ? (
               <div className={classes.relative}>
-                <img src='/beaker.png' className={classes.logoImage}/>
-                <div className={classes.logoText}>
-                  {sample.sample_type}
-                </div>
-                <div className={classes.logoSubText}>
-                  {sample.user_name} ({sample.login})
-                </div>
-                <div className={classes.flexCardLabel}>
-                  NAME
-                </div>
-                <div className={classes.flexCardText}>
-                  {sample.name || <span className={classes.info}>-</span>}
-                </div>
-
-                <div className={classes.flexCardLabel}>
-                  DESCRIPTION
-                </div>
-                <div className={classes.flexCardText}>
-                  {sample.description || <span className={classes.info}>-</span>}
-                </div>
-
-                {sample.fields.map((k) => (
-                  <>
-                    <div className={`${classes.flexCardLabel} ${classes[`${k.type}`]}`}>
-                      {k.name}
+                  <img src='/beaker.png' className={classes.logoImage}/>
+                  <div className={classes.logoText}>
+                    <div className={classes.textTitle}>
+                      {sample.sample_type}
                     </div>
-                    <div className={classes.flexCardText}>
-                      { /* TODO: THIS IS REALLY UGLY... */ }
-                      {k.value || (k.child_sample_id ? <span>{k.child_sample_id}: {k.child_sample_name}</span> : <span className={classes.info}>-</span>)}
+                    <div className={classes.mb4}>
+                      <span className={classes.textBold}>ID #</span>
+                      {' '}
+                      <span className={classes.textInfo}>{sample.id}</span>
                     </div>
-                  </>
-                ))}
+                    <div className={classes.mb4}>
+                      <span className={classes.textBold}>Added by</span>
+                      {' '}
+                      <span className={classes.textInfo}>{sample.user_name}</span>
+                    </div>
+                  </div>
 
-                <div className=''>
-                  Added {sample.created_at.substr(0,10)}
-                </div>
+                  <Divider />
+
+                  <div className={classes.flexCardLabel}>
+                    Name
+                  </div>
+                  <div className={classes.flexCardText}>
+                    {sample.name || '-'}
+                  </div>
+
+                  <div className={classes.flexCardLabel}>
+                    Description
+                  </div>
+                  <div className={classes.flexCardText}>
+                    {sample.description || '---'}
+                  </div>
+
+                  {sample.fields.map((k) => (
+                    <>
+                      <div className={classes.flexCardLabel}>
+                        {k.name}
+                      </div>
+                      <div className={classes.flexCardText}>
+                        {k.value || <span>---</span>}
+                      </div>
+                    </>
+                  ))}
+
+                  <Divider />
+
+                  {sample.fields_samples.map((k) => (
+                    <>
+                      <div className={classes.flexCardLabel}>
+                        {k.name}
+                      </div>
+                      <div className={classes.flexCardText}>
+                        {k.value || (k.child_sample_id ? <Link className={classes.pointer} onClick={() => handleClick(k.child_sample_id)}>{k.child_sample_id}: {k.child_sample_name}</Link> : <span>---</span>)}
+                      </div>
+                    </>
+                  ))}
+
+                  <div className={classes.mb16}>
+                    <span className={classes.textBold}>Added:</span>
+                    {' '}
+                    <span className={classes.textInfo}>{sample.created_at.substr(0,10)}</span>
+                  </div>
               </div>
             ) : (
               <>
@@ -516,7 +550,7 @@ const SampleOverlay = ({ showSample, setShowSample }) => {
           </Grid>
         </Grid>
       </div>
-    </div>
+    </>
 
   );
 };

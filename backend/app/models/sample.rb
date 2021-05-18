@@ -107,7 +107,8 @@ class Sample < ActiveRecord::Base
             type: sample.ft_type,
             created_at: sample.created_at,
             item_ids: sids[1,sids.length-2].to_s.split("."),
-            fields: []
+            fields: [],
+            fields_samples: []
           }
 
           # set this_id
@@ -117,7 +118,11 @@ class Sample < ActiveRecord::Base
         # update fields for current sample
         # NOTE: there is no ft_id if the sample does not have any field values
         if sample.ft_id
-          samples[-1][:fields] << {type: sample.ft_type, name: sample.ft_name, value: sample.fv_value, child_sample_id: sample.child_sample_id, child_sample_name: sample.child_sample_name}
+          if sample.ft_type == "sample"
+            samples[-1][:fields_samples] << {type: sample.ft_type, name: sample.ft_name, value: sample.fv_value, child_sample_id: sample.child_sample_id, child_sample_name: sample.child_sample_name}
+          else
+            samples[-1][:fields] << {type: sample.ft_type, name: sample.ft_name, value: sample.fv_value, child_sample_id: sample.child_sample_id, child_sample_name: sample.child_sample_name}
+          end
         end
       end
 
@@ -145,12 +150,17 @@ class Sample < ActiveRecord::Base
       type: this_sample.ft_type,
       created_at: this_sample.created_at,
       item_ids: sids[1,sids.length-2].to_s.split("."),
-      fields: []
+      fields: [],
+      fields_samples: []
     }
 
     # loop through field values and append to sample.fields array
     sample_data.each do |s|
-      sample[:fields] << {type: s.ft_type, name: s.ft_name, value: s.fv_value, child_sample_id: s.child_sample_id, child_sample_name: s.child_sample_name}
+      if s.ft_type == "sample"
+        sample[:fields_samples] << {type: s.ft_type, name: s.ft_name, value: s.fv_value, child_sample_id: s.child_sample_id, child_sample_name: s.child_sample_name}
+      else
+        sample[:fields] << {type: s.ft_type, name: s.ft_name, value: s.fv_value, child_sample_id: s.child_sample_id, child_sample_name: s.child_sample_name}
+      end
     end
 
     # get items + collections from inventory

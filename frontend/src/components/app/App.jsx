@@ -74,14 +74,13 @@ const theme = createMuiTheme({
 const useStyles = makeStyles(() => ({
   root: {
     width: '100%',
-    overflow: 'auto',
     backgroundColor: '#fff',
   },
   content: {
     width: '100%',
     marginTop: '72px',
-    marginLeft: '20px',
-    marginRight: '20px',
+    paddingLeft: '20px',
+    paddingRight: '20px',
     overflowX: 'auto',
     overflowY: 'hidden',
   },

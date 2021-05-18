@@ -7,6 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Divider from '@material-ui/core/Divider';
 import Toolbar from '@material-ui/core/Toolbar';
+import Link from '@material-ui/core/Link';
 
 import { StandardButton } from '../shared/Buttons';
 import sampleAPI from '../../helpers/api/sample';
@@ -52,12 +53,7 @@ const useStyles = makeStyles(() => ({
     minWidth: '0',
     border: '1px solid black',
     marginBottom: '40px',
-    cursor: 'pointer',
-    fontSize: '12px',
-
-    '&:hover': {
-      backgroundColor: '#eee',
-    },
+    fontSize: '14px',
   },
 
   cardScroll: {
@@ -80,6 +76,7 @@ const useStyles = makeStyles(() => ({
   flexCardText: {
     marginBottom: '16px',
     wordBreak: 'break-all',
+    color: '#333',
   },
 
   show: {
@@ -100,10 +97,6 @@ const useStyles = makeStyles(() => ({
 
   pointer: {
     cursor: 'pointer',
-  },
-
-  wrapper: {
-    padding: '0 24px',
   },
 
   absolute: {
@@ -145,39 +138,49 @@ const useStyles = makeStyles(() => ({
     position: 'absolute',
   },
 
-  logoText: {
-    marginLeft: '40px',
-    lineHeight: '30px',
-    fontSize: '18px',
+  logoPopout: {
+    position: 'absolute',
+    width: '24px',
+    right: '8px',
+    textAlign: 'right',
+    fontSize: '20px',
+    fontWeight: 'bold',
+    cursor: 'pointer',
+
+    '&:hover': {
+      textDecoration: 'none',
+    }
   },
 
-  logoSubText: {
+  logoText: {
     marginLeft: '40px',
-    lineHeight: '10px',
-    fontSize: '12px',
-    color: '#aaa',
+    marginRight: '32px',
     marginBottom: '16px',
   },
 
-
-  string: {
-    color: '#358235',
+  textTitle: {
+    fontSize: '18px',
+    marginBottom: '4px',
   },
 
-  number: {
-    color: '#358235',
+  mb4: {
+    marginBottom: '4px',
   },
 
-  url: {
-    color: '#966306',
+  mb8: {
+    marginBottom: '8px',
   },
 
-  sample: {
-    color: '#353582',
+  mb16: {
+    marginBottom: '16px',
   },
 
-  info: {
-    color: '#aaa',
+  textBold: {
+    fontWeight: 'bold',
+  },
+
+  textInfo: {
+    color: '#333',
   },
 }));
 
@@ -283,11 +286,8 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
 
   return (
     <>
-    {showSample ? (
-      <SampleOverlay showSample={showSample} setShowSample={setShowSample}/>
-    ) : (
-      <div className={`${classes.wrapper} ${classes.mt16}`}>
-        <div className={classes.header}>
+      <div className={classes.mt16}>
+        <div className={`${classes.header} ${showSample ? classes.hidden : '' }`}>
           <div className={classes.subheader}>
             <Typography className={`${classes.searchBox} ${classes.mr24}`}>
               <TextField
@@ -362,6 +362,10 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
 
         <Divider />
 
+    {showSample ? (
+      <SampleOverlay showSample={showSample} setShowSample={setShowSample}/>
+    ) : (
+      <>
         <Typography>
           <p>
             <div className={classes.absolute}>
@@ -388,53 +392,84 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
           </p>
         </Typography>
 
-
         <div className={classes.flexCardWrapper}>
           <div className={classes.flex}>
             {samples.map((sample) => (
-              <div className={classes.flexCard25} onClick={() => handleClick(sample.id)} cy={`sample-${sample.id}`}>
+              <div className={classes.flexCard25} cy={`sample-${sample.id}`}>
                 <div className={classes.cardScroll}>
                   <img src='/beaker.png' className={classes.logoImage}/>
+                  <Link className={classes.logoPopout} onClick={() => handleClick(sample.id)}>&#x2197;</Link>
                   <div className={classes.logoText}>
-                    {sample.id}: {sample.sample_type}
+                    <div className={classes.textTitle}>
+                      {sample.sample_type}
+                    </div>
+                    <div className={classes.mb4}>
+                      <span className={classes.textBold}>ID #</span>
+                      {' '}
+                      <span className={classes.textInfo}>{sample.id}</span>
+                    </div>
+                    <div className={classes.mb4}>
+                      <span className={classes.textBold}>Added by</span>
+                      {' '}
+                      <span className={classes.textInfo}>{sample.user_name}</span>
+                    </div>
                   </div>
-                  <div className={classes.logoSubText}>
-                    {sample.user_name} ({sample.login})
-                  </div>
+
+                  <Divider />
+
                   <div className={classes.flexCardLabel}>
-                    NAME
+                    Name
                   </div>
                   <div className={classes.flexCardText}>
                     {sample.name || '-'}
                   </div>
 
                   <div className={classes.flexCardLabel}>
-                    DESCRIPTION
+                    Description
                   </div>
                   <div className={classes.flexCardText}>
-                    {sample.description || '-'}
+                    {sample.description || '---'}
                   </div>
 
                   {sample.fields.map((k) => (
                     <>
-                      <div className={`${classes.flexCardLabel} ${classes[`${k.type}`]}`}>
+                      <div className={classes.flexCardLabel}>
                         {k.name}
                       </div>
                       <div className={classes.flexCardText}>
-                        {k.value || (k.child_sample_id ? <span>{k.child_sample_id}: {k.child_sample_name}</span> : <span className={classes.info}>-</span>)}
+                        {k.value || <span>---</span>}
                       </div>
                     </>
                   ))}
-                </div>
-                <div className={classes.cardStatusBar}>
-                  Added {sample.created_at.substr(0,10)}
+
+                  <Divider />
+
+                  {sample.fields_samples.map((k) => (
+                    <>
+                      <div className={classes.flexCardLabel}>
+                        {k.name}
+                      </div>
+                      <div className={classes.flexCardText}>
+                        {k.value || (k.child_sample_id ? <Link className={classes.pointer} onClick={() => handleClick(k.child_sample_id)}>{k.child_sample_id}: {k.child_sample_name}</Link> : <span>---</span>)}
+                      </div>
+                    </>
+                  ))}
+
+                  <div className={classes.mb16}>
+                    <span className={classes.textBold}>Added:</span>
+                    {' '}
+                    <span className={classes.textInfo}>{sample.created_at.substr(0,10)}</span>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
-      </div>
+      </>
     )}
+
+
+      </div>
     </>
   );
 };
@@ -445,3 +480,18 @@ SamplesPage.propTypes = {
 };
 
 export default SamplesPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
