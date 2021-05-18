@@ -108,6 +108,7 @@ class Sample < ActiveRecord::Base
             created_at: sample.created_at,
             item_ids: sids[1,sids.length-2].to_s.split("."),
             fields: [],
+            fields_urls: [],
             fields_samples: []
           }
 
@@ -120,6 +121,8 @@ class Sample < ActiveRecord::Base
         if sample.ft_id
           if sample.ft_type == "sample"
             samples[-1][:fields_samples] << {type: sample.ft_type, name: sample.ft_name, value: sample.fv_value, child_sample_id: sample.child_sample_id, child_sample_name: sample.child_sample_name}
+          elsif sample.ft_type == "url"
+            samples[-1][:fields_urls] << {type: sample.ft_type, name: sample.ft_name, value: sample.fv_value, child_sample_id: sample.child_sample_id, child_sample_name: sample.child_sample_name}
           else
             samples[-1][:fields] << {type: sample.ft_type, name: sample.ft_name, value: sample.fv_value, child_sample_id: sample.child_sample_id, child_sample_name: sample.child_sample_name}
           end
@@ -151,6 +154,7 @@ class Sample < ActiveRecord::Base
       created_at: this_sample.created_at,
       item_ids: sids[1,sids.length-2].to_s.split("."),
       fields: [],
+      fields_urls: [],
       fields_samples: []
     }
 
@@ -158,6 +162,8 @@ class Sample < ActiveRecord::Base
     sample_data.each do |s|
       if s.ft_type == "sample"
         sample[:fields_samples] << {type: s.ft_type, name: s.ft_name, value: s.fv_value, child_sample_id: s.child_sample_id, child_sample_name: s.child_sample_name}
+      elsif s.ft_type == "url"
+        sample[:fields_urls] << {type: s.ft_type, name: s.ft_name, value: s.fv_value, child_sample_id: s.child_sample_id, child_sample_name: s.child_sample_name}
       else
         sample[:fields] << {type: s.ft_type, name: s.ft_name, value: s.fv_value, child_sample_id: s.child_sample_id, child_sample_name: s.child_sample_name}
       end

@@ -442,6 +442,17 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
                     </>
                   ))}
 
+                  {sample.fields_urls.map((k) => (
+                    <>
+                      <div className={classes.flexCardLabel}>
+                        {k.name}
+                      </div>
+                      <div className={classes.flexCardText}>
+                        {k.value ? <Link className={classes.pointer} onClick={() => window.open(k.value, "_blank")}>{k.value}</Link> : <span>---</span>}
+                      </div>
+                    </>
+                  ))}
+
                   <Divider />
 
                   {sample.fields_samples.map((k) => (
@@ -450,7 +461,7 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
                         {k.name}
                       </div>
                       <div className={classes.flexCardText}>
-                        {k.value || (k.child_sample_id ? <Link className={classes.pointer} onClick={() => handleClick(k.child_sample_id)}>{k.child_sample_id}: {k.child_sample_name}</Link> : <span>---</span>)}
+                        {k.child_sample_id ? <Link className={classes.pointer} onClick={() => handleClick(k.child_sample_id)}>{k.child_sample_id}: {k.child_sample_name}</Link> : <span>---</span>}
                       </div>
                     </>
                   ))}
