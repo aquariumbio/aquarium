@@ -12,7 +12,7 @@ import HorizontalNavList from './HorizontalNavList';
 const useStyles = makeStyles(() => ({
   root: {
     display: 'inline-flex',
-    width: '100vw',
+    width: '100%',
     height: 'calc(100vh - 75px)',
 
   },
@@ -22,8 +22,8 @@ const useStyles = makeStyles(() => ({
   },
 
   main: {
-    marginTop: '25px',
-    marginLeft: '20px',
+    paddingTop: '25px',
+    paddingLeft: '20px',
     width: '100%',
     height: 'calc(100vh - 125px)',
     overflowY: 'auto',
