@@ -26,7 +26,7 @@ const LeftHamburgerMenu = () => {
 
   return (
     <>
-      <IconButton aria-label="menu" color="disabled" size="medium" onClick={handleMenu}>
+      <IconButton aria-label="menu" size="medium" onClick={handleMenu}>
         <MenuIcon color="inherit" fontSize="inherit" />
       </IconButton>
       <Menu

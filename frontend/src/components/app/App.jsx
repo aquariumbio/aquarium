@@ -41,16 +41,16 @@ import theme from '../../theme';
 const useStyles = makeStyles(() => ({
   root: {
     width: '100%',
-    minWidth: '1280px',
     height: '100%',
-    backgroundColor: '#fff',
   },
   content: {
-    marginTop: '75px',
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
-    overflowX: 'auto',
-    overflowY: 'hidden',
+    position: 'fixed',
+    top: '74px',
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    overflow: 'hidden',
+    height: 'calc(100vh - 74px)',
+    width: '100%',
   },
 
 }));

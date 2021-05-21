@@ -28,35 +28,35 @@ const globalUseStyles = makeStyles((theme) => ({
   },
   flexCol1: {
     flex: '1 1 0',
-    marginRight: `${theme.spacing(1)}px`,
+    paddingRight: `${theme.spacing(1)}px`,
     paddingLeftt: `${theme.spacing(1)}px`,
     minWidth: '0',
   },
 
   flexCol2: {
     flex: '2 1 0',
-    marginRight: `${theme.spacing(1)}px`,
+    paddingRight: `${theme.spacing(1)}px`,
     paddingLeftt: `${theme.spacing(1)}px`,
     minWidth: '0',
   },
 
   flexCol3: {
     flex: '3 1 0',
-    marginRight: `${theme.spacing(1)}px`,
+    paddingRight: `${theme.spacing(1)}px`,
     paddingLeftt: `${theme.spacing(1)}px`,
     minWidth: '0',
   },
 
   flexCol4: {
     flex: '4 1 0',
-    marginRight: `${theme.spacing(1)}px`,
+    paddingRight: `${theme.spacing(1)}px`,
     paddingLeftt: `${theme.spacing(1)}px`,
     minWidth: '0',
   },
 
   flexColAuto: {
     width: 'auto',
-    marginRight: `${theme.spacing(1)}px`,
+    paddingRight: `${theme.spacing(1)}px`,
     paddingLeftt: `${theme.spacing(1)}px`,
     minWidth: '0',
   },
