@@ -117,7 +117,7 @@ _build_empty_database() {
 }
 
 _update_database() {
-    rake db:migrate
+    rake db:migrate RAILS_ENV=production
 }
 
 _main() {
