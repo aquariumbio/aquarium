@@ -8,6 +8,8 @@ import ShowFinished from './ShowFinished';
 import ShowByOperation from './ShowByOperation';
 import jobsAPI from '../../helpers/api/jobsAPI';
 import HorizontalNavList from './HorizontalNavList';
+import Page from '../shared/layout/Page';
+import NavBar from '../shared/layout/NavBar';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -63,8 +65,23 @@ const JobsPage = ({ setIsLoading, setAlertProps }) => {
     init();
   }, []);
 
+  const navBar = () => (
+    <NavBar>
+      {value === 'categories' && (
+        // Operation states
+        <HorizontalNavList
+          name="operation-state-nav"
+          list={[{ name: 'Pending' }]}
+          value={operationState}
+          setValue={setOperationState}
+          count={pendingCount}
+        />
+      )}
+    </NavBar>
+  );
+
   return (
-    <div className={classes.root}>
+    <Page navBar={navBar}>
 
       {/* Jobs & Operations */}
       <SideBar
@@ -78,19 +95,6 @@ const JobsPage = ({ setIsLoading, setAlertProps }) => {
       />
 
       <div className={classes.main} name="object-types-main-container" data-cy="object-types-main-container">
-        <div className={classes.whiteSpace}>
-          {value === 'categories' && (
-
-            // Operation states
-            <HorizontalNavList
-              name="operation-state-nav"
-              list={[{ name: 'Pending' }]}
-              value={operationState}
-              setValue={setOperationState}
-              count={pendingCount}
-            />
-          )}
-        </div>
 
         {value === 'unassigned' && (
           <ShowUnassigned setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
@@ -114,7 +118,7 @@ const JobsPage = ({ setIsLoading, setAlertProps }) => {
           />
         )}
       </div>
-    </div>
+    </Page>
   );
 };
 
