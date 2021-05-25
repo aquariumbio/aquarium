@@ -62,8 +62,6 @@ RSpec.describe JsonController, type: :controller do
     end
   end
 
-
-
   context 'no method' do
     it 'should be unhappy' do
       post :index, as: :json
