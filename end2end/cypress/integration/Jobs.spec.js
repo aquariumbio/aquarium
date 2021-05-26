@@ -11,7 +11,7 @@ describe('/jobs', () => {
 
   it('should first render with unassigned jobs', () => {
 
-    cy.get('[data-cy="job-states-tablist"]').within(() => {
+    cy.get('[data-cy="job-states"]').within(() => {
       // Only yield inputs within nav
 
       // Verify selection indicator

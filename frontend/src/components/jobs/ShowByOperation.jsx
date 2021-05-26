@@ -1,7 +1,6 @@
 import Checkbox from '@material-ui/core/Checkbox';
 import React, { useState, useEffect } from 'react';
 import { func, string, object } from 'prop-types';
-import { makeStyles } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import jobsAPI from '../../helpers/api/jobsAPI';
@@ -9,41 +8,8 @@ import VerticalNavList from './VerticalNavList';
 import globalUseSyles from '../../globalUseStyles';
 import { useWindowDimensions } from '../../WindowDimensionsProvider';
 import { StandardButton } from '../shared/Buttons';
+import Main from '../shared/layout/Main';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    height: 'calc(100% - 64px)',
-    display: 'flex',
-  },
-
-  inventory: {
-    fontSize: '0.875rem',
-    marginBottom: theme.spacing(2),
-  },
-
-  /* Use to scale and hide columns in the title row */
-  flexColAutoHidden: {
-    width: 'auto',
-    marginRight: '8px',
-    paddingLeft: '8px',
-    minWidth: '0',
-    visibility: 'hidden',
-  },
-
-  show: {
-    display: 'block',
-  },
-
-  hide: {
-    display: 'none',
-  },
-
-  pointer: {
-    cursor: 'pointer',
-  },
-}));
-
-// eslint-disable-next-line no-unused-vars
 const ShowByOperation = ({
   category,
   operationType,
@@ -51,7 +17,6 @@ const ShowByOperation = ({
   setPendingCount,
   setAlertProps,
 }) => {
-  const classes = useStyles();
   const globalClasses = globalUseSyles();
   const { tablet } = useWindowDimensions();
 
@@ -141,6 +106,35 @@ const ShowByOperation = ({
   if (!operationTypes) {
     return <div>{category} has no operations</div>;
   }
+
+  const title = () => (
+    <div className={globalClasses.flexWrapper}>
+      <StandardButton
+        name="create-job"
+        text="create job"
+        disabled={checked.length < 1}
+        icon="attach"
+        dense
+        variant="text"
+        handleClick={createJob}
+      />
+      <Divider />
+      <div className={`${globalClasses.flex} ${globalClasses.flexTitle}`}>
+        <div className={`${globalClasses.flexCol1}`} />
+        <div className={`${globalClasses.flexCol1}`}>Plan</div>
+        <div className={`${globalClasses.flexCol4}`}>Input/Output</div>
+        {tablet ? (
+          <div className={`${globalClasses.flexCol2}`}>Details</div>
+        ) : (
+          <>
+            <div className={`${globalClasses.flexCol2}`}>Updated</div>
+            <div className={`${globalClasses.flexCol2}`}>Researcher</div>
+            <div className={`${globalClasses.flexCol1}`}>Op Id</div>
+          </>
+        )}
+      </div>
+    </div>
+  );
   const displayInOutData = (operation) => (
     <>
       {!!operation.inputs && operation.inputs.map((input, index) => (
@@ -205,91 +199,62 @@ const ShowByOperation = ({
 
     return (
       operationType.operations.map((operation) => (
-        <div className={`${globalClasses.flex} ${globalClasses.flexRow} ${checked.includes(operation.id) && globalClasses.hightlight}`} key={`op_${operation.id}`}>
-          <div className={`${globalClasses.flexCol1}`}>
-            <Checkbox
-              color="primary"
-              inputProps={{ 'aria-label': 'operation-checkbox' }}
-              edge="start"
-              checked={checked.indexOf(operation.id) !== -1}
-              onChange={handleToggle(operation.id)}
-              tabIndex={-1}
-              disableRipple
-            />
-          </div>
-          <div className={`${globalClasses.flexCol1}`}>
-            <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{operation.plan_id}</Typography>
-          </div>
-          <div className={`${globalClasses.flexCol4}`}>
-            {displayInOutData(operation)}
-          </div>
-          {tablet ? (
-            <div className={`${globalClasses.flexCol2}`}>
-              <Typography variant={tablet ? 'body2' : 'body1'} noWrap>Updated: {operation.updated_at.substring(0, 16).replace('T', ' ')}</Typography>
-              <Typography variant={tablet ? 'body2' : 'body1'} noWrap>Researcher: {operation.name}</Typography>
-              <Typography variant={tablet ? 'body2' : 'body1'} noWrap>Op Id: {operation.id}</Typography>
+        <div className={globalClasses.flexWrapper}>
+          <div className={`${globalClasses.flex} ${globalClasses.flexRow} ${checked.includes(operation.id) && globalClasses.hightlight}`} key={`op_${operation.id}`}>
+            <div className={`${globalClasses.flexCol1}`}>
+              <Checkbox
+                color="primary"
+                inputProps={{ 'aria-label': 'operation-checkbox' }}
+                edge="start"
+                checked={checked.indexOf(operation.id) !== -1}
+                onChange={handleToggle(operation.id)}
+                tabIndex={-1}
+                disableRipple
+              />
             </div>
-          ) : (
-            <>
+            <div className={`${globalClasses.flexCol1}`}>
+              <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{operation.plan_id}</Typography>
+            </div>
+            <div className={`${globalClasses.flexCol4}`}>
+              {displayInOutData(operation)}
+            </div>
+            {tablet ? (
               <div className={`${globalClasses.flexCol2}`}>
-                <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{operation.updated_at.substring(0, 16).replace('T', ' ')}</Typography>
+                <Typography variant={tablet ? 'body2' : 'body1'} noWrap>Updated: {operation.updated_at.substring(0, 16).replace('T', ' ')}</Typography>
+                <Typography variant={tablet ? 'body2' : 'body1'} noWrap>Researcher: {operation.name}</Typography>
+                <Typography variant={tablet ? 'body2' : 'body1'} noWrap>Op Id: {operation.id}</Typography>
               </div>
-              <div className={`${globalClasses.flexCol2}`}>
-                <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{operation.name}</Typography>
-              </div>
-              <div className={`${globalClasses.flexCol1}`}>
-                <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{operation.id}</Typography>
-              </div>
-            </>
-          )}
+            ) : (
+              <>
+                <div className={`${globalClasses.flexCol2}`}>
+                  <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{operation.updated_at.substring(0, 16).replace('T', ' ')}</Typography>
+                </div>
+                <div className={`${globalClasses.flexCol2}`}>
+                  <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{operation.name}</Typography>
+                </div>
+                <div className={`${globalClasses.flexCol1}`}>
+                  <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{operation.id}</Typography>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       ))
     );
   };
 
   return (
-    <div id="show-by-operation" className={classes.root}>
+    <>
       <VerticalNavList
         name="operation-types"
         list={operationTypes}
         value={operationType}
         getOperations={getOperations}
       />
-      <div style={{ width: '100%', marginLeft: '20px' }}>
-        <Divider style={{ marginTop: '0' }} />
-        <StandardButton
-          name="create-job"
-          text="create job"
-          disabled={checked.length < 1}
-          icon="attach"
-          dense
-          variant="text"
-          handleClick={createJob}
-        />
-        <Divider />
-
-        <div>
-          <div className={globalClasses.flexWrapper}>
-            <div className={`${globalClasses.flex} ${globalClasses.flexTitle}`}>
-              <div className={`${globalClasses.flexCol1}`} />
-              <div className={`${globalClasses.flexCol1}`}>Plan</div>
-              <div className={`${globalClasses.flexCol4}`}>Input/Output</div>
-              {tablet ? (
-                <div className={`${globalClasses.flexCol2}`}>Details</div>
-              ) : (
-                <>
-                  <div className={`${globalClasses.flexCol2}`}>Updated</div>
-                  <div className={`${globalClasses.flexCol2}`}>Researcher</div>
-                  <div className={`${globalClasses.flexCol1}`}>Op Id</div>
-                </>
-              )}
-            </div>
-            {rows()}
-          </div>
-        </div>
-      </div>
-    </div>
-
+      <Main numOfSections={3} title={title()}>
+        {rows()}
+      </Main>
+    </>
   );
 };
 

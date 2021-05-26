@@ -1,20 +1,34 @@
 import React from 'react';
 import {
-  element, oneOf, arrayOf, oneOfType,
+  element, oneOf, arrayOf, oneOfType, string,
 } from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    height: 'inherit',
+  },
   paper: {
     paddingLeft: theme.spacing(1),
     paddingTop: theme.spacing(1),
-    height: '100%',
+    height: 'calc(100% - 40px)',
+    overflow: 'hidden',
+  },
+  titleArea: {
+    paddingRight: '10px',
+    [theme.breakpoints.down('lg')]: {
+      paddingRight: '0px',
+
+    },
+  },
+  scollingContent: {
+    height: 'inherit',
     overflow: 'scroll',
   },
   divider: {
-    height: '24px',
+    height: '32px',
     borderBottom: '1px #DDD solid',
     marginBottom: theme.spacing(1),
   },
@@ -22,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Main = (props) => {
   const classes = useStyles();
-  const { numOfSections, children } = props;
+  const { numOfSections, title, children } = props;
 
   // Default to large sigle section
   let flex = {
@@ -44,10 +58,17 @@ const Main = (props) => {
   }
 
   return (
-    <Grid item xs={flex.xs} lg={flex.lg}>
+    <Grid item xs={flex.xs} lg={flex.lg} className={classes.root}>
+      <div className={classes.divider} />{' '}
       <Paper elevation={0} className={classes.paper}>
-        <div className={classes.divider} /> {/* Hold space so align dividers across sections */}
-        {children}
+        {title && (
+          <div className={classes.titleArea}>
+            {title}
+          </div>
+        )}
+        <div className={classes.scollingContent}>
+          {children}
+        </div>
       </Paper>
     </Grid>
   );
@@ -55,15 +76,15 @@ const Main = (props) => {
 
 Main.propTypes = {
   numOfSections: oneOf([1, 2, 3]),
-  children: oneOfType([
-    arrayOf(element),
-    element,
-  ]),
+  children: oneOfType([arrayOf(element), element]),
+  title: oneOfType([arrayOf(element), element, string]),
+
 };
 
 Main.defaultProps = {
   numOfSections: 1,
   children: React.createElement('div'),
+  title: null,
 };
 
 export default Main;

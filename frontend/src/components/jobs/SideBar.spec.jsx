@@ -3,7 +3,7 @@ import {
   render, screen, waitForElementToBeRemoved, within,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import SideBar from './SideBar';
+import JobsSideBar from './JobsSideBar';
 
 describe('SideBar', () => {
   const mockJobCounts = {
@@ -32,7 +32,7 @@ describe('SideBar', () => {
   const mockSetCategory = jest.fn();
 
   const sideBar = () => render(
-    <SideBar
+    <JobsSideBar
       jobCounts={mockJobCounts}
       activeCounts={mockActiveCategories}
       inactive={mockInactiveCategories}
@@ -116,7 +116,7 @@ describe('SideBar', () => {
 
   describe('no active jobs', () => {
     const testSidebar = () => render(
-      <SideBar
+      <JobsSideBar
         jobCounts={mockJobCounts}
         activeCounts={{}}
         inactive={mockInactiveCategories}

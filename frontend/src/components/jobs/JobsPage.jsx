@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core';
-import SideBar from './SideBar';
+import JobsSideBar from './JobsSideBar';
 import ShowAssigned from './ShowAssigned';
 import ShowUnassigned from './ShowUnassigned';
 import ShowFinished from './ShowFinished';
@@ -11,35 +10,7 @@ import HorizontalNavList from './HorizontalNavList';
 import Page from '../shared/layout/Page';
 import NavBar from '../shared/layout/NavBar';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    display: 'inline-flex',
-    width: '100%',
-    height: 'calc(100vh - 75px)',
-
-  },
-
-  whiteSpace: {
-    height: '88px',
-  },
-
-  main: {
-    paddingTop: '25px',
-    paddingLeft: '20px',
-    width: '100%',
-    height: 'calc(100vh - 125px)',
-    overflowY: 'auto',
-    overflowX: 'hidden',
-  },
-
-  divider: {
-    marginTop: '0',
-  },
-}));
-
 const JobsPage = ({ setIsLoading, setAlertProps }) => {
-  const classes = useStyles();
-
   const [value, setValue] = useState('unassigned');
   const [jobCounts, setJobCounts] = useState({});
   const [activeCounts, setActiveCounts] = useState({});
@@ -84,7 +55,7 @@ const JobsPage = ({ setIsLoading, setAlertProps }) => {
     <Page navBar={navBar}>
 
       {/* Jobs & Operations */}
-      <SideBar
+      <JobsSideBar
         jobCounts={jobCounts}
         activeCounts={activeCounts}
         inactive={inactive}
@@ -93,31 +64,29 @@ const JobsPage = ({ setIsLoading, setAlertProps }) => {
         category={category}
         setCategory={setCategory}
       />
-
-      <div className={classes.main} name="object-types-main-container" data-cy="object-types-main-container">
-
-        {value === 'unassigned' && (
+      {value === 'categories' ? (
+        <ShowByOperation
+          category={category}
+          operationType={operationType}
+          setOperationType={setOperationType}
+          setPendingCount={setPendingCount}
+          setAlertProps={setAlertProps}
+        />
+      ) : (
+        <>
+          {value === 'unassigned' && (
           <ShowUnassigned setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
-        )}
+          )}
 
-        {value === 'assigned' && (
+          {value === 'assigned' && (
           <ShowAssigned setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
-        )}
+          )}
 
-        {value === 'finished' && (
+          {value === 'finished' && (
           <ShowFinished setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
-        )}
-
-        { value === 'categories' && (
-          <ShowByOperation
-            category={category}
-            operationType={operationType}
-            setOperationType={setOperationType}
-            setPendingCount={setPendingCount}
-            setAlertProps={setAlertProps}
-          />
-        )}
-      </div>
+          )}
+        </>
+      )}
     </Page>
   );
 };

@@ -3,10 +3,9 @@ import { makeStyles } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import globalUseSyles from '../../globalUseStyles';
 import { useWindowDimensions } from '../../WindowDimensionsProvider';
-
+import Main from '../shared/layout/Main';
 import jobsAPI from '../../helpers/api/jobsAPI';
 
 const useStyles = makeStyles({
@@ -38,6 +37,38 @@ const ShowFinished = () => {
   useEffect(() => {
     init('0');
   }, []);
+
+  const title = () => (
+    <div className={`${globalClasses.flexWrapper}`}>
+      <TextField
+        name="seven-days"
+        id="seven-days-input"
+        value={sevenDays}
+        onChange={(event) => init(event.target.value)}
+        variant="outlined"
+        type="string"
+        inputProps={{
+          'aria-label': 'seven-days-input',
+          'data-cy': 'seven-days-input',
+        }}
+        select
+        size="small"
+      >
+        <MenuItem key="1" value="1">Last 7 Days</MenuItem>
+        <MenuItem key="0" value="0">All</MenuItem>
+      </TextField>
+
+      <div className={`${globalClasses.flex} ${globalClasses.flexTitle}`}>
+        <div className={`${globalClasses.flexCol1}`}>Assigned To</div>
+        <div className={`${globalClasses.flexCol1}`}>Assigned</div>
+        <div className={`${globalClasses.flexCol1}`}>Started</div>
+        <div className={`${globalClasses.flexCol1}`}>Finished</div>
+        <div className={`${globalClasses.flexCol2}`}>Protocol</div>
+        <div className={`${globalClasses.flexCol1}`}>Job</div>
+        <div className={`${globalClasses.flexCol1}`}>Operations</div>
+      </div>
+    </div>
+  );
 
   const rows = () => {
     if (!jobs) {
@@ -71,39 +102,11 @@ const ShowFinished = () => {
   };
 
   return (
-    <>
-      <Divider style={{ marginTop: '0' }} />
+    <Main numOfSections={2} title={title()}>
       <div role="grid" aria-label="finished-jobs" className={`${globalClasses.flexWrapper} ${classes.root}`} data-cy="finished-jobs">
-        <TextField
-          name="seven-days"
-          id="seven-days-input"
-          value={sevenDays}
-          onChange={(event) => init(event.target.value)}
-          variant="outlined"
-          type="string"
-          inputProps={{
-            'aria-label': 'seven-days-input',
-            'data-cy': 'seven-days-input',
-          }}
-          select
-        >
-          <MenuItem key="1" value="1">Last 7 Days</MenuItem>
-          <MenuItem key="0" value="0">All</MenuItem>
-        </TextField>
-
-        <div className={`${globalClasses.flex} ${globalClasses.flexTitle}`}>
-          <div className={`${globalClasses.flexCol1}`}>Assigned To</div>
-          <div className={`${globalClasses.flexCol1}`}>Assigned</div>
-          <div className={`${globalClasses.flexCol1}`}>Started</div>
-          <div className={`${globalClasses.flexCol1}`}>Finished</div>
-          <div className={`${globalClasses.flexCol2}`}>Protocol</div>
-          <div className={`${globalClasses.flexCol1}`}>Job</div>
-          <div className={`${globalClasses.flexCol1}`}>Operations</div>
-
-        </div>
         {rows()}
       </div>
-    </>
+    </Main>
   );
 };
 

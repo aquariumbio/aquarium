@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  element, arrayOf, oneOfType,
-} from 'prop-types';
+import { element, arrayOf, oneOfType } from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -34,10 +32,7 @@ const NavBar = (props) => {
 };
 
 NavBar.propTypes = {
-  children: oneOfType([
-    arrayOf(element),
-    element,
-  ]),
+  children: oneOfType([arrayOf(element), element]),
 };
 
 NavBar.defaultProps = {

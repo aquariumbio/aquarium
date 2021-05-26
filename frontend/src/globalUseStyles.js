@@ -8,7 +8,8 @@ const globalUseStyles = makeStyles((theme) => ({
     position: 'relative',
   },
   flexWrapper: {
-    padding: `0 ${theme.spacing(2)}px`,
+    padding: `0 ${theme.spacing(1)}px ${theme.spacing(1)}px ${theme.spacing(1)}px`,
+    height: 'inherit',
   },
   /* Title row */
   flexTitle: {

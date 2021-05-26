@@ -21,19 +21,14 @@ const useStyles = makeStyles(() => ({
 
   main: {
     width: '100%',
-    height: 'calc(100vh - 148px)', // (view height - header & nav bar)
-    overflowY: 'auto',
-    overflowX: 'hidden',
+    height: 'calc(100vh - 174px)', // (view height - header & nav bar)
+    overflow: 'hidden',
   },
-
 }));
 
 const Page = (props) => {
   const classes = useStyles();
-  const {
-    navBar,
-    children,
-  } = props;
+  const { navBar, children } = props;
 
   return (
     <div className={classes.root}>
@@ -47,10 +42,7 @@ const Page = (props) => {
 
 Page.propTypes = {
   navBar: func,
-  children: oneOfType([
-    arrayOf(element),
-    element,
-  ]).isRequired,
+  children: oneOfType([arrayOf(element), element]).isRequired,
 };
 
 Page.defaultProps = {

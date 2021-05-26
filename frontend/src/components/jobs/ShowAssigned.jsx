@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import jobsAPI from '../../helpers/api/jobsAPI';
 import globalUseSyles from '../../globalUseStyles';
 import { useWindowDimensions } from '../../WindowDimensionsProvider';
+import Main from '../shared/layout/Main';
 
 const useStyles = makeStyles({
   root: {
@@ -30,6 +30,18 @@ const ShowAssigned = () => {
 
     init();
   }, []);
+
+  const title = () => (
+    <div className={`${globalClasses.flexWrapper}`}>
+      <div className={`${globalClasses.flex} ${globalClasses.flexTitle}`}>
+        <div className={`${globalClasses.flexCol1}`}>Assigned To</div>
+        <div className={`${globalClasses.flexCol2}`}>Protocol</div>
+        <div className={`${globalClasses.flexCol1}`}>Job</div>
+        <div className={`${globalClasses.flexCol1}`}>Operations</div>
+        <div className={`${globalClasses.flexCol1}`}>Started</div>
+      </div>
+    </div>
+  );
 
   const rows = () => {
     if (!jobs) {
@@ -60,19 +72,11 @@ const ShowAssigned = () => {
   };
 
   return (
-    <>
-      <Divider style={{ marginTop: '0' }} />
+    <Main numOfSections={2} title={title()}>
       <div role="grid" aria-label="assigned-jobs" className={`${globalClasses.flexWrapper} ${classes.root}`} data-cy="assigned-jobs">
-        <div className={`${globalClasses.flex} ${globalClasses.flexTitle}`}>
-          <div className={`${globalClasses.flexCol1}`}>Assigned To</div>
-          <div className={`${globalClasses.flexCol2}`}>Protocol</div>
-          <div className={`${globalClasses.flexCol1}`}>Job</div>
-          <div className={`${globalClasses.flexCol1}`}>Operations</div>
-          <div className={`${globalClasses.flexCol1}`}>Started</div>
-        </div>
         {rows()}
       </div>
-    </>
+    </Main>
   );
 };
 

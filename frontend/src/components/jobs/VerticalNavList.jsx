@@ -3,10 +3,10 @@ import {
   string, arrayOf, shape, func, object,
 } from 'prop-types';
 import { makeStyles } from '@material-ui/core';
-import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
+import SideBar from '../shared/layout/SideBar';
+import ListFixed from '../shared/layout/ListFixed';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -36,13 +36,8 @@ const useStyles = makeStyles(() => ({
     color: '#333',
     fontWeight: '300',
   },
-
-  divider: {
-    marginTop: '0',
-  },
 }));
 
-// eslint-disable-next-line no-unused-vars
 const VerticalNavList = ({
   name,
   list,
@@ -59,27 +54,24 @@ const VerticalNavList = ({
     return <Typography>No Operations</Typography>;
   }
   return (
-    <List
-      aria-label={`${name}-tablist`}
-      className={classes.root}
-      role="tablist"
-    >
-      <Divider className={classes.divider} />
+    <SideBar>
+      <ListFixed ariaLabel={name}>
+        {list !== undefined && list.map((li) => (
+          <ListItem
+            button
+            role="tab"
+            onClick={(event) => handleListItemClick(event, li.name)}
+            selected={value.name === li.name}
+            key={li.name}
+            disableGutters
+          >
+            <Typography noWrap>{li.name} </Typography>
+            <Typography className={classes.count}>({li.n})</Typography>
+          </ListItem>
+        ))}
+      </ListFixed>
+    </SideBar>
 
-      {list !== undefined && list.map((li) => (
-        <ListItem
-          button
-          role="tab"
-          onClick={(event) => handleListItemClick(event, li.name)}
-          selected={value.name === li.name}
-          key={li.name}
-        >
-          <Typography noWrap>{li.name} </Typography>
-          <Typography className={classes.count}>({li.n})</Typography>
-        </ListItem>
-      ))}
-
-    </List>
   );
 };
 
