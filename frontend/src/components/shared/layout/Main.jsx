@@ -15,16 +15,17 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(1),
     height: 'calc(100% - 40px)',
     overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column',
   },
   titleArea: {
-    paddingRight: '10px',
+    paddingRight: theme.spacing(2),
     [theme.breakpoints.down('lg')]: {
-      paddingRight: '0px',
-
+      paddingRight: 0,
     },
   },
   scollingContent: {
-    height: 'inherit',
+    flexGrow: 1,
     overflow: 'scroll',
   },
   divider: {

@@ -24,7 +24,6 @@ const useStyles = makeStyles(() => ({
   },
 
   count: {
-    fontSize: '0.625rem',
     marginLeft: '2px',
     color: 'rgba(0, 0, 0, 0.87)',
   },
@@ -46,7 +45,7 @@ const VerticalNavList = ({
 }) => {
   const classes = useStyles();
 
-  const handleListItemClick = (page) => {
+  const handleListItemClick = (event, page) => {
     getOperations(page);
   };
 
@@ -65,8 +64,8 @@ const VerticalNavList = ({
             key={li.name}
             disableGutters
           >
-            <Typography noWrap>{li.name} </Typography>
-            <Typography className={classes.count}>({li.n})</Typography>
+            <Typography variant="body1" noWrap>{li.name} </Typography>
+            <Typography variant="body2" className={classes.count}>({li.n})</Typography>
           </ListItem>
         ))}
       </ListFixed>

@@ -17,6 +17,7 @@ import ListScroll from '../shared/layout/ListScroll';
 const useStyles = makeStyles(() => ({
   count: {
     marginLeft: '2px',
+    color: 'rgba(0, 0, 0, 0.87)',
   },
 
   label: {
