@@ -21,20 +21,31 @@ const JobsPage = ({ setIsLoading, setAlertProps }) => {
   const [operationType, setOperationType] = useState({});
   const [pendingCount, setPendingCount] = useState();
 
+  const init = async () => {
+    const response = await jobsAPI.getCounts();
+
+    if (!response) return;
+
+    // success
+    setJobCounts(response.counts.jobs);
+    setActiveCounts(response.counts.operations.active);
+    setInactive(response.counts.operations.inactive);
+  };
+
   useEffect(() => {
-    const init = async () => {
-      const response = await jobsAPI.getCounts();
-
-      if (!response) return;
-
-      // success
-      setJobCounts(response.counts.jobs);
-      setActiveCounts(response.counts.operations.active);
-      setInactive(response.counts.operations.inactive);
-    };
-
     init();
   }, []);
+
+  const cancelJob = async (jobId) => {
+    const response = await jobsAPI.cancelJob(jobId);
+    if (!response) return;
+    await init();
+    setAlertProps({
+      message: `Job #${jobId} canceled`,
+      severity: 'success',
+      open: true,
+    });
+  };
 
   const navBar = () => (
     <NavBar>
@@ -75,7 +86,11 @@ const JobsPage = ({ setIsLoading, setAlertProps }) => {
       ) : (
         <>
           {value === 'unassigned' && (
-          <ShowUnassigned setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
+          <ShowUnassigned
+            setIsLoading={setIsLoading}
+            setAlertProps={setAlertProps}
+            cancelJob={cancelJob}
+          />
           )}
 
           {value === 'assigned' && (
