@@ -16,7 +16,7 @@ const theme = createMuiTheme({
   overrides: {
     MuiDivider: {
       root: {
-        margin: '16px 0px',
+        color: '#DDD',
       },
     },
     MuiAppBar: {

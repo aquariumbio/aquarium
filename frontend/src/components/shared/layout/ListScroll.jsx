@@ -11,6 +11,9 @@ const useStyles = makeStyles((theme) => ({
     height: '24px',
     borderBottom: '1px #DDD solid',
     marginBottom: theme.spacing(1),
+    fontWeight: 'light',
+    paddingLeft: theme.spacing(1),
+
   },
   list: {
     backgroundColor: theme.palette.background.paper,
@@ -25,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   spacingTop: {
-    marginTop: theme.spacing(1),
+    marginTop: '30px',
   },
   scrollDiv: {
     overflowY: 'scroll',
@@ -42,12 +45,13 @@ const ListScroll = (props) => {
     children,
     ariaLabel,
   } = props;
+
   const classes = useStyles();
 
   return (
     <>
       <div className={`${classes.titleDiv} ${spacingTop ? classes.spacingTop : ''}`}>
-        <Typography noWrap variant="subtitle2">
+        <Typography noWrap variant="caption">
           {title}
         </Typography>
       </div>

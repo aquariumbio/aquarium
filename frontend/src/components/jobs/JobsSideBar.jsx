@@ -58,7 +58,7 @@ const JobsSideBar = ({
   };
 
   return (
-    <SideBar>
+    <SideBar small>
       <ListFixed
         title="JOBS"
         ariaLabel="job-states"
@@ -69,11 +69,10 @@ const JobsSideBar = ({
           selected={value === 'unassigned'}
           id="unassigned"
           key="unassigned"
-          disableGutters
 
         >
-          <Typography variant="body1" noWrap>Unassigned</Typography>
-          <Typography variant="body2" className={classes.count}>{`(${jobCounts.unassigned})`}</Typography>
+          <Typography variant="caption" noWrap>Unassigned</Typography>
+          <Typography variant="caption" className={classes.count}>{`(${jobCounts.unassigned})`}</Typography>
         </ListItem>
 
         <ListItem
@@ -82,11 +81,10 @@ const JobsSideBar = ({
           selected={value === 'assigned'}
           id="assigned"
           key="assigned"
-          disableGutters
 
         >
-          <Typography variant="body1" noWrap>Assigned</Typography>
-          <Typography variant="body2" className={classes.count}>{`(${jobCounts.assigned})`}</Typography>
+          <Typography variant="caption" noWrap>Assigned</Typography>
+          <Typography variant="caption" className={classes.count}>{`(${jobCounts.assigned})`}</Typography>
         </ListItem>
 
         <ListItem
@@ -95,11 +93,10 @@ const JobsSideBar = ({
           selected={value === 'finished'}
           id="finished"
           key="finished"
-          disableGutters
 
         >
-          <Typography variant="body1" noWrap>Finished</Typography>
-          <Typography variant="body2" className={classes.count}>{`(${jobCounts.finished})`}</Typography>
+          <Typography variant="caption" noWrap>Finished</Typography>
+          <Typography variant="caption" className={classes.count}>{`(${jobCounts.finished})`}</Typography>
         </ListItem>
       </ListFixed>
 
@@ -115,14 +112,13 @@ const JobsSideBar = ({
             selected={category === key}
             id="category-list"
             key={key}
-            disableGutters
           >
-            <Typography variant="body1" noWrap>{key}</Typography>
-            <Typography variant="body2" className={classes.count}>{`(${activeCounts[`${key}`]})`}</Typography>
+            <Typography variant="caption" noWrap>{key}</Typography>
+            <Typography variant="caption" className={classes.count}>{`(${activeCounts[`${key}`]})`}</Typography>
           </ListItem>
         ))}
 
-        <ListSubheader variant="button" role="button" disableGutters className={classes.label} onClick={handleExpand} id="inactive" key="inactive">
+        <ListSubheader variant="caption" role="button" className={classes.label} onClick={handleExpand} id="inactive" key="inactive">
           <ListItemIcon>{expand ? <ExpandLess /> : <ExpandMore />}</ListItemIcon>
           <ListItemText primary="Inactive" />
         </ListSubheader>
@@ -136,10 +132,9 @@ const JobsSideBar = ({
               key={key}
               onClick={(event) => handleJobStateClick(event)}
               selected={value === key}
-              disableGutters
             >
-              <Typography variant="body1" noWrap>{key}</Typography>
-              <Typography variant="body2" className={classes.count}>({count})</Typography>
+              <Typography variant="caption" noWrap>{key}</Typography>
+              <Typography variant="caption" className={classes.count}>({count})</Typography>
             </ListItem>
           ))}
         </Collapse>

@@ -62,9 +62,8 @@ const VerticalNavList = ({
             onClick={(event) => handleListItemClick(event, li.name)}
             selected={value.name === li.name}
             key={li.name}
-            disableGutters
           >
-            <Typography variant="body1" noWrap>{li.name} </Typography>
+            <Typography variant="body2" noWrap>{li.name} </Typography>
             <Typography variant="body2" className={classes.count}>({li.n})</Typography>
           </ListItem>
         ))}

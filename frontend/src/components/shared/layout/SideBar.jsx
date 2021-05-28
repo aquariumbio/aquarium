@@ -1,11 +1,15 @@
 import React from 'react';
-import { element, arrayOf, oneOfType } from 'prop-types';
+import {
+  element, arrayOf, oneOfType, bool,
+} from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles((theme) => ({
-  root: {},
+  root: {
+    maxWidth: '170px',
+  },
   paper: {
     paddingLeft: theme.spacing(1),
     paddingTop: theme.spacing(1),
@@ -20,11 +24,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SideBar = (props) => {
-  const { children } = props;
+  const { children, small } = props;
   const classes = useStyles();
 
   return (
-    <Grid item xs={3} lg={2} zeroMinWidth className={classes.root}>
+    <Grid item lg={small ? 1 : 2} zeroMinWidth className={classes.root}>
       <Paper elevation={0} className={`${classes.paper}`}>
         {children}
       </Paper>
@@ -34,10 +38,12 @@ const SideBar = (props) => {
 
 SideBar.propTypes = {
   children: oneOfType([arrayOf(element), element]),
+  small: bool,
 };
 
 SideBar.defaultProps = {
   children: React.createElement('div'),
+  small: false,
 };
 
 export default SideBar;

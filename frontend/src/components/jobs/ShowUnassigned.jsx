@@ -15,8 +15,9 @@ const ShowUnassigned = () => {
     const init = async () => {
       const response = await jobsAPI.getUnassigned();
       if (!response) return;
+      const waitingJobs = response.jobs.filter((job) => job.pc === -1);
 
-      setJobs(response.jobs);
+      setJobs(waitingJobs);
     };
 
     init();
@@ -28,7 +29,7 @@ const ShowUnassigned = () => {
         <div className={`${globalClasses.flexCol2}`}>Protocol</div>
         <div className={`${globalClasses.flexCol1}`}>Job</div>
         <div className={`${globalClasses.flexCol1}`}>Operations</div>
-        <div className={`${globalClasses.flexCol1}`}>Started</div>
+        <div className={`${globalClasses.flexCol1}`}>Created</div>
       </div>
     </div>
   );

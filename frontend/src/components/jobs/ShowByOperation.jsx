@@ -3,12 +3,19 @@ import React, { useState, useEffect } from 'react';
 import { func, string, object } from 'prop-types';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core';
 import jobsAPI from '../../helpers/api/jobsAPI';
 import VerticalNavList from './VerticalNavList';
 import globalUseSyles from '../../globalUseStyles';
 import { useWindowDimensions } from '../../WindowDimensionsProvider';
 import { StandardButton } from '../shared/Buttons';
 import Main from '../shared/layout/Main';
+
+const useStyles = makeStyles(() => ({
+  checkbox: {
+    padding: 0,
+  },
+}));
 
 const ShowByOperation = ({
   category,
@@ -17,6 +24,7 @@ const ShowByOperation = ({
   setPendingCount,
   setAlertProps,
 }) => {
+  const classes = useStyles();
   const globalClasses = globalUseSyles();
   const { tablet } = useWindowDimensions();
 
@@ -114,22 +122,21 @@ const ShowByOperation = ({
         text="create job"
         disabled={checked.length < 1}
         icon="attach"
-        dense
         variant="text"
         handleClick={createJob}
       />
       <Divider />
       <div className={`${globalClasses.flex} ${globalClasses.flexTitle}`}>
         <div className={`${globalClasses.flexCol1}`} />
-        <div className={`${globalClasses.flexCol1}`}>Plan</div>
-        <div className={`${globalClasses.flexCol4}`}>Input/Output</div>
+        <div className={`${globalClasses.flexCol1}`}><Typography variant="body2">Plan</Typography></div>
+        <div className={`${globalClasses.flexCol4}`}><Typography variant="body2">Input/Output</Typography></div>
         {tablet ? (
-          <div className={`${globalClasses.flexCol2}`}>Details</div>
+          <div className={`${globalClasses.flexCol2}`}><Typography variant="body2">Details</Typography></div>
         ) : (
           <>
-            <div className={`${globalClasses.flexCol2}`}>Updated</div>
-            <div className={`${globalClasses.flexCol2}`}>Researcher</div>
-            <div className={`${globalClasses.flexCol1}`}>Op Id</div>
+            <div className={`${globalClasses.flexCol2}`}><Typography variant="body2">Updated</Typography></div>
+            <div className={`${globalClasses.flexCol2}`}><Typography variant="body2">Researcher</Typography></div>
+            <div className={`${globalClasses.flexCol1}`}><Typography variant="body2">Op Id</Typography></div>
           </>
         )}
       </div>
@@ -140,30 +147,30 @@ const ShowByOperation = ({
       {!!operation.inputs && operation.inputs.map((input, index) => (
         <div className={`${globalClasses.flex} ${globalClasses.flexRowNested}`}>
           <div className={globalClasses.flexCol1}>
-            <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{index === 0 ? 'in:' : ''}</Typography>
+            <Typography variant="body2" noWrap>{index === 0 ? 'in:' : ''}</Typography>
           </div>
           <div className={globalClasses.flexCol2}>
-            <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{input.name}</Typography>
+            <Typography variant="body2" noWrap>{input.name}</Typography>
           </div>
           {input.sample_id && input.sample_name ? (
             <div className={globalClasses.flexCol4}>
-              <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{input.sample_id}: {input.sample_name}</Typography>
+              <Typography variant="body2" noWrap>{input.sample_id}: {input.sample_name}</Typography>
             </div>
           ) : <div className={globalClasses.flexCol4} />}
         </div>
       ))}
 
       {!!operation.outputs && operation.outputs.map((output, index) => (
-        <div className={`${globalClasses.flex} ${globalClasses.flexRowNested}`}>
+        <div className={`${globalClasses.flex}`}>
           <div className={globalClasses.flexCol1}>
-            <Typography variant={tablet ? 'body2' : 'body1'}>{index === 0 ? 'out:' : ''}</Typography>
+            <Typography variant="body2">{index === 0 ? 'out:' : ''}</Typography>
           </div>
           <div className={globalClasses.flexCol2}>
-            <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{output.name}</Typography>
+            <Typography variant="body2" noWrap>{output.name}</Typography>
           </div>
           {output.sample_id && output.sample_name ? (
             <div className={globalClasses.flexCol4}>
-              <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{output.sample_id}: {output.sample_name}</Typography>
+              <Typography variant="body2" noWrap>{output.sample_id}: {output.sample_name}</Typography>
             </div>
           ) : <div className={globalClasses.flexCol4} />}
         </div>
@@ -178,13 +185,13 @@ const ShowByOperation = ({
           return false;
         }
         return (
-          <div className={`${globalClasses.flex} ${globalClasses.flexRowNested}`}>
+          <div className={`${globalClasses.flex}`}>
             <div className={globalClasses.flexCol1} />
             <div className={globalClasses.flexCol2}>
-              <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{key.replace('_', ' ')}:</Typography>
+              <Typography variant="body2" noWrap>{key.replace('_', ' ')}:</Typography>
             </div>
             <div className={globalClasses.flexCol4}>
-              <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{value}</Typography>
+              <Typography variant="body2" noWrap>{value}</Typography>
             </div>
           </div>
         );
@@ -205,35 +212,36 @@ const ShowByOperation = ({
               <Checkbox
                 color="primary"
                 inputProps={{ 'aria-label': 'operation-checkbox' }}
-                edge="start"
+                edge="end"
                 checked={checked.indexOf(operation.id) !== -1}
                 onChange={handleToggle(operation.id)}
                 tabIndex={-1}
                 disableRipple
+                className={classes.checkbox}
               />
             </div>
             <div className={`${globalClasses.flexCol1}`}>
-              <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{operation.plan_id}</Typography>
+              <Typography variant="body2" noWrap>{operation.plan_id}</Typography>
             </div>
             <div className={`${globalClasses.flexCol4}`}>
               {displayInOutData(operation)}
             </div>
             {tablet ? (
               <div className={`${globalClasses.flexCol2}`}>
-                <Typography variant={tablet ? 'body2' : 'body1'} noWrap>Updated: {operation.updated_at.substring(0, 16).replace('T', ' ')}</Typography>
-                <Typography variant={tablet ? 'body2' : 'body1'} noWrap>Researcher: {operation.name}</Typography>
-                <Typography variant={tablet ? 'body2' : 'body1'} noWrap>Op Id: {operation.id}</Typography>
+                <Typography variant="body2" noWrap>Updated: {operation.updated_at.substring(0, 16).replace('T', ' ')}</Typography>
+                <Typography variant="body2" noWrap>Researcher: {operation.name}</Typography>
+                <Typography variant="body2" noWrap>Op Id: {operation.id}</Typography>
               </div>
             ) : (
               <>
                 <div className={`${globalClasses.flexCol2}`}>
-                  <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{operation.updated_at.substring(0, 16).replace('T', ' ')}</Typography>
+                  <Typography variant="body2" noWrap>{operation.updated_at.substring(0, 16).replace('T', ' ')}</Typography>
                 </div>
                 <div className={`${globalClasses.flexCol2}`}>
-                  <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{operation.name}</Typography>
+                  <Typography variant="body2" noWrap>{operation.name}</Typography>
                 </div>
                 <div className={`${globalClasses.flexCol1}`}>
-                  <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{operation.id}</Typography>
+                  <Typography variant="body2" noWrap>{operation.id}</Typography>
                 </div>
               </>
             )}

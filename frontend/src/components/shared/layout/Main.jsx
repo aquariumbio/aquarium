@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     paddingLeft: theme.spacing(1),
-    paddingTop: theme.spacing(1),
     height: 'calc(100% - 40px)',
     overflow: 'hidden',
     display: 'flex',
@@ -29,9 +28,8 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'scroll',
   },
   divider: {
-    height: '32px',
+    height: '36px',
     borderBottom: '1px #DDD solid',
-    marginBottom: theme.spacing(1),
   },
 }));
 
@@ -54,12 +52,12 @@ const Main = (props) => {
   } else if (numOfSections === 3) {
     flex = {
       xs: 6,
-      lg: 8,
+      lg: 9,
     };
   }
 
   return (
-    <Grid item xs={flex.xs} lg={flex.lg} className={classes.root}>
+    <Grid lg className={classes.root}>
       <div className={classes.divider} />{' '}
       <Paper elevation={0} className={classes.paper}>
         {title && (

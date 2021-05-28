@@ -13,17 +13,24 @@ const globalUseStyles = makeStyles((theme) => ({
   },
   /* Title row */
   flexTitle: {
-    paddingTop: theme.spacing(1),
-    // paddingRight: theme.spacing(1),
-    paddingBottom: theme.spacing(2),
-    borderBottom: '2px solid #c0c0c0',
+    padding: `${theme.spacing(2)}px ${theme.spacing(4)}px`,
+    borderBottom: '1px solid #DDD',
     fontWeight: 'bold',
+
+    '& p': {
+      fontWeight: 'bold',
+      lineHeight: 1.75,
+    },
   },
   flexRow: {
-    padding: `${theme.spacing(1)}px 0`,
-    borderBottom: '1px solid #c0c0c0',
+    padding: `${theme.spacing(2)}px ${theme.spacing(4)}px`,
+    lineHeight: 1.75,
+    borderBottom: '1px solid #DDD',
     '&:hover': {
       boxShadow: '0 0 3px 0 rgba(0, 0, 0, 0.8)',
+    },
+    '& p': {
+      lineHeight: 1.75,
     },
   },
   flexRowNested: {

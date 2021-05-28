@@ -11,6 +11,8 @@ const useStyles = makeStyles((theme) => ({
     height: '24px',
     borderBottom: '1px #DDD solid',
     marginBottom: theme.spacing(1),
+    paddingLeft: theme.spacing(1),
+    fontWeight: 'light',
   },
   list: {
     backgroundColor: theme.palette.background.paper,
@@ -34,7 +36,7 @@ const ListFixed = (props) => {
   return (
     <>
       <div className={classes.div}>
-        <Typography noWrap variant="subtitle2">
+        <Typography noWrap variant="caption">
           {title}
         </Typography>
       </div>
