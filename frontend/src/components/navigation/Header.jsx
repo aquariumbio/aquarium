@@ -95,7 +95,7 @@ const Header = ({ location }) => {
 
   return (
     <AppBar position="fixed" elevation={0} className={classes.root} component="header">
-      <Toolbar disableGutters>
+      <Toolbar>
         <div className={classes.headerOptions}>
           <LeftHamburgerMenu />
 
@@ -117,9 +117,7 @@ const Header = ({ location }) => {
                   to={url}
                   component={RouterLink}
                   className={classes.tab}
-                >
-                  {title}
-                </Tab>
+                />
               );
             })}
           </Tabs>

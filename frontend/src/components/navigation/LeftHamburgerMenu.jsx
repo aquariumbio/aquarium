@@ -7,7 +7,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Divider from '@material-ui/core/Divider';
-import createBrowserHistory from 'history/createBrowserHistory';
+import { createBrowserHistory } from 'history';
 
 const LeftHamburgerMenu = () => {
   // allows force refresh when clicking on a hamburger menu item

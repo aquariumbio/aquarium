@@ -57,9 +57,9 @@ const Main = (props) => {
   }
 
   return (
-    <Grid lg className={classes.root}>
-      <div className={classes.divider} />{' '}
+    <Grid item lg className={classes.root}>
       <Paper elevation={0} className={classes.paper}>
+        <div className={classes.divider} />
         {title && (
           <div className={classes.titleArea}>
             {title}

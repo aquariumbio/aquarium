@@ -11,7 +11,10 @@ const theme = createMuiTheme({
       dark: '#005cc7',
       contrastText: '#fff',
     },
-    disabled: '#ddd',
+    action: {
+      selected: 'rgba(64, 222, 253, 0.13)',
+      disabled: '#ddd',
+    },
   },
   overrides: {
     MuiDivider: {
@@ -44,6 +47,11 @@ const theme = createMuiTheme({
     MuiListSubheader: {
       gutters: {
         paddingLeft: '10px',
+      },
+    },
+    MuiIconButton: {
+      root: {
+        padding: 0,
       },
     },
   },

@@ -91,9 +91,6 @@ const globalUseStyles = makeStyles((theme) => ({
     cursor: 'pointer',
   },
 
-  hightlight: {
-    background: 'rgba(64, 222, 253, 0.13)',
-  },
 }));
 
 export default globalUseStyles;

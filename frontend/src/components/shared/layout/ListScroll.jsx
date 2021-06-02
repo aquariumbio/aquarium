@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import {
-  string, element, arrayOf, oneOfType, bool,
+  string, element, arrayOf, oneOfType, bool, objectOf,
 } from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     color: 'rgba(0, 0, 0, 0.87)',
 
     '& .Mui-selected': {
-      background: 'rgba(64, 222, 253, 0.13)',
+      background: theme.palette.action.selected,
     },
     '& .MuiListItemIcon-root': {
       maxWidth: '45px',
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
   scrollDiv: {
     overflowY: 'scroll',
-    paddingRight: theme.spacing(1), // account for scroll bar on small screen
+    paddingRight: theme.spacing(0.5), // account for scroll bar on small screen
     paddingBottom: theme.spacing(2),
   },
 }));
@@ -75,7 +75,12 @@ const ListScroll = (props) => {
 
 ListScroll.propTypes = {
   title: string,
-  children: oneOfType([arrayOf(element), element]),
+  children: oneOfType([
+    element,
+    arrayOf(element),
+    arrayOf(arrayOf(element), element),
+    objectOf(element),
+  ]),
   height: string,
   spacingTop: bool,
   // eslint-disable-next-line react/require-default-props

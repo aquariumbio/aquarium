@@ -1,9 +1,13 @@
 import Checkbox from '@material-ui/core/Checkbox';
 import React, { useState, useEffect } from 'react';
-import { func, string, object } from 'prop-types';
+import {
+  func, string, object, oneOf,
+} from 'prop-types';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
 import jobsAPI from '../../helpers/api/jobsAPI';
 import VerticalNavList from './VerticalNavList';
 import globalUseSyles from '../../globalUseStyles';
@@ -23,6 +27,7 @@ const ShowByOperation = ({
   setOperationType,
   setPendingCount,
   setAlertProps,
+  actionColumn,
 }) => {
   const classes = useStyles();
   const globalClasses = globalUseSyles();
@@ -30,6 +35,7 @@ const ShowByOperation = ({
 
   const [operationTypes, setOperationTypes] = useState();
   const [checked, setChecked] = React.useState([]);
+
   const init = async (setFirst = true) => {
     const response = await jobsAPI.getCategoryByStatus(category);
 
@@ -109,6 +115,10 @@ const ShowByOperation = ({
         open: true,
       })
     );
+  };
+
+  const handleRemove = (opId) => (event) => {
+    alert('TO DO: Remove operation');
   };
 
   if (!operationTypes) {
@@ -199,16 +209,12 @@ const ShowByOperation = ({
     </>
   );
 
-  const rows = () => {
-    if (!operationType.operations) {
-      return <div> No operations</div>;
-    }
-
-    return (
-      operationType.operations.map((operation) => (
-        <div className={globalClasses.flexWrapper}>
-          <div className={`${globalClasses.flex} ${globalClasses.flexRow} ${checked.includes(operation.id) && globalClasses.hightlight}`} key={`op_${operation.id}`}>
-            <div className={`${globalClasses.flexCol1}`}>
+  const rows = () => (
+    operationType.operations.map((operation) => (
+      <div className={globalClasses.flexWrapper} key={operation.id}>
+        <div className={`${globalClasses.flex} ${globalClasses.flexRow} ${checked.includes(operation.id) && globalClasses.hightlight}`} key={`op_${operation.id}`}>
+          <div className={`${globalClasses.flexCol1}`}>
+            {actionColumn === 'create' && (
               <Checkbox
                 color="primary"
                 inputProps={{ 'aria-label': 'operation-checkbox' }}
@@ -219,49 +225,65 @@ const ShowByOperation = ({
                 disableRipple
                 className={classes.checkbox}
               />
-            </div>
-            <div className={`${globalClasses.flexCol1}`}>
-              <Typography variant="body2" noWrap>{operation.plan_id}</Typography>
-            </div>
-            <div className={`${globalClasses.flexCol4}`}>
-              {displayInOutData(operation)}
-            </div>
-            {tablet ? (
-              <div className={`${globalClasses.flexCol2}`}>
-                <Typography variant="body2" noWrap>Updated: {operation.updated_at.substring(0, 16).replace('T', ' ')}</Typography>
-                <Typography variant="body2" noWrap>Researcher: {operation.name}</Typography>
-                <Typography variant="body2" noWrap>Op Id: {operation.id}</Typography>
-              </div>
-            ) : (
-              <>
-                <div className={`${globalClasses.flexCol2}`}>
-                  <Typography variant="body2" noWrap>{operation.updated_at.substring(0, 16).replace('T', ' ')}</Typography>
-                </div>
-                <div className={`${globalClasses.flexCol2}`}>
-                  <Typography variant="body2" noWrap>{operation.name}</Typography>
-                </div>
-                <div className={`${globalClasses.flexCol1}`}>
-                  <Typography variant="body2" noWrap>{operation.id}</Typography>
-                </div>
-              </>
             )}
+            {actionColumn === 'remove' && (
+              <IconButton aria-label="cancel job" onClick={() => { handleRemove(operation.id); }}>
+                <CancelOutlinedIcon htmlColor="#FF0000" />
+              </IconButton>
+            )}
+
           </div>
+          <div className={`${globalClasses.flexCol1}`}>
+            <Typography variant="body2" noWrap>{operation.plan_id}</Typography>
+          </div>
+          <div className={`${globalClasses.flexCol4}`}>
+            {displayInOutData(operation)}
+          </div>
+          {tablet ? (
+            <div className={`${globalClasses.flexCol2}`}>
+              <Typography variant="body2" noWrap>Updated: {operation.updated_at.substring(0, 16).replace('T', ' ')}</Typography>
+              <Typography variant="body2" noWrap>Researcher: {operation.name}</Typography>
+              <Typography variant="body2" noWrap>Op Id: {operation.id}</Typography>
+            </div>
+          ) : (
+            <>
+              <div className={`${globalClasses.flexCol2}`}>
+                <Typography variant="body2" noWrap>{operation.updated_at.substring(0, 16).replace('T', ' ')}</Typography>
+              </div>
+              <div className={`${globalClasses.flexCol2}`}>
+                <Typography variant="body2" noWrap>{operation.name}</Typography>
+              </div>
+              <div className={`${globalClasses.flexCol1}`}>
+                <Typography variant="body2" noWrap>{operation.id}</Typography>
+              </div>
+            </>
+          )}
         </div>
-      ))
-    );
-  };
+      </div>
+    ))
+  );
 
   return (
     <>
-      <VerticalNavList
-        name="operation-types"
-        list={operationTypes}
-        value={operationType}
-        getOperations={getOperations}
-      />
-      <Main numOfSections={3} title={title()}>
-        {rows()}
-      </Main>
+      {actionColumn === 'create' && ( // Full page view w/ sidebar
+        <>
+          <VerticalNavList
+            name="operation-types"
+            list={operationTypes}
+            value={operationType}
+            getOperations={getOperations}
+          />
+          <Main numOfSections={3} title={title()}>
+            {rows()}
+          </Main>
+        </>
+      )}
+
+      {actionColumn === 'remove' && ( // Accordion view
+        <Main numOfSections={1} title={title()}>
+          {rows()}
+        </Main>
+      )}
     </>
   );
 };
@@ -273,6 +295,7 @@ ShowByOperation.propTypes = {
   setOperationType: func.isRequired,
   setPendingCount: func.isRequired,
   setAlertProps: func.isRequired,
+  actionColumn: oneOf(['remove', 'create']).isRequired,
 };
 
 export default ShowByOperation;

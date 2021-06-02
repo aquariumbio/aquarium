@@ -49,7 +49,7 @@ const JobsPage = ({ setIsLoading, setAlertProps }) => {
 
   const navBar = () => (
     <NavBar>
-      {value === 'categories' && (
+      {value === 'categories' ? (
         // Operation states
         <HorizontalNavList
           name="operation-state-nav"
@@ -58,7 +58,7 @@ const JobsPage = ({ setIsLoading, setAlertProps }) => {
           setValue={setOperationState}
           count={pendingCount}
         />
-      )}
+      ) : <></>}
     </NavBar>
   );
 
@@ -82,6 +82,7 @@ const JobsPage = ({ setIsLoading, setAlertProps }) => {
           setOperationType={setOperationType}
           setPendingCount={setPendingCount}
           setAlertProps={setAlertProps}
+          actionColumn="create"
         />
       ) : (
         <>

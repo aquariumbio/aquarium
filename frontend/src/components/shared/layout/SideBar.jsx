@@ -8,7 +8,10 @@ import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: '170px',
+    maxWidth: '250px',
+  },
+  small: {
+    width: '200px',
   },
   paper: {
     paddingLeft: theme.spacing(1),
@@ -28,7 +31,7 @@ const SideBar = (props) => {
   const classes = useStyles();
 
   return (
-    <Grid item lg={small ? 1 : 2} zeroMinWidth className={classes.root}>
+    <Grid item lg={small ? false : 2} className={small ? classes.small : classes.root}>
       <Paper elevation={0} className={`${classes.paper}`}>
         {children}
       </Paper>

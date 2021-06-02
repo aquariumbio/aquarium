@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, List } from '@material-ui/core';
 import Collapse from '@material-ui/core/Collapse';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -57,6 +57,41 @@ const JobsSideBar = ({
     setExpand(!expand);
   };
 
+  const opsList = Object.keys(activeCounts).map((key) => (
+    <ListItem
+      role="tab"
+      onClick={(event) => handleOperationClick(event, key)}
+      selected={category === key}
+      id="category-list"
+      key={key}
+    >
+      <Typography variant="caption" noWrap>{key}</Typography>
+      <Typography variant="caption" className={classes.count}>{`(${activeCounts[`${key}`]})`}</Typography>
+    </ListItem>
+  ));
+
+  opsList.push(
+    <ListItem variant="caption" role="button" className={classes.label} onClick={handleExpand} id="inactive" key="inactive">
+      <ListItemIcon>{expand ? <ExpandLess /> : <ExpandMore />}</ListItemIcon>
+      <ListItemText primary="Inactive" />
+    </ListItem>,
+    <Collapse in={expand} timeout="auto" unmountOnExit key="collapse">
+      {inactive.map((key, count) => (
+        <ListItem
+          role="tab"
+          button
+          className={classes.inactive}
+          key={key}
+          onClick={(event) => handleJobStateClick(event)}
+          selected={value === key}
+        >
+          <Typography variant="caption" noWrap>{key}</Typography>
+          <Typography variant="caption" className={classes.count}>({count})</Typography>
+        </ListItem>
+      ))}
+    </Collapse>,
+  );
+
   return (
     <SideBar small>
       <ListFixed
@@ -105,39 +140,9 @@ const JobsSideBar = ({
         ariaLabel="categories"
         spacingTop
       >
-        {Object.keys(activeCounts).map((key) => (
-          <ListItem
-            role="tab"
-            onClick={(event) => handleOperationClick(event, key)}
-            selected={category === key}
-            id="category-list"
-            key={key}
-          >
-            <Typography variant="caption" noWrap>{key}</Typography>
-            <Typography variant="caption" className={classes.count}>{`(${activeCounts[`${key}`]})`}</Typography>
-          </ListItem>
-        ))}
 
-        <ListSubheader variant="caption" role="button" className={classes.label} onClick={handleExpand} id="inactive" key="inactive">
-          <ListItemIcon>{expand ? <ExpandLess /> : <ExpandMore />}</ListItemIcon>
-          <ListItemText primary="Inactive" />
-        </ListSubheader>
+        {opsList}
 
-        <Collapse in={expand} timeout="auto" unmountOnExit>
-          {inactive.map((key, count) => (
-            <ListItem
-              role="tab"
-              button
-              className={classes.inactive}
-              key={key}
-              onClick={(event) => handleJobStateClick(event)}
-              selected={value === key}
-            >
-              <Typography variant="caption" noWrap>{key}</Typography>
-              <Typography variant="caption" className={classes.count}>({count})</Typography>
-            </ListItem>
-          ))}
-        </Collapse>
       </ListScroll>
     </SideBar>
   );

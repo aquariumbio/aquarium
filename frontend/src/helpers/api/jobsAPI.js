@@ -22,8 +22,8 @@ jobsAPI.getFinished = (sevenDays) => axiosInstance
   .then((response) => response.data)
   .catch((error) => error);
 
-jobsAPI.getJob = (id) => axiosInstance
-  .get(`/jobs/${id}/show`)
+jobsAPI.getJob = (jobId) => axiosInstance
+  .get(`/jobs/${jobId}/show`)
   .then((response) => response.data)
   .catch((error) => error);
 

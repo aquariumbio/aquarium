@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     color: 'rgba(0, 0, 0, 0.87)',
 
     '& .Mui-selected': {
-      background: 'rgba(64, 222, 253, 0.13)',
+      background: theme.palette.action.selected,
     },
     '& .MuiListItemIcon-root': {
       maxWidth: '45px',

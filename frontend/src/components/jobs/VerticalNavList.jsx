@@ -8,12 +8,12 @@ import Typography from '@material-ui/core/Typography';
 import SideBar from '../shared/layout/SideBar';
 import ListFixed from '../shared/layout/ListFixed';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: '170px',
     paddingTop: '0px',
     '& .Mui-selected': {
-      background: 'rgba(64, 222, 253, 0.13)',
+      background: theme.palette.action.selected,
     },
     '& .MuiListItemIcon-root': {
       maxWidth: '45px',
