@@ -228,6 +228,10 @@ module Api
         details = SampleType.details(id)
         details = details.update({ id: id, name: sample_type.name, description: sample_type.description })
 
+puts ">>> sample type"
+puts details.to_json
+puts ">>>"
+
         render json: {
           sample_type: details
         }.to_json, status: :ok
