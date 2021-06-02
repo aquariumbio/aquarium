@@ -122,7 +122,11 @@ const ShowByOperation = ({
   };
 
   if (!operationTypes) {
-    return <div>{category} has no operations</div>;
+    return (
+      <Main numOfSections={1}>
+        <Typography variant="body2">{category} has no operations</Typography>
+      </Main>
+    );
   }
 
   const title = () => (

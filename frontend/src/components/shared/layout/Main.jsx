@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'scroll',
   },
   divider: {
-    height: '36px',
+    height: '32px',
     borderBottom: '1px #DDD solid',
   },
 }));
