@@ -102,7 +102,7 @@ const ShowFinished = () => {
   };
 
   return (
-    <Main numOfSections={2} title={title()}>
+    <Main title={title()}>
       <div role="grid" aria-label="finished-jobs" className={`${globalClasses.flexWrapper} ${classes.root}`} data-cy="finished-jobs">
         {rows()}
       </div>

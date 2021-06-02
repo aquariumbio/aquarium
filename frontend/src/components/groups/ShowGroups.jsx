@@ -3,21 +3,12 @@ import { Link as RouterLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core';
 import Link from '@material-ui/core/Link';
 
 import groupsAPI from '../../helpers/api/groups';
 import globalUseSyles from '../../globalUseStyles';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    height: 'calc(100% - 64px)',
-    width: '100%',
-  },
-}));
-
 const ShowGroups = ({ groups }) => {
-  const classes = useStyles();
   const globalClasses = globalUseSyles();
 
   const handleDelete = async (group) => {

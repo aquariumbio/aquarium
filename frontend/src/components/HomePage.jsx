@@ -5,7 +5,7 @@ import Main from './shared/layout/Main';
 
 const HomePage = () => (
   <Page>
-    <Main numOfSections={1}>
+    <Main>
       <Typography variant="h1">Home</Typography>
     </Main>
   </Page>

@@ -7,7 +7,6 @@ import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
 import SideBar from '../shared/layout/SideBar';
 import ListFixed from '../shared/layout/ListFixed';
-import globalUseStyles from '../../globalUseStyles';
 
 const useStyles = makeStyles(() => ({
   count: {
@@ -23,7 +22,6 @@ const VerticalNavList = ({
   getOperations,
 }) => {
   const classes = useStyles();
-  const globalClasses = globalUseStyles();
 
   const handleListItemClick = (event, page) => {
     getOperations(page);

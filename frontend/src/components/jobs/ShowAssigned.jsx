@@ -72,7 +72,7 @@ const ShowAssigned = () => {
   };
 
   return (
-    <Main numOfSections={2} title={title()}>
+    <Main title={title()}>
       <div role="grid" aria-label="assigned-jobs" className={`${globalClasses.flexWrapper} ${classes.root}`} data-cy="assigned-jobs">
         {rows()}
       </div>

@@ -162,7 +162,7 @@ const ShowUnassigned = (props) => {
   };
 
   return (
-    <Main numOfSections={2} title={title()}>
+    <Main title={title()}>
       <div role="grid" aria-label="unassigned-jobs" data-cy="unassigned-jobs">
         {rows()}
       </div>

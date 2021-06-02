@@ -76,7 +76,7 @@ export default Page;
           </ul>
         </SideBar>
 
-        <Main numOfSections={3}>
+        <Main>
           <div style={{ height: '100px', width: '100px', backgroundColor: 'blue' }} />
           <div style={{ height: '100px', width: '100px', backgroundColor: 'red' }} />
           <div style={{ height: '100px', width: '100px', backgroundColor: 'green' }} />

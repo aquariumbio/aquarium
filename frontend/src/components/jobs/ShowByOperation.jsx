@@ -1,13 +1,11 @@
 import Checkbox from '@material-ui/core/Checkbox';
 import React, { useState, useEffect } from 'react';
 import {
-  func, string, object, oneOf,
+  func, string, object,
 } from 'prop-types';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
 import jobsAPI from '../../helpers/api/jobsAPI';
 import VerticalNavList from './VerticalNavList';
 import globalUseSyles from '../../globalUseStyles';
@@ -131,7 +129,7 @@ const ShowByOperation = ({
   };
 
   const fallback = () => (
-    <Main numOfSections={1}>
+    <Main>
       <Typography variant="body2">No operations</Typography>
     </Main>
   );
@@ -282,7 +280,7 @@ const ShowByOperation = ({
         value={operationType}
         getOperations={getOperations}
       />
-      <Main numOfSections={3} title={title()}>
+      <Main title={title()}>
         {rows()}
       </Main>
     </>

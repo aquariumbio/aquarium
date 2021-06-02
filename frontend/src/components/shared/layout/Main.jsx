@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  element, oneOf, arrayOf, oneOfType, string,
+  element, arrayOf, oneOfType, string,
 } from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
@@ -35,26 +35,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Main = (props) => {
   const classes = useStyles();
-  const { numOfSections, title, children } = props;
-
-  // Default to large sigle section
-  let flex = {
-    xs: 12,
-    lg: 12,
-  };
-
-  // Reduce main section size to accomodate more sections
-  if (numOfSections === 2) {
-    flex = {
-      xs: 9,
-      lg: 10,
-    };
-  } else if (numOfSections === 3) {
-    flex = {
-      xs: 6,
-      lg: 9,
-    };
-  }
+  const { title, children } = props;
 
   return (
     <Grid item lg className={classes.root}>
@@ -74,14 +55,12 @@ const Main = (props) => {
 };
 
 Main.propTypes = {
-  numOfSections: oneOf([1, 2, 3]),
   children: oneOfType([arrayOf(element), element]),
   title: oneOfType([arrayOf(element), element, string]),
 
 };
 
 Main.defaultProps = {
-  numOfSections: 1,
   children: React.createElement('div'),
   title: null,
 };
