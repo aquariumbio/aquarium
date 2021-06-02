@@ -7,33 +7,12 @@ import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
 import SideBar from '../shared/layout/SideBar';
 import ListFixed from '../shared/layout/ListFixed';
+import globalUseStyles from '../../globalUseStyles';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    minWidth: '170px',
-    paddingTop: '0px',
-    '& .Mui-selected': {
-      background: theme.palette.action.selected,
-    },
-    '& .MuiListItemIcon-root': {
-      maxWidth: '45px',
-    },
-    '& .MuiListItem-gutters': {
-      paddingRight: '0px',
-    },
-  },
-
+const useStyles = makeStyles(() => ({
   count: {
     marginLeft: '2px',
     color: 'rgba(0, 0, 0, 0.87)',
-  },
-
-  label: {
-    opacity: '0.7',
-    textTransform: 'uppercase',
-    borderBottom: '1px #DDD solid',
-    color: '#333',
-    fontWeight: '300',
   },
 }));
 
@@ -44,24 +23,28 @@ const VerticalNavList = ({
   getOperations,
 }) => {
   const classes = useStyles();
+  const globalClasses = globalUseStyles();
 
   const handleListItemClick = (event, page) => {
     getOperations(page);
   };
 
-  if (list.length < 1) {
-    return <Typography>No Operations</Typography>;
-  }
   return (
     <SideBar>
       <ListFixed ariaLabel={name}>
+        {list.length < 1 && (
+          <ListItem key="none">
+            <Typography variant="body2">No Operations</Typography>
+          </ListItem>
+        )}
+
         {list !== undefined && list.map((li) => (
           <ListItem
             button
-            role="tab"
             onClick={(event) => handleListItemClick(event, li.name)}
             selected={value.name === li.name}
             key={li.name}
+            // className={globalClasses.pointer}
           >
             <Typography variant="body2" noWrap>{li.name} </Typography>
             <Typography variant="body2" className={classes.count}>({li.n})</Typography>

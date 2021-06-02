@@ -43,6 +43,12 @@ const theme = createMuiTheme({
       gutters: {
         paddingLeft: '10px',
       },
+      button: {
+        '&:hover, &.active:hover': {
+          cursor: 'pointer',
+          backgroundColor: '#fff',
+        },
+      },
     },
     MuiListSubheader: {
       gutters: {

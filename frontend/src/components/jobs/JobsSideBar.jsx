@@ -59,6 +59,7 @@ const JobsSideBar = ({
 
   const opsList = Object.keys(activeCounts).map((key) => (
     <ListItem
+      button
       role="tab"
       onClick={(event) => handleOperationClick(event, key)}
       selected={category === key}
@@ -71,14 +72,13 @@ const JobsSideBar = ({
   ));
 
   opsList.push(
-    <ListItem variant="caption" role="button" className={classes.label} onClick={handleExpand} id="inactive" key="inactive">
+    <ListItem button className={classes.label} onClick={handleExpand} id="inactive" key="inactive">
       <ListItemIcon>{expand ? <ExpandLess /> : <ExpandMore />}</ListItemIcon>
       <ListItemText primary="Inactive" />
     </ListItem>,
     <Collapse in={expand} timeout="auto" unmountOnExit key="collapse">
       {inactive.map((key, count) => (
         <ListItem
-          role="tab"
           button
           className={classes.inactive}
           key={key}
@@ -99,6 +99,7 @@ const JobsSideBar = ({
         ariaLabel="job-states"
       >
         <ListItem
+          button
           role="tab"
           onClick={(event) => handleJobStateClick(event, 'unassigned')}
           selected={value === 'unassigned'}
@@ -111,6 +112,7 @@ const JobsSideBar = ({
         </ListItem>
 
         <ListItem
+          button
           role="tab"
           onClick={(event) => handleJobStateClick(event, 'assigned')}
           selected={value === 'assigned'}
@@ -123,6 +125,7 @@ const JobsSideBar = ({
         </ListItem>
 
         <ListItem
+          button
           role="tab"
           onClick={(event) => handleJobStateClick(event, 'finished')}
           selected={value === 'finished'}
