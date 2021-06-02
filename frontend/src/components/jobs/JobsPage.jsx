@@ -82,7 +82,6 @@ const JobsPage = ({ setIsLoading, setAlertProps }) => {
           setOperationType={setOperationType}
           setPendingCount={setPendingCount}
           setAlertProps={setAlertProps}
-          actionColumn="create"
         />
       ) : (
         <>

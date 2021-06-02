@@ -21,17 +21,26 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const useDelayedRender = (delay = 3000) => {
+  const [delayed, setDelayed] = useState(true);
+  useEffect(() => {
+    const timeout = setTimeout(() => setDelayed(false), delay);
+    return () => clearTimeout(timeout);
+  }, []);
+  return (fn) => !delayed && fn();
+};
+
 const ShowByOperation = ({
   category,
   operationType,
   setOperationType,
   setPendingCount,
   setAlertProps,
-  actionColumn,
 }) => {
   const classes = useStyles();
   const globalClasses = globalUseSyles();
   const { tablet } = useWindowDimensions();
+  const delayedRender = useDelayedRender();
 
   const [operationTypes, setOperationTypes] = useState();
   const [checked, setChecked] = React.useState([]);
@@ -40,7 +49,7 @@ const ShowByOperation = ({
     const response = await jobsAPI.getCategoryByStatus(category);
 
     if (!response) {
-      return setOperationTypes();
+      return setOperationTypes([]);
     }
 
     const { operation_types: opTypes, ...rest } = response;
@@ -121,12 +130,18 @@ const ShowByOperation = ({
     alert('TO DO: Remove operation');
   };
 
+  const fallback = () => (
+    <Main numOfSections={1}>
+      <Typography variant="body2">No operations</Typography>
+    </Main>
+  );
+
   if (!operationTypes) {
-    return (
-      <Main numOfSections={1}>
-        <Typography variant="body2">{category} has no operations</Typography>
-      </Main>
-    );
+    return delayedRender(() => fallback());
+  }
+
+  if (operationTypes.length === 0) {
+    return fallback();
   }
 
   const title = () => (
@@ -218,24 +233,16 @@ const ShowByOperation = ({
       <div className={globalClasses.flexWrapper} key={operation.id}>
         <div className={`${globalClasses.flex} ${globalClasses.flexRow} ${checked.includes(operation.id) && globalClasses.hightlight}`} key={`op_${operation.id}`}>
           <div className={`${globalClasses.flexCol1}`}>
-            {actionColumn === 'create' && (
-              <Checkbox
-                color="primary"
-                inputProps={{ 'aria-label': 'operation-checkbox' }}
-                edge="end"
-                checked={checked.indexOf(operation.id) !== -1}
-                onChange={handleToggle(operation.id)}
-                tabIndex={-1}
-                disableRipple
-                className={classes.checkbox}
-              />
-            )}
-            {actionColumn === 'remove' && (
-              <IconButton aria-label="cancel job" onClick={() => { handleRemove(operation.id); }}>
-                <CancelOutlinedIcon htmlColor="#FF0000" />
-              </IconButton>
-            )}
-
+            <Checkbox
+              color="primary"
+              inputProps={{ 'aria-label': 'operation-checkbox' }}
+              edge="end"
+              checked={checked.indexOf(operation.id) !== -1}
+              onChange={handleToggle(operation.id)}
+              tabIndex={-1}
+              disableRipple
+              className={classes.checkbox}
+            />
           </div>
           <div className={`${globalClasses.flexCol1}`}>
             <Typography variant="body2" noWrap>{operation.plan_id}</Typography>
@@ -269,25 +276,15 @@ const ShowByOperation = ({
 
   return (
     <>
-      {actionColumn === 'create' && ( // Full page view w/ sidebar
-        <>
-          <VerticalNavList
-            name="operation-types"
-            list={operationTypes}
-            value={operationType}
-            getOperations={getOperations}
-          />
-          <Main numOfSections={3} title={title()}>
-            {rows()}
-          </Main>
-        </>
-      )}
-
-      {actionColumn === 'remove' && ( // Accordion view
-        <Main numOfSections={1} title={title()}>
-          {rows()}
-        </Main>
-      )}
+      <VerticalNavList
+        name="operation-types"
+        list={operationTypes}
+        value={operationType}
+        getOperations={getOperations}
+      />
+      <Main numOfSections={3} title={title()}>
+        {rows()}
+      </Main>
     </>
   );
 };
@@ -299,7 +296,6 @@ ShowByOperation.propTypes = {
   setOperationType: func.isRequired,
   setPendingCount: func.isRequired,
   setAlertProps: func.isRequired,
-  actionColumn: oneOf(['remove', 'create']).isRequired,
 };
 
 export default ShowByOperation;
