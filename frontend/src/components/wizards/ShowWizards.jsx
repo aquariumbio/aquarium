@@ -7,6 +7,8 @@ import { makeStyles } from '@material-ui/core';
 import Link from '@material-ui/core/Link';
 import wizardsAPI from '../../helpers/api/wizards';
 import globalUseSyles from '../../globalUseStyles';
+import Page from '../shared/layout/Page';
+import Main from '../shared/layout/Main';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,20 +40,21 @@ const ShowWizards = ({ wizards }) => {
   };
 
   return (
-    <>
-      <div className={globalClasses.flexWrapper}>
+    <Page>
+      <Main title={(
         <div className={`${globalClasses.flex} ${globalClasses.flexTitle}`}>
           <Typography className={globalClasses.flexCol1}><b>Name</b></Typography>
           <Typography className={globalClasses.flexCol3}><b>Description</b></Typography>
           <Typography className={globalClasses.flexColAutoHidden}>Edit</Typography>
           <Typography className={globalClasses.flexColAutoHidden}>Delete</Typography>
         </div>
-
+      )}
+      >
         {wizards.map((wizard) => (
           <div className={`${globalClasses.flex} ${globalClasses.flexRow}`} key={`object_${wizard.id}`}>
             <Typography className={globalClasses.flexCol1}>
               {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
-              <Link data-cy={`show_${wizard.id}`} className={classes.pointer} onClick={() => alert('wizard page')}>{wizard.name}</Link>
+              <Link data-cy={`show_${wizard.id}`} className={globalClasses.pointer} onClick={() => alert('wizard page')}>{wizard.name}</Link>
             </Typography>
 
             <Typography className={globalClasses.flexCol3}>
@@ -64,12 +67,12 @@ const ShowWizards = ({ wizards }) => {
 
             <Typography className={globalClasses.flexColAuto}>
               {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
-              <Link data-cy={`delete_${wizard.id}`} className={classes.pointer} onClick={() => handleDelete(wizard)}>Delete</Link>
+              <Link data-cy={`delete_${wizard.id}`} className={globalClasses.pointer} onClick={() => handleDelete(wizard)}>Delete</Link>
             </Typography>
           </div>
         ))}
-      </div>
-    </>
+      </Main>
+    </Page>
   );
 };
 

@@ -75,11 +75,11 @@ const ShowObjectTypesByHandler = ({ objectTypes, setIsLoading, setAlertProps }) 
           <div className={`${globalClasses.flex} ${globalClasses.flexRow}`} key={`object_${objectType.id}`}>
             <Typography className={globalClasses.flexCol1}>
               {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
-              <Link data-cy={`show_${objectType.id}`} className={classes.pointer} onClick={() => handleToggles(objectType.id, toggleIds, setToggleIds, triggerUpdate)}>{objectType.name}</Link>
+              <Link data-cy={`show_${objectType.id}`} className={globalClasses.pointer} onClick={() => handleToggles(objectType.id, toggleIds, setToggleIds, triggerUpdate)}>{objectType.name}</Link>
             </Typography>
             <Typography className={globalClasses.flexCol3}>
               {objectType.description}
-              <span className={toggleIds[objectType.id] ? classes.show : classes.hide}>
+              <span className={toggleIds[objectType.id] ? globalClasses.show : globalClasses.hide}>
                 <ListItem>
                   <b>Min/Max</b>: {objectType.min} / {objectType.max}
                 </ListItem>
@@ -116,7 +116,7 @@ const ShowObjectTypesByHandler = ({ objectTypes, setIsLoading, setAlertProps }) 
 
             <Typography className={globalClasses.flexColAuto}>
               {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
-              <Link data-cy={`delete_${objectType.id}`} className={classes.pointer} onClick={() => handleDelete(objectType.id)}>Delete</Link>
+              <Link data-cy={`delete_${objectType.id}`} className={globalClasses.pointer} onClick={() => handleDelete(objectType.id)}>Delete</Link>
             </Typography>
           </div>
         ))}

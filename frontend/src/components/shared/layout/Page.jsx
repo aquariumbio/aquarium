@@ -54,7 +54,11 @@ export default Page;
 /*
   Example usage:
   const ExamplePage = () => {
-    const navBar = () => (<NavBar><Typography variant="h4">Example </Typography></NavBar>);
+    const navBar = () => (
+      <NavBar>
+        <Typography variant="h4">Example </Typography>
+      </NavBar>
+    );
 
     return (
       <Page
