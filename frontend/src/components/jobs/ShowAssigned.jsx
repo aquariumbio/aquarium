@@ -1,69 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { DataGrid } from '@material-ui/data-grid';
-import jobsAPI from '../../helpers/api/jobs';
-
-const columns = [
-  {
-    field: 'to_name',
-    headerName: 'Assigned To',
-    flex: 1,
-  },
-  {
-    field: 'name',
-    headerName: 'Protocol',
-    flex: 2,
-  },
-  {
-    field: 'job_id',
-    headerName: 'Job',
-    flex: 1,
-  },
-  {
-    field: 'operations_count',
-    headerName: 'Operations',
-    flex: 1,
-  },
-  {
-    field: 'pc',
-    headerName: 'Status',
-    valueFormatter: (params) => {
-      if (params.value === '-1') { return 'Not Started'; }
-      if (params.value === '-2') { return 'Completed'; }
-      return 'Running';
-    },
-    flex: 1,
-  },
-  {
-    field: 'created_at',
-    headerName: 'Started',
-    sortable: false,
-    valueFormatter: (params) => (params.getValue('pc') === '-1' ? '-' : params.getValue('created_at').substring(0, 16).replace('T', ' ')),
-    flex: 1,
-  },
-];
+import Typography from '@material-ui/core/Typography';
+import jobsAPI from '../../helpers/api/jobsAPI';
+import globalUseSyles from '../../globalUseStyles';
+import { useWindowDimensions } from '../../WindowDimensionsProvider';
+import Main from '../shared/layout/Main';
 
 const useStyles = makeStyles({
   root: {
-    minWidth: '1085px',
-    fontSize: '12px',
-    '& .MuiDataGrid-colCellTitle': {
-      fontWeight: 700,
-    },
-    '& .cellValue': {
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-    },
-    '& .MuiDataGrid-root': {
-      border: 'none',
-    },
+    height: 'calc(100% - 64px)',
+    width: '100%',
   },
 });
 
 const ShowAssigned = () => {
   const classes = useStyles();
-
+  const globalClasses = globalUseSyles();
+  const { tablet } = useWindowDimensions();
   const [jobs, setJobs] = useState([]);
 
   useEffect(() => {
@@ -78,17 +31,52 @@ const ShowAssigned = () => {
     init();
   }, []);
 
+  const title = () => (
+    <div className={`${globalClasses.flexWrapper}`}>
+      <div className={`${globalClasses.flex} ${globalClasses.flexTitle}`}>
+        <div className={`${globalClasses.flexCol1}`}>Assigned To</div>
+        <div className={`${globalClasses.flexCol2}`}>Protocol</div>
+        <div className={`${globalClasses.flexCol1}`}>Job</div>
+        <div className={`${globalClasses.flexCol1}`}>Operations</div>
+        <div className={`${globalClasses.flexCol1}`}>Started</div>
+      </div>
+    </div>
+  );
+
+  const rows = () => {
+    if (!jobs) {
+      return <div> No assigned jobs</div>;
+    }
+
+    return (
+      jobs.map((job) => (
+        <div className={`${globalClasses.flex} ${globalClasses.flexRow}`} key={`job_${job.id}`}>
+          <div className={`${globalClasses.flexCol1}`}>
+            <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{job.to_name}</Typography>
+          </div>
+          <div className={`${globalClasses.flexCol2}`}>
+            <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{job.name}</Typography>
+          </div>
+          <div className={`${globalClasses.flexCol1}`}>
+            <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{job.job_id}</Typography>
+          </div>
+          <div className={`${globalClasses.flexCol1}`}>
+            <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{job.operations_count}</Typography>
+          </div>
+          <div className={`${globalClasses.flexCol1}`}>
+            <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{job.created_at ? job.created_at.substring(0, 16).replace('T', ' ') : '-'}</Typography>
+          </div>
+        </div>
+      ))
+    );
+  };
+
   return (
-    <DataGrid
-      columns={columns}
-      rows={jobs}
-      disableColumnMenu
-      disableColumnSelector
-      disableSelectionOnClick
-      className={classes.root}
-      autoHeight
-      hideFooter
-    />
+    <Main title={title()}>
+      <div role="grid" aria-label="assigned-jobs" className={`${globalClasses.flexWrapper} ${classes.root}`} data-cy="assigned-jobs">
+        {rows()}
+      </div>
+    </Main>
   );
 };
 

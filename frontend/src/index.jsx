@@ -21,6 +21,11 @@ ReactDOM.render(
 
 // Set minimum screen width
 document.getElementById('root').style.minWidth = '1280px';
+document.getElementById('root').style.width = '100vw';
+document.getElementById('root').style.height = '100vh';
+document.getElementById('root').style.overflow = 'auto';
+document.getElementById('root').style.backgroundColor = '#fff';
+
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals

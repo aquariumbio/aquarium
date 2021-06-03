@@ -1,106 +1,108 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-
-import { makeStyles } from '@material-ui/core';
-import Divider from '@material-ui/core/Divider';
-import SideBar from './SideBar';
+import JobsSideBar from './JobsSideBar';
 import ShowAssigned from './ShowAssigned';
 import ShowUnassigned from './ShowUnassigned';
 import ShowFinished from './ShowFinished';
-// import ShowByOperation from './ShowByOperation';
-import jobsAPI from '../../helpers/api/jobs';
-
-function TabPanel(props) {
-  const {
-    children, value, page, id,
-  } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== page}
-      id={id}
-    >
-      {children}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node.isRequired,
-  value: PropTypes.isRequired,
-  page: PropTypes.string.isRequired,
-  id: PropTypes.isRequired,
-};
-
-const useStyles = makeStyles(() => ({
-  root: {
-    display: 'inline-flex',
-    width: '98%',
-  },
-  main: {
-    marginTop: '23px',
-    marginLeft: '20px',
-    width: '100%',
-  },
-}));
+import ShowByOperation from './ShowByOperation';
+import jobsAPI from '../../helpers/api/jobsAPI';
+import HorizontalNavList from './HorizontalNavList';
+import Page from '../shared/layout/Page';
+import NavBar from '../shared/layout/NavBar';
 
 const JobsPage = ({ setIsLoading, setAlertProps }) => {
-  const classes = useStyles();
-
-  // const [operationType, setOperationType] = useState();
+  const [value, setValue] = useState('unassigned');
   const [jobCounts, setJobCounts] = useState({});
   const [activeCounts, setActiveCounts] = useState({});
   const [inactive, setInactive] = useState([]);
-  const [value, setValue] = useState('unassigned');
+
+  const [category, setCategory] = useState('');
+  const [operationState, setOperationState] = useState('Pending');
+  const [operationType, setOperationType] = useState({});
+  const [pendingCount, setPendingCount] = useState();
+
+  const init = async () => {
+    const response = await jobsAPI.getCounts();
+
+    if (!response) return;
+
+    // success
+    setJobCounts(response.counts.jobs);
+    setActiveCounts(response.counts.operations.active);
+    setInactive(response.counts.operations.inactive);
+  };
 
   useEffect(() => {
-    const init = async () => {
-      const response = await jobsAPI.getCounts();
-
-      if (!response) return;
-
-      // success
-      setJobCounts(response.counts.jobs);
-      setActiveCounts(response.counts.operations.active);
-      setInactive(response.counts.operations.inactive);
-    };
-
     init();
   }, []);
 
+  const cancelJob = async (jobId) => {
+    const response = await jobsAPI.cancelJob(jobId);
+    if (!response) return;
+    await init();
+    setAlertProps({
+      message: `Job #${jobId} canceled`,
+      severity: 'success',
+      open: true,
+    });
+  };
+
+  const navBar = () => (
+    <NavBar>
+      {value === 'categories' ? (
+        // Operation states
+        <HorizontalNavList
+          name="operation-state-nav"
+          list={[{ name: 'Pending' }]}
+          value={operationState}
+          setValue={setOperationState}
+          count={pendingCount}
+        />
+      ) : <></>}
+    </NavBar>
+  );
+
   return (
-    <div className={classes.root}>
-      <SideBar
+    <Page navBar={navBar}>
+
+      {/* Jobs & Operations */}
+      <JobsSideBar
         jobCounts={jobCounts}
         activeCounts={activeCounts}
         inactive={inactive}
         value={value}
         setValue={setValue}
-        // setOperationType={setOperationType}
-        setIsLoading={setIsLoading}
-        setAlertProps={setAlertProps}
+        category={category}
+        setCategory={setCategory}
       />
+      {value === 'categories' ? (
+        <ShowByOperation
+          category={category}
+          operationType={operationType}
+          setOperationType={setOperationType}
+          setPendingCount={setPendingCount}
+          setAlertProps={setAlertProps}
+        />
+      ) : (
+        <>
+          {value === 'unassigned' && (
+          <ShowUnassigned
+            setIsLoading={setIsLoading}
+            setAlertProps={setAlertProps}
+            cancelJob={cancelJob}
+          />
+          )}
 
-      <div className={classes.main} name="object-types-main-container" data-cy="object-types-main-container">
-        <Divider />
-
-        <TabPanel id="unassigned-jobs-table" value={value} index={0} page="unassigned">
-          <ShowUnassigned setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
-        </TabPanel>
-
-        <TabPanel id="assigned-jobs-table" value={value} index={1} page="assigned">
+          {value === 'assigned' && (
           <ShowAssigned setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
-        </TabPanel>
+          )}
 
-        <TabPanel id="finished-jobs-table" value={value} index={2} page="finished">
+          {value === 'finished' && (
           <ShowFinished setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
-        </TabPanel>
-
-        {/* list === 'Operation' &&
-          <ShowByOperation setIsLoading={setIsLoading} setAlertProps={setAlertProps} /> */}
-      </div>
-    </div>
+          )}
+        </>
+      )}
+    </Page>
   );
 };
 

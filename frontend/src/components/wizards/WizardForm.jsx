@@ -11,6 +11,8 @@ import Divider from '@material-ui/core/Divider';
 import wizardsAPI from '../../helpers/api/wizards';
 import tokensAPI from '../../helpers/api/tokensAPI';
 import { StandardButton, LinkButton } from '../shared/Buttons';
+import Page from '../shared/layout/Page';
+import Main from '../shared/layout/Main';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -155,201 +157,206 @@ const WizardForm = ({ setIsLoading, setAlertProps, match }) => {
   };
 
   return (
-    <Container className={classes.root} maxWidth="xl" data-cy="wizard-container">
-      {id ? (
+    <Page>
+      <Main title={(
         <>
-          <Typography variant="h1" align="center" className={classes.title}>
-            <u>{wizardName}</u>
-          </Typography>
-          <Typography variant="h2" align="center" className={classes.title}>
-            Edit Wizard {id}
-          </Typography>
+          {id ? (
+            <>
+              <Typography variant="h1" align="center" className={classes.title}>
+                <u>{wizardName}</u>
+              </Typography>
+              <Typography variant="h2" align="center" className={classes.title}>
+                Edit Wizard {id}
+              </Typography>
+            </>
+          ) : (
+            <Typography variant="h1" align="center" className={classes.title}>
+              New Wizard
+            </Typography>
+          )}
+
+          <Typography align="right">* field is required</Typography>
         </>
-      ) : (
-        <Typography variant="h1" align="center" className={classes.title}>
-          New Wizard
-        </Typography>
       )}
+      >
+        <form id="wizard-form" name="wizard-form" data-cy="wizard-form" onSubmit={handleSubmit}>
+          <Typography variant="h4" className={classes.inputName} display="inline">
+            Name
+          </Typography>
+          <Typography variant="overline" color="error">
+            {' * '}
+          </Typography>
 
-      <Typography align="right">* field is required</Typography>
+          <TextField
+            name="name"
+            fullWidth
+            value={wizardName}
+            id="wizard-name-input"
+            onChange={(event) => setWizardName(event.target.value)}
+            variant="outlined"
+            autoFocus
+            required
+            type="string"
+            inputProps={{
+              'aria-label': 'wizard-name-input',
+              'data-cy': 'wizard-name-input',
+            }}
+            className={classes.spaceBelow}
+          />
 
-      <form id="wizard-form" name="wizard-form" data-cy="wizard-form" onSubmit={handleSubmit}>
-        <Typography variant="h4" className={classes.inputName} display="inline">
-          Name
-        </Typography>
-        <Typography variant="overline" color="error">
-          {' * '}
-        </Typography>
+          <Typography variant="h4" className={classes.inputName} display="inline">
+            Description
+          </Typography>
+          <Typography variant="overline" color="error">
+            {' * '}
+          </Typography>
 
-        <TextField
-          name="name"
-          fullWidth
-          value={wizardName}
-          id="wizard-name-input"
-          onChange={(event) => setWizardName(event.target.value)}
-          variant="outlined"
-          autoFocus
-          required
-          type="string"
-          inputProps={{
-            'aria-label': 'wizard-name-input',
-            'data-cy': 'wizard-name-input',
-          }}
-          className={classes.spaceBelow}
-        />
+          <TextField
+            name="description"
+            fullWidth
+            value={wizardDescription}
+            id="wizard-description-input"
+            onChange={(event) => setWizardDescription(event.target.value)}
+            variant="outlined"
+            type="string"
+            required
+            inputProps={{
+              'aria-label': 'wizard-description-input',
+              'data-cy': 'wizard-description-input',
+            }}
+          />
 
-        <Typography variant="h4" className={classes.inputName} display="inline">
-          Description
-        </Typography>
-        <Typography variant="overline" color="error">
-          {' * '}
-        </Typography>
+          <Typography variant="h4" className={classes.inputName} display="inline">
+            Field 1 Name
+          </Typography>
+          <Typography variant="overline" color="error">
+            {' * '}
+          </Typography>
 
-        <TextField
-          name="description"
-          fullWidth
-          value={wizardDescription}
-          id="wizard-description-input"
-          onChange={(event) => setWizardDescription(event.target.value)}
-          variant="outlined"
-          type="string"
-          required
-          inputProps={{
-            'aria-label': 'wizard-description-input',
-            'data-cy': 'wizard-description-input',
-          }}
-        />
+          <TextField
+            name="field1Name"
+            fullWidth
+            value={wizardField1Name}
+            id="wizard-field1-name-input"
+            onChange={(event) => setWizardField1Name(event.target.value)}
+            variant="outlined"
+            type="string"
+            required
+            inputProps={{
+              'aria-label': 'wizard-field1-name-input',
+              'data-cy': 'wizard-field1-name-input',
+            }}
+          />
 
-        <Typography variant="h4" className={classes.inputName} display="inline">
-          Field 1 Name
-        </Typography>
-        <Typography variant="overline" color="error">
-          {' * '}
-        </Typography>
+          <Typography variant="h4" className={classes.inputName} display="inline">
+            Field 2 Name
+          </Typography>
+          <Typography variant="overline" color="error">
+            {' * '}
+          </Typography>
 
-        <TextField
-          name="field1Name"
-          fullWidth
-          value={wizardField1Name}
-          id="wizard-field1-name-input"
-          onChange={(event) => setWizardField1Name(event.target.value)}
-          variant="outlined"
-          type="string"
-          required
-          inputProps={{
-            'aria-label': 'wizard-field1-name-input',
-            'data-cy': 'wizard-field1-name-input',
-          }}
-        />
+          <TextField
+            name="field1Name"
+            fullWidth
+            value={wizardField2Name}
+            id="wizard-field2-name-input"
+            onChange={(event) => setWizardField2Name(event.target.value)}
+            variant="outlined"
+            type="string"
+            required
+            inputProps={{
+              'aria-label': 'wizard-field2-name-input',
+              'data-cy': 'wizard-field2-name-input',
+            }}
+          />
 
-        <Typography variant="h4" className={classes.inputName} display="inline">
-          Field 2 Name
-        </Typography>
-        <Typography variant="overline" color="error">
-          {' * '}
-        </Typography>
+          <Typography variant="h4" className={classes.inputName} display="inline">
+            Field 2 Capacity
+          </Typography>
+          <Typography variant="overline" color="error">
+            {' * '}
+          </Typography>
 
-        <TextField
-          name="field1Name"
-          fullWidth
-          value={wizardField2Name}
-          id="wizard-field2-name-input"
-          onChange={(event) => setWizardField2Name(event.target.value)}
-          variant="outlined"
-          type="string"
-          required
-          inputProps={{
-            'aria-label': 'wizard-field2-name-input',
-            'data-cy': 'wizard-field2-name-input',
-          }}
-        />
+          <TextField
+            name="field2Capacity"
+            fullWidth
+            value={wizardField2Capacity}
+            id="wizard-field2-capacity-input"
+            onChange={(event) => setWizardField2Capacity(event.target.value)}
+            variant="outlined"
+            type="number"
+            required
+            inputProps={{
+              'aria-label': 'wizard-field2-capacity-input',
+              'data-cy': 'wizard-field2-capacity-input',
+            }}
+          />
 
-        <Typography variant="h4" className={classes.inputName} display="inline">
-          Field 2 Capacity
-        </Typography>
-        <Typography variant="overline" color="error">
-          {' * '}
-        </Typography>
+          <Typography variant="h4" className={classes.inputName} display="inline">
+            Field 3 Name
+          </Typography>
+          <Typography variant="overline" color="error">
+            {' * '}
+          </Typography>
 
-        <TextField
-          name="field2Capacity"
-          fullWidth
-          value={wizardField2Capacity}
-          id="wizard-field2-capacity-input"
-          onChange={(event) => setWizardField2Capacity(event.target.value)}
-          variant="outlined"
-          type="number"
-          required
-          inputProps={{
-            'aria-label': 'wizard-field2-capacity-input',
-            'data-cy': 'wizard-field2-capacity-input',
-          }}
-        />
+          <TextField
+            name="field3Name"
+            fullWidth
+            value={wizardField3Name}
+            id="wizard-field3-name-input"
+            onChange={(event) => setWizardField3Name(event.target.value)}
+            variant="outlined"
+            type="string"
+            required
+            inputProps={{
+              'aria-label': 'wizard-field3-name-input',
+              'data-cy': 'wizard-field3-name-input',
+            }}
+          />
 
-        <Typography variant="h4" className={classes.inputName} display="inline">
-          Field 3 Name
-        </Typography>
-        <Typography variant="overline" color="error">
-          {' * '}
-        </Typography>
+          <Typography variant="h4" className={classes.inputName} display="inline">
+            Field 3 Capacity
+          </Typography>
+          <Typography variant="overline" color="error">
+            {' * '}
+          </Typography>
 
-        <TextField
-          name="field3Name"
-          fullWidth
-          value={wizardField3Name}
-          id="wizard-field3-name-input"
-          onChange={(event) => setWizardField3Name(event.target.value)}
-          variant="outlined"
-          type="string"
-          required
-          inputProps={{
-            'aria-label': 'wizard-field3-name-input',
-            'data-cy': 'wizard-field3-name-input',
-          }}
-        />
+          <TextField
+            name="field3Capacity"
+            fullWidth
+            value={wizardField3Capacity}
+            id="wizard-field3-capacity-input"
+            onChange={(event) => setWizardField3Capacity(event.target.value)}
+            variant="outlined"
+            type="number"
+            required
+            inputProps={{
+              'aria-label': 'wizard-field3-capacity-input',
+              'data-cy': 'wizard-field3-capacity-input',
+            }}
+          />
 
-        <Typography variant="h4" className={classes.inputName} display="inline">
-          Field 3 Capacity
-        </Typography>
-        <Typography variant="overline" color="error">
-          {' * '}
-        </Typography>
+          <Divider style={{ marginTop: '0px' }} />
 
-        <TextField
-          name="field3Capacity"
-          fullWidth
-          value={wizardField3Capacity}
-          id="wizard-field3-capacity-input"
-          onChange={(event) => setWizardField3Capacity(event.target.value)}
-          variant="outlined"
-          type="number"
-          required
-          inputProps={{
-            'aria-label': 'wizard-field3-capacity-input',
-            'data-cy': 'wizard-field3-capacity-input',
-          }}
-        />
+          <StandardButton
+            name="save"
+            testName="save-wizard"
+            handleClick={handleSubmit}
+            text="Save"
+            type="submit"
+            disabled={disableSubmit}
+            dark
+          />
 
-        <Divider style={{ marginTop: '0px' }} />
-
-        <StandardButton
-          name="save"
-          testName="save-wizard"
-          handleClick={handleSubmit}
-          text="Save"
-          type="submit"
-          disabled={disableSubmit}
-          dark
-        />
-
-        <LinkButton
-          name="back"
-          testName="back"
-          text="All"
-          linkTo="/wizards"
-        />
-      </form>
-    </Container>
+          <LinkButton
+            name="back"
+            testName="back"
+            text="All"
+            linkTo="/wizards"
+          />
+        </form>
+      </Main>
+    </Page>
   );
 };
 

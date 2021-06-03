@@ -1,79 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-
 import { makeStyles } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
-
-import { DataGrid, GridToolbarContainer } from '@material-ui/data-grid';
-
-import jobsAPI from '../../helpers/api/jobs';
-
-const finishedColumns = [
-  {
-    headerName: 'Assigned To',
-    field: 'to_name',
-    flex: 1,
-  },
-  {
-    headerName: 'Assigned',
-    field: 'assigned_date',
-    valueFormatter: (params) => (params.getValue('assigned_date') ? params.getValue('assigned_date').substring(0, 16).replace('T', ' ') : '-'),
-    flex: 1,
-  },
-  {
-    headerName: 'Started',
-    field: 'created_at',
-    sortable: false,
-    valueFormatter: (params) => (params.value.substring(0, 16).replace('T', ' ')),
-    flex: 1,
-  },
-  {
-    headerName: 'Finished',
-    field: 'updated_at',
-    sortable: false,
-    valueFormatter: (params) => (params.value.substring(0, 16).replace('T', ' ')),
-    flex: 1,
-  },
-  {
-    field: 'name',
-    headerName: 'Protocol',
-    flex: 2,
-  },
-  {
-    headerName: 'Job',
-    field: 'job_id',
-    flex: 1,
-  },
-  {
-    headerName: 'Operations',
-    field: 'operations_count',
-    flex: 1,
-  },
-];
+import Typography from '@material-ui/core/Typography';
+import globalUseSyles from '../../globalUseStyles';
+import { useWindowDimensions } from '../../WindowDimensionsProvider';
+import Main from '../shared/layout/Main';
+import jobsAPI from '../../helpers/api/jobsAPI';
 
 const useStyles = makeStyles({
   root: {
-    minWidth: '1085px',
-    fontSize: '12px',
-
-    '& .MuiDataGrid-colCellTitle': {
-      fontWeight: 700,
-    },
-    '& .cellValue': {
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-    },
-    '& .MuiDataGrid-root': {
-      border: 'none',
-    },
+    height: 'calc(100% - 64px)',
+    width: '100%',
   },
 });
 
 // eslint-disable-next-line no-unused-vars
-const ShowFinished = ({ setList, setIsLoading, setAlertProps }) => {
+const ShowFinished = () => {
   const classes = useStyles();
+  const globalClasses = globalUseSyles();
+  const { tablet } = useWindowDimensions();
 
   const [jobs, setJobs] = useState([]);
   const [sevenDays, setSevenDays] = useState('0');
@@ -92,8 +38,8 @@ const ShowFinished = ({ setList, setIsLoading, setAlertProps }) => {
     init('0');
   }, []);
 
-  const CustomToolbar = () => (
-    <GridToolbarContainer>
+  const title = () => (
+    <div className={`${globalClasses.flexWrapper}`}>
       <TextField
         name="seven-days"
         id="seven-days-input"
@@ -106,34 +52,62 @@ const ShowFinished = ({ setList, setIsLoading, setAlertProps }) => {
           'data-cy': 'seven-days-input',
         }}
         select
+        size="small"
       >
         <MenuItem key="1" value="1">Last 7 Days</MenuItem>
         <MenuItem key="0" value="0">All</MenuItem>
       </TextField>
-    </GridToolbarContainer>
+
+      <div className={`${globalClasses.flex} ${globalClasses.flexTitle}`}>
+        <div className={`${globalClasses.flexCol1}`}>Assigned To</div>
+        <div className={`${globalClasses.flexCol1}`}>Assigned</div>
+        <div className={`${globalClasses.flexCol1}`}>Started</div>
+        <div className={`${globalClasses.flexCol1}`}>Finished</div>
+        <div className={`${globalClasses.flexCol2}`}>Protocol</div>
+        <div className={`${globalClasses.flexCol1}`}>Job</div>
+        <div className={`${globalClasses.flexCol1}`}>Operations</div>
+      </div>
+    </div>
   );
+
+  const rows = () => {
+    if (!jobs) {
+      return <div> No finished jobs</div>;
+    }
+
+    return (
+      jobs.map((job) => (
+        <div className={`${globalClasses.flex} ${globalClasses.flexRow}`} key={`job_${job.id}`}>
+          <div className={`${globalClasses.flexCol1}`}>
+            <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{job.to_name}</Typography>
+          </div>
+          <div className={`${globalClasses.flexCol1}`}>
+            <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{job.assigned_date ? job.assigned_date.substring(0, 16).replace('T', ' ') : '-'}</Typography>
+          </div>
+          <div className={`${globalClasses.flexCol2}`}>
+            <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{job.name}</Typography>
+          </div>
+          <div className={`${globalClasses.flexCol1}`}>
+            <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{job.job_id}</Typography>
+          </div>
+          <div className={`${globalClasses.flexCol1}`}>
+            <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{job.operations_count}</Typography>
+          </div>
+          <div className={`${globalClasses.flexCol1}`}>
+            <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{job.created_at ? job.created_at.substring(0, 16).replace('T', ' ') : '-'}</Typography>
+          </div>
+        </div>
+      ))
+    );
+  };
 
   return (
-    <DataGrid
-      columns={finishedColumns}
-      rows={jobs}
-      className={classes.root}
-      disableColumnMenu
-      disableColumnSelector
-      disableSelectionOnClick
-      autoHeight
-      hideFooter
-      components={{
-        Toolbar: CustomToolbar,
-      }}
-    />
+    <Main title={title()}>
+      <div role="grid" aria-label="finished-jobs" className={`${globalClasses.flexWrapper} ${classes.root}`} data-cy="finished-jobs">
+        {rows()}
+      </div>
+    </Main>
   );
-};
-
-ShowFinished.propTypes = {
-  setList: PropTypes.func,
-  setIsLoading: PropTypes.func.isRequired,
-  setAlertProps: PropTypes.func,
 };
 
 export default ShowFinished;
