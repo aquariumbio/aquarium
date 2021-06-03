@@ -79,6 +79,7 @@ const JobsSideBar = ({
       {inactive.map((key, count) => (
         <ListItem
           button
+          role="tab"
           className={classes.inactive}
           key={key}
           onClick={(event) => handleJobStateClick(event)}

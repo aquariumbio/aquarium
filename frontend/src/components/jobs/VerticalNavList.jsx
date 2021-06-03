@@ -39,6 +39,7 @@ const VerticalNavList = ({
         {list !== undefined && list.map((li) => (
           <ListItem
             button
+            role="tab"
             onClick={(event) => handleListItemClick(event, li.name)}
             selected={value.name === li.name}
             key={li.name}
