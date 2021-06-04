@@ -15,15 +15,9 @@ import Main from '../shared/layout/Main';
 import ShowJobOperations from './ShowJobOperations';
 
 const useStyles = makeStyles((theme) => ({
-  title: {
-    padding: theme.spacing(2),
-    borderBottom: '1px solid #DDD',
-    fontWeight: 'bold',
-
-    '& p': {
-      fontWeight: 'bold',
-      lineHeight: 1.75,
-    },
+  root: {
+    height: 'calc(100% - 64px)',
+    width: '100%',
   },
   accordion: {
     backgroundColor: theme.palette.action.selected,
@@ -50,12 +44,11 @@ const ShowUnassigned = (props) => {
   const init = async () => {
     const response = await jobsAPI.getUnassigned();
     if (!response) return;
-    const waitingJobs = response.jobs.filter((job) => job.pc === -1);
     const expandState = {};
     // eslint-disable-next-line no-return-assign
-    waitingJobs.forEach((job) => expandState[job.job_id] = { open: false });
+    response.jobs.forEach((job) => expandState[job.job_id] = { open: false });
     setExpand(expandState);
-    setJobs(waitingJobs);
+    setJobs(response.jobs);
   };
 
   useEffect(() => {
@@ -93,7 +86,7 @@ const ShowUnassigned = (props) => {
 
   const title = () => (
     <div className={`${globalClasses.flexWrapper}`}>
-      <div className={`${globalClasses.flex} ${classes.title}`}>
+      <div className={`${globalClasses.flex} ${globalClasses.flexTitle}`}>
         <div className={`${globalClasses.flexCol1}`} />
         <div className={`${globalClasses.flexCol2}`}><Typography variant="body2">Protocol</Typography></div>
         <div className={`${globalClasses.flexCol1}`}><Typography variant="body2">Job</Typography></div>
@@ -163,7 +156,7 @@ const ShowUnassigned = (props) => {
 
   return (
     <Main title={title()}>
-      <div role="grid" aria-label="unassigned-jobs" data-cy="unassigned-jobs">
+      <div className={`${globalClasses.flexWrapper} ${classes.root}`} role="grid" aria-label="unassigned-jobs" data-cy="unassigned-jobs">
         {rows()}
       </div>
     </Main>
