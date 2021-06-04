@@ -11,9 +11,10 @@ describe('ShowUnassigned component', () => {
     width: 1920,
     tablet: window.innerWidth <= tabletWidth,
   };
+  const mockCancel = jest.fn();
   const showUnassigned = () => render(
     <WindowDimensionsProvider value={mockWindowDimensions}>
-      <ShowUnassigned />
+      <ShowUnassigned cancelJob={mockCancel} />
     </WindowDimensionsProvider>,
   );
 
