@@ -19,11 +19,11 @@ const NavBar = (props) => {
   return (
     <Paper elevation={0} className={`${classes.root}`}>
       <Grid container spacing={1}>
-        <Grid item lg={1}>
+        <Grid item style={{ width: '200px' }}>
           <Paper elevation={0} />
         </Grid>
 
-        <Grid item xs={9} lg={10}>
+        <Grid item xs>
           <Paper elevation={0}>{children}</Paper>
         </Grid>
       </Grid>
