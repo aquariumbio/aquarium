@@ -201,6 +201,8 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
   const [searchWords, setSearchWords] = useState(' ');
   const [sampleTypes, setSampleTypes] = useState([]);
   const [sampleTypeId, setSampleTypeId] = useState(0);
+  const [sampleTypeIdAdd, setSampleTypeIdAdd] = useState(0);
+  const [containerIdAdd, setContainerIdAdd] = useState(0);
   const [createdBys, setCreatedBys] = useState([]);
   const [createdById, setCreatedById] = useState(0);
   const [sampleId, setSampleId] = useState(0);
@@ -268,8 +270,14 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
     init();
   }, []);
 
-  const add = async () => {
-    alert('add')
+  const handleAddContainer = async (id) => {
+    setContainerIdAdd(id)
+    alert(`add container ${id}`)
+  }
+
+  const handleAddSample = async (id) => {
+    setSampleTypeIdAdd(id)
+    alert(`add sample ${id}`)
   }
 
   const handleClick = async (id) => {
@@ -349,15 +357,37 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
             </Typography>
           </div>
 
-          <Typography>
-            <StandardButton
-              name="Add"
-              testName="add"
-              text="Add"
-              type="button"
-              handleClick = {add}
-            />
-          </Typography>
+          <div className={classes.subheader}>
+            <TextField
+              name="add_sample"
+              fullWidth
+              id="add_sample"
+              value={sampleTypeIdAdd}
+              onChange={(event) => handleAddSample(event.target.value)}
+              variant="outlined"
+              type="string"
+              inputProps={{
+                'aria-label': 'add_sample',
+                'data-cy': 'add_sample',
+              }}
+              select
+            >
+              <MenuItem key="0" value="0">Add Sample</MenuItem>
+              {sampleTypes.map((sampleType) => (
+                <MenuItem key={sampleType.id} value={sampleType.id}>{sampleType.name}</MenuItem>
+              ))}
+            </TextField>
+
+            <Typography>
+              <StandardButton
+                name="add_container"
+                testName="add_container"
+                text="Add Container"
+                type="button"
+                handleClick = {(event) => handleAddContainer('testing')}
+              />
+            </Typography>
+          </div>
         </div>
 
         <Divider />
@@ -491,18 +521,3 @@ SamplesPage.propTypes = {
 };
 
 export default SamplesPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
