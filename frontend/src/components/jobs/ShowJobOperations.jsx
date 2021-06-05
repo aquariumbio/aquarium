@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   array,
+  func,
 } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core';
@@ -39,31 +40,48 @@ const useStyles = makeStyles((theme) => ({
 
 const ShowJobOperations = ({
   operations,
+  cancelJob,
 }) => {
   const classes = useStyles();
   const globalClasses = globalUseSyles();
-  const { tablet } = useWindowDimensions();
+  const tablet = useWindowDimensions();
 
-  const handleRemove = (opId) => (event) => {
-    alert('TO DO: Remove operation');
+  const handleRemove = (opId) => {
+    cancelJob(opId);
   };
 
-  if (!operations) {
+  if (!operations || operations.length === 0) {
     return <div> No operations</div>;
   }
 
   const title = (
-    <div className={`${classes.border} ${globalClasses.flex} ${classes.title}`} key="title">
+    <div
+      className={`${classes.border} ${globalClasses.flex} ${classes.title}`}
+      key="title"
+      role="row"
+    >
       <div className={`${globalClasses.flexCol1}`} />
-      <div className={`${globalClasses.flexCol1}`}><Typography variant="body2">Plan #</Typography></div>
-      <div className={`${globalClasses.flexCol4}`}><Typography variant="body2">Input/Output</Typography></div>
+      <div role="columnheader" className={`${globalClasses.flexCol1}`}>
+        <Typography variant="body2">Plan #</Typography>
+      </div>
+      <div role="columnheader" className={`${globalClasses.flexCol4}`}>
+        <Typography variant="body2">Input/Output</Typography>
+      </div>
       {tablet ? (
-        <div className={`${globalClasses.flexCol2}`}><Typography variant="body2">Details</Typography></div>
+        <div role="columnheader" className={`${globalClasses.flexCol2}`}>
+          <Typography variant="body2">Details</Typography>
+        </div>
       ) : (
         <>
-          <div className={`${globalClasses.flexCol2}`}><Typography variant="body2">Last Updated</Typography></div>
-          <div className={`${globalClasses.flexCol2}`}><Typography variant="body2">Client</Typography></div>
-          <div className={`${globalClasses.flexCol1}`}><Typography variant="body2">Op ID</Typography></div>
+          <div role="columnheader" className={`${globalClasses.flexCol2}`}>
+            <Typography variant="body2">Last Updated</Typography>
+          </div>
+          <div role="columnheader" className={`${globalClasses.flexCol2}`}>
+            <Typography variant="body2">Client</Typography>
+          </div>
+          <div role="columnheader" className={`${globalClasses.flexCol1}`}>
+            <Typography variant="body2">Op ID</Typography>
+          </div>
         </>
       )}
     </div>
@@ -131,33 +149,33 @@ const ShowJobOperations = ({
 
   const rows = (
     operations.map((operation) => (
-      <div className={`${globalClasses.flex} ${globalClasses.flexRow}`} key={`op_${operation.id}`}>
-        <div className={`${globalClasses.flexCol1}`}>
-          <IconButton aria-label="remove operation" onClick={() => { handleRemove(operation.id); }}>
+      <div role="row" className={`${globalClasses.flex} ${globalClasses.flexRow}`} key={`op_${operation.id}`}>
+        <div role="cell" className={`${globalClasses.flexCol1}`}>
+          <IconButton aria-label={`remove operation ${operation.id}`} onClick={() => { handleRemove(operation.id); }}>
             <RemoveCircleOutlineIcon htmlColor="#FF0000" />
           </IconButton>
         </div>
-        <div className={`${globalClasses.flexCol1}`}>
+        <div role="cell" className={`${globalClasses.flexCol1}`}>
           <Typography variant="body2" noWrap>{operation.plan_id}</Typography>
         </div>
-        <div className={`${globalClasses.flexCol4}`}>
+        <div role="cell" className={`${globalClasses.flexCol4}`}>
           {displayInOutData(operation)}
         </div>
         {tablet ? (
-          <div className={`${globalClasses.flexCol2}`}>
-            <Typography variant="body2" noWrap>Updated: {operation.updated_at.substring(0, 16).replace('T', ' ')}</Typography>
+          <div role="cell" className={`${globalClasses.flexCol2}`}>
+            <Typography variant="body2" noWrap>Last Updated: {operation.updated_at.substring(0, 16).replace('T', ' ')}</Typography>
             <Typography variant="body2" noWrap>Researcher: {operation.name}</Typography>
             <Typography variant="body2" noWrap>Op Id: {operation.id}</Typography>
           </div>
         ) : (
           <>
-            <div className={`${globalClasses.flexCol2}`}>
+            <div role="cell" className={`${globalClasses.flexCol2}`}>
               <Typography variant="body2" noWrap>{operation.updated_at.substring(0, 16).replace('T', ' ')}</Typography>
             </div>
-            <div className={`${globalClasses.flexCol2}`}>
+            <div role="cell" className={`${globalClasses.flexCol2}`}>
               <Typography variant="body2" noWrap>{operation.name}</Typography>
             </div>
-            <div className={`${globalClasses.flexCol1}`}>
+            <div role="cell" className={`${globalClasses.flexCol1}`}>
               <Typography variant="body2" noWrap>{operation.id}</Typography>
             </div>
           </>
@@ -167,7 +185,7 @@ const ShowJobOperations = ({
   );
 
   return (
-    <Grid item lg className={classes.root}>
+    <Grid item xs className={classes.root} role="table" aria-label="job operations">
       <Paper elevation={0} className={classes.paper}>
         {title}
         {rows}
@@ -179,6 +197,7 @@ const ShowJobOperations = ({
 ShowJobOperations.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   operations: array.isRequired,
+  cancelJob: func.isRequired,
 };
 
 export default ShowJobOperations;
