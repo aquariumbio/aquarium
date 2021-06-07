@@ -14,6 +14,9 @@ import Link from '@material-ui/core/Link';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
+import Button from '@material-ui/core/Button';
 
 import { StandardButton } from '../shared/Buttons';
 import sampleAPI from '../../helpers/api/sample';
@@ -256,6 +259,10 @@ const useStyles = makeStyles(() => ({
     marginBottom: '16px',
   },
 
+  mr16: {
+    marginRight: '16px',
+  },
+
   textBold: {
     fontWeight: 'bold',
   },
@@ -293,6 +300,9 @@ const SampleOverlay = ({ showSample, setShowSample }) => {
   // TODO: change this from true / false to show / hide
   const [showDeleted, setShowDeleted] = useState(false);
 
+  // add item
+  const [itemAdd, setItemAdd] = useState(0);
+
   const handleChange = async () => {
     setShowDeleted(!showDeleted);
   };
@@ -315,19 +325,21 @@ const SampleOverlay = ({ showSample, setShowSample }) => {
     setToggleIds({...toggleIds, id:newIds[id]})
   };
 
+  const editSample = () => {
+    alert(`edit ${showSample}`)
+  };
+
   useEffect(() => {
     const init = async () => {
-      alert(showSample)
       // wrap the API calls
       const response1 = await sampleAPI.getById(showSample);
-      const response2 = await objectsAPI.getBySampleType(showSample);
+      const response2 = await objectsAPI.getBySample(showSample);
       if (!response1) return;
 
       // success
       setSample(response1.sample);
       setInventory(response1.inventory);
       setObjectTypes(response2.object_types);
-      debugger;
     };
 
     init();
@@ -343,12 +355,18 @@ const SampleOverlay = ({ showSample, setShowSample }) => {
     setInventory(response.inventory);
   }
 
+  const handleAddItem = async (id) => {
+    setItemAdd(id)
+    alert(`add item ${id}`)
+  }
+
   return (
     <>
 
       <Typography>
         <p className={classes.right}>
-          <button className={classes.pointer} onClick={() => {setShowSample(false)}}>Close</button>
+          <Button className={classes.mr16} variant="outlined" onClick={() => {editSample()}}>Edit</Button>
+          <Button variant="outlined" onClick={() => {setShowSample(false)}}>Close</Button>
         </p>
       </Typography>
 
@@ -448,123 +466,134 @@ const SampleOverlay = ({ showSample, setShowSample }) => {
             xs={9}
           >
 
-              <div className={classes.flexWrapper}>
-                <div className={`${classes.flex} ${classes.flexTitle}`}>
-                  <Typography className={`${classes.flexColFixed40} ${classes.center}`}>
-                    <b>+</b>
+            <div className={classes.flexWrapper}>
+              <div className={`${classes.flex} ${classes.flexTitle}`}>
+                <Typography className={`${classes.flexColFixed40} ${classes.center}`}>
+                  <b>+</b>
+                </Typography>
+                <Typography className={classes.flexCol4}>
+                  <b>Object Type</b>
+                </Typography>
+                <Typography className={`${classes.flexCol1} ${classes.right}`}>
+                  <b>In Inventory</b>
+                </Typography>
+                <Typography className={`${classes.flexCol1} ${classes.right}`}>
+                  <b>Discarded</b>
+                </Typography>
+                <Typography className={`${classes.flexColFixed40} ${classes.center} ${classes.hidden}`}>
+                  &nbsp;
+                </Typography>
+                <Typography className={`${classes.flexCol1} ${classes.mtm7} ${classes.relative}`}>
+                  <Typography className={`${classes.absolute} ${classes.hide}`}>
+                    <FormGroup className={ Object.values(toggleIds).indexOf(true) == -1 ? classes.hide : classes.show }>
+                      <FormControlLabel
+                        control={<Switch checked={showDeleted} onChange={handleChange} />}
+                        label={<span style={{ fontSize: '13px' }}>{showDeleted ? 'Hide' : 'Show'}</span>}
+                      />
+                    </FormGroup>
                   </Typography>
-                  <Typography className={classes.flexCol4}>
-                    <b>Object Type</b>
-                  </Typography>
-                  <Typography className={`${classes.flexCol1} ${classes.right}`}>
-                    <b>In Inventory</b>
-                  </Typography>
-                  <Typography className={`${classes.flexCol1} ${classes.right}`}>
-                    <b>Discarded</b>
-                  </Typography>
-                  <Typography className={`${classes.flexColFixed40} ${classes.center} ${classes.hidden}`}>
-                    &nbsp;
-                  </Typography>
-                  <Typography className={`${classes.flexCol1} ${classes.mtm7} ${classes.relative}`}>
-                    <Typography className={`${classes.absolute} ${classes.hide}`}>
-                      <FormGroup className={ Object.values(toggleIds).indexOf(true) == -1 ? classes.hide : classes.show }>
-                        <FormControlLabel
-                          control={<Switch checked={showDeleted} onChange={handleChange} />}
-                          label={<span style={{ fontSize: '13px' }}>{showDeleted ? 'Hide' : 'Show'}</span>}
-                        />
-                      </FormGroup>
-                    </Typography>
-                  </Typography>
-                </div>
+                </Typography>
+              </div>
 
-                <div className={classes.flexBottom}>
+              <div className={classes.flexBottom}>
                 {inventory.map((group,index) => (
                   <>
-                  <div className={`${classes.flex} ${toggleIds[index] ? classes.flexRowSel : classes.flexRow}`}  key={`index_${index}`}>
-                    <Typography className={`${classes.flexColFixed40} ${classes.center} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index)}>
-                      &#x2195;
-                    </Typography>
-                    <Typography className={`${classes.flexCol4} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index)} cy={`group-${group.type_id}`}>
-                      {group.type}
-                    </Typography>
-                    <Typography className={`${classes.flexCol1} ${classes.right} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index)}>
-                      {group.count_inventory}
-                    </Typography>
-                    <Typography className={`${classes.flexCol1} ${classes.right} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index)}>
-                      {group.count_deleted}
-                    </Typography>
-                    <Typography className={`${classes.flexColFixed40} ${classes.center} ${classes.hidden}`}>
-                      &nbsp;
-                    </Typography>
-                    <Typography className={`${classes.flexCol1} ${classes.mtm8} ${classes.relative}`}>
-                      <Typography className={`${classes.absolute}`}>
-                        <FormGroup className={ toggleIds[index] ? classes.show : classes.hide }>
-                          <FormControlLabel
-                            control={<Switch onChange={handleToggle} name={`checked_${index}`} />}
-                            label={<span style={{ fontSize: '13px' }}>Discarded</span>}
-                            cy={`toggle-${group.type_id}`}
-                          />
-                        </FormGroup>
+                    <div className={`${classes.flex} ${toggleIds[index] ? classes.flexRowSel : classes.flexRow}`}  key={`index_${index}`}>
+                      <Typography className={`${classes.flexColFixed40} ${classes.center} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index)}>
+                        &#x2195;
                       </Typography>
-                    </Typography>
-                  </div>
-
-                  <div className={toggleIds[index] ? classes.show : classes.hide}>
-                    <div className={`${classes.flex} ${classes.flexTitleSub}`}>
-                      <div className={`${classes.flexColFixed40} ${classes.center}`}>
+                      <Typography className={`${classes.flexCol4} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index)} cy={`group-${group.type_id}`}>
+                        {group.type}
+                      </Typography>
+                      <Typography className={`${classes.flexCol1} ${classes.right} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index)}>
+                        {group.count_inventory}
+                      </Typography>
+                      <Typography className={`${classes.flexCol1} ${classes.right} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index)}>
+                        {group.count_deleted}
+                      </Typography>
+                      <Typography className={`${classes.flexColFixed40} ${classes.center} ${classes.hidden}`}>
                         &nbsp;
-                      </div>
-                      <div className={classes.flexCol1}>
-                        Item #
-                      </div>
-                      <div className={classes.flexCol1}>
-                        Location
-                      </div>
-                      <div className={`${classes.flexCol1} ${classes.right}`}>
-                        Added
-                      </div>
-                      <div className={classes.flexColAuto}>
-                        <span className={classes.hidden}>&#128465;</span>
-                      </div>
+                      </Typography>
+                      <Typography className={`${classes.flexCol1} ${classes.mtm8} ${classes.relative}`}>
+                        <Typography className={`${classes.absolute}`}>
+                          <FormGroup className={ toggleIds[index] ? classes.show : classes.hide }>
+                            <FormControlLabel
+                              control={<Switch onChange={handleToggle} name={`checked_${index}`} />}
+                              label={<span style={{ fontSize: '13px' }}>Discarded</span>}
+                              cy={`toggle-${group.type_id}`}
+                            />
+                          </FormGroup>
+                        </Typography>
+                      </Typography>
                     </div>
 
-                    {group.data.map((item) => (
-                      <div className = {item.location == 'deleted' ? ( state[`checked_${index}`] ? classes.show : classes.hide ) : ''}>
-                        <div className={`${classes.flex} ${classes.flexRowSub}`}>
-                          <div className={`${classes.flexColFixed40} ${classes.center}`}>
-                            &nbsp;
-                          </div>
-                          <div className={classes.flexCol1} cy={`item-${item.item_id}`}>
-                            {item.item_id}
-                          </div>
-                          <div className={classes.flexCol1}>
-                            {item.location}
-                          </div>
-                          <div className={`${classes.flexCol1} ${classes.right}`}>
-                            {item.date.substr(0,10)}
-                          </div>
-                          <div className={classes.flexColAuto}>
-                            <span className={item.location == 'deleted' ? classes.hidden : classes.visible}>&#128465;</span>
-                          </div>
+                    <div className={toggleIds[index] ? classes.show : classes.hide}>
+                      <div className={`${classes.flex} ${classes.flexTitleSub}`}>
+                        <div className={`${classes.flexColFixed40} ${classes.center}`}>
+                          &nbsp;
+                        </div>
+                        <div className={classes.flexCol1}>
+                          Item #
+                        </div>
+                        <div className={classes.flexCol1}>
+                          Location
+                        </div>
+                        <div className={`${classes.flexCol1} ${classes.right}`}>
+                          Added
+                        </div>
+                        <div className={classes.flexColAuto}>
+                          <span className={classes.hidden}>&#128465;</span>
                         </div>
                       </div>
-                    ))}
-                  </div>
+
+                      {group.data.map((item) => (
+                        <div className = {item.location == 'deleted' ? ( state[`checked_${index}`] ? classes.show : classes.hide ) : ''}>
+                          <div className={`${classes.flex} ${classes.flexRowSub}`}>
+                            <div className={`${classes.flexColFixed40} ${classes.center}`}>
+                              &nbsp;
+                            </div>
+                            <div className={classes.flexCol1} cy={`item-${item.item_id}`}>
+                              {item.item_id}
+                            </div>
+                            <div className={classes.flexCol1}>
+                              {item.location}
+                            </div>
+                            <div className={`${classes.flexCol1} ${classes.right}`}>
+                              {item.date.substr(0,10)}
+                            </div>
+                            <div className={classes.flexColAuto}>
+                              <span className={item.location == 'deleted' ? classes.hidden : classes.visible}>&#128465;</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </>
                 ))}
-                </div>
-
-            </div>
-              <div>
-              New Item
               </div>
-              <div>
-                  {objectTypes.map((objectType) => (
-                    <div>
-                      {objectType.id} {objectType.name}
-                    </div>
-                  ))}
-                </div>
+              <br />
+
+              <TextField
+                name="add_item"
+                fullWidth
+                id="add_item"
+                value={itemAdd}
+                onChange={(event) => handleAddItem(event.target.value)}
+                variant="outlined"
+                type="string"
+                inputProps={{
+                  'aria-label': 'add_item',
+                  'data-cy': 'add_item',
+                }}
+                select
+              >
+                <MenuItem key="0" value="0">Add Item</MenuItem>
+                {objectTypes.map((objectType) => (
+                  <MenuItem key={objectType.id} value={objectType.id}>{objectType.name}</MenuItem>
+                ))}
+              </TextField>
+            </div>
+
           </Grid>
         </Grid>
       </div>

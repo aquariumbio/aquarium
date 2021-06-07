@@ -55,12 +55,14 @@ class ObjectType < ActiveRecord::Base
   # Return objects for a specific sample type id.
   #
   # @return the objects
-  def self.find_by_sample_type_id(id)
-    wheres = sanitize_sql(['sample_type_id = ?', id])
+  def self.find_by_sample_id(id)
+    wheres = sanitize_sql(['id = ?', id])
     sql = "
       select ot.*
       from object_types ot
-      where #{wheres}
+      where sample_type_id in (
+        select sample_type_id from samples where #{wheres}
+      )
       order by name
     "
     ObjectType.find_by_sql sql

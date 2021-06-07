@@ -271,11 +271,6 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
     init();
   }, []);
 
-  const handleAddcollection = async (id) => {
-    setcollectionIdAdd(id)
-    alert(`add collection ${id}`)
-  }
-
   const handleAddSample = async (id) => {
     setSampleAdd(id)
     alert(`add sample ${id}`)

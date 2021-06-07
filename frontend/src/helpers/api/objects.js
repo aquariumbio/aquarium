@@ -12,8 +12,8 @@ objectsAPI.getByHandler = (handler) => axiosInstance
   .then((response) => response.data)
   .catch((error) => error);
 
-objectsAPI.getBySampleType = (id) => axiosInstance
-  .get(`/object_types/sample_type/${id}`)
+objectsAPI.getBySample = (id) => axiosInstance
+  .get(`/object_types/sample/${id}`)
   .then((response) => response.data)
   .catch((error) => error);
 

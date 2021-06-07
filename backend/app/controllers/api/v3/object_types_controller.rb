@@ -206,15 +206,17 @@ module Api
       # @!method show_handler(token, handler)
       # @param token [String] a token
       # @param handler [String] the name of the handler
-      def show_by_sample_type
+      def show_by_sample
         # Check for admin permissions
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         # Get object_types
-        sample_type_id = Input.int(params[:sample_type_id])
-        object_types = ObjectType.find_by_sample_type_id(sample_type_id)
-
+        sample_id = Input.int(params[:sample_id])
+        object_types = ObjectType.find_by_sample_id(sample_id)
+puts ">>> object_types"
+puts object_types
+puts ">>>"
         render json: { object_types: object_types }.to_json, status: :ok
       end
 
