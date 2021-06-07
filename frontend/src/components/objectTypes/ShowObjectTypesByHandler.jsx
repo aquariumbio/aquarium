@@ -105,29 +105,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// change the state of toggleIds[objectType.id] and trigger React to update the screen
-// (see NOTE below)
-const handleToggles = (id, toggleId, setToggleIds, triggerUpdate) => {
-  const newIds = toggleId;
-  newIds[id] = !newIds[id];
-  setToggleIds(newIds);
-  triggerUpdate();
-};
-
 // eslint-disable-next-line no-unused-vars
 const ShowObjectTypesByHandler = ({ objectTypes, setIsLoading, setAlertProps }) => {
-  // NOTE: regarding toggleIds and triggerUpdate
-  // eslint-disable-next-line max-len
-  // toggleIds used to track show/hide state for object type details, takes the form { objectType.id => true/false }
-  // triggerUpdate used to trigger a screen update.
-  // - React does not change the screen when changing the toggleIds
-  //   eslint-disable-next-line max-len
-  // - calling triggerUpdate() triggers a screen update (which also includes any state changes to toggleIds)
-  const [toggleIds, setToggleIds] = useState({});
-  // eslint-disable-next-line arrow-parens
-  const [, triggerUpdate] = useReducer(x => !x, false);
-
   const classes = useStyles();
+
+  // show/hide toggles
+  const [toggleIds, setToggleIds] = useState({});
+
+  // change the state of toggleIds[id]
+  const handleToggles = (id) => {
+    const newIds = toggleIds;
+    newIds[id] = !newIds[id];
+
+    setToggleIds({...toggleIds, id:newIds[id]})
+  };
 
   const handleDelete = async (id) => {
     const response = await objectsAPI.delete(id);
@@ -158,7 +149,7 @@ const ShowObjectTypesByHandler = ({ objectTypes, setIsLoading, setAlertProps }) 
           <div className={`${classes.flex} ${classes.flexRow}`} key={`object_${objectType.id}`}>
             <Typography className={classes.flexCol1}>
               {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
-              <Link data-cy={`show_${objectType.id}`} className={classes.pointer} onClick={() => handleToggles(objectType.id, toggleIds, setToggleIds, triggerUpdate)}>{objectType.name}</Link>
+              <Link data-cy={`show_${objectType.id}`} className={classes.pointer} onClick={() => handleToggles(objectType.id)}>{objectType.name}</Link>
             </Typography>
             <Typography className={classes.flexCol3}>
               {objectType.description}

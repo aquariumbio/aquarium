@@ -314,7 +314,6 @@ const SampleOverlay = ({ showSample, setShowSample }) => {
     setToggleIds({...toggleIds, id:newIds[id]})
   };
 
-
   useEffect(() => {
     const init = async () => {
       // wrap the API call
