@@ -146,7 +146,7 @@ module Api
       # @!method show_handler(token, handler)
       # @param token [String] a token
       # @param handler [String] the name of the handler
-      def show_handler
+      def show_by_handler
         # Check for admin permissions
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
@@ -160,6 +160,62 @@ module Api
             object_types: object_types
           }
         }.to_json, status: :ok
+      end
+
+      # Returns all object_types for a specific sample_type_id.
+      #
+      # <b>API Call:</b>
+      #   GET: /api/v3/object_types/sample_type_id/<id>
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     <handler>: {
+      #       object_types: [
+      #         {
+      #           id: <id>,
+      #           name: <name>,
+      #           description: <description>,
+      #           min: <min>,
+      #           max: <max>,
+      #           handler: <handler>,
+      #           safety: <safety>,
+      #           cleanup: <cleanup>,
+      #           data: <data>,
+      #           vendor: <vendor>,
+      #           created_at: <datetime>,
+      #           updated_at: <datetime>,
+      #           unit: <unit>,,
+      #           cost: <cost>,
+      #           release_method: <release_method>,
+      #           release_description: <release_description>,
+      #           sample_type_id: <sample_type_id>,
+      #           image: <image>,
+      #           prefix: <prefix>,
+      #           rows: <rows>,
+      #           columns: <columns>
+      #         },
+      #         ...
+      #       ]
+      #     }
+      #   }
+      #
+      # @!method show_handler(token, handler)
+      # @param token [String] a token
+      # @param handler [String] the name of the handler
+      def show_by_sample_type
+        # Check for admin permissions
+        status, response = check_token_for_permission(Permission.admin_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # Get object_types
+        sample_type_id = Input.int(params[:sample_type_id])
+        object_types = ObjectType.find_by_sample_type_id(sample_type_id)
+
+        render json: { object_types: object_types }.to_json, status: :ok
       end
 
       # Returns a specific object type

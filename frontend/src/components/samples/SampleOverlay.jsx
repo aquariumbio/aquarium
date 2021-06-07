@@ -17,6 +17,7 @@ import Switch from '@material-ui/core/Switch';
 
 import { StandardButton } from '../shared/Buttons';
 import sampleAPI from '../../helpers/api/sample';
+import objectsAPI from '../../helpers/api/objects';
 
 // Route: /object_types
 // Linked in LeftHamburgeMenu
@@ -288,7 +289,7 @@ const SampleOverlay = ({ showSample, setShowSample }) => {
 
   const [sample, setSample] = useState();
   const [inventory, setInventory] = useState([]);
-  const [items, setItems] = useState([1,2,3]);
+  // const [items, setItems] = useState([1,2,3]);
   // TODO: change this from true / false to show / hide
   const [showDeleted, setShowDeleted] = useState(false);
 
@@ -316,13 +317,17 @@ const SampleOverlay = ({ showSample, setShowSample }) => {
 
   useEffect(() => {
     const init = async () => {
-      // wrap the API call
-      const response = await sampleAPI.getById(showSample);
-      if (!response) return;
+      alert(showSample)
+      // wrap the API calls
+      const response1 = await sampleAPI.getById(showSample);
+      const response2 = await objectsAPI.getBySampleType(showSample);
+      if (!response1) return;
 
       // success
-      setSample(response.sample);
-      setInventory(response.inventory);
+      setSample(response1.sample);
+      setInventory(response1.inventory);
+      setObjectTypes(response2.object_types);
+      debugger;
     };
 
     init();

@@ -81,12 +81,13 @@ Rails.application.routes.draw do
   post 'api/v3/sample_types/:id/delete',           to: 'api/v3/sample_types#delete'
 
   # Object Types
-  get  'api/v3/object_types',                      to: 'api/v3/object_types#index'
-  post 'api/v3/object_types/create',               to: 'api/v3/object_types#create'
-  get  'api/v3/object_types/handler/:handler',     to: 'api/v3/object_types#show_handler'
-  get  'api/v3/object_types/:id',                  to: 'api/v3/object_types#show'
-  post 'api/v3/object_types/:id/update',           to: 'api/v3/object_types#update'
-  post 'api/v3/object_types/:id/delete',           to: 'api/v3/object_types#delete'
+  get  'api/v3/object_types',                                  to: 'api/v3/object_types#index'
+  post 'api/v3/object_types/create',                           to: 'api/v3/object_types#create'
+  get  'api/v3/object_types/handler/:handler',                 to: 'api/v3/object_types#show_by_handler'
+  get  'api/v3/object_types/sample_type/:sample_type_id',      to: 'api/v3/object_types#show_by_sample_type'
+  get  'api/v3/object_types/:id',                              to: 'api/v3/object_types#show'
+  post 'api/v3/object_types/:id/update',                       to: 'api/v3/object_types#update'
+  post 'api/v3/object_types/:id/delete',                       to: 'api/v3/object_types#delete'
 
   # Location Wizards
   get  'api/v3/wizards',                           to: 'api/v3/wizards#index'

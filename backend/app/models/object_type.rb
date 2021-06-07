@@ -36,7 +36,7 @@ class ObjectType < ActiveRecord::Base
     ObjectType.find_by_sql sql
   end
 
-  # Return objects for a specific object types.
+  # Return objects for a specific object type.
   #
   # @return the objects
   def self.find_by_handler(handler)
@@ -46,6 +46,20 @@ class ObjectType < ActiveRecord::Base
       from object_types ot
       left join wizards w on w.name = ot.prefix
       left join sample_types st on st.id = ot.sample_type_id
+      where #{wheres}
+      order by name
+    "
+    ObjectType.find_by_sql sql
+  end
+
+  # Return objects for a specific sample type id.
+  #
+  # @return the objects
+  def self.find_by_sample_type_id(id)
+    wheres = sanitize_sql(['sample_type_id = ?', id])
+    sql = "
+      select ot.*
+      from object_types ot
       where #{wheres}
       order by name
     "
