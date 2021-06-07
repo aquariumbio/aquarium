@@ -12,6 +12,7 @@ import Link from '@material-ui/core/Link';
 import { StandardButton } from '../shared/Buttons';
 import sampleAPI from '../../helpers/api/sample';
 import usersAPI from '../../helpers/api/users';
+import objectsAPI from '../../helpers/api/objects';
 import SampleOverlay from './SampleOverlay';
 
 // Route: /object_types
@@ -199,15 +200,21 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
   const [search, setSearch] = useState('');
   // initialize searchWords as single space so it triggers the search on page load
   const [searchWords, setSearchWords] = useState(' ');
+  // sample types for search by sample type + add sample dropdowns
   const [sampleTypes, setSampleTypes] = useState([]);
+  // search by sample type id
   const [sampleTypeId, setSampleTypeId] = useState(0);
-  const [sampleTypeIdAdd, setSampleTypeIdAdd] = useState(0);
-  const [containerIdAdd, setContainerIdAdd] = useState(0);
-  const [createdBys, setCreatedBys] = useState([]);
+  // search by created by id
   const [createdById, setCreatedById] = useState(0);
-  const [sampleId, setSampleId] = useState(0);
 
-  const goSearch = async (sampletypeid, createdbyid, sampleid, pagenum) => {
+  // add sample
+  const [sampleAdd, setSampleAdd] = useState(0);
+  // collection types
+  const [collectionTypes, setCollectionTypes] = useState([]);
+  // add collection
+  const [collectionAdd, setCollectionAdd] = useState(0);
+
+  const goSearch = async (sampletypeid, createdbyid, pagenum) => {
     const words = search.replace(/ +/g,' ') //.trim()
 
     if (words != searchWords || sampletypeid != sampleTypeId || createdbyid != createdById || pagenum != page) {
@@ -215,7 +222,6 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
       setSearchWords(words);
       setSampleTypeId(sampletypeid);
       setCreatedById(createdbyid);
-      setSampleId(sampleid);
       setPage(pagenum);
 
       // wrap the API call with the spinner
@@ -250,34 +256,34 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
 
   useEffect(() => {
     const init = async () => {
-      // wrap the API call
-      const response = await sampleAPI.getTypes();
-      if (!response) return;
+      // wrap the API calls
+      const response1 = await sampleAPI.getTypes();
+      const response2 = await objectsAPI.getByHandler('collection')
+      if (!response1 || !response2) return;
 
       // success
-      setSampleTypes(response.sample_types);
-
-      // // wrap the API call
-      // const responses = await usersAPI.getUsers();
-      // if (!responses) return;
-      //
-      // // success
-      // setCreatedBys(responses.users);
       setUser(JSON.parse(localStorage.getItem('user')));
+      setSampleTypes(response1.sample_types);
+      setCollectionTypes(response2.collection.object_types);
     }
 
     goSearch(0, 0, 0);
     init();
   }, []);
 
-  const handleAddContainer = async (id) => {
-    setContainerIdAdd(id)
-    alert(`add container ${id}`)
+  const handleAddcollection = async (id) => {
+    setcollectionIdAdd(id)
+    alert(`add collection ${id}`)
   }
 
   const handleAddSample = async (id) => {
-    setSampleTypeIdAdd(id)
+    setSampleAdd(id)
     alert(`add sample ${id}`)
+  }
+
+  const handleAddCollection = async (id) => {
+    setCollectionAdd(id)
+    alert(`add collection ${id}`)
   }
 
   const handleClick = async (id) => {
@@ -285,11 +291,11 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
   }
 
   const handleSampleTypeId = async (id) => {
-    goSearch(id, createdById, sampleId)
+    goSearch(id, createdById)
   }
 
   const handleCreatedById = async (id) => {
-    goSearch(sampleTypeId, id, sampleId)
+    goSearch(sampleTypeId, id)
   }
 
   return (
@@ -312,7 +318,7 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
                   'aria-label': 'search',
                   'data-cy': 'search',
                 }}
-                onKeyUp = {(event) => goSearch(sampleTypeId, createdById, sampleId)}
+                onKeyUp = {(event) => goSearch(sampleTypeId, createdById)}
               />
             </Typography>
 
@@ -357,12 +363,12 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
             </Typography>
           </div>
 
-          <div className={classes.subheader}>
+          <div>
             <TextField
               name="add_sample"
               fullWidth
               id="add_sample"
-              value={sampleTypeIdAdd}
+              value={sampleAdd}
               onChange={(event) => handleAddSample(event.target.value)}
               variant="outlined"
               type="string"
@@ -377,16 +383,27 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
                 <MenuItem key={sampleType.id} value={sampleType.id}>{sampleType.name}</MenuItem>
               ))}
             </TextField>
+            <br /><br />
 
-            <Typography>
-              <StandardButton
-                name="add_container"
-                testName="add_container"
-                text="Add Container"
-                type="button"
-                handleClick = {(event) => handleAddContainer('testing')}
-              />
-            </Typography>
+            <TextField
+              name="add_collection"
+              fullWidth
+              id="add_collection"
+              value={collectionAdd}
+              onChange={(event) => handleAddCollection(event.target.value)}
+              variant="outlined"
+              type="string"
+              inputProps={{
+                'aria-label': 'add_collection',
+                'data-cy': 'add_collection',
+              }}
+              select
+            >
+              <MenuItem key="0" value="0">Add Collection</MenuItem>
+              {collectionTypes.map((collectionType) => (
+                <MenuItem key={collectionType.id} value={collectionType.id}>{collectionType.name}</MenuItem>
+              ))}
+            </TextField>
           </div>
         </div>
 

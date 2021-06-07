@@ -280,14 +280,6 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-// change the state of toggleIds[index] and trigger React to update the screen
-// (see NOTE below)
-const handleToggles = (id, toggleIds, setToggleIds, triggerUpdate) => {
-  const newIds = toggleIds;
-  newIds[id] = !newIds[id];
-  setToggleIds(newIds);
-  triggerUpdate();
-};
 
 // eslint-disable-next-line no-unused-vars
 const SampleOverlay = ({ showSample, setShowSample }) => {
@@ -304,23 +296,24 @@ const SampleOverlay = ({ showSample, setShowSample }) => {
     setShowDeleted(!showDeleted);
   };
 
-  const [state, setState] = React.useState({
-  });
+  const [state, setState] = useState({});
+  const [objectTypes, setObjectTypes] = useState([{id:1, name:'name1'},{id:2, name:'name2'}]);
 
   const handleToggle = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
 
-  // NOTE: regarding toggleIds and triggerUpdate
-  // eslint-disable-next-line max-len
-  // toggleIds used to track show/hide state for object type details, takes the form { index => true/false }
-  // triggerUpdate used to trigger a screen update.
-  // - React does not change the screen when changing the toggleIds
-  //   eslint-disable-next-line max-len
-  // - calling triggerUpdate() triggers a screen update (which also includes any state changes to toggleIds)
+  // show/hide toggles
   const [toggleIds, setToggleIds] = useState({});
-  // eslint-disable-next-line arrow-parens
-  const [, triggerUpdate] = useReducer(x => !x, false);
+
+  // change the state of toggleIds[id]
+  const handleToggles = (id) => {
+    const newIds = toggleIds;
+    newIds[id] = !newIds[id];
+
+    setToggleIds({...toggleIds, id:newIds[id]})
+  };
+
 
   useEffect(() => {
     const init = async () => {
@@ -484,16 +477,16 @@ const SampleOverlay = ({ showSample, setShowSample }) => {
                 {inventory.map((group,index) => (
                   <>
                   <div className={`${classes.flex} ${toggleIds[index] ? classes.flexRowSel : classes.flexRow}`}  key={`index_${index}`}>
-                    <Typography className={`${classes.flexColFixed40} ${classes.center} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index, toggleIds, setToggleIds, triggerUpdate)}>
+                    <Typography className={`${classes.flexColFixed40} ${classes.center} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index)}>
                       &#x2195;
                     </Typography>
-                    <Typography className={`${classes.flexCol4} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index, toggleIds, setToggleIds, triggerUpdate)} cy={`group-${group.type_id}`}>
+                    <Typography className={`${classes.flexCol4} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index)} cy={`group-${group.type_id}`}>
                       {group.type}
                     </Typography>
-                    <Typography className={`${classes.flexCol1} ${classes.right} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index, toggleIds, setToggleIds, triggerUpdate)}>
+                    <Typography className={`${classes.flexCol1} ${classes.right} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index)}>
                       {group.count_inventory}
                     </Typography>
-                    <Typography className={`${classes.flexCol1} ${classes.right} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index, toggleIds, setToggleIds, triggerUpdate)}>
+                    <Typography className={`${classes.flexCol1} ${classes.right} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index)}>
                       {group.count_deleted}
                     </Typography>
                     <Typography className={`${classes.flexColFixed40} ${classes.center} ${classes.hidden}`}>
@@ -558,6 +551,16 @@ const SampleOverlay = ({ showSample, setShowSample }) => {
                 </div>
 
             </div>
+              <div>
+              New Item
+              </div>
+              <div>
+                  {objectTypes.map((objectType) => (
+                    <div>
+                      {objectType.id} {objectType.name}
+                    </div>
+                  ))}
+                </div>
           </Grid>
         </Grid>
       </div>
