@@ -290,7 +290,7 @@ const useStyles = makeStyles(() => ({
 
 
 // eslint-disable-next-line no-unused-vars
-const SampleOverlay = ({ showSample, setShowSample }) => {
+const SampleOverlay = ({ sampleId, setSampleId }) => {
   const classes = useStyles();
   const history = useHistory();
 
@@ -326,14 +326,14 @@ const SampleOverlay = ({ showSample, setShowSample }) => {
   };
 
   const editSample = () => {
-    alert(`edit ${showSample}`)
+    alert(`edit ${sampleId}`)
   };
 
   useEffect(() => {
     const init = async () => {
       // wrap the API calls
-      const response1 = await sampleAPI.getById(showSample);
-      const response2 = await objectsAPI.getBySample(showSample);
+      const response1 = await sampleAPI.getById(sampleId);
+      const response2 = await objectsAPI.getBySample(sampleId);
       if (!response1) return;
 
       // success
@@ -366,7 +366,7 @@ const SampleOverlay = ({ showSample, setShowSample }) => {
       <Typography>
         <p className={classes.right}>
           <Button className={classes.mr16} variant="outlined" onClick={() => {editSample()}}>Edit</Button>
-          <Button variant="outlined" onClick={() => {setShowSample(false)}}>Close</Button>
+          <Button variant="outlined" onClick={() => {setSampleId(false)}}>Close</Button>
         </p>
       </Typography>
 
@@ -603,7 +603,7 @@ const SampleOverlay = ({ showSample, setShowSample }) => {
 };
 
 SampleOverlay.propTypes = {
-  showSample: PropTypes.isRequired,
+  sampleId: PropTypes.isRequired,
 };
 
 export default SampleOverlay;

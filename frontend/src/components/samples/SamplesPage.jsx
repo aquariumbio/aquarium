@@ -189,7 +189,7 @@ const useStyles = makeStyles(() => ({
 const SamplesPage = ({ setIsLoading, setAlertProps }) => {
   const classes = useStyles();
 
-  const [showSample,setShowSample] = useState(false);
+  const [sampleId,setSampleId] = useState(false);
 
   const [samples, setSamples] = useState([]);
   const [count, setCount] = useState();
@@ -282,7 +282,7 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
   }
 
   const handleClick = async (id) => {
-    setShowSample(id)
+    setSampleId(id)
   }
 
   const handleSampleTypeId = async (id) => {
@@ -296,7 +296,7 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
   return (
     <>
       <div className={classes.mt16}>
-        <div className={`${classes.header} ${showSample ? classes.hidden : '' }`}>
+        <div className={`${classes.header} ${sampleId ? classes.hidden : '' }`}>
           <div className={classes.subheader}>
             <Typography className={`${classes.searchBox} ${classes.mr24}`}>
               <TextField
@@ -358,171 +358,171 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
             </Typography>
           </div>
 
-          <div>
-            <TextField
-              name="add_sample"
-              fullWidth
-              id="add_sample"
-              value={sampleAdd}
-              onChange={(event) => handleAddSample(event.target.value)}
-              variant="outlined"
-              type="string"
-              inputProps={{
-                'aria-label': 'add_sample',
-                'data-cy': 'add_sample',
-              }}
-              select
-            >
-              <MenuItem key="0" value="0">Add Sample</MenuItem>
-              {sampleTypes.map((sampleType) => (
-                <MenuItem key={sampleType.id} value={sampleType.id}>{sampleType.name}</MenuItem>
-              ))}
-            </TextField>
-            <br /><br />
+          <div className={classes.subheader}>
+            <Typography className={classes.mr24}>
+              <TextField
+                name="add_sample"
+                fullWidth
+                id="add_sample"
+                value={sampleAdd}
+                onChange={(event) => handleAddSample(event.target.value)}
+                variant="outlined"
+                type="string"
+                inputProps={{
+                  'aria-label': 'add_sample',
+                  'data-cy': 'add_sample',
+                }}
+                select
+              >
+                <MenuItem key="0" value="0">Add Sample</MenuItem>
+                {sampleTypes.map((sampleType) => (
+                  <MenuItem key={sampleType.id} value={sampleType.id}>{sampleType.name}</MenuItem>
+                ))}
+              </TextField>
+            </Typography>
 
-            <TextField
-              name="add_collection"
-              fullWidth
-              id="add_collection"
-              value={collectionAdd}
-              onChange={(event) => handleAddCollection(event.target.value)}
-              variant="outlined"
-              type="string"
-              inputProps={{
-                'aria-label': 'add_collection',
-                'data-cy': 'add_collection',
-              }}
-              select
-            >
-              <MenuItem key="0" value="0">Add Collection</MenuItem>
-              {collectionTypes.map((collectionType) => (
-                <MenuItem key={collectionType.id} value={collectionType.id}>{collectionType.name}</MenuItem>
-              ))}
-            </TextField>
+            <Typography className={classes.mr24}>
+              <TextField
+                name="add_collection"
+                fullWidth
+                id="add_collection"
+                value={collectionAdd}
+                onChange={(event) => handleAddCollection(event.target.value)}
+                variant="outlined"
+                type="string"
+                inputProps={{
+                  'aria-label': 'add_collection',
+                  'data-cy': 'add_collection',
+                }}
+                select
+              >
+                <MenuItem key="0" value="0">Add Collection</MenuItem>
+                {collectionTypes.map((collectionType) => (
+                  <MenuItem key={collectionType.id} value={collectionType.id}>{collectionType.name}</MenuItem>
+                ))}
+              </TextField>
+            </Typography>
           </div>
         </div>
+      </div>
 
-        <Divider />
+      <Divider />
 
-    {showSample ? (
-      <SampleOverlay showSample={showSample} setShowSample={setShowSample}/>
-    ) : (
-      <>
-        <Typography>
-          <p>
-            <div className={classes.absolute}>
-              {count} Samples
-            </div>
+      {sampleId && <SampleOverlay sampleId={sampleId} setSampleId={setSampleId}/>}
+      {!sampleId && (
+        <>
+          <Typography>
+            <p>
+              <div className={classes.absolute}>
+                {count} Samples
+              </div>
 
-            <div className={classes.center}>
-              <span className={classes.mr16}>
-                <button className={`${classes.pointer} ${page == 1 ? classes.hidden : classes.visible}`} onClick={() => handlePage(1)}>First</button>
-              </span>
-              <span className={classes.mr16}>
-                <button className={`${classes.pointer} ${page == 1 ? classes.hidden : classes.visible}`} onClick={() => handlePage(page-1)}>&lt; Prev</button>
-              </span>
-              <span className={`${classes.width200} ${pages == 0 ? classes.hidden : classes.visible}`}>
-                Page {page} of {pages}
-              </span>
-              <span className={classes.ml16}>
-                <button className={`${classes.pointer} ${page >= pages ? classes.hidden : classes.visible}`} onClick={() => handlePage(page+1)}>Next ></button>
-              </span>
-              <span className={classes.ml16}>
-                <button className={`${classes.pointer} ${page >= pages ? classes.hidden : classes.visible}`} onClick={() => handlePage(pages)}>Last</button>
-              </span>
-            </div>
-          </p>
-        </Typography>
+              <div className={classes.center}>
+                <span className={classes.mr16}>
+                  <button className={`${classes.pointer} ${page == 1 ? classes.hidden : classes.visible}`} onClick={() => handlePage(1)}>First</button>
+                </span>
+                <span className={classes.mr16}>
+                  <button className={`${classes.pointer} ${page == 1 ? classes.hidden : classes.visible}`} onClick={() => handlePage(page-1)}>&lt; Prev</button>
+                </span>
+                <span className={`${classes.width200} ${pages == 0 ? classes.hidden : classes.visible}`}>
+                  Page {page} of {pages}
+                </span>
+                <span className={classes.ml16}>
+                  <button className={`${classes.pointer} ${page >= pages ? classes.hidden : classes.visible}`} onClick={() => handlePage(page+1)}>Next ></button>
+                </span>
+                <span className={classes.ml16}>
+                  <button className={`${classes.pointer} ${page >= pages ? classes.hidden : classes.visible}`} onClick={() => handlePage(pages)}>Last</button>
+                </span>
+              </div>
+            </p>
+          </Typography>
 
-        <div className={classes.flexCardWrapper}>
-          <div className={classes.flex}>
-            {samples.map((sample) => (
-              <div className={classes.flexCard25} cy={`sample-${sample.id}`}>
-                <div className={classes.cardScroll}>
-                  <img src='/beaker.png' className={classes.logoImage}/>
-                  <Link className={classes.logoPopout} onClick={() => handleClick(sample.id)}>&#x2197;</Link>
-                  <div className={classes.logoText}>
-                    <div className={classes.textTitle}>
-                      {sample.sample_type}
+          <div className={classes.flexCardWrapper}>
+            <div className={classes.flex}>
+              {samples.map((sample) => (
+                <div className={classes.flexCard25} cy={`sample-${sample.id}`}>
+                  <div className={classes.cardScroll}>
+                    <img src='/beaker.png' className={classes.logoImage}/>
+                    <Link className={classes.logoPopout} onClick={() => handleClick(sample.id)}>&#x2197;</Link>
+                    <div className={classes.logoText}>
+                      <div className={classes.textTitle}>
+                        {sample.sample_type}
+                      </div>
+                      <div className={classes.mb4}>
+                        <span className={classes.textBold}>ID #</span>
+                        {' '}
+                        <span className={classes.textInfo}>{sample.id}</span>
+                      </div>
+                      <div className={classes.mb4}>
+                        <span className={classes.textBold}>Added by</span>
+                        {' '}
+                        <span className={classes.textInfo}>{sample.user_name}</span>
+                      </div>
                     </div>
-                    <div className={classes.mb4}>
-                      <span className={classes.textBold}>ID #</span>
+
+                    <Divider />
+
+                    <div className={classes.flexCardLabel}>
+                      Name
+                    </div>
+                    <div className={classes.flexCardText}>
+                      {sample.name || '-'}
+                    </div>
+
+                    <div className={classes.flexCardLabel}>
+                      Description
+                    </div>
+                    <div className={classes.flexCardText}>
+                      {sample.description || '---'}
+                    </div>
+
+                    {sample.fields.map((k) => (
+                      <>
+                        <div className={classes.flexCardLabel}>
+                          {k.name}
+                        </div>
+                        <div className={classes.flexCardText}>
+                          {k.value || <span>---</span>}
+                        </div>
+                      </>
+                    ))}
+
+                    {sample.fields_urls.map((k) => (
+                      <>
+                        <div className={classes.flexCardLabel}>
+                          {k.name}
+                        </div>
+                        <div className={classes.flexCardText}>
+                          {k.value ? <Link className={classes.pointer} onClick={() => window.open(k.value, "_blank")}>{k.value}</Link> : <span>---</span>}
+                        </div>
+                      </>
+                    ))}
+
+                    <Divider />
+
+                    {sample.fields_samples.map((k) => (
+                      <>
+                        <div className={classes.flexCardLabel}>
+                          {k.name}
+                        </div>
+                        <div className={classes.flexCardText}>
+                          {k.child_sample_id ? <Link className={classes.pointer} onClick={() => handleClick(k.child_sample_id)}>{k.child_sample_id}: {k.child_sample_name}</Link> : <span>---</span>}
+                        </div>
+                      </>
+                    ))}
+
+                    <div className={classes.mb16}>
+                      <span className={classes.textBold}>Added:</span>
                       {' '}
-                      <span className={classes.textInfo}>{sample.id}</span>
+                      <span className={classes.textInfo}>{sample.created_at.substr(0,10)}</span>
                     </div>
-                    <div className={classes.mb4}>
-                      <span className={classes.textBold}>Added by</span>
-                      {' '}
-                      <span className={classes.textInfo}>{sample.user_name}</span>
-                    </div>
-                  </div>
-
-                  <Divider />
-
-                  <div className={classes.flexCardLabel}>
-                    Name
-                  </div>
-                  <div className={classes.flexCardText}>
-                    {sample.name || '-'}
-                  </div>
-
-                  <div className={classes.flexCardLabel}>
-                    Description
-                  </div>
-                  <div className={classes.flexCardText}>
-                    {sample.description || '---'}
-                  </div>
-
-                  {sample.fields.map((k) => (
-                    <>
-                      <div className={classes.flexCardLabel}>
-                        {k.name}
-                      </div>
-                      <div className={classes.flexCardText}>
-                        {k.value || <span>---</span>}
-                      </div>
-                    </>
-                  ))}
-
-                  {sample.fields_urls.map((k) => (
-                    <>
-                      <div className={classes.flexCardLabel}>
-                        {k.name}
-                      </div>
-                      <div className={classes.flexCardText}>
-                        {k.value ? <Link className={classes.pointer} onClick={() => window.open(k.value, "_blank")}>{k.value}</Link> : <span>---</span>}
-                      </div>
-                    </>
-                  ))}
-
-                  <Divider />
-
-                  {sample.fields_samples.map((k) => (
-                    <>
-                      <div className={classes.flexCardLabel}>
-                        {k.name}
-                      </div>
-                      <div className={classes.flexCardText}>
-                        {k.child_sample_id ? <Link className={classes.pointer} onClick={() => handleClick(k.child_sample_id)}>{k.child_sample_id}: {k.child_sample_name}</Link> : <span>---</span>}
-                      </div>
-                    </>
-                  ))}
-
-                  <div className={classes.mb16}>
-                    <span className={classes.textBold}>Added:</span>
-                    {' '}
-                    <span className={classes.textInfo}>{sample.created_at.substr(0,10)}</span>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </>
-    )}
-
-
-      </div>
+        </>
+      )}
     </>
   );
 };
