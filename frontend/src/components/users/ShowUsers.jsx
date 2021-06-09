@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core';
 import Link from '@material-ui/core/Link';
 
-import usersAPI from '../../helpers/api/users';
+import usersAPI from '../../helpers/api/usersAPI';
 
 const useStyles = makeStyles((theme) => ({
   root: {

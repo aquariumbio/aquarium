@@ -21,8 +21,8 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 // import FormControlLabel from '@material-ui/core/FormControlLabel';
 // import Switch from '@material-ui/core/Switch';
 
-import usersAPI from '../../../helpers/api/users';
-import permissionsAPI from '../../../helpers/api/permissions';
+import usersAPI from '../../../helpers/api/usersAPI';
+import permissionsAPI from '../../../helpers/api/permissionsAPI';
 import { StandardButton, LinkButton } from '../../shared/Buttons';
 
 const useStyles = makeStyles((theme) => ({

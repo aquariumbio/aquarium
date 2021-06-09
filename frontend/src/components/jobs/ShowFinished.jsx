@@ -7,7 +7,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import { DataGrid, GridToolbarContainer } from '@material-ui/data-grid';
 
-import jobsAPI from '../../helpers/api/jobs';
+import jobsAPI from '../../helpers/api/jobsAPI';
 
 const finishedColumns = [
   {

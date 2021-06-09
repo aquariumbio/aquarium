@@ -14,8 +14,8 @@ import Button from '@material-ui/core/Button';
 
 import ShowUsers from './ShowUsers';
 import { LinkButton } from '../shared/Buttons';
-import usersAPI from '../../helpers/api/users';
-import permissionsAPI from '../../helpers/api/permissions';
+import usersAPI from '../../helpers/api/usersAPI';
+import permissionsAPI from '../../helpers/api/permissionsAPI';
 
 // Route: /object_types
 // Linked in LeftHamburgeMenu

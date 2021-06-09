@@ -10,7 +10,7 @@ import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import Alert from '@material-ui/lab/Alert';
 import Divider from '@material-ui/core/Divider';
 
-import objectsAPI from '../../helpers/api/objects';
+import objectsAPI from '../../helpers/api/objectsAPI';
 import samplesAPI from '../../helpers/api/samplesAPI';
 import { StandardButton, LinkButton } from '../shared/Buttons';
 

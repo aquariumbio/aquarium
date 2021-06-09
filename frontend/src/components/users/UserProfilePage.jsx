@@ -10,7 +10,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 
-import usersAPI from '../../helpers/api/users';
+import usersAPI from '../../helpers/api/usersAPI';
 import Information from './profile/Information';
 import Permissions from './profile/Permissions';
 import Statistics from './profile/Statistics';

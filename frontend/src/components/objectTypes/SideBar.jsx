@@ -9,7 +9,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core';
 
-import objectsAPI from '../../helpers/api/objects';
+import objectsAPI from '../../helpers/api/objectsAPI';
 
 const useStyles = makeStyles(() => ({
   root: {

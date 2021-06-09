@@ -14,7 +14,7 @@ import Button from '@material-ui/core/Button';
 
 import ShowGroups from './ShowGroups';
 import { LinkButton } from '../shared/Buttons';
-import groupsAPI from '../../helpers/api/groups';
+import groupsAPI from '../../helpers/api/groupsAPI';
 
 // Route: /object_types
 // Linked in LeftHamburgeMenu

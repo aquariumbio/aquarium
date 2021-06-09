@@ -10,8 +10,8 @@ import Divider from '@material-ui/core/Divider';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
-import usersAPI from '../../helpers/api/users';
-import permissionsAPI from '../../helpers/api/permissions';
+import usersAPI from '../../helpers/api/usersAPI';
+import permissionsAPI from '../../helpers/api/permissionsAPI';
 import { StandardButton, LinkButton } from '../shared/Buttons';
 
 const useStyles = makeStyles((theme) => ({

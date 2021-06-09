@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/core';
 import Link from '@material-ui/core/Link';
 
 import ShowObjectTypeDetails from './ShowObjectTypeDetails';
-import objectsAPI from '../../helpers/api/objects';
+import objectsAPI from '../../helpers/api/objectsAPI';
 
 const useStyles = makeStyles((theme) => ({
   root: {

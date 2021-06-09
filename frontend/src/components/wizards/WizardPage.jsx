@@ -15,7 +15,7 @@ import Grid from '@material-ui/core/Grid';
 
 import SideBar from './SideBar';
 import { LinkButton } from '../shared/Buttons';
-import wizardsAPI from '../../helpers/api/wizards';
+import wizardsAPI from '../../helpers/api/wizardsAPI';
 
 const useStyles = makeStyles((theme) => ({
   root: {

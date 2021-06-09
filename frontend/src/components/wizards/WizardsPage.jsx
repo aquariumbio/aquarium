@@ -14,7 +14,7 @@ import Button from '@material-ui/core/Button';
 
 import ShowWizards from './ShowWizards';
 import { LinkButton } from '../shared/Buttons';
-import wizardsAPI from '../../helpers/api/wizards';
+import wizardsAPI from '../../helpers/api/wizardsAPI';
 
 // Route: /object_types
 // Linked in LeftHamburgeMenu

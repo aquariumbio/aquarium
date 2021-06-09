@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core';
 import Link from '@material-ui/core/Link';
-import wizardsAPI from '../../helpers/api/wizards';
+import wizardsAPI from '../../helpers/api/wizardsAPI';
 
 const useStyles = makeStyles((theme) => ({
   root: {

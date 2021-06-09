@@ -12,7 +12,7 @@ import Link from '@material-ui/core/Link';
 
 import SideBar from './SideBar';
 import { LinkButton } from '../shared/Buttons';
-import groupsAPI from '../../helpers/api/groups';
+import groupsAPI from '../../helpers/api/groupsAPI';
 
 // Route: /object_types
 // Linked in LeftHamburgeMenu

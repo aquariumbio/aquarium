@@ -15,7 +15,7 @@ import Alert from '@material-ui/lab/Alert';
 
 import ShowObjectTypeDetails from './ShowObjectTypeDetails';
 import { StandardButton, LinkButton } from '../shared/Buttons';
-import objectsAPI from '../../helpers/api/objects';
+import objectsAPI from '../../helpers/api/objectsAPI';
 
 // Route: /object_types
 // Linked in LeftHamburgeMenu

@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core';
 import Link from '@material-ui/core/Link';
 
-import groupsAPI from '../../helpers/api/groups';
+import groupsAPI from '../../helpers/api/groupsAPI';
 
 const useStyles = makeStyles((theme) => ({
   root: {

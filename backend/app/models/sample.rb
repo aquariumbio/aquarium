@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # samples table
 class Sample < ActiveRecord::Base
   validates :name,        presence: true, uniqueness: { case_sensitive: false }

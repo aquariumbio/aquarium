@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 
 import tokensAPI from '../../helpers/api/tokensAPI';
-// import wizardsAPI from '../../helpers/api/wizards';
+// import wizardsAPI from '../../helpers/api/wizardsAPI';
 
 const useStyles = makeStyles((theme) => ({
   root: {

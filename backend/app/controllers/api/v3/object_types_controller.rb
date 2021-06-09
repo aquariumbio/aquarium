@@ -214,9 +214,7 @@ module Api
         # Get object_types
         sample_id = Input.int(params[:sample_id])
         object_types = ObjectType.find_by_sample_id(sample_id)
-puts ">>> object_types"
-puts object_types
-puts ">>>"
+
         render json: { object_types: object_types }.to_json, status: :ok
       end
 

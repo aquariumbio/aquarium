@@ -19,8 +19,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 
 import { StandardButton } from '../shared/Buttons';
-import sampleAPI from '../../helpers/api/sample';
-import objectsAPI from '../../helpers/api/objects';
+import sampleAPI from '../../helpers/api/sampleAPI';
+import objectsAPI from '../../helpers/api/objectsAPI';
+import itemsAPI from '../../helpers/api/itemsAPI';
 
 // Route: /object_types
 // Linked in LeftHamburgeMenu
@@ -290,9 +291,12 @@ const useStyles = makeStyles(() => ({
 
 
 // eslint-disable-next-line no-unused-vars
-const SampleOverlay = ({ sampleId, setSampleId }) => {
+const SampleCard = ({ sampleId, setSampleId }) => {
   const classes = useStyles();
   const history = useHistory();
+
+  // hack to trigger update
+  const [ , triggerUpdate] = useReducer(x => !x, false)
 
   const [sample, setSample] = useState();
   const [inventory, setInventory] = useState([]);
@@ -301,7 +305,7 @@ const SampleOverlay = ({ sampleId, setSampleId }) => {
   const [showDeleted, setShowDeleted] = useState(false);
 
   // add item
-  const [itemAdd, setItemAdd] = useState(0);
+  // const [itemAdd, setItemAdd] = useState(0);
 
   const handleChange = async () => {
     setShowDeleted(!showDeleted);
@@ -329,35 +333,37 @@ const SampleOverlay = ({ sampleId, setSampleId }) => {
     alert(`edit ${sampleId}`)
   };
 
+  const init = async (id) => {
+    // wrap the API calls
+    const response1 = await sampleAPI.getById(id);
+    const response2 = await objectsAPI.getBySample(id);
+    if (!response1) return;
+
+    // success
+    setSample(response1.sample);
+    setInventory(response1.inventory);
+    setObjectTypes(response2.object_types);
+  };
+
   useEffect(() => {
-    const init = async () => {
-      // wrap the API calls
-      const response1 = await sampleAPI.getById(sampleId);
-      const response2 = await objectsAPI.getBySample(sampleId);
-      if (!response1) return;
-
-      // success
-      setSample(response1.sample);
-      setInventory(response1.inventory);
-      setObjectTypes(response2.object_types);
-    };
-
-    init();
+    init(sampleId);
   }, []);
 
   const handleClick = async (id) => {
-    // wrap the API call
-    const response = await sampleAPI.getById(id);
-    if (!response) return;
-
-    // success
-    setSample(response.sample);
-    setInventory(response.inventory);
+    init(id);
   }
 
   const handleAddItem = async (id) => {
-    setItemAdd(id)
-    alert(`add item ${id}`)
+    const formData = {
+      object_type_id: id,
+      sample_id: sampleId,
+    }
+
+    const response1 = await itemsAPI.create(formData);
+    if (!response1) return;
+
+    // success
+    init(sampleId);
   }
 
   return (
@@ -366,7 +372,7 @@ const SampleOverlay = ({ sampleId, setSampleId }) => {
       <Typography>
         <p className={classes.right}>
           <Button className={classes.mr16} variant="outlined" onClick={() => {editSample()}}>Edit</Button>
-          <Button variant="outlined" onClick={() => {setSampleId(false)}}>Close</Button>
+          <Button variant="outlined" onClick={() => {setSampleId(0)}}>Close</Button>
         </p>
       </Typography>
 
@@ -577,7 +583,7 @@ const SampleOverlay = ({ sampleId, setSampleId }) => {
                 name="add_item"
                 fullWidth
                 id="add_item"
-                value={itemAdd}
+                value="0"
                 onChange={(event) => handleAddItem(event.target.value)}
                 variant="outlined"
                 type="string"
@@ -602,8 +608,8 @@ const SampleOverlay = ({ sampleId, setSampleId }) => {
   );
 };
 
-SampleOverlay.propTypes = {
+SampleCard.propTypes = {
   sampleId: PropTypes.isRequired,
 };
 
-export default SampleOverlay;
+export default SampleCard;

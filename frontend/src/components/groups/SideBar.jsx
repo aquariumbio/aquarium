@@ -6,8 +6,8 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Grid from '@material-ui/core/Grid';
 
-import usersAPI from '../../helpers/api/users';
-import groupsAPI from '../../helpers/api/groups';
+import usersAPI from '../../helpers/api/usersAPI';
+import groupsAPI from '../../helpers/api/groupsAPI';
 
 // Route: /object_types
 // Linked in LeftHamburgeMenu

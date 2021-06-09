@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { DataGrid } from '@material-ui/data-grid';
-import jobsAPI from '../../helpers/api/jobs';
+import jobsAPI from '../../helpers/api/jobsAPI';
 
 const columns = [
   {

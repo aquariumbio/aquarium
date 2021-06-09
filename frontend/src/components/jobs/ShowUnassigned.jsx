@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import { makeStyles } from '@material-ui/core';
 
-import jobsAPI from '../../helpers/api/jobs';
+import jobsAPI from '../../helpers/api/jobsAPI';
 
 const unassignedColumns = [
   {

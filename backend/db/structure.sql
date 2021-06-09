@@ -181,7 +181,7 @@ CREATE TABLE `field_types` (
   PRIMARY KEY (`id`),
   KEY `index_field_types_on_parent_class_and_parent_id` (`parent_class`,`parent_id`) USING BTREE,
   KEY `index_field_types_on_sample_type_id` (`parent_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=23772 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=23776 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `field_values`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -388,7 +388,7 @@ CREATE TABLE `locators` (
   PRIMARY KEY (`id`),
   KEY `index_locators_on_item_id` (`item_id`) USING BTREE,
   KEY `index_locators_on_wizard_id` (`wizard_id`) USING BTREE,
-  CONSTRAINT `fk_rails_64c3d29cac` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rails_64c3d29cac` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`) ON DELETE SET NULL,
   CONSTRAINT `fk_rails_bb120b6235` FOREIGN KEY (`wizard_id`) REFERENCES `wizards` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=72995 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -593,7 +593,7 @@ CREATE TABLE `sample_types` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `samples`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -972,6 +972,8 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20201218000010'),
 ('20210301000000'),
 ('20210301000010'),
-('20210301000020');
+('20210301000020'),
+('20210601000000'),
+('20210601000010');
 
 

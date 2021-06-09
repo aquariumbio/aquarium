@@ -8,7 +8,7 @@ import ShowAssigned from './ShowAssigned';
 import ShowUnassigned from './ShowUnassigned';
 import ShowFinished from './ShowFinished';
 // import ShowByOperation from './ShowByOperation';
-import jobsAPI from '../../helpers/api/jobs';
+import jobsAPI from '../../helpers/api/jobsAPI';
 
 function TabPanel(props) {
   const {
