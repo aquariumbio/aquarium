@@ -156,6 +156,8 @@ CREATE TABLE `field_type_sorts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ftype` varchar(255) DEFAULT NULL,
   `sort` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
