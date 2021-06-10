@@ -3,6 +3,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -10,6 +11,12 @@ const useStyles = makeStyles((theme) => ({
     '& > * + *': {
       marginTop: theme.spacing(2),
     },
+  },
+  alert: {
+    backgroundColor: 'black',
+  },
+  success: {
+    color: '#05FF00',
   },
 }));
 
@@ -63,7 +70,15 @@ const AlertToast = (props) => {
   return (
     <div className={classes.root}>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={severity} data-cy="alert-toast">
+        <Alert
+          iconMapping={{
+            success: <CheckCircleIcon classes={{ root: classes.success }} fontSize="inherit" />,
+          }}
+          onClose={handleClose}
+          severity={severity}
+          data-cy="alert-toast"
+          classes={{ root: classes.alert }}
+        >
           <span dangerouslySetInnerHTML={raw(message)} />
         </Alert>
       </Snackbar>
