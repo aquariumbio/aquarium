@@ -10,7 +10,7 @@ describe('ShowJobOperations', () => {
       id: 163112,
       operation_id: 289759,
       updated_at: '2020-06-11T04:32:28.000Z',
-      status: 'done',
+      status: 'scheduled',
       plan_id: 40034,
       inputs: [
         {
@@ -67,7 +67,7 @@ describe('ShowJobOperations', () => {
       id: 163114,
       operation_id: 289761,
       updated_at: '2020-06-11T04:31:28.000Z',
-      status: 'error',
+      status: 'scheduled',
       plan_id: 40034,
       inputs: [
         {
@@ -128,7 +128,7 @@ describe('ShowJobOperations', () => {
       id: 163113,
       operation_id: 289760,
       updated_at: '2020-06-11T04:31:27.000Z',
-      status: 'error',
+      status: 'scheduled',
       plan_id: 40034,
       inputs: [
         {
@@ -187,6 +187,8 @@ describe('ShowJobOperations', () => {
     },
   ];
 
+  const mockJobId = 117326;
+  const mockRemove = jest.fn();
   const mockCancel = jest.fn();
 
   const tabletWidth = 1280;
@@ -197,19 +199,34 @@ describe('ShowJobOperations', () => {
   };
 
   const showJobOperations = () => render(
-    <ShowJobOperations operations={mockOperations} cancelJob={mockCancel} />,
+    <ShowJobOperations
+      operations={mockOperations}
+      handleCancelJob={mockCancel}
+      removeOperation={mockRemove}
+      jobId={mockJobId}
+    />,
   );
 
   const showJobOperationsSmall = () => render(
     <WindowDimensionsProvider value={mockWindowDimensions}>
-      <ShowJobOperations operations={mockOperations} cancelJob={mockCancel} />
+      <ShowJobOperations
+        operations={mockOperations}
+        handleCancelJob={mockCancel}
+        removeOperation={mockRemove}
+        jobId={mockJobId}
+      />
     </WindowDimensionsProvider>,
   );
 
   it('should render "no operations" when there are no operations', () => {
     render(
       <WindowDimensionsProvider value={mockWindowDimensions}>
-        <ShowJobOperations operations={[]} cancelJob={mockCancel} />
+        <ShowJobOperations
+          operations={[]}
+          handleCancelJob={mockCancel}
+          removeOperation={mockRemove}
+          jobId={mockJobId}
+        />
       </WindowDimensionsProvider>,
     );
     expect(screen.getByText(/no operations/i)).toBeInTheDocument();
@@ -248,7 +265,12 @@ describe('ShowJobOperations', () => {
 
   it('should not render the table when there are no operations', () => {
     render(
-      <ShowJobOperations operations={[]} cancelJob={mockCancel} />,
+      <ShowJobOperations
+        operations={[]}
+        handleCancelJob={mockCancel}
+        removeOperation={mockRemove}
+        jobId={mockJobId}
+      />,
     );
     expect(screen.queryByRole('table')).not.toBeInTheDocument();
   });
@@ -260,15 +282,50 @@ describe('ShowJobOperations', () => {
 
   it('should call remove operation function when remove button is clicked clicked', () => {
     showJobOperations();
-    const removeBtn = screen.getByRole('button', { name: `remove operation ${mockOperations[0].id}` });
+    const removeBtn = screen.getByRole('button', { name: `remove operation ${mockOperations[0].operation_id}` });
     userEvent.click(removeBtn);
-    expect(mockCancel).toHaveBeenCalledTimes(1);
+    expect(mockRemove).toHaveBeenCalledTimes(1);
   });
 
   it('should call remove operation function with the correct id when remove button is clicked clicked', () => {
     showJobOperations();
-    const removeBtn = screen.getByRole('button', { name: `remove operation ${mockOperations[0].id}` });
+    const removeBtn = screen.getByRole('button', { name: `remove operation ${mockOperations[1].operation_id}` });
+    userEvent.click(removeBtn);
+    expect(mockRemove).toHaveBeenCalledWith(mockJobId, mockOperations[1].operation_id);
+  });
+
+  it('should call cancel job function when there is only one operation to be removed', () => {
+    const mockOps = [mockOperations[0]];
+    render(
+      <ShowJobOperations
+        operations={mockOps}
+        handleCancelJob={mockCancel}
+        removeOperation={mockRemove}
+        jobId={mockJobId}
+      />,
+    );
+
+    const removeBtn = screen.getByRole('button', { name: `remove operation ${mockOps[0].operation_id}` });
     userEvent.click(removeBtn);
     expect(mockCancel).toHaveBeenCalledTimes(1);
+    expect(mockCancel).toHaveBeenCalledWith(mockJobId);
+  });
+
+  it('should only show remove button when operation status is "scheduled"', () => {
+    const mockOps = mockOperations;
+    mockOps[0].status = 'error';
+    mockOps[2].status = 'pending';
+    mockOps[2].status = 'done';
+
+    render(
+      <ShowJobOperations
+        operations={mockOps}
+        handleCancelJob={mockCancel}
+        removeOperation={mockRemove}
+        jobId={mockJobId}
+      />,
+    );
+
+    expect(screen.queryAllByRole('button', { name: 'remove operation' })).toHaveLength(0);
   });
 });

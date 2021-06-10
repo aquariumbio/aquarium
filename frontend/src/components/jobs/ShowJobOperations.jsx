@@ -2,6 +2,7 @@ import React from 'react';
 import {
   array,
   func,
+  number,
 } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core';
@@ -40,14 +41,16 @@ const useStyles = makeStyles((theme) => ({
 
 const ShowJobOperations = ({
   operations,
-  cancelJob,
+  removeOperation,
+  handleCancelJob,
+  jobId,
 }) => {
   const classes = useStyles();
   const globalClasses = globalUseSyles();
   const tablet = useWindowDimensions();
 
   const handleRemove = (opId) => {
-    cancelJob(opId);
+    removeOperation(jobId, opId);
   };
 
   if (!operations || operations.length === 0) {
@@ -151,9 +154,18 @@ const ShowJobOperations = ({
     operations.map((operation) => (
       <div role="row" className={`${globalClasses.flex} ${globalClasses.flexRow}`} key={`op_${operation.id}`}>
         <div role="cell" className={`${globalClasses.flexCol1}`}>
-          <IconButton aria-label={`remove operation ${operation.id}`} onClick={() => { handleRemove(operation.id); }}>
-            <RemoveCircleOutlineIcon htmlColor="#FF0000" />
-          </IconButton>
+          {operation.status === 'scheduled' && (
+            <IconButton
+              aria-label={`remove operation ${operation.operation_id}`}
+              onClick={() => {
+                operations.length > 1
+                  ? handleRemove(operation.operation_id)
+                  : handleCancelJob(jobId);
+              }}
+            >
+              <RemoveCircleOutlineIcon htmlColor="#FF0000" />
+            </IconButton>
+          )}
         </div>
         <div role="cell" className={`${globalClasses.flexCol1}`}>
           <Typography variant="body2" noWrap>{operation.plan_id}</Typography>
@@ -165,7 +177,7 @@ const ShowJobOperations = ({
           <div role="cell" className={`${globalClasses.flexCol2}`}>
             <Typography variant="body2" noWrap>Last Updated: {operation.updated_at.substring(0, 16).replace('T', ' ')}</Typography>
             <Typography variant="body2" noWrap>Researcher: {operation.name}</Typography>
-            <Typography variant="body2" noWrap>Op Id: {operation.id}</Typography>
+            <Typography variant="body2" noWrap>Op Id: {operation.operation_id}</Typography>
           </div>
         ) : (
           <>
@@ -176,7 +188,7 @@ const ShowJobOperations = ({
               <Typography variant="body2" noWrap>{operation.name}</Typography>
             </div>
             <div role="cell" className={`${globalClasses.flexCol1}`}>
-              <Typography variant="body2" noWrap>{operation.id}</Typography>
+              <Typography variant="body2" noWrap>{operation.operation_id}</Typography>
             </div>
           </>
         )}
@@ -197,7 +209,9 @@ const ShowJobOperations = ({
 ShowJobOperations.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   operations: array.isRequired,
-  cancelJob: func.isRequired,
+  removeOperation: func.isRequired,
+  jobId: number.isRequired,
+  handleCancelJob: func.isRequired,
 };
 
 export default ShowJobOperations;
