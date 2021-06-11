@@ -99,7 +99,7 @@ const ShowUnassigned = (props) => {
         <div className={`${globalClasses.flexCol1}`}><Typography variant="body2">Job</Typography></div>
         <div className={`${globalClasses.flexCol1}`}><Typography variant="body2">Operations</Typography></div>
         <div className={`${globalClasses.flexCol1}`}><Typography variant="body2">Created</Typography></div>
-        <div className={`${globalClasses.flexCol1}`}><Typography variant="body2" /></div>
+        <div className={`${globalClasses.flexCol1}`}><Typography variant="body2">Cancel</Typography></div>
       </div>
     </div>
   );
