@@ -21,16 +21,7 @@ class Item < ActiveRecord::Base
       inner join items i on i.id = pa.part_id
       where pa.collection_id = #{item.id}
     "
-    collection_data = PartAssociation.find_by_sql sql
-
-    collection = {}
-    collection_data.each do |c|
-      if collection[c.row]
-        collection[c.row] = collection[c.row].update({c.column => "#{c.sample_id}: #{c.item_id}"})
-      else
-        collection = collection.update({c.row => {c.column => "#{c.sample_id}: #{c.item_id}"}})
-      end
-    end
+    collection = PartAssociation.find_by_sql sql
 
     return item, object_type, collection
   end

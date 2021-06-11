@@ -310,8 +310,16 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
       setRows([...Array(response1.object_type.rows || 1)].map(() => ' ' ));
       setColumns([...Array(response1.object_type.columns || 12)].map(() => ' ' ));
 
-      // set collection data
-      setCollection(response1.collection)
+      // map collection data
+      let temp = new Object
+      response1.collection.map((c) => (
+        temp[c.row]
+        ? temp[c.row]={...temp[c.row], [c.column]: `${c.sample_id}: ${c.item_id}`}
+        : temp[c.row]={[c.column]: `${c.sample_id}: ${c.item_id}`}
+      ))
+
+      // set collection
+      setCollection(temp)
     }
 
     collectionId == 0 ? initNew() : initEdit(collectionId);
@@ -351,8 +359,8 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
               </Typography>
               {columns.map((column,cIndex) =>(
                 <Typography className={classes.flexCol1}>
-                  {collection[rIndex] && collection[rIndex][cIndex] && `${collection[rIndex][cIndex]}`}
                   <input className={classes.width100p} key={`{rIndex},{cIndex}`} id={`{rIndex},{cIndex}`} />
+                  {collection[rIndex] && collection[rIndex][cIndex] && `${collection[rIndex][cIndex]}`}
                 </Typography>
               ))}
             </div>

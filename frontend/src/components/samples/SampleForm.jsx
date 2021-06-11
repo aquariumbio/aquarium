@@ -19,6 +19,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 
 import { StandardButton } from '../shared/Buttons';
+import sampleAPI from '../../helpers/api/sampleAPI';
 import samplesAPI from '../../helpers/api/samplesAPI';
 import objectsAPI from '../../helpers/api/objectsAPI';
 
@@ -308,8 +309,12 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
     };
 
     const initEdit = async (id) => {
-      setSample({...sample, id: id})
-      alert(`TODO: get data for sample ${id}`)
+      // wrap the API calls
+      const response = await sampleAPI.getById(id);
+      if (!response) return;
+
+      // success
+      setSample(response.sample)
     }
 
     init();
@@ -335,8 +340,13 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
           <Typography className={classes.flexCol1}>
             (*) name
           </Typography>
+          <Typography className={classes.flexCol1}>
+            (string)
+          </Typography>
           <Typography className={classes.flexCol3}>
-            (string) {sample.name}
+            <input
+            value={sample.name}
+            />
           </Typography>
         </div>
 
@@ -344,8 +354,13 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
           <Typography className={classes.flexCol1}>
             description
           </Typography>
+          <Typography className={classes.flexCol1}>
+            (string)
+          </Typography>
           <Typography className={classes.flexCol3}>
-            (string) {sample.description}
+            <input
+            value={sample.description}
+            />
           </Typography>
         </div>
 
@@ -353,8 +368,13 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
           <Typography className={classes.flexCol1}>
             (*) project
           </Typography>
+          <Typography className={classes.flexCol1}>
+            (string)
+          </Typography>
           <Typography className={classes.flexCol3}>
-            (string) {sample.project}
+            <input
+            value={sample.project}
+            />
           </Typography>
         </div>
 
@@ -364,7 +384,7 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
               {field_type.required ? '(*)' : ''} {field_type.name}
 
             </Typography>
-            <Typography className={classes.flexCol3}>
+            <Typography className={classes.flexCol1}>
               ({field_type.ftype}{field_type.array ? ' / array' : ''}) <br />
               {field_type.ftype == 'sample' && field_type.allowable_field_types ? (
                 <>
@@ -377,6 +397,9 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
               ) : (
                 ''
               )}
+            </Typography>
+            <Typography className={classes.flexCol3}>
+              <input />
             </Typography>
           </div>
         ))}
