@@ -314,7 +314,15 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
       if (!response) return;
 
       // success
-      setSample(response.sample)
+      // map collection data
+      const resp = response.sample
+      let temp = new Object
+      temp={...temp, ['id']: resp.id}
+      temp={...temp, ['name']: resp.name}
+      temp={...temp, ['description']: resp.description}
+      temp={...temp, ['project']: resp.project}
+
+      setSample(temp)
     }
 
     init();

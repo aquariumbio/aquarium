@@ -29,7 +29,7 @@ class AddSearch < ActiveRecord::Migration[4.2]
     # create view_samples (for sample data)
     execute <<-SQL
       create view view_samples as
-      select s.id, s.name, s.description, s.created_at, s.item_ids, s.sample_type_id,
+      select s.id, s.name, s.description, s.project, s.created_at, s.item_ids, s.sample_type_id,
       st.name as 'sample_type',
       u.name as 'user_name', u.login,
       ft.id as 'ft_id',

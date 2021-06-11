@@ -103,6 +103,7 @@ class Sample < ActiveRecord::Base
             id: sample.id,
             name: sample.name,
             description: sample.description,
+            project: sample.project,
             sample_type_id: sample.sample_type_id,
             sample_type: sample.sample_type.upcase,
             user_name: sample.user_name,
@@ -123,11 +124,11 @@ class Sample < ActiveRecord::Base
         # NOTE: there is no ft_id if the sample does not have any field values
         if sample.ft_id
           if sample.ft_type == "sample"
-            samples[-1][:fields_samples] << {type: sample.ft_type, name: sample.ft_name, value: sample.fv_value, child_sample_id: sample.child_sample_id, child_sample_name: sample.child_sample_name}
+            samples[-1][:fields_samples] << {id: sample.ft_id, type: sample.ft_type, name: sample.ft_name, value: sample.fv_value, child_sample_id: sample.child_sample_id, child_sample_name: sample.child_sample_name}
           elsif sample.ft_type == "url"
-            samples[-1][:fields_urls] << {type: sample.ft_type, name: sample.ft_name, value: sample.fv_value, child_sample_id: sample.child_sample_id, child_sample_name: sample.child_sample_name}
+            samples[-1][:fields_urls] << {id: sample.ft_id, type: sample.ft_type, name: sample.ft_name, value: sample.fv_value, child_sample_id: sample.child_sample_id, child_sample_name: sample.child_sample_name}
           else
-            samples[-1][:fields] << {type: sample.ft_type, name: sample.ft_name, value: sample.fv_value, child_sample_id: sample.child_sample_id, child_sample_name: sample.child_sample_name}
+            samples[-1][:fields] << {id: sample.ft_id, type: sample.ft_type, name: sample.ft_name, value: sample.fv_value, child_sample_id: sample.child_sample_id, child_sample_name: sample.child_sample_name}
           end
         end
       end
@@ -150,6 +151,7 @@ class Sample < ActiveRecord::Base
       id: this_sample.id,
       name: this_sample.name,
       description: this_sample.description,
+      project: this_sample.project,
       sample_type_id: this_sample.sample_type_id,
       sample_type: this_sample.sample_type.upcase,
       user_name: this_sample.user_name,
@@ -165,11 +167,11 @@ class Sample < ActiveRecord::Base
     # loop through field values and append to sample.fields array
     sample_data.each do |s|
       if s.ft_type == "sample"
-        sample[:fields_samples] << {type: s.ft_type, name: s.ft_name, value: s.fv_value, child_sample_id: s.child_sample_id, child_sample_name: s.child_sample_name}
+        sample[:fields_samples] << {id: s.ft_id, type: s.ft_type, name: s.ft_name, value: s.fv_value, child_sample_id: s.child_sample_id, child_sample_name: s.child_sample_name}
       elsif s.ft_type == "url"
-        sample[:fields_urls] << {type: s.ft_type, name: s.ft_name, value: s.fv_value, child_sample_id: s.child_sample_id, child_sample_name: s.child_sample_name}
+        sample[:fields_urls] << {id: s.ft_id, type: s.ft_type, name: s.ft_name, value: s.fv_value, child_sample_id: s.child_sample_id, child_sample_name: s.child_sample_name}
       else
-        sample[:fields] << {type: s.ft_type, name: s.ft_name, value: s.fv_value, child_sample_id: s.child_sample_id, child_sample_name: s.child_sample_name}
+        sample[:fields] << {id: s.ft_id, type: s.ft_type, name: s.ft_name, value: s.fv_value, child_sample_id: s.child_sample_id, child_sample_name: s.child_sample_name}
       end
     end
 
