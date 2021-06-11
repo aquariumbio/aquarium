@@ -62,6 +62,13 @@ const useStyles = makeStyles((theme) => ({
     borderLeft: '1px solid  #ccc',
   },
 
+  flexCol1x: {
+    flex: '1 1 0',
+    minWidth: '0',
+    borderTop: '1px solid #ccc',
+    borderLeft: '1px solid  #ccc',
+  },
+
   flexCol2: {
     flex: '2 1 0',
     padding: '8px',
@@ -263,7 +270,18 @@ const useStyles = makeStyles((theme) => ({
   dark: {
     backgroundColor: theme.palette.primary.main,
     color: '#fff',
-  }
+  },
+
+  deselected: {
+    cursor: 'pointer',
+    padding: '8px',
+  },
+
+  selected: {
+    cursor: 'pointer',
+    border: '2px dashed black',
+    padding: '7px 6px 6px 7px',
+  },
 }));
 
 // eslint-disable-next-line no-unused-vars
@@ -279,6 +297,8 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
 
+  const [rowSel, setRowSel] = useState(-1);
+  const [colSel, setColSel] = useState(-1);
 
   useEffect(() => {
     const initNew = async () => {
@@ -294,8 +314,8 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
       setObjectType(response1.object_type);
 
       // set rows and columns
-      setRows([...Array(response1.object_type.rows || 1)].map(() => ' ' ));
-      setColumns([...Array(response1.object_type.columns || 12)].map(() => ' ' ));
+      setRows([...Array(response1.object_type.rows || 1).keys()]);
+      setColumns([...Array(response1.object_type.columns || 12).keys()]);
     };
 
     const initEdit = async (id) => {
@@ -307,15 +327,15 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
       setObjectType(response1.object_type);
 
       // set rows and columns
-      setRows([...Array(response1.object_type.rows || 1)].map(() => ' ' ));
-      setColumns([...Array(response1.object_type.columns || 12)].map(() => ' ' ));
+      setRows([...Array(response1.object_type.rows || 1).keys()]);
+      setColumns([...Array(response1.object_type.columns || 12).keys()]);
 
       // map collection data
       let temp = new Object
       response1.collection.map((c) => (
         temp[c.row]
-        ? temp[c.row]={...temp[c.row], [c.column]: `${c.sample_id}: ${c.item_id}`}
-        : temp[c.row]={[c.column]: `${c.sample_id}: ${c.item_id}`}
+        ? temp[c.row]={...temp[c.row], [c.column]: `${c.sample_id} (${c.item_id})`}
+        : temp[c.row]={[c.column]: `${c.sample_id} (${c.item_id})`}
       ))
 
       // set collection
@@ -324,6 +344,16 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
 
     collectionId == 0 ? initNew() : initEdit(collectionId);
   }, []);
+
+  const handleRC = (r,c) => {
+    rowSel == r && colSel == c ? (
+      setRowSel(-1),
+      setColSel(-1)
+    ) : (
+      setRowSel(r),
+      setColSel(c)
+    )
+  };
 
   return (
     <>
@@ -345,22 +375,21 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
             <Typography className={classes.flexColFixed40}>
               &nbsp;
             </Typography>
-            {columns.map((column,cIndex) =>(
+            {columns.map((column) =>(
               <Typography className={classes.flexCol1}>
-                {cIndex}
+                {column}
               </Typography>
             ))}
           </div>
 
-          {rows.map((row,rIndex) =>(
+          {rows.map((row) =>(
             <div className={`${classes.flex} ${classes.flexRow}`}>
               <Typography className={`${classes.flexColFixed40} ${classes.dark}`}>
-                {rIndex}
+                {row}
               </Typography>
               {columns.map((column,cIndex) =>(
-                <Typography className={classes.flexCol1}>
-                  <input className={classes.width100p} key={`{rIndex},{cIndex}`} id={`{rIndex},{cIndex}`} />
-                  {collection[rIndex] && collection[rIndex][cIndex] && `${collection[rIndex][cIndex]}`}
+                <Typography className={`${classes.flexCol1x} ${rowSel == row && colSel == column ? classes.selected : classes.deselected}`} id={`${row},${column}`} onClick={() => handleRC(row, column)}>
+                  {collection[row] && collection[row][column] && `${collection[row][column]}`}
                 </Typography>
               ))}
             </div>
