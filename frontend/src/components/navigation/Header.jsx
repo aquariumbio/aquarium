@@ -99,11 +99,17 @@ const Header = ({ location }) => {
       <Toolbar>
         <div className={classes.headerOptions}>
           <Tooltip title="Main Menu">
-            <LeftHamburgerMenu />
+            {/* Wrap custom components in fragment to avoid
+                'Invalid prop `children` supplied to `ForwardRef(Tooltip)`' error */}
+            <>
+              <LeftHamburgerMenu />
+            </>
           </Tooltip>
 
           <Tooltip title="Home">
-            <HomeButton />
+            <>
+              <HomeButton />
+            </>
           </Tooltip>
 
           <Tabs
@@ -129,7 +135,9 @@ const Header = ({ location }) => {
 
         </div>
         <Tooltip title="User Menu">
-          <UserMenu />
+          <>
+            <UserMenu />
+          </>
         </Tooltip>
 
       </Toolbar>
