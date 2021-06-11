@@ -79,6 +79,20 @@ module Api
         render json: { item: item, object_type: object_type }.to_json, status: :created
       end
 
+      # Returns details for a specific item.
+      def show_collection
+        # Check for admin permissions
+        status, response = check_token_for_permission(Permission.admin_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        id = params[:id].to_i
+        item, object_type = Item.get_collection(id)
+
+        render json: { item: nil, object_type: nil }.to_json, status: :not_found and return  if !item
+
+        render json: { item: item, object_type: object_type }.to_json, status: :ok
+      end
+
     end
   end
 end

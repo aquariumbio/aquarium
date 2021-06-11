@@ -298,7 +298,7 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
   const [sample, setSample] = useState({});
 
   useEffect(() => {
-    const initNew = async () => {
+    const init = async () => {
       // wrap the API calls
       const response = await samplesAPI.getTypeById(sampleTypeId);
       if (!response) return;
@@ -307,13 +307,13 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
       setSampleType(response);
     };
 
-    const init = async (id) => {
+    const initEdit = async (id) => {
       setSample({...sample, id: id})
-      alert(`get sample ${id}`)
+      alert(`TODO: get data for sample ${id}`)
     }
 
-    initNew();
-    sampleId == 0 ? '' : init(sampleId);
+    init();
+    sampleId == 0 ? '' : initEdit(sampleId);
   }, []);
 
   return (

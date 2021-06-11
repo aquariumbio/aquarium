@@ -118,8 +118,10 @@ Rails.application.routes.draw do
   # post 'api/v3/sample/:id/update',                 to: 'api/v3/sample#update'
   # post 'api/v3/sample/:id/discard',                to: 'api/v3/sample#discard'
 
-  # items
+  # Items
   post 'api/v3/items/create',                      to: 'api/v3/items#create'
+  get  'api/v3/items/collection/:id',              to: 'api/v3/items#show_collection'
+  get  'api/v3/items/container/:id',               to: 'api/v3/items#show_container'
 
   # Initialize columns in db
   get  'api/v3/set_search_text',                   to: 'api/v3/samples#set_search_text'

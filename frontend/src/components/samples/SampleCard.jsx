@@ -291,12 +291,9 @@ const useStyles = makeStyles(() => ({
 
 
 // eslint-disable-next-line no-unused-vars
-const SampleCard = ({ sampleId, setSampleId, setSampleTypeId }) => {
+const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, setCollectionTypeId }) => {
   const classes = useStyles();
   const history = useHistory();
-
-  // hack to trigger update
-  const [ , triggerUpdate] = useReducer(x => !x, false)
 
   const [sample, setSample] = useState();
   const [inventory, setInventory] = useState([]);
@@ -329,10 +326,6 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId }) => {
     setToggleIds({...toggleIds, id:newIds[id]})
   };
 
-  const editSample = () => {
-    alert(`edit ${sampleId}`)
-  };
-
   const init = async (id) => {
     // wrap the API calls
     const response1 = await sampleAPI.getById(id);
@@ -353,7 +346,14 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId }) => {
     init(id);
   }
 
-  const handleItemClick = async (id) => {
+  const handleCollectionClick = async (id, type_id) => {
+    event.preventDefault();
+
+    setCollectionId(id);
+    setCollectionTypeId(type_id)
+  }
+
+  const handleContainerClick = async (id) => {
     event.preventDefault();
     alert(id)
   }
@@ -572,7 +572,7 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId }) => {
                             <div className={classes.flexCol1} cy={`item-${item.item_id}`}>
                               {item.collections ? (
                                 <>
-                                  <Link className={classes.pointer} onClick={() => handleItemClick(item.item_id)}>{item.item_id}</Link>
+                                  <Link className={classes.pointer} onClick={() => handleCollectionClick(item.item_id, item.type_id)}>{item.item_id}</Link>
                                   {item.collections.map((part) => (
                                     <div>
                                       &rarr; {part.part_id} [{part.row}, {part.column}]
@@ -580,7 +580,7 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId }) => {
                                   ))}
                                 </>
                               ) : (
-                                <Link className={classes.pointer} onClick={() => handleItemClick(item.item_id)}>{item.item_id}</Link>
+                                <Link className={classes.pointer} onClick={() => handleContainerClick(item.item_id)}>{item.item_id}</Link>
                               )}
                             </div>
                             <div className={classes.flexCol1}>

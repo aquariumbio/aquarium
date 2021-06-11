@@ -2,6 +2,22 @@
 class Item < ActiveRecord::Base
   validate  :object_type_id_sample_id?
 
+  # get an item
+  def self.get_collection(id)
+    sql = "
+      select i.*
+      from items i
+      inner join object_types ot on ot.id = i.object_type_id
+      where i.id = #{id.to_i} and ot.handler = 'collection'
+      limit 1
+    "
+    collection = (Item.find_by_sql sql)[0]
+
+    object_type = collection ? ObjectType.find_by(id: collection.object_type_id) : nil
+
+    return collection, object_type
+  end
+
   # Create an item
   #
   # @param item [Hash] the group

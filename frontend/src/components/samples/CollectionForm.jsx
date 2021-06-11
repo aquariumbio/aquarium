@@ -296,16 +296,25 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
       setColumns([...Array(response1.object_type.columns || 12)].map(() => ' ' ));
     };
 
-    const init = async (id) => {
-      setCollection({...collection, id: id})
-      // example
-      setCollection({...collection, '1': {'2': 'test.1.2', '3': 'test.1.3'}})
+    const initEdit = async (id) => {
+      const response1 = await itemsAPI.getCollectionById(id);
+      if (!response1) return;
 
-      alert(`get collection ${id}`)
+      setCollection(response1.item);
+      setObjectType(response1.object_type);
+
+      // set rows and columns
+      setRows([...Array(response1.object_type.rows || 1)].map(() => ' ' ));
+      setColumns([...Array(response1.object_type.columns || 12)].map(() => ' ' ));
+
+      setCollection({...collection, id: id})
+
+      alert(`TODO: get data for collection ${id}`)
+      // example
+      // setCollection({...collection, '1': {'2': 'test.1.2', '3': 'test.1.3'}})
     }
 
-    initNew();
-    collectionId == 0 ? '' : init(collectionId);
+    collectionId == 0 ? initNew() : initEdit(collectionId);
   }, []);
 
   return (

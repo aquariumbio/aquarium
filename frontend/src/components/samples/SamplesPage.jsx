@@ -427,7 +427,7 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
       {sampleTypeId != 0 && (<SampleForm sampleId={sampleId} sampleTypeId={sampleTypeId} setSampleTypeId={setSampleTypeId}/>)}
       {/* {containerTypeId != 0 && (<ContainerForm containerId={containerId} containerTypeId={containerTypeId} setContainerTypeId={setContainerTypeId}/>)} */}
       {collectionTypeId != 0 && (<CollectionForm collectionId={collectionId} collectionTypeId={collectionTypeId} setCollectionTypeId={setCollectionTypeId}/>)}
-      {sampleTypeId == 0 && collectionTypeId == 0 && sampleId != 0 && <SampleCard sampleId={sampleId} setSampleId={setSampleId} setSampleTypeId={setSampleTypeId}/>}
+      {sampleTypeId == 0 && collectionTypeId == 0 && sampleId != 0 && <SampleCard sampleId={sampleId} setSampleId={setSampleId} setSampleTypeId={setSampleTypeId} setCollectionId={setCollectionId} setCollectionTypeId={setCollectionTypeId}/>}
       {sampleTypeId == 0 && collectionTypeId == 0 && sampleId == 0 && <SampleCards handlePage={handlePage} handleClick={handleClick} count={count} page={page} pages={pages} samples={samples}/>}
     </>
   );
