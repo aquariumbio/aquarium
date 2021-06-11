@@ -60,7 +60,7 @@ class AddSearch < ActiveRecord::Migration[4.2]
       ott.id as 'collection_type_id', ott.name as 'collection_type'
       from samples s
       inner join items i on i.sample_id = s.id
-      inner join object_types ot on ot.id =i.object_type_id
+      inner join object_types ot on ot.id = i.object_type_id and ot.handler = 'sample_container'
       left join part_associations pa on pa.part_id = i.id
       left join items ii on ii.id = pa.collection_id
       left join object_types ott on ott.id = ii.object_type_id

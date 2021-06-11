@@ -477,13 +477,6 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, s
             xs={9}
           >
             <div className={classes.flexWrapper}>
-              <div>
-                TODO: IMPORTANT <br />
-                - exclude any items that are not 'sample_container' (do it on the backend)<br />
-                - there are some that are 'glassware' <br />
-                - e.g 22033, 22034 <br />
-                <br />
-              </div>
               <div className={`${classes.flex} ${classes.flexTitle}`}>
                 <Typography className={`${classes.flexColFixed40} ${classes.center}`}>
                   <b>+</b>
