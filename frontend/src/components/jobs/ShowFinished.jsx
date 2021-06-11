@@ -59,12 +59,12 @@ const ShowFinished = () => {
       </TextField>
 
       <div className={`${globalClasses.flex} ${globalClasses.flexTitle}`}>
-        <div className={`${globalClasses.flexCol1}`}>Assigned To</div>
+        <div className={`${globalClasses.flexCol1}`}>Experimenter</div>
         <div className={`${globalClasses.flexCol1}`}>Assigned</div>
         <div className={`${globalClasses.flexCol1}`}>Started</div>
         <div className={`${globalClasses.flexCol1}`}>Finished</div>
         <div className={`${globalClasses.flexCol2}`}>Protocol</div>
-        <div className={`${globalClasses.flexCol1}`}>Job</div>
+        <div className={`${globalClasses.flexCol1}`}>Job#</div>
         <div className={`${globalClasses.flexCol1}`}>Operations</div>
       </div>
     </div>
@@ -84,6 +84,12 @@ const ShowFinished = () => {
           <div className={`${globalClasses.flexCol1}`}>
             <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{job.assigned_date ? job.assigned_date.substring(0, 16).replace('T', ' ') : '-'}</Typography>
           </div>
+          <div className={`${globalClasses.flexCol1}`}>
+            <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{job.created_at ? job.created_at.substring(0, 16).replace('T', ' ') : '-'}</Typography>
+          </div>
+          <div className={`${globalClasses.flexCol1}`}>
+            <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{job.updated_at ? job.updated_at.substring(0, 16).replace('T', ' ') : '-'}</Typography>
+          </div>
           <div className={`${globalClasses.flexCol2}`}>
             <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{job.name}</Typography>
           </div>
@@ -93,9 +99,7 @@ const ShowFinished = () => {
           <div className={`${globalClasses.flexCol1}`}>
             <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{job.operations_count}</Typography>
           </div>
-          <div className={`${globalClasses.flexCol1}`}>
-            <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{job.created_at ? job.created_at.substring(0, 16).replace('T', ' ') : '-'}</Typography>
-          </div>
+
         </div>
       ))
     );
