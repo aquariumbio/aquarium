@@ -19,13 +19,12 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 
 import { StandardButton } from '../shared/Buttons';
-import sampleAPI from '../../helpers/api/sampleAPI';
+import itemsAPI from '../../helpers/api/itemsAPI';
 import objectsAPI from '../../helpers/api/objectsAPI';
 
 // Route: /object_types
 // Linked in LeftHamburgeMenu
-
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   box: {
     border: '1px solid black',
     padding: '16px',
@@ -44,80 +43,47 @@ const useStyles = makeStyles(() => ({
     overflowWrap: 'break-word',
   },
 
-  /* Title row */
-  flexTitle: {
-    padding: '8px 0',
-    backgroundColor: '#eee',
-    borderLeft: '1px solid #ccc',
-    borderRight: '1px solid #ccc',
-    borderTop: '1px solid #ccc',
-  },
-
   /* Bottom of table */
   flexBottom: {
     borderBottom: '1px solid #ccc',
+    borderRight: '1px solid #ccc',
   },
 
   /* Data Row */
   flexRow: {
-    padding: '8px 0',
-    borderTop: '1px solid #ccc',
-    borderLeft: '1px solid  #ccc',
-    borderRight: '1px solid  #ccc',
-  },
-
-  flexRowSel: {
-    padding: '8px 0',
-    borderTop: '1px solid #ccc',
-    borderLeft: '1px solid  #ccc',
-    borderRight: '1px solid  #ccc',
-    backgroundColor: '#d6e9ff',
-  },
-
-  /* Data Row */
-  flexTitleSub: {
-    padding: '4px 0',
-    borderTop: '1px solid #ccc',
-    borderLeft: '1px solid  #ccc',
-    borderRight: '1px solid  #ccc',
-    fontWeight: 'bold',
-  },
-
-  /* Data Row */
-  flexRowSub: {
-    padding: '4px 0',
-    borderTop: '1px dashed #ccc',
-    borderLeft: '1px solid  #ccc',
-    borderRight: '1px solid  #ccc',
   },
 
   /* Column definiions */
   flexCol1: {
     flex: '1 1 0',
-    paddingRight: '8px',
-    paddingLeft: '8px',
+    padding: '8px',
     minWidth: '0',
+    borderTop: '1px solid #ccc',
+    borderLeft: '1px solid  #ccc',
   },
 
   flexCol2: {
     flex: '2 1 0',
-    paddingRight: '8px',
-    paddingLeft: '8px',
+    padding: '8px',
     minWidth: '0',
+    borderTop: '1px solid #ccc',
+    borderLeft: '1px solid  #ccc',
   },
 
   flexCol3: {
     flex: '3 1 0',
-    paddingRight: '8px',
-    paddingLeft: '8px',
+    padding: '8px',
     minWidth: '0',
+    borderTop: '1px solid #ccc',
+    borderLeft: '1px solid  #ccc',
   },
 
   flexCol4: {
     flex: '4 1 0',
-    paddingRight: '8px',
-    paddingLeft: '8px',
+    padding: '8px',
     minWidth: '0',
+    borderTop: '1px solid #ccc',
+    borderLeft: '1px solid  #ccc',
   },
 
   flexColAuto: {
@@ -125,13 +91,16 @@ const useStyles = makeStyles(() => ({
     paddingRight: '24px',
     paddingLeft: '24px',
     minWidth: '0',
+    borderTop: '1px solid #ccc',
+    borderLeft: '1px solid  #ccc',
   },
 
   flexColFixed40: {
     width: '40px',
-    paddingRight: '8px',
-    paddingLeft: '8px',
+    padding: '8px',
     minWidth: '0',
+    borderTop: '1px solid #ccc',
+    borderLeft: '1px solid  #ccc',
   },
 
   show: {
@@ -286,99 +255,111 @@ const useStyles = makeStyles(() => ({
   mtm8: {
     marginTop: '-8px',
   },
+
+  width100p: {
+    width: '100%',
+  },
+
+  dark: {
+    backgroundColor: theme.palette.primary.main,
+    color: '#fff',
+  }
 }));
 
-
 // eslint-disable-next-line no-unused-vars
-const CollectionAdd = ({ collectionAdd, setCollectionAdd }) => {
+const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId }) => {
   const classes = useStyles();
   const history = useHistory();
 
-  //   const [sample, setSample] = useState();
-  //   const [inventory, setInventory] = useState([]);
-  //   // const [items, setItems] = useState([1,2,3]);
-  //   // TODO: change this from true / false to show / hide
-  //   const [showDeleted, setShowDeleted] = useState(false);
-  //
-  //   // add item
-  //   const [itemAdd, setItemAdd] = useState(0);
-  //
-  //   const handleChange = async () => {
-  //     setShowDeleted(!showDeleted);
-  //   };
-  //
-  //   const [state, setState] = useState({});
-  //   const [objectTypes, setObjectTypes] = useState([{id:1, name:'name1'},{id:2, name:'name2'}]);
-  //
-  //   const handleToggle = (event) => {
-  //     setState({ ...state, [event.target.name]: event.target.checked });
-  //   };
-  //
-  //   // show/hide toggles
-  //   const [toggleIds, setToggleIds] = useState({});
-  //
-  //   // change the state of toggleIds[id]
-  //   const handleToggles = (id) => {
-  //     const newIds = toggleIds;
-  //     newIds[id] = !newIds[id];
-  //
-  //     setToggleIds({...toggleIds, id:newIds[id]})
-  //   };
-  //
-  //   const editSample = () => {
-  //     alert(`edit ${sampleId}`)
-  //   };
-  //
-  //   useEffect(() => {
-  //     const init = async () => {
-  //       // wrap the API calls
-  //       const response1 = await sampleAPI.getById(sampleId);
-  //       const response2 = await objectsAPI.getBySample(sampleId);
-  //       if (!response1) return;
-  //
-  //       // success
-  //       setSample(response1.sample);
-  //       setInventory(response1.inventory);
-  //       setObjectTypes(response2.object_types);
-  //     };
-  //
-  //     init();
-  //   }, []);
-  //
-  //   const handleClick = async (id) => {
-  //     // wrap the API call
-  //     const response = await sampleAPI.getById(id);
-  //     if (!response) return;
-  //
-  //     // success
-  //     setSample(response.sample);
-  //     setInventory(response.inventory);
-  //   }
-  //
-  //   const handleAddItem = async (id) => {
-  //     setItemAdd(id)
-  //     alert(`add item ${id}`)
-  //   }
+  const [collection, setCollection] = useState({});
+  const [objectType, setObjectType] = useState({});
+
+  // used to set rows/columns in case they are not defined in object_type (backend quirk)
+  const [rows, setRows] = useState([]);
+  const [columns, setColumns] = useState([]);
+
+
+  useEffect(() => {
+    const initNew = async () => {
+      const formData = {
+        object_type_id: collectionTypeId,
+      }
+
+      const response1 = await itemsAPI.create(formData);
+      if (!response1) return;
+
+      setCollection(response1.item);
+      setObjectType(response1.object_type);
+
+      // set rows and columns
+      setRows([...Array(response1.object_type.rows || 1)].map(() => ' ' ));
+      setColumns([...Array(response1.object_type.columns || 12)].map(() => ' ' ));
+    };
+
+    const init = async (id) => {
+      setCollection({...collection, id: id})
+      // example
+      setCollection({...collection, '1': {'2': 'test.1.2', '3': 'test.1.3'}})
+
+      alert(`get collection ${id}`)
+    }
+
+    initNew();
+    collectionId == 0 ? '' : init(collectionId);
+  }, []);
 
   return (
     <>
 
       <Typography>
         <p className={classes.right}>
-          <Button variant="outlined" onClick={() => {setCollectionAdd(0)}}>Close</Button>
+          <Button variant="outlined" onClick={() => {setCollectionTypeId(0)}}>Close</Button>
         </p>
       </Typography>
 
       <div className={classes.box}>
-        Add Collection {collectionAdd}
+        <Typography>
+          Collection: {collection.id}: {objectType.name}
+        </Typography>
+
+        <div className={classes.flexBottom}>
+
+          <div className={`${classes.flex} ${classes.flexRow} ${classes.dark}`}>
+            <Typography className={classes.flexColFixed40}>
+              &nbsp;
+            </Typography>
+            {columns.map((column,cIndex) =>(
+              <Typography className={classes.flexCol1}>
+                {cIndex}
+              </Typography>
+            ))}
+          </div>
+
+          {rows.map((row,rIndex) =>(
+            <div className={`${classes.flex} ${classes.flexRow}`}>
+              <Typography className={`${classes.flexColFixed40} ${classes.dark}`}>
+                {rIndex}
+              </Typography>
+              {columns.map((column,cIndex) =>(
+                <Typography className={classes.flexCol1}>
+                  {collection[rIndex] && collection[rIndex][cIndex] && `${collection[rIndex][cIndex]}`}
+                  <input className={classes.width100p} key={`{rIndex},{cIndex}`} id={`{rIndex},{cIndex}`} />
+                </Typography>
+              ))}
+            </div>
+          ))}
+        </div>
+
       </div>
     </>
 
   );
 };
 
-CollectionAdd.propTypes = {
-  sampleId: PropTypes.isRequired,
+CollectionForm.propTypes = {
+  collectionTypeId: PropTypes.isRequired,
+  setCollectionTypeId: PropTypes.isRequired,
 };
 
-export default CollectionAdd;
+export default CollectionForm;
+

@@ -228,10 +228,6 @@ module Api
         details = SampleType.details(id)
         details = details.update({ id: id, name: sample_type.name, description: sample_type.description })
 
-puts ">>> sample type"
-puts details.to_json
-puts ">>>"
-
         render json: {
           sample_type: details
         }.to_json, status: :ok
@@ -253,7 +249,7 @@ puts ">>>"
       #           required: <required>,
       #           array: <array>,
       #           choices: <choices>,
-      #           allowable_field_types: [             # (for ftype == "sample")
+      #           allowable_field_types: [ # (only used when ftype = "sample")
       #             {
       #               sample_type_id: <sample_type_id>
       #             },
@@ -295,13 +291,6 @@ puts ">>>"
         render json: { sample_type: sample_type }.to_json, status: :created
       end
 
-      # Update a sample type.
-      #
-      # @param token [String] a token
-      # @param id [Int] the id of the sample type
-      # @param sample_type [Hash] the sample type
-      # @return the sample type
-
       # Update a sample_type.
       #
       # <b>API Call:</b>
@@ -320,7 +309,7 @@ puts ">>>"
       #           required: <required>,
       #           array: <array>,
       #           choices: <choices>,
-      #           allowable_field_types: [             # (for ftype == "sample")
+      #           allowable_field_types: [ # (only used when ftype = "sample")
       #             {
       #               id: <allowable_field_type_id>,
       #               sample_type_id: <sample_type_id>

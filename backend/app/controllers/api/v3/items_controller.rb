@@ -73,10 +73,10 @@ module Api
         params_item = params[:item] || {}
 
         # Create group
-        item, errors = Item.create_from(params_item)
+        item, object_type, errors = Item.create_from(params_item)
         render json: { errors: errors }.to_json, status: :ok and return if !item
 
-        render json: { item: item }.to_json, status: :created
+        render json: { item: item, object_type: object_type }.to_json, status: :created
       end
 
     end

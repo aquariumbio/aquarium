@@ -103,6 +103,7 @@ class Sample < ActiveRecord::Base
             id: sample.id,
             name: sample.name,
             description: sample.description,
+            sample_type_id: sample.sample_type_id,
             sample_type: sample.sample_type.upcase,
             user_name: sample.user_name,
             login: sample.login,
@@ -149,6 +150,7 @@ class Sample < ActiveRecord::Base
       id: this_sample.id,
       name: this_sample.name,
       description: this_sample.description,
+      sample_type_id: this_sample.sample_type_id,
       sample_type: this_sample.sample_type.upcase,
       user_name: this_sample.user_name,
       login: this_sample.login,
@@ -204,7 +206,7 @@ class Sample < ActiveRecord::Base
             type: s.collection_type,
             location: s.collection_location,
             date: s.collection_date,
-            collections: [{row: s.row, column: s.column}],
+            collections: [{part_id: s.item_id, row: s.row, column: s.column}],
             key_values: []
           }
         else
@@ -219,7 +221,7 @@ class Sample < ActiveRecord::Base
           }
         end
       else
-        this_data[:collections] << {row: s.row, column: s.column}
+        this_data[:collections] << {part_id: s.item_id, row: s.row, column: s.column}
       end
       inv = inv.update({this_id => this_data})
     end

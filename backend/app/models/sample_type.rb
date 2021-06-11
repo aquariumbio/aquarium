@@ -27,10 +27,11 @@ class SampleType < ActiveRecord::Base
   def self.details(id)
     # Get feild types
     sql = "
-      select *, null as 'allowable_field_types'
+      select ft.*, null as 'allowable_field_types'
       from field_types ft
+      inner join field_type_sorts fts on fts.ftype = ft.ftype
       where ft.parent_class = 'SampleType' and ft.parent_id = #{id}
-      order by ft.name
+      order by fts.sort, ft.name
     "
     field_types = FieldType.find_by_sql sql
 

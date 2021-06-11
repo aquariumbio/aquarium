@@ -291,7 +291,7 @@ const useStyles = makeStyles(() => ({
 
 
 // eslint-disable-next-line no-unused-vars
-const SampleCard = ({ sampleId, setSampleId }) => {
+const SampleCard = ({ sampleId, setSampleId, setSampleTypeId }) => {
   const classes = useStyles();
   const history = useHistory();
 
@@ -353,6 +353,11 @@ const SampleCard = ({ sampleId, setSampleId }) => {
     init(id);
   }
 
+  const handleItemClick = async (id) => {
+    event.preventDefault();
+    alert(id)
+  }
+
   const handleAddItem = async (id) => {
     const formData = {
       object_type_id: id,
@@ -371,7 +376,7 @@ const SampleCard = ({ sampleId, setSampleId }) => {
 
       <Typography>
         <p className={classes.right}>
-          <Button className={classes.mr16} variant="outlined" onClick={() => {editSample()}}>Edit</Button>
+          <Button className={classes.mr16} variant="outlined" onClick={() => {setSampleTypeId(sample.sample_type_id)}}>Edit</Button>
           <Button variant="outlined" onClick={() => {setSampleId(0)}}>Close</Button>
         </p>
       </Typography>
@@ -471,8 +476,14 @@ const SampleCard = ({ sampleId, setSampleId }) => {
             item
             xs={9}
           >
-
             <div className={classes.flexWrapper}>
+              <div>
+                TODO: IMPORTANT <br />
+                - exclude any items that are not 'sample_container' (do it on the backend)<br />
+                - there are some that are 'glassware' <br />
+                - e.g 22033, 22034 <br />
+                <br />
+              </div>
               <div className={`${classes.flex} ${classes.flexTitle}`}>
                 <Typography className={`${classes.flexColFixed40} ${classes.center}`}>
                   <b>+</b>
@@ -559,7 +570,18 @@ const SampleCard = ({ sampleId, setSampleId }) => {
                               &nbsp;
                             </div>
                             <div className={classes.flexCol1} cy={`item-${item.item_id}`}>
-                              {item.item_id}
+                              {item.collections ? (
+                                <>
+                                  <Link className={classes.pointer} onClick={() => handleItemClick(item.item_id)}>{item.item_id}</Link>
+                                  {item.collections.map((part) => (
+                                    <div>
+                                      &rarr; {part.part_id} [{part.row}, {part.column}]
+                                    </div>
+                                  ))}
+                                </>
+                              ) : (
+                                <Link className={classes.pointer} onClick={() => handleItemClick(item.item_id)}>{item.item_id}</Link>
+                              )}
                             </div>
                             <div className={classes.flexCol1}>
                               {item.location}

@@ -15,8 +15,8 @@ import usersAPI from '../../helpers/api/usersAPI';
 import objectsAPI from '../../helpers/api/objectsAPI';
 import SampleCards from './SampleCards';
 import SampleCard from './SampleCard';
-import SampleAdd from './SampleAdd';
-import CollectionAdd from './CollectionAdd';
+import SampleForm from './SampleForm';
+import CollectionForm from './CollectionForm';
 
 // Route: /object_types
 // Linked in LeftHamburgeMenu
@@ -193,6 +193,8 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
   const classes = useStyles();
 
   const [sampleId,setSampleId] = useState(0);
+  const [collectionId,setCollectionId] = useState(0);
+  const [containerId,setContainerId] = useState(0);
 
   const [samples, setSamples] = useState([]);
   const [count, setCount] = useState();
@@ -200,31 +202,35 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
   const [pages, setPages] = useState();
   const [user, setUser] = useState({});
 
+  // search box
   const [search, setSearch] = useState('');
   // initialize searchWords as single space so it triggers the search on page load
   const [searchWords, setSearchWords] = useState(' ');
-  // sample types for search by sample type + add sample dropdowns
-  const [sampleTypes, setSampleTypes] = useState([]);
   // search by sample type id
-  const [sampleTypeId, setSampleTypeId] = useState(0);
+  const [searchSampleTypeId, setSearchSampleTypeId] = useState(0);
   // search by created by id
-  const [createdById, setCreatedById] = useState(0);
+  const [searchCreatedById, setSearchCreatedById] = useState(0);
 
-  // add sample
-  const [sampleAdd, setSampleAdd] = useState(0);
-  // collection types
+  // list of sample types
+  const [sampleTypes, setSampleTypes] = useState([]);
+  // list of collection types
   const [collectionTypes, setCollectionTypes] = useState([]);
-  // add collection
-  const [collectionAdd, setCollectionAdd] = useState(0);
+
+  // add/edit a sample by sample type id
+  const [sampleTypeId, setSampleTypeId] = useState(0);
+  // add/edit a collection by collection type id (an object type with handler = 'collection')
+  const [collectionTypeId, setCollectionTypeId] = useState(0);
+  // add/edit an item by object type id (an object type with handler = 'sample_container')
+  const [containerTypeId, setContainerTypeId] = useState(0);
 
   const goSearch = async (sampletypeid, createdbyid, pagenum) => {
     const words = search.replace(/ +/g,' ') //.trim()
 
-    if (words != searchWords || sampletypeid != sampleTypeId || createdbyid != createdById || pagenum != page) {
-      if (words != searchWords || sampletypeid != sampleTypeId || createdbyid != createdById) pagenum = 1
+    if (words != searchWords || sampletypeid != searchSampleTypeId || createdbyid != searchCreatedById || pagenum != page) {
+      if (words != searchWords || sampletypeid != searchSampleTypeId || createdbyid != searchCreatedById) pagenum = 1
       setSearchWords(words);
-      setSampleTypeId(sampletypeid);
-      setCreatedById(createdbyid);
+      setSearchSampleTypeId(sampletypeid);
+      setSearchCreatedById(createdbyid);
       setPage(pagenum);
 
       // wrap the API call with the spinner
@@ -246,7 +252,7 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
     if (pagenum != page) {
       setPage(pagenum);
 
-      const response = await sampleAPI.getSamples(searchWords, sampleTypeId, createdById, pagenum);
+      const response = await sampleAPI.getSamples(searchWords, searchSampleTypeId, searchCreatedById, pagenum);
       if (!response) return;
 
       // success
@@ -275,11 +281,11 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
   }, []);
 
   const handleAddSample = async (id) => {
-    setSampleAdd(id)
+    setSampleTypeId(id)
   }
 
   const handleAddCollection = async (id) => {
-    setCollectionAdd(id)
+    setCollectionTypeId(id)
   }
 
   const handleClick = async (id) => {
@@ -287,17 +293,17 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
   }
 
   const handleSampleTypeId = async (id) => {
-    goSearch(id, createdById)
+    goSearch(id, searchCreatedById)
   }
 
   const handleCreatedById = async (id) => {
-    goSearch(sampleTypeId, id)
+    goSearch(searchSampleTypeId, id)
   }
 
   return (
     <>
       <div className={classes.mt16}>
-        <div className={`${classes.header} ${sampleId + sampleAdd + collectionAdd != 0 ? classes.hidden : '' }`}>
+        <div className={`${classes.header} ${sampleId + sampleTypeId + collectionTypeId != 0 ? classes.hidden : '' }`}>
           <div className={classes.subheader}>
             <Typography className={`${classes.searchBox} ${classes.mr24}`}>
               <TextField
@@ -314,7 +320,7 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
                   'aria-label': 'search',
                   'data-cy': 'search',
                 }}
-                onKeyUp = {(event) => goSearch(sampleTypeId, createdById)}
+                onKeyUp = {(event) => goSearch(searchSampleTypeId, searchCreatedById)}
               />
             </Typography>
 
@@ -322,7 +328,7 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
               <TextField
                 name="sample_type"
                 id="sample-type"
-                value={sampleTypeId}
+                value={searchSampleTypeId}
                 onChange={(event) => handleSampleTypeId(event.target.value)}
                 variant="outlined"
                 type="string"
@@ -343,7 +349,7 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
               <TextField
                 name="created_by"
                 id="created-by"
-                value={createdById}
+                value={searchCreatedById}
                 onChange={(event) => handleCreatedById(event.target.value)}
                 variant="outlined"
                 type="string"
@@ -365,7 +371,7 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
                 name="add_sample"
                 fullWidth
                 id="add_sample"
-                value={sampleAdd}
+                value={sampleTypeId}
                 onChange={(event) => handleAddSample(event.target.value)}
                 variant="outlined"
                 type="string"
@@ -387,7 +393,7 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
                 name="add_collection"
                 fullWidth
                 id="add_collection"
-                value={collectionAdd}
+                value={collectionTypeId}
                 onChange={(event) => handleAddCollection(event.target.value)}
                 variant="outlined"
                 type="string"
@@ -409,10 +415,20 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
 
       <Divider />
 
-      {sampleAdd != 0 && (<SampleAdd sampleAdd={sampleAdd} setSampleAdd={setSampleAdd}/>)}
-      {collectionAdd != 0 && (<CollectionAdd collectionAdd={collectionAdd} setCollectionAdd={setCollectionAdd}/>)}
-      {sampleAdd === 0 && collectionAdd === 0 && sampleId != 0 && <SampleCard sampleId={sampleId} setSampleId={setSampleId}/>}
-      {sampleAdd === 0 && collectionAdd === 0 && sampleId === 0 && <SampleCards handlePage={handlePage} handleClick={handleClick} count={count} page={page} pages={pages} samples={samples}/>}
+      {/* display one of
+      sample pages
+      - SampleCards (search page) <== sampleId == 0
+      - SampleCard (individual sample page) <== sampleId != 0
+      sub-forms
+      - SampleForm (sample form) <== sampleTypeId != 0
+      - ContainerForm (item form if item is a single item) <== containerTypeId != 0
+      - Collectionform (item form if item is a collection) <== collectionTypeId != 0
+      */}
+      {sampleTypeId != 0 && (<SampleForm sampleId={sampleId} sampleTypeId={sampleTypeId} setSampleTypeId={setSampleTypeId}/>)}
+      {/* {containerTypeId != 0 && (<ContainerForm containerId={containerId} containerTypeId={containerTypeId} setContainerTypeId={setContainerTypeId}/>)} */}
+      {collectionTypeId != 0 && (<CollectionForm collectionId={collectionId} collectionTypeId={collectionTypeId} setCollectionTypeId={setCollectionTypeId}/>)}
+      {sampleTypeId == 0 && collectionTypeId == 0 && sampleId != 0 && <SampleCard sampleId={sampleId} setSampleId={setSampleId} setSampleTypeId={setSampleTypeId}/>}
+      {sampleTypeId == 0 && collectionTypeId == 0 && sampleId == 0 && <SampleCards handlePage={handlePage} handleClick={handleClick} count={count} page={page} pages={pages} samples={samples}/>}
     </>
   );
 };
