@@ -61,7 +61,6 @@ const HorizontalNavList = ({
           {!!count && <Typography className={classes.count}>({count})</Typography>}
         </ListItem>
       ))}
-
     </List>
   );
 };

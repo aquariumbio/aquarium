@@ -15,7 +15,7 @@ import { useWindowDimensions } from '../../WindowDimensionsProvider';
 
 const useStyles = makeStyles((theme) => ({
   title: {
-    padding: theme.spacing(2),
+    padding: `${theme.spacing(2)}px ${theme.spacing(4)}px`,
     borderBottom: '1px solid #DDD',
     fontWeight: 'bold',
 
@@ -63,7 +63,9 @@ const ShowJobOperations = ({
       key="title"
       role="row"
     >
-      <div className={`${globalClasses.flexCol1}`} />
+      <div className={`${globalClasses.flexCol1}`}>
+        <Typography variant="body2">Remove</Typography>
+      </div>
       <div role="columnheader" className={`${globalClasses.flexCol1}`}>
         <Typography variant="body2">Plan #</Typography>
       </div>

@@ -4,6 +4,7 @@ import {
   func, string, object,
 } from 'prop-types';
 import Divider from '@material-ui/core/Divider';
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core';
 import jobsAPI from '../../helpers/api/jobsAPI';
@@ -231,16 +232,18 @@ const ShowByOperation = ({
       <div className={globalClasses.flexWrapper} key={operation.id}>
         <div className={`${globalClasses.flex} ${globalClasses.flexRow} ${checked.includes(operation.id) && globalClasses.hightlight}`} key={`op_${operation.id}`}>
           <div className={`${globalClasses.flexCol1}`}>
-            <Checkbox
-              color="primary"
-              inputProps={{ 'aria-label': 'operation-checkbox' }}
-              edge="end"
-              checked={checked.indexOf(operation.id) !== -1}
-              onChange={handleToggle(operation.id)}
-              tabIndex={-1}
-              disableRipple
-              className={classes.checkbox}
-            />
+            <Tooltip title="add to job">
+              <Checkbox
+                color="primary"
+                inputProps={{ 'aria-label': 'operation-checkbox' }}
+                edge="end"
+                checked={checked.indexOf(operation.id) !== -1}
+                onChange={handleToggle(operation.id)}
+                tabIndex={-1}
+                disableRipple
+                className={classes.checkbox}
+              />
+            </Tooltip>
           </div>
           <div className={`${globalClasses.flexCol1}`}>
             <Typography variant="body2" noWrap>{operation.plan_id}</Typography>

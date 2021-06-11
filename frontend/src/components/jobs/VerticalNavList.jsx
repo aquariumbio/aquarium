@@ -5,8 +5,11 @@ import {
 import { makeStyles } from '@material-ui/core';
 import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
+import Tooltip from '@material-ui/core/Tooltip';
 import SideBar from '../shared/layout/SideBar';
 import ListFixed from '../shared/layout/ListFixed';
+
+// Operations navigation component
 
 const useStyles = makeStyles(() => ({
   count: {
@@ -37,17 +40,18 @@ const VerticalNavList = ({
         )}
 
         {list !== undefined && list.map((li) => (
-          <ListItem
-            button
-            role="tab"
-            onClick={(event) => handleListItemClick(event, li.name)}
-            selected={value.name === li.name}
-            key={li.name}
-            // className={globalClasses.pointer}
-          >
-            <Typography variant="body2" noWrap>{li.name} </Typography>
-            <Typography variant="body2" className={classes.count}>({li.n})</Typography>
-          </ListItem>
+          <Tooltip title={li.name}>
+            <ListItem
+              button
+              role="tab"
+              onClick={(event) => handleListItemClick(event, li.name)}
+              selected={value.name === li.name}
+              key={li.name}
+            >
+              <Typography variant="body2" noWrap>{li.name} </Typography>
+              <Typography variant="body2" className={classes.count}>({li.n})</Typography>
+            </ListItem>
+          </Tooltip>
         ))}
       </ListFixed>
     </SideBar>

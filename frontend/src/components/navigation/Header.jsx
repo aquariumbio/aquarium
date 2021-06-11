@@ -7,6 +7,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import { withRouter, Link as RouterLink } from 'react-router-dom';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import Tooltip from '@material-ui/core/Tooltip';
 import UserMenu from './UserMenu';
 import LeftHamburgerMenu from './LeftHamburgerMenu';
 import { HomeButton } from '../shared/Buttons';
@@ -97,9 +98,13 @@ const Header = ({ location }) => {
     <AppBar position="fixed" elevation={0} className={classes.root} component="header">
       <Toolbar>
         <div className={classes.headerOptions}>
-          <LeftHamburgerMenu />
+          <Tooltip title="Main Menu">
+            <LeftHamburgerMenu />
+          </Tooltip>
 
-          <HomeButton />
+          <Tooltip title="Home">
+            <HomeButton />
+          </Tooltip>
 
           <Tabs
             value={value}
@@ -123,8 +128,9 @@ const Header = ({ location }) => {
           </Tabs>
 
         </div>
-
-        <UserMenu />
+        <Tooltip title="User Menu">
+          <UserMenu />
+        </Tooltip>
 
       </Toolbar>
     </AppBar>
