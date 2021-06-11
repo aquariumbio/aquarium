@@ -14,7 +14,7 @@ class Operation < ActiveRecord::Base
 
   def self.operations_for_category_type_status(category, type, status)
     sql = "
-      select o.id, pa.plan_id, u.name, o.status, o.updated_at
+      select o.id, pa.plan_id, u.name as 'user_name', o.status, o.updated_at
       from operation_types ot
       inner join operations o on o.operation_type_id = ot.id
       inner join plan_associations pa on pa.operation_id = o.id
@@ -36,7 +36,7 @@ class Operation < ActiveRecord::Base
       # get data_associations for operation
       data_associations = DataAssociation.data_associations(operation_id)
 
-      results << { id: o.id, plan_id: o.plan_id, name: o.name, status: o.status, updated_at: o.updated_at, inputs: inputs, outputs: outputs, data_associations: data_associations }
+      results << { id: o.id, plan_id: o.plan_id, user_name: o.user_name, status: o.status, updated_at: o.updated_at, inputs: inputs, outputs: outputs, data_associations: data_associations }
     end
     results
   end
