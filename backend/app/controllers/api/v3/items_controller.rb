@@ -86,11 +86,11 @@ module Api
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
         id = params[:id].to_i
-        item, object_type = Item.get_collection(id)
+        item, object_type, collection = Item.get_collection(id)
 
-        render json: { item: nil, object_type: nil }.to_json, status: :not_found and return  if !item
+        render json: { item: nil, object_type: nil, collection: nill }.to_json, status: :not_found and return  if !item
 
-        render json: { item: item, object_type: object_type }.to_json, status: :ok
+        render json: { item: item, object_type: object_type, collection: collection }.to_json, status: :ok
       end
 
     end

@@ -271,6 +271,7 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
   const classes = useStyles();
   const history = useHistory();
 
+  const [item, setItem] = useState({});
   const [collection, setCollection] = useState({});
   const [objectType, setObjectType] = useState({});
 
@@ -288,7 +289,8 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
       const response1 = await itemsAPI.create(formData);
       if (!response1) return;
 
-      setCollection(response1.item);
+      // set item + object type
+      setItem(response1.item);
       setObjectType(response1.object_type);
 
       // set rows and columns
@@ -300,18 +302,16 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
       const response1 = await itemsAPI.getCollectionById(id);
       if (!response1) return;
 
-      setCollection(response1.item);
+      // set item + object type
+      setItem(response1.item);
       setObjectType(response1.object_type);
 
       // set rows and columns
       setRows([...Array(response1.object_type.rows || 1)].map(() => ' ' ));
       setColumns([...Array(response1.object_type.columns || 12)].map(() => ' ' ));
 
-      setCollection({...collection, id: id})
-
-      alert(`TODO: get data for collection ${id}`)
-      // example
-      // setCollection({...collection, '1': {'2': 'test.1.2', '3': 'test.1.3'}})
+      // set collection data
+      setCollection(response1.collection)
     }
 
     collectionId == 0 ? initNew() : initEdit(collectionId);
@@ -328,7 +328,7 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
 
       <div className={classes.box}>
         <Typography>
-          Collection: {collection.id}: {objectType.name}
+          Collection: {item.id}: {objectType.name}
         </Typography>
 
         <div className={classes.flexBottom}>

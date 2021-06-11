@@ -11,11 +11,28 @@ class Item < ActiveRecord::Base
       where i.id = #{id.to_i} and ot.handler = 'collection'
       limit 1
     "
-    collection = (Item.find_by_sql sql)[0]
+    item = (Item.find_by_sql sql)[0]
 
-    object_type = collection ? ObjectType.find_by(id: collection.object_type_id) : nil
+    object_type = item ? ObjectType.find_by(id: item.object_type_id) : nil
 
-    return collection, object_type
+    sql = "
+      select pa.row, pa.column, i.id as 'item_id', i.sample_id
+      from part_associations pa
+      inner join items i on i.id = pa.part_id
+      where pa.collection_id = #{item.id}
+    "
+    collection_data = PartAssociation.find_by_sql sql
+
+    collection = {}
+    collection_data.each do |c|
+      if collection[c.row]
+        collection[c.row] = collection[c.row].update({c.column => "#{c.sample_id}: #{c.item_id}"})
+      else
+        collection = collection.update({c.row => {c.column => "#{c.sample_id}: #{c.item_id}"}})
+      end
+    end
+
+    return item, object_type, collection
   end
 
   # Create an item
