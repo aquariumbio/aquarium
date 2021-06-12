@@ -333,9 +333,7 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
       // map collection data
       let temp = new Object
       response1.collection.map((c) => (
-        temp[c.row]
-        ? temp[c.row]={...temp[c.row], [c.column]: `${c.sample_id} (${c.item_id})`}
-        : temp[c.row]={[c.column]: `${c.sample_id} (${c.item_id})`}
+        temp={...temp,[`${c.row}.${c.column}`]: c.sample_id}
       ))
 
       // set collection
@@ -389,7 +387,7 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
               </Typography>
               {columns.map((column,cIndex) =>(
                 <Typography className={`${classes.flexCol1x} ${rowSel == row && colSel == column ? classes.selected : classes.deselected}`} id={`${row},${column}`} onClick={() => handleRC(row, column)}>
-                  {collection[row] && collection[row][column] && `${collection[row][column]}`}
+                  {collection[`${row}.${column}`]}
                 </Typography>
               ))}
             </div>
