@@ -375,7 +375,7 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
             </Typography>
             {columns.map((column) =>(
               <Typography className={classes.flexCol1}>
-                {column}
+                {column + 1}
               </Typography>
             ))}
           </div>
@@ -383,7 +383,7 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
           {rows.map((row) =>(
             <div className={`${classes.flex} ${classes.flexRow}`}>
               <Typography className={`${classes.flexColFixed40} ${classes.dark}`}>
-                {row}
+                {row + 1}
               </Typography>
               {columns.map((column,cIndex) =>(
                 <Typography className={`${classes.flexCol1x} ${rowSel == row && colSel == column ? classes.selected : classes.deselected}`} id={`${row},${column}`} onClick={() => handleRC(row, column)}>

@@ -30,7 +30,7 @@ class Sample < ActiveRecord::Base
       # search item id only
       this_id = words[5,words.length].strip.split(' ')[0]
       if this_id == this_id.to_i.to_s
-        ands << "id = (select sample_id from items where id = #{this_id})"
+        ands << "item_ids like '%.#{this_id}.%'"
       else
         ands << "0"
       end
@@ -46,7 +46,7 @@ class Sample < ActiveRecord::Base
       # search item id only
       this_id = words[2,words.length].strip.split(' ')[0]
       if this_id == this_id.to_i.to_s
-        ands << "id = (select sample_id from items where id = #{this_id})"
+        ands << "item_ids like '%.#{this_id}.%'"
       else
         ands << "0"
       end

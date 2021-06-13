@@ -568,7 +568,7 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, s
                                   <Link className={classes.pointer} onClick={() => handleCollectionClick(item.item_id, item.type_id)}>{item.item_id}</Link>
                                   {item.collections.map((part) => (
                                     <div>
-                                      &rarr; {part.part_id} [{part.row}, {part.column}]
+                                      &rarr; row {part.row + 1} col {part.column + 1}
                                     </div>
                                   ))}
                                 </>
