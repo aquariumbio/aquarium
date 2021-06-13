@@ -348,8 +348,39 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
     sampleId == 0 ? '' : initEdit(sampleId);
   }, []);
 
+  const [inputs, setInputs] = useState({f_16_0: 'abc', f_16_1:'def'});
+
+  const handleInputs = async(event) => {
+    setInputs({...inputs,
+      [event.target.id]:event.target.value
+    })
+  }
+
+  // Submit form with all data
+  const handleSubmit = async () => {
+    // set formData
+    const form = document.querySelector('#sampleForm');
+    const data = new FormData(form);
+    const formData = Object.fromEntries(data);
+
+    // formData does not support array syntax. Build arrays manually
+    let temp
+    let input
+
+    temp = []
+    input = document.getElementsByName('f_16')
+    input.forEach(i => temp.push(i.value))
+    formData['f_16']=temp
+
+    temp = []
+    input = document.getElementsByName('f_15')
+    input.forEach(i => temp.push(i.value))
+    formData['f_15']=temp
+debugger;
+  }
+
   return (
-    <>
+    <form id='sampleForm'>
 
       <Typography>
         <p className={classes.right}>
@@ -372,6 +403,7 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
           </Typography>
           <Typography className={classes.flexCol3}>
             <input
+            name="name"
             value={sample.name}
             />
           </Typography>
@@ -386,6 +418,7 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
           </Typography>
           <Typography className={classes.flexCol3}>
             <input
+            name="description"
             value={sample.description}
             />
           </Typography>
@@ -400,6 +433,7 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
           </Typography>
           <Typography className={classes.flexCol3}>
             <input
+            name="project"
             value={sample.project}
             />
           </Typography>
@@ -435,13 +469,18 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
               ) : (
                 ''
               )}
-              <input />
+              {`f_${field_type.id}`}
+              <input id={`f_${field_type.id}_0`} name={`f_${field_type.id}`} value={inputs[`f_${field_type.id}_0`]} onChange={(event) => handleInputs(event)} />
+              <input id={`f_${field_type.id}_1`} name={`f_${field_type.id}`} value={inputs[`f_${field_type.id}_1`]} onChange={(event) => handleInputs(event)} />
             </Typography>
           </div>
         ))}
         </div>
       </div>
-    </>
+      <Typography>
+        <Button variant="outlined" onClick={handleSubmit}>Submit</Button>
+      </Typography>
+    </form>
 
   );
 };
@@ -451,3 +490,5 @@ SampleForm.propTypes = {
 };
 
 export default SampleForm;
+
+//
