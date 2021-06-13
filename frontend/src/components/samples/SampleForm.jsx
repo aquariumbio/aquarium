@@ -322,6 +322,25 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
       temp={...temp, ['description']: resp.description}
       temp={...temp, ['project']: resp.project}
 
+      // map fields
+      let fields = new Object
+      resp.fields.map((f) => (
+        fields[f.id]
+        ? fields[f.id]=[...fields[f.id], f.value]
+        : fields[f.id]=[f.value]
+      ))
+      resp.fields_urls.map((f) => (
+        fields[f.id]
+        ? fields[f.id]=[...fields[f.id], f.value]
+        : fields[f.id]=[f.value]
+      ))
+      resp.fields_samples.map((f) => (
+        fields[f.id]
+        ? fields[f.id]=[...fields[f.id],`${f.child_sample_id}: ${f.child_sample_name}`]
+        : fields[f.id]=[`${f.child_sample_id}: ${f.child_sample_name}`]
+      ))
+      temp={...temp, ['fields']: fields}
+
       setSample(temp)
     }
 
@@ -398,7 +417,7 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
                 <>
                     {field_type.allowable_field_types.map((allowable_field_type) => (
                       <>
-                        {allowable_field_type.name} <br />
+                        {allowable_field_type.name} ({allowable_field_type.sample_type_id}) <br />
                       </>
                     ))}
                 </>
@@ -407,6 +426,15 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
               )}
             </Typography>
             <Typography className={classes.flexCol3}>
+              {sample.fields[field_type.id] ? (
+                sample.fields[field_type.id].map((f) => (
+                  <div>
+                    {f}
+                  </div>
+                ))
+              ) : (
+                ''
+              )}
               <input />
             </Typography>
           </div>
