@@ -325,19 +325,25 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
       // map fields
       let fields = new Object
       resp.fields.map((f) => (
-        fields[f.id]
-        ? fields[f.id]=[...fields[f.id], f.value]
-        : fields[f.id]=[f.value]
+        f.value && (
+          fields[f.id]
+          ? fields[f.id]=[...fields[f.id], f.value]
+          : fields[f.id]=[f.value]
+        )
       ))
       resp.fields_urls.map((f) => (
-        fields[f.id]
-        ? fields[f.id]=[...fields[f.id], f.value]
-        : fields[f.id]=[f.value]
+        f.value && (
+          fields[f.id]
+          ? fields[f.id]=[...fields[f.id], f.value]
+          : fields[f.id]=[f.value]
+        )
       ))
       resp.fields_samples.map((f) => (
-        fields[f.id]
-        ? fields[f.id]=[...fields[f.id],`${f.child_sample_id}: ${f.child_sample_name}`]
-        : fields[f.id]=[`${f.child_sample_id}: ${f.child_sample_name}`]
+        f.child_sample_id && (
+          fields[f.id]
+          ? fields[f.id]=[...fields[f.id],`${f.child_sample_id}: ${f.child_sample_name}`]
+          : fields[f.id]=[`${f.child_sample_id}: ${f.child_sample_name}`]
+        )
       ))
       temp={...temp, ['fields']: fields}
 
@@ -348,7 +354,9 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
     sampleId == 0 ? '' : initEdit(sampleId);
   }, []);
 
-  const [inputs, setInputs] = useState({f_16_0: 'abc', f_16_1:'def'});
+  const [inputs, setInputs] = useState({});
+  // example
+  // const [inputs, setInputs] = useState({f_16_0: 'abc', f_16_1:'def'});
 
   const handleInputs = async(event) => {
     setInputs({...inputs,
