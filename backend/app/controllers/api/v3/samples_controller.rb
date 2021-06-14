@@ -193,6 +193,49 @@ module Api
 
       end
 
+      # Searches samples
+      #
+      # <b>API Call:</b>
+      #   GET: /api/v3/samples/search
+      #   {
+      #     token: <token>,
+      #     text: <text>,
+      #     sample_type_ids: <sample_type_ids>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     samples: [
+      #       {
+      #         id: <sample_id>,
+      #         name: <name>
+      #       },
+      #       ...
+      #     ]
+      #   }
+      #
+      # @!method index(token, words, sample_type_ids,)
+      # @param token [String] a token
+      # @param text [String] search text / sample:<sample_id>
+      # @param sample_type_id [Array] the ids of the sample types to search
+      def quick_search
+        # Check for admin permissions
+        status, response = check_token_for_permission(Permission.admin_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        page = Input.int(params[:page])
+        text = Input.text(params[:text])
+        sample_type_ids = Input.int(params[:sample_type_ids])
+
+        results = Sample.quick_search({
+          text: text,
+          sample_type_ids: sample_type_ids
+        })
+        render json: results.to_json, status: :ok
+
+      end
+
       # Returns details for a specific sample.
       #
       # <b>API Call:</b>

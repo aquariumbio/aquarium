@@ -28,7 +28,6 @@ class Sample < ActiveRecord::Base
       end
     elsif words[0,5]=="item:"
       # search item id only
-      # TODO: remove dependency on item_ids (and remove item_ids from the db)
       this_id = words[5,words.length].strip.split(' ')[0]
       if this_id == this_id.to_i.to_s
         ands << "item_ids like '%.#{this_id}.%'"
@@ -45,7 +44,6 @@ class Sample < ActiveRecord::Base
       end
     elsif words[0,2]=="i:"
       # search item id only
-      # TODO: remove dependency on item_ids (and remove item_ids from the db)
       this_id = words[2,words.length].strip.split(' ')[0]
       if this_id == this_id.to_i.to_s
         ands << "item_ids like '%.#{this_id}.%'"
@@ -137,6 +135,13 @@ class Sample < ActiveRecord::Base
 
     end
     return { page: page, count: count, pages: (1.0 * count / per_page).ceil(), samples: samples }
+  end
+
+  # Return search results
+  def self.quick_search(options)
+    # testing
+    sql = "select id, name from samples order by id desc limit 100"
+    Sample.find_by_sql sql
   end
 
   # Return sample + inventory data

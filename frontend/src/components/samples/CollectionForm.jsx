@@ -21,6 +21,7 @@ import Button from '@material-ui/core/Button';
 import { StandardButton } from '../shared/Buttons';
 import itemsAPI from '../../helpers/api/itemsAPI';
 import objectsAPI from '../../helpers/api/objectsAPI';
+import sampleAPI from '../../helpers/api/sampleAPI';
 
 // Route: /object_types
 // Linked in LeftHamburgeMenu
@@ -128,6 +129,10 @@ const useStyles = makeStyles((theme) => ({
 
   mt16: {
     marginTop: '16px',
+  },
+
+  mt8: {
+    marginTop: '8px',
   },
 
   center: {
@@ -282,6 +287,23 @@ const useStyles = makeStyles((theme) => ({
     border: '2px dashed black',
     padding: '7px 6px 6px 7px',
   },
+
+  selectList: {
+    height: '320px',
+    overflowY: 'scroll',
+    border: '1px solid black',
+  },
+
+  selectItem: {
+    cursor: 'pointer',
+    padding: '0 4px',
+    height: '20px',
+    lineHeight: '20px',
+
+    '&:hover': {
+      backgroundColor: '#ccc',
+    }
+  },
 }));
 
 // eslint-disable-next-line no-unused-vars
@@ -292,6 +314,8 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
   const [item, setItem] = useState({});
   const [collection, setCollection] = useState({});
   const [objectType, setObjectType] = useState({});
+  const [quickSearch, setQuickSearch] = useState('');
+  const [list, setList] = useState([]);
 
   // used to set rows/columns in case they are not defined in object_type (backend quirk)
   const [rows, setRows] = useState([]);
@@ -353,6 +377,26 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
     )
   };
 
+  const handleSearch = async () => {
+    setQuickSearch(event.target.value)
+
+    const response1 = await sampleAPI.getQuickSearch('testing','1.2.3');
+    if (!response1) return;
+
+    // set item + object type
+    setList(response1);
+  };
+
+  const handleSelect = async (event) => {
+    alert(`assign ${event.target.id} to row ${rowSel} column ${colSel}`)
+    setList([])
+    setQuickSearch('')
+  }
+
+  const handleRemove = async () => {
+    alert(`remove - row ${rowSel} column ${colSel}`)
+  }
+
   return (
     <>
 
@@ -395,6 +439,40 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
         </div>
 
       </div>
+
+      {rowSel != -1 && (
+        <>
+          {collection[`${rowSel}.${colSel}`] ? (
+            <>
+              <Typography className={classes.mt16}>
+                Remove Sample from Selection
+              </Typography>
+              <Typography className={classes.mt8}>
+                <Button variant="outlined" onClick={handleRemove}>Remove</Button>
+              </Typography>
+            </>
+          ) : (
+            <>
+              <Typography className={classes.mt16}>
+                Assign Sample to Selection
+              </Typography>
+              <Typography className={classes.mt8}>
+                <input value={quickSearch} onChange={(event) => handleSearch(event)} />
+                {list.length!=0 && (
+                  <div className={classes.selectList}>
+                    {list.map((l) => (
+                      <div id={l.id} className={classes.selectItem} onClick={(event) => handleSelect(event)}>
+                        {l.id}: {l.name}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </Typography>
+            </>
+          )}
+        </>
+      )}
+
     </>
 
   );
