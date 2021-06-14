@@ -167,6 +167,21 @@ const useStyles = makeStyles(() => ({
     cursor: 'pointer',
   },
 
+  remove: {
+    cursor: 'pointer',
+    fontWeight: 'bold',
+    fontSize: '150%',
+    marginLeft: '8px',
+  },
+
+  add: {
+    cursor: 'pointer',
+    border: '1px solid black',
+    padding: '2px 4px',
+    backgroundColor: '#eee',
+    marginLeft: '8px',
+  },
+
   pointer_no_hover: {
     cursor: 'pointer',
 
@@ -287,6 +302,10 @@ const useStyles = makeStyles(() => ({
   mtm8: {
     marginTop: '-8px',
   },
+
+  p100: {
+    width: 'calc(100% - 50px)',
+  },
 }));
 
 
@@ -297,6 +316,7 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
 
   const [sampleType, setSampleType] = useState({});
   const [sample, setSample] = useState({});
+  const [fields, setFields] = useState({});
 
   useEffect(() => {
     const init = async () => {
@@ -314,45 +334,60 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
       if (!response) return;
 
       // success
-      // map collection data
+      // map sample data
       const resp = response.sample
       let temp = new Object
       temp={...temp, ['id']: resp.id}
       temp={...temp, ['name']: resp.name}
       temp={...temp, ['description']: resp.description}
       temp={...temp, ['project']: resp.project}
+      setSample(temp)
 
       // map fields
-      let fields = new Object
+      let temp2 = new Object
       resp.fields.map((f) => (
         f.value && (
-          fields[f.id]
-          ? fields[f.id]=[...fields[f.id], f.value]
-          : fields[f.id]=[f.value]
+          temp2[f.id]
+          ? temp2[f.id]=[...temp2[f.id], f.value]
+          : temp2[f.id]=[f.value]
         )
       ))
       resp.fields_urls.map((f) => (
         f.value && (
-          fields[f.id]
-          ? fields[f.id]=[...fields[f.id], f.value]
-          : fields[f.id]=[f.value]
+          temp2[f.id]
+          ? temp2[f.id]=[...temp2[f.id], f.value]
+          : temp2[f.id]=[f.value]
         )
       ))
       resp.fields_samples.map((f) => (
         f.child_sample_id && (
-          fields[f.id]
-          ? fields[f.id]=[...fields[f.id],`${f.child_sample_id}: ${f.child_sample_name}`]
-          : fields[f.id]=[`${f.child_sample_id}: ${f.child_sample_name}`]
+          temp2[f.id]
+          ? temp2[f.id]=[...temp2[f.id],`${f.child_sample_id}: ${f.child_sample_name}`]
+          : temp2[f.id]=[`${f.child_sample_id}: ${f.child_sample_name}`]
         )
       ))
-      temp={...temp, ['fields']: fields}
-
-      setSample(temp)
+      setFields(temp2)
     }
 
     init();
     sampleId == 0 ? '' : initEdit(sampleId);
   }, []);
+
+  const addField = async(id) => {
+    let temp = fields[id]
+    temp ? (
+      temp=temp.push('new'),
+      setFields({...fields, [fields[id]]: temp})
+    ) : (
+      setFields({...fields, [id]: ['new']})
+    )
+  }
+
+  const removeField = async(id,index) => {
+    let temp = fields[id]
+    temp = temp.splice(index,1)
+    setFields({...fields, [fields[id]]: temp})
+  }
 
   const [inputs, setInputs] = useState({});
   // example
@@ -468,18 +503,20 @@ debugger;
               )}
             </Typography>
             <Typography className={classes.flexCol3}>
-              {sample.fields[field_type.id] ? (
-                sample.fields[field_type.id].map((f) => (
+              {fields[field_type.id] ? (
+                fields[field_type.id].map((f,i) => (
                   <div>
-                    {f}
+                    <input className={classes.p100} disabled name={`f.${field_type.id}`} value={`${f} (f.${field_type.id}.${i})`} />
+                    <span className={`${classes.remove}`} onClick={() => removeField(field_type.id, i)}>&#215;</span>
                   </div>
                 ))
               ) : (
                 ''
               )}
-              {`f_${field_type.id}`}
-              <input id={`f_${field_type.id}_0`} name={`f_${field_type.id}`} value={inputs[`f_${field_type.id}_0`]} onChange={(event) => handleInputs(event)} />
-              <input id={`f_${field_type.id}_1`} name={`f_${field_type.id}`} value={inputs[`f_${field_type.id}_1`]} onChange={(event) => handleInputs(event)} />
+              <div>
+                <input className={classes.p100} id={`i.${field_type.id}`}  value={inputs[`i.${field_type.id}`]} onChange={(event) => handleInputs(event)} />
+                <span className={`${classes.add}`} onClick={() => addField(field_type.id)}>Add</span>
+              </div>
             </Typography>
           </div>
         ))}
@@ -499,4 +536,12 @@ SampleForm.propTypes = {
 
 export default SampleForm;
 
-//
+//               <div>
+//                 <Button variant="outlined" onClick={() => addField(field_type.id)}>Add</Button>
+//               </div>
+//               <div>
+//                 <input id={`f_${field_type.id}_0`} name={`f_${field_type.id}`} value={inputs[`f_${field_type.id}_0`]} onChange={(event) => handleInputs(event)} />
+//               </div>
+//               <div>
+//                 <input id={`f_${field_type.id}_1`} name={`f_${field_type.id}`} value={inputs[`f_${field_type.id}_1`]} onChange={(event) => handleInputs(event)} />
+//               </div>

@@ -303,7 +303,7 @@ CREATE TABLE `items` (
   CONSTRAINT `fk_rails_6b7d1f696e` FOREIGN KEY (`sample_id`) REFERENCES `samples` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_a6ef7e6462` FOREIGN KEY (`object_type_id`) REFERENCES `object_types` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_d02c2a2df1` FOREIGN KEY (`locator_id`) REFERENCES `locators` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=513609 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=513642 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `job_assignment_logs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -799,8 +799,34 @@ SET character_set_client = utf8;
   `id` tinyint NOT NULL,
   `name` tinyint NOT NULL,
   `description` tinyint NOT NULL,
+  `project` tinyint NOT NULL,
   `created_at` tinyint NOT NULL,
   `item_ids` tinyint NOT NULL,
+  `sample_type_id` tinyint NOT NULL,
+  `sample_type` tinyint NOT NULL,
+  `user_name` tinyint NOT NULL,
+  `login` tinyint NOT NULL,
+  `ft_id` tinyint NOT NULL,
+  `ft_type` tinyint NOT NULL,
+  `ft_sort` tinyint NOT NULL,
+  `ft_name` tinyint NOT NULL,
+  `fv_id` tinyint NOT NULL,
+  `fv_value` tinyint NOT NULL,
+  `child_sample_id` tinyint NOT NULL,
+  `child_sample_name` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+DROP TABLE IF EXISTS `view_samples_`;
+/*!50001 DROP VIEW IF EXISTS `view_samples_`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `view_samples_` (
+  `id` tinyint NOT NULL,
+  `name` tinyint NOT NULL,
+  `description` tinyint NOT NULL,
+  `created_at` tinyint NOT NULL,
+  `item_ids` tinyint NOT NULL,
+  `sample_type_id` tinyint NOT NULL,
   `sample_type` tinyint NOT NULL,
   `user_name` tinyint NOT NULL,
   `login` tinyint NOT NULL,
@@ -884,7 +910,7 @@ CREATE TABLE `workers` (
 /*!50001 SET collation_connection      = latin1_swedish_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`aquarium`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `view_inventories` AS select `s`.`id` AS `id`,`i`.`id` AS `item_id`,`i`.`location` AS `item_location`,`i`.`created_at` AS `item_date`,`ot`.`id` AS `item_type_id`,`ot`.`name` AS `item_type`,`pa`.`collection_id` AS `collection_id`,`pa`.`row` AS `row`,`pa`.`column` AS `column`,`ii`.`location` AS `collection_location`,`ii`.`created_at` AS `collection_date`,`ott`.`id` AS `collection_type_id`,`ott`.`name` AS `collection_type` from (((((`samples` `s` join `items` `i` on((`i`.`sample_id` = `s`.`id`))) join `object_types` `ot` on((`ot`.`id` = `i`.`object_type_id`))) left join `part_associations` `pa` on((`pa`.`part_id` = `i`.`id`))) left join `items` `ii` on((`ii`.`id` = `pa`.`collection_id`))) left join `object_types` `ott` on((`ott`.`id` = `ii`.`object_type_id`))) */;
+/*!50001 VIEW `view_inventories` AS select `s`.`id` AS `id`,`i`.`id` AS `item_id`,`i`.`location` AS `item_location`,`i`.`created_at` AS `item_date`,`ot`.`id` AS `item_type_id`,`ot`.`name` AS `item_type`,`pa`.`collection_id` AS `collection_id`,`pa`.`row` AS `row`,`pa`.`column` AS `column`,`ii`.`location` AS `collection_location`,`ii`.`created_at` AS `collection_date`,`ott`.`id` AS `collection_type_id`,`ott`.`name` AS `collection_type` from (((((`samples` `s` join `items` `i` on((`i`.`sample_id` = `s`.`id`))) join `object_types` `ot` on(((`ot`.`id` = `i`.`object_type_id`) and (`ot`.`handler` = 'sample_container')))) left join `part_associations` `pa` on((`pa`.`part_id` = `i`.`id`))) left join `items` `ii` on((`ii`.`id` = `pa`.`collection_id`))) left join `object_types` `ott` on((`ott`.`id` = `ii`.`object_type_id`))) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -935,12 +961,26 @@ CREATE TABLE `workers` (
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 SET character_set_client      = latin1 */;
+/*!50001 SET character_set_results     = latin1 */;
+/*!50001 SET collation_connection      = latin1_swedish_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`aquarium`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `view_samples` AS select `s`.`id` AS `id`,`s`.`name` AS `name`,`s`.`description` AS `description`,`s`.`created_at` AS `created_at`,`s`.`item_ids` AS `item_ids`,`st`.`name` AS `sample_type`,`u`.`name` AS `user_name`,`u`.`login` AS `login`,`ft`.`id` AS `ft_id`,`ft`.`ftype` AS `ft_type`,`fts`.`sort` AS `ft_sort`,`ft`.`name` AS `ft_name`,`fv`.`id` AS `fv_id`,`fv`.`value` AS `fv_value`,`fv`.`child_sample_id` AS `child_sample_id`,`ss`.`name` AS `child_sample_name` from ((((((`samples` `s` join `sample_types` `st` on((`st`.`id` = `s`.`sample_type_id`))) join `users` `u` on((`u`.`id` = `s`.`user_id`))) left join `field_types` `ft` on(((`ft`.`parent_id` = `s`.`sample_type_id`) and (`ft`.`parent_class` = 'SampleType')))) left join `field_type_sorts` `fts` on((`fts`.`ftype` = `ft`.`ftype`))) left join `field_values` `fv` on(((`fv`.`parent_id` = `s`.`id`) and (`fv`.`parent_class` = 'Sample') and (`fv`.`field_type_id` = `ft`.`id`)))) left join `samples` `ss` on((`ss`.`id` = `fv`.`child_sample_id`))) */;
+/*!50001 VIEW `view_samples` AS select `s`.`id` AS `id`,`s`.`name` AS `name`,`s`.`description` AS `description`,`s`.`project` AS `project`,`s`.`created_at` AS `created_at`,`s`.`item_ids` AS `item_ids`,`s`.`sample_type_id` AS `sample_type_id`,`st`.`name` AS `sample_type`,`u`.`name` AS `user_name`,`u`.`login` AS `login`,`ft`.`id` AS `ft_id`,`ft`.`ftype` AS `ft_type`,`fts`.`sort` AS `ft_sort`,`ft`.`name` AS `ft_name`,`fv`.`id` AS `fv_id`,`fv`.`value` AS `fv_value`,`fv`.`child_sample_id` AS `child_sample_id`,`ss`.`name` AS `child_sample_name` from ((((((`samples` `s` join `sample_types` `st` on((`st`.`id` = `s`.`sample_type_id`))) join `users` `u` on((`u`.`id` = `s`.`user_id`))) left join `field_types` `ft` on(((`ft`.`parent_id` = `s`.`sample_type_id`) and (`ft`.`parent_class` = 'SampleType')))) left join `field_type_sorts` `fts` on((`fts`.`ftype` = `ft`.`ftype`))) left join `field_values` `fv` on(((`fv`.`parent_id` = `s`.`id`) and (`fv`.`parent_class` = 'Sample') and (`fv`.`field_type_id` = `ft`.`id`)))) left join `samples` `ss` on((`ss`.`id` = `fv`.`child_sample_id`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+/*!50001 DROP TABLE IF EXISTS `view_samples_`*/;
+/*!50001 DROP VIEW IF EXISTS `view_samples_`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = latin1 */;
+/*!50001 SET character_set_results     = latin1 */;
+/*!50001 SET collation_connection      = latin1_swedish_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`aquarium`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_samples_` AS select `s`.`id` AS `id`,`s`.`name` AS `name`,`s`.`description` AS `description`,`s`.`created_at` AS `created_at`,`s`.`item_ids` AS `item_ids`,`s`.`sample_type_id` AS `sample_type_id`,`st`.`name` AS `sample_type`,`u`.`name` AS `user_name`,`u`.`login` AS `login`,`ft`.`id` AS `ft_id`,`ft`.`ftype` AS `ft_type`,`fts`.`sort` AS `ft_sort`,`ft`.`name` AS `ft_name`,`fv`.`id` AS `fv_id`,`fv`.`value` AS `fv_value`,`fv`.`child_sample_id` AS `child_sample_id`,`ss`.`name` AS `child_sample_name` from ((((((`samples` `s` join `sample_types` `st` on((`st`.`id` = `s`.`sample_type_id`))) join `users` `u` on((`u`.`id` = `s`.`user_id`))) left join `field_types` `ft` on(((`ft`.`parent_id` = `s`.`sample_type_id`) and (`ft`.`parent_class` = 'SampleType')))) left join `field_type_sorts` `fts` on((`fts`.`ftype` = `ft`.`ftype`))) left join `field_values` `fv` on(((`fv`.`parent_id` = `s`.`id`) and (`fv`.`parent_class` = 'Sample') and (`fv`.`field_type_id` = `ft`.`id`)))) left join `samples` `ss` on((`ss`.`id` = `fv`.`child_sample_id`))) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
