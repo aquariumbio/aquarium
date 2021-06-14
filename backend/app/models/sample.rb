@@ -28,6 +28,7 @@ class Sample < ActiveRecord::Base
       end
     elsif words[0,5]=="item:"
       # search item id only
+      # TODO: remove dependency on item_ids (and remove item_ids from the db)
       this_id = words[5,words.length].strip.split(' ')[0]
       if this_id == this_id.to_i.to_s
         ands << "item_ids like '%.#{this_id}.%'"
@@ -44,6 +45,7 @@ class Sample < ActiveRecord::Base
       end
     elsif words[0,2]=="i:"
       # search item id only
+      # TODO: remove dependency on item_ids (and remove item_ids from the db)
       this_id = words[2,words.length].strip.split(' ')[0]
       if this_id == this_id.to_i.to_s
         ands << "item_ids like '%.#{this_id}.%'"
