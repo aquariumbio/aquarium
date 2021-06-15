@@ -131,11 +131,13 @@ class Sample < ActiveRecord::Base
       this_id = text[2,text.length].strip.split(' ')[0]
       this_id = 0 if this_id != this_id.to_i.to_s
 
-      sql = "select id, name from samples where id = #{this_id} limit 1"
+      ands = ["id = #{this_id}"]
+      ands << "sample_type_id in (#{sample_type_ids})" if sample_type_ids != ""
+
+      sql = "select id, name from samples where #{ands.join(' and ')} limit 1"
       Sample.find_by_sql sql
     else
       ands = []
-
       ands << "sample_type_id in (#{sample_type_ids})" if sample_type_ids != ""
 
       ok = false

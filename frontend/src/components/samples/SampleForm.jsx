@@ -616,7 +616,7 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
                   {(field_type.array || !fields[field_type.id] || fields[field_type.id].length == 0) && (
                     <>
                       <div className={classes.mt8}>
-                        <input className={classes.p100} placeholder="Search ( by name / s:<sample_id> )" value={inputs[`${field_type.id}`]} onChange={(event) => handleQuickSearch(field_type.id, event)} />
+                        <input className={classes.p100} placeholder="Add ( by name / s:<sample_id> )" value={inputs[`${field_type.id}`]} onChange={(event) => handleQuickSearch(field_type.id, event)} />
                       </div>
                       {lists[field_type.id] && lists[field_type.id].length!=0 && (
                         <div className={classes.selectList}>
