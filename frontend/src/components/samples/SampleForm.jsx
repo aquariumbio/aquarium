@@ -171,11 +171,11 @@ const useStyles = makeStyles(() => ({
   },
 
   add: {
+    display: 'inline-block',
     cursor: 'pointer',
     border: '1px solid black',
     padding: '2px 4px',
     backgroundColor: '#eee',
-    marginLeft: '8px',
   },
 
   pointer_no_hover: {
@@ -336,7 +336,6 @@ const useStyles = makeStyles(() => ({
 
 }));
 
-
 // eslint-disable-next-line no-unused-vars
 const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
   const classes = useStyles();
@@ -346,9 +345,11 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
   const [sample, setSample] = useState({});
   // data values for fields
   const [fields, setFields] = useState({});
-  // input boxes for fields
+  // hash of allowable field types to pass to quicksearch { field_type_id: [<id>, <id>, ...] }
   const [allowableFieldTypes, setAllowableFieldTypes] = useState({});
+  // hash of inputs
   const [inputs, setInputs] = useState({});
+  // hash of lists for dropdown lists
   const [lists, setLists] = useState({})
 
   useEffect(() => {
@@ -360,21 +361,17 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
       // success
       setSampleType(response);
 
-      // initialize allowableFieldTypes {field_type_id: <id>.<id>.<id>}
-      // initialize lists to {field_type_id: []}
+      // initialize allowableFieldTypes {field_type_id: [<id>, <id>, ...]}
       let temp = new Object;
-      let temp2 = new Object;
       response.field_types.map((f) => (
         f.ftype == 'sample' && (
           temp={...temp,[f.id]: []},
-          temp2={...temp2,[f.id]: []},
           f.allowable_field_types.map((a) =>
             temp[f.id]=[...temp[f.id], a.sample_type_id]
           )
         )
       ))
       setAllowableFieldTypes(temp)
-      setLists(temp2)
     };
 
     const initEdit = async (id) => {
@@ -392,45 +389,25 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
       temp={...temp, ['project']: resp.project}
       setSample(temp)
 
-      // map fields
-      // setInputs is a hack - need to clean it up to only get non-array values and use blanks for arrays
+      // map fields to arrays {field_type_id: [<value>, <value>, ... ]}
+      // for single items use fields[<id>][0]
       let temp2 = new Object
-      let tempi = new Object
       resp.fields.map((f) => (
-        f.ftype == 'sample' ? (
-          alert('sample')
-        ) : (
-          f.ftype == 'url' ? (
-            alert('url')
-          ) : (
-            alert('other')
+        f.type == 'sample' ? (
+          f.child_sample_id && (
+            temp2[f.id]
+            ? temp2[f.id]=[...temp2[f.id],`${f.child_sample_id}: ${f.child_sample_name}`]
+            : temp2[f.id]=[`${f.child_sample_id}: ${f.child_sample_name}`]
           )
-        ),
-
-        f.value && (
-          temp2[f.id]
-          ? temp2[f.id]=[...temp2[f.id], f.value]
-          : temp2[f.id]=[f.value]
-        ),
-        f.value && (tempi[f.id] = f.value)
+        ) : (
+          f.value && (
+            temp2[f.id]
+            ? temp2[f.id]=[...temp2[f.id], f.value]
+            : temp2[f.id]=[f.value]
+          )
+        )
       ))
-//       resp.fields_urls.map((f) => (
-//         f.value && (
-//           temp2[f.id]
-//           ? temp2[f.id]=[...temp2[f.id], f.value]
-//           : temp2[f.id]=[f.value]
-//         ),
-//         f.value && (tempi[f.id] = f.value)
-//       ))
-//       resp.fields_samples.map((f) => (
-//         f.child_sample_id && (
-//           temp2[f.id]
-//           ? temp2[f.id]=[...temp2[f.id],`${f.child_sample_id}: ${f.child_sample_name}`]
-//           : temp2[f.id]=[`${f.child_sample_id}: ${f.child_sample_name}`]
-//         )
-//       ))
       setFields(temp2)
-      setInputs(tempi)
     }
 
     init();
@@ -440,16 +417,17 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
   const addField = async(id) => {
     let temp = fields[id]
     temp ? (
-      temp=temp.push('new'),
+      temp=temp.push(''),
       setFields({...fields, [fields[id]]: temp})
     ) : (
-      setFields({...fields, [id]: ['new']})
+      setFields({...fields, [id]: ['']})
     )
   }
 
-  const editField = async(event) => {
-    let temp = fields[event.target.id]
-    setFields({...fields, [event.target.id]: [event.target.value]})
+  const editField = async(id, index, event) => {
+    let temp = fields[id]
+    temp=temp.splice(index,1,event.target.value)
+    setFields({...fields, [fields[id]]: temp})
   }
 
   const removeField = async(id,index) => {
@@ -464,8 +442,7 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
     })
   }
 
-  // WIP
-  // TODO: use inputs instead of quicksearch
+  // search for samples of type allowableFeildTypes
   const handleQuickSearch = async(id, event) => {
     setInputs({...inputs,
       [id]:event.target.value
@@ -478,8 +455,8 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
     setLists({...lists,[id]: response1});
   }
 
-  // WIP
-  // TODO: use inputs instead of quicksearch
+  // select an item from the list after searching
+  // sets the fields variable to display the info and submit the form
   const handleSelect = async (id, event) => {
     setLists({...lists,[id]: []})
     setInputs({...inputs,
@@ -493,10 +470,6 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
     ) : (
       setFields({...fields, [id]: [event.target.getAttribute('value')]})
     )
-  }
-
-  const handleUpdate = async(id) => {
-    alert('update')
   }
 
   // Submit form with all data
@@ -623,7 +596,7 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
                   )}
                   {(field_type.array || !fields[field_type.id] || fields[field_type.id].length == 0) && (
                     <>
-                      <div className={classes.mt8}>
+                      <div>
                         <input className={classes.p100} placeholder="Add ( by name / s:<sample_id> )" value={inputs[`${field_type.id}`]} onChange={(event) => handleQuickSearch(field_type.id, event)} />
                       </div>
                       {lists[field_type.id] && lists[field_type.id].length!=0 && (
@@ -639,11 +612,25 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
                   )}
                 </>
               ) : (
-                <>
+                field_type.array ? (
+                  <>
+                    {fields[field_type.id] && (
+                      fields[field_type.id].map((f,i) => (
+                        <div className={classes.mb8}>
+                          <input className={classes.p100} name={`f.${field_type.id}`} value={fields[field_type.id][i]} onChange={(event) => editField(field_type.id, i, event)} />
+                          <span className={`${classes.remove}`} onClick={() => removeField(field_type.id, i)}>x</span>
+                        </div>
+                      ))
+                    )}
+                    <Typography className={classes.add} onClick={(event) => addField(field_type.id)}>
+                      Add Value
+                    </Typography>
+                  </>
+                ) : (
                   <div>
-                    <input className={classes.p100} id={field_type.id} name={`f.${field_type.id}`} value={fields[field_type.id] ? fields[field_type.id][0] : ''} onChange={(event) => editField(event)} />
+                    <input className={classes.p100} name={`f.${field_type.id}`} value={fields[field_type.id] ? fields[field_type.id][0] : ''} onChange={(event) => editField(field_type.id, 0, event)} />
                   </div>
-                </>
+                )
               )}
             </div>
           </div>
@@ -664,7 +651,3 @@ SampleForm.propTypes = {
 };
 
 export default SampleForm;
-//                   <div>
-//                     <input className={classes.p100} id={field_type.id} value={inputs[`${field_type.id}`]} onChange={(event) => handleInputs(event)} />
-//                     <span className={`${classes.add}`} onClick={() => addField(field_type.id)}>Add</span>
-//                   </div>
