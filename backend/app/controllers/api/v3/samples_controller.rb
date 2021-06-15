@@ -224,9 +224,8 @@ module Api
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
-        page = Input.int(params[:page])
         text = Input.text(params[:text])
-        sample_type_ids = Input.int(params[:sample_type_ids])
+        sample_type_ids = Input.text(params[:sample_type_ids])
 
         results = Sample.quick_search({
           text: text,

@@ -62,7 +62,7 @@ class Sample < ActiveRecord::Base
       # seasrch words
       words = words.split(' ')
       words.each do |word|
-        ands << "search_text like '%#{word.gsub('\'','\\\'').gsub('_','\\_').gsub('%','\\%')}%'" if word.length > 1
+        ands << "search_text like '%#{sanitize_sql_like(word)}%'" if word.length > 1
       end
     end
 
@@ -139,9 +139,35 @@ class Sample < ActiveRecord::Base
 
   # Return search results
   def self.quick_search(options)
-    # testing
-    sql = "select id, name from samples order by id desc limit 100"
-    Sample.find_by_sql sql
+
+    sample_type_ids = options[:sample_type_ids].to_s.split('.').map!{|id| id.to_i}.join(',')
+    text = options[:text].to_s
+
+    if text[0,2] == "s:"
+      this_id = text[2,text.length].strip.split(' ')[0]
+      this_id = 0 if this_id != this_id.to_i.to_s
+
+      sql = "select id, name from samples where id = #{this_id} limit 1"
+      Sample.find_by_sql sql
+    else
+      ands = []
+
+      ands << "sample_type_id in (#{sample_type_ids})" if sample_type_ids != ""
+
+      ok = false
+      words = text.split(' ')
+      words.each do |word|
+        if word.length > 1
+          ands << "name like '%#{sanitize_sql_like(word)}%'"
+          ok = true
+        end
+      end
+
+      return [] if !ok
+
+      sql = "select id, name from samples where #{ands.join(' and ')} order by id desc limit 100"
+      Sample.find_by_sql sql
+    end
   end
 
   # Return sample + inventory data

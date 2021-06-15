@@ -278,25 +278,23 @@ const useStyles = makeStyles((theme) => ({
   },
 
   deselected: {
-    cursor: 'pointer',
     padding: '8px',
   },
 
   selected: {
-    cursor: 'pointer',
     border: '2px dashed black',
     padding: '7px 6px 6px 7px',
   },
 
   selectList: {
-    height: '320px',
+    maxHeight: '322px',
     overflowY: 'scroll',
     border: '1px solid black',
   },
 
   selectItem: {
     cursor: 'pointer',
-    padding: '0 4px',
+    padding: '0 8px',
     height: '20px',
     lineHeight: '20px',
 
@@ -304,6 +302,22 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: '#ccc',
     }
   },
+
+  remove: {
+    cursor: 'pointer',
+    fontWeight: 'bold',
+    fontSize: '150%',
+    position: 'absolute',
+    marginLeft: '8px',
+    marginTop: '-6px',
+  },
+
+  p100: {
+    width: '100%',
+    padding: '4px 8px',
+    marginBottom: '16px',
+  },
+
 }));
 
 // eslint-disable-next-line no-unused-vars
@@ -380,7 +394,7 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
   const handleSearch = async () => {
     setQuickSearch(event.target.value)
 
-    const response1 = await sampleAPI.getQuickSearch('testing','1.2.3');
+    const response1 = await sampleAPI.getQuickSearch(event.target.value,'');
     if (!response1) return;
 
     // set item + object type
@@ -393,18 +407,16 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
     setQuickSearch('')
   }
 
-  const handleRemove = async () => {
-    alert(`remove - row ${rowSel} column ${colSel}`)
+  const handleRemove = async (r, c) => {
+    alert(`remove - row ${r} column ${c}`)
   }
 
   return (
     <>
 
-      <Typography>
-        <p className={classes.right}>
-          <Button variant="outlined" onClick={() => {setCollectionTypeId(0)}}>Close</Button>
-        </p>
-      </Typography>
+      <div className={classes.right}>
+        <Button variant="outlined" onClick={() => {setCollectionTypeId(0)}}>Close</Button>
+      </div>
 
       <div className={classes.box}>
         <Typography>
@@ -429,10 +441,19 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
               <Typography className={`${classes.flexColFixed40} ${classes.dark}`}>
                 {row + 1}
               </Typography>
-              {columns.map((column,cIndex) =>(
-                <Typography className={`${classes.flexCol1x} ${rowSel == row && colSel == column ? classes.selected : classes.deselected}`} id={`${row},${column}`} onClick={() => handleRC(row, column)}>
-                  {collection[`${row}.${column}`]}
-                </Typography>
+              {columns.map((column,cIndex) => (
+                <>
+                  {collection[`${row}.${column}`] ? (
+                    <Typography className={`${classes.flexCol1x} ${classes.deselected}`}>
+                      {collection[`${row}.${column}`]}
+                      <span className={`${classes.remove}`} onClick={() => handleRemove(row, column)}>x</span>
+                    </Typography>
+                  ) : (
+                    <Typography className={`${classes.flexCol1x} ${classes.pointer} ${rowSel == row && colSel == column ? classes.selected : classes.deselected}`} id={`${row},${column}`} onClick={() => handleRC(row, column)}>
+                      &nbsp;
+                    </Typography>
+                  )}
+                </>
               ))}
             </div>
           ))}
@@ -442,33 +463,20 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
 
       {rowSel != -1 && (
         <>
-          {collection[`${rowSel}.${colSel}`] ? (
-            <>
-              <Typography className={classes.mt16}>
-                Remove Sample from Selection
-              </Typography>
-              <Typography className={classes.mt8}>
-                <Button variant="outlined" onClick={handleRemove}>Remove</Button>
-              </Typography>
-            </>
-          ) : (
-            <>
-              <Typography className={classes.mt16}>
-                Assign Sample to Selection
-              </Typography>
-              <Typography className={classes.mt8}>
-                <input value={quickSearch} onChange={(event) => handleSearch(event)} />
-                {list.length!=0 && (
-                  <div className={classes.selectList}>
-                    {list.map((l) => (
-                      <div id={l.id} className={classes.selectItem} onClick={(event) => handleSelect(event)}>
-                        {l.id}: {l.name}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </Typography>
-            </>
+          <Typography className={classes.mt16}>
+            Assign Sample to Selection
+          </Typography>
+          <div className={classes.mt8}>
+            <input className={classes.p100} placeholder="Search ( by name | s: <sample_id> )" value={quickSearch} onChange={(event) => handleSearch(event)} />
+          </div>
+          {list.length!=0 && (
+            <div className={classes.selectList}>
+              {list.map((l) => (
+                <div id={l.id} className={classes.selectItem} onClick={(event) => handleSelect(event)}>
+                  {l.id}: {l.name}
+                </div>
+              ))}
+            </div>
           )}
         </>
       )}

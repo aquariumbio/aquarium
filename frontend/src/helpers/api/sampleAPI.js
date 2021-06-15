@@ -14,12 +14,12 @@ sampleAPI.getTypes = () => axiosInstance
   .catch((error) => error);
 
 sampleAPI.getSamples = (list, sample_type_id, user_id, page) => axiosInstance
-  .get(`/samples?words=${list}&sample_type_id=${sample_type_id}&user_id=${user_id}&page=${page}`)
+  .get(`/samples?words=${encodeURIComponent(list)}&sample_type_id=${sample_type_id}&user_id=${user_id}&page=${page}`)
   .then((response) => response.data)
   .catch((error) => error);
 
 sampleAPI.getQuickSearch = (text, sample_type_ids) => axiosInstance
-  .get(`/samples/quick_search?text=${text}&sample_type_ids=${sample_type_ids}`)
+  .get(`/samples/quick_search?text=${encodeURIComponent(text)}&sample_type_ids=${sample_type_ids}`)
   .then((response) => response.data)
   .catch((error) => error);
 

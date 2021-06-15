@@ -439,11 +439,11 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
   return (
     <form id='sampleForm'>
 
-      <Typography>
-        <p className={classes.right}>
-          <Button variant="outlined" onClick={() => {setSampleTypeId(0)}}>Close</Button>
-        </p>
-      </Typography>
+      <div className={classes.right}>
+        <Button variant="outlined" onClick={() => {setSampleTypeId(0)}}>
+          Close
+        </Button>
+      </div>
 
       <div className={classes.box}>
         <Typography>
@@ -458,13 +458,13 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
           <Typography className={classes.flexCol1}>
             (string)
           </Typography>
-          <Typography className={classes.flexCol3}>
+          <div className={classes.flexCol3}>
             <input
             className={classes.p100}
             name="name"
             value={sample.name}
             />
-          </Typography>
+          </div>
         </div>
 
         <div className={`${classes.flex} ${classes.flexRow}`}>
@@ -474,13 +474,13 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
           <Typography className={classes.flexCol1}>
             (string)
           </Typography>
-          <Typography className={classes.flexCol3}>
+          <div className={classes.flexCol3}>
             <input
             className={classes.p100}
             name="description"
             value={sample.description}
             />
-          </Typography>
+          </div>
         </div>
 
         <div className={`${classes.flex} ${classes.flexRow}`}>
@@ -490,13 +490,13 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
           <Typography className={classes.flexCol1}>
             (string)
           </Typography>
-          <Typography className={classes.flexCol3}>
+          <div className={classes.flexCol3}>
             <input
             className={classes.p100}
             name="project"
             value={sample.project}
             />
-          </Typography>
+          </div>
         </div>
 
         {sampleType.field_types && sampleType.field_types.map((field_type) => (
@@ -504,7 +504,7 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
             <Typography className={classes.flexCol1}>
               {field_type.required ? '(*)' : ''} {field_type.name} {field_type.array && '(array)'}
             </Typography>
-            <Typography className={classes.flexCol1}>
+            <div className={classes.flexCol1}>
               ({field_type.ftype} - {field_type.id}) <br />
               {field_type.ftype == 'sample' && field_type.allowable_field_types ? (
                 <>
@@ -517,8 +517,8 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
               ) : (
                 ''
               )}
-            </Typography>
-            <Typography className={classes.flexCol3}>
+            </div>
+            <div className={classes.flexCol3}>
               {field_type.array ? (
                 <>
                   {fields[field_type.id] && (
@@ -539,14 +539,14 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
                   <input className={classes.p100} id={field_type.id} name={`f.${field_type.id}`} value={fields[field_type.id] ? fields[field_type.id][0] : ''} onChange={(event) => editField(event)} />
                 </div>
               )}
-            </Typography>
+            </div>
           </div>
         ))}
         </div>
       </div>
-      <Typography className={classes.mt16}>
+      <div className={classes.mt16}>
         <Button variant="outlined" onClick={handleSubmit}>Submit</Button>
-      </Typography>
+      </div>
     </form>
 
   );
