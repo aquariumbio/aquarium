@@ -309,6 +309,23 @@ const useStyles = makeStyles(() => ({
     width: 'calc(100% - 80px)',
   },
 
+  selectList: {
+    maxHeight: '322px',
+    overflowY: 'scroll',
+    border: '1px solid black',
+  },
+
+  selectItem: {
+    cursor: 'pointer',
+    padding: '0 8px',
+    height: '20px',
+    lineHeight: '20px',
+
+    '&:hover': {
+      backgroundColor: '#ccc',
+    }
+  },
+
 }));
 
 
@@ -319,9 +336,17 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
 
   const [sampleType, setSampleType] = useState({});
   const [sample, setSample] = useState({});
+  // data values for fields
   const [fields, setFields] = useState({});
+  // input boxes for fields
   const [inputs, setInputs] = useState({});
 
+  // WIP
+  // PROOF-OF-CONCEPT, WILL ONLY WORK WITH ONE SEARCH BOX
+  // TODO: use inputs instead of quicksearch
+  // TODO: make list an object of arrays
+  const [quickSearch, setQuickSearch] = useState('');
+  const [list, setList] = useState([]);
 
   useEffect(() => {
     const init = async () => {
@@ -408,6 +433,37 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
     setInputs({...inputs,
       [event.target.id]:event.target.value
     })
+  }
+
+  // WIP
+  // TODO: use inputs instead of quicksearch
+  const handleQuickSearch = async(event,sample_types) => {
+    setInputs({...inputs,
+      [event.target.id]:event.target.value
+    })
+
+    setQuickSearch(event.target.value)
+
+    const response1 = await sampleAPI.getQuickSearch(event.target.value,sample_types);
+    if (!response1) return;
+
+    // set item + object type
+    setList(response1);
+  }
+
+  // WIP
+  // TODO: use inputs instead of quicksearch
+  const handleSelect = async (id, event) => {
+    setList([])
+    setQuickSearch('')
+
+    let temp = fields[id]
+    temp ? (
+      temp=temp.push(event.target.getAttribute('value')),
+      setFields({...fields, [fields[id]]: temp})
+    ) : (
+      setFields({...fields, [id]: [event.target.getAttribute('value')]})
+    )
   }
 
   const handleUpdate = async(id) => {
@@ -505,12 +561,12 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
               {field_type.required ? '(*)' : ''} {field_type.name} {field_type.array && '(array)'}
             </Typography>
             <div className={classes.flexCol1}>
-              ({field_type.ftype} - {field_type.id}) <br />
+              ({field_type.ftype}) <br />
               {field_type.ftype == 'sample' && field_type.allowable_field_types ? (
                 <>
                     {field_type.allowable_field_types.map((allowable_field_type) => (
                       <>
-                        {allowable_field_type.name} ({allowable_field_type.sample_type_id}) <br />
+                        {allowable_field_type.name}<br />
                       </>
                     ))}
                 </>
@@ -529,10 +585,18 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
                       </div>
                     ))
                   )}
-                  <div>
-                    <input className={classes.p100} id={field_type.id} value={inputs[`${field_type.id}`]} onChange={(event) => handleInputs(event)} />
-                    <span className={`${classes.add}`} onClick={() => addField(field_type.id)}>Add</span>
+                  <div className={classes.mt8}>
+                    <input className={classes.p100} placeholder="Search ( by name / s:<sample_id> )" value={inputs[`${field_type.id}`]} onChange={(event) => handleQuickSearch(event,'4.1')} />
                   </div>
+                  {list.length!=0 && (
+                    <div className={classes.selectList}>
+                      {list.map((l) => (
+                        <div id={l.id} value={`${l.id}: ${l.name}`} className={classes.selectItem} onClick={(event) => handleSelect(field_type.id,event)}>
+                          {l.id}: {l.name}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </>
               ) : (
                 <div>
@@ -557,3 +621,7 @@ SampleForm.propTypes = {
 };
 
 export default SampleForm;
+//                   <div>
+//                     <input className={classes.p100} id={field_type.id} value={inputs[`${field_type.id}`]} onChange={(event) => handleInputs(event)} />
+//                     <span className={`${classes.add}`} onClick={() => addField(field_type.id)}>Add</span>
+//                   </div>
