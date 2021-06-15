@@ -98,7 +98,7 @@ const Header = ({ location }) => {
     <AppBar position="fixed" elevation={0} className={classes.root} component="header">
       <Toolbar>
         <div className={classes.headerOptions}>
-          <Tooltip title="Main Menu">
+          <Tooltip title="Menu">
             {/* Wrap custom components in fragment to avoid
                 'Invalid prop `children` supplied to `ForwardRef(Tooltip)`' error */}
             <>

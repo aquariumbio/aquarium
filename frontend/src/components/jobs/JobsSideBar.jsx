@@ -83,17 +83,18 @@ const JobsSideBar = ({
     </ListItem>,
     <Collapse in={expand} timeout="auto" unmountOnExit key="collapse">
       {inactive.map((key, count) => (
-        <ListItem
-          button
-          role="tab"
-          className={classes.inactive}
-          key={key}
-          onClick={(event) => handleJobStateClick(event)}
-          selected={value === key}
-        >
-          <Typography variant="caption" noWrap>{key}</Typography>
-          <Typography variant="caption" className={classes.count}>({count})</Typography>
-        </ListItem>
+        <Tooltip title={key} key={key}>
+          <ListItem
+            button
+            role="tab"
+            className={classes.inactive}
+            onClick={(event) => handleJobStateClick(event)}
+            selected={value === key}
+          >
+            <Typography variant="caption" noWrap>{key}</Typography>
+            <Typography variant="caption" className={classes.count}>({count})</Typography>
+          </ListItem>
+        </Tooltip>
       ))}
     </Collapse>,
   );
@@ -104,42 +105,39 @@ const JobsSideBar = ({
         title="JOBS"
         ariaLabel="job-states"
       >
-        <Tooltip title="Unassigned Jobs">
+        <Tooltip title="Unassigned Jobs" key="unassigned">
           <ListItem
             button
             role="tab"
             onClick={(event) => handleJobStateClick(event, 'unassigned')}
             selected={value === 'unassigned'}
             id="unassigned"
-            key="unassigned"
           >
             <Typography variant="caption" noWrap>Unassigned</Typography>
             <Typography variant="caption" className={classes.count}>{`(${jobCounts.unassigned})`}</Typography>
           </ListItem>
         </Tooltip>
 
-        <Tooltip title="Assigned Jobs">
+        <Tooltip title="Assigned Jobs" key="assigned">
           <ListItem
             button
             role="tab"
             onClick={(event) => handleJobStateClick(event, 'assigned')}
             selected={value === 'assigned'}
             id="assigned"
-            key="assigned"
           >
             <Typography variant="caption" noWrap>Assigned</Typography>
             <Typography variant="caption" className={classes.count}>{`(${jobCounts.assigned})`}</Typography>
           </ListItem>
         </Tooltip>
 
-        <Tooltip title="Finished Jobs">
+        <Tooltip title="Finished Jobs" key="finished">
           <ListItem
             button
             role="tab"
             onClick={(event) => handleJobStateClick(event, 'finished')}
             selected={value === 'finished'}
             id="finished"
-            key="finished"
           >
             <Typography variant="caption" noWrap>Finished</Typography>
             <Typography variant="caption" className={classes.count}>{`(${jobCounts.finished})`}</Typography>
