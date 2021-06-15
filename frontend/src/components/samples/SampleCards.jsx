@@ -260,32 +260,13 @@ const SamplesPage = ({ handlePage, handleClick, count, page, pages, samples }) =
                   <>
                     <div className={classes.flexCardLabel}>
                       {k.name}
+                      {' '}(show 1 of 3)
                     </div>
                     <div className={classes.flexCardText}>
                       {k.value || <span>-</span>}
-                    </div>
-                  </>
-                ))}
-
-                {sample.fields_urls.map((k) => (
-                  <>
-                    <div className={classes.flexCardLabel}>
-                      {k.name}
-                    </div>
-                    <div className={classes.flexCardText}>
+                      <br />
                       {k.value ? <Link className={classes.pointer} onClick={() => window.open(k.value, "_blank")}>{k.value}</Link> : <span>-</span>}
-                    </div>
-                  </>
-                ))}
-
-                <Divider />
-
-                {sample.fields_samples.map((k) => (
-                  <>
-                    <div className={classes.flexCardLabel}>
-                      {k.name}
-                    </div>
-                    <div className={classes.flexCardText}>
+                      <br />
                       {k.child_sample_id ? <Link className={classes.pointer} onClick={() => handleClick(k.child_sample_id)}>{k.child_sample_id}: {k.child_sample_name}</Link> : <span>-</span>}
                     </div>
                   </>

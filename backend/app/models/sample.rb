@@ -95,10 +95,11 @@ class Sample < ActiveRecord::Base
             type: sample.ft_type,
             created_at: sample.created_at,
             item_ids: sids[1,sids.length-2].to_s.split("."),
-            fields: [],
-            fields_urls: [],
-            fields_samples: []
+            fields: []
           }
+#             fields: [],
+#             fields_urls: [],
+#             fields_samples: []
 
           # set this_id
           this_id = sample.id
@@ -107,13 +108,14 @@ class Sample < ActiveRecord::Base
         # update fields for current sample
         # NOTE: there is no ft_id if the sample does not have any field values
         if sample.ft_id
-          if sample.ft_type == "sample"
-            samples[-1][:fields_samples] << {id: sample.ft_id, type: sample.ft_type, name: sample.ft_name, value: sample.fv_value, child_sample_id: sample.child_sample_id, child_sample_name: sample.child_sample_name}
-          elsif sample.ft_type == "url"
-            samples[-1][:fields_urls] << {id: sample.ft_id, type: sample.ft_type, name: sample.ft_name, value: sample.fv_value, child_sample_id: sample.child_sample_id, child_sample_name: sample.child_sample_name}
-          else
-            samples[-1][:fields] << {id: sample.ft_id, type: sample.ft_type, name: sample.ft_name, value: sample.fv_value, child_sample_id: sample.child_sample_id, child_sample_name: sample.child_sample_name}
-          end
+          samples[-1][:fields] << {id: sample.ft_id, type: sample.ft_type, name: sample.ft_name, value: sample.fv_value, child_sample_id: sample.child_sample_id, child_sample_name: sample.child_sample_name}
+#           if sample.ft_type == "sample"
+#             samples[-1][:fields_samples] << {id: sample.ft_id, type: sample.ft_type, name: sample.ft_name, value: sample.fv_value, child_sample_id: sample.child_sample_id, child_sample_name: sample.child_sample_name}
+#           elsif sample.ft_type == "url"
+#             samples[-1][:fields_urls] << {id: sample.ft_id, type: sample.ft_type, name: sample.ft_name, value: sample.fv_value, child_sample_id: sample.child_sample_id, child_sample_name: sample.child_sample_name}
+#           else
+#             samples[-1][:fields] << {id: sample.ft_id, type: sample.ft_type, name: sample.ft_name, value: sample.fv_value, child_sample_id: sample.child_sample_id, child_sample_name: sample.child_sample_name}
+#           end
         end
       end
 
@@ -178,20 +180,22 @@ class Sample < ActiveRecord::Base
       type: this_sample.ft_type,
       created_at: this_sample.created_at,
       item_ids: sids[1,sids.length-2].to_s.split("."),
-      fields: [],
-      fields_urls: [],
-      fields_samples: []
+      fields: []
     }
+#       fields: [],
+#       fields_urls: [],
+#       fields_samples: []
 
     # loop through field values and append to sample.fields array
     sample_data.each do |s|
-      if s.ft_type == "sample"
-        sample[:fields_samples] << {id: s.ft_id, type: s.ft_type, name: s.ft_name, value: s.fv_value, child_sample_id: s.child_sample_id, child_sample_name: s.child_sample_name}
-      elsif s.ft_type == "url"
-        sample[:fields_urls] << {id: s.ft_id, type: s.ft_type, name: s.ft_name, value: s.fv_value, child_sample_id: s.child_sample_id, child_sample_name: s.child_sample_name}
-      else
-        sample[:fields] << {id: s.ft_id, type: s.ft_type, name: s.ft_name, value: s.fv_value, child_sample_id: s.child_sample_id, child_sample_name: s.child_sample_name}
-      end
+      sample[:fields] << {id: s.ft_id, type: s.ft_type, name: s.ft_name, value: s.fv_value, child_sample_id: s.child_sample_id, child_sample_name: s.child_sample_name}
+#       if s.ft_type == "sample"
+#         sample[:fields_samples] << {id: s.ft_id, type: s.ft_type, name: s.ft_name, value: s.fv_value, child_sample_id: s.child_sample_id, child_sample_name: s.child_sample_name}
+#       elsif s.ft_type == "url"
+#         sample[:fields_urls] << {id: s.ft_id, type: s.ft_type, name: s.ft_name, value: s.fv_value, child_sample_id: s.child_sample_id, child_sample_name: s.child_sample_name}
+#       else
+#         sample[:fields] << {id: s.ft_id, type: s.ft_type, name: s.ft_name, value: s.fv_value, child_sample_id: s.child_sample_id, child_sample_name: s.child_sample_name}
+#       end
     end
 
     # get items + collections from inventory

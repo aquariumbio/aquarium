@@ -397,6 +397,16 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
       let temp2 = new Object
       let tempi = new Object
       resp.fields.map((f) => (
+        f.ftype == 'sample' ? (
+          alert('sample')
+        ) : (
+          f.ftype == 'url' ? (
+            alert('url')
+          ) : (
+            alert('other')
+          )
+        ),
+
         f.value && (
           temp2[f.id]
           ? temp2[f.id]=[...temp2[f.id], f.value]
@@ -404,21 +414,21 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
         ),
         f.value && (tempi[f.id] = f.value)
       ))
-      resp.fields_urls.map((f) => (
-        f.value && (
-          temp2[f.id]
-          ? temp2[f.id]=[...temp2[f.id], f.value]
-          : temp2[f.id]=[f.value]
-        ),
-        f.value && (tempi[f.id] = f.value)
-      ))
-      resp.fields_samples.map((f) => (
-        f.child_sample_id && (
-          temp2[f.id]
-          ? temp2[f.id]=[...temp2[f.id],`${f.child_sample_id}: ${f.child_sample_name}`]
-          : temp2[f.id]=[`${f.child_sample_id}: ${f.child_sample_name}`]
-        )
-      ))
+//       resp.fields_urls.map((f) => (
+//         f.value && (
+//           temp2[f.id]
+//           ? temp2[f.id]=[...temp2[f.id], f.value]
+//           : temp2[f.id]=[f.value]
+//         ),
+//         f.value && (tempi[f.id] = f.value)
+//       ))
+//       resp.fields_samples.map((f) => (
+//         f.child_sample_id && (
+//           temp2[f.id]
+//           ? temp2[f.id]=[...temp2[f.id],`${f.child_sample_id}: ${f.child_sample_name}`]
+//           : temp2[f.id]=[`${f.child_sample_id}: ${f.child_sample_name}`]
+//         )
+//       ))
       setFields(temp2)
       setInputs(tempi)
     }
