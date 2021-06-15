@@ -18,23 +18,7 @@ class Sample < ActiveRecord::Base
 
     # Generate ands for sql query
     ands = []
-    if words[0,7]=="sample:"
-      # search sample id only
-      this_id = words[7,words.length].strip.split(' ')[0]
-      if this_id == this_id.to_i.to_s
-        ands << "id = #{this_id}"
-      else
-        ands << "0"
-      end
-    elsif words[0,5]=="item:"
-      # search item id only
-      this_id = words[5,words.length].strip.split(' ')[0]
-      if this_id == this_id.to_i.to_s
-        ands << "item_ids like '%.#{this_id}.%'"
-      else
-        ands << "0"
-      end
-    elsif words[0,2]=="s:"
+    if words[0,2]=="s:"
       # search sample id only
       this_id = words[2,words.length].strip.split(' ')[0]
       if this_id == this_id.to_i.to_s

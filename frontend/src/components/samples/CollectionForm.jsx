@@ -467,7 +467,7 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
             Assign Sample to Selection
           </Typography>
           <div className={classes.mt8}>
-            <input className={classes.p100} placeholder="Search ( by name | s: <sample_id> )" value={quickSearch} onChange={(event) => handleSearch(event)} />
+            <input className={classes.p100} placeholder="Search ( by name / s:<sample_id> )" value={quickSearch} onChange={(event) => handleSearch(event)} />
           </div>
           {list.length!=0 && (
             <div className={classes.selectList}>

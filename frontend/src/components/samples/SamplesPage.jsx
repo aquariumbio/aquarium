@@ -310,7 +310,7 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
                 name="search"
                 id="search"
                 value = {search}
-                placeholder="Search (e.g., by keyword, sample:123, item:123)"
+                placeholder="Search ( by keyword / s:<sample_id> / i:<item_id> )"
                 fullWidth
                 onChange={(event) => setSearch(event.target.value)}
                 variant="outlined"

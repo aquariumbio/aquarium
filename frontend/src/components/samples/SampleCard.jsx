@@ -420,7 +420,7 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, s
                     Description
                   </div>
                   <div className={classes.flexCardText}>
-                    {sample.description || '---'}
+                    {sample.description || '-'}
                   </div>
 
                   {sample.fields.map((k) => (
@@ -429,7 +429,7 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, s
                         {k.name}
                       </div>
                       <div className={classes.flexCardText}>
-                        {k.value || <span>---</span>}
+                        {k.value || <span>-</span>}
                       </div>
                     </>
                   ))}
@@ -440,7 +440,7 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, s
                         {k.name}
                       </div>
                       <div className={classes.flexCardText}>
-                        {k.value ? <Link className={classes.pointer} onClick={() => window.open(k.value, "_blank")}>{k.value}</Link> : <span>---</span>}
+                        {k.value ? <Link className={classes.pointer} onClick={() => window.open(k.value, "_blank")}>{k.value}</Link> : <span>-</span>}
                       </div>
                     </>
                   ))}
@@ -453,7 +453,7 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, s
                         {k.name}
                       </div>
                       <div className={classes.flexCardText}>
-                        {k.child_sample_id ? <Link className={classes.pointer} onClick={() => handleClick(k.child_sample_id)}>{k.child_sample_id}: {k.child_sample_name}</Link> : <span>---</span>}
+                        {k.child_sample_id ? <Link className={classes.pointer} onClick={() => handleClick(k.child_sample_id)}>{k.child_sample_id}: {k.child_sample_name}</Link> : <span>-</span>}
                       </div>
                     </>
                   ))}
