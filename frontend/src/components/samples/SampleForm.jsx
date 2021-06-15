@@ -23,9 +23,6 @@ import sampleAPI from '../../helpers/api/sampleAPI';
 import samplesAPI from '../../helpers/api/samplesAPI';
 import objectsAPI from '../../helpers/api/objectsAPI';
 
-// Route: /object_types
-// Linked in LeftHamburgeMenu
-
 const useStyles = makeStyles(() => ({
   box: {
     border: '1px solid black',
@@ -339,14 +336,9 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
   // data values for fields
   const [fields, setFields] = useState({});
   // input boxes for fields
+  const [allowableFieldTypes, setAllowableFieldTypes] = useState({});
   const [inputs, setInputs] = useState({});
-
-  // WIP
-  // PROOF-OF-CONCEPT, WILL ONLY WORK WITH ONE SEARCH BOX
-  // TODO: use inputs instead of quicksearch
-  // TODO: make list an object of arrays
-  const [quickSearch, setQuickSearch] = useState('');
-  const [list, setList] = useState([]);
+  const [lists, setLists] = useState({})
 
   useEffect(() => {
     const init = async () => {
@@ -356,6 +348,22 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
 
       // success
       setSampleType(response);
+
+      // initialize allowableFieldTypes {field_type_id: <id>.<id>.<id>}
+      // initialize lists to {field_type_id: []}
+      let temp = new Object;
+      let temp2 = new Object;
+      response.field_types.map((f) => (
+        f.ftype == 'sample' && (
+          temp={...temp,[f.id]: []},
+          temp2={...temp2,[f.id]: []},
+          f.allowable_field_types.map((a) =>
+            temp[f.id]=[...temp[f.id], a.sample_type_id]
+          )
+        )
+      ))
+      setAllowableFieldTypes(temp)
+      setLists(temp2)
     };
 
     const initEdit = async (id) => {
@@ -374,6 +382,7 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
       setSample(temp)
 
       // map fields
+      // setInputs is a hack - need to clean it up to only get non-array values and use blanks for arrays
       let temp2 = new Object
       let tempi = new Object
       resp.fields.map((f) => (
@@ -437,25 +446,25 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
 
   // WIP
   // TODO: use inputs instead of quicksearch
-  const handleQuickSearch = async(event,sample_types) => {
+  const handleQuickSearch = async(id, event) => {
     setInputs({...inputs,
-      [event.target.id]:event.target.value
+      [id]:event.target.value
     })
 
-    setQuickSearch(event.target.value)
-
-    const response1 = await sampleAPI.getQuickSearch(event.target.value,sample_types);
+    const response1 = await sampleAPI.getQuickSearch(event.target.value,allowableFieldTypes[id].join('.'));
     if (!response1) return;
 
     // set item + object type
-    setList(response1);
+    setLists({...lists,[id]: response1});
   }
 
   // WIP
   // TODO: use inputs instead of quicksearch
   const handleSelect = async (id, event) => {
-    setList([])
-    setQuickSearch('')
+    setLists({...lists,[id]: []})
+    setInputs({...inputs,
+      [id]: ''
+    })
 
     let temp = fields[id]
     temp ? (
@@ -561,47 +570,67 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
               {field_type.required ? '(*)' : ''} {field_type.name} {field_type.array && '(array)'}
             </Typography>
             <div className={classes.flexCol1}>
-              ({field_type.ftype}) <br />
-              {field_type.ftype == 'sample' && field_type.allowable_field_types ? (
+              <Typography>
+                ({field_type.ftype}) <br />
+              </Typography>
+              {field_type.choices && (
+                <Typography>
+                  {field_type.choices} <br />
+                </Typography>
+              )}
+              {field_type.ftype == 'sample' && field_type.allowable_field_types && (
                 <>
-                    {field_type.allowable_field_types.map((allowable_field_type) => (
-                      <>
-                        {allowable_field_type.name}<br />
-                      </>
-                    ))}
+                  {field_type.allowable_field_types.map((allowable_field_type) => (
+                    <Typography>
+                      {allowable_field_type.name}<br />
+                    </Typography>
+                  ))}
                 </>
-              ) : (
-                ''
               )}
             </div>
             <div className={classes.flexCol3}>
-              {field_type.array ? (
+              {/* TODO: maybe move to components to clean up */}
+              {/* samples vs other inputs */}
+              {/* arrays vs single inputs */}
+              {/* choices vs unrestricted */}
+              {field_type.ftype == 'sample' ? (
                 <>
-                  {fields[field_type.id] && (
-                    fields[field_type.id].map((f,i) => (
-                      <div className={classes.mb8}>
-                        <input className={classes.p100} disabled name={`f.${field_type.id}`} value={`${f}`} />
-                        <span className={`${classes.remove}`} onClick={() => removeField(field_type.id, i)}>x</span>
+                  {field_type.array ? (
+                    <>
+                      {fields[field_type.id] && (
+                        fields[field_type.id].map((f,i) => (
+                          <div className={classes.mb8}>
+                            <input className={classes.p100} disabled name={`f.${field_type.id}`} value={`${f}`} />
+                            <span className={`${classes.remove}`} onClick={() => removeField(field_type.id, i)}>x</span>
+                          </div>
+                        ))
+                      )}
+                      <div className={classes.mt8}>
+                        <input className={classes.p100} placeholder="Search ( by name / s:<sample_id> )" value={inputs[`${field_type.id}`]} onChange={(event) => handleQuickSearch(field_type.id, event)} />
                       </div>
-                    ))
-                  )}
-                  <div className={classes.mt8}>
-                    <input className={classes.p100} placeholder="Search ( by name / s:<sample_id> )" value={inputs[`${field_type.id}`]} onChange={(event) => handleQuickSearch(event,'4.1')} />
-                  </div>
-                  {list.length!=0 && (
-                    <div className={classes.selectList}>
-                      {list.map((l) => (
-                        <div id={l.id} value={`${l.id}: ${l.name}`} className={classes.selectItem} onClick={(event) => handleSelect(field_type.id,event)}>
-                          {l.id}: {l.name}
+                      {lists[field_type.id] && lists[field_type.id].length!=0 && (
+                        <div className={classes.selectList}>
+                          {lists[field_type.id].map((l) => (
+                            <div value={`${l.id}: ${l.name}`} className={classes.selectItem} onClick={(event) => handleSelect(field_type.id,event)}>
+                              {l.id}: {l.name}
+                            </div>
+                          ))}
                         </div>
-                      ))}
+                      )}
+                    </>
+                  ) : (
+                    <div>
+                      <input className={classes.p100} id={field_type.id} name={`f.${field_type.id}`} value={fields[field_type.id] ? fields[field_type.id][0] : ''} onChange={(event) => editField(event)} />
                     </div>
                   )}
                 </>
               ) : (
-                <div>
-                  <input className={classes.p100} id={field_type.id} name={`f.${field_type.id}`} value={fields[field_type.id] ? fields[field_type.id][0] : ''} onChange={(event) => editField(event)} />
-                </div>
+                <>
+                    <div>
+                    (something else)<br />
+                      <input className={classes.p100} id={field_type.id} name={`f.${field_type.id}`} value={fields[field_type.id] ? fields[field_type.id][0] : ''} onChange={(event) => editField(event)} />
+                    </div>
+                </>
               )}
             </div>
           </div>
