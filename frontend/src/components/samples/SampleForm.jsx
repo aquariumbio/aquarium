@@ -27,6 +27,7 @@ const useStyles = makeStyles(() => ({
   box: {
     border: '1px solid black',
     padding: '16px',
+    margin: '16px 0',
   },
 
   /* flex */
@@ -146,10 +147,6 @@ const useStyles = makeStyles(() => ({
 
   hidden: {
     visibility: 'hidden',
-  },
-
-  mt16: {
-    marginTop: '16px',
   },
 
   center: {
@@ -306,10 +303,20 @@ const useStyles = makeStyles(() => ({
     width: 'calc(100% - 80px)',
   },
 
+  p100d: {
+    width: 'calc(100% - 80px)',
+    color: 'black',
+    backgroundColor: 'transparent',
+    border: '1px solid #777',
+  },
+
   selectList: {
     maxHeight: '322px',
     overflowY: 'scroll',
-    border: '1px solid black',
+    borderLeft: '1px solid #777',
+    borderBottom: '1px solid #777',
+    borderRight: '1px solid #777',
+    marginRight: '80px',
   },
 
   selectItem: {
@@ -321,6 +328,10 @@ const useStyles = makeStyles(() => ({
     '&:hover': {
       backgroundColor: '#ccc',
     }
+  },
+
+  black: {
+     color: 'black',
   },
 
 }));
@@ -406,8 +417,7 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
           temp2[f.id]
           ? temp2[f.id]=[...temp2[f.id],`${f.child_sample_id}: ${f.child_sample_name}`]
           : temp2[f.id]=[`${f.child_sample_id}: ${f.child_sample_name}`]
-        ),
-        f.child_sample_id && (tempi[f.id] = `${f.child_sample_id}: ${f.child_sample_name}`)
+        )
       ))
       setFields(temp2)
       setInputs(tempi)
@@ -595,16 +605,16 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
               {/* choices vs unrestricted */}
               {field_type.ftype == 'sample' ? (
                 <>
-                  {field_type.array ? (
+                  {fields[field_type.id] && (
+                    fields[field_type.id].map((f,i) => (
+                      <div className={classes.mb8}>
+                        <input className={classes.p100d} disabled name={`f.${field_type.id}`} value={`${f}`} />
+                        <span className={`${classes.remove}`} onClick={() => removeField(field_type.id, i)}>x</span>
+                      </div>
+                    ))
+                  )}
+                  {(field_type.array || !fields[field_type.id] || fields[field_type.id].length == 0) && (
                     <>
-                      {fields[field_type.id] && (
-                        fields[field_type.id].map((f,i) => (
-                          <div className={classes.mb8}>
-                            <input className={classes.p100} disabled name={`f.${field_type.id}`} value={`${f}`} />
-                            <span className={`${classes.remove}`} onClick={() => removeField(field_type.id, i)}>x</span>
-                          </div>
-                        ))
-                      )}
                       <div className={classes.mt8}>
                         <input className={classes.p100} placeholder="Search ( by name / s:<sample_id> )" value={inputs[`${field_type.id}`]} onChange={(event) => handleQuickSearch(field_type.id, event)} />
                       </div>
@@ -618,18 +628,13 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
                         </div>
                       )}
                     </>
-                  ) : (
-                    <div>
-                      <input className={classes.p100} id={field_type.id} name={`f.${field_type.id}`} value={fields[field_type.id] ? fields[field_type.id][0] : ''} onChange={(event) => editField(event)} />
-                    </div>
                   )}
                 </>
               ) : (
                 <>
-                    <div>
-                    (something else)<br />
-                      <input className={classes.p100} id={field_type.id} name={`f.${field_type.id}`} value={fields[field_type.id] ? fields[field_type.id][0] : ''} onChange={(event) => editField(event)} />
-                    </div>
+                  <div>
+                    <input className={classes.p100} id={field_type.id} name={`f.${field_type.id}`} value={fields[field_type.id] ? fields[field_type.id][0] : ''} onChange={(event) => editField(event)} />
+                  </div>
                 </>
               )}
             </div>
@@ -637,7 +642,7 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
         ))}
         </div>
       </div>
-      <div className={classes.mt16}>
+      <div>
         <Button variant="outlined" onClick={handleSubmit}>Submit</Button>
       </div>
     </form>

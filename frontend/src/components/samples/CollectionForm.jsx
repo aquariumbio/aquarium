@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
   box: {
     border: '1px solid black',
     padding: '16px',
+    margin: '16px 0',
   },
 
   /* flex */
@@ -129,10 +130,6 @@ const useStyles = makeStyles((theme) => ({
 
   mt16: {
     marginTop: '16px',
-  },
-
-  mt8: {
-    marginTop: '8px',
   },
 
   center: {
@@ -289,7 +286,9 @@ const useStyles = makeStyles((theme) => ({
   selectList: {
     maxHeight: '322px',
     overflowY: 'scroll',
-    border: '1px solid black',
+    borderLeft: '1px solid #777',
+    borderBottom: '1px solid #777',
+    borderRight: '1px solid #777',
   },
 
   selectItem: {
@@ -315,9 +314,7 @@ const useStyles = makeStyles((theme) => ({
   p100: {
     width: '100%',
     padding: '4px 8px',
-    marginBottom: '16px',
   },
-
 }));
 
 // eslint-disable-next-line no-unused-vars
@@ -402,13 +399,13 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
   };
 
   const handleSelect = async (event) => {
-    alert(`assign ${event.target.id} to row ${rowSel} column ${colSel}`)
+    alert(`assign ${event.target.id} to [${rowSel+1}, ${colSel+1}]`)
     setList([])
     setQuickSearch('')
   }
 
   const handleRemove = async (r, c) => {
-    alert(`remove - row ${r} column ${c}`)
+    alert(`remove [${r+1}, ${c+1}]`)
   }
 
   return (
@@ -463,10 +460,10 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
 
       {rowSel != -1 && (
         <>
-          <Typography className={classes.mt16}>
+          <Typography className={classes.mb8}>
             Assign Sample to Selection
           </Typography>
-          <div className={classes.mt8}>
+          <div>
             <input className={classes.p100} placeholder="Search ( by name / s:<sample_id> )" value={quickSearch} onChange={(event) => handleSearch(event)} />
           </div>
           {list.length!=0 && (
