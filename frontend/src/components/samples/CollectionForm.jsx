@@ -410,7 +410,6 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
 
   return (
     <>
-
       <div className={classes.right}>
         <Button variant="outlined" onClick={() => {setCollectionTypeId(0)}}>Close</Button>
       </div>
@@ -477,7 +476,6 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
           )}
         </>
       )}
-
     </>
 
   );

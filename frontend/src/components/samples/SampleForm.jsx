@@ -514,10 +514,8 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
   return (
     <form id='sampleForm'>
 
-      <div className={classes.right}>
-        <Button variant="outlined" onClick={() => {setSampleTypeId(0)}}>
-          Close
-        </Button>
+      <div className={classes.hidden}>
+        <Button variant="outlined">&nbsp;</Button>
       </div>
 
       <div className={classes.box}>
@@ -642,7 +640,8 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
         ))}
         </div>
       </div>
-      <div>
+      <div className={`${classes.right} ${classes.mb16}`}>
+        <Button className={classes.mr16} variant="outlined" onClick={() => {setSampleTypeId(0)}}>Cancel</Button>
         <Button variant="outlined" onClick={handleSubmit}>Submit</Button>
       </div>
     </form>
