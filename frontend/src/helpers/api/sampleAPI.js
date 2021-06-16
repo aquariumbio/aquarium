@@ -1,5 +1,7 @@
 import axiosInstance from './axiosInstance';
 
+// TODO: change this file to samplesAPI.js
+// TODO: change current samplesAPI.js to sampleTypesAPI.js
 const sampleAPI = {};
 
 // not used
@@ -8,6 +10,7 @@ const sampleAPI = {};
 //   .then((response) => response.data)
 //   .catch((error) => error);
 
+// TODO: move this to sampleTypesAPI.getTypes and pass list_only as parameter
 sampleAPI.getTypes = () => axiosInstance
   .get('/sample_types?list_only=1')
   .then((response) => response.data)
