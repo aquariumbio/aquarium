@@ -11,6 +11,7 @@ import Link from '@material-ui/core/Link';
 
 import { StandardButton } from '../shared/Buttons';
 import samplesAPI from '../../helpers/api/samplesAPI';
+import sampleTypesAPI from '../../helpers/api/sampleTypesAPI';
 import usersAPI from '../../helpers/api/usersAPI';
 import objectsAPI from '../../helpers/api/objectsAPI';
 import SampleCards from './SampleCards';
@@ -266,7 +267,7 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
   useEffect(() => {
     const init = async () => {
       // wrap the API calls
-      const response1 = await samplesAPI.getTypes();
+      const response1 = await sampleTypesAPI.getTypes();
       const response2 = await objectsAPI.getByHandler('collection')
       if (!response1 || !response2) return;
 

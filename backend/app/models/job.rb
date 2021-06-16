@@ -82,7 +82,7 @@ class Job < ActiveRecord::Base
     categories.each do |c|
       active.merge!({ c.category => c.count })
     end
-puts ">>> ONE"
+
     # list inactive operation types
     inactive = []
     inactive_categories.each do |i|

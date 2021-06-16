@@ -2,8 +2,13 @@ import axiosInstance from './axiosInstance';
 
 const sampleTypesAPI = {};
 
-sampleTypesAPI.getTypes = () => axiosInstance
+sampleTypesAPI.getTypesPlusFirst = () => axiosInstance
   .get('/sample_types')
+  .then((response) => response.data)
+  .catch((error) => error);
+
+sampleTypesAPI.getTypes = () => axiosInstance
+  .get('/sample_types?list_only=1')
   .then((response) => response.data)
   .catch((error) => error);
 

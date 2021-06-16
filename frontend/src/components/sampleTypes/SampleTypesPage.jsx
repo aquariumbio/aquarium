@@ -48,7 +48,7 @@ const SampleTypeDefinitions = ({ setIsLoading }) => {
     const fetchData = async () => {
       // wrap the API call with the spinner
       const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
-      const response = await sampleTypesAPI.getTypes();
+      const response = await sampleTypesAPI.getTypesPlusFirst();
       clearTimeout(loading);
       setIsLoading(false);
       if (!response) return;
@@ -70,7 +70,7 @@ const SampleTypeDefinitions = ({ setIsLoading }) => {
     if (!response) return;
 
     // success
-    const data = await sampleTypesAPI.getTypes();
+    const data = await sampleTypesAPI.getTypesPlusFirst();
 
     setAlertProps({
       message: `${currentSampleType.name} deleted`,

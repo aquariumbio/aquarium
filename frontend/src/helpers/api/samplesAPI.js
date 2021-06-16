@@ -10,12 +10,6 @@ const samplesAPI = {};
 //   .then((response) => response.data)
 //   .catch((error) => error);
 
-// TODO: move this to sampleTypesAPI.getTypes and pass list_only as parameter
-samplesAPI.getTypes = () => axiosInstance
-  .get('/sample_types?list_only=1')
-  .then((response) => response.data)
-  .catch((error) => error);
-
 samplesAPI.getSamples = (list, sample_type_id, user_id, page) => axiosInstance
   .get(`/samples?words=${encodeURIComponent(list)}&sample_type_id=${sample_type_id}&user_id=${user_id}&page=${page}`)
   .then((response) => response.data)
