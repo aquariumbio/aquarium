@@ -223,7 +223,7 @@ const SamplesPage = ({ handlePage, handleClick, count, page, pages, samples }) =
             <div className={classes.flexCard25} cy={`sample-${sample.id}`}>
               <div className={classes.cardScroll}>
                 <img src='/beaker.png' className={classes.logoImage}/>
-                <Link className={classes.logoPopout} onClick={() => handleClick(sample.id)}>&#x2197;</Link>
+                <Link cy={`sample.${sample.id}`} className={classes.logoPopout} onClick={() => handleClick(sample.id)}>&#x2197;</Link>
                 <div className={classes.logoText}>
                   <div className={classes.textTitle}>
                     {sample.sample_type}

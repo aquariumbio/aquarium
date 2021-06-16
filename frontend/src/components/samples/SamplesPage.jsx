@@ -200,7 +200,7 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
   const [count, setCount] = useState();
   const [page, setPage] = useState();
   const [pages, setPages] = useState();
-  const [user, setUser] = useState({});
+  const [userId, setUserId] = useState();
 
   // search box
   const [search, setSearch] = useState('');
@@ -271,7 +271,7 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
       if (!response1 || !response2) return;
 
       // success
-      setUser(JSON.parse(localStorage.getItem('user')));
+      setUserId(localStorage.getItem('userId'));
       setSampleTypes(response1.sample_types);
       setCollectionTypes(response2.collection.object_types);
     }
@@ -360,7 +360,7 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
                 select
               >
                 <MenuItem value="0">Added by anyone</MenuItem>
-                <MenuItem value={user.id}>Added by me</MenuItem>
+                <MenuItem value={userId}>Added by me</MenuItem>
               </TextField>
             </Typography>
           </div>

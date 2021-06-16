@@ -51,12 +51,14 @@ tokensAPI.signOut = () => {
     .then((response) => {
       localStorage.clear('token');
       localStorage.clear('user');
+      localStorage.clear('userId');
       window.location.reload();
       return response;
     })
     .catch((error) => {
       localStorage.clear('token');
       localStorage.clear('user');
+      localStorage.clear('userId');
       window.location.reload();
       return error;
     });

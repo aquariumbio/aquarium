@@ -22,9 +22,11 @@ describe('/samples', () => {
 
   // sample page
   it('sample page', () => {
+    cy.intercept('GET', `${Cypress.env('API_URL')}/api/v3/samples?*`, { fixture: 'samples.json' });
     cy.intercept('GET', `${Cypress.env('API_URL')}/api/v3/samples/36319?*`, { fixture: 'sample.json' });
 
-    cy.visit('/samples/36319');
+    cy.visit('/samples');
+    cy.get(`[cy="sample.36319"]`).click();
 
     // should have 5 groups
     cy.get(`[cy="group-421"]`).should('have.text', '1 ng/µL Fragment Stock');

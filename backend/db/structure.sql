@@ -183,7 +183,7 @@ CREATE TABLE `field_types` (
   PRIMARY KEY (`id`),
   KEY `index_field_types_on_parent_class_and_parent_id` (`parent_class`,`parent_id`) USING BTREE,
   KEY `index_field_types_on_sample_type_id` (`parent_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=23776 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=23778 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `field_values`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -303,7 +303,7 @@ CREATE TABLE `items` (
   CONSTRAINT `fk_rails_6b7d1f696e` FOREIGN KEY (`sample_id`) REFERENCES `samples` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_a6ef7e6462` FOREIGN KEY (`object_type_id`) REFERENCES `object_types` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_d02c2a2df1` FOREIGN KEY (`locator_id`) REFERENCES `locators` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=513650 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=513655 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `job_assignment_logs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
