@@ -427,14 +427,23 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, s
                     <>
                       <div className={classes.flexCardLabel}>
                         {k.name}
-                        {' '}(show 1 of 3)
                       </div>
                       <div className={classes.flexCardText}>
-                        {k.value || <span>-</span>}
-                        <br />
-                        {k.value ? <Link className={classes.pointer} onClick={() => window.open(k.value, "_blank")}>{k.value}</Link> : <span>-</span>}
-                        <br />
-                        {k.child_sample_id ? <Link className={classes.pointer} onClick={() => handleClick(k.child_sample_id)}>{k.child_sample_id}: {k.child_sample_name}</Link> : <span>-</span>}
+                        {k.type == 'sample' ? (
+                          <>
+                            {k.child_sample_id ? <Link className={classes.pointer} onClick={() => handleClick(k.child_sample_id)}>{k.child_sample_id}: {k.child_sample_name}</Link> : <span>-</span>}
+                          </>
+                        ) : (
+                          k.type == 'url' ? (
+                            <>
+                              {k.value ? <Link className={classes.pointer} onClick={() => window.open(k.value, "_blank")}>{k.value}</Link> : <span>-</span>}
+                            </>
+                          ) : (
+                            <>
+                              {k.value || <span>-</span>}
+                            </>
+                          )
+                        )}
                       </div>
                     </>
                   ))}
