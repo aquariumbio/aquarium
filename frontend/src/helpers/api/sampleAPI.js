@@ -28,6 +28,15 @@ sampleAPI.getById = (id) => axiosInstance
   .then((response) => response.data)
   .catch((error) => error);
 
+sampleAPI.create = (FormData) => {
+  return 'create sample'
+}
+
+sampleAPI.update = (id, FormData) => {
+  return `edit sample ${id}`
+}
+
+
 // sampleAPI.create = (FormData) => axiosInstance
 //   .post('object_types/create', {
 //     object_type: FormData,

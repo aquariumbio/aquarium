@@ -479,19 +479,38 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
     const data = new FormData(form);
     const formData = Object.fromEntries(data);
 
-    // formData does not support array syntax. Build arrays manually
+    // build sample inputs from names
+    let inputsByName
     let temp
-    let input
+    sampleType.field_types.map((f) => (
+      f.ftype == 'sample' && (
+        temp = [],
+        inputsByName = document.getElementsByName(`f.${f.id}`),
+        inputsByName.forEach(i => temp.push(i.value)),
+        formData[`f.${f.id}`]=temp
+      )
+    ))
 
-    temp = []
-    input = document.getElementsByName('f_16')
-    input.forEach(i => temp.push(i.value))
-    formData['f_16']=temp
+    const response = sampleId == 0
+      ? await sampleAPI.create(formData)
+      : await sampleAPI.update(sampleId, formData);
+    if (!response) return;
 
-    temp = []
-    input = document.getElementsByName('f_15')
-    input.forEach(i => temp.push(i.value))
-    formData['f_15']=temp
+    // process errors
+    const errors = response.errors;
+    if (errors) {
+      setAlertProps({
+        message: JSON.stringify(errors, null, 2),
+        severity: 'error',
+        open: true,
+      });
+      return;
+    }
+
+    // success
+    // pass alert popup in localStorage (does not work if pass as object, so pass as JSON string)
+    alert(response)
+
   }
 
   return (
@@ -562,7 +581,7 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
             </Typography>
             <div className={classes.flexCol1}>
               <Typography>
-                ({field_type.ftype}) <br />
+                ({field_type.ftype} - {field_type.id}) <br />
               </Typography>
               {field_type.choices && (
                 <Typography>
@@ -589,6 +608,7 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
                   {fields[field_type.id] && (
                     fields[field_type.id].map((f,i) => (
                       <div className={classes.mb8}>
+                        {/* NOTE: disabled inputs not in formData. Will build inputs from names */}
                         <input className={classes.p100d} disabled name={`f.${field_type.id}`} value={f} />
                         <span className={`${classes.remove}`} onClick={() => removeField(field_type.id, i)}>x</span>
                       </div>
@@ -597,12 +617,13 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
                   {(field_type.array || !fields[field_type.id] || fields[field_type.id].length == 0) && (
                     <>
                       <div>
+                        {/* NOTE: inputs with no name not in form data on purpose */}
                         <input className={classes.p100} placeholder="Add ( by name / s:<sample_id> )" value={inputs[`${field_type.id}`]} onChange={(event) => handleQuickSearch(field_type.id, event)} />
                       </div>
                       {lists[field_type.id] && lists[field_type.id].length!=0 && (
                         <div className={classes.selectList}>
                           {lists[field_type.id].map((l) => (
-                            <div value={`${l.id}: ${l.name}`} className={classes.selectItem} onClick={(event) => handleSelect(field_type.id,event)}>
+                            <div className={classes.selectItem} value={`${l.id}: ${l.name}`} onClick={(event) => handleSelect(field_type.id,event)}>
                               {l.id}: {l.name}
                             </div>
                           ))}
@@ -642,6 +663,7 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
                       {fields[field_type.id] && (
                         fields[field_type.id].map((f,i) => (
                           <div className={classes.mb8}>
+                            {/* NOTE: will build array from same names */}
                             <input className={classes.p100} name={`f.${field_type.id}`} value={fields[field_type.id][i]} onChange={(event) => editField(field_type.id, i, event)} />
                             <span className={`${classes.remove}`} onClick={() => removeField(field_type.id, i)}>x</span>
                           </div>
