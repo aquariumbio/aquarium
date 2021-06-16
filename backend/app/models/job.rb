@@ -80,9 +80,9 @@ class Job < ActiveRecord::Base
     # populate counts by active operation type
     active = {}
     categories.each do |c|
-      active = active.update({ c.category => c.count })
+      active.merge!({ c.category => c.count })
     end
-
+puts ">>> ONE"
     # list inactive operation types
     inactive = []
     inactive_categories.each do |i|
@@ -107,7 +107,7 @@ class Job < ActiveRecord::Base
       and ja.id is null
       order by jot.created_at desc
     "
-    unassigned = IdString.find_by_sql sql
+    unassigned = Job.find_by_sql sql
   end
 
   # Get assigned jobs that have operations and that are not finished
@@ -124,7 +124,7 @@ class Job < ActiveRecord::Base
       where jot.pc != -2
       order by jot.created_at desc
     "
-    assigned = IdString.find_by_sql sql
+    assigned = Job.find_by_sql sql
   end
 
   # Get finished jobs that have operations
@@ -156,6 +156,6 @@ class Job < ActiveRecord::Base
       order by jot.updated_at desc
       limit 100
     "
-    finished = IdString.find_by_sql sql
+    finished = Job.find_by_sql sql
   end
 end

@@ -48,7 +48,7 @@ class SampleType < ActiveRecord::Base
         "
         allowable_field_types = AllowableFieldType.find_by_sql sql
 
-        ft = ft.update({ allowable_field_types: allowable_field_types })
+        ft[:allowable_field_types] = allowable_field_types
       end
     end
 
