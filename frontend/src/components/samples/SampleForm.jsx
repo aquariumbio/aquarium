@@ -589,7 +589,7 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
                   {fields[field_type.id] && (
                     fields[field_type.id].map((f,i) => (
                       <div className={classes.mb8}>
-                        <input className={classes.p100d} disabled name={`f.${field_type.id}`} value={`${f}`} />
+                        <input className={classes.p100d} disabled name={`f.${field_type.id}`} value={f} />
                         <span className={`${classes.remove}`} onClick={() => removeField(field_type.id, i)}>x</span>
                       </div>
                     ))
@@ -612,24 +612,50 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
                   )}
                 </>
               ) : (
-                field_type.array ? (
-                  <>
-                    {fields[field_type.id] && (
-                      fields[field_type.id].map((f,i) => (
-                        <div className={classes.mb8}>
-                          <input className={classes.p100} name={`f.${field_type.id}`} value={fields[field_type.id][i]} onChange={(event) => editField(field_type.id, i, event)} />
-                          <span className={`${classes.remove}`} onClick={() => removeField(field_type.id, i)}>x</span>
-                        </div>
-                      ))
-                    )}
-                    <Typography className={classes.add} onClick={(event) => addField(field_type.id)}>
-                      Add Value
-                    </Typography>
-                  </>
+                field_type.choices ? (
+                  field_type.array ? (
+                    <>
+                      {fields[field_type.id] && (
+                        fields[field_type.id].map((f,i) => (
+                          <div className={classes.mb8}>
+                            <select className={classes.p100d} name={`f.${field_type.id}`} value={f}>
+                              <option value="0">Select...</option>
+                              <option value="1">option 1</option>
+                              <option value="2">option 2</option>
+                            </select>
+                            <span className={`${classes.remove}`} onClick={() => removeField(field_type.id, i)}>x</span>
+                          </div>
+                        ))
+                      )}
+                      <Typography className={classes.add} onClick={(event) => addField(field_type.id)}>
+                        Add
+                      </Typography>
+                    </>
+                  ) : (
+                    <select className={classes.p100d}>
+                      <option value="0">Select...</option>
+                    </select>
+                  )
                 ) : (
-                  <div>
-                    <input className={classes.p100} name={`f.${field_type.id}`} value={fields[field_type.id] ? fields[field_type.id][0] : ''} onChange={(event) => editField(field_type.id, 0, event)} />
-                  </div>
+                  field_type.array ? (
+                    <>
+                      {fields[field_type.id] && (
+                        fields[field_type.id].map((f,i) => (
+                          <div className={classes.mb8}>
+                            <input className={classes.p100} name={`f.${field_type.id}`} value={fields[field_type.id][i]} onChange={(event) => editField(field_type.id, i, event)} />
+                            <span className={`${classes.remove}`} onClick={() => removeField(field_type.id, i)}>x</span>
+                          </div>
+                        ))
+                      )}
+                      <Typography className={classes.add} onClick={(event) => addField(field_type.id)}>
+                        Add
+                      </Typography>
+                    </>
+                  ) : (
+                    <div>
+                      <input className={classes.p100} name={`f.${field_type.id}`} value={fields[field_type.id] ? fields[field_type.id][0] : ''} onChange={(event) => editField(field_type.id, 0, event)} />
+                    </div>
+                  )
                 )
               )}
             </div>

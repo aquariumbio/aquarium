@@ -330,7 +330,7 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, s
     // wrap the API calls
     const response1 = await sampleAPI.getById(id);
     const response2 = await objectsAPI.getBySample(id);
-    if (!response1) return;
+    if (!response1 || !response2) return;
 
     // success
     setSample(response1.sample);
