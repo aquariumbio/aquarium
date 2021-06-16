@@ -6,7 +6,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
-import samplesAPI from '../../helpers/api/samplesAPI';
+import sampleTypesAPI from '../../helpers/api/sampleTypesAPI';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -22,7 +22,7 @@ const SideBar = ({ sampleTypes, setCurrentSampleType, setIsLoading }) => {
   const fetchData = async (id) => {
     // wrap the API call with the spinner
     const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
-    const response = await samplesAPI.getTypeById(id);
+    const response = await sampleTypesAPI.getTypeById(id);
     clearTimeout(loading);
     setIsLoading(false);
     if (!response) return;

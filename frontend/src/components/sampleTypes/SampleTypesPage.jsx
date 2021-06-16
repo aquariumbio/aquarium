@@ -8,7 +8,7 @@ import Divider from '@material-ui/core/Divider';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Toolbar from '@material-ui/core/Toolbar';
-import samplesAPI from '../../helpers/api/samplesAPI';
+import sampleTypesAPI from '../../helpers/api/sampleTypesAPI';
 import SideBar from './SideBar';
 import ShowSampleType from './ShowSampleType';
 import { LinkButton, StandardButton } from '../shared/Buttons';
@@ -48,7 +48,7 @@ const SampleTypeDefinitions = ({ setIsLoading }) => {
     const fetchData = async () => {
       // wrap the API call with the spinner
       const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
-      const response = await samplesAPI.getTypes();
+      const response = await sampleTypesAPI.getTypes();
       clearTimeout(loading);
       setIsLoading(false);
       if (!response) return;
@@ -64,13 +64,13 @@ const SampleTypeDefinitions = ({ setIsLoading }) => {
   const handleDelete = async () => {
     // wrap the API call with the spinner
     const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
-    const response = await samplesAPI.delete(currentSampleType.id);
+    const response = await sampleTypesAPI.delete(currentSampleType.id);
     clearTimeout(loading);
     setIsLoading(false);
     if (!response) return;
 
     // success
-    const data = await samplesAPI.getTypes();
+    const data = await sampleTypesAPI.getTypes();
 
     setAlertProps({
       message: `${currentSampleType.name} deleted`,

@@ -19,8 +19,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 
 import { StandardButton } from '../shared/Buttons';
-import sampleAPI from '../../helpers/api/sampleAPI';
 import samplesAPI from '../../helpers/api/samplesAPI';
+import sampleTypesAPI from '../../helpers/api/sampleTypesAPI';
 import objectsAPI from '../../helpers/api/objectsAPI';
 
 const useStyles = makeStyles(() => ({
@@ -355,7 +355,7 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
   useEffect(() => {
     const init = async () => {
       // wrap the API calls
-      const response = await samplesAPI.getTypeById(sampleTypeId);
+      const response = await sampleTypesAPI.getTypeById(sampleTypeId);
       if (!response) return;
 
       // success
@@ -376,7 +376,7 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
 
     const initEdit = async (id) => {
       // wrap the API calls
-      const response = await sampleAPI.getById(id);
+      const response = await samplesAPI.getById(id);
       if (!response) return;
 
       // success
@@ -448,7 +448,7 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
       [id]:event.target.value
     })
 
-    const response1 = await sampleAPI.getQuickSearch(event.target.value,allowableFieldTypes[id].join('.'));
+    const response1 = await samplesAPI.getQuickSearch(event.target.value,allowableFieldTypes[id].join('.'));
     if (!response1) return;
 
     // set item + object type
@@ -492,8 +492,8 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
     ))
 
     const response = sampleId == 0
-      ? await sampleAPI.create(formData)
-      : await sampleAPI.update(sampleId, formData);
+      ? await samplesAPI.create(formData)
+      : await samplesAPI.update(sampleId, formData);
     if (!response) return;
 
     // process errors

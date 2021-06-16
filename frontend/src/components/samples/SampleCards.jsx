@@ -10,7 +10,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Link from '@material-ui/core/Link';
 
 import { StandardButton } from '../shared/Buttons';
-import sampleAPI from '../../helpers/api/sampleAPI';
+import samplesAPI from '../../helpers/api/samplesAPI';
 import usersAPI from '../../helpers/api/usersAPI';
 import objectsAPI from '../../helpers/api/objectsAPI';
 import SampleCard from './SampleCard';

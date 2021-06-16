@@ -21,7 +21,7 @@ import Button from '@material-ui/core/Button';
 import { StandardButton } from '../shared/Buttons';
 import itemsAPI from '../../helpers/api/itemsAPI';
 import objectsAPI from '../../helpers/api/objectsAPI';
-import sampleAPI from '../../helpers/api/sampleAPI';
+import samplesAPI from '../../helpers/api/samplesAPI';
 
 // Route: /object_types
 // Linked in LeftHamburgeMenu
@@ -391,7 +391,7 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
   const handleSearch = async () => {
     setQuickSearch(event.target.value)
 
-    const response1 = await sampleAPI.getQuickSearch(event.target.value,'');
+    const response1 = await samplesAPI.getQuickSearch(event.target.value,'');
     if (!response1) return;
 
     // set item + object type

@@ -19,7 +19,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 
 import { StandardButton } from '../shared/Buttons';
-import sampleAPI from '../../helpers/api/sampleAPI';
+import samplesAPI from '../../helpers/api/samplesAPI';
 import objectsAPI from '../../helpers/api/objectsAPI';
 import itemsAPI from '../../helpers/api/itemsAPI';
 
@@ -328,7 +328,7 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, s
 
   const init = async (id) => {
     // wrap the API calls
-    const response1 = await sampleAPI.getById(id);
+    const response1 = await samplesAPI.getById(id);
     const response2 = await objectsAPI.getBySample(id);
     if (!response1 || !response2) return;
 

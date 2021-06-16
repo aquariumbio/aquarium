@@ -9,7 +9,7 @@ import Alert from '@material-ui/lab/Alert';
 import Divider from '@material-ui/core/Divider';
 import SampleTypeFieldForm from './fields/SampleTypeFieldForm';
 import FieldLabels from './fields/FieldLabels';
-import samplesAPI from '../../helpers/api/samplesAPI';
+import sampleTypesAPI from '../../helpers/api/sampleTypesAPI';
 import { StandardButton, LinkButton } from '../shared/Buttons';
 import utils from '../../helpers/utils';
 import AlertToast from '../shared/AlertToast';
@@ -66,7 +66,7 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
   const fetchDataNew = async () => {
     // wrap the API call with the spinner
     const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
-    const response = await samplesAPI.getTypes();
+    const response = await sampleTypesAPI.getTypes();
     clearTimeout(loading);
     setIsLoading(false);
     if (!response) return;
@@ -81,8 +81,8 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
   const fetchDataEdit = async () => {
     // wrap the API call with the spinner
     const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
-    const getAll = samplesAPI.getTypes();
-    const getCurrent = samplesAPI.getTypeById(match.params.id);
+    const getAll = sampleTypesAPI.getTypes();
+    const getCurrent = sampleTypesAPI.getTypeById(match.params.id);
     const responseGetAll = await getAll;
     const responseGetCurrent = await getCurrent;
     clearTimeout(loading);
@@ -213,8 +213,8 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
     // wrap the API call with the spinner
     const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
     const response = update
-      ? await samplesAPI.update(formData, state.sampleType.id)
-      : await samplesAPI.create(formData);
+      ? await sampleTypesAPI.update(formData, state.sampleType.id)
+      : await sampleTypesAPI.create(formData);
     clearTimeout(loading);
     setIsLoading(false);
     if (!response) return;

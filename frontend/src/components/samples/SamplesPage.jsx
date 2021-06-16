@@ -10,7 +10,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Link from '@material-ui/core/Link';
 
 import { StandardButton } from '../shared/Buttons';
-import sampleAPI from '../../helpers/api/sampleAPI';
+import samplesAPI from '../../helpers/api/samplesAPI';
 import usersAPI from '../../helpers/api/usersAPI';
 import objectsAPI from '../../helpers/api/objectsAPI';
 import SampleCards from './SampleCards';
@@ -235,7 +235,7 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
 
       // wrap the API call with the spinner
       const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
-      const response = await sampleAPI.getSamples(words, sampletypeid, createdbyid, pagenum);
+      const response = await samplesAPI.getSamples(words, sampletypeid, createdbyid, pagenum);
       clearTimeout(loading);
       setIsLoading(false);
       if (!response) return;
@@ -252,7 +252,7 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
     if (pagenum != page) {
       setPage(pagenum);
 
-      const response = await sampleAPI.getSamples(searchWords, searchSampleTypeId, searchCreatedById, pagenum);
+      const response = await samplesAPI.getSamples(searchWords, searchSampleTypeId, searchCreatedById, pagenum);
       if (!response) return;
 
       // success
@@ -266,7 +266,7 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
   useEffect(() => {
     const init = async () => {
       // wrap the API calls
-      const response1 = await sampleAPI.getTypes();
+      const response1 = await samplesAPI.getTypes();
       const response2 = await objectsAPI.getByHandler('collection')
       if (!response1 || !response2) return;
 

@@ -11,7 +11,7 @@ import Alert from '@material-ui/lab/Alert';
 import Divider from '@material-ui/core/Divider';
 
 import objectsAPI from '../../helpers/api/objectsAPI';
-import samplesAPI from '../../helpers/api/samplesAPI';
+import sampleTypesAPI from '../../helpers/api/sampleTypesAPI';
 import { StandardButton, LinkButton } from '../shared/Buttons';
 
 const useStyles = makeStyles((theme) => ({
@@ -78,7 +78,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
   useEffect(() => {
     const initNew = async () => {
       // wrap the API call
-      const response = await samplesAPI.getTypes();
+      const response = await sampleTypesAPI.getTypes();
       if (!response) return;
 
       // success
@@ -92,7 +92,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
 
     const initEdit = async (thisid) => {
       // wrap the API calls
-      const response = await samplesAPI.getTypes();
+      const response = await sampleTypesAPI.getTypes();
       if (!response) return;
 
       // success
