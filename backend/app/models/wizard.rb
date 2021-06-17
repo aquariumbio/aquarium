@@ -194,7 +194,7 @@ class Wizard < ActiveRecord::Base
   # @option wizard[:description] [String] the description
   # @option wizard[:specification] [String] the specification
   # return the wizard
-  def update(wizard)
+  def update_with(wizard)
     # Read the parameters
     input_name = Input.text(wizard[:name])
     input_description = Input.text(wizard[:description])

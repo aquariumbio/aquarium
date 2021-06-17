@@ -422,7 +422,7 @@ module Api
 
         # Update object type
         # Note: any errors handled automatically and silently
-        object_type = object_type.update(params_object_type)
+        object_type = object_type.update_with(params_object_type)
 
         render json:  { object_type: object_type }.to_json, status: :ok
       end

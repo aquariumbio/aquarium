@@ -249,7 +249,7 @@ module Api
         params_wizard = params[:wizard] || {}
 
         # Update wizard
-        wizard, errors = wizard.update(params_wizard)
+        wizard, errors = wizard.update_with(params_wizard)
         render json: { errors: errors }.to_json, status: :ok and return if !wizard
 
         render json: { wizard: wizard }.to_json, status: :ok

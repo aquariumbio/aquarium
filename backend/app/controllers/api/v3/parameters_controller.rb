@@ -192,7 +192,7 @@ module Api
         params_parameter = params[:parameter] || {}
 
         # Update parameter
-        parameter, errors = parameter.update(params_parameter)
+        parameter, errors = parameter.update_with(params_parameter)
         render json: { errors: errors }.to_json, status: :ok and return if !parameter
 
         render json: { parameter: parameter }.to_json, status: :ok

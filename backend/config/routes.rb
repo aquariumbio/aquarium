@@ -114,10 +114,10 @@ Rails.application.routes.draw do
   # Samples
   get  'api/v3/samples',                           to: 'api/v3/samples#index'
   get  'api/v3/samples/quick_search',              to: 'api/v3/samples#quick_search'
-  # post 'api/v3/sample/create',                     to: 'api/v3/sample#create'
+  post 'api/v3/samples/create',                    to: 'api/v3/samples#create'
   get  'api/v3/samples/:id',                       to: 'api/v3/samples#show'
-  # post 'api/v3/sample/:id/update',                 to: 'api/v3/sample#update'
-  # post 'api/v3/sample/:id/discard',                to: 'api/v3/sample#discard'
+  post 'api/v3/samples/:id/update',                to: 'api/v3/samples#update'
+  post 'api/v3/samples/:id/discard',               to: 'api/v3/samples#discard'
 
   # Items
   post 'api/v3/items/create',                      to: 'api/v3/items#create'

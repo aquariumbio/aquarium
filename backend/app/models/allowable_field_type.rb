@@ -30,7 +30,7 @@ class AllowableFieldType < ActiveRecord::Base
   # @option allowable_field_type[:id] [Int] the id of the allowable field type
   # @option allowable_field_type[:sample_type_id] [Int] the id of the sample type
   # @return id or 0
-  def self.update(field_type_id, allowable_field_type)
+  def self.update_with(field_type_id, allowable_field_type)
     # Verify that the sample_type_id is valid
     sample_type_id = Input.int(allowable_field_type[:sample_type_id])
     sql = "select * from sample_types where id = #{sample_type_id} limit 1"

@@ -425,9 +425,9 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
       - ContainerForm (item form if item is a single item) <== containerTypeId != 0
       - Collectionform (item form if item is a collection) <== collectionTypeId != 0
       */}
-      {sampleTypeId != 0 && (<SampleForm sampleId={sampleId} sampleTypeId={sampleTypeId} setSampleTypeId={setSampleTypeId}/>)}
+      {sampleTypeId != 0 && (<SampleForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} sampleId={sampleId} sampleTypeId={sampleTypeId} setSampleTypeId={setSampleTypeId}/>)}
       {/* {containerTypeId != 0 && (<ContainerForm containerId={containerId} containerTypeId={containerTypeId} setContainerTypeId={setContainerTypeId}/>)} */}
-      {collectionTypeId != 0 && (<CollectionForm collectionId={collectionId} collectionTypeId={collectionTypeId} setCollectionTypeId={setCollectionTypeId}/>)}
+      {collectionTypeId != 0 && (<CollectionForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} collectionId={collectionId} collectionTypeId={collectionTypeId} setCollectionTypeId={setCollectionTypeId}/>)}
       {sampleTypeId == 0 && collectionTypeId == 0 && sampleId != 0 && <SampleCard sampleId={sampleId} setSampleId={setSampleId} setSampleTypeId={setSampleTypeId} setCollectionId={setCollectionId} setCollectionTypeId={setCollectionTypeId}/>}
       {sampleTypeId == 0 && collectionTypeId == 0 && sampleId == 0 && <SampleCards handlePage={handlePage} handleClick={handleClick} count={count} page={page} pages={pages} samples={samples}/>}
     </>

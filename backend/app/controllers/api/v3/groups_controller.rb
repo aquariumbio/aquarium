@@ -203,7 +203,7 @@ module Api
         params_group = params[:group] || {}
 
         # Update group
-        group, errors = group.update(params_group)
+        group, errors = group.update_with(params_group)
         render json: { errors: errors }.to_json, status: :ok and return if !group
 
         render json: { group: group }.to_json, status: :ok

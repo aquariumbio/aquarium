@@ -64,11 +64,18 @@ const useStyles = makeStyles((theme) => ({
     borderLeft: '1px solid  #ccc',
   },
 
+  // &::before creates a square box
   flexCol1x: {
     flex: '1 1 0',
     minWidth: '0',
     borderTop: '1px solid #ccc',
     borderLeft: '1px solid  #ccc',
+
+    "&::before": {
+      content: `''`,
+      float:'left',
+      paddingTop:'100%',
+    },
   },
 
   flexCol2: {
@@ -318,7 +325,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // eslint-disable-next-line no-unused-vars
-const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId }) => {
+const CollectionForm = ({ setIsLoading, setAlertProps, collectionId, collectionTypeId, setCollectionTypeId }) => {
   const classes = useStyles();
   const history = useHistory();
 
@@ -440,9 +447,8 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
               {columns.map((column,cIndex) => (
                 <>
                   {collection[`${row}.${column}`] ? (
-                    <Typography className={`${classes.flexCol1x} ${classes.deselected}`}>
+                    <Typography className={`${classes.flexCol1x} ${classes.pointer} ${rowSel == row && colSel == column ? classes.selected : classes.deselected}`} id={`${row},${column}`} onClick={() => handleRC(row, column)}>
                       {collection[`${row}.${column}`]}
-                      <span className={`${classes.remove}`} onClick={() => handleRemove(row, column)}>x</span>
                     </Typography>
                   ) : (
                     <Typography className={`${classes.flexCol1x} ${classes.pointer} ${rowSel == row && colSel == column ? classes.selected : classes.deselected}`} id={`${row},${column}`} onClick={() => handleRC(row, column)}>
@@ -459,20 +465,47 @@ const CollectionForm = ({ collectionId, collectionTypeId, setCollectionTypeId })
 
       {rowSel != -1 && (
         <>
-          <Typography className={classes.mb8}>
-            Assign Sample to Selection
-          </Typography>
-          <div>
-            <input className={classes.p100} placeholder="Search ( by name / s:<sample_id> )" value={quickSearch} onChange={(event) => handleSearch(event)} />
-          </div>
-          {list.length!=0 && (
-            <div className={classes.selectList}>
-              {list.map((l) => (
-                <div id={l.id} className={classes.selectItem} onClick={(event) => handleSelect(event)}>
-                  {l.id}: {l.name}
+          {collection[`${rowSel}.${colSel}`] ? (
+            <>
+              <Typography className={`${classes.mb8} ${classes.mt16}`}>
+                Remove Sample from Selection
+              </Typography>
+              <div>
+               <Button variant="outlined" onClick={() => handleRemove(rowSel, colSel)}>Remove</Button>
+              </div>
+
+              <Typography className={`${classes.mb8} ${classes.mt16}`}>
+                Data
+              </Typography>
+              <Typography className={classes.mb8}>
+                TODO: Add Data
+              </Typography>
+
+              <Typography className={`${classes.mb8} ${classes.mt16}`}>
+                History
+              </Typography>
+              <Typography className={classes.mb8}>
+                TODO: Add History
+              </Typography>
+            </>
+          ) : (
+            <>
+              <Typography className={`${classes.mb8} ${classes.mt16}`}>
+                Assign Sample to Selection
+              </Typography>
+              <div>
+                <input className={classes.p100} placeholder="Search ( by name / s:<sample_id> )" value={quickSearch} onChange={(event) => handleSearch(event)} />
+              </div>
+              {list.length!=0 && (
+                <div className={classes.selectList}>
+                  {list.map((l) => (
+                    <div id={l.id} className={classes.selectItem} onClick={(event) => handleSelect(event)}>
+                      {l.id}: {l.name}
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              )}
+            </>
           )}
         </>
       )}

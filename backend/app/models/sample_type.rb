@@ -110,7 +110,7 @@ class SampleType < ActiveRecord::Base
   # @option sample_type[:description] [String] the description of the sample type
   # @option sample_type[:field_types] [Hash] the field_type attributes associated with the sample type
   # @return the sample type
-  def update(sample_type)
+  def update_with(sample_type)
     input_name = Input.text(sample_type[:name])
     input_description = Input.text(sample_type[:description])
 

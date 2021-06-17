@@ -3,7 +3,7 @@
 # @api api.v3
 module Api
   module V3
-    # Sample Type API calls
+    # Sample API calls
     #
     # <b>General</b>
     #   API Status Codes:
@@ -289,6 +289,180 @@ module Api
         render json: { sample: sample, inventory: inventory }.to_json, status: :ok
       end
 
+      # Create a new sample.
+      #
+      # <b>API Call:</b>
+      #   POST: /api/v3/samples/create
+      #   {
+      #     token: <token>,
+      #     sample: {
+      #       name: <name>,
+      #       description: <description>,
+      #       field_types: [
+      #         {
+      #           name: <name>,
+      #           ftype: <ftype>,
+      #           required: <required>,
+      #           array: <array>,
+      #           choices: <choices>,
+      #           allowable_field_types: [ # (only used when ftype = "sample")
+      #             {
+      #               sample_type_id: <sample_type_id>
+      #             },
+      #             ...
+      #           ]
+      #         },
+      #         ...
+      #       ]
+      #     }
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 201
+      #   {
+      #     sample: {
+      #       id: <sample_id>,
+      #       name: <name>,
+      #       description: <description>,
+      #       created_at: <datetime>,
+      #       updated_at: <datetime>
+      #     }
+      #   }
+      #
+      # @!method create(token, sample)
+      # @param token [String] a token
+      # @param sample [Hash] the sample
+      def create
+        # Check for admin permissions
+        status, response = check_token_for_permission(Permission.admin_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # Read sample parameter
+        params_sample = params[:sample] || {}
+
+puts ">>> params_sample"
+puts params_sample.to_json
+puts ">>>"
+
+return "create sample"
+        # Create sample
+#         sample, errors = SampleType.create_from(params_sample)
+#         render json: { errors: errors }.to_json, status: :ok and return if !sample
+#
+#         render json: { sample: sample }.to_json, status: :created
+      end
+
+      # Update a sample.
+      #
+      # <b>API Call:</b>
+      #   POST: /api/v3/samples/<id>/update
+      #   {
+      #     token: <token>
+      #     id: <sample_id>,
+      #     sample: {
+      #       name: <name>,
+      #       description: <description>,
+      #       field_types: [
+      #         {
+      #           id: <field_type_id>,
+      #           name: <name>,
+      #           ftype: <ftype>,
+      #           required: <required>,
+      #           array: <array>,
+      #           choices: <choices>,
+      #           allowable_field_types: [ # (only used when ftype = "sample")
+      #             {
+      #               id: <allowable_field_type_id>,
+      #               sample_type_id: <sample_type_id>
+      #             },
+      #             ...
+      #           ]
+      #         },
+      #         ...
+      #       ]
+      #     }
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     sample: {
+      #       id: <sample_id>,
+      #       name: <name>,
+      #       description: <description>,
+      #       created_at: <datetime>,
+      #       updated_at: <datetime>
+      #     }
+      #   }
+      #
+      # @!method update(token, id, sample)
+      # @param token [String] a token
+      # @param id [Int] the id of the sample
+      # @param sample [Hash] the sample
+      def update
+        # Check for admin permissions
+        status, response = check_token_for_permission(Permission.admin_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # Get sample
+        id = Input.int(params[:id])
+        sample = Sample.find_id(id)
+        render json: { error: "Sample not found" }.to_json, status: :not_found and return if !sample
+
+        # Read sample parameter
+        params_sample = params[:sample] || {}
+
+puts ">>> params_sample"
+# params_sample.each do |k,v|
+# puts "#{k}: #{v}"
+# end
+# puts ">>>"
+
+        # Update sample
+        sample, errors = sample.update_with(params_sample)
+puts ">>> ..."
+        render json: { errors: errors }.to_json, status: :ok and return if !sample
+puts ">>> OK"
+
+        render json: { sample: sample }.to_json, status: :ok
+      end
+
+      # Delete a sample.
+      #
+      # <b>API Call:</b>
+      #   POST: /api/v3/samples/<id>/delete
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     message: "Sample deleted"
+      #   }
+      #
+      # @!method delete(token, id)
+      # @param token [String] a token
+      # @param id [Int] the id of the sample
+      def delete
+        # Check for admin permissions
+        status, response = check_token_for_permission(Permission.admin_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        id = Input.int(params[:id])
+
+        # Get sample
+        sample = Sample.find_id(id)
+        render json: { error: "Sample not found" }.to_json, status: :not_found and return if !sample
+
+return "delete sample"
+        # Delete sample and related items that do not have foreign keys
+#         sample.delete_sample
+#
+#         render json: {
+#           message: "Sample deleted"
+#         }.to_json, status: :ok
+      end
     end
   end
 end

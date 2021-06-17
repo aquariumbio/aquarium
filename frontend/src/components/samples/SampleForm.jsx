@@ -337,7 +337,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 // eslint-disable-next-line no-unused-vars
-const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
+const SampleForm = ({ setIsLoading, setAlertProps, sampleId, sampleTypeId, setSampleTypeId }) => {
   const classes = useStyles();
   const history = useHistory();
 
@@ -442,6 +442,12 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
     })
   }
 
+  const handleChange = async(event) => {
+    setSample({...sample,
+      [event.target.name]: event.target.value
+    })
+  }
+
   // search for samples of type allowableFeildTypes
   const handleQuickSearch = async(id, event) => {
     setInputs({...inputs,
@@ -493,7 +499,7 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
 
     const response = sampleId == 0
       ? await samplesAPI.create(formData)
-      : await samplesAPI.update(sampleId, formData);
+      : await samplesAPI.update(formData, sampleId);
     if (!response) return;
 
     // process errors
@@ -538,6 +544,7 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
             className={classes.p100}
             name="name"
             value={sample.name}
+            onChange={(event) => handleChange(event)}
             />
           </div>
         </div>
@@ -554,6 +561,7 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
             className={classes.p100}
             name="description"
             value={sample.description}
+            onChange={(event) => handleChange(event)}
             />
           </div>
         </div>
@@ -570,6 +578,7 @@ const SampleForm = ({ sampleId, sampleTypeId, setSampleTypeId }) => {
             className={classes.p100}
             name="project"
             value={sample.project}
+            onChange={(event) => handleChange(event)}
             />
           </div>
         </div>

@@ -174,7 +174,7 @@ class ObjectType < ActiveRecord::Base
   # @option object_type[:vendor] [String] the vendor information
   # @option object_type[:image] [String] the image (TODO)
   # return the object type
-  def update(object_type)
+  def update_with(object_type)
     # Read and auto-correct parameters
     input_name = Input.text(object_type[:name]) || self.name
     input_description = Input.text(object_type[:description]) || self.description

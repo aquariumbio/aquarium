@@ -78,7 +78,7 @@ class Budget < ActiveRecord::Base
   # @option budget[:email] [String] the email
   # @option budget[:phone] [String] the phone
   # return the budget
-  def update(budget)
+  def update_with(budget)
     # Read the parameters
     input_name = Input.text(budget[:name])
     input_description = Input.text(budget[:description])

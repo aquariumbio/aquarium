@@ -194,7 +194,7 @@ module Api
         params_announcement = params[:announcement] || {}
 
         # Update announcement
-        announcement, errors = announcement.update(params_announcement)
+        announcement, errors = announcement.update_with(params_announcement)
         render json: { errors: errors }.to_json, status: :ok and return if !announcement
 
         render json: { announcement: announcement }.to_json, status: :ok

@@ -353,7 +353,7 @@ module Api
 
         # Update sample type
         # Note: any errors handled automatically and silently
-        sample_type = sample_type.update(params_sample_type)
+        sample_type = sample_type.update_with(params_sample_type)
 
         render json: { sample_type: sample_type }.to_json, status: :ok
       end

@@ -5,6 +5,11 @@ class Sample < ActiveRecord::Base
   validates :name,        presence: true, uniqueness: { case_sensitive: false }
   validates :description, presence: true
 
+  # Return a specific sample.
+  def self.find_id(id)
+    Sample.find_by(id: id)
+  end
+
   # Return search results
   def self.search(options)
     # read parameters
@@ -284,5 +289,12 @@ class Sample < ActiveRecord::Base
     end
 
     return sample, inventory
+  end
+
+  def update_with(sample)
+    puts ">>> sample"
+    puts sample.to_json
+    puts ">>>"
+    return false, {abc: "def", ghi: "jkl"}
   end
 end
