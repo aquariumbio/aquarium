@@ -485,6 +485,9 @@ const SampleForm = ({ setIsLoading, setAlertProps, sampleId, sampleTypeId, setSa
     const data = new FormData(form);
     const formData = Object.fromEntries(data);
 
+    // add the sample type id
+    formData['sample_type_id'] = sampleTypeId
+
     // build sample inputs from names
     let inputsByName
     let temp

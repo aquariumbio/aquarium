@@ -70,8 +70,8 @@ class User < ActiveRecord::Base
   # return the user
   def self.create_from(user)
     # Read the parameters
-    name = Input.text_field(user[:name])
-    login = Input.text_field(user[:login])
+    name = Input.text(user[:name])
+    login = Input.text(user[:login])
     password = user[:password]
 
     # create the user and check whether it is valid
@@ -115,9 +115,9 @@ class User < ActiveRecord::Base
     valid = true
 
     # update info
-    self.name = Input.text_field(user_data[:name])
-    email = Input.text_field(user_data[:email])
-    phone = Input.text_field(user_data[:phone])
+    self.name = Input.text(user_data[:name])
+    email = Input.text(user_data[:email])
+    phone = Input.text(user_data[:phone])
     valid = false if !self.valid_info?(email, phone)
 
     return { errors: self.errors }, :ok if !valid
@@ -143,8 +143,8 @@ class User < ActiveRecord::Base
     valid = true
 
     # update password
-    password1 = Input.text_field(user_data[:password1])
-    password2 = Input.text_field(user_data[:password2])
+    password1 = Input.text(user_data[:password1])
+    password2 = Input.text(user_data[:password2])
     return { errors: { password: "Passwords do not match" } }, :ok if password1 != password2
 
     self.password = password1

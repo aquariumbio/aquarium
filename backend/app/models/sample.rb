@@ -2,8 +2,15 @@
 
 # samples table
 class Sample < ActiveRecord::Base
+  # used to validate feild_types
+  attr_accessor :field_type_errors
+
   validates :name,        presence: true, uniqueness: { case_sensitive: false }
   validates :description, presence: true
+  validates :project,     presence: true
+  validate  :sample_type_id?
+  validate  :user_id?
+  validate  :field_types?
 
   # Set serach_text
   def self.set_search_text(wheres)
@@ -326,10 +333,74 @@ class Sample < ActiveRecord::Base
     return sample, inventory
   end
 
-  def update_with(sample)
-    puts ">>> sample"
-    puts sample.to_json
-    puts ">>>"
-    return false, {abc: "def", ghi: "jkl"}
+  def self.create_from(obj, user_id)
+    # set basic attributes
+    sample_type_id = obj[:sample_type_id]
+    name = Input.text(obj[:name])
+    description = Input.text(obj[:description])
+    project = Input.text(obj[:project])
+
+    # create sample object and fill in basic data
+    sample = Sample.new({
+      user_id: user_id,
+      sample_type_id: sample_type_id,
+      name: name,
+      description: description,
+      project: project
+    })
+
+    # loop through sample type details to get field_types
+    sample.field_type_errors = sample.validate_field_types?(obj)
+
+    # check if valid
+    return nil, sample.errors if !sample.valid?
+
+    # save sample
+    sample.save
+
+    # save field types
+    # NOTES:
+    # - presumes the field types are valid
+    # - this should be checked in validate_field_types?
+    # - for now this is controlled on the front-end
+
+    # TODO: IMPORTANT - ADD THIS
+
+    return sample, nil
   end
+
+  def update_with(sample)
+    return false, {update: "def", sample: "jkl"}
+  end
+
+  def validate_field_types?(obj)
+    # get field types from sample type details
+    # - check required fields
+    # - TODO: check whether required fields are actually valid...
+    # - TODO: probably want to move this tto field_types.rb
+    field_type_errors = []
+    details = SampleType.details(sample_type_id)
+    details[:field_types].each do |field_type|
+      temp = "f.#{field_type["id"]}"
+      field_type_errors << "#{field_type["name"]} required" if field_type["required"] and (!obj[temp] or obj[temp].length == 0)
+    end
+    field_type_errors
+  end
+
+  private
+
+  def sample_type_id?
+    errors.add(:sample_type_id, 'not valid')  if !SampleType.find_by(id: sample_type_id)
+  end
+
+  def user_id?
+    errors.add(:user_id, 'not valid')  if !User.find_by(id: user_id)
+  end
+
+  def field_types?
+    field_type_errors.each do |e|
+      errors.add(:field_types, e)
+    end
+  end
+
 end

@@ -452,7 +452,7 @@ module Api
 
         # Read inputs
         new_samples_private = Input.boolean(params[:new_samples_private])
-        lab_name = Input.text_field(params[:lab_name])
+        lab_name = Input.text(params[:lab_name])
 
         # Update the preferences
         UserProfile.set_user_profile(user.id, "new_samples_private", new_samples_private)

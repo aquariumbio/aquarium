@@ -295,19 +295,17 @@ module Api
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
+        # get user id
+        user_id = response[:user]["id"]
+
         # Read sample parameter
         params_sample = params[:sample] || {}
 
-puts ">>> params_sample"
-puts params_sample.to_json
-puts ">>>"
-
-return "create sample"
         # Create sample
-#         sample, errors = SampleType.create_from(params_sample)
-#         render json: { errors: errors }.to_json, status: :ok and return if !sample
-#
-#         render json: { sample: sample }.to_json, status: :created
+        sample, errors = Sample.create_from(params_sample, user_id)
+        render json: { errors: errors }.to_json, status: :ok and return if !sample
+
+        render json: { sample: sample }.to_json, status: :created
       end
 
       # Update a sample.
@@ -370,17 +368,9 @@ return "create sample"
         # Read sample parameter
         params_sample = params[:sample] || {}
 
-puts ">>> params_sample"
-# params_sample.each do |k,v|
-# puts "#{k}: #{v}"
-# end
-# puts ">>>"
-
         # Update sample
         sample, errors = sample.update_with(params_sample)
-puts ">>> ..."
         render json: { errors: errors }.to_json, status: :ok and return if !sample
-puts ">>> OK"
 
         render json: { sample: sample }.to_json, status: :ok
       end
