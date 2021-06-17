@@ -398,22 +398,39 @@ class Sample < ActiveRecord::Base
     # - check required fields
     # - create field_values array and field_value_errors array
     # - if there are no field_value_errors then we can save the field_values later
-
-
-    # - TODO: iterate on all field values to make sure they are valid
-    # - TODO: probably want to move this tto field_types.rb
     field_values = []
     field_value_errors = []
+
+    # loop through inputs for each field type
+    # - if the field type is required, verify that there is an input
+    # - if the field type is an array, verify that each item in the array is not blank
     details = SampleType.details(sample_type_id)
     details[:field_types].each do |field_type|
-      temp = "f.#{field_type["id"]}"
-# CHECK FOR SAMPLE/ARRAY OR SIMPLE VALUE
-# LOOP THROUGH EACH OBJ
-# VALIDATE OR LET THROUGH
-      if field_type["required"] and (!obj[temp] or obj[temp].length == 0)
-        field_value_errors << "#{field_type["name"]} required"
+      # - NOTE: assume the inputs conform to any restrictions
+      if field_type["ftype"] == "sample" or field_type["array"]
+        # The inputs should be an array
+        inputs = obj["f.#{field_type["id"]}"]
+
+        if field_type["required"] and inputs.length == 0
+          field_value_errors << "#{field_type["name"]} required"
+        else
+          inputs.each_with_index do |input, index|
+            temp = Input.text(input)
+            if !temp
+              field_value_errors << "#{field_type["name"]}[#{index+1}] cannot be blank"
+            else
+              field_values << "#{field_type["name"]} value: ___"
+            end
+          end
+        end
       else
-        field_values << "#{field_type["name"]} value: ___"
+        # the input should be a single value
+        input = Input.text(obj["f.#{field_type["id"]}"])
+        if field_type["required"] and !input
+          field_value_errors << "#{field_type["name"]} required"
+        else
+          field_values << "#{field_type["name"]} value: ___"
+        end
       end
     end
     return field_values, field_value_errors
