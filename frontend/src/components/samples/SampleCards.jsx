@@ -186,7 +186,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 // eslint-disable-next-line no-unused-vars
-const SamplesPage = ({ handlePage, handleClick, count, page, pages, samples }) => {
+const SampleCards = ({ handlePage, handleClick, count, page, pages, samples }) => {
   const classes = useStyles();
 
   return (
@@ -295,9 +295,9 @@ const SamplesPage = ({ handlePage, handleClick, count, page, pages, samples }) =
   );
 };
 
-SamplesPage.propTypes = {
+SampleCards.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
   setAlertProps: PropTypes,
 };
 
-export default SamplesPage;
+export default SampleCards;

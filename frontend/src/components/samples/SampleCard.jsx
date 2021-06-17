@@ -291,7 +291,7 @@ const useStyles = makeStyles(() => ({
 
 
 // eslint-disable-next-line no-unused-vars
-const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, setCollectionTypeId }) => {
+const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, setCollectionTypeId, setItemId }) => {
   const classes = useStyles();
   const history = useHistory();
 
@@ -353,9 +353,10 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, s
     setCollectionTypeId(type_id)
   }
 
-  const handleContainerClick = async (id) => {
+  const handleItemClick = async (id) => {
     event.preventDefault();
-    alert(id)
+
+    setItemId(id);
   }
 
   const handleAddItem = async (id) => {
@@ -563,7 +564,7 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, s
                                   ))}
                                 </>
                               ) : (
-                                <Link className={classes.pointer} onClick={() => handleContainerClick(item.item_id)}>{item.item_id}</Link>
+                                <Link className={classes.pointer} onClick={() => handleItemClick(item.item_id)}>{item.item_id}</Link>
                               )}
                             </div>
                             <div className={classes.flexCol1}>

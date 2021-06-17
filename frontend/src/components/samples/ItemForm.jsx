@@ -325,199 +325,71 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // eslint-disable-next-line no-unused-vars
-const CollectionForm = ({ setIsLoading, setAlertProps, collectionId, collectionTypeId, setCollectionTypeId }) => {
+const ItemForm = ({ setIsLoading, setAlertProps, itemId, setItemId }) => {
   const classes = useStyles();
   const history = useHistory();
 
   const [item, setItem] = useState({});
-  const [collection, setCollection] = useState({});
   const [objectType, setObjectType] = useState({});
-  const [quickSearch, setQuickSearch] = useState('');
-  const [list, setList] = useState([]);
-
-  // used to set rows/columns in case they are not defined in object_type (backend quirk)
-  const [rows, setRows] = useState([]);
-  const [columns, setColumns] = useState([]);
-
-  const [rowSel, setRowSel] = useState(-1);
-  const [colSel, setColSel] = useState(-1);
 
   useEffect(() => {
-    const initNew = async () => {
-      const formData = {
-        object_type_id: collectionTypeId,
-      }
-
-      const response1 = await itemsAPI.create(formData);
-      if (!response1) return;
-
-      // set item + object type
-      setItem(response1.item);
-      setObjectType(response1.object_type);
-
-      // set rows and columns
-      setRows([...Array(response1.object_type.rows || 1).keys()]);
-      setColumns([...Array(response1.object_type.columns || 12).keys()]);
-    };
-
-    const initEdit = async (id) => {
-      const response1 = await itemsAPI.getCollectionById(id);
-      if (!response1) return;
-
-      // set item + object type
-      setItem(response1.item);
-      setObjectType(response1.object_type);
-
-      // set rows and columns
-      setRows([...Array(response1.object_type.rows || 1).keys()]);
-      setColumns([...Array(response1.object_type.columns || 12).keys()]);
-
-      // map collection data
-      let temp = new Object
-      response1.collection.map((c) => (
-        temp={...temp,[`${c.row}.${c.column}`]: c.sample_id}
-      ))
-
-      // set collection
-      setCollection(temp)
+    const init = async (id) => {
+//       const response1 = await itemsAPI.getItemById(id);
+//       if (!response1) return;
+//
+//       // set item + object type
+//       setItem(response1.item);
+//       setObjectType(response1.object_type);
+//
+//       // set rows and columns
+//       setRows([...Array(response1.object_type.rows || 1).keys()]);
+//       setColumns([...Array(response1.object_type.columns || 12).keys()]);
+//
+//       // map item data
+//       let temp = new Object
+//       response1.item.map((c) => (
+//         temp={...temp,[`${c.row}.${c.column}`]: c.sample_id}
+//       ))
+//
+//       // set item
+//       setItem(temp)
     }
 
-    collectionId == 0 ? initNew() : initEdit(collectionId);
+    init();
   }, []);
-
-  const handleRC = (r,c) => {
-    rowSel == r && colSel == c ? (
-      setRowSel(-1),
-      setColSel(-1)
-    ) : (
-      setRowSel(r),
-      setColSel(c)
-    )
-  };
-
-  const handleSearch = async () => {
-    setQuickSearch(event.target.value)
-
-    const response1 = await samplesAPI.getQuickSearch(event.target.value,'');
-    if (!response1) return;
-
-    // set item + object type
-    setList(response1);
-  };
-
-  const handleSelect = async (event) => {
-    alert(`assign ${event.target.id} to [${rowSel+1}, ${colSel+1}]`)
-    setList([])
-    setQuickSearch('')
-  }
-
-  const handleRemove = async (r, c) => {
-    alert(`remove [${r+1}, ${c+1}]`)
-  }
 
   return (
     <>
       <div>
-        <Button variant="outlined" onClick={() => {setCollectionTypeId(0)}}>Close</Button>
+        <Button variant="outlined" onClick={() => {setItemId(0)}}>Close</Button>
       </div>
 
-      <div className={classes.box}>
-        <Typography>
-          Collection: {item.id}: {objectType.name}
-        </Typography>
+      <Typography className={`${classes.mb8} ${classes.mt16}`}>
+        Item: {itemId}: {objectType.name}
+      </Typography>
 
-        <div className={classes.flexBottom}>
+      <Typography className={`${classes.mb8} ${classes.mt16}`}>
+        Data
+      </Typography>
+      <Typography className={classes.mb8}>
+        TODO: Add Data
+      </Typography>
 
-          <div className={`${classes.flex} ${classes.flexRow} ${classes.dark}`}>
-            <Typography className={classes.flexColFixed40}>
-              &nbsp;
-            </Typography>
-            {columns.map((column) =>(
-              <Typography className={classes.flexCol1}>
-                {column + 1}
-              </Typography>
-            ))}
-          </div>
-
-          {rows.map((row) =>(
-            <div className={`${classes.flex} ${classes.flexRow}`}>
-              <Typography className={`${classes.flexColFixed40} ${classes.dark}`}>
-                {row + 1}
-              </Typography>
-              {columns.map((column,cIndex) => (
-                <>
-                  {collection[`${row}.${column}`] ? (
-                    <Typography className={`${classes.flexCol1x} ${classes.pointer} ${rowSel == row && colSel == column ? classes.selected : classes.deselected}`} id={`${row},${column}`} onClick={() => handleRC(row, column)}>
-                      {collection[`${row}.${column}`]}
-                    </Typography>
-                  ) : (
-                    <Typography className={`${classes.flexCol1x} ${classes.pointer} ${rowSel == row && colSel == column ? classes.selected : classes.deselected}`} id={`${row},${column}`} onClick={() => handleRC(row, column)}>
-                      &nbsp;
-                    </Typography>
-                  )}
-                </>
-              ))}
-            </div>
-          ))}
-        </div>
-
-      </div>
-
-      {rowSel != -1 && (
-        <>
-          {collection[`${rowSel}.${colSel}`] ? (
-            <>
-              <Typography className={`${classes.mb8} ${classes.mt16}`}>
-                Remove Sample from Selection
-              </Typography>
-              <div>
-               <Button variant="outlined" onClick={() => handleRemove(rowSel, colSel)}>Remove</Button>
-              </div>
-
-              <Typography className={`${classes.mb8} ${classes.mt16}`}>
-                Data
-              </Typography>
-              <Typography className={classes.mb8}>
-                TODO: Add Data
-              </Typography>
-
-              <Typography className={`${classes.mb8} ${classes.mt16}`}>
-                History
-              </Typography>
-              <Typography className={classes.mb8}>
-                TODO: Add History
-              </Typography>
-            </>
-          ) : (
-            <>
-              <Typography className={`${classes.mb8} ${classes.mt16}`}>
-                Assign Sample to Selection
-              </Typography>
-              <div>
-                <input className={classes.p100} placeholder="Search ( by name / s:<sample_id> )" value={quickSearch} onChange={(event) => handleSearch(event)} />
-              </div>
-              {list.length!=0 && (
-                <div className={classes.selectList}>
-                  {list.map((l) => (
-                    <div id={l.id} className={classes.selectItem} onClick={(event) => handleSelect(event)}>
-                      {l.id}: {l.name}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </>
-          )}
-        </>
-      )}
+      <Typography className={`${classes.mb8} ${classes.mt16}`}>
+        History
+      </Typography>
+      <Typography className={classes.mb8}>
+        TODO: Add History
+      </Typography>
     </>
 
   );
 };
 
-CollectionForm.propTypes = {
-  collectionTypeId: PropTypes.isRequired,
-  setCollectionTypeId: PropTypes.isRequired,
+ItemForm.propTypes = {
+  itemTypeId: PropTypes.isRequired,
+  setItemTypeId: PropTypes.isRequired,
 };
 
-export default CollectionForm;
+export default ItemForm;
 

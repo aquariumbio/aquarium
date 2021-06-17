@@ -18,6 +18,7 @@ import SampleCards from './SampleCards';
 import SampleCard from './SampleCard';
 import SampleForm from './SampleForm';
 import CollectionForm from './CollectionForm';
+import ItemForm from './ItemForm';
 
 // Route: /object_types
 // Linked in LeftHamburgeMenu
@@ -195,7 +196,7 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
 
   const [sampleId,setSampleId] = useState(0);
   const [collectionId,setCollectionId] = useState(0);
-  const [containerId,setContainerId] = useState(0);
+  const [itemId,setItemId] = useState(0);
 
   const [samples, setSamples] = useState([]);
   const [count, setCount] = useState();
@@ -221,8 +222,6 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
   const [sampleTypeId, setSampleTypeId] = useState(0);
   // add/edit a collection by collection type id (an object type with handler = 'collection')
   const [collectionTypeId, setCollectionTypeId] = useState(0);
-  // add/edit an item by object type id (an object type with handler = 'sample_container')
-  const [containerTypeId, setContainerTypeId] = useState(0);
 
   const goSearch = async (sampletypeid, createdbyid, pagenum) => {
     const words = search.replace(/ +/g,' ') //.trim()
@@ -422,14 +421,26 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
       - SampleCard (individual sample page) <== sampleId != 0
       sub-forms
       - SampleForm (sample form) <== sampleTypeId != 0
-      - ContainerForm (item form if item is a single item) <== containerTypeId != 0
+      - ItemForm (item form if item is a single item) <== itemId != 0
       - Collectionform (item form if item is a collection) <== collectionTypeId != 0
       */}
-      {sampleTypeId != 0 && (<SampleForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} sampleId={sampleId} sampleTypeId={sampleTypeId} setSampleTypeId={setSampleTypeId}/>)}
-      {/* {containerTypeId != 0 && (<ContainerForm containerId={containerId} containerTypeId={containerTypeId} setContainerTypeId={setContainerTypeId}/>)} */}
-      {collectionTypeId != 0 && (<CollectionForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} collectionId={collectionId} collectionTypeId={collectionTypeId} setCollectionTypeId={setCollectionTypeId}/>)}
-      {sampleTypeId == 0 && collectionTypeId == 0 && sampleId != 0 && <SampleCard sampleId={sampleId} setSampleId={setSampleId} setSampleTypeId={setSampleTypeId} setCollectionId={setCollectionId} setCollectionTypeId={setCollectionTypeId}/>}
-      {sampleTypeId == 0 && collectionTypeId == 0 && sampleId == 0 && <SampleCards handlePage={handlePage} handleClick={handleClick} count={count} page={page} pages={pages} samples={samples}/>}
+      {sampleTypeId != 0 ? (
+        <SampleForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} sampleId={sampleId} sampleTypeId={sampleTypeId} setSampleTypeId={setSampleTypeId}/>
+      ) : (
+        collectionTypeId != 0 ? (
+          <CollectionForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} collectionId={collectionId} collectionTypeId={collectionTypeId} setCollectionTypeId={setCollectionTypeId}/>
+        ) : (
+          itemId != 0 ? (
+            <ItemForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} itemId={itemId} setItemId={setItemId}/>
+          ) : (
+            sampleId != 0 ? (
+              <SampleCard sampleId={sampleId} setSampleId={setSampleId} setSampleTypeId={setSampleTypeId} setCollectionId={setCollectionId} setCollectionTypeId={setCollectionTypeId} setItemId={setItemId}/>
+            ) : (
+              <SampleCards handlePage={handlePage} handleClick={handleClick} count={count} page={page} pages={pages} samples={samples}/>
+            )
+          )
+        )
+      )}
     </>
   );
 };
