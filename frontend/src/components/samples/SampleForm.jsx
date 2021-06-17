@@ -543,9 +543,6 @@ const SampleForm = ({ setIsLoading, setAlertProps, sampleId, sampleTypeId, setSa
           <Typography className={classes.flexCol1}>
             (*) name
           </Typography>
-          <Typography className={classes.flexCol1}>
-            (string)
-          </Typography>
           <div className={classes.flexCol3}>
             <input
             className={classes.p100}
@@ -560,9 +557,6 @@ const SampleForm = ({ setIsLoading, setAlertProps, sampleId, sampleTypeId, setSa
           <Typography className={classes.flexCol1}>
             description
           </Typography>
-          <Typography className={classes.flexCol1}>
-            (string)
-          </Typography>
           <div className={classes.flexCol3}>
             <input
             className={classes.p100}
@@ -576,9 +570,6 @@ const SampleForm = ({ setIsLoading, setAlertProps, sampleId, sampleTypeId, setSa
         <div className={`${classes.flex} ${classes.flexRow}`}>
           <Typography className={classes.flexCol1}>
             (*) project
-          </Typography>
-          <Typography className={classes.flexCol1}>
-            (string)
           </Typography>
           <div className={classes.flexCol3}>
             <input
@@ -595,25 +586,6 @@ const SampleForm = ({ setIsLoading, setAlertProps, sampleId, sampleTypeId, setSa
             <Typography className={classes.flexCol1}>
               {field_type.required ? '(*)' : ''} {field_type.name} {field_type.array && '(array)'}
             </Typography>
-            <div className={classes.flexCol1}>
-              <Typography>
-                ({field_type.ftype} - {field_type.id}) <br />
-              </Typography>
-              {field_type.choices && (
-                <Typography>
-                  {field_type.choices} <br />
-                </Typography>
-              )}
-              {field_type.ftype == 'sample' && field_type.allowable_field_types && (
-                <>
-                  {field_type.allowable_field_types.map((allowable_field_type) => (
-                    <Typography>
-                      {allowable_field_type.name}<br />
-                    </Typography>
-                  ))}
-                </>
-              )}
-            </div>
             <div className={classes.flexCol3}>
               {/* TODO: maybe move to components to clean up */}
               {/* samples vs other inputs */}
@@ -723,3 +695,24 @@ SampleForm.propTypes = {
 };
 
 export default SampleForm;
+
+//             <div className={classes.flexCol1}>
+//               <Typography>
+//                 ({field_type.ftype} - {field_type.id}) <br />
+//               </Typography>
+//               {field_type.choices && (
+//                 <Typography>
+//                   {field_type.choices} <br />
+//                 </Typography>
+//               )}
+//               {field_type.ftype == 'sample' && field_type.allowable_field_types && (
+//                 <>
+//                   {field_type.allowable_field_types.map((allowable_field_type) => (
+//                     <Typography>
+//                       {allowable_field_type.name}<br />
+//                     </Typography>
+//                   ))}
+//                 </>
+//               )}
+//             </div>
+

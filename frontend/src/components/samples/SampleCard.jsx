@@ -269,7 +269,7 @@ const useStyles = makeStyles(() => ({
   },
 
   textInfo: {
-    color: '#333',
+    color: '#808080',
   },
 
   relative: {
@@ -394,27 +394,24 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, s
                   <img src='/beaker.png' className={classes.logoImage}/>
                   <div className={classes.logoText}>
                     <div className={classes.textTitle}>
+                      {sample.name}
+                    </div>
+                    <div className={`${classes.mb4} ${classes.textInfo}`}>
                       {sample.sample_type}
                     </div>
-                    <div className={classes.mb4}>
-                      <span className={classes.textBold}>ID #</span>
+                    <div className={`${classes.mb4} ${classes.textInfo}`}>
+                      Added by:
                       {' '}
-                      <span className={classes.textInfo}>{sample.id}</span>
-                    </div>
-                    <div className={classes.mb4}>
-                      <span className={classes.textBold}>Added by</span>
-                      {' '}
-                      <span className={classes.textInfo}>{sample.user_name}</span>
+                      {sample.user_name}
                     </div>
                   </div>
 
                   <Divider />
 
-                  <div className={classes.flexCardLabel}>
-                    Name
-                  </div>
                   <div className={classes.flexCardText}>
-                    {sample.name || '-'}
+                    <span className={classes.textBold}>ID:</span>
+                    {' '}
+                    {sample.id}
                   </div>
 
                   <div className={classes.flexCardLabel}>
