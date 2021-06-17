@@ -125,6 +125,6 @@ Rails.application.routes.draw do
   get  'api/v3/items/container/:id',               to: 'api/v3/items#show_container'
 
   # Initialize columns in db
-  get  'api/v3/set_search_text',                   to: 'api/v3/samples#set_search_text'
-  get  'api/v3/set_field_type_ids',                to: 'api/v3/samples#set_field_type_ids'
+  get  'set_search_text',                   to: 'api/v3/samples#set_search_text'
+  get  'set_field_type_ids',                to: 'api/v3/samples#set_field_type_ids'
 end

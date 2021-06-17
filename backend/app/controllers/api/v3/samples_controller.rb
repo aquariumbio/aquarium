@@ -36,48 +36,14 @@ module Api
       # TODO: INITIALIZE WHEN MIGRATE
       # TODO: MOVE TO WHEN CREATE / UPDATE NAME / DESCRIPTION / FIELD VALUES FOR EACH SAMPLE
       def set_search_text
-        sql ="select s.id, s.name, s.description, st.name as 'sample_type' from samples s inner join sample_types st on st.id = s.sample_type_id"
-        samples = Sample.find_by_sql sql
-
-        samples.each do |sample|
-          text = []
-
-          # sample name + description
-          text << sample.name if sample.name.to_s.length != 0
-          text << sample.description if sample.description.to_s.length != 0
-          text << sample.sample_type if sample.sample_type.to_s.length != 0
-
-          # field values
-          sql= "select * from view_samples where id =#{sample.id} order by ft_sort"
-          temp = Sample.find_by_sql sql
-          temp.each do |t|
-            if t.ft_id
-              text << t.ft_name if t.ft_name.to_s.length != 0
-              text << t.fv_value if t.fv_value.to_s.length != 0
-              text << t.child_sample_name if t.child_sample_name.to_s.length != 0
-            end
-          end
-          sample.search_text = text.join(' ')
-
-          # item ids
-          sql = "
-           select if(collection_id, collection_id, item_id) as 'iid'
-           from view_inventories
-           where id = #{sample.id}
-           order by collection_id is not null, collection_type, item_type, collection_id, item_id
-          "
-          temp = Sample.find_by_sql sql
-          iids = "."
-          tid = 0
-          temp.each do |t|
-            if t.iid != tid
-              tid = t.iid
-              iids += "#{tid}."
-            end
-          end
-          sample.item_ids = iids
-          sample.save
+        wheres = ""
+        if id = params[:sample_type_id]
+          wheres = "where s.sample_type_id = #{id.to_i}"
+        elsif id = params[:sample_id]
+          wheres = "where s.id = #{id.to_i}"
         end
+
+        Sample.set_search_text(wheres)
       end
 
       # INITIALIZE FIELD_TYPE_ID IN FIELD_VALUES TABLE
@@ -148,10 +114,6 @@ module Api
       #         login: <login>,
       #         type: <type>,
       #         created_at: <created_at>,
-      #         item_ids: [
-      #           <item_id>,
-      #           ...
-      #         ],
       #         fields: [
       #           {
       #             type: <type>,
@@ -256,10 +218,6 @@ module Api
       #       login: <___>,
       #       type: <___>,
       #       created_at: <___>,
-      #       item_ids: [
-      #         <item_id>,
-      #         ...
-      #       ],
       #       fields: [
       #         {
       #           type: string,

@@ -4,9 +4,8 @@ class AddSearch < ActiveRecord::Migration[4.2]
   def change
     # TABLES
     #
-    # add samples.search_text, samples.item_ids
+    # add samples.search_text
     add_column :samples, :search_text, :text
-    add_column :samples, :item_ids, :text
 
     create_table :field_type_sorts do |t|
       t.string :ftype
@@ -29,7 +28,7 @@ class AddSearch < ActiveRecord::Migration[4.2]
     # create view_samples (for sample data)
     execute <<-SQL
       create view view_samples as
-      select s.id, s.name, s.description, s.project, s.created_at, s.item_ids, s.sample_type_id,
+      select s.id, s.name, s.description, s.project, s.created_at, s.sample_type_id,
       st.name as 'sample_type',
       u.name as 'user_name', u.login,
       ft.id as 'ft_id',

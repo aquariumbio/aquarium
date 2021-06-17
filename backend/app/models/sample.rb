@@ -5,6 +5,38 @@ class Sample < ActiveRecord::Base
   validates :name,        presence: true, uniqueness: { case_sensitive: false }
   validates :description, presence: true
 
+  # Set serach_text
+  def self.set_search_text(wheres)
+    # NOTE: run in background in case it times out
+    background = fork do
+      sql ="select s.id, s.name, s.description, st.name as 'sample_type' from samples s inner join sample_types st on st.id = s.sample_type_id #{wheres}"
+      samples = Sample.find_by_sql sql
+
+      samples.each do |sample|
+        text = []
+
+        # sample name + description
+        text << sample.name if sample.name.to_s.length != 0
+        text << sample.description if sample.description.to_s.length != 0
+        text << sample.sample_type if sample.sample_type.to_s.length != 0
+
+        # field values
+        sql= "select * from view_samples where id =#{sample.id} order by ft_sort"
+        temp = Sample.find_by_sql sql
+        temp.each do |t|
+          if t.ft_id
+            text << t.ft_name if t.ft_name.to_s.length != 0
+            text << t.fv_value if t.fv_value.to_s.length != 0
+            text << t.child_sample_name if t.child_sample_name.to_s.length != 0
+          end
+        end
+        sample.search_text = text.join(' ')
+        sample.save
+      end
+    end
+    Process.detach(background)
+  end
+
   # Return a specific sample.
   def self.find_id(id)
     Sample.find_by(id: id)
@@ -35,7 +67,14 @@ class Sample < ActiveRecord::Base
       # search item id only
       this_id = words[2,words.length].strip.split(' ')[0]
       if this_id == this_id.to_i.to_s
-        ands << "item_ids like '%.#{this_id}.%'"
+        ands << "
+          id in (
+            select distinct if(i.sample_id, i.sample_id, ii.sample_id) from items i
+            left join part_associations pa on pa.collection_id = i.id
+            left join items ii on ii.id = pa.part_id
+            where i.id = #{this_id}
+          )
+        "
       else
         ands << "0"
       end
@@ -87,7 +126,6 @@ class Sample < ActiveRecord::Base
       sample_data.each do |sample|
         if sample.id != this_id
           # initialize new sample
-          sids = sample.item_ids
           samples << {
             id: sample.id,
             name: sample.name,
@@ -99,7 +137,6 @@ class Sample < ActiveRecord::Base
             login: sample.login,
             type: sample.ft_type,
             created_at: sample.created_at,
-            item_ids: sids[1,sids.length-2].to_s.split("."),
             fields: []
           }
 
@@ -162,7 +199,6 @@ class Sample < ActiveRecord::Base
 
     # initialize new_sample
     this_sample = sample_data[0]
-    sids = this_sample.item_ids
     sample = {
       id: this_sample.id,
       name: this_sample.name,
@@ -174,7 +210,6 @@ class Sample < ActiveRecord::Base
       login: this_sample.login,
       type: this_sample.ft_type,
       created_at: this_sample.created_at,
-      item_ids: sids[1,sids.length-2].to_s.split("."),
       fields: []
     }
 
