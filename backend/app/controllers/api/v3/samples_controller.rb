@@ -301,6 +301,12 @@ module Api
         # Read sample parameter
         params_sample = params[:sample] || {}
 
+puts ">>> params_sample"
+params_sample.each do |k,v|
+  puts "#{k}: #{v}"
+end
+puts ">>>"
+
         # Create sample
         sample, errors = Sample.create_from(params_sample, user_id)
         render json: { errors: errors }.to_json, status: :ok and return if !sample

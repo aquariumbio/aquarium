@@ -3,7 +3,7 @@
 # samples table
 class Sample < ActiveRecord::Base
   # used to validate feild_types
-  attr_accessor :field_type_errors
+  attr_accessor :field_value_errors
 
   validates :name,        presence: true, uniqueness: { case_sensitive: false }
   validates :description, presence: true
@@ -349,8 +349,15 @@ class Sample < ActiveRecord::Base
       project: project
     })
 
-    # loop through sample type details to get field_types
-    sample.field_type_errors = sample.validate_field_types?(obj)
+    # loop through field types to get field values and check for errors
+    field_values, validation_errors = sample.validate_field_types?(obj)
+    sample.field_value_errors = validation_errors
+
+# puts ">>> field_values"
+# field_values.each do |field_value|
+#   puts field_value
+# end
+# puts ">>>"
 
     # check if valid
     return nil, sample.errors if !sample.valid?
@@ -358,13 +365,26 @@ class Sample < ActiveRecord::Base
     # save sample
     sample.save
 
-    # save field types
-    # NOTES:
-    # - presumes the field types are valid
-    # - this should be checked in validate_field_types?
-    # - for now this is controlled on the front-end
+    # save field values
+    # loop through field_values and save each one
+    field_values.each do |field_value|
+      # field_value
+      # - parent_id (sample_id)
+      # - parent_class ('Sample')
+      # - field_type_id (id of field type)
+      # - name (name of field type - redundant, should make sure nothing else uses it and remove it)
+      # - value (for anything other than samples)
+      # - child_sample_id (for samples)
 
-    # TODO: IMPORTANT - ADD THIS
+#       FieldValue.create({
+#         parent_id: ___,
+#         parent_class: 'Sample',
+#         field_type_id: ___,
+#         name: ___,
+#         value: ___,
+#         child_sample_id: ___
+#       })
+    end
 
     return sample, nil
   end
@@ -376,15 +396,27 @@ class Sample < ActiveRecord::Base
   def validate_field_types?(obj)
     # get field types from sample type details
     # - check required fields
-    # - TODO: check whether required fields are actually valid...
+    # - create field_values array and field_value_errors array
+    # - if there are no field_value_errors then we can save the field_values later
+
+
+    # - TODO: iterate on all field values to make sure they are valid
     # - TODO: probably want to move this tto field_types.rb
-    field_type_errors = []
+    field_values = []
+    field_value_errors = []
     details = SampleType.details(sample_type_id)
     details[:field_types].each do |field_type|
       temp = "f.#{field_type["id"]}"
-      field_type_errors << "#{field_type["name"]} required" if field_type["required"] and (!obj[temp] or obj[temp].length == 0)
+# CHECK FOR SAMPLE/ARRAY OR SIMPLE VALUE
+# LOOP THROUGH EACH OBJ
+# VALIDATE OR LET THROUGH
+      if field_type["required"] and (!obj[temp] or obj[temp].length == 0)
+        field_value_errors << "#{field_type["name"]} required"
+      else
+        field_values << "#{field_type["name"]} value: ___"
+      end
     end
-    field_type_errors
+    return field_values, field_value_errors
   end
 
   private
@@ -398,7 +430,7 @@ class Sample < ActiveRecord::Base
   end
 
   def field_types?
-    field_type_errors.each do |e|
+    field_value_errors.each do |e|
       errors.add(:field_types, e)
     end
   end

@@ -426,8 +426,12 @@ const SampleForm = ({ setIsLoading, setAlertProps, sampleId, sampleTypeId, setSa
 
   const editField = async(id, index, event) => {
     let temp = fields[id]
-    temp=temp.splice(index,1,event.target.value)
-    setFields({...fields, [fields[id]]: temp})
+    temp ? (
+      temp=temp.splice(index,1,event.target.value),
+      setFields({...fields, [fields[id]]: temp})
+    ) : (
+      setFields({...fields, [id]: [temp]})
+    )
   }
 
   const removeField = async(id,index) => {
@@ -492,7 +496,7 @@ const SampleForm = ({ setIsLoading, setAlertProps, sampleId, sampleTypeId, setSa
     let inputsByName
     let temp
     sampleType.field_types.map((f) => (
-      f.ftype == 'sample' && (
+      ( f.ftype == 'sample' || f.array ) && (
         temp = [],
         inputsByName = document.getElementsByName(`f.${f.id}`),
         inputsByName.forEach(i => temp.push(i.value)),
@@ -665,7 +669,7 @@ const SampleForm = ({ setIsLoading, setAlertProps, sampleId, sampleTypeId, setSa
                       </Typography>
                     </>
                   ) : (
-                    <select className={classes.p100d}>
+                    <select className={classes.p100d} name={`f.${field_type.id}`} >
                       <option value="0">Select...</option>
                     </select>
                   )
