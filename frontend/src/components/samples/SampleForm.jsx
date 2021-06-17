@@ -655,10 +655,13 @@ const SampleForm = ({ setIsLoading, setAlertProps, sampleId, sampleTypeId, setSa
                       {fields[field_type.id] && (
                         fields[field_type.id].map((f,i) => (
                           <div className={classes.mb8}>
-                            <select className={classes.p100d} name={`f.${field_type.id}`} value={f}>
-                              <option value="0">Select...</option>
-                              <option value="1">option 1</option>
-                              <option value="2">option 2</option>
+                            <select className={classes.p100d} name={`f.${field_type.id}`} value={f} onChange={(event) => editField(field_type.id, i, event)}>
+                              {/* set the value equal to the option */}
+                              {/* could also use the index but then have to map incoming data )*/}
+                              <option value="">Select...</option>
+                              {field_type.choices.split(",").map((c) =>
+                                <option value={c}>{c}</option>
+                              )}
                             </select>
                             <span className={`${classes.remove}`} onClick={() => removeField(field_type.id, i)}>x</span>
                           </div>
@@ -669,8 +672,13 @@ const SampleForm = ({ setIsLoading, setAlertProps, sampleId, sampleTypeId, setSa
                       </Typography>
                     </>
                   ) : (
-                    <select className={classes.p100d} name={`f.${field_type.id}`} >
-                      <option value="0">Select...</option>
+                    <select className={classes.p100d} name={`f.${field_type.id}`} value={fields[field_type.id] ? fields[field_type.id][0] : ''} onChange={(event) => editField(field_type.id, 0, event)}>
+                      <option value="">Select...</option>
+                      {/* set the value equal to the option */}
+                      {/* could also use the index but then have to map incoming data )*/}
+                      {field_type.choices.split(",").map((c) =>
+                        <option value={c}>{c}</option>
+                      )}
                     </select>
                   )
                 ) : (
