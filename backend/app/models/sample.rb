@@ -13,10 +13,17 @@ class Sample < ActiveRecord::Base
   validate  :field_types?
 
   # Set serach_text
-  def self.set_search_text(wheres)
+  def self.set_search_text(params)
+      wheres = ""
+      if id = params[:sample_type_id]
+        wheres = "where s.sample_type_id = #{id.to_i}"
+      elsif id = params[:sample_id]
+        wheres = "where s.id = #{id.to_i}"
+      end
+
     # NOTE: run in background in case it times out
     background = fork do
-      sql ="select s.id, s.name, s.description, st.name as 'sample_type' from samples s inner join sample_types st on st.id = s.sample_type_id #{wheres}"
+      sql ="select s.*, st.name as 'sample_type' from samples s inner join sample_types st on st.id = s.sample_type_id #{wheres}"
       samples = Sample.find_by_sql sql
 
       samples.each do |sample|
@@ -353,12 +360,6 @@ class Sample < ActiveRecord::Base
     field_values, validation_errors = sample.validate_field_types?(obj)
     sample.field_value_errors = validation_errors
 
-# puts ">>> field_values"
-# field_values.each do |field_value|
-#   puts field_value
-# end
-# puts ">>>"
-
     # check if valid
     return nil, sample.errors if !sample.valid?
 
@@ -376,14 +377,14 @@ class Sample < ActiveRecord::Base
       # - value (for anything other than samples)
       # - child_sample_id (for samples)
 
-#       FieldValue.create({
-#         parent_id: ___,
-#         parent_class: 'Sample',
-#         field_type_id: ___,
-#         name: ___,
-#         value: ___,
-#         child_sample_id: ___
-#       })
+      FieldValue.create({
+        parent_id: sample.id,
+        parent_class: 'Sample',
+        field_type_id: field_value[:field_type_id],
+        name: field_value[:name],
+        value: field_value[:value],
+        child_sample_id: field_value[:child_sample_id]
+      })
     end
 
     return sample, nil
@@ -418,18 +419,35 @@ class Sample < ActiveRecord::Base
             temp = Input.text(input)
             if !temp
               field_value_errors << "#{field_type["name"]}[#{index+1}] cannot be blank"
+            elsif field_type["ftype"] == "sample"
+              field_values << {
+                field_type_id: field_type['id'],
+                name: field_type['name'],
+                field_type_id: field_type['id'],
+                child_sample_id: input.to_i
+              }
             else
-              field_values << "#{field_type["name"]} value: ___"
+              field_values << {
+                field_type_id: field_type['id'],
+                name: field_type['name'],
+                field_type_id: field_type['id'],
+                value: input
+              }
             end
           end
         end
       else
         # the input should be a single value
         input = Input.text(obj["f.#{field_type["id"]}"])
-        if field_type["required"] and !input
+        if input
+          field_values << {
+            field_type_id: field_type['id'],
+            name: field_type['name'],
+            field_type_id: field_type['id'],
+            value: input
+          }
+        elsif field_type["required"]
           field_value_errors << "#{field_type["name"]} required"
-        else
-          field_values << "#{field_type["name"]} value: ___"
         end
       end
     end
@@ -447,7 +465,7 @@ class Sample < ActiveRecord::Base
   end
 
   def field_types?
-    field_value_errors.each do |e|
+    field_value_errors.to_a.each do |e|
       errors.add(:field_types, e)
     end
   end

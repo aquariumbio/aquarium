@@ -521,8 +521,7 @@ const SampleForm = ({ setIsLoading, setAlertProps, sampleId, sampleTypeId, setSa
     }
 
     // success
-    // pass alert popup in localStorage (does not work if pass as object, so pass as JSON string)
-    alert(response)
+    document.location.reload()
 
   }
 

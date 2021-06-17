@@ -36,14 +36,7 @@ module Api
       # TODO: INITIALIZE WHEN MIGRATE
       # TODO: MOVE TO WHEN CREATE / UPDATE NAME / DESCRIPTION / FIELD VALUES FOR EACH SAMPLE
       def set_search_text
-        wheres = ""
-        if id = params[:sample_type_id]
-          wheres = "where s.sample_type_id = #{id.to_i}"
-        elsif id = params[:sample_id]
-          wheres = "where s.id = #{id.to_i}"
-        end
-
-        Sample.set_search_text(wheres)
+        Sample.set_search_text(params)
       end
 
       # INITIALIZE FIELD_TYPE_ID IN FIELD_VALUES TABLE
@@ -301,15 +294,12 @@ module Api
         # Read sample parameter
         params_sample = params[:sample] || {}
 
-puts ">>> params_sample"
-params_sample.each do |k,v|
-  puts "#{k}: #{v}"
-end
-puts ">>>"
-
         # Create sample
         sample, errors = Sample.create_from(params_sample, user_id)
         render json: { errors: errors }.to_json, status: :ok and return if !sample
+
+        # Update sample_text
+        Sample.set_search_text({sample_id: sample.id})
 
         render json: { sample: sample }.to_json, status: :created
       end
