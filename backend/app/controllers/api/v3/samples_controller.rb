@@ -37,6 +37,8 @@ module Api
       # TODO: MOVE TO WHEN CREATE / UPDATE NAME / DESCRIPTION / FIELD VALUES FOR EACH SAMPLE
       def set_search_text
         Sample.set_search_text(params)
+
+        render :body => "Processing in background"
       end
 
       # INITIALIZE FIELD_TYPE_ID IN FIELD_VALUES TABLE
@@ -76,8 +78,8 @@ module Api
         # NOTE:  SQL Query to get field values that could not be mapped
         # "select * from field_values where parent_class = 'Sample' and field_type_id is null"
 
+        render :body => "Processing in background"
       end
-
 
       # Searches samples
       #
@@ -370,6 +372,9 @@ module Api
         # Update sample
         sample, errors = sample.update_with(params_sample, user_id)
         render json: { errors: errors }.to_json, status: :ok and return if !sample
+
+        # Update sample_text
+        Sample.set_search_text({sample_id: sample.id})
 
         render json: { sample: sample }.to_json, status: :ok
       end
