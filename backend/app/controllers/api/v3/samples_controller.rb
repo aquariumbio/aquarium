@@ -242,6 +242,7 @@ module Api
         render json: { sample: sample, inventory: inventory }.to_json, status: :ok
       end
 
+      # IMPORTANT - SCRUB THIS... IT IS COPIED FROM ANOTHER METHOD
       # Create a new sample.
       #
       # <b>API Call:</b>
@@ -306,6 +307,7 @@ module Api
         render json: { sample: sample }.to_json, status: :created
       end
 
+      # IMPORTANT - SCRUB THIS... IT IS COPIED FROM ANOTHER METHOD
       # Update a sample.
       #
       # <b>API Call:</b>

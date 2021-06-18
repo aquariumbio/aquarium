@@ -9,10 +9,14 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Toolbar from '@material-ui/core/Toolbar';
 
-import SideBar from './SideBar';
+import Handlers from './Handlers';
 import ShowObjectTypesByHandler from './ShowObjectTypesByHandler';
 import { LinkButton } from '../shared/Buttons';
 import objectsAPI from '../../helpers/api/objectsAPI';
+import Page from '../shared/layout/Page';
+import Main from '../shared/layout/Main';
+import SideBar from '../shared/layout/SideBar';
+import ListScroll from '../shared/layout/ListScroll';
 
 // Route: /object_types
 // Linked in LeftHamburgeMenu
@@ -56,67 +60,64 @@ const ObjectTypesPage = ({ setIsLoading, setAlertProps }) => {
   }, []);
 
   return (
-    <>
-      <Grid container className={classes.root}>
-        {/* SIDE BAR */}
-        <SideBar
+    <Page>
+      <SideBar>
+        <Handlers
           objectTypeHandlers={objectTypeHandlers}
           setCurrentObjectTypeHandler={setCurrentObjectTypeHandler}
           setCurrentObjectTypesByHandler={setCurrentObjectTypesByHandler}
           setIsLoading={setIsLoading}
           setAlertProps={setAlertProps}
         />
+      </SideBar>
 
-        {/* MAIN CONTENT */}
-        <Grid
-          item
-          xs={10}
-          name="object-types-main-container"
-          data-cy="object-types-main-container"
-          overflow="visible"
-        >
-          <Toolbar className={classes.header}>
-            <Breadcrumbs
-              separator={<NavigateNextIcon fontSize="small" />}
-              aria-label="breadcrumb"
-              component="div"
-              data-cy="page-title"
-            >
-              <Typography display="inline" variant="h6" component="h1">
-                Object Type Handlers
-              </Typography>
-              <Typography display="inline" variant="h6" component="h1">
-                {currentObjectTypeHandler}
-              </Typography>
-            </Breadcrumbs>
+      <Main
+        item
+        name="object-types-main-container"
+        data-cy="object-types-main-container"
+        overflow="visible"
+      >
+        <Toolbar className={classes.header}>
+          <Breadcrumbs
+            separator={<NavigateNextIcon fontSize="small" />}
+            aria-label="breadcrumb"
+            component="div"
+            data-cy="page-title"
+          >
+            <Typography display="inline" variant="h6" component="h1">
+              Object Type Handlers
+            </Typography>
+            <Typography display="inline" variant="h6" component="h1">
+              {currentObjectTypeHandler}
+            </Typography>
+          </Breadcrumbs>
 
-            <div>
-              <LinkButton
-                name="New Object Type"
-                testName="new_object_type_btn"
-                text="New"
-                dark
-                type="button"
-                linkTo="/object_types/new"
-              />
-            </div>
-          </Toolbar>
-
-          <Divider />
-
-          {currentObjectTypesByHandler ? (
-            /* eslint-disable-next-line max-len */
-            <ShowObjectTypesByHandler
-              objectTypes={currentObjectTypesByHandler}
-              setIsLoading={setIsLoading}
-              setAlertProps={setAlertProps}
+          <div>
+            <LinkButton
+              name="New Object Type"
+              testName="new_object_type_btn"
+              text="New"
+              dark
+              type="button"
+              linkTo="/object_types/new"
             />
-          ) : (
-            ''
-          )}
-        </Grid>
-      </Grid>
-    </>
+          </div>
+        </Toolbar>
+
+        <Divider />
+
+        {currentObjectTypesByHandler ? (
+          /* eslint-disable-next-line max-len */
+          <ShowObjectTypesByHandler
+            objectTypes={currentObjectTypesByHandler}
+            setIsLoading={setIsLoading}
+            setAlertProps={setAlertProps}
+          />
+        ) : (
+          ''
+        )}
+      </Main>
+    </Page>
   );
 };
 

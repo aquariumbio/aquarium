@@ -22,8 +22,30 @@ jobsAPI.getFinished = (sevenDays) => axiosInstance
   .then((response) => response.data)
   .catch((error) => error);
 
-jobsAPI.getJob = (id) => axiosInstance
-  .get(`/jobs/${id}/show`)
+jobsAPI.getJob = (jobId) => axiosInstance
+  .get(`/jobs/${jobId}/show`)
+  .then((response) => response.data)
+  .catch((error) => error);
+
+jobsAPI.getCategoryByStatus = (category, status = 'pending') => axiosInstance
+  .get(`/jobs/category/${category}?status=${status}`)
+  .then((response) => response.data)
+  .catch((error) => error);
+
+jobsAPI.getOperationTypeByCategoryAndStatus = (operationType, category, status = 'pending') => axiosInstance
+  .get(`/jobs/category/${category}/${operationType}?status=${status}`)
+  .then((response) => response.data)
+  .catch((error) => error);
+
+jobsAPI.create = (operationIds) => axiosInstance
+  .post('/jobs/create', {
+    operation_ids: [...operationIds],
+  })
+  .then((response) => response.data)
+  .catch((error) => error);
+
+jobsAPI.cancelJob = (jobId) => axiosInstance
+  .post(`/jobs/${jobId}/delete`)
   .then((response) => response.data)
   .catch((error) => error);
 

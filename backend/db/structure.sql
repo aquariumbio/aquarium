@@ -214,7 +214,7 @@ CREATE TABLE `field_values` (
   CONSTRAINT `fk_rails_319b222007` FOREIGN KEY (`child_item_id`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_50fa557e81` FOREIGN KEY (`allowable_field_type_id`) REFERENCES `allowable_field_types` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_e04e5b0273` FOREIGN KEY (`child_sample_id`) REFERENCES `samples` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=1241893 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1241899 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `folder_contents`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -871,9 +871,9 @@ CREATE TABLE `workers` (
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = latin1 */;
-/*!50001 SET character_set_results     = latin1 */;
-/*!50001 SET collation_connection      = latin1_swedish_ci */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`aquarium`@`%` SQL SECURITY DEFINER */
 /*!50001 VIEW `view_inventories` AS select `s`.`id` AS `id`,`i`.`id` AS `item_id`,`i`.`location` AS `item_location`,`i`.`created_at` AS `item_date`,`ot`.`id` AS `item_type_id`,`ot`.`name` AS `item_type`,`pa`.`collection_id` AS `collection_id`,`pa`.`row` AS `row`,`pa`.`column` AS `column`,`ii`.`location` AS `collection_location`,`ii`.`created_at` AS `collection_date`,`ott`.`id` AS `collection_type_id`,`ott`.`name` AS `collection_type` from (((((`samples` `s` join `items` `i` on((`i`.`sample_id` = `s`.`id`))) join `object_types` `ot` on(((`ot`.`id` = `i`.`object_type_id`) and (`ot`.`handler` = 'sample_container')))) left join `part_associations` `pa` on((`pa`.`part_id` = `i`.`id`))) left join `items` `ii` on((`ii`.`id` = `pa`.`collection_id`))) left join `object_types` `ott` on((`ott`.`id` = `ii`.`object_type_id`))) */;
@@ -927,9 +927,9 @@ CREATE TABLE `workers` (
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = latin1 */;
-/*!50001 SET character_set_results     = latin1 */;
-/*!50001 SET collation_connection      = latin1_swedish_ci */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`aquarium`@`%` SQL SECURITY DEFINER */
 /*!50001 VIEW `view_samples` AS select `s`.`id` AS `id`,`s`.`name` AS `name`,`s`.`description` AS `description`,`s`.`project` AS `project`,`s`.`created_at` AS `created_at`,`s`.`sample_type_id` AS `sample_type_id`,`st`.`name` AS `sample_type`,`u`.`name` AS `user_name`,`u`.`login` AS `login`,`ft`.`id` AS `ft_id`,`ft`.`ftype` AS `ft_type`,`fts`.`sort` AS `ft_sort`,`ft`.`name` AS `ft_name`,`fv`.`id` AS `fv_id`,`fv`.`value` AS `fv_value`,`fv`.`child_sample_id` AS `child_sample_id`,`ss`.`name` AS `child_sample_name` from ((((((`samples` `s` join `sample_types` `st` on((`st`.`id` = `s`.`sample_type_id`))) join `users` `u` on((`u`.`id` = `s`.`user_id`))) left join `field_types` `ft` on(((`ft`.`parent_id` = `s`.`sample_type_id`) and (`ft`.`parent_class` = 'SampleType')))) left join `field_type_sorts` `fts` on((`fts`.`ftype` = `ft`.`ftype`))) left join `field_values` `fv` on(((`fv`.`parent_id` = `s`.`id`) and (`fv`.`parent_class` = 'Sample') and (`fv`.`field_type_id` = `ft`.`id`)))) left join `samples` `ss` on((`ss`.`id` = `fv`.`child_sample_id`))) */;

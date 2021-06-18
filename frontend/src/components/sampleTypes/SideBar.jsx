@@ -20,10 +20,17 @@ const SideBar = ({ sampleTypes, setCurrentSampleType, setIsLoading }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const fetchData = async (id) => {
-    // wrap the API call with the spinner
-    const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
-    const response = await sampleTypesAPI.getTypeById(id);
-    clearTimeout(loading);
+    setIsLoading(true);
+
+    const response = await samplesAPI.getTypeById(id);
+    setIsLoading(false);
+
+    // break if the HTTP call resulted in an error ("return false" from API.js)
+    if (!response) {
+      return;
+    }
+
+    // clear timeout and clear overlay
     setIsLoading(false);
     if (!response) return;
 

@@ -13,6 +13,7 @@ import Link from '@material-ui/core/Link';
 import SideBar from './SideBar';
 import { LinkButton } from '../shared/Buttons';
 import groupsAPI from '../../helpers/api/groupsAPI';
+import globalUseSyles from '../../globalUseStyles';
 
 // Route: /object_types
 // Linked in LeftHamburgeMenu
@@ -36,93 +37,12 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
   },
 
-  /* flex */
-  flexWrapper: {
-    padding: '0 16px',
-  },
-
-  flex: {
-    display: '-ms-flexbox',
-    // eslint-disable-next-line no-dupe-keys
-    display: 'flex',
-    position: 'relative',
-  },
-
-  /* Title row */
-  flexTitle: {
-    padding: '8px 0',
-    borderBottom: '2px solid #ccc',
-  },
-
-  /* Data Row */
-  flexRow: {
-    padding: '8px 0',
-    borderBottom: '1px solid #ccc',
-    '&:hover': {
-      boxShadow: '0 0 3px 0 rgba(0, 0, 0, 0.8)',
-    },
-  },
-
-  /* Column definiions */
-  flexCol1: {
-    flex: '1 1 0',
-    marginRight: '8px',
-    paddingLeft: '8px',
-    minWidth: '0',
-  },
-
-  flexCol2: {
-    flex: '2 1 0',
-    marginRight: '8px',
-    paddingLeft: '8px',
-    minWidth: '0',
-  },
-
-  flexCol3: {
-    flex: '3 1 0',
-    marginRight: '8px',
-    paddingLeft: '8px',
-    minWidth: '0',
-  },
-
-  flexCol4: {
-    flex: '4 1 0',
-    marginRight: '8px',
-    paddingLeft: '8px',
-    minWidth: '0',
-  },
-
-  flexColAuto: {
-    width: 'auto',
-    marginRight: '8px',
-    paddingLeft: '8px',
-    minWidth: '0',
-  },
-
-  /* Use to scale and hide columns in the title row */
-  flexColAutoHidden: {
-    width: 'auto',
-    marginRight: '8px',
-    paddingLeft: '8px',
-    minWidth: '0',
-    visibility: 'hidden',
-  },
-
-  show: {
-    display: 'block',
-  },
-
-  hide: {
-    display: 'none',
-  },
-
-  pointer: {
-    cursor: 'pointer',
-  },
 }));
 
 const GroupPage = ({ setIsLoading, setAlertProps, match }) => {
   const classes = useStyles();
+  const globalClasses = globalUseSyles();
+
   const [groupMembers, setGroupMembers] = useState([]);
   const [groupName, setGroupName] = useState('');
   const id = match.params.id;
@@ -193,23 +113,23 @@ const GroupPage = ({ setIsLoading, setAlertProps, match }) => {
 
         {/* MAIN CONTENT */}
         <Grid item xs={9} name="main-container" data-cy="main-container" overflow="visible">
-          <div className={classes.flexWrapper}>
-            <div className={`${classes.flex} ${classes.flexTitle}`}>
-              <Typography className={classes.flexCol1}><b>Name</b></Typography>
-              <Typography className={classes.flexCol1}><b>Login</b></Typography>
-              <Typography className={classes.flexColAutoHidden}>Remove</Typography>
+          <div className={globalClasses.flexWrapper}>
+            <div className={`${globalClasses.flex} ${globalClasses.flexTitle}`}>
+              <Typography className={globalClasses.flexCol1}><b>Name</b></Typography>
+              <Typography className={globalClasses.flexCol1}><b>Login</b></Typography>
+              <Typography className={globalClasses.flexColAutoHidden}>Remove</Typography>
             </div>
 
             {groupMembers ? (
               groupMembers.map((member) => (
-                <div className={`${classes.flex} ${classes.flexRow}`} key={`member_${member.id}`}>
-                  <Typography className={classes.flexCol1}>
+                <div className={`${globalClasses.flex} ${globalClasses.flexRow}`} key={`member_${member.id}`}>
+                  <Typography className={globalClasses.flexCol1}>
                     {member.name}
                   </Typography>
-                  <Typography className={classes.flexCol1}>
+                  <Typography className={globalClasses.flexCol1}>
                     {member.login}
                   </Typography>
-                  <Typography className={classes.flexColAuto}>
+                  <Typography className={globalClasses.flexColAuto}>
                     {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
                     <Link data-cy={`remove_${member.id}`} className={classes.pointer} onClick={() => handleRemove(member.id)}>Remove</Link>
                   </Typography>

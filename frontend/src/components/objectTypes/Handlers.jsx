@@ -10,6 +10,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core';
 
 import objectsAPI from '../../helpers/api/objectsAPI';
+import ListScroll from '../shared/layout/ListScroll';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -47,31 +48,19 @@ const SideBar = ({
   };
 
   return (
-    <Grid
-      item
-      xs={2}
-      name="object-types-side-bar"
-      data-cy="object-types-side-bar"
-      className={classes.root}
-    >
-      <Card>
-        <CardContent>
-          <List component="nav" aria-label="object types list">
-            {objectTypeHandlers.map((st, index) => (
-              <ListItem
-                button
-                key={st.handler}
-                data-cy={`handler_${st.handler}`}
-                selected={selectedIndex === index}
-                onClick={(event) => handleListItemClick(event, index, st.handler)}
-              >
-                <ListItemText primary={st.handler} primaryTypographyProps={{ noWrap: true }} />
-              </ListItem>
-            ))}
-          </List>
-        </CardContent>
-      </Card>
-    </Grid>
+    <ListScroll component="nav" aria-label="object types list">
+      {objectTypeHandlers.map((st, index) => (
+        <ListItem
+          button
+          key={st.handler}
+          data-cy={`handler_${st.handler}`}
+          selected={selectedIndex === index}
+          onClick={(event) => handleListItemClick(event, index, st.handler)}
+        >
+          <ListItemText primary={st.handler} primaryTypographyProps={{ noWrap: true }} />
+        </ListItem>
+      ))}
+    </ListScroll>
   );
 };
 
