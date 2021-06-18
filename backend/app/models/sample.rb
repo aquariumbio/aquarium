@@ -369,29 +369,62 @@ class Sample < ActiveRecord::Base
     # save field values
     # loop through field_values and save each one
     field_values.each do |field_value|
-      # field_value
-      # - parent_id (sample_id)
-      # - parent_class ('Sample')
-      # - field_type_id (id of field type)
-      # - name (name of field type - redundant, should make sure nothing else uses it and remove it)
-      # - value (for anything other than samples)
-      # - child_sample_id (for samples)
-
       FieldValue.create({
         parent_id: sample.id,
         parent_class: 'Sample',
         field_type_id: field_value[:field_type_id],
-        name: field_value[:name],
-        value: field_value[:value],
-        child_sample_id: field_value[:child_sample_id]
+        name: field_value[:name], # name of field type (redundant, should make sure nothing else uses it and remove it)
+        value: field_value[:value], # for anything other than samples
+        child_sample_id: field_value[:child_sample_id] # for samples
       })
     end
 
     return sample, nil
   end
 
-  def update_with(sample)
-    return false, {update: "def", sample: "jkl"}
+  # update sample type
+  def update_with(obj, user_id)
+    # set basic attributes
+    sample_type_id = obj[:sample_type_id]
+    name = Input.text(obj[:name])
+    description = Input.text(obj[:description])
+    project = Input.text(obj[:project])
+
+    # update sample object
+    self.user_id = user_id
+    self.sample_type_id = sample_type_id
+    self.name = name
+    self.description = description
+    self.project = project
+
+    # loop through field types to get field values and check for errors
+    field_values, validation_errors = self.validate_field_types?(obj)
+    self.field_value_errors = validation_errors
+
+    # check if valid
+    return nil, errors if !valid?
+
+    # save sample
+    self.save
+
+    # delete existing field values
+    sql = "delete from field_values where parent_id = #{self.id} and parent_class = 'Sample'"
+    FieldValue.connection.execute sql
+
+    # save new field values
+    # loop through field_values and save each one
+    field_values.each do |field_value|
+      FieldValue.create({
+        parent_id: self.id,
+        parent_class: 'Sample',
+        field_type_id: field_value[:field_type_id],
+        name: field_value[:name], # name of field type (redundant, should make sure nothing else uses it and remove it)
+        value: field_value[:value], # for anything other than samples
+        child_sample_id: field_value[:child_sample_id] # for samples
+      })
+    end
+
+    return self, nil
   end
 
   def validate_field_types?(obj)

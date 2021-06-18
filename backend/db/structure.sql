@@ -214,7 +214,7 @@ CREATE TABLE `field_values` (
   CONSTRAINT `fk_rails_319b222007` FOREIGN KEY (`child_item_id`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_50fa557e81` FOREIGN KEY (`allowable_field_type_id`) REFERENCES `allowable_field_types` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_e04e5b0273` FOREIGN KEY (`child_sample_id`) REFERENCES `samples` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=1241869 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1241893 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `folder_contents`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -295,7 +295,7 @@ CREATE TABLE `items` (
   CONSTRAINT `fk_rails_6b7d1f696e` FOREIGN KEY (`sample_id`) REFERENCES `samples` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_a6ef7e6462` FOREIGN KEY (`object_type_id`) REFERENCES `object_types` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_d02c2a2df1` FOREIGN KEY (`locator_id`) REFERENCES `locators` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=513655 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=513657 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `job_assignment_logs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -446,7 +446,7 @@ CREATE TABLE `object_types` (
   `rows` int(11) DEFAULT NULL,
   `columns` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=866 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=867 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `operation_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -608,7 +608,7 @@ CREATE TABLE `samples` (
   KEY `index_samples_on_user_id` (`user_id`) USING BTREE,
   CONSTRAINT `fk_rails_8e0800c2e2` FOREIGN KEY (`sample_type_id`) REFERENCES `sample_types` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_d699eb2564` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=36429 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=36439 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `schema_migrations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

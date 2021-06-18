@@ -356,6 +356,9 @@ module Api
         status, response = check_token_for_permission(Permission.admin_id)
         render json: response.to_json, status: status.to_sym and return if response[:error]
 
+        # get user id
+        user_id = response[:user]["id"]
+
         # Get sample
         id = Input.int(params[:id])
         sample = Sample.find_id(id)
@@ -365,7 +368,7 @@ module Api
         params_sample = params[:sample] || {}
 
         # Update sample
-        sample, errors = sample.update_with(params_sample)
+        sample, errors = sample.update_with(params_sample, user_id)
         render json: { errors: errors }.to_json, status: :ok and return if !sample
 
         render json: { sample: sample }.to_json, status: :ok
