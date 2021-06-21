@@ -87,6 +87,8 @@ class Item < ActiveRecord::Base
     self.quantity = -1
     self.inuse = -1
     self.save
+
+    Locator.remove(id)
   end
 
   private

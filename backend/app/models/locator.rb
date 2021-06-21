@@ -64,4 +64,8 @@ class Locator < ActiveRecord::Base
     return locator, location
   end
 
+  def self.remove(item_id)
+    sql = "update locators set item_id = NULL where item_id = #{item_id}"
+    Locator.connection.execute (sql)
+  end
 end
