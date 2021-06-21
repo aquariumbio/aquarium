@@ -79,13 +79,14 @@ class Sample < ActiveRecord::Base
       end
     elsif words[0,2]=="i:"
       # search item id only
+      # ignore discarded items in collections (inuse != -1)
       this_id = words[2,words.length].strip.split(' ')[0]
       if this_id == this_id.to_i.to_s
         ands << "
           id in (
             select distinct if(i.sample_id, i.sample_id, ii.sample_id) from items i
             left join part_associations pa on pa.collection_id = i.id
-            left join items ii on ii.id = pa.part_id
+            left join items ii on ii.id = pa.part_id and ii.inuse != -1
             where i.id = #{this_id}
           )
         "
@@ -235,10 +236,11 @@ class Sample < ActiveRecord::Base
     # get items + collections from inventory
     # NOTES:
     # - collection_id could appear multilpe times
+    # - ignore discarded items in collections (inuse != -1)
     sql = "
       select *
       from view_inventories
-      where id = #{id}
+      where id = #{id} and inuse != -1
       order by collection_id is not null, collection_type, item_type, collection_id, item_id
     "
     inventory_data = Sample.find_by_sql sql

@@ -15,12 +15,13 @@ class Item < ActiveRecord::Base
 
     object_type = item ? ObjectType.find_by(id: item.object_type_id) : nil
 
+    # ignore discarded items in collections (inuse != -1)
     sql = "
       select pa.row, pa.column, i.id as 'item_id', i.sample_id, s.name
       from part_associations pa
       inner join items i on i.id = pa.part_id
       inner join samples s on s.id = i.sample_id
-      where pa.collection_id = #{item.id}
+      where pa.collection_id = #{item.id} and i.inuse != -1
     "
     collection = PartAssociation.find_by_sql sql
 
@@ -81,7 +82,9 @@ class Item < ActiveRecord::Base
 
   # discard an item
   def discard
+    # TODO: need to add a data-assciation for history comments...
     self.location = "deleted"
+    self.quantity = -1
     self.inuse = -1
     self.save
   end

@@ -342,6 +342,28 @@ const CollectionForm = ({ setIsLoading, setAlertProps, collectionId, collectionT
   const [rowSel, setRowSel] = useState(-1);
   const [colSel, setColSel] = useState(-1);
 
+  const initEdit = async (id) => {
+    const response1 = await itemsAPI.getCollectionById(id);
+    if (!response1) return;
+
+    // set item + object type
+    setItem(response1.item);
+    setObjectType(response1.object_type);
+
+    // set rows and columns
+    setRows([...Array(response1.object_type.rows || 1).keys()]);
+    setColumns([...Array(response1.object_type.columns || 12).keys()]);
+
+    // map collection data
+    let temp = new Object
+    response1.collection.map((c) => (
+      temp={...temp,[`${c.row}.${c.column}`]: [`${c.sample_id}: ${c.name}`, c.item_id]}
+    ))
+
+    // set collection
+    setCollection(temp)
+  }
+
   useEffect(() => {
     const initNew = async () => {
       const formData = {
@@ -359,28 +381,6 @@ const CollectionForm = ({ setIsLoading, setAlertProps, collectionId, collectionT
       setRows([...Array(response1.object_type.rows || 1).keys()]);
       setColumns([...Array(response1.object_type.columns || 12).keys()]);
     };
-
-    const initEdit = async (id) => {
-      const response1 = await itemsAPI.getCollectionById(id);
-      if (!response1) return;
-
-      // set item + object type
-      setItem(response1.item);
-      setObjectType(response1.object_type);
-
-      // set rows and columns
-      setRows([...Array(response1.object_type.rows || 1).keys()]);
-      setColumns([...Array(response1.object_type.columns || 12).keys()]);
-
-      // map collection data
-      let temp = new Object
-      response1.collection.map((c) => (
-        temp={...temp,[`${c.row}.${c.column}`]: [`${c.sample_id}: ${c.name}`, c.item_id]}
-      ))
-
-      // set collection
-      setCollection(temp)
-    }
 
     collectionId == 0 ? initNew() : initEdit(collectionId);
   }, []);
@@ -406,9 +406,17 @@ const CollectionForm = ({ setIsLoading, setAlertProps, collectionId, collectionT
   };
 
   const handleSelect = async (event) => {
-    alert(`assign ${event.target.id} to [${rowSel+1}, ${colSel+1}]`)
     setList([])
     setQuickSearch('')
+
+//     const response1 = await itemsAPI.addICollectionItem(collectionId, event.target.id, rosSel, rowCol);
+//     if (!response1) return;
+
+    alert(`assign ${event.target.id} to [${rowSel+1}, ${colSel+1}]`)
+
+    // initialize page
+    initEdit(collectionId);
+
   }
 
   const handleRemove = async (i) => {
@@ -447,7 +455,9 @@ const CollectionForm = ({ setIsLoading, setAlertProps, collectionId, collectionT
               {columns.map((column,cIndex) => (
                 <>
                   {collection[`${row}.${column}`] ? (
-                    <Typography className={`${classes.flexCol1x} ${classes.pointer} ${rowSel == row && colSel == column ? classes.selected : classes.deselected}`} id={`${row},${column}`} onClick={() => handleRC(row, column)}>
+                    <Typography
+                    className={`${classes.flexCol1x} ${classes.pointer} ${rowSel == row && colSel == column ? classes.selected : classes.deselected} `}
+                    id={`${row},${column}`} onClick={() => handleRC(row, column)}>
                       {collection[`${row}.${column}`][0]}
                     </Typography>
                   ) : (

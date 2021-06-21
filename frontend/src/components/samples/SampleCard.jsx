@@ -607,7 +607,7 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, s
               >
                 <MenuItem key="0" value="0">Add Item</MenuItem>
                 {objectTypes.map((objectType) => (
-                  <MenuItem key={objectType.id} value={objectType.id}>{objectType.name}</MenuItem>
+                  <MenuItem key={objectType.id} value={objectType.id}> {objectType.name}</MenuItem>
                 ))}
               </TextField>
             </div>

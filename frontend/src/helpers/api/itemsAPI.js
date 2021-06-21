@@ -19,4 +19,8 @@ itemsAPI.discard = (id) => axiosInstance
   .then((response) => response.data)
   .catch((error) => error);
 
+// itemsAPI.addICollectionItem = (collectionId, event.target.id, rosSel, rowCol) => {
+//   alert('here')
+// }
+
 export default itemsAPI;

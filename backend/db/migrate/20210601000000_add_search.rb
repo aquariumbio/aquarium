@@ -52,7 +52,7 @@ class AddSearch < ActiveRecord::Migration[4.2]
     execute <<-SQL
       create view view_inventories as
       select s.id,
-      i.id as 'item_id', i.location as 'item_location', i.created_at as 'item_date',
+      i.id as 'item_id', i.location as 'item_location', i.created_at as 'item_date', i.inuse,
       ot.id as 'item_type_id', ot.name as 'item_type',
       pa.collection_id, pa.row, pa.column,
       ii.location as 'collection_location', ii.created_at as 'collection_date',
