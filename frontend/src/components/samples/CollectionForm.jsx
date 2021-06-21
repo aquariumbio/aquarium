@@ -419,8 +419,12 @@ const CollectionForm = ({ setIsLoading, setAlertProps, collectionId, collectionT
 
   }
 
-  const handleRemove = async (i) => {
-    alert(`remove ${i}`)
+  const handleDiscard = async (id) => {
+    const response1 = await itemsAPI.discard(id);
+    if (!response1) return;
+
+    // success
+    initEdit(collectionId);
   }
 
   return (
@@ -481,7 +485,7 @@ const CollectionForm = ({ setIsLoading, setAlertProps, collectionId, collectionT
                 Remove Sample from Selection
               </Typography>
               <div>
-               <Button variant="outlined" onClick={() => handleRemove(collection[`${rowSel}.${colSel}`][1])}>Remove</Button>
+               <Button variant="outlined" onClick={() => handleDiscard(collection[`${rowSel}.${colSel}`][1])}>Remove</Button>
               </div>
 
               <Typography className={`${classes.mb8} ${classes.mt16}`}>

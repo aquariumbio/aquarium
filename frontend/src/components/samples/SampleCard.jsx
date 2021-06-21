@@ -576,11 +576,7 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, s
                               {item.date.substr(0,10)}
                             </div>
                             <div className={classes.flexColAuto}>
-                              {item.collections ? (
-                                <span className={classes.hidden}>&#128465;</span>
-                              ) : (
-                                <span className={`${classes.pointer} ${item.location == 'deleted' ? classes.hidden : classes.visible}`} onClick={() => handleItemDiscard(item.item_id)}>&#128465;</span>
-                              )}
+                              <span className={`${classes.pointer} ${item.location == 'deleted' ? classes.hidden : classes.visible}`} onClick={() => handleItemDiscard(item.item_id)}>&#128465;</span>
                             </div>
                           </div>
                         </div>
