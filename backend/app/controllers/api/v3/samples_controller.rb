@@ -242,7 +242,6 @@ module Api
         render json: { sample: sample, inventory: inventory }.to_json, status: :ok
       end
 
-      # IMPORTANT - SCRUB THIS... IT IS COPIED FROM ANOTHER METHOD
       # Create a new sample.
       #
       # <b>API Call:</b>
@@ -252,22 +251,13 @@ module Api
       #     sample: {
       #       name: <name>,
       #       description: <description>,
-      #       field_types: [
-      #         {
-      #           name: <name>,
-      #           ftype: <ftype>,
-      #           required: <required>,
-      #           array: <array>,
-      #           choices: <choices>,
-      #           allowable_field_types: [ # (only used when ftype = "sample")
-      #             {
-      #               sample_type_id: <sample_type_id>
-      #             },
-      #             ...
-      #           ]
-      #         },
-      #         ...
-      #       ]
+      #       project: <project>,
+      #       f.<single_value_field_type_id>: <field_type_value>,
+      #       f.<array_field_type_id>: [
+      #          <field_type_value>,
+      #          ...
+      #       ],
+      #       ...
       #     }
       #   }
       #
@@ -276,8 +266,11 @@ module Api
       #   {
       #     sample: {
       #       id: <sample_id>,
+      #       user_id: <user_id>,
+      #       sample_type_id: <sample_type_id>,
       #       name: <name>,
       #       description: <description>,
+      #       project: <project>,
       #       created_at: <datetime>,
       #       updated_at: <datetime>
       #     }
@@ -307,7 +300,6 @@ module Api
         render json: { sample: sample }.to_json, status: :created
       end
 
-      # IMPORTANT - SCRUB THIS... IT IS COPIED FROM ANOTHER METHOD
       # Update a sample.
       #
       # <b>API Call:</b>
@@ -318,24 +310,13 @@ module Api
       #     sample: {
       #       name: <name>,
       #       description: <description>,
-      #       field_types: [
-      #         {
-      #           id: <field_type_id>,
-      #           name: <name>,
-      #           ftype: <ftype>,
-      #           required: <required>,
-      #           array: <array>,
-      #           choices: <choices>,
-      #           allowable_field_types: [ # (only used when ftype = "sample")
-      #             {
-      #               id: <allowable_field_type_id>,
-      #               sample_type_id: <sample_type_id>
-      #             },
-      #             ...
-      #           ]
-      #         },
-      #         ...
-      #       ]
+      #       project: <project>,
+      #       f.<single_value_field_type_id>: <field_type_value>,
+      #       f.<array_field_type_id>: [
+      #          <field_type_value>,
+      #          ...
+      #       ],
+      #       ...
       #     }
       #   }
       #
@@ -344,8 +325,11 @@ module Api
       #   {
       #     sample: {
       #       id: <sample_id>,
+      #       user_id: <user_id>,
+      #       sample_type_id: <sample_type_id>,
       #       name: <name>,
       #       description: <description>,
+      #       project: <project>,
       #       created_at: <datetime>,
       #       updated_at: <datetime>
       #     }
