@@ -16,9 +16,10 @@ class Item < ActiveRecord::Base
     object_type = item ? ObjectType.find_by(id: item.object_type_id) : nil
 
     sql = "
-      select pa.row, pa.column, i.id as 'item_id', i.sample_id
+      select pa.row, pa.column, i.id as 'item_id', i.sample_id, s.name
       from part_associations pa
       inner join items i on i.id = pa.part_id
+      inner join samples s on s.id = i.sample_id
       where pa.collection_id = #{item.id}
     "
     collection = PartAssociation.find_by_sql sql

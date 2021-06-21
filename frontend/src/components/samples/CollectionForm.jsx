@@ -375,7 +375,7 @@ const CollectionForm = ({ setIsLoading, setAlertProps, collectionId, collectionT
       // map collection data
       let temp = new Object
       response1.collection.map((c) => (
-        temp={...temp,[`${c.row}.${c.column}`]: c.sample_id}
+        temp={...temp,[`${c.row}.${c.column}`]: [`${c.sample_id}: ${c.name}`, c.item_id]}
       ))
 
       // set collection
@@ -411,8 +411,8 @@ const CollectionForm = ({ setIsLoading, setAlertProps, collectionId, collectionT
     setQuickSearch('')
   }
 
-  const handleRemove = async (r, c) => {
-    alert(`remove [${r+1}, ${c+1}]`)
+  const handleRemove = async (i) => {
+    alert(`remove ${i}`)
   }
 
   return (
@@ -448,7 +448,7 @@ const CollectionForm = ({ setIsLoading, setAlertProps, collectionId, collectionT
                 <>
                   {collection[`${row}.${column}`] ? (
                     <Typography className={`${classes.flexCol1x} ${classes.pointer} ${rowSel == row && colSel == column ? classes.selected : classes.deselected}`} id={`${row},${column}`} onClick={() => handleRC(row, column)}>
-                      {collection[`${row}.${column}`]}
+                      {collection[`${row}.${column}`][0]}
                     </Typography>
                   ) : (
                     <Typography className={`${classes.flexCol1x} ${classes.pointer} ${rowSel == row && colSel == column ? classes.selected : classes.deselected}`} id={`${row},${column}`} onClick={() => handleRC(row, column)}>
@@ -471,7 +471,7 @@ const CollectionForm = ({ setIsLoading, setAlertProps, collectionId, collectionT
                 Remove Sample from Selection
               </Typography>
               <div>
-               <Button variant="outlined" onClick={() => handleRemove(rowSel, colSel)}>Remove</Button>
+               <Button variant="outlined" onClick={() => handleRemove(collection[`${rowSel}.${colSel}`][1])}>Remove</Button>
               </div>
 
               <Typography className={`${classes.mb8} ${classes.mt16}`}>

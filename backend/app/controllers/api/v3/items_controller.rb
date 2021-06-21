@@ -115,7 +115,7 @@ module Api
         id = params[:id].to_i
         item, object_type, collection = Item.get_collection(id)
 
-        render json: { item: nil, object_type: nil, collection: nill }.to_json, status: :not_found and return  if !item
+        render json: { item: nil, object_type: nil, collection: nil }.to_json, status: :not_found and return  if !item
 
         render json: { item: item, object_type: object_type, collection: collection }.to_json, status: :ok
       end
