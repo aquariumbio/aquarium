@@ -33,9 +33,4 @@ samplesAPI.update = (FormData, id) => axiosInstance
   .then((response) => response.data)
   .catch((error) => error);
 
-samplesAPI.discard = (id) => axiosInstance
-  .post(`/samples/${id}/delete`)
-  .then((response) => response.data)
-  .catch((error) => error);
-
 export default samplesAPI;

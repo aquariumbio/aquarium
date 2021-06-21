@@ -301,9 +301,6 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, s
   // TODO: change this from true / false to show / hide
   const [showDeleted, setShowDeleted] = useState(false);
 
-  // add item
-  // const [itemAdd, setItemAdd] = useState(0);
-
   const handleChange = async () => {
     setShowDeleted(!showDeleted);
   };
@@ -366,6 +363,14 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, s
     }
 
     const response1 = await itemsAPI.create(formData);
+    if (!response1) return;
+
+    // success
+    init(sampleId);
+  }
+
+  const handleItemDiscard = async (id) => {
+    const response1 = await itemsAPI.discard(id);
     if (!response1) return;
 
     // success
@@ -571,7 +576,11 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, s
                               {item.date.substr(0,10)}
                             </div>
                             <div className={classes.flexColAuto}>
-                              <span className={item.location == 'deleted' ? classes.hidden : classes.visible}>&#128465;</span>
+                              {item.collections ? (
+                                <span className={classes.hidden}>&#128465;</span>
+                              ) : (
+                                <span className={`${classes.pointer} ${item.location == 'deleted' ? classes.hidden : classes.visible}`} onClick={() => handleItemDiscard(item.item_id)}>&#128465;</span>
+                              )}
                             </div>
                           </div>
                         </div>

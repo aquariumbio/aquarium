@@ -14,4 +14,9 @@ itemsAPI.create = (FormData) => axiosInstance
   .then((response) => response.data)
   .catch((error) => error);
 
+itemsAPI.discard = (id) => axiosInstance
+  .post(`/items/${id}/discard`)
+  .then((response) => response.data)
+  .catch((error) => error);
+
 export default itemsAPI;

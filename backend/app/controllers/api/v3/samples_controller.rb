@@ -365,42 +365,6 @@ module Api
         render json: { sample: sample }.to_json, status: :ok
       end
 
-      # Delete a sample.
-      #
-      # <b>API Call:</b>
-      #   POST: /api/v3/samples/<id>/delete
-      #   {
-      #     token: <token>
-      #   }
-      #
-      # <b>API Return Success:</b>
-      #   STATUS_CODE: 200
-      #   {
-      #     message: "Sample deleted"
-      #   }
-      #
-      # @!method delete(token, id)
-      # @param token [String] a token
-      # @param id [Int] the id of the sample
-      def delete
-        # Check for admin permissions
-        status, response = check_token_for_permission(Permission.admin_id)
-        render json: response.to_json, status: status.to_sym and return if response[:error]
-
-        id = Input.int(params[:id])
-
-        # Get sample
-        sample = Sample.find_id(id)
-        render json: { error: "Sample not found" }.to_json, status: :not_found and return if !sample
-
-return "delete sample"
-        # Delete sample and related items that do not have foreign keys
-#         sample.delete_sample
-#
-#         render json: {
-#           message: "Sample deleted"
-#         }.to_json, status: :ok
-      end
     end
   end
 end

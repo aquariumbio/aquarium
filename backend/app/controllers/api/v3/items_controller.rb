@@ -79,7 +79,34 @@ module Api
         render json: { item: item, object_type: object_type }.to_json, status: :created
       end
 
-      # Returns details for a specific item.
+      # Returns details for a specific collection.
+      #
+      # <b>API Call:</b>
+      #   GET: /api/v3/items/collection/36357
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 201
+      #   {
+      #     item: {
+      #       id: <item_id>,
+      #       location: <location>,
+      #       quantity: <quantity>,
+      #       object_type_id: <object_type_id>,
+      #       inuse: <inuse>,
+      #       sample_id: <sample_id>,
+      #       data: <data>,
+      #       locator_id: <locator_id>,
+      #       created_at: <datetime>,
+      #       updated_at: <datetime>
+      #     }
+      #   }
+      #
+      # @!method create(token, item)
+      # @param token [String] a token
+      # @param item [Hash] the item
       def show_collection
         # Check for admin permissions
         status, response = check_token_for_permission(Permission.admin_id)
@@ -91,6 +118,43 @@ module Api
         render json: { item: nil, object_type: nil, collection: nill }.to_json, status: :not_found and return  if !item
 
         render json: { item: item, object_type: object_type, collection: collection }.to_json, status: :ok
+      end
+
+      # Discard an item.
+      #
+      # <b>API Call:</b>
+      #   POST: /api/v3/items/<id>/delete
+      #   {
+      #     token: <token>
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 200
+      #   {
+      #     message: "Item deleted"
+      #   }
+      #
+      # @!method delete(token, id)
+      # @param token [String] a token
+      # @param id [Int] the id of the item
+      def discard
+        # Check for admin permissions
+        status, response = check_token_for_permission(Permission.admin_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        id = Input.int(params[:id])
+
+        # Get item
+        # TODO: should verify that this is an item, not a collection
+        item = Item.find_by(id: id)
+        render json: { error: "Item not found" }.to_json, status: :not_found and return if !item
+
+        # discard sample
+        item.discard
+
+        render json: {
+          message: "Item deleted"
+        }.to_json, status: :ok
       end
 
     end

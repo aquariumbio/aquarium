@@ -117,12 +117,12 @@ Rails.application.routes.draw do
   post 'api/v3/samples/create',                    to: 'api/v3/samples#create'
   get  'api/v3/samples/:id',                       to: 'api/v3/samples#show'
   post 'api/v3/samples/:id/update',                to: 'api/v3/samples#update'
-  post 'api/v3/samples/:id/discard',               to: 'api/v3/samples#discard'
 
   # Items
   post 'api/v3/items/create',                      to: 'api/v3/items#create'
   get  'api/v3/items/collection/:id',              to: 'api/v3/items#show_collection'
   get  'api/v3/items/container/:id',               to: 'api/v3/items#show_container'
+  post 'api/v3/items/:id/discard',                 to: 'api/v3/items#discard'
 
   # Initialize columns in db
   get  'set_search_text',                   to: 'api/v3/samples#set_search_text'

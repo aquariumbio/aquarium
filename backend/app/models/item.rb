@@ -78,6 +78,13 @@ class Item < ActiveRecord::Base
     return item_new, object_type, false
   end
 
+  # discard an item
+  def discard
+    self.location = "deleted"
+    self.inuse = -1
+    self.save
+  end
+
   private
 
   def object_type_id_sample_id?
