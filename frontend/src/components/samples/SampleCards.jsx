@@ -35,7 +35,16 @@ const useStyles = makeStyles(() => ({
     alignItems: 'center',
   },
 
-  /* flex */
+  /* CUSTOM FLEX */
+
+  flex: {
+    display: '-ms-flexbox',
+    // eslint-disable-next-line no-dupe-keys
+    display: 'flex',
+    position: 'relative',
+    flexFlow: 'wrap',
+  },
+
   flexCardWrapper: {
     margin: '0 -1.5%',
   },
@@ -169,7 +178,7 @@ const SampleCards = ({ handlePage, handleClick, count, page, pages, samples }) =
       </div>
 
       <div className={classes.flexCardWrapper}>
-        <div className={globalClasses.flex}>
+        <div className={classes.flex}>
           {samples.map((sample) => (
             <div className={classes.flexCard25} cy={`sample-${sample.id}`}>
               <div className={classes.cardScroll}>
