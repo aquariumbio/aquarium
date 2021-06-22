@@ -37,14 +37,6 @@ const useStyles = makeStyles((theme) => ({
   spaceBelow: {
     marginBottom: theme.spacing(1),
   },
-
-  show: {
-    display: 'block',
-  },
-
-  hide: {
-    display: 'none',
-  },
 }));
 
 // eslint-disable-next-line no-unused-vars

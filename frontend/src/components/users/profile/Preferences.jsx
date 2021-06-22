@@ -40,14 +40,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
   },
 
-  show: {
-    display: 'block',
-  },
-
-  hide: {
-    display: 'none',
-  },
-
   header: {
     display: 'flex',
     justifyContent: 'space-between',

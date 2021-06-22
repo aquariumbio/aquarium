@@ -33,18 +33,6 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
   },
 
-  show: {
-    display: 'block',
-  },
-
-  hide: {
-    display: 'none',
-  },
-
-  pointer: {
-    cursor: 'pointer',
-  },
-
   mr8: {
     marginRight: '8px',
   },

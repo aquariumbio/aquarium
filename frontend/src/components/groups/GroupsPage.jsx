@@ -34,10 +34,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
 
-  wrapper: {
-    padding: '0 24px',
-  },
-
   letter: {
     color: theme.palette.primary.main,
   },
