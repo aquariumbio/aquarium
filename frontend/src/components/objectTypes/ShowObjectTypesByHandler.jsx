@@ -55,38 +55,29 @@ const ShowObjectTypesByHandler = ({ objectTypes, setIsLoading, setAlertProps }) 
 
   return (
     <>
-      <div className={globalClasses.flexWrapper}>
-        <div className={`${globalClasses.flex} ${globalClasses.flexTitle}`}>
-          <Typography className={globalClasses.flexCol1}><b>Name</b></Typography>
-          <Typography className={globalClasses.flexCol3}><b>Description</b></Typography>
-          <Typography className={globalClasses.flexColAutoHidden}>Edit</Typography>
-          <Typography className={globalClasses.flexColAutoHidden}>Delete</Typography>
+      {objectTypes.map((objectType) => (
+        <div className={`${globalClasses.flex} ${globalClasses.flexRow}`} key={`object_${objectType.id}`}>
+          <Typography className={globalClasses.flexCol1}>
+            {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
+            <Link data-cy={`show_${objectType.id}`} className={globalClasses.pointer} onClick={() => handleToggles(objectType.id)}>{objectType.name}</Link>
+          </Typography>
+          <Typography className={globalClasses.flexCol3}>
+            {objectType.description}
+            <span className={toggleIds[objectType.id] ? globalClasses.show : globalClasses.hide}>
+              <ShowObjectTypeDetails objectType={objectType} />
+            </span>
+          </Typography>
+
+          <Typography className={globalClasses.flexColAuto}>
+            <Link data-cy={`edit_${objectType.id}`} component={RouterLink} to={`/object_types/${objectType.id}/edit`}>Edit</Link>
+          </Typography>
+
+          <Typography className={globalClasses.flexColAuto}>
+            {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
+            <Link data-cy={`delete_${objectType.id}`} className={globalClasses.pointer} onClick={() => handleDelete(objectType.id)}>Delete</Link>
+          </Typography>
         </div>
-
-        {objectTypes.map((objectType) => (
-          <div className={`${globalClasses.flex} ${globalClasses.flexRow}`} key={`object_${objectType.id}`}>
-            <Typography className={globalClasses.flexCol1}>
-              {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
-              <Link data-cy={`show_${objectType.id}`} className={globalClasses.pointer} onClick={() => handleToggles(objectType.id)}>{objectType.name}</Link>
-            </Typography>
-            <Typography className={globalClasses.flexCol3}>
-              {objectType.description}
-              <span className={toggleIds[objectType.id] ? globalClasses.show : globalClasses.hide}>
-                <ShowObjectTypeDetails objectType={objectType} />
-              </span>
-            </Typography>
-
-            <Typography className={globalClasses.flexColAuto}>
-              <Link data-cy={`edit_${objectType.id}`} component={RouterLink} to={`/object_types/${objectType.id}/edit`}>Edit</Link>
-            </Typography>
-
-            <Typography className={globalClasses.flexColAuto}>
-              {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
-              <Link data-cy={`delete_${objectType.id}`} className={globalClasses.pointer} onClick={() => handleDelete(objectType.id)}>Delete</Link>
-            </Typography>
-          </div>
-        ))}
-      </div>
+      ))}
     </>
   );
 };
