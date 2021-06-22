@@ -19,8 +19,16 @@ itemsAPI.discard = (id) => axiosInstance
   .then((response) => response.data)
   .catch((error) => error);
 
-// itemsAPI.addICollectionItem = (collectionId, event.target.id, rosSel, rowCol) => {
-//   alert('here')
-// }
+itemsAPI.addCollectionItem = (collectionId, sampleId, rowSel, colSel) => axiosInstance
+  .post('/items/create_part', {
+    part_association: {
+      collection_id: collectionId,
+      sample_id: sampleId,
+      row: rowSel,
+      column: colSel
+    }
+  })
+  .then((response) => response.data)
+  .catch((error) => error);
 
 export default itemsAPI;

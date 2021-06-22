@@ -409,14 +409,11 @@ const CollectionForm = ({ setIsLoading, setAlertProps, collectionId, collectionT
     setList([])
     setQuickSearch('')
 
-//     const response1 = await itemsAPI.addICollectionItem(collectionId, event.target.id, rosSel, rowCol);
-//     if (!response1) return;
-
-    alert(`assign ${event.target.id} to [${rowSel+1}, ${colSel+1}]`)
+    const response1 = await itemsAPI.addCollectionItem(collectionId, event.target.id, rowSel, colSel);
+    if (!response1) return;
 
     // initialize page
     initEdit(collectionId);
-
   }
 
   const handleDiscard = async (id) => {

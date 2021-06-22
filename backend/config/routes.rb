@@ -120,6 +120,7 @@ Rails.application.routes.draw do
 
   # Items
   post 'api/v3/items/create',                      to: 'api/v3/items#create'
+  post 'api/v3/items/create_part',                 to: 'api/v3/items#create_part'
   get  'api/v3/items/collection/:id',              to: 'api/v3/items#show_collection'
   get  'api/v3/items/container/:id',               to: 'api/v3/items#show_container'
   post 'api/v3/items/:id/discard',                 to: 'api/v3/items#discard'

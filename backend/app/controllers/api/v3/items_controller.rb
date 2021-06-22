@@ -79,6 +79,66 @@ module Api
         render json: { item: item, object_type: object_type }.to_json, status: :created
       end
 
+      # Create a new part association.
+      #
+      # <b>API Call:</b>
+      #   GET: /api/v3/groups/create
+      #   {
+      #     token: <token>
+      #     part_association: {
+      #       collection_id: <collection_id>,
+      #       part_id: <part_id>,
+      #       row: <row>,
+      #       column: <column>
+      #     }
+      #   }
+      #
+      # <b>API Return Success:</b>
+      #   STATUS_CODE: 201
+      #   {
+      #     part_association: {
+      #       id: <item_id>,
+      #       collection_id: <collection_id>,
+      #       part_id: <part_id>,
+      #       row: <row>,
+      #       column: <column>,
+      #       created_at: <datetime>,
+      #       updated_at: <datetime>
+      #     }
+      #   }
+      #
+      # @!method create(token, item)
+      # @param token [String] a token
+      # @param part_association [Hash] the part_association
+      def create_part
+        # Check for admin permissions
+        status, response = check_token_for_permission(Permission.admin_id)
+        render json: response.to_json, status: status.to_sym and return if response[:error]
+
+        # Add a part
+        params_part_association = params[:part_association] || {}
+
+        # Get the sample id
+        sample = Sample.find_by(id: Input.int(params_part_association[:sample_id]))
+        render json: { part_association: nil }.to_json, status: :not_found and return if !sample
+
+        # Add a part
+        # IMPORTANT: OBJECT_TYPE_ID MUST BE WHATEVER IS __PART
+        #            NEED TO REVIEW THIS
+        item = Item.create ({
+          quantity: 1,
+          object_type_id: 807,
+          sample_id: sample.id
+        })
+
+        # Create group
+        params_part_association[:part_id] = item.id
+        part_association, errors = PartAssociation.create_from(params_part_association)
+        render json: { errors: errors }.to_json, status: :ok and return if !part_association
+
+        render json: { part_association: part_association }.to_json, status: :created
+      end
+
       # Returns details for a specific collection.
       #
       # <b>API Call:</b>
