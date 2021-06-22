@@ -61,29 +61,25 @@ const SideBar = ({ setIsLoading, setAlertProps, id, refresh }) => {
   }, []);
 
   return (
-    <>
-      <div className={globalClasses.wrapper}>
-        <TextField
-          name="user_id"
-          fullWidth
-          id="user-id-input"
-          value={newMember}
-          onChange={(event) => handleSubmit(event.target.value)}
-          variant="outlined"
-          type="string"
-          inputProps={{
-            'aria-label': 'user-id-input',
-            'data-cy': 'user-id-input',
-          }}
-          select
-        >
-          <MenuItem key="0" value="0">Add Member</MenuItem>
-          {users.map((user) => (
-            <MenuItem key={user.id} value={user.id}>{user.name}</MenuItem>
-          ))}
-        </TextField>
-      </div>
-    </>
+    <TextField
+      name="user_id"
+      fullWidth
+      id="user-id-input"
+      value={newMember}
+      onChange={(event) => handleSubmit(event.target.value)}
+      variant="outlined"
+      type="string"
+      inputProps={{
+        'aria-label': 'user-id-input',
+        'data-cy': 'user-id-input',
+      }}
+      select
+    >
+      <MenuItem key="0" value="0">Add Member</MenuItem>
+      {users.map((user) => (
+        <MenuItem key={user.id} value={user.id}>{user.name}</MenuItem>
+      ))}
+    </TextField>
   );
 };
 
