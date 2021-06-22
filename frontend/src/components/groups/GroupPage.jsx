@@ -10,9 +10,12 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 
-import SideBar from './SideBar';
+import SideBarContent from './SideBar';
 import { LinkButton } from '../shared/Buttons';
 import groupsAPI from '../../helpers/api/groupsAPI';
+import Page from '../shared/layout/Page';
+import Main from '../shared/layout/Main';
+import SideBar from '../shared/layout/SideBar';
 import globalUseSyles from '../../globalUseStyles';
 
 // Route: /object_types
@@ -72,47 +75,45 @@ const GroupPage = ({ setIsLoading, setAlertProps, match }) => {
   };
 
   return (
-    <>
-      <Toolbar className={classes.header}>
-        <Breadcrumbs
-          separator={<NavigateNextIcon fontSize="small" />}
-          aria-label="breadcrumb"
-          component="div"
-          data-cy="page-title"
-        >
-          <Typography display="inline" variant="h6" component="h1">
-            Groups
-          </Typography>
-          <Typography display="inline" variant="h6" component="h1">
-            {groupName}
-          </Typography>
-        </Breadcrumbs>
-
-        <div>
-          <LinkButton
-            name="All Groups"
-            testName="all_groups_button"
-            text="All Groups"
-            light
-            type="button"
-            linkTo="/groups"
-          />
-        </div>
-      </Toolbar>
-
-      <Divider />
-
-      <Grid container className={classes.root}>
-        {/* SIDE BAR */}
-        <SideBar
+    <Page>
+      <SideBar>
+        <SideBarContent
           setIsLoading={setIsLoading}
           setAlertProps={setAlertProps}
           id={id}
           refresh={init}
         />
+      </SideBar>
+      <Main title={(
+        <Toolbar className={classes.header}>
+          <Breadcrumbs
+            separator={<NavigateNextIcon fontSize="small" />}
+            aria-label="breadcrumb"
+            component="div"
+            data-cy="page-title"
+          >
+            <Typography display="inline" variant="h6" component="h1">
+              Groups
+            </Typography>
+            <Typography display="inline" variant="h6" component="h1">
+              {groupName}
+            </Typography>
+          </Breadcrumbs>
 
-        {/* MAIN CONTENT */}
-        <Grid item xs={9} name="main-container" data-cy="main-container" overflow="visible">
+          <div>
+            <LinkButton
+              name="All Groups"
+              testName="all_groups_button"
+              text="All Groups"
+              light
+              type="button"
+              linkTo="/groups"
+            />
+          </div>
+        </Toolbar>
+      )}
+      >
+
           <div className={globalClasses.flexWrapper}>
             <div className={`${globalClasses.flex} ${globalClasses.flexTitle}`}>
               <Typography className={globalClasses.flexCol1}><b>Name</b></Typography>
@@ -139,9 +140,8 @@ const GroupPage = ({ setIsLoading, setAlertProps, match }) => {
               ''
             )}
           </div>
-        </Grid>
-      </Grid>
-    </>
+    </Main>
+    </Page>
   );
 };
 

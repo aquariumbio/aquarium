@@ -64,13 +64,6 @@ const SideBar = ({ setIsLoading, setAlertProps, id, refresh }) => {
 
   return (
     <>
-      <Grid
-        item
-        xs={3}
-        name="side-bar"
-        data-cy="side-bar"
-        className={classes.root}
-      >
         <div className={classes.wrapper}>
           <TextField
             name="user_id"
@@ -92,7 +85,6 @@ const SideBar = ({ setIsLoading, setAlertProps, id, refresh }) => {
             ))}
           </TextField>
         </div>
-      </Grid>
     </>
   );
 };
