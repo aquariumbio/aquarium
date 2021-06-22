@@ -433,7 +433,7 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, s
                               {item.location}
                             </div>
                             <div className={`${globalClasses.flexCol1} ${globalClasses.right}`}>
-                              {item.date.substr(0,10)}
+                              {item.date && item.date.substr(0,10)}
                             </div>
                             <div className={globalClasses.flexColAuto}>
                               <span className={`${globalClasses.pointer} ${item.location == 'deleted' ? globalClasses.hidden : globalClasses.visible}`} onClick={() => handleItemDiscard(item.item_id)}>&#128465;</span>

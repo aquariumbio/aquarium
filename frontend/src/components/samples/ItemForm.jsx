@@ -369,10 +369,10 @@ const ItemForm = ({ setIsLoading, setAlertProps, itemId, setItemId }) => {
       </Typography>
 
       <Typography className={`${classes.mb8} ${classes.mt16}`}>
-        Data
+        Data Associations
       </Typography>
       <Typography className={classes.mb8}>
-        TODO: Add Data
+        TODO: Add Data Associations
       </Typography>
 
       <Typography className={`${classes.mb8} ${classes.mt16}`}>
