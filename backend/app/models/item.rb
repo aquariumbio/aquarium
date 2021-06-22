@@ -34,15 +34,6 @@ class Item < ActiveRecord::Base
   # @option item[:object_type_id] [Int] the object type id
   # @option item[:sample_id] [Int] the sample id
   # return the item
-
-  # TODO: COLLECTIONS (NEW COLLECTION FROM THE SAMPLES PAGE)
-  # - location => bench (NOT SURE HOW TO ASSIGN IT TO A LOCATION LATER)
-  # - object_type_id => from form
-  # - sample_id => null
-  # - data => null
-  # - locator_id => null
-  # NOTE
-  # - assign a sample_id to a selection in a collection => creates a new item and assigns that item (plus adds  the part association)
   def self.create_from(item)
     # Read the parameters
     object_type_id = Input.int(item[:object_type_id])

@@ -2,15 +2,38 @@
 
 # plan_associations table
 class PartAssociation < ActiveRecord::Base
+  # TODO: add validations
+  # - check that row is valid
+  # - check that column is valid
+  # - check that collection_id is a collection
+  # - check that part_id is an item
 
-#       rows = object_type.rows.to_i
-#       columns = object_type.columns.to_i
-#
-#       rows = 1 if rows < 1
-#       columns = 12 if columns < 1
-#
-#       pa_new.rows = rows
-#       pa_new.columns = columns
-#       pa_new.save
+  # Create a part assocation
+  #
+  # @param item [Hash] the group
+  # @option item[:object_type_id] [Int] the object type id
+  # @option item[:sample_id] [Int] the sample id
+  # return the item
+  def self.create_from(part_association)
+    # Read the parameters
+    part_id = Input.int(part_association[:part_id])
+    collection_id = Input.int(part_association[:collection_id])
+    row = Input.int(part_association[:row])
+    column = Input.int(part_association[:column])
+
+    part_association_new = PartAssociation.new({
+      part_id: part_id,
+      collection_id: collection_id,
+      row: row,
+      column: column
+    })
+
+    valid = part_association_new.valid?
+    return false, part_association_new.errors if !valid
+
+    part_association_new.save
+
+    return part_association_new, false
+  end
 
 end

@@ -236,11 +236,11 @@ class Sample < ActiveRecord::Base
     # get items + collections from inventory
     # NOTES:
     # - collection_id could appear multilpe times
-    # - ignore discarded items in collections (inuse != -1)
+    # - ignore discarded items in collections (collection_id is null or collection_id is not null and inuse != -1)
     sql = "
       select *
       from view_inventories
-      where id = #{id} and inuse != -1
+      where id = #{id} and (collection_id is null or collection_id is not null and inuse != -1)
       order by collection_id is not null, collection_type, item_type, collection_id, item_id
     "
     inventory_data = Sample.find_by_sql sql
