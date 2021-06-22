@@ -16,6 +16,7 @@ import Grid from '@material-ui/core/Grid';
 import SideBar from './SideBar';
 import { LinkButton } from '../shared/Buttons';
 import wizardsAPI from '../../helpers/api/wizardsAPI';
+import globalUseSyles from '../../globalUseStyles';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -76,6 +77,7 @@ const useStyles = makeStyles((theme) => ({
 
 const WizardPage = ({ setIsLoading, setAlertProps, match }) => {
   const classes = useStyles();
+  const globalClasses = globalUseSyles();
   const history = useHistory();
   const id = match.params.id;
   const [wizard, setwizard] = useState({});
@@ -194,7 +196,7 @@ const WizardPage = ({ setIsLoading, setAlertProps, match }) => {
             <>
             {wizard.boxes.map((box) => (
               <>
-                <Link className={`${classes.pointer} ${classes.mr8}`} onClick={() => getBox(box)}>{box}</Link>
+                <Link className={`${globalClasses.pointer} ${classes.mr8}`} onClick={() => getBox(box)}>{box}</Link>
                 {' '}
               </>
             ))}
@@ -219,7 +221,7 @@ const WizardPage = ({ setIsLoading, setAlertProps, match }) => {
                 {items.map((item) => (
                   item.item_id ? (
                     <div className={`${classes.boxElement}`}>
-                      <Link className={`${classes.pointer}`} onClick={() => alert(`item ${item.item_id}`)}>{item.item_id}</Link>
+                      <Link className={`${globalClasses.pointer}`} onClick={() => alert(`item ${item.item_id}`)}>{item.item_id}</Link>
                     </div>
                   ) : (
                     <>

@@ -131,7 +131,7 @@ const GroupPage = ({ setIsLoading, setAlertProps, match }) => {
                   </Typography>
                   <Typography className={globalClasses.flexColAuto}>
                     {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
-                    <Link data-cy={`remove_${member.id}`} className={classes.pointer} onClick={() => handleRemove(member.id)}>Remove</Link>
+                    <Link data-cy={`remove_${member.id}`} className={globalClasses.pointer} onClick={() => handleRemove(member.id)}>Remove</Link>
                   </Typography>
                 </div>
               ))

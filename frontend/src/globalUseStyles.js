@@ -79,6 +79,7 @@ const globalUseStyles = makeStyles((theme) => ({
     minWidth: '0',
     visibility: 'hidden',
   },
+
   show: {
     display: 'block',
   },
