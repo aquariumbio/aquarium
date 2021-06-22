@@ -88,6 +88,22 @@ const globalUseStyles = makeStyles((theme) => ({
     display: 'none',
   },
 
+  visible: {
+    visibility: 'visible',
+  },
+
+  hidden: {
+    visibility: 'hidden',
+  },
+
+  relative: {
+    position: 'relative',
+  },
+
+  absolute: {
+    position: 'absolute',
+  },
+
   pointer: {
     cursor: 'pointer',
   },

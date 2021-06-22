@@ -191,31 +191,28 @@ const SampleCards = ({ handlePage, handleClick, count, page, pages, samples }) =
 
   return (
     <>
-      <Typography>
+      <div className={classes.center}>
         <p>
-          <div className={classes.absolute}>
-            {count} Samples
-          </div>
-
-          <div className={classes.center}>
-            <span className={classes.mr16}>
-              <button className={`${classes.pointer} ${page == 1 ? classes.hidden : classes.visible}`} onClick={() => handlePage(1)}>First</button>
-            </span>
-            <span className={classes.mr16}>
-              <button className={`${classes.pointer} ${page == 1 ? classes.hidden : classes.visible}`} onClick={() => handlePage(page-1)}>&lt; Prev</button>
-            </span>
-            <span className={`${classes.width200} ${pages == 0 ? classes.hidden : classes.visible}`}>
-              Page {page} of {pages}
-            </span>
-            <span className={classes.ml16}>
-              <button className={`${classes.pointer} ${page >= pages ? classes.hidden : classes.visible}`} onClick={() => handlePage(page+1)}>Next ></button>
-            </span>
-            <span className={classes.ml16}>
-              <button className={`${classes.pointer} ${page >= pages ? classes.hidden : classes.visible}`} onClick={() => handlePage(pages)}>Last</button>
-            </span>
-          </div>
+          {count} Samples
         </p>
-      </Typography>
+        <p>
+          <span className={classes.mr16}>
+            <button className={`${classes.pointer} ${page == 1 ? classes.hidden : classes.visible}`} onClick={() => handlePage(1)}>First</button>
+          </span>
+          <span className={classes.mr16}>
+            <button className={`${classes.pointer} ${page == 1 ? classes.hidden : classes.visible}`} onClick={() => handlePage(page-1)}>&lt; Prev</button>
+          </span>
+          <span className={`${classes.width200} ${pages == 0 ? classes.hidden : classes.visible}`}>
+            Page {page} of {pages}
+          </span>
+          <span className={classes.ml16}>
+            <button className={`${classes.pointer} ${page >= pages ? classes.hidden : classes.visible}`} onClick={() => handlePage(page+1)}>Next ></button>
+          </span>
+          <span className={classes.ml16}>
+            <button className={`${classes.pointer} ${page >= pages ? classes.hidden : classes.visible}`} onClick={() => handlePage(pages)}>Last</button>
+          </span>
+        </p>
+      </div>
 
       <div className={classes.flexCardWrapper}>
         <div className={classes.flex}>

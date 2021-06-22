@@ -19,6 +19,9 @@ import SampleCard from './SampleCard';
 import SampleForm from './SampleForm';
 import CollectionForm from './CollectionForm';
 import ItemForm from './ItemForm';
+import globalUseSyles from '../../globalUseStyles';
+import Page from '../shared/layout/Page';
+import Main from '../shared/layout/Main';
 
 // Route: /object_types
 // Linked in LeftHamburgeMenu
@@ -193,6 +196,7 @@ const useStyles = makeStyles(() => ({
 // eslint-disable-next-line no-unused-vars
 const SamplesPage = ({ setIsLoading, setAlertProps }) => {
   const classes = useStyles();
+  const globalClasses = globalUseSyles();
 
   const [sampleId,setSampleId] = useState(0);
   const [collectionId,setCollectionId] = useState(0);
@@ -301,8 +305,8 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
   }
 
   return (
-    <>
-      <div className={classes.mt16}>
+    <Page>
+      <Main title={(
         <div className={`${classes.header} ${sampleId + sampleTypeId + collectionTypeId != 0 ? classes.hidden : '' }`}>
           <div className={classes.subheader}>
             <Typography className={`${classes.searchBox} ${classes.mr24}`}>
@@ -411,37 +415,36 @@ const SamplesPage = ({ setIsLoading, setAlertProps }) => {
             </Typography>
           </div>
         </div>
-      </div>
-
-      <Divider />
-
-      {/* display one of
-      sample pages
-      - SampleCards (search page) <== sampleId == 0
-      - SampleCard (individual sample page) <== sampleId != 0
-      sub-forms
-      - SampleForm (sample form) <== sampleTypeId != 0
-      - ItemForm (item form if item is a single item) <== itemId != 0
-      - Collectionform (item form if item is a collection) <== collectionTypeId != 0
-      */}
-      {sampleTypeId != 0 ? (
-        <SampleForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} sampleId={sampleId} sampleTypeId={sampleTypeId} setSampleTypeId={setSampleTypeId}/>
-      ) : (
-        collectionTypeId != 0 ? (
-          <CollectionForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} collectionId={collectionId} collectionTypeId={collectionTypeId} setCollectionTypeId={setCollectionTypeId}/>
+      )}
+      >
+        {/* display one of
+        sample pages
+        - SampleCards (search page) <== sampleId == 0
+        - SampleCard (individual sample page) <== sampleId != 0
+        sub-forms
+        - SampleForm (sample form) <== sampleTypeId != 0
+        - ItemForm (item form if item is a single item) <== itemId != 0
+        - Collectionform (item form if item is a collection) <== collectionTypeId != 0
+        */}
+        {sampleTypeId != 0 ? (
+          <SampleForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} sampleId={sampleId} sampleTypeId={sampleTypeId} setSampleTypeId={setSampleTypeId}/>
         ) : (
-          itemId != 0 ? (
-            <ItemForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} itemId={itemId} setItemId={setItemId}/>
+          collectionTypeId != 0 ? (
+            <CollectionForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} collectionId={collectionId} collectionTypeId={collectionTypeId} setCollectionTypeId={setCollectionTypeId}/>
           ) : (
-            sampleId != 0 ? (
-              <SampleCard sampleId={sampleId} setSampleId={setSampleId} setSampleTypeId={setSampleTypeId} setCollectionId={setCollectionId} setCollectionTypeId={setCollectionTypeId} setItemId={setItemId}/>
+            itemId != 0 ? (
+              <ItemForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} itemId={itemId} setItemId={setItemId}/>
             ) : (
-              <SampleCards handlePage={handlePage} handleClick={handleClick} count={count} page={page} pages={pages} samples={samples}/>
+              sampleId != 0 ? (
+                <SampleCard sampleId={sampleId} setSampleId={setSampleId} setSampleTypeId={setSampleTypeId} setCollectionId={setCollectionId} setCollectionTypeId={setCollectionTypeId} setItemId={setItemId}/>
+              ) : (
+                <SampleCards handlePage={handlePage} handleClick={handleClick} count={count} page={page} pages={pages} samples={samples}/>
+              )
             )
           )
-        )
-      )}
-    </>
+        )}
+      </Main>
+    </Page>
   );
 };
 
