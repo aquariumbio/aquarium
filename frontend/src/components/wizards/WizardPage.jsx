@@ -16,6 +16,8 @@ import Grid from '@material-ui/core/Grid';
 import SideBar from './SideBar';
 import { LinkButton } from '../shared/Buttons';
 import wizardsAPI from '../../helpers/api/wizardsAPI';
+import Page from '../shared/layout/Page';
+import Main from '../shared/layout/Main';
 import globalUseSyles from '../../globalUseStyles';
 
 const useStyles = makeStyles((theme) => ({
@@ -114,116 +116,117 @@ const WizardPage = ({ setIsLoading, setAlertProps, match }) => {
   }
 
   return (
-    <>
-      <Toolbar className={classes.header}>
-        <Breadcrumbs
-          separator={<NavigateNextIcon fontSize="small" />}
-          aria-label="breadcrumb"
-          component="div"
-          data-cy="page-title"
-        >
-          <Typography display="inline" variant="h6" component="h1">
-            Wizards
-          </Typography>
-          <Typography display="inline" variant="h6" component="h1">
-            {wizard ? wizard.name : ''}
-          </Typography>
-        </Breadcrumbs>
+    <Page>
+      <Main title={(
+        <Toolbar className={classes.header}>
+          <Breadcrumbs
+            separator={<NavigateNextIcon fontSize="small" />}
+            aria-label="breadcrumb"
+            component="div"
+            data-cy="page-title"
+          >
+            <Typography display="inline" variant="h6" component="h1">
+              Wizards
+            </Typography>
+            <Typography display="inline" variant="h6" component="h1">
+              {wizard ? wizard.name : ''}
+            </Typography>
+          </Breadcrumbs>
 
-        <div>
-          <LinkButton
-            name="Edit"
-            testName="edit_button"
-            text="Edit"
-            light
-            type="button"
-            linkTo={`/wizards/${id}/edit`}
+          <div>
+            <LinkButton
+              name="Edit"
+              testName="edit_button"
+              text="Edit"
+              light
+              type="button"
+              linkTo={`/wizards/${id}/edit`}
+            />
+
+            <LinkButton
+              name="All Wizards"
+              testName="all_wizards_button"
+              text="All Wizards"
+              light
+              type="button"
+              linkTo="/wizards"
+            />
+          </div>
+        </Toolbar>
+      )}
+      >
+        <Grid container className={classes.root}>
+          {/* SIDE BAR */}
+          <SideBar
+            setIsLoading={setIsLoading}
+            setAlertProps={setAlertProps}
+            wizard={wizard}
           />
 
-          <LinkButton
-            name="All Wizards"
-            testName="all_wizards_button"
-            text="All Wizards"
-            light
-            type="button"
-            linkTo="/wizards"
-          />
-        </div>
-      </Toolbar>
+          {/* MAIN CONTENT */}
 
-      <Divider />
+          <Grid
+            item
+            xs={4}
+            className={`${classes.root} ${globalClasses.wrapper}`}
+          >
+            <Typography variant="h5">
+              {boxLabel} managed by {wizard ? wizard.name : ''}
+            </Typography>
 
-      <Grid container className={classes.root}>
-        {/* SIDE BAR */}
-        <SideBar
-          setIsLoading={setIsLoading}
-          setAlertProps={setAlertProps}
-          wizard={wizard}
-        />
-
-        {/* MAIN CONTENT */}
-
-        <Grid
-          item
-          xs={4}
-          className={`${classes.root} ${globalClasses.wrapper}`}
-        >
-          <Typography variant="h5">
-            {boxLabel} managed by {wizard ? wizard.name : ''}
-          </Typography>
-
+            <p>
+              {wizard.specification ? renderRanges(JSON.parse(wizard.specification)) : ''}
+            </p>
           <p>
-            {wizard.specification ? renderRanges(JSON.parse(wizard.specification)) : ''}
-          </p>
-        <p>
-          {wizard.boxes ? (
-            <>
-            {wizard.boxes.map((box) => (
+            {wizard.boxes ? (
               <>
-                <Link className={`${globalClasses.pointer} ${classes.mr8}`} onClick={() => getBox(box)}>{box}</Link>
-                {' '}
-              </>
-            ))}
-            </>
-          ) : (
-            'loading...'
-          )}
-        </p>
-        </Grid>
-
-        <Grid
-          item
-          xs={4}
-          className={`${classes.root} ${globalClasses.wrapper}`}
-        >
-          <Typography variant="h5">
-            {thisBox}&nbsp;
-          </Typography>
-          <p>
-            {items ? (
-              <>
-                {items.map((item) => (
-                  item.item_id ? (
-                    <div className={`${classes.boxElement}`}>
-                      <Link className={`${globalClasses.pointer}`} onClick={() => alert(`item ${item.item_id}`)}>{item.item_id}</Link>
-                    </div>
-                  ) : (
-                    <>
-                    <div className={`${classes.boxElement} ${classes.backgroundGray}`}>
-                      {item.number}
-                    </div>
-                    </>
-                  )
-                ))}
+              {wizard.boxes.map((box) => (
+                <>
+                  <Link className={`${globalClasses.pointer} ${classes.mr8}`} onClick={() => getBox(box)}>{box}</Link>
+                  {' '}
+                </>
+              ))}
               </>
             ) : (
               'loading...'
             )}
-            <div className={`${classes.boxClear}`}></div>
           </p>
+          </Grid>
+
+          <Grid
+            item
+            xs={4}
+            className={`${classes.root} ${globalClasses.wrapper}`}
+          >
+            <Typography variant="h5">
+              {thisBox}&nbsp;
+            </Typography>
+            <p>
+              {items ? (
+                <>
+                  {items.map((item) => (
+                    item.item_id ? (
+                      <div className={`${classes.boxElement}`}>
+                        <Link className={`${globalClasses.pointer}`} onClick={() => alert(`item ${item.item_id}`)}>{item.item_id}</Link>
+                      </div>
+                    ) : (
+                      <>
+                      <div className={`${classes.boxElement} ${classes.backgroundGray}`}>
+                        {item.number}
+                      </div>
+                      </>
+                    )
+                  ))}
+                </>
+              ) : (
+                'loading...'
+              )}
+              <div className={`${classes.boxClear}`}></div>
+            </p>
+          </Grid>
         </Grid>
-      </Grid>
-    </>
+      </Main>
+    </Page>
   );
 };
 

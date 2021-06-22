@@ -7,8 +7,6 @@ import { makeStyles } from '@material-ui/core';
 import Link from '@material-ui/core/Link';
 import wizardsAPI from '../../helpers/api/wizardsAPI';
 import globalUseSyles from '../../globalUseStyles';
-import Page from '../shared/layout/Page';
-import Main from '../shared/layout/Main';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -63,49 +61,37 @@ const ShowWizards = ({ wizards }) => {
   };
 
   return (
-    <Page>
-      <Main title={(
-        <div className={`${globalClasses.flex} ${globalClasses.flexTitle}`}>
-          <Typography className={globalClasses.flexCol1}><b>Name</b></Typography>
-          <Typography className={globalClasses.flexCol3}><b>Description</b></Typography>
-          <Typography className={globalClasses.flexCol2}><b>Form</b></Typography>
-          <Typography className={globalClasses.flexCol1}><b>Ranges</b></Typography>
-          <Typography className={globalClasses.flexColAutoHidden}>Edit</Typography>
-          <Typography className={globalClasses.flexColAutoHidden}>Delete</Typography>
+    <>
+      {wizards.map((wizard) => (
+        <div className={`${globalClasses.flex} ${globalClasses.flexRow}`} key={`object_${wizard.id}`}>
+          <Typography className={globalClasses.flexCol1}>
+            {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
+            <Link data-cy={`show_${wizard.id}`} component={RouterLink} to={`/wizards/${wizard.id}/show`}>{wizard.name}</Link>
+          </Typography>
+
+          <Typography className={globalClasses.flexCol3}>
+            {wizard.description}
+          </Typography>
+
+          <Typography className={globalClasses.flexCol2}>
+            {renderForm(JSON.parse(wizard.specification))}
+          </Typography>
+
+          <Typography className={globalClasses.flexCol1}>
+            {renderRanges(JSON.parse(wizard.specification))}
+          </Typography>
+
+          <Typography className={globalClasses.flexColAuto}>
+            <Link data-cy={`edit_${wizard.id}`} component={RouterLink} to={`/wizards/${wizard.id}/edit`}>Edit</Link>
+          </Typography>
+
+          <Typography className={globalClasses.flexColAuto}>
+            {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
+            <Link data-cy={`delete_${wizard.id}`} className={globalClasses.pointer} onClick={() => handleDelete(wizard)}>Delete</Link>
+          </Typography>
         </div>
-      )}
-      >
-        {wizards.map((wizard) => (
-          <div className={`${globalClasses.flex} ${globalClasses.flexRow}`} key={`object_${wizard.id}`}>
-            <Typography className={globalClasses.flexCol1}>
-              {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
-              <Link data-cy={`show_${wizard.id}`} component={RouterLink} to={`/wizards/${wizard.id}/show`}>{wizard.name}</Link>
-            </Typography>
-
-            <Typography className={globalClasses.flexCol3}>
-              {wizard.description}
-            </Typography>
-
-            <Typography className={globalClasses.flexCol2}>
-              {renderForm(JSON.parse(wizard.specification))}
-            </Typography>
-
-            <Typography className={globalClasses.flexCol1}>
-              {renderRanges(JSON.parse(wizard.specification))}
-            </Typography>
-
-            <Typography className={globalClasses.flexColAuto}>
-              <Link data-cy={`edit_${wizard.id}`} component={RouterLink} to={`/wizards/${wizard.id}/edit`}>Edit</Link>
-            </Typography>
-
-            <Typography className={globalClasses.flexColAuto}>
-              {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
-              <Link data-cy={`delete_${wizard.id}`} className={globalClasses.pointer} onClick={() => handleDelete(wizard)}>Delete</Link>
-            </Typography>
-          </div>
-        ))}
-      </Main>
-    </Page>
+      ))}
+    </>
   );
 };
 

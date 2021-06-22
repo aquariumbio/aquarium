@@ -16,6 +16,9 @@ import ShowWizards from './ShowWizards';
 import { LinkButton } from '../shared/Buttons';
 import wizardsAPI from '../../helpers/api/wizardsAPI';
 import Alphabet from '../shared/Alphabet';
+import Page from '../shared/layout/Page';
+import Main from '../shared/layout/Main';
+import globalUseSyles from '../../globalUseStyles';
 
 // Route: /object_types
 // Linked in LeftHamburgeMenu
@@ -39,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
 // eslint-disable-next-line no-unused-vars
 const WizardsPage = ({ setIsLoading, setAlertProps, match }) => {
   const classes = useStyles();
+  const globalClasses = globalUseSyles();
   const history = useHistory();
 
   // const [wizardLetters, setWizardLetters] = useState([]);
@@ -105,40 +109,54 @@ const WizardsPage = ({ setIsLoading, setAlertProps, match }) => {
   };
 
   return (
-    <>
-      <Toolbar className={classes.header}>
-        <Breadcrumbs
-          separator={<NavigateNextIcon fontSize="small" />}
-          aria-label="breadcrumb"
-          component="div"
-          data-cy="page-title"
-        >
-          <Typography display="inline" variant="h6" component="h1">
-            Wizards
-          </Typography>
-          <Typography display="inline" variant="h6" component="h1">
-            {currentLetter}
-          </Typography>
-        </Breadcrumbs>
+    <Page>
+      <Main title={(
+        <>
+          <Toolbar className={classes.header}>
+            <Breadcrumbs
+              separator={<NavigateNextIcon fontSize="small" />}
+              aria-label="breadcrumb"
+              component="div"
+              data-cy="page-title"
+            >
+              <Typography display="inline" variant="h6" component="h1">
+                Wizards
+              </Typography>
+              <Typography display="inline" variant="h6" component="h1">
+                {currentLetter}
+              </Typography>
+            </Breadcrumbs>
 
-        <div>
-          <LinkButton
-            name="New Wizard"
-            testName="new_wizard_btn"
-            text="New"
-            dark
-            type="button"
-            linkTo="/wizards/new"
-          />
-        </div>
-      </Toolbar>
+            <div>
+              <LinkButton
+                name="New Wizard"
+                testName="new_wizard_btn"
+                text="New"
+                dark
+                type="button"
+                linkTo="/wizards/new"
+              />
+            </div>
+          </Toolbar>
 
-      <Alphabet fetchLetter={fetchLetter} fetchAll={fetchAll} />
+          <Alphabet fetchLetter={fetchLetter} fetchAll={fetchAll} />
 
-      {currentWizards
-        ? <ShowWizards wizards={currentWizards} />
-        : ''}
-    </>
+          <div className={`${globalClasses.flex} ${globalClasses.flexTitle}`}>
+            <Typography className={globalClasses.flexCol1}><b>Name</b></Typography>
+            <Typography className={globalClasses.flexCol3}><b>Description</b></Typography>
+            <Typography className={globalClasses.flexCol2}><b>Form</b></Typography>
+            <Typography className={globalClasses.flexCol1}><b>Ranges</b></Typography>
+            <Typography className={globalClasses.flexColAutoHidden}>Edit</Typography>
+            <Typography className={globalClasses.flexColAutoHidden}>Delete</Typography>
+          </div>
+        </>
+      )}
+      >
+        {currentWizards
+          ? <ShowWizards wizards={currentWizards} />
+          : ''}
+      </Main>
+    </Page>
   );
 };
 
