@@ -14,6 +14,7 @@ import samplesAPI from '../../helpers/api/samplesAPI';
 import usersAPI from '../../helpers/api/usersAPI';
 import objectsAPI from '../../helpers/api/objectsAPI';
 import SampleCard from './SampleCard';
+import globalUseSyles from '../../globalUseStyles';
 
 // Route: /object_types
 // Linked in LeftHamburgeMenu
@@ -37,14 +38,6 @@ const useStyles = makeStyles(() => ({
   /* flex */
   flexCardWrapper: {
     margin: '0 -1.5%',
-  },
-
-  flex: {
-    display: '-ms-flexbox',
-    // eslint-disable-next-line no-dupe-keys
-    display: 'flex',
-    position: 'relative',
-    flexFlow: 'wrap',
   },
 
   flexCard25: {
@@ -80,30 +73,6 @@ const useStyles = makeStyles(() => ({
     color: '#333',
   },
 
-  show: {
-    display: 'block',
-  },
-
-  hide: {
-    display: 'none',
-  },
-
-  visible: {
-    visibility: 'visible',
-  },
-
-  hidden: {
-    visibility: 'hidden',
-  },
-
-  pointer: {
-    cursor: 'pointer',
-  },
-
-  absolute: {
-    position: 'absolute',
-  },
-
   searchBox: {
     width: '600px',
     marginRight: '24px',
@@ -121,18 +90,6 @@ const useStyles = makeStyles(() => ({
 
   mr16: {
     marginRight: '16px',
-  },
-
-  mr24: {
-    marginRight: '24px',
-  },
-
-  mt16: {
-    marginTop: '16px',
-  },
-
-  center: {
-    textAlign: 'center',
   },
 
   logoImage: {
@@ -168,10 +125,6 @@ const useStyles = makeStyles(() => ({
     marginBottom: '4px',
   },
 
-  mb8: {
-    marginBottom: '8px',
-  },
-
   mb16: {
     marginBottom: '16px',
   },
@@ -188,34 +141,35 @@ const useStyles = makeStyles(() => ({
 // eslint-disable-next-line no-unused-vars
 const SampleCards = ({ handlePage, handleClick, count, page, pages, samples }) => {
   const classes = useStyles();
+  const globalClasses = globalUseSyles();
 
   return (
     <>
-      <div className={classes.center}>
+      <div className={globalClasses.center}>
         <p>
           {count} Samples
         </p>
         <p>
           <span className={classes.mr16}>
-            <button className={`${classes.pointer} ${page == 1 ? classes.hidden : classes.visible}`} onClick={() => handlePage(1)}>First</button>
+            <button className={`${globalClasses.pointer} ${page == 1 ? globalClasses.hidden : globalClasses.visible}`} onClick={() => handlePage(1)}>First</button>
           </span>
           <span className={classes.mr16}>
-            <button className={`${classes.pointer} ${page == 1 ? classes.hidden : classes.visible}`} onClick={() => handlePage(page-1)}>&lt; Prev</button>
+            <button className={`${globalClasses.pointer} ${page == 1 ? globalClasses.hidden : globalClasses.visible}`} onClick={() => handlePage(page-1)}>&lt; Prev</button>
           </span>
-          <span className={`${classes.width200} ${pages == 0 ? classes.hidden : classes.visible}`}>
+          <span className={`${classes.width200} ${pages == 0 ? globalClasses.hidden : globalClasses.visible}`}>
             Page {page} of {pages}
           </span>
           <span className={classes.ml16}>
-            <button className={`${classes.pointer} ${page >= pages ? classes.hidden : classes.visible}`} onClick={() => handlePage(page+1)}>Next ></button>
+            <button className={`${globalClasses.pointer} ${page >= pages ? globalClasses.hidden : globalClasses.visible}`} onClick={() => handlePage(page+1)}>Next ></button>
           </span>
           <span className={classes.ml16}>
-            <button className={`${classes.pointer} ${page >= pages ? classes.hidden : classes.visible}`} onClick={() => handlePage(pages)}>Last</button>
+            <button className={`${globalClasses.pointer} ${page >= pages ? globalClasses.hidden : globalClasses.visible}`} onClick={() => handlePage(pages)}>Last</button>
           </span>
         </p>
       </div>
 
       <div className={classes.flexCardWrapper}>
-        <div className={classes.flex}>
+        <div className={globalClasses.flex}>
           {samples.map((sample) => (
             <div className={classes.flexCard25} cy={`sample-${sample.id}`}>
               <div className={classes.cardScroll}>
@@ -258,12 +212,12 @@ const SampleCards = ({ handlePage, handleClick, count, page, pages, samples }) =
                     <div className={classes.flexCardText}>
                       {k.type == 'sample' ? (
                         <>
-                          {k.child_sample_id ? <Link className={classes.pointer} onClick={() => handleClick(k.child_sample_id)}>{k.child_sample_id}: {k.child_sample_name}</Link> : <span>-</span>}
+                          {k.child_sample_id ? <Link className={globalClasses.pointer} onClick={() => handleClick(k.child_sample_id)}>{k.child_sample_id}: {k.child_sample_name}</Link> : <span>-</span>}
                         </>
                       ) : (
                         k.type == 'url' ? (
                           <>
-                            {k.value ? <Link className={classes.pointer} onClick={() => window.open(k.value, "_blank")}>{k.value}</Link> : <span>-</span>}
+                            {k.value ? <Link className={globalClasses.pointer} onClick={() => window.open(k.value, "_blank")}>{k.value}</Link> : <span>-</span>}
                           </>
                         ) : (
                           <>
