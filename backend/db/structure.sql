@@ -183,7 +183,7 @@ CREATE TABLE `field_types` (
   PRIMARY KEY (`id`),
   KEY `index_field_types_on_parent_class_and_parent_id` (`parent_class`,`parent_id`) USING BTREE,
   KEY `index_field_types_on_sample_type_id` (`parent_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=23778 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=23781 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `field_values`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -214,7 +214,7 @@ CREATE TABLE `field_values` (
   CONSTRAINT `fk_rails_319b222007` FOREIGN KEY (`child_item_id`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_50fa557e81` FOREIGN KEY (`allowable_field_type_id`) REFERENCES `allowable_field_types` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_e04e5b0273` FOREIGN KEY (`child_sample_id`) REFERENCES `samples` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=1241899 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1241911 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `folder_contents`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -295,7 +295,7 @@ CREATE TABLE `items` (
   CONSTRAINT `fk_rails_6b7d1f696e` FOREIGN KEY (`sample_id`) REFERENCES `samples` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_a6ef7e6462` FOREIGN KEY (`object_type_id`) REFERENCES `object_types` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_d02c2a2df1` FOREIGN KEY (`locator_id`) REFERENCES `locators` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=513657 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=513709 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `job_assignment_logs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -446,7 +446,7 @@ CREATE TABLE `object_types` (
   `rows` int(11) DEFAULT NULL,
   `columns` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=867 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=868 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `operation_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -521,11 +521,11 @@ CREATE TABLE `part_associations` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `index_part_associations_on_collection_id_and_row_and_column` (`collection_id`,`row`,`column`),
   KEY `index_part_associations_on_part_id` (`part_id`) USING BTREE,
+  KEY `index_part_associations_on_collection_id` (`collection_id`),
   CONSTRAINT `fk_rails_39a9c3d5bb` FOREIGN KEY (`part_id`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_f889cf647d` FOREIGN KEY (`collection_id`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=240065 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=240079 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -587,7 +587,7 @@ CREATE TABLE `sample_types` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `samples`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -608,7 +608,7 @@ CREATE TABLE `samples` (
   KEY `index_samples_on_user_id` (`user_id`) USING BTREE,
   CONSTRAINT `fk_rails_8e0800c2e2` FOREIGN KEY (`sample_type_id`) REFERENCES `sample_types` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_d699eb2564` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=36439 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=36441 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `schema_migrations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -728,6 +728,7 @@ SET character_set_client = utf8;
   `item_id` tinyint NOT NULL,
   `item_location` tinyint NOT NULL,
   `item_date` tinyint NOT NULL,
+  `inuse` tinyint NOT NULL,
   `item_type_id` tinyint NOT NULL,
   `item_type` tinyint NOT NULL,
   `collection_id` tinyint NOT NULL,
@@ -871,12 +872,12 @@ CREATE TABLE `workers` (
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 SET character_set_client      = latin1 */;
+/*!50001 SET character_set_results     = latin1 */;
+/*!50001 SET collation_connection      = latin1_swedish_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`aquarium`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `view_inventories` AS select `s`.`id` AS `id`,`i`.`id` AS `item_id`,`i`.`location` AS `item_location`,`i`.`created_at` AS `item_date`,`ot`.`id` AS `item_type_id`,`ot`.`name` AS `item_type`,`pa`.`collection_id` AS `collection_id`,`pa`.`row` AS `row`,`pa`.`column` AS `column`,`ii`.`location` AS `collection_location`,`ii`.`created_at` AS `collection_date`,`ott`.`id` AS `collection_type_id`,`ott`.`name` AS `collection_type` from (((((`samples` `s` join `items` `i` on((`i`.`sample_id` = `s`.`id`))) join `object_types` `ot` on(((`ot`.`id` = `i`.`object_type_id`) and (`ot`.`handler` = 'sample_container')))) left join `part_associations` `pa` on((`pa`.`part_id` = `i`.`id`))) left join `items` `ii` on((`ii`.`id` = `pa`.`collection_id`))) left join `object_types` `ott` on((`ott`.`id` = `ii`.`object_type_id`))) */;
+/*!50001 VIEW `view_inventories` AS select `s`.`id` AS `id`,`i`.`id` AS `item_id`,`i`.`location` AS `item_location`,`i`.`created_at` AS `item_date`,`i`.`inuse` AS `inuse`,`ot`.`id` AS `item_type_id`,`ot`.`name` AS `item_type`,`pa`.`collection_id` AS `collection_id`,`pa`.`row` AS `row`,`pa`.`column` AS `column`,`ii`.`location` AS `collection_location`,`ii`.`created_at` AS `collection_date`,`ott`.`id` AS `collection_type_id`,`ott`.`name` AS `collection_type` from (((((`samples` `s` join `items` `i` on((`i`.`sample_id` = `s`.`id`))) join `object_types` `ot` on(((`ot`.`id` = `i`.`object_type_id`) and (`ot`.`handler` = 'sample_container')))) left join `part_associations` `pa` on((`pa`.`part_id` = `i`.`id`))) left join `items` `ii` on((`ii`.`id` = `pa`.`collection_id`))) left join `object_types` `ott` on((`ott`.`id` = `ii`.`object_type_id`))) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;

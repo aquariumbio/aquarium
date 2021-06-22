@@ -80,6 +80,13 @@ const globalUseStyles = makeStyles((theme) => ({
     visibility: 'hidden',
   },
 
+  flexColFixed40: {
+    width: '40px',
+    paddingRight: '8px',
+    paddingLeft: '8px',
+    minWidth: '0',
+  },
+
   show: {
     display: 'block',
   },
@@ -108,8 +115,24 @@ const globalUseStyles = makeStyles((theme) => ({
     cursor: 'pointer',
   },
 
+  pointer_no_hover: {
+    cursor: 'pointer',
+
+    '&:hover': {
+      textDecoration: 'none',
+    },
+  },
+
   wrapper: {
     padding: '0 24px',
+  },
+
+  center: {
+    textAlign: 'center',
+  },
+
+  right: {
+    textAlign: 'right',
   },
 
 }));

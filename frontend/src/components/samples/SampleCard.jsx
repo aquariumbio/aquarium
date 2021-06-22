@@ -22,6 +22,7 @@ import { StandardButton } from '../shared/Buttons';
 import samplesAPI from '../../helpers/api/samplesAPI';
 import objectsAPI from '../../helpers/api/objectsAPI';
 import itemsAPI from '../../helpers/api/itemsAPI';
+import globalUseSyles from '../../globalUseStyles';
 
 // Route: /object_types
 // Linked in LeftHamburgeMenu
@@ -32,18 +33,7 @@ const useStyles = makeStyles(() => ({
     padding: '16px',
   },
 
-  /* flex */
-  flexWrapper: {
-    padding: '0 16px',
-  },
-
-  flex: {
-    display: '-ms-flexbox',
-    // eslint-disable-next-line no-dupe-keys
-    display: 'flex',
-    position: 'relative',
-    overflowWrap: 'break-word',
-  },
+  /* CUSTOM FLEX */
 
   /* Title row */
   flexTitle: {
@@ -92,87 +82,8 @@ const useStyles = makeStyles(() => ({
     borderRight: '1px solid  #ccc',
   },
 
-  /* Column definiions */
-  flexCol1: {
-    flex: '1 1 0',
-    paddingRight: '8px',
-    paddingLeft: '8px',
-    minWidth: '0',
-  },
-
-  flexCol2: {
-    flex: '2 1 0',
-    paddingRight: '8px',
-    paddingLeft: '8px',
-    minWidth: '0',
-  },
-
-  flexCol3: {
-    flex: '3 1 0',
-    paddingRight: '8px',
-    paddingLeft: '8px',
-    minWidth: '0',
-  },
-
-  flexCol4: {
-    flex: '4 1 0',
-    paddingRight: '8px',
-    paddingLeft: '8px',
-    minWidth: '0',
-  },
-
-  flexColAuto: {
-    width: 'auto',
-    paddingRight: '24px',
-    paddingLeft: '24px',
-    minWidth: '0',
-  },
-
-  flexColFixed40: {
-    width: '40px',
-    paddingRight: '8px',
-    paddingLeft: '8px',
-    minWidth: '0',
-  },
-
-  show: {
-    display: 'block',
-  },
-
-  hide: {
-    display: 'none',
-  },
-
-  visible: {
-    visibility: 'visible',
-  },
-
-  hidden: {
-    visibility: 'hidden',
-  },
-
   mt16: {
     marginTop: '16px',
-  },
-
-  center: {
-    textAlign: 'center',
-  },
-
-  right: {
-    textAlign: 'right',
-  },
-
-  pointer: {
-    cursor: 'pointer',
-  },
-
-  pointer_no_hover: {
-    cursor: 'pointer',
-
-    '&:hover': {
-      textDecoration: 'none',
-    }
   },
 
   root: {
@@ -185,29 +96,7 @@ const useStyles = makeStyles(() => ({
     alignItems: 'center',
   },
 
-  /* flex */
-  flexCardWrapper: {
-    margin: '0 -1.5%',
-  },
-
-  flexCard25: {
-    flex: '0 0 22%',
-    paddingRight: '1.5%',
-    marginLeft: '1.5%',
-    minWidth: '0',
-    border: '1px solid black',
-    padding: '8px',
-    marginBottom: '40px',
-    fontSize: '12px',
-    cursor: 'pointer',
-    height: '400px',
-    overflowY: 'scroll',
-    position: 'relative',
-
-    '&:hover': {
-      backgroundColor: '#eee',
-    },
-  },
+  /* custom flex */
 
   flexCardLabel: {
     fontWeight: 'bold',
@@ -248,22 +137,6 @@ const useStyles = makeStyles(() => ({
     marginBottom: '4px',
   },
 
-  mb4: {
-    marginBottom: '4px',
-  },
-
-  mb8: {
-    marginBottom: '8px',
-  },
-
-  mb16: {
-    marginBottom: '16px',
-  },
-
-  mr16: {
-    marginRight: '16px',
-  },
-
   textBold: {
     fontWeight: 'bold',
   },
@@ -272,16 +145,16 @@ const useStyles = makeStyles(() => ({
     color: '#808080',
   },
 
-  relative: {
-    position: 'relative',
+  mb4: {
+    marginBottom: '4px',
   },
 
-  absolute: {
-    position: 'absolute',
+  mb16: {
+    marginBottom: '16px',
   },
 
-  mtm7: {
-    marginTop: '-7px',
+  mr16: {
+    marginRight: '16px',
   },
 
   mtm8: {
@@ -293,17 +166,11 @@ const useStyles = makeStyles(() => ({
 // eslint-disable-next-line no-unused-vars
 const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, setCollectionTypeId, setItemId }) => {
   const classes = useStyles();
+  const globalClasses = globalUseSyles();
   const history = useHistory();
 
   const [sample, setSample] = useState();
   const [inventory, setInventory] = useState([]);
-  // const [items, setItems] = useState([1,2,3]);
-  // TODO: change this from true / false to show / hide
-  const [showDeleted, setShowDeleted] = useState(false);
-
-  const handleChange = async () => {
-    setShowDeleted(!showDeleted);
-  };
 
   const [state, setState] = useState({});
   const [objectTypes, setObjectTypes] = useState([{id:1, name:'name1'},{id:2, name:'name2'}]);
@@ -381,7 +248,7 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, s
     <>
 
       <Typography>
-        <p className={classes.right}>
+        <p className={globalClasses.right}>
           <Button className={classes.mr16} variant="outlined" onClick={() => {setSampleTypeId(sample.sample_type_id)}}>Edit</Button>
           <Button variant="outlined" onClick={() => {setSampleId(0)}}>Close</Button>
         </p>
@@ -395,7 +262,7 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, s
             xs={3}
           >
             {sample ? (
-              <div className={classes.relative}>
+              <div className={globalClasses.relative}>
                   <img src='/beaker.png' className={classes.logoImage}/>
                   <div className={classes.logoText}>
                     <div className={classes.textTitle}>
@@ -434,12 +301,12 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, s
                       <div className={classes.flexCardText}>
                         {k.type == 'sample' ? (
                           <>
-                            {k.child_sample_id ? <Link className={classes.pointer} onClick={() => handleClick(k.child_sample_id)}>{k.child_sample_id}: {k.child_sample_name}</Link> : <span>-</span>}
+                            {k.child_sample_id ? <Link className={globalClasses.pointer} onClick={() => handleClick(k.child_sample_id)}>{k.child_sample_id}: {k.child_sample_name}</Link> : <span>-</span>}
                           </>
                         ) : (
                           k.type == 'url' ? (
                             <>
-                              {k.value ? <Link className={classes.pointer} onClick={() => window.open(k.value, "_blank")}>{k.value}</Link> : <span>-</span>}
+                              {k.value ? <Link className={globalClasses.pointer} onClick={() => window.open(k.value, "_blank")}>{k.value}</Link> : <span>-</span>}
                             </>
                           ) : (
                             <>
@@ -469,57 +336,50 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, s
             item
             xs={9}
           >
-            <div className={classes.flexWrapper}>
-              <div className={`${classes.flex} ${classes.flexTitle}`}>
-                <Typography className={`${classes.flexColFixed40} ${classes.center}`}>
-                  <b>+</b>
-                </Typography>
-                <Typography className={classes.flexCol4}>
-                  <b>Object Type</b>
-                </Typography>
-                <Typography className={`${classes.flexCol1} ${classes.right}`}>
-                  <b>In Inventory</b>
-                </Typography>
-                <Typography className={`${classes.flexCol1} ${classes.right}`}>
-                  <b>Discarded</b>
-                </Typography>
-                <Typography className={`${classes.flexColFixed40} ${classes.center} ${classes.hidden}`}>
+            <div className={globalClasses.flexWrapper}>
+              <div className={`${globalClasses.flex} ${classes.flexTitle}`}>
+                <Typography className={`${globalClasses.flexColFixed40} ${globalClasses.center}`}>
                   &nbsp;
                 </Typography>
-                <Typography className={`${classes.flexCol1} ${classes.mtm7} ${classes.relative}`}>
-                  <Typography className={`${classes.absolute} ${classes.hide}`}>
-                    <FormGroup className={ Object.values(toggleIds).indexOf(true) == -1 ? classes.hide : classes.show }>
-                      <FormControlLabel
-                        control={<Switch checked={showDeleted} onChange={handleChange} />}
-                        label={<span style={{ fontSize: '13px' }}>{showDeleted ? 'Hide' : 'Show'}</span>}
-                      />
-                    </FormGroup>
-                  </Typography>
+                <Typography className={globalClasses.flexCol4}>
+                  <b>Object Type</b>
+                </Typography>
+                <Typography className={`${globalClasses.flexCol1} ${globalClasses.right}`}>
+                  <b>In Inventory</b>
+                </Typography>
+                <Typography className={`${globalClasses.flexCol1} ${globalClasses.right}`}>
+                  <b>Discarded</b>
+                </Typography>
+                <Typography className={`${globalClasses.flexColFixed40} ${globalClasses.center} ${globalClasses.hidden}`}>
+                  &nbsp;
+                </Typography>
+                <Typography className={globalClasses.flexCol1}>
+                  &nbsp;
                 </Typography>
               </div>
 
               <div className={classes.flexBottom}>
                 {inventory.map((group,index) => (
                   <>
-                    <div className={`${classes.flex} ${toggleIds[index] ? classes.flexRowSel : classes.flexRow}`}  key={`index_${index}`}>
-                      <Typography className={`${classes.flexColFixed40} ${classes.center} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index)}>
+                    <div className={`${globalClasses.flex} ${toggleIds[index] ? classes.flexRowSel : classes.flexRow}`}  key={`index_${index}`}>
+                      <Typography className={`${globalClasses.flexColFixed40} ${globalClasses.center} ${globalClasses.pointer_no_hover}`} onClick={() => handleToggles(index)}>
                         &#x2195;
                       </Typography>
-                      <Typography className={`${classes.flexCol4} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index)} cy={`group-${group.type_id}`}>
+                      <Typography className={`${globalClasses.flexCol4} ${globalClasses.pointer_no_hover}`} onClick={() => handleToggles(index)} cy={`group-${group.type_id}`}>
                         {group.type}
                       </Typography>
-                      <Typography className={`${classes.flexCol1} ${classes.right} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index)}>
+                      <Typography className={`${globalClasses.flexCol1} ${globalClasses.right} ${globalClasses.pointer_no_hover}`} onClick={() => handleToggles(index)}>
                         {group.count_inventory}
                       </Typography>
-                      <Typography className={`${classes.flexCol1} ${classes.right} ${classes.pointer_no_hover}`} onClick={() => handleToggles(index)}>
+                      <Typography className={`${globalClasses.flexCol1} ${globalClasses.right} ${globalClasses.pointer_no_hover}`} onClick={() => handleToggles(index)}>
                         {group.count_deleted}
                       </Typography>
-                      <Typography className={`${classes.flexColFixed40} ${classes.center} ${classes.hidden}`}>
+                      <Typography className={`${globalClasses.flexColFixed40} ${globalClasses.center} ${globalClasses.hidden}`}>
                         &nbsp;
                       </Typography>
-                      <Typography className={`${classes.flexCol1} ${classes.mtm8} ${classes.relative}`}>
-                        <Typography className={`${classes.absolute}`}>
-                          <FormGroup className={ toggleIds[index] ? classes.show : classes.hide }>
+                      <Typography className={`${globalClasses.flexCol1} ${classes.mtm8} ${globalClasses.relative}`}>
+                        <Typography className={`${globalClasses.absolute}`}>
+                          <FormGroup className={ toggleIds[index] ? globalClasses.show : globalClasses.hide }>
                             <FormControlLabel
                               control={<Switch onChange={handleToggle} name={`checked_${index}`} />}
                               label={<span style={{ fontSize: '13px' }}>Discarded</span>}
@@ -530,35 +390,35 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, s
                       </Typography>
                     </div>
 
-                    <div className={toggleIds[index] ? classes.show : classes.hide}>
-                      <div className={`${classes.flex} ${classes.flexTitleSub}`}>
-                        <div className={`${classes.flexColFixed40} ${classes.center}`}>
+                    <div className={toggleIds[index] ? globalClasses.show : globalClasses.hide}>
+                      <div className={`${globalClasses.flex} ${classes.flexTitleSub}`}>
+                        <div className={`${globalClasses.flexColFixed40} ${globalClasses.center}`}>
                           &nbsp;
                         </div>
-                        <div className={classes.flexCol1}>
+                        <div className={globalClasses.flexCol1}>
                           Item #
                         </div>
-                        <div className={classes.flexCol1}>
+                        <div className={globalClasses.flexCol1}>
                           Location
                         </div>
-                        <div className={`${classes.flexCol1} ${classes.right}`}>
+                        <div className={`${globalClasses.flexCol1} ${globalClasses.right}`}>
                           Added
                         </div>
-                        <div className={classes.flexColAuto}>
-                          <span className={classes.hidden}>&#128465;</span>
+                        <div className={globalClasses.flexColAuto}>
+                          <span className={globalClasses.hidden}>&#128465;</span>
                         </div>
                       </div>
 
                       {group.data.map((item) => (
-                        <div className = {item.location == 'deleted' ? ( state[`checked_${index}`] ? classes.show : classes.hide ) : ''}>
-                          <div className={`${classes.flex} ${classes.flexRowSub}`}>
-                            <div className={`${classes.flexColFixed40} ${classes.center}`}>
+                        <div className = {item.location == 'deleted' ? ( state[`checked_${index}`] ? globalClasses.show : globalClasses.hide ) : ''}>
+                          <div className={`${globalClasses.flex} ${classes.flexRowSub}`}>
+                            <div className={`${globalClasses.flexColFixed40} ${globalClasses.center}`}>
                               &nbsp;
                             </div>
-                            <div className={classes.flexCol1} cy={`item-${item.item_id}`}>
+                            <div className={globalClasses.flexCol1} cy={`item-${item.item_id}`}>
                               {item.collections ? (
                                 <>
-                                  <Link className={classes.pointer} onClick={() => handleCollectionClick(item.item_id, item.type_id)}>{item.item_id}</Link>
+                                  <Link className={globalClasses.pointer} onClick={() => handleCollectionClick(item.item_id, item.type_id)}>{item.item_id}</Link>
                                   {item.collections.map((part) => (
                                     <div>
                                       &rarr; row {part.row + 1} col {part.column + 1}
@@ -566,17 +426,17 @@ const SampleCard = ({ sampleId, setSampleId, setSampleTypeId, setCollectionId, s
                                   ))}
                                 </>
                               ) : (
-                                <Link className={classes.pointer} onClick={() => handleItemClick(item.item_id)}>{item.item_id}</Link>
+                                <Link className={globalClasses.pointer} onClick={() => handleItemClick(item.item_id)}>{item.item_id}</Link>
                               )}
                             </div>
-                            <div className={classes.flexCol1}>
+                            <div className={globalClasses.flexCol1}>
                               {item.location}
                             </div>
-                            <div className={`${classes.flexCol1} ${classes.right}`}>
+                            <div className={`${globalClasses.flexCol1} ${globalClasses.right}`}>
                               {item.date.substr(0,10)}
                             </div>
-                            <div className={classes.flexColAuto}>
-                              <span className={`${classes.pointer} ${item.location == 'deleted' ? classes.hidden : classes.visible}`} onClick={() => handleItemDiscard(item.item_id)}>&#128465;</span>
+                            <div className={globalClasses.flexColAuto}>
+                              <span className={`${globalClasses.pointer} ${item.location == 'deleted' ? globalClasses.hidden : globalClasses.visible}`} onClick={() => handleItemDiscard(item.item_id)}>&#128465;</span>
                             </div>
                           </div>
                         </div>
