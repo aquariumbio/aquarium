@@ -16,6 +16,7 @@ import Alert from '@material-ui/lab/Alert';
 import ShowObjectTypeDetails from './ShowObjectTypeDetails';
 import { StandardButton, LinkButton } from '../shared/Buttons';
 import objectsAPI from '../../helpers/api/objectsAPI';
+import globalUseSyles from '../../globalUseStyles';
 
 // Route: /object_types
 // Linked in LeftHamburgeMenu
@@ -35,18 +36,12 @@ const useStyles = makeStyles(() => ({
     borderLeft: '1px solid #ccc',
   },
 
-  wrapper: {
-    padding: '0 24px',
-  },
-
-  pointer: {
-    cursor: 'pointer',
-  },
 }));
 
 // eslint-disable-next-line no-unused-vars
 const ObjectTypePage = ({ setIsLoading, setAlertProps, match }) => {
   const classes = useStyles();
+  const globalClasses = globalUseSyles();
 
   const id = match.params.id;
   const [objectType, setObjectType] = useState([]);
@@ -117,7 +112,7 @@ const ObjectTypePage = ({ setIsLoading, setAlertProps, match }) => {
           <Divider />
 
           {objectType ? (
-            <Typography className={classes.wrapper}>
+            <Typography className={globalClasses.wrapper}>
               <p>
                 <b>Description</b>: {objectType.description}
               </p>

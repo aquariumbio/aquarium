@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
+import globalUseSyles from '../../globalUseStyles';
 
 import tokensAPI from '../../helpers/api/tokensAPI';
 // import wizardsAPI from '../../helpers/api/wizardsAPI';
@@ -22,14 +23,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
 
-  wrapper: {
-    padding: '0 24px',
-  },
-
-  pointer: {
-    cursor: 'pointer',
-  },
-
   mr8: {
     marginRight: '8px',
   },
@@ -42,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
 // eslint-disable-next-line no-unused-vars
 const SideBar = ({ setIsLoading, setAlertProps, wizard }) => {
   const classes = useStyles();
+  const globalClasses = globalUseSyles();
 
   // initialize to all and get permissions
   useEffect(() => {
@@ -63,7 +57,7 @@ const SideBar = ({ setIsLoading, setAlertProps, wizard }) => {
         xs={4}
         name="side-bar"
         data-cy="side-bar"
-        className={`${classes.root} ${classes.wrapper}`}
+        className={`${classes.root} ${globalClasses.wrapper}`}
       >
         <Typography variant="h5">
           {wizard.containers ? Pluralize('Container', 2) : ''}{' '}

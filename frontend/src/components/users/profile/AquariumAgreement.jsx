@@ -10,6 +10,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 
 import { LinkButton, StandardButton } from '../../shared/Buttons';
 import usersAPI from '../../../helpers/api/usersAPI';
+import globalUseSyles from '../../../globalUseStyles';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -48,15 +49,12 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-
-  wrapper: {
-    padding: '0 24px',
-  },
 }));
 
 // eslint-disable-next-line no-unused-vars
 const AquariumAgreement = ({ setIsLoading, setAlertProps, id }) => {
   const classes = useStyles();
+  const globalClasses = globalUseSyles();
 
   const [userName, setUserName] = useState('');
   const [aquariumAgreement, setAquariumAgreement] = useState('');
@@ -113,7 +111,7 @@ const AquariumAgreement = ({ setIsLoading, setAlertProps, id }) => {
 
       <Divider />
 
-      <div className={classes.wrapper}>
+      <div className={globalClasses.wrapper}>
         <Typography variant="h4">
           Aquarium Agreement
         </Typography>

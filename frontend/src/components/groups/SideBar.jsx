@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid';
 
 import usersAPI from '../../helpers/api/usersAPI';
 import groupsAPI from '../../helpers/api/groupsAPI';
+import globalUseSyles from '../../globalUseStyles';
 
 // Route: /object_types
 // Linked in LeftHamburgeMenu
@@ -35,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
 // eslint-disable-next-line object-curly-newline, no-unused-vars
 const SideBar = ({ setIsLoading, setAlertProps, id, refresh }) => {
   const classes = useStyles();
+  const globalClasses = globalUseSyles();
   const [users, setUsers] = useState([]);
   const newMember = '0';
 
@@ -64,27 +66,27 @@ const SideBar = ({ setIsLoading, setAlertProps, id, refresh }) => {
 
   return (
     <>
-        <div className={classes.wrapper}>
-          <TextField
-            name="user_id"
-            fullWidth
-            id="user-id-input"
-            value={newMember}
-            onChange={(event) => handleSubmit(event.target.value)}
-            variant="outlined"
-            type="string"
-            inputProps={{
-              'aria-label': 'user-id-input',
-              'data-cy': 'user-id-input',
-            }}
-            select
-          >
-            <MenuItem key="0" value="0">Add Member</MenuItem>
-            {users.map((user) => (
-              <MenuItem key={user.id} value={user.id}>{user.name}</MenuItem>
-            ))}
-          </TextField>
-        </div>
+      <div className={globalClasses.wrapper}>
+        <TextField
+          name="user_id"
+          fullWidth
+          id="user-id-input"
+          value={newMember}
+          onChange={(event) => handleSubmit(event.target.value)}
+          variant="outlined"
+          type="string"
+          inputProps={{
+            'aria-label': 'user-id-input',
+            'data-cy': 'user-id-input',
+          }}
+          select
+        >
+          <MenuItem key="0" value="0">Add Member</MenuItem>
+          {users.map((user) => (
+            <MenuItem key={user.id} value={user.id}>{user.name}</MenuItem>
+          ))}
+        </TextField>
+      </div>
     </>
   );
 };

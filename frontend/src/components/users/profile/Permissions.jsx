@@ -24,6 +24,7 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import usersAPI from '../../../helpers/api/usersAPI';
 import permissionsAPI from '../../../helpers/api/permissionsAPI';
 import { StandardButton, LinkButton } from '../../shared/Buttons';
+import globalUseSyles from '../../../globalUseStyles';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -63,10 +64,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
 
-  wrapper: {
-    padding: '0 24px',
-  },
-
   note: {
     color: 'rgba(0, 0, 0, 0.5)',
   },
@@ -75,6 +72,7 @@ const useStyles = makeStyles((theme) => ({
 // eslint-disable-next-line no-unused-vars
 const UserForm = ({ setIsLoading, setAlertProps, id }) => {
   const classes = useStyles();
+  const globalClasses = globalUseSyles();
   const history = useHistory();
 
   const [userName, setUserName] = useState('');
@@ -190,7 +188,7 @@ const UserForm = ({ setIsLoading, setAlertProps, id }) => {
 
       <Divider />
 
-      <div className={classes.wrapper}>
+      <div className={globalClasses.wrapper}>
         <Typography variant="h4">
           Permissions
         </Typography>

@@ -113,34 +113,33 @@ const GroupPage = ({ setIsLoading, setAlertProps, match }) => {
         </Toolbar>
       )}
       >
-
-          <div className={globalClasses.flexWrapper}>
-            <div className={`${globalClasses.flex} ${globalClasses.flexTitle}`}>
-              <Typography className={globalClasses.flexCol1}><b>Name</b></Typography>
-              <Typography className={globalClasses.flexCol1}><b>Login</b></Typography>
-              <Typography className={globalClasses.flexColAutoHidden}>Remove</Typography>
-            </div>
-
-            {groupMembers ? (
-              groupMembers.map((member) => (
-                <div className={`${globalClasses.flex} ${globalClasses.flexRow}`} key={`member_${member.id}`}>
-                  <Typography className={globalClasses.flexCol1}>
-                    {member.name}
-                  </Typography>
-                  <Typography className={globalClasses.flexCol1}>
-                    {member.login}
-                  </Typography>
-                  <Typography className={globalClasses.flexColAuto}>
-                    {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
-                    <Link data-cy={`remove_${member.id}`} className={globalClasses.pointer} onClick={() => handleRemove(member.id)}>Remove</Link>
-                  </Typography>
-                </div>
-              ))
-            ) : (
-              ''
-            )}
+        <div className={globalClasses.flexWrapper}>
+          <div className={`${globalClasses.flex} ${globalClasses.flexTitle}`}>
+            <Typography className={globalClasses.flexCol1}><b>Name</b></Typography>
+            <Typography className={globalClasses.flexCol1}><b>Login</b></Typography>
+            <Typography className={globalClasses.flexColAutoHidden}>Remove</Typography>
           </div>
-    </Main>
+
+          {groupMembers ? (
+            groupMembers.map((member) => (
+              <div className={`${globalClasses.flex} ${globalClasses.flexRow}`} key={`member_${member.id}`}>
+                <Typography className={globalClasses.flexCol1}>
+                  {member.name}
+                </Typography>
+                <Typography className={globalClasses.flexCol1}>
+                  {member.login}
+                </Typography>
+                <Typography className={globalClasses.flexColAuto}>
+                  {/* eslint-disable-next-line max-len, jsx-a11y/anchor-is-valid */}
+                  <Link data-cy={`remove_${member.id}`} className={globalClasses.pointer} onClick={() => handleRemove(member.id)}>Remove</Link>
+                </Typography>
+              </div>
+            ))
+          ) : (
+            ''
+          )}
+        </div>
+      </Main>
     </Page>
   );
 };

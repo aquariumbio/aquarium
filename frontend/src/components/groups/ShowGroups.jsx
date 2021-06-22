@@ -7,8 +7,6 @@ import Link from '@material-ui/core/Link';
 
 import groupsAPI from '../../helpers/api/groupsAPI';
 import globalUseSyles from '../../globalUseStyles';
-import Page from '../shared/layout/Page';
-import Main from '../shared/layout/Main';
 
 const ShowGroups = ({ groups }) => {
   const globalClasses = globalUseSyles();
@@ -28,16 +26,7 @@ const ShowGroups = ({ groups }) => {
   };
 
   return (
-    <Page>
-      <Main title={(
-        <div className={`${globalClasses.flex} ${globalClasses.flexTitle}`}>
-          <Typography className={globalClasses.flexCol1}><b>Name</b></Typography>
-          <Typography className={globalClasses.flexCol3}><b>Description</b></Typography>
-          <Typography className={globalClasses.flexColAutoHidden}>Edit</Typography>
-          <Typography className={globalClasses.flexColAutoHidden}>Delete</Typography>
-        </div>
-      )}
-      >
+    <>
         {groups.map((group) => (
           <div className={`${globalClasses.flex} ${globalClasses.flexRow}`} key={`object_${group.id}`}>
             <Typography className={globalClasses.flexCol1}>
@@ -57,8 +46,7 @@ const ShowGroups = ({ groups }) => {
             </Typography>
           </div>
         ))}
-      </Main>
-    </Page>
+    </>
   );
 };
 

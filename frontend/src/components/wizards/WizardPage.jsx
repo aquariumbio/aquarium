@@ -29,10 +29,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
 
-  wrapper: {
-    padding: '0 24px',
-  },
-
   letter: {
     color: theme.palette.primary.main,
   },
@@ -182,7 +178,7 @@ const WizardPage = ({ setIsLoading, setAlertProps, match }) => {
         <Grid
           item
           xs={4}
-          className={`${classes.root} ${classes.wrapper}`}
+          className={`${classes.root} ${globalClasses.wrapper}`}
         >
           <Typography variant="h5">
             {boxLabel} managed by {wizard ? wizard.name : ''}
@@ -210,7 +206,7 @@ const WizardPage = ({ setIsLoading, setAlertProps, match }) => {
         <Grid
           item
           xs={4}
-          className={`${classes.root} ${classes.wrapper}`}
+          className={`${classes.root} ${globalClasses.wrapper}`}
         >
           <Typography variant="h5">
             {thisBox}&nbsp;

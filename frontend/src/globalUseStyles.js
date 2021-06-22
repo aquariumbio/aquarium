@@ -108,6 +108,10 @@ const globalUseStyles = makeStyles((theme) => ({
     cursor: 'pointer',
   },
 
+  wrapper: {
+    padding: '0 24px',
+  },
+
 }));
 
 export default globalUseStyles;
