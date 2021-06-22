@@ -15,6 +15,7 @@ import sampleTypesAPI from '../../helpers/api/sampleTypesAPI';
 import { StandardButton, LinkButton } from '../shared/Buttons';
 import Page from '../shared/layout/Page';
 import Main from '../shared/layout/Main';
+import globalUseSyles from '../../globalUseStyles';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -39,19 +40,12 @@ const useStyles = makeStyles((theme) => ({
   spaceBelow: {
     marginBottom: theme.spacing(1),
   },
-
-  show: {
-    display: 'block',
-  },
-
-  hide: {
-    display: 'none',
-  },
 }));
 
 // eslint-disable-next-line no-unused-vars
 const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
   const classes = useStyles();
+  const globalClasses = globalUseSyles();
 
   const [disableSubmit, setDisableSubmit] = useState(false);
   const [sampleTypes, setSampleTypes] = useState([]);
@@ -408,7 +402,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
             }}
           />
 
-          <div className={objectTypeHandler === 'sample_container' ? classes.show : classes.hide}>
+          <div className={objectTypeHandler === 'sample_container' ? globalClasses.show : globalClasses.hide}>
             <Typography variant="h4" className={classes.inputName}>
               Sample Type Id
             </Typography>
@@ -471,7 +465,7 @@ const ObjectTypeForm = ({ setIsLoading, setAlertProps, match }) => {
             }}
           />
 
-          <div className={objectTypeHandler === 'collection' ? classes.show : classes.hide}>
+          <div className={objectTypeHandler === 'collection' ? globalClasses.show : globalClasses.hide}>
             <Typography variant="h4" className={classes.inputName}>
               Rows
             </Typography>
