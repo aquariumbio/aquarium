@@ -87,7 +87,7 @@ Given a list of categories and a configuration file, you can do
 ```ruby
 require 'aquadoc'
 
-Aquadoc::Git()config, categories).run
+Aquadoc::Git(config, categories).run
 ```
 
 to generate the github repo.
