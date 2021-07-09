@@ -1,9 +1,14 @@
 /* eslint-disable no-alert */
 /* eslint-disable no-console */
 import axios from 'axios';
+import Config from "./config.json"
 
-const backend = process.env.REACT_APP_BACKEND;
-const backendPort = process.env.REACT_APP_BACKEND_PORT;
+let backend = process.env.REACT_APP_BACKEND;
+let backendPort = process.env.REACT_APP_BACKEND_PORT;
+if (process.env.NODE_ENV == "production") {
+  backend = Config.REACT_APP_BACKEND
+  backendPort = Config.REACT_APP_BACKEND_PORT
+} 
 const backendURL = `http://${backend}:${backendPort}/api/v3`;
 
 axios.defaults.baseURL = backendURL;

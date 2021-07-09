@@ -18,21 +18,29 @@ COPY . ./
 
 CMD ["npm", "start"]
 
-# Temporary building stage
+# Temporary build stage
 #
 FROM frontend-development AS frontend-builder
-ENV REACT_APP_BACKEND=localhost
-ENV REACT_APP_BACKEND_PORT=80
+ENV NODE_ENV production
 RUN npm run build
 
 # Build production image
 #
 FROM nginx:${NGINX_VERSION}-alpine AS aquarium-frontend
 
-COPY --from=frontend-builder /app/build /usr/share/nginx/html
+# used to create config.json in entrypoint
+RUN apk add --no-cache "jo>=1.3"
+
+ENV NODE_ENV production
+ENV BUILD_ROOT=/usr/share/nginx/html
+
+COPY --from=frontend-builder /app/build ${BUILD_ROOT}
 
 RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+
+COPY production-entrypoint.sh /
+ENTRYPOINT [ "/production-entrypoint.sh" ]
 
 EXPOSE 3000
 
