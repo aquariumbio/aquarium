@@ -9,7 +9,7 @@ services:
       - db
     env_file: 
       - .env_files/production/backend
-      - .env_files/development/timezone
+      - .env_files/production/timezone
     networks:
       - aquarium_net
 
@@ -20,6 +20,11 @@ services:
     image: aquarium-frontend:${AQUARIUM_VERSION:-edge}
     depends_on:
       - backend
+    env_file:
+      - .env_files/production/timezone
+    environment:
+      - REACT_APP_BACKEND=localhost # NOTE: don't use service here
+      - REACT_APP_BACKEND_PORT=${APP_PUBLIC_PORT:-80}
     networks:
       - aquarium_net
 
@@ -41,9 +46,9 @@ services:
 
   web:
     build:
-      context: ./nginx
-      target: aquarium-nginx
-    image: aquarium-nginx:${AQUARIUM_VERSION:-edge}
+      context: ./reverse-proxy
+      target: aquarium-reverse-proxy
+    image: aquarium-reverse-proxy:${AQUARIUM_VERSION:-edge}
     ports:
       - "${APP_PUBLIC_PORT:-80}:80"
     networks:
