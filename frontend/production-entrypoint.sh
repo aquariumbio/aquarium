@@ -13,6 +13,16 @@ if [ -z ${BUILD_ROOT+x} ]; then
     exit 2
 fi
 
+if [ -z ${REACT_APP_BACKEND+x} ]; then
+    echo "ERROR: REACT_APP_BACKEND is not set";
+    exit 2
+fi
+
+if [ -z ${REACT_APP_BACKEND_PORT+x} ]; then
+    echo "ERROR: REACT_APP_BACKEND_PORT is not set";
+    exit 2
+fi
+
 # TODO: check this path is correct
 rm -f $BUILD_ROOT/helpers/api/config.json
 jo REACT_APP_BACKEND=$REACT_APP_BACKEND REACT_APP_BACKEND_PORT=$REACT_APP_BACKEND_PORT > $BUILD_ROOT/helpers/api/config.json
