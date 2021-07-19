@@ -40,6 +40,7 @@ RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
 COPY production-entrypoint.sh /
+RUN ["chmod", "+x", "/production-entrypoint.sh"]
 ENTRYPOINT [ "/production-entrypoint.sh" ]
 
 EXPOSE 3000
