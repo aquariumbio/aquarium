@@ -1,5 +1,5 @@
 {
-    "_description": "Dummy file for development; actual is created by production_entrypoint.sh",
-    "REACT_APP_BACKEND": "",
-    "REACT_APP_BACKEND_PORT": ""
+    "_description": "Parameterization for production",
+    "REACT_APP_BACKEND": "$REACT_APP_BACKEND",
+    "REACT_APP_BACKEND_PORT": "$REACT_APP_BACKEND_PORT"
 }

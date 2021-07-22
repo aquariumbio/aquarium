@@ -28,9 +28,6 @@ RUN npm run build
 #
 FROM nginx:${NGINX_VERSION}-alpine AS aquarium-frontend
 
-# used to create config.json in entrypoint
-RUN apk add --no-cache "jo>=1.3"
-
 ENV NODE_ENV production
 ENV BUILD_ROOT=/usr/share/nginx/html
 
