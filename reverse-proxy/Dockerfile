@@ -1,6 +1,6 @@
 ARG NGINX_VERSION=stable
 
-FROM nginx:${NGINX_VERSION}-alpine AS aquarium-nginx
+FROM nginx:${NGINX_VERSION}-alpine AS aquarium-reverse-proxy
 
 EXPOSE 80
 
