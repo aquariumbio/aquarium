@@ -23,7 +23,8 @@ services:
     env_file:
       - .env_files/production/timezone
     environment:
-      - REACT_APP_BACKEND=localhost # NOTE: don't use service here
+      # NOTE: frontend runs in browser, so backend access is through reverse-proxy
+      - REACT_APP_BACKEND=localhost
       - REACT_APP_BACKEND_PORT=${APP_PUBLIC_PORT:-80}
     networks:
       - aquarium_net
