@@ -27,7 +27,7 @@ CREATE TABLE `account_logs` (
   CONSTRAINT `fk_rails_0fc0d85f00` FOREIGN KEY (`row1`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_8e6656e8a4` FOREIGN KEY (`row2`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_c91e200913` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=1696 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `accounts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -55,7 +55,7 @@ CREATE TABLE `accounts` (
   CONSTRAINT `fk_rails_9910875b16` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_b1e30bebc8` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_ba2f9f474f` FOREIGN KEY (`operation_id`) REFERENCES `operations` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=343678 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `allowable_field_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -74,7 +74,7 @@ CREATE TABLE `allowable_field_types` (
   CONSTRAINT `fk_rails_1d47761735` FOREIGN KEY (`field_type_id`) REFERENCES `field_types` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_2bc0f30ee5` FOREIGN KEY (`sample_type_id`) REFERENCES `sample_types` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_a968b4a54c` FOREIGN KEY (`object_type_id`) REFERENCES `object_types` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3294 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `announcements`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -87,7 +87,7 @@ CREATE TABLE `announcements` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `ar_internal_metadata`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -114,7 +114,7 @@ CREATE TABLE `budgets` (
   `email` varchar(255) DEFAULT NULL,
   `phone` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `codes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -129,7 +129,7 @@ CREATE TABLE `codes` (
   `updated_at` datetime NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22496 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `data_associations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -147,7 +147,7 @@ CREATE TABLE `data_associations` (
   KEY `index_data_associations_on_parent_class_and_parent_id` (`parent_class`,`parent_id`) USING BTREE,
   KEY `index_data_associations_on_upload_id` (`upload_id`) USING BTREE,
   CONSTRAINT `fk_rails_26226b25a9` FOREIGN KEY (`upload_id`) REFERENCES `uploads` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=946067 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `field_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -171,7 +171,7 @@ CREATE TABLE `field_types` (
   PRIMARY KEY (`id`),
   KEY `index_field_types_on_parent_class_and_parent_id` (`parent_class`,`parent_id`) USING BTREE,
   KEY `index_field_types_on_sample_type_id` (`parent_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=17600 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `field_values`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -202,7 +202,7 @@ CREATE TABLE `field_values` (
   CONSTRAINT `fk_rails_319b222007` FOREIGN KEY (`child_item_id`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_50fa557e81` FOREIGN KEY (`allowable_field_type_id`) REFERENCES `allowable_field_types` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_e04e5b0273` FOREIGN KEY (`child_sample_id`) REFERENCES `samples` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=1076746 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `folder_contents`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -215,7 +215,7 @@ CREATE TABLE `folder_contents` (
   `folder_id` int(11) DEFAULT NULL,
   `workflow_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `folders`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -228,7 +228,7 @@ CREATE TABLE `folders` (
   `user_id` int(11) DEFAULT NULL,
   `parent_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -240,7 +240,7 @@ CREATE TABLE `groups` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=362 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `id_strings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -268,7 +268,7 @@ CREATE TABLE `invoices` (
   KEY `index_invoices_on_user_id` (`user_id`) USING BTREE,
   CONSTRAINT `fk_rails_3d1522a0d8` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_3dd4c64f3b` FOREIGN KEY (`budget_id`) REFERENCES `budgets` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=1733 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -291,7 +291,7 @@ CREATE TABLE `items` (
   CONSTRAINT `fk_rails_6b7d1f696e` FOREIGN KEY (`sample_id`) REFERENCES `samples` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_a6ef7e6462` FOREIGN KEY (`object_type_id`) REFERENCES `object_types` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_d02c2a2df1` FOREIGN KEY (`locator_id`) REFERENCES `locators` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=464149 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `job_assignment_logs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -310,7 +310,7 @@ CREATE TABLE `job_assignment_logs` (
   CONSTRAINT `fk_rails_3c67081d23` FOREIGN KEY (`assigned_to`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_afd4527da7` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_cec96ca499` FOREIGN KEY (`assigned_by`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `job_associations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -326,7 +326,7 @@ CREATE TABLE `job_associations` (
   KEY `index_job_associations_on_operation_id` (`operation_id`) USING BTREE,
   CONSTRAINT `fk_rails_25efd65a81` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_8f590b1e09` FOREIGN KEY (`operation_id`) REFERENCES `operations` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=164703 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `jobs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -351,7 +351,7 @@ CREATE TABLE `jobs` (
   KEY `index_jobs_on_user_id` (`user_id`) USING BTREE,
   CONSTRAINT `fk_rails_4928288085` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_df6238c8a6` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=117883 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `libraries`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -363,7 +363,7 @@ CREATE TABLE `libraries` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=326 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `locators`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -380,7 +380,7 @@ CREATE TABLE `locators` (
   KEY `index_locators_on_wizard_id` (`wizard_id`) USING BTREE,
   CONSTRAINT `fk_rails_64c3d29cac` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_bb120b6235` FOREIGN KEY (`wizard_id`) REFERENCES `wizards` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=67791 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `logs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -398,7 +398,7 @@ CREATE TABLE `logs` (
   KEY `index_logs_on_user_id` (`user_id`) USING BTREE,
   CONSTRAINT `fk_rails_81ff90ed92` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_8fc980bf44` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=147772 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `memberships`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -414,7 +414,7 @@ CREATE TABLE `memberships` (
   KEY `index_memberships_on_user_id` (`user_id`) USING BTREE,
   CONSTRAINT `fk_rails_99326fb65d` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_aaf389f138` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=841 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `object_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -442,7 +442,7 @@ CREATE TABLE `object_types` (
   `rows` int(11) DEFAULT NULL,
   `columns` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=867 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `operation_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -457,7 +457,7 @@ CREATE TABLE `operation_types` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_operation_types_on_category_and_name` (`category`,`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=841 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `operations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -477,7 +477,7 @@ CREATE TABLE `operations` (
   KEY `index_operations_on_user_id` (`user_id`) USING BTREE,
   CONSTRAINT `fk_rails_10e3ccbd52` FOREIGN KEY (`operation_type_id`) REFERENCES `operation_types` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_63fbf4e94e` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=293209 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `parameters`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -490,7 +490,7 @@ CREATE TABLE `parameters` (
   `updated_at` datetime NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1190 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `parameters_bak`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -521,7 +521,7 @@ CREATE TABLE `part_associations` (
   KEY `index_part_associations_on_part_id` (`part_id`) USING BTREE,
   CONSTRAINT `fk_rails_39a9c3d5bb` FOREIGN KEY (`part_id`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_f889cf647d` FOREIGN KEY (`collection_id`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=219407 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -534,7 +534,7 @@ CREATE TABLE `permissions` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_permissions_on_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `plan_associations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -550,7 +550,7 @@ CREATE TABLE `plan_associations` (
   KEY `index_plan_associations_on_plan_id` (`plan_id`) USING BTREE,
   CONSTRAINT `fk_rails_5ca5742cd9` FOREIGN KEY (`plan_id`) REFERENCES `plans` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_c36597dd79` FOREIGN KEY (`operation_id`) REFERENCES `operations` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=278654 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `plans`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -571,7 +571,7 @@ CREATE TABLE `plans` (
   KEY `index_plans_on_user_id` (`user_id`) USING BTREE,
   CONSTRAINT `fk_rails_45da853770` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_55f7cff6c3` FOREIGN KEY (`budget_id`) REFERENCES `budgets` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=40396 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `sample_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -583,7 +583,7 @@ CREATE TABLE `sample_types` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `samples`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -603,7 +603,7 @@ CREATE TABLE `samples` (
   KEY `index_samples_on_user_id` (`user_id`) USING BTREE,
   CONSTRAINT `fk_rails_8e0800c2e2` FOREIGN KEY (`sample_type_id`) REFERENCES `sample_types` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_d699eb2564` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=34484 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `schema_migrations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -628,7 +628,7 @@ CREATE TABLE `timings` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `index_timings_on_parent_class_and_parent_id` (`parent_class`,`parent_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=147 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `uploads`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -645,7 +645,7 @@ CREATE TABLE `uploads` (
   PRIMARY KEY (`id`),
   KEY `index_uploads_on_job_id` (`job_id`) USING BTREE,
   CONSTRAINT `fk_rails_76093eb5d3` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=42397 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `user_budget_associations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -663,7 +663,7 @@ CREATE TABLE `user_budget_associations` (
   KEY `index_user_budget_associations_on_user_id` (`user_id`) USING BTREE,
   CONSTRAINT `fk_rails_a2966bc54b` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_f1322363b9` FOREIGN KEY (`budget_id`) REFERENCES `budgets` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=376 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `user_profiles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -678,7 +678,7 @@ CREATE TABLE `user_profiles` (
   PRIMARY KEY (`id`),
   KEY `index_user_profiles_on_user_id` (`user_id`),
   CONSTRAINT `fk_rails_87a6352e58` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1746 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `user_tokens`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -712,16 +712,8 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_login` (`login`),
   KEY `index_users_on_remember_token` (`remember_token`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=338 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `view_job_assignment_logs`;
-/*!50001 DROP VIEW IF EXISTS `view_job_assignment_logs`*/;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE TABLE `view_job_assignment_logs` (
-  `id` tinyint NOT NULL
-) ENGINE=MyISAM */;
-SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `view_job_assignments`;
 /*!50001 DROP VIEW IF EXISTS `view_job_assignments`*/;
 SET @saved_cs_client     = @@character_set_client;
@@ -797,7 +789,7 @@ CREATE TABLE `wires` (
   KEY `index_wires_on_to_id` (`to_id`) USING BTREE,
   CONSTRAINT `fk_rails_1073ab769d` FOREIGN KEY (`to_id`) REFERENCES `field_values` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_rails_684cde68aa` FOREIGN KEY (`from_id`) REFERENCES `field_values` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=218090 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `wizards`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -810,7 +802,7 @@ CREATE TABLE `wizards` (
   `updated_at` datetime NOT NULL,
   `description` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `workers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -823,22 +815,8 @@ CREATE TABLE `workers` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-/*!50001 DROP TABLE IF EXISTS `view_job_assignment_logs`*/;
-/*!50001 DROP VIEW IF EXISTS `view_job_assignment_logs`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`aquarium`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `view_job_assignment_logs` AS select max(`job_assignment_logs`.`id`) AS `id` from `job_assignment_logs` group by `job_assignment_logs`.`job_id` */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!50001 DROP TABLE IF EXISTS `view_job_assignments`*/;
 /*!50001 DROP VIEW IF EXISTS `view_job_assignments`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
@@ -906,121 +884,6 @@ CREATE TABLE `workers` (
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 INSERT INTO `schema_migrations` (version) VALUES
-('20130726214810'),
-('20130728175955'),
-('20130813203406'),
-('20130813203610'),
-('20130930164148'),
-('20131001153824'),
-('20131001154059'),
-('20131001162233'),
-('20131001164018'),
-('20131002160320'),
-('20131007152145'),
-('20131007221832'),
-('20131008170438'),
-('20131008170820'),
-('20131017153859'),
-('20131017195843'),
-('20131017223325'),
-('20131022161712'),
-('20131029153603'),
-('20131029153634'),
-('20131111143554'),
-('20131111143621'),
-('20131113172448'),
-('20131113181345'),
-('20131119164152'),
-('20131119164208'),
-('20131122032927'),
-('20131223192901'),
-('20140131235419'),
-('20140404201838'),
-('20140404201900'),
-('20140404204258'),
-('20140408224245'),
-('20140428213241'),
-('20140507230919'),
-('20140508203643'),
-('20140513225335'),
-('20140616190537'),
-('20140714220057'),
-('20140907220135'),
-('20150124195318'),
-('20150124201744'),
-('20150129213358'),
-('20150129221830'),
-('20150212051010'),
-('20150212051027'),
-('20150213173621'),
-('20150222153442'),
-('20150326202149'),
-('20150405154727'),
-('20150515160553'),
-('20150515160619'),
-('20150719221125'),
-('20150719221226'),
-('20150719221253'),
-('20150719223053'),
-('20150720044538'),
-('20150828232337'),
-('20150923014954'),
-('20150923015030'),
-('20150923184243'),
-('20150924044044'),
-('20150926162327'),
-('20151027164741'),
-('20151029034310'),
-('20151118210640'),
-('20151203054202'),
-('20160128203950'),
-('20160128205317'),
-('20160128205943'),
-('20160129021809'),
-('20160129164244'),
-('20160129165100'),
-('20160330023703'),
-('20160330033810'),
-('20160330185947'),
-('20160330190634'),
-('20160411130601'),
-('20160411131711'),
-('20160412010529'),
-('20160427043024'),
-('20160427043546'),
-('20160429232330'),
-('20160429232408'),
-('20160429232434'),
-('20160430000308'),
-('20160430152749'),
-('20160514044605'),
-('20160526204339'),
-('20160607162741'),
-('20160615161649'),
-('20160720211005'),
-('20161113203042'),
-('20161219172133'),
-('20170106204721'),
-('20170330173426'),
-('20170421231924'),
-('20170426225719'),
-('20170504211619'),
-('20170504212208'),
-('20170604165355'),
-('20170627173019'),
-('20170725190809'),
-('20170729024546'),
-('20170806145525'),
-('20170813203843'),
-('20171103151518'),
-('20180509200425'),
-('20180529204642'),
-('20180809012224'),
-('20181221174622'),
-('20200810000000'),
-('20200810000010'),
-('20200810000020'),
-('20200910000000'),
 ('20201030000000'),
 ('20201218000000'),
 ('20201218000010'),
