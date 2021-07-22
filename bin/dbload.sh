@@ -2,7 +2,7 @@
 set -uxo pipefail
 
 if [[ $# -ne 2 ]]; then
-    echo "Expected 2 arguments: environment database-name"
+    echo "Expected 2 arguments: environment database-file"
     exit 2
 fi
 
