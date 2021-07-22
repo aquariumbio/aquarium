@@ -11,6 +11,8 @@ import Divider from '@material-ui/core/Divider';
 import groupsAPI from '../../helpers/api/groups';
 import tokensAPI from '../../helpers/api/tokensAPI';
 import { StandardButton, LinkButton } from '../shared/Buttons';
+import Page from '../shared/layout/Page';
+import Main from '../shared/layout/Main';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -126,90 +128,95 @@ const GroupForm = ({ setIsLoading, setAlertProps, match }) => {
   };
 
   return (
-    <Container className={classes.root} maxWidth="xl" data-cy="group-container">
-      {id ? (
+    <Page>
+      <Main title={(
         <>
-          <Typography variant="h1" align="center" className={classes.title}>
-            <u>{groupName}</u>
-          </Typography>
-          <Typography variant="h2" align="center" className={classes.title}>
-            Edit Group {id}
-          </Typography>
+          {id ? (
+            <>
+              <Typography variant="h1" align="center" className={classes.title}>
+                <u>{groupName}</u>
+              </Typography>
+              <Typography variant="h2" align="center" className={classes.title}>
+                Edit Group {id}
+              </Typography>
+            </>
+          ) : (
+            <Typography variant="h1" align="center" className={classes.title}>
+              New Group
+            </Typography>
+          )}
+          <Typography align="right">* field is required</Typography>
         </>
-      ) : (
-        <Typography variant="h1" align="center" className={classes.title}>
-          New Group
-        </Typography>
       )}
-      <Typography align="right">* field is required</Typography>
+      >
+        <form id="group-form" name="group-form" data-cy="group-form" onSubmit={handleSubmit}>
+          <Typography variant="h4" className={classes.inputName} display="inline">
+            Name
+          </Typography>
+          <Typography variant="overline" color="error">
+            {' * '}
+          </Typography>
 
-      <form id="group-form" name="group-form" data-cy="group-form" onSubmit={handleSubmit}>
-        <Typography variant="h4" className={classes.inputName} display="inline">
-          Name
-        </Typography>
-        <Typography variant="overline" color="error">
-          {' * '}
-        </Typography>
+          <TextField
+            name="name"
+            fullWidth
+            value={groupName}
+            id="group-name-input"
+            onChange={(event) => setGroupName(event.target.value)}
+            variant="outlined"
+            autoFocus
+            required
+            type="string"
+            inputProps={{
+              'aria-label': 'group-name-input',
+              'data-cy': 'group-name-input',
+            }}
+            className={classes.spaceBelow}
+          />
 
-        <TextField
-          name="name"
-          fullWidth
-          value={groupName}
-          id="group-name-input"
-          onChange={(event) => setGroupName(event.target.value)}
-          variant="outlined"
-          autoFocus
-          required
-          type="string"
-          inputProps={{
-            'aria-label': 'group-name-input',
-            'data-cy': 'group-name-input',
-          }}
-          className={classes.spaceBelow}
-        />
+          <Typography variant="h4" className={classes.inputName} display="inline">
+            Description
+          </Typography>
+          <Typography variant="overline" color="error">
+            {' * '}
+          </Typography>
 
-        <Typography variant="h4" className={classes.inputName} display="inline">
-          Description
-        </Typography>
-        <Typography variant="overline" color="error">
-          {' * '}
-        </Typography>
+          <TextField
+            name="description"
+            fullWidth
+            value={groupDescription}
+            id="group-description-input"
+            onChange={(event) => setGroupDescription(event.target.value)}
+            variant="outlined"
+            type="string"
+            required
+            inputProps={{
+              'aria-label': 'group-description-input',
+              'data-cy': 'group-description-input',
+            }}
+          />
 
-        <TextField
-          name="description"
-          fullWidth
-          value={groupDescription}
-          id="group-description-input"
-          onChange={(event) => setGroupDescription(event.target.value)}
-          variant="outlined"
-          type="string"
-          required
-          inputProps={{
-            'aria-label': 'group-description-input',
-            'data-cy': 'group-description-input',
-          }}
-        />
+          <Divider style={{ marginTop: '0px' }} />
 
-        <Divider style={{ marginTop: '0px' }} />
+          <LinkButton
+            name="back"
+            testName="back"
+            text="Cancel"
+            linkTo="/groups"
+          />
 
-        <LinkButton
-          name="back"
-          testName="back"
-          text="Cancel"
-          linkTo="/groups"
-        />
-
-        <StandardButton
-          name="save"
-          testName="save-group"
-          handleClick={handleSubmit}
-          text="Save"
-          type="submit"
-          disabled={disableSubmit}
-          dark
-        />
-      </form>
-    </Container>
+          <StandardButton
+            name="save"
+            testName="save-group"
+            handleClick={handleSubmit}
+            text="Save"
+            type="submit"
+            disabled={disableSubmit}
+            dark
+          />
+        </form>
+      </Main>
+    </Page>
   );
 };
 

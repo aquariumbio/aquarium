@@ -13,6 +13,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 import usersAPI from '../../helpers/api/users';
 import permissionsAPI from '../../helpers/api/permissions';
 import { StandardButton, LinkButton } from '../shared/Buttons';
+import Page from '../shared/layout/Page';
+import Main from '../shared/layout/Main';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -125,132 +127,137 @@ const UserForm = ({ setIsLoading, setAlertProps, match }) => {
   };
 
   return (
-    <Container className={classes.root} maxWidth="xl" data-cy="user-container">
-      <Typography variant="h1" align="center" className={classes.title}>
-        New User
-      </Typography>
-      <Typography align="right">* field is required</Typography>
+    <Page>
+      <Main title={(
+        <>
+          <Typography variant="h1" align="center" className={classes.title}>
+            New User
+          </Typography>
+          <Typography align="right">* field is required</Typography>
+        </>
+      )}
+      >
+        <form id="user-form" name="user-form" data-cy="user-form" onSubmit={handleSubmit}>
+          <Typography variant="h4" className={classes.inputName} display="inline">
+            Name
+          </Typography>
+          <Typography variant="overline" color="error">
+            {' * '}
+          </Typography>
 
-      <form id="user-form" name="user-form" data-cy="user-form" onSubmit={handleSubmit}>
-        <Typography variant="h4" className={classes.inputName} display="inline">
-          Name
-        </Typography>
-        <Typography variant="overline" color="error">
-          {' * '}
-        </Typography>
+          <TextField
+            name="name"
+            fullWidth
+            value={userName}
+            id="user-name-input"
+            onChange={(event) => setUserName(event.target.value)}
+            variant="outlined"
+            autoFocus
+            required
+            type="string"
+            inputProps={{
+              'aria-label': 'user-name-input',
+              'data-cy': 'user-name-input',
+            }}
+            className={classes.spaceBelow}
+          />
 
-        <TextField
-          name="name"
-          fullWidth
-          value={userName}
-          id="user-name-input"
-          onChange={(event) => setUserName(event.target.value)}
-          variant="outlined"
-          autoFocus
-          required
-          type="string"
-          inputProps={{
-            'aria-label': 'user-name-input',
-            'data-cy': 'user-name-input',
-          }}
-          className={classes.spaceBelow}
-        />
+          <Typography variant="h4" className={classes.inputName} display="inline">
+            Login
+          </Typography>
+          <Typography variant="overline" color="error">
+            {' * '}
+          </Typography>
 
-        <Typography variant="h4" className={classes.inputName} display="inline">
-          Login
-        </Typography>
-        <Typography variant="overline" color="error">
-          {' * '}
-        </Typography>
+          <TextField
+            name="login"
+            fullWidth
+            value={userLogin}
+            id="user-login-input"
+            onChange={(event) => setUserLogin(event.target.value)}
+            variant="outlined"
+            type="string"
+            required
+            inputProps={{
+              'aria-label': 'user-login-input',
+              'data-cy': 'user-login-input',
+            }}
+          />
 
-        <TextField
-          name="login"
-          fullWidth
-          value={userLogin}
-          id="user-login-input"
-          onChange={(event) => setUserLogin(event.target.value)}
-          variant="outlined"
-          type="string"
-          required
-          inputProps={{
-            'aria-label': 'user-login-input',
-            'data-cy': 'user-login-input',
-          }}
-        />
+          <Typography variant="h4" className={classes.inputName} display="inline">
+            Password
+          </Typography>
+          <Typography variant="overline" color="error">
+            {' * '}
+          </Typography>
 
-        <Typography variant="h4" className={classes.inputName} display="inline">
-          Password
-        </Typography>
-        <Typography variant="overline" color="error">
-          {' * '}
-        </Typography>
+          <TextField
+            name="password"
+            fullWidth
+            value={userPassword}
+            id="user-password-input"
+            onChange={(event) => setUserPassword(event.target.value)}
+            variant="outlined"
+            type="string"
+            required
+            inputProps={{
+              'aria-label': 'user-password-input',
+              'data-cy': 'user-password-input',
+            }}
+          />
 
-        <TextField
-          name="password"
-          fullWidth
-          value={userPassword}
-          id="user-password-input"
-          onChange={(event) => setUserPassword(event.target.value)}
-          variant="outlined"
-          type="string"
-          required
-          inputProps={{
-            'aria-label': 'user-password-input',
-            'data-cy': 'user-password-input',
-          }}
-        />
+          <Typography variant="h4" className={classes.inputName}>
+            Permissions
+          </Typography>
 
-        <Typography variant="h4" className={classes.inputName}>
-          Permissions
-        </Typography>
+          {// Add permissions checkboxes
+           //   - Use ids for each checkbox instead of names
+           //   - Build array of permission_ids on the fly when submit the form
+           //   - Hide checkbox for 'retired' */
+           //     eslint-disable-next-line max-len
+           //   - Could also chain .filter(ey => permissionsList[key]!='retired').map(key => ...) but that loops twice
+          }
+          <div>
+            { Object.keys(permissionsList).map((key) => (
+              <div className={permissionsList[key] === 'retired' ? classes.hide : classes.show}>
+                <FormControlLabel
+                  control={(
+                    <Checkbox
+                      id={`permission_id_${key}`}
+                      color="primary"
+                      inputProps={{
+                        'aria-label': 'permission-id',
+                        'data-cy': 'permission-id-checkbox',
+                      }}
+                    />
+                  )}
+                  label={permissionsList[key]}
+                />
+              </div>
+            ))}
+          </div>
 
-        {// Add permissions checkboxes
-         //   - Use ids for each checkbox instead of names
-         //   - Build array of permission_ids on the fly when submit the form
-         //   - Hide checkbox for 'retired' */
-         //     eslint-disable-next-line max-len
-         //   - Could also chain .filter(ey => permissionsList[key]!='retired').map(key => ...) but that loops twice
-        }
-        <div>
-          { Object.keys(permissionsList).map((key) => (
-            <div className={permissionsList[key] === 'retired' ? classes.hide : classes.show}>
-              <FormControlLabel
-                control={(
-                  <Checkbox
-                    id={`permission_id_${key}`}
-                    color="primary"
-                    inputProps={{
-                      'aria-label': 'permission-id',
-                      'data-cy': 'permission-id-checkbox',
-                    }}
-                  />
-                )}
-                label={permissionsList[key]}
-              />
-            </div>
-          ))}
-        </div>
+          <Divider style={{ marginTop: '0px' }} />
 
-        <Divider style={{ marginTop: '0px' }} />
+          <LinkButton
+            name="back"
+            testName="back"
+            text="Cancel"
+            linkTo="/users"
+          />
 
-        <LinkButton
-          name="back"
-          testName="back"
-          text="Cancel"
-          linkTo="/users"
-        />
-
-        <StandardButton
-          name="save"
-          testName="save-user"
-          handleClick={handleSubmit}
-          text="Save"
-          type="submit"
-          disabled={disableSubmit}
-          dark
-        />
-      </form>
-    </Container>
+          <StandardButton
+            name="save"
+            testName="save-user"
+            handleClick={handleSubmit}
+            text="Save"
+            type="submit"
+            disabled={disableSubmit}
+            dark
+          />
+        </form>
+      </Main>
+    </Page>
   );
 };
 

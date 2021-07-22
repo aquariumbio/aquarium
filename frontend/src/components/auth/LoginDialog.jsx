@@ -6,12 +6,14 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import { useHistory, withRouter } from 'react-router-dom';
+import Container from '@material-ui/core/Container';
 import tokensAPI from '../../helpers/api/tokensAPI';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    marginTop: '10%',
+    transform: 'translate(0%, 25%)',
+    width: '100%',
   },
   divider: {
     marginTop: '40px',
@@ -96,7 +98,7 @@ const LoginDialog = ({ setIsLoading }) => {
     history.push('/');
   }
   return (
-    <div className={classes.root}>
+    <Container className={classes.root}>
       <header>
         <Typography className={classes.labName} variant="h1" gutterBottom align="center">
           Your Lab
@@ -148,7 +150,7 @@ const LoginDialog = ({ setIsLoading }) => {
           SIGN IN
         </Button>
       </form>
-    </div>
+    </Container>
   );
 };
 

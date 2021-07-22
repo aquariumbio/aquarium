@@ -63,7 +63,10 @@ axiosInstance.interceptors.response.use(
           alert(`${status}: ${data.message} - Insufficient permissions`);
           break;
         case 404:
-          alert(`${status}: ${data.message}`);
+          if (window.location.pathname === '/jobs') {
+            break;
+          }
+          alert(`${status}: ${data.message}, ${window.location}`);
           break;
         default:
           alert(`${status}: ${data.message}`);
