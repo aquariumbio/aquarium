@@ -534,7 +534,7 @@ CREATE TABLE `permissions` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_permissions_on_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `plan_associations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -712,7 +712,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_login` (`login`),
   KEY `index_users_on_remember_token` (`remember_token`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `view_job_assignments`;
 /*!50001 DROP VIEW IF EXISTS `view_job_assignments`*/;
