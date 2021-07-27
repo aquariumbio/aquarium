@@ -136,7 +136,7 @@ module Krill
     end
 
     # Copy the content of the given {ShowBlock} into this block.
-    # 
+    #
     # Note: inserting the contents of a block may result in a badly formed show block.
     #
     # @param block [ShowBlock] the block to copy from

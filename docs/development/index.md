@@ -23,6 +23,11 @@ Everyone else should visit the installation page on [Aquarium.bio](https://www.a
    bash ./setup.sh
    ```
 
+## Versions
+
+The `master` branch is currently version 2 (v2.9.0 as of July 2021).
+The `v3-refactor` branch is the base of version 3, and is a complete reorganization of the repository.
+
 ## Running Aquarium
 
 The following commands will allow you to run Aquarium in Rails development mode in a Unix&trade;-like environment.

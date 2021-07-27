@@ -57,8 +57,8 @@
   resolved "https://codeload.github.com/jozefizso/bower-bootstrap-css/tar.gz/3ca4d051f9d391d56641f7f30c6c936f39944910"
 
 "@bower_components/datatables.net@DataTables/Dist-DataTables#*":
-  version "1.10.24"
-  resolved "https://codeload.github.com/DataTables/Dist-DataTables/tar.gz/f3a4432dab5c299c40b4500d2a2a8e09a6a16e9c"
+  version "1.10.25"
+  resolved "https://codeload.github.com/DataTables/Dist-DataTables/tar.gz/c1e4804cb4fa15cd6aa47928f5373ef9eab4dd16"
   dependencies:
     jquery ">=1.7"
 
@@ -87,10 +87,8 @@
   resolved "https://codeload.github.com/components/jqueryui/tar.gz/44ecf3794cc56b65954cc19737234a3119d036cc"
 
 "@bower_components/jquery-ujs@rails/jquery-ujs#*":
-  version "1.2.2"
-  resolved "https://codeload.github.com/rails/jquery-ujs/tar.gz/a4da3b4909b2ca081de3c6f99064403623bfe1fb"
-  dependencies:
-    jquery ">=1.8.0"
+  version "1.2.3"
+  resolved "https://codeload.github.com/rails/jquery-ujs/tar.gz/83b041ba72261f487b9264b9e94211e8107a1f18"
 
 "@bower_components/jquery@jquery/jquery-dist#>=1.6":
   version "3.6.0"
@@ -101,8 +99,8 @@
   resolved "https://codeload.github.com/lodash/lodash/tar.gz/f299b52f39486275a9e6483b60a410e06520c538"
 
 "@bower_components/markdown-it@markdown-it/markdown-it#*":
-  version "12.0.4"
-  resolved "https://codeload.github.com/markdown-it/markdown-it/tar.gz/7b8969ce5cb2edc54f2c1aa39a85a3a08076337d"
+  version "12.1.0"
+  resolved "https://codeload.github.com/markdown-it/markdown-it/tar.gz/13cdeb95abccc78a5ce17acf9f6e8cf5b9ce713b"
   dependencies:
     argparse "^2.0.1"
     entities "~2.1.0"
@@ -121,8 +119,8 @@
     should-util "^1.0.0"
 
 "@bower_components/underscore@jashkenas/underscore#*":
-  version "1.13.0"
-  resolved "https://codeload.github.com/jashkenas/underscore/tar.gz/7054a54d63af2ed1c99eb3707836da709b5e625e"
+  version "1.13.1"
+  resolved "https://codeload.github.com/jashkenas/underscore/tar.gz/943977e34e2279503528a71ddcc2dd5f96483945"
 
 angular@>=1.3.0:
   version "1.8.2"
@@ -154,7 +152,7 @@ entities@~2.1.0:
   resolved "https://registry.yarnpkg.com/entities/-/entities-2.1.0.tgz#992d3129cf7df6870b96c57858c249a120f8b8b5"
   integrity sha512-hCx1oky9PFrJ611mf0ifBLBRW8lUUVRlFolb5gWRfIELabBlbp9xZvrqZLZAs+NxFnbfQoeGd8wDkygjg7U85w==
 
-jquery@>=1.7, jquery@>=1.8.0:
+jquery@>=1.7:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.6.0.tgz#c72a09f15c1bdce142f49dbf1170bdf8adac2470"
   integrity sha512-JVzAR/AjBvVt2BmYhxRCSYysDsPcssdmTFnzyLEts9qNwmjmu4JTAMYubEfwVOSwpQ1I1sKKFcxhZCI2buerfw==
