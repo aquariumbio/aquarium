@@ -367,32 +367,30 @@ TODO: REMOVE ABSOLUTE POSITION */
 }
 
 .tech_dash_table_content {
-  position: absolute;
-  left: 307px;
   top: 225px;
-  width: 1583px;
   padding-left: 30px;
 }
-.tech_table_title {
+
+.tech_table {
   position: absolute;
-  width: 1583px;
+  width: calc(100vw - 307px);
   left: 307px;
   top: 153px;
-  padding-left: 30px;
+  // padding-left: 30px;
+}
 
+.tech_table_title {
+  padding-left: 30px;
   height: 64px;
   background-color: #e9e9e9;
-
   font-family: Roboto;
   font-style: normal;
   font-weight: 700;
   font-size: 18px;
   line-height: 24px;
-
   display: flex;
   align-items: center;
   letter-spacing: 0.25px;
   font-variant: small-caps;
-
   color: #333333;
 }
