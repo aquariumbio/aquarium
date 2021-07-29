@@ -18,11 +18,13 @@ class UpdateViewJobOperationTypes < ActiveRecord::Migration[4.2]
     SQL
 
     # Create dummy table with id as string
-    execute <<-SQL
-      create table `id_strings` (
-        `id` varchar(255) not null default '',
-        primary key (`id`)
-      )
-    SQL
+    unless table_exists?(:id_strings)
+      execute <<-SQL
+        create table `id_strings` (
+          `id` varchar(255) not null default '',
+          primary key (`id`)
+        )
+      SQL
+    end
   end
 end
