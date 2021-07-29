@@ -1,6 +1,7 @@
 .git/
 .idea/
 .yardoc/
+coverage/
 data/
 docker/
 docs/
@@ -16,5 +17,7 @@ vendor/
 .ruby-gemset
 .ruby-version
 
+develop-compose.sh
+aquarium.sh
 docker-compose.*yml
 Dockerfile
