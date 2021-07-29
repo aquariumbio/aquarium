@@ -67,11 +67,12 @@ _set_timezone() {
 _create_compose_config() {
     local env_file=$1
     touch $env_file
+    _set_variable 'APP_PUBLIC_PORT' '80' $env_file
     _set_variable 'LEGACY_VERSION' '2.9.0' $env_file
-    _set_variable 'LEGACY_PUBLIC_PORT' '3100' $env_file   
     _set_variable 'S3_SERVICE' 'minio' $env_file
     _set_variable 'S3_ID' 'aquarium_minio' $env_file
     _set_variable 'S3_REGION' 'us-west-1' $env_file
+    _set_variable 'S3_PUBLIC_PORT' '9000' $env_file
     _set_random 'S3_SECRET_ACCESS_KEY' '40'  $env_file
 }
 
