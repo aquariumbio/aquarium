@@ -1,4 +1,3 @@
-# typed: false
 # encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
@@ -24,7 +23,7 @@ ActiveRecord::Schema.define(version: 20210301000000) do
   end
 
   add_index "account_logs", ["row1"], name: "index_account_logs_on_row1", using: :btree
-  add_index "account_logs", ["row2"], name: "fk_rails_8e6656e8a4", using: :btree
+  add_index "account_logs", ["row2"], name: "index_account_logs_on_row2", using: :btree
   add_index "account_logs", ["user_id"], name: "index_account_log_associations_on_user_id", using: :btree
 
   create_table "accounts", force: :cascade do |t|
@@ -119,7 +118,6 @@ ActiveRecord::Schema.define(version: 20210301000000) do
   end
 
   add_index "field_types", ["parent_class", "parent_id"], name: "index_field_types_on_parent_class_and_parent_id", using: :btree
-  add_index "field_types", ["parent_id"], name: "index_field_types_on_sample_type_id", using: :btree
 
   create_table "field_values", force: :cascade do |t|
     t.integer  "parent_id",               limit: 4
@@ -142,23 +140,6 @@ ActiveRecord::Schema.define(version: 20210301000000) do
   add_index "field_values", ["child_sample_id"], name: "fk_rails_e04e5b0273", using: :btree
   add_index "field_values", ["field_type_id"], name: "index_field_values_on_field_type_id", using: :btree
   add_index "field_values", ["parent_class", "parent_id"], name: "index_field_values_on_parent_class_and_parent_id", using: :btree
-  add_index "field_values", ["parent_id"], name: "index_field_values_on_sample_id", using: :btree
-
-  create_table "folder_contents", force: :cascade do |t|
-    t.integer  "sample_id",   limit: 4
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
-    t.integer  "folder_id",   limit: 4
-    t.integer  "workflow_id", limit: 4
-  end
-
-  create_table "folders", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-    t.integer  "user_id",    limit: 4
-    t.integer  "parent_id",  limit: 4
-  end
 
   create_table "groups", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -604,7 +585,6 @@ ActiveRecord::Schema.define(version: 20210301000000) do
   add_foreign_key "uploads", "jobs", on_delete: :cascade
   add_foreign_key "user_budget_associations", "budgets", on_delete: :cascade
   add_foreign_key "user_budget_associations", "users", on_delete: :cascade
-  add_foreign_key "user_profiles", "users", on_delete: :cascade
   add_foreign_key "user_tokens", "users", on_delete: :cascade
   add_foreign_key "wires", "field_values", column: "from_id", on_delete: :cascade
   add_foreign_key "wires", "field_values", column: "to_id", on_delete: :cascade
