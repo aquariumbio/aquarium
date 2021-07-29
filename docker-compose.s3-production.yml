@@ -61,6 +61,13 @@ services:
     networks:
       - aquarium_net
 
+  web:
+    depends_on: 
+      - s3
+      - createbucket
+    ports:
+      - "${S3_PUBLIC_PORT:-9000}:9000"
+
 volumes:
   s3_data:
   s3_config:

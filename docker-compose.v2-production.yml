@@ -19,7 +19,7 @@
 version: "3.7"
 services:
   app:
-    image: aquariumbio/aquarium:${LEGACY_VERSION}
+    image: aquariumbio/aquarium:${LEGACY_VERSION}_hybrid
     command: ["production"]
     env_file:
       - .env_files/production/legacy
@@ -28,7 +28,7 @@ services:
       - public:/aquarium/public
       - logs:/aquarium/log
       - shared:/aquarium/shared
-      - ./config/instance.yml:/aquarium/config/instance.yml
+      - ./hybrid/instance.yml:/aquarium/config/instance.yml
     networks:
       - aquarium_net
     expose:
@@ -37,7 +37,7 @@ services:
       - db
 
   krill:
-    image: aquariumbio/aquarium:${LEGACY_VERSION}
+    image: aquariumbio/aquarium:${LEGACY_VERSION}_hybrid
     command: ["krill", "production"]
     networks:
       - aquarium_net
@@ -49,6 +49,26 @@ services:
     depends_on:
       - db
       - app
+
+  legacy:
+    image: nginx:stable-alpine
+    ports: 
+      - "3000:80"
+    networks:
+      - aquarium_net
+    depends_on: 
+      - app
+    volumes: 
+      - public:/aquarium/public
+      - logs:/aquarium/log
+      - shared:/aquarium/shared
+      - ./hybrid/nginx.v2-production.conf:/etc/nginx/conf.d/default.conf:ro
+
+  web:
+    depends_on: 
+      - legacy
+    volumes:
+      - ./hybrid/nginx.hybrid-reverse-proxy.conf:/etc/nginx/conf.d/default.conf:ro
 
 networks:
   aquarium_net:
