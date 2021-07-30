@@ -34,6 +34,8 @@ Bioturk::Application.configure do
   # Generate digests for assets URLs
   config.assets.digest = true
 
+  config.assets.prefix = '/v2/assets'
+
   # See everything in the log (default is :info)
   config.log_level = :error
 
