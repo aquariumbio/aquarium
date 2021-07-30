@@ -77,6 +77,10 @@ ENTRYPOINT [ "/aquarium/entrypoint.sh" ]
 # Temporary stage for building production environment based on development stage
 FROM aquarium-development AS aquarium-builder
 
+ENV NODE_ENV=production
+RUN yarn install --modules-folder public/node_modules \
+ && yarn cache clean
+
 # directories used by puma configuration in production
 RUN mkdir -p /aquarium/shared/sockets \
  && mkdir -p /aquarium/shared/log \
@@ -85,7 +89,7 @@ RUN mkdir -p /aquarium/shared/sockets \
  # Precompile assets
  # This requires an active database connection, use nulldb:
  # http://blog.zeit.io/use-a-fake-db-adapter-to-play-nice-with-rails-assets-precompilation/
- && RAILS_ENV=production SECRET_KEY_BASE=foo DB_ADAPTER=nulldb bundle exec rake assets:precompile --trace \
+ && RAILS_ENV=production SECRET_KEY_BASE=foo DB_ADAPTER=nulldb bundle exec rake assets:clean assets:precompile --trace \
  #
  # Clean up from build
  && rm -rf /usr/local/bundle/cache/*.gem \
