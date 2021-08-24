@@ -712,7 +712,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_login` (`login`),
   KEY `index_users_on_remember_token` (`remember_token`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `view_job_assignments`;
 /*!50001 DROP VIEW IF EXISTS `view_job_assignments`*/;
@@ -890,5 +890,3 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20210301000000'),
 ('20210301000010'),
 ('20210301000020');
-
-
