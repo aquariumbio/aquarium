@@ -1,0 +1,5 @@
+{
+    "_description": "Parameterization for production",
+    "REACT_APP_BACKEND": "$REACT_APP_BACKEND",
+    "REACT_APP_BACKEND_PORT": "$REACT_APP_BACKEND_PORT"
+}

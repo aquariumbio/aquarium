@@ -1,0 +1,19 @@
+# Configuration for Aquarium instance.
+#
+# Keys are
+# - instance_name - the name of this Aquarium instance shown in the interface (default 'Your Lab').
+# - lab_email_address - the email address used for sending emails from this Aquarium instance (default: none)
+# - image_uri (default: images bucket in S3, so S3_PROTOCOL://S3_HOST/images)
+# - logo_path - the name of the logo (default: aquarium-logo.png).
+# TODO: make logo_path work with image URI
+#
+# Defaults are values set by Aquarium if not set here
+
+default: &default
+  instance_name: Hybrid
+
+production:
+  <<: *default
+
+development:
+  <<: *default

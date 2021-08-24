@@ -102,4 +102,10 @@ Rails.application.configure do
   # config.active_record.database_selector = { delay: 2.seconds }
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
+
+  # Allow requests from any domain (we do this for development and test environments)
+  # Should be OK since nginx is handling incoming traffic.
+  # See
+  # https://blog.saeloun.com/2019/10/31/rails-6-adds-guard-against-dns-rebinding-attacks.html
+  config.hosts = nil
 end

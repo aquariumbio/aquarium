@@ -1,0 +1,79 @@
+# Base docker-compose file for aquarium
+#
+# Defines services for Aquarium, Krill, database, and S3.  Uses Docker network
+# address translation, and containers for MySQL, and the Minio S3 server.
+#
+# Initializes the database the first time MySQL is run from the database dump
+# in data/mysql_init/dump.sql. If you want to use an alternative, replace this
+# file.
+#
+# To reininitialize the database with the original or an alternative dump file,
+# remove the data/db directory with
+#
+#   sudo rm -rf data/db/*
+#
+# before running `docker-compose up`
+
+# set environment variable EMAIL_SERVICE to AWS to use AWS SES
+
+version: "3.7"
+services:
+  app:
+    image: aquariumbio/aquarium:${LEGACY_VERSION}_hybrid
+    command: ["production"]
+    env_file:
+      - .env_files/production/legacy
+      - .env_files/production/timezone
+    volumes:
+      - public:/aquarium/public
+      - logs:/aquarium/log
+      - shared:/aquarium/shared
+      - ./hybrid/instance.yml:/aquarium/config/instance.yml
+    networks:
+      - aquarium_net
+    expose:
+      - "3000"
+    depends_on:
+      - db
+
+  krill:
+    image: aquariumbio/aquarium:${LEGACY_VERSION}_hybrid
+    command: ["krill", "production"]
+    networks:
+      - aquarium_net
+    expose:
+      - "3500"
+    env_file:
+      - .env_files/production/legacy
+      - .env_files/production/timezone
+    depends_on:
+      - db
+      - app
+
+  legacy:
+    image: nginx:stable-alpine
+    expose:
+      - "80"
+    networks:
+      - aquarium_net
+    depends_on: 
+      - app
+    volumes: 
+      - public:/aquarium/public
+      - logs:/aquarium/log
+      - shared:/aquarium/shared
+      - ./hybrid/nginx.v2-production.conf:/etc/nginx/conf.d/default.conf:ro
+
+  web:
+    depends_on: 
+      - legacy
+    volumes:
+      - ./hybrid/nginx.hybrid-reverse-proxy.conf:/etc/nginx/conf.d/default.conf:ro
+
+networks:
+  aquarium_net:
+
+volumes:
+  public:
+  logs:
+  shared:
