@@ -28,10 +28,11 @@ _clean_up_stray_server() {
     fi
 }
 
-# Starts the develoment server.
+# Starts the development server.
 _start_development_server() {
     echo "Starting development Rails server"
     rails db:migrate RAILS_ENV=development
+    rails db:seed:seeds RAILS_ENV=development
     exec rails server -e development -p 3000 -b '0.0.0.0'
 }
 
