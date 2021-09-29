@@ -36,7 +36,7 @@ gem 'mysql2', '~> 0.5.2'
 gem 'oj'
 
 # For uploads
-gem 'paperclip', '~> 6.1'
+gem 'paperclip', '~> 6.1', '>= 6.1.0'
 
 # Needed for rails 3.2 => 4.0 upgrade
 gem 'protected_attributes_continued'
@@ -44,7 +44,7 @@ gem 'protected_attributes_continued'
 gem 'rack-cors', '~> 1.0.5', require: 'rack/cors'
 
 gem 'rails', '4.2.11.3'
-gem 'mimemagic', '> 0.3.5'
+gem 'mimemagic', '>= 0.3.10'
 
 gem 'redcarpet', '>= 3.5.1'
 
@@ -62,7 +62,7 @@ gem 'will_paginate'
 group :development do
   gem 'factory_bot_rails', '>= 5.2.0'
   gem 'ipaddress' # used to determine subnet for docker containers for web-console
-  gem 'rspec-rails', '>= 4.0.1'
+  gem 'rspec-rails', '>= 4.1.2'
   gem 'rspec-sorbet'
   gem 'rubocop'
   gem 'rubocop-rails'
