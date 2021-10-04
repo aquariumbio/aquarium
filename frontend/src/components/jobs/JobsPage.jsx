@@ -47,6 +47,17 @@ const JobsPage = ({ setIsLoading, setAlertProps }) => {
     });
   };
 
+  const removeOperation = async (jobId, opId) => {
+    const response = await jobsAPI.removeOperation(jobId, opId);
+    if (!response) return;
+    await init();
+    setAlertProps({
+      message: response.message,
+      severity: 'success',
+      open: true,
+    });
+  };
+
   const navBar = () => (
     <NavBar>
       {value === 'categories' ? (
@@ -90,6 +101,7 @@ const JobsPage = ({ setIsLoading, setAlertProps }) => {
             setIsLoading={setIsLoading}
             setAlertProps={setAlertProps}
             cancelJob={cancelJob}
+            removeOperation={removeOperation}
           />
           )}
 

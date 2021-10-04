@@ -16,5 +16,15 @@ class UpdateViewJobOperationTypes < ActiveRecord::Migration[4.2]
       inner join operations o on o.id = ja.operation_id
       inner join operation_types ot on ot.id = o.operation_type_id
     SQL
+
+    # Create dummy table with id as string
+    unless table_exists?(:id_strings)
+      execute <<-SQL
+        create table `id_strings` (
+          `id` varchar(255) not null default '',
+          primary key (`id`)
+        )
+      SQL
+    end
   end
 end

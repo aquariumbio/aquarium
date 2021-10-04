@@ -1,11 +1,26 @@
 describe('/jobs', () => {
-
   beforeEach(() => {
+
+    // stub API responses
+    cy.fixture('jobs/jobCounts').then((json) => {
+      cy.intercept('GET', '/jobs/counts', json)
+    });
+
+    cy.fixture('jobs/unassigned').then((json) => {
+      cy.intercept('GET', '/jobs/unassigned', json)
+    });
+
+    cy.fixture('jobs/showJobOperations').then((json) => {
+      // user handle wildcard variables
+      cy.intercept('GET', '**/jobs/*/show*', json)
+    });
+
     cy.login();
     cy.visit('/jobs');
   });
 
   it('Should load the correct URL', () => {
+
     cy.url().should('eq', `${Cypress.config().baseUrl}/jobs`);
   });
 
@@ -26,6 +41,7 @@ describe('/jobs', () => {
 
   context('should accept user clicks to change tables using left navigation', () => {
     it('should select assigned tab', () => {
+
       cy.get('[id=assigned]')
         .should('not.have.class', 'Mui-selected')
         .click()
@@ -53,4 +69,13 @@ describe('/jobs', () => {
       });
   });
 
+  it('should remove operation from job', () => {
+
+    // get the first row in the table then only objects within the row
+    cy.get(`[role="row"]:first`).within(() => {
+      cy.get(`[aria-label^="expand job"]:first`).click();
+      cy.get(`[aria-label^="remove operation"]:first`).click();
+
+    })
+  });
 });
