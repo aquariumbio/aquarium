@@ -12,8 +12,13 @@ wizardsAPI.getWizardsByLetter = (letter) => axiosInstance
   .then((response) => response.data)
   .catch((error) => error);
 
-wizardsAPI.getWizardById = (id) => axiosInstance
-  .get(`/wizards/${id}`)
+wizardsAPI.getWizardById = (id, box) => axiosInstance
+  .get(`/wizards/${id}?box=${box}`)
+  .then((response) => response.data)
+  .catch((error) => error);
+
+wizardsAPI.getBox = (id, box) => axiosInstance
+  .get(`/wizards/${id}/box?box=${box}`)
   .then((response) => response.data)
   .catch((error) => error);
 

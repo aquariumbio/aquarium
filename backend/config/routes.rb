@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   get  'api/v3/users/:id/show_info',               to: 'api/v3/users#show_info'
   get  'api/v3/users/:id/groups',                  to: 'api/v3/users#groups'
   post 'api/v3/users/:id/update_info',             to: 'api/v3/users#update_info'
+  post 'api/v3/users/:id/update_password',         to: 'api/v3/users#update_password'
   post 'api/v3/users/:id/update_permissions',      to: 'api/v3/users#update_permissions'
   post 'api/v3/users/:id/agreements/:agreement',   to: 'api/v3/users#agreements', constraints: { agreement: /lab_agreement|aquarium_agreement/ }
   post 'api/v3/users/:id/preferences',             to: 'api/v3/users#preferences'
@@ -45,7 +46,7 @@ Rails.application.routes.draw do
   get  'api/v3/groups/:id',                                     to: 'api/v3/groups#show'
   post 'api/v3/groups/:id/update',                              to: 'api/v3/groups#update'
   post 'api/v3/groups/:id/delete',                              to: 'api/v3/groups#delete'
-  post 'api/v3/groups/:id/create_membership',                   to: 'api/v3/groups#create_membership'
+  post 'api/v3/groups/:id/create_membership/:user_id',          to: 'api/v3/groups#create_membership'
   post 'api/v3/groups/:id/delete_membership/:user_id',          to: 'api/v3/groups#delete_membership'
 
   # Announcements
@@ -82,7 +83,8 @@ Rails.application.routes.draw do
   # Object Types
   get  'api/v3/object_types',                      to: 'api/v3/object_types#index'
   post 'api/v3/object_types/create',               to: 'api/v3/object_types#create'
-  get  'api/v3/object_types/handler/:handler',     to: 'api/v3/object_types#show_handler'
+  get  'api/v3/object_types/handler/:handler',     to: 'api/v3/object_types#show_by_handler'
+  get  'api/v3/object_types/sample/:sample_id',    to: 'api/v3/object_types#show_by_sample'
   get  'api/v3/object_types/:id',                  to: 'api/v3/object_types#show'
   post 'api/v3/object_types/:id/update',           to: 'api/v3/object_types#update'
   post 'api/v3/object_types/:id/delete',           to: 'api/v3/object_types#delete'
@@ -91,6 +93,7 @@ Rails.application.routes.draw do
   get  'api/v3/wizards',                           to: 'api/v3/wizards#index'
   post 'api/v3/wizards/create',                    to: 'api/v3/wizards#create'
   get  'api/v3/wizards/:id',                       to: 'api/v3/wizards#show'
+  get  'api/v3/wizards/:id/box',                   to: 'api/v3/wizards#box'
   post 'api/v3/wizards/:id/update',                to: 'api/v3/wizards#update'
   post 'api/v3/wizards/:id/delete',                to: 'api/v3/wizards#delete'
 
@@ -107,4 +110,22 @@ Rails.application.routes.draw do
   post 'api/v3/jobs/:id/unassign',                              to: 'api/v3/job_assignments#unassign'
   post 'api/v3/jobs/:id/delete',                                to: 'api/v3/jobs#delete'
   post 'api/v3/jobs/:id/remove/:operation_id',                  to: 'api/v3/jobs#remove'
+
+  # Samples
+  get  'api/v3/samples',                           to: 'api/v3/samples#index'
+  get  'api/v3/samples/quick_search',              to: 'api/v3/samples#quick_search'
+  post 'api/v3/samples/create',                    to: 'api/v3/samples#create'
+  get  'api/v3/samples/:id',                       to: 'api/v3/samples#show'
+  post 'api/v3/samples/:id/update',                to: 'api/v3/samples#update'
+
+  # Items
+  post 'api/v3/items/create',                      to: 'api/v3/items#create'
+  post 'api/v3/items/create_part',                 to: 'api/v3/items#create_part'
+  get  'api/v3/items/collection/:id',              to: 'api/v3/items#show_collection'
+  get  'api/v3/items/container/:id',               to: 'api/v3/items#show_container'
+  post 'api/v3/items/:id/discard',                 to: 'api/v3/items#discard'
+
+  # Initialize columns in db
+  get  'set_search_text',                   to: 'api/v3/samples#set_search_text'
+  get  'set_field_type_ids',                to: 'api/v3/samples#set_field_type_ids'
 end

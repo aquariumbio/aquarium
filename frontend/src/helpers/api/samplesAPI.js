@@ -1,34 +1,36 @@
 import axiosInstance from './axiosInstance';
 
+// TODO: change this file to sampleTypesAPI.js
+// TODO: change current sampleTypesAPI.js to sampleTypesAPI.js
 const samplesAPI = {};
 
-samplesAPI.getTypes = () => axiosInstance
-  .get('/sample_types')
+samplesAPI.getSamples = (list, sample_type_id, user_id, page) => axiosInstance
+  .get(`/samples?words=${encodeURIComponent(list)}&sample_type_id=${sample_type_id}&user_id=${user_id}&page=${page}`)
   .then((response) => response.data)
   .catch((error) => error);
 
-samplesAPI.getTypeById = (id) => axiosInstance
-  .get(`/sample_types/${id}`)
-  .then((response) => response.data.sample_type)
+samplesAPI.getQuickSearch = (text, sample_type_ids) => axiosInstance
+  .get(`/samples/quick_search?text=${encodeURIComponent(text)}&sample_type_ids=${sample_type_ids}`)
+  .then((response) => response.data)
+  .catch((error) => error);
+
+samplesAPI.getById = (id) => axiosInstance
+  .get(`/samples/${id}`)
+  .then((response) => response.data)
   .catch((error) => error);
 
 samplesAPI.create = (FormData) => axiosInstance
-  .post('sample_types/create', {
-    sample_type: FormData,
+  .post('samples/create', {
+    sample: FormData,
   })
-  .then((response) => response)
+  .then((response) => response.data)
   .catch((error) => error);
 
 samplesAPI.update = (FormData, id) => axiosInstance
-  .post(`/sample_types/${id}/update`, {
-    sample_type: FormData,
+  .post(`/samples/${id}/update`, {
+    sample: FormData,
   })
-  .then((response) => response)
-  .catch((error) => error);
-
-samplesAPI.delete = (id) => axiosInstance
-  .post(`/sample_types/${id}/delete`)
-  .then((response) => response)
+  .then((response) => response.data)
   .catch((error) => error);
 
 export default samplesAPI;

@@ -25,7 +25,7 @@ class Permission < ActiveRecord::Base
       hash = {}
       sql = 'select * from permissions order by sort, id'
       (Permission.find_by_sql sql).each do |r|
-        hash.update({ r.id => r.name })
+        hash[r.id] = r.name
       end
       hash
     end

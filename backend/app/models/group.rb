@@ -63,7 +63,7 @@ class Group < ActiveRecord::Base
   # @option group[:name] [String] the name
   # @option group[:description] [String] the description
   # return the group
-  def update(group)
+  def update_with(group)
     # Read the parameters
     input_name = Input.text(group[:name])
     input_description = Input.text(group[:description])

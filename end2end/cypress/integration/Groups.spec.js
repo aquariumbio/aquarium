@@ -1,4 +1,5 @@
 var thisId
+var userId
 
 describe('/groups', () => {
   beforeEach(() => {
@@ -11,8 +12,6 @@ describe('/groups', () => {
 
   // group page
   it('group page', () => {
-    cy.intercept('GET', '/groups/new?*').as('newgroup')
-
     cy.visit('/groups');
     cy.contains('h1', 'All');
     cy.get('[data-cy="new_group_btn"]').click().then(() => {
@@ -35,7 +34,7 @@ describe('/groups', () => {
       .type("description")
       .should("have.value", "description");
 
-    cy.get("form").submit()
+    cy.get("#group-form").submit()
     cy.wait('@newgroup').should(({ request, response }) => {
       // wait for up to 3 seconds for the page to load
       cy.location('pathname', {timeout: 3000}).should('eq', `/groups`);
@@ -71,7 +70,7 @@ describe('/groups', () => {
       .type("2")
       .should("have.value", "description2");
 
-    cy.get("form").submit()
+    cy.get("#group-form").submit()
     cy.wait('@editgroup').should(({ request, response }) => {
       // wait for up to 3 seconds for the page to load
       cy.location('pathname', {timeout: 3000}).should('eq', `/groups`);
@@ -79,6 +78,50 @@ describe('/groups', () => {
       // show group link should exist
       cy.get(`[data-cy="show_${thisId}"]`).should('exist');
     })
+  });
+
+  // visit the group detail page
+  it('visit group page', () => {
+    cy.intercept('POST', `${Cypress.env('API_URL')}/api/v3/groups/${thisId}/show?*`).as('showgroup')
+
+    cy.visit(`/groups/${thisId}/show`);
+    cy.contains('div', 'Add Member');
+  });
+
+  // add member to the group
+  it('add member', () => {
+    userId = window.localStorage.getItem('userId')
+
+    // add member
+    cy.visit(`/groups/${thisId}/show`);
+    // click on dropdown
+    cy.get("#user-id-input").click().then(() => {
+      // click on option
+      cy.get(`[data-value="${userId}"]`).click().then(() => {
+        cy.contains('div', 'test_user');
+      })
+    })
+
+    // group should also appear on the users profile > membership page
+    cy.visit(`/users/${userId}/profile`);
+    // wait 1 sec, there should be a better way to do this
+    cy.wait(1000)
+    cy.get(`[data-cy="memberships"]`).click().then(() => {
+      cy.contains('h5', 'name2');
+    })
+
+  });
+
+  // remove member from the group
+  it('remove member', () => {
+    userId = window.localStorage.getItem('userId')
+
+    cy.visit(`/groups/${thisId}/show`);
+    // remove member
+    cy.get(`[data-cy="remove_${userId}"]`).click().then(() => {
+      // the member should no longer exist
+      cy.get(`[data-cy="remove_${userId}"]`).should('not.exist');
+    });
   });
 
   // delete group

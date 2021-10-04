@@ -5,12 +5,9 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 
 import { LinkButton } from './Buttons';
+import globalUseSyles from '../../globalUseStyles';
 
 const useStyles = makeStyles((theme) => ({
-  wrapper: {
-    padding: '0 24px 24px 24px',
-  },
-
   letter: {
     color: theme.palette.primary.main,
   },
@@ -18,9 +15,10 @@ const useStyles = makeStyles((theme) => ({
 
 const Alphabet = ({ fetchLetter, fetchAll }) => {
   const classes = useStyles();
+  const globalClasses = globalUseSyles();
 
   return (
-    <div className={classes.wrapper}>
+    <div className={globalClasses.wrapper}>
       <Button className={classes.letter} variant="outlined" onClick={() => fetchAll()}>All</Button>
       <Button className={classes.letter} variant="outlined" onClick={() => fetchLetter('A')}>A</Button>
       <Button className={classes.letter} variant="outlined" onClick={() => fetchLetter('B')}>B</Button>

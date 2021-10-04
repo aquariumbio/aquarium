@@ -11,8 +11,6 @@ describe('/wizards', () => {
 
   // wizard page
   it('wizard page', () => {
-    cy.intercept('GET', '/wizards/new').as('newwizard')
-
     cy.visit('/wizards');
     cy.contains('h1', 'All');
     cy.get('[data-cy="new_wizard_btn"]').click().then(() => {
@@ -38,7 +36,7 @@ describe('/wizards', () => {
     // not worried about field names here
     // they are just sent to the backend as a json string
 
-    cy.get("form").submit()
+    cy.get("#wizard-form").submit()
     cy.wait('@newwizard').should(({ request, response }) => {
       // wait for up to 3 seconds for the page to load
       cy.location('pathname', {timeout: 3000}).should('eq', `/wizards`);
@@ -51,12 +49,14 @@ describe('/wizards', () => {
     })
   });
 
-  // click edit wizard
-  it('edit wizard', () => {
+  // wizard details page
+  it('show wizard', () => {
     cy.visit('/wizards');
-    cy.get(`[data-cy="edit_${thisId}"]`).click().then(() => {
+    cy.get(`[data-cy="show_${thisId}"]`).click().then(() => {
       // wait for up to 3 seconds for the page to load
-      cy.location('pathname', {timeout: 3000}).should('eq', `/wizards/${thisId}/edit`);
+      cy.location('pathname', {timeout: 3000}).should('eq', `/wizards/${thisId}/show`);
+
+      cy.contains('div', 'Containers managed by name')
     });
   });
 
@@ -74,7 +74,7 @@ describe('/wizards', () => {
       .type("2")
       .should("have.value", "description2");
 
-    cy.get("form").submit()
+    cy.get("#wizard-form").submit()
     cy.wait('@editwizard').should(({ request, response }) => {
       // wait for up to 3 seconds for the page to load
       cy.location('pathname', {timeout: 3000}).should('eq', `/wizards`);

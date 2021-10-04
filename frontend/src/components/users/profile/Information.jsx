@@ -10,7 +10,8 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Toolbar from '@material-ui/core/Toolbar';
 
 import { LinkButton, StandardButton } from '../../shared/Buttons';
-import usersAPI from '../../../helpers/api/users';
+import usersAPI from '../../../helpers/api/usersAPI';
+import globalUseSyles from '../../../globalUseStyles';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -36,28 +37,17 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
   },
 
-  show: {
-    display: 'block',
-  },
-
-  hide: {
-    display: 'none',
-  },
-
   header: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-  },
-
-  wrapper: {
-    padding: '0 24px',
   },
 }));
 
 // eslint-disable-next-line no-unused-vars
 const Information = ({ setIsLoading, setAlertProps, id }) => {
   const classes = useStyles();
+  const globalClasses = globalUseSyles();
 
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
@@ -84,7 +74,7 @@ const Information = ({ setIsLoading, setAlertProps, id }) => {
     event.preventDefault();
 
     // set formData
-    const form = document.querySelector('form');
+    const form = document.querySelector('#information-form');
     const data = new FormData(form);
     const formData = Object.fromEntries(data);
 
@@ -147,7 +137,13 @@ const Information = ({ setIsLoading, setAlertProps, id }) => {
 
       <Divider />
 
-      <div className={classes.wrapper}>
+      <div className={globalClasses.wrapper}>
+        <Typography variant="h4">
+          Information
+        </Typography>
+
+        <Divider />
+
         <form id="information-form" name="information-form" data-cy="information-form" onSubmit={handleSubmit}>
           <Typography variant="h4" className={classes.inputName} display="inline">
             Name
@@ -229,7 +225,7 @@ const Information = ({ setIsLoading, setAlertProps, id }) => {
 
           <StandardButton
             name="save"
-            testName="save-group"
+            testName="save-info"
             handleClick={handleSubmit}
             text="Save"
             type="submit"

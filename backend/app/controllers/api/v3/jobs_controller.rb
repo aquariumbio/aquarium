@@ -286,7 +286,7 @@ module Api
           # get data_associations for operation
           data_associations = DataAssociation.data_associations(operation_id)
 
-          operations << { id: jo.id, operation_id: jo.operation_id, updated_at: jo.updated_at, status: jo.status, plan_id: jo.plan_id, inputs: inputs, outputs: outputs, data_associations: data_associations }
+          operations << { id: jo.id, user_name: jo.user_name, operation_id: jo.operation_id, updated_at: jo.updated_at, status: jo.status, plan_id: jo.plan_id, inputs: inputs, outputs: outputs, data_associations: data_associations }
         end
 
         render json: { operations: operations }, status: :ok
@@ -495,7 +495,7 @@ module Api
 
         # Get operation_types for selected category, status
         operation_types = OperationType.operation_types(category, status)
-        render json: { error: "No operation types" }.to_json, status: :not_found and return if !operation_types[0]
+        render json: { operation_types: [], '' => { operations: [] } }.to_json, status: :ok and return if !operation_types[0]
 
         # Get operations for first operation_type = operation_typs[0].name and status
         operations = Operation.operations_for_category_type_status(category, operation_types[0].name, status)

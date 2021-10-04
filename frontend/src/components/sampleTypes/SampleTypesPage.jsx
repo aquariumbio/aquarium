@@ -8,7 +8,7 @@ import Divider from '@material-ui/core/Divider';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Toolbar from '@material-ui/core/Toolbar';
-import samplesAPI from '../../helpers/api/samplesAPI';
+import sampleTypesAPI from '../../helpers/api/sampleTypesAPI';
 import SideBar from './SideBar';
 import ShowSampleType from './ShowSampleType';
 import { LinkButton, StandardButton } from '../shared/Buttons';
@@ -46,21 +46,12 @@ const SampleTypeDefinitions = ({ setIsLoading }) => {
       second argument to useEffect  */
   useEffect(() => {
     const fetchData = async () => {
-      // loading overlay - delay by window.$timeout to avoid screen flash
-      const loading = setTimeout(() => {
-        setIsLoading(true);
-      }, window.$timeout);
-
-      const response = await samplesAPI.getTypes();
-
-      // break if the HTTP call resulted in an error ("return false" from API.js)
-      if (!response) {
-        return;
-      }
-
-      // clear timeout and clear overlay
+      // wrap the API call with the spinner
+      const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
+      const response = await sampleTypesAPI.getTypesPlusFirst();
       clearTimeout(loading);
       setIsLoading(false);
+      if (!response) return;
 
       // success
       setSampleTypes(response.sample_types);
@@ -71,42 +62,24 @@ const SampleTypeDefinitions = ({ setIsLoading }) => {
   }, []);
 
   const handleDelete = async () => {
-    // loading overlay - delay by window.$timeout to avoid screen flash
-    const loading = setTimeout(() => {
-      setIsLoading(true);
-    }, window.$timeout);
-
-    const response = await samplesAPI.delete(currentSampleType.id);
-
-    // break if the HTTP call resulted in an error ("return false" from API.js)
-    if (!response) {
-      return;
-    }
-
-    // clear timeout and clear overlay
+    // wrap the API call with the spinner
+    const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
+    const response = await sampleTypesAPI.delete(currentSampleType.id);
     clearTimeout(loading);
     setIsLoading(false);
+    if (!response) return;
 
     // success
-    //
-    // NOTE: This seems too repetitive.
-    //       I think we should just reload the page with a trigger to set the alert
-    //
-    /*  When we successfully delete a sample type we set the success alert,
-        make a new call to get all sample types and update the current sample type
-        so the user is seeing valid data */
-    if (response.status === 200) {
-      const data = await samplesAPI.getTypes();
+    const data = await sampleTypesAPI.getTypesPlusFirst();
 
-      setAlertProps({
-        message: `${currentSampleType.name} deleted`,
-        severity: 'success',
-        open: true,
-      });
+    setAlertProps({
+      message: `${currentSampleType.name} deleted`,
+      severity: 'success',
+      open: true,
+    });
 
-      setSampleTypes(data.sample_types);
-      setCurrentSampleType(data.first);
-    }
+    setSampleTypes(data.sample_types);
+    setCurrentSampleType(data.first);
   };
 
   //

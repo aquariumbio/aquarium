@@ -63,9 +63,7 @@ const ShowJobOperations = ({
       key="title"
       role="row"
     >
-      <div className={`${globalClasses.flexCol1}`}>
-        <Typography variant="body2">Remove</Typography>
-      </div>
+      <div className={`${globalClasses.flexCol1}`} />
       <div role="columnheader" className={`${globalClasses.flexCol1}`}>
         <Typography variant="body2">Plan #</Typography>
       </div>
@@ -176,18 +174,18 @@ const ShowJobOperations = ({
           {displayInOutData(operation)}
         </div>
         {tablet ? (
-          <div role="cell" className={`${globalClasses.flexCol2}`}>
-            <Typography variant="body2" noWrap>Last Updated: {operation.updated_at.substring(0, 16).replace('T', ' ')}</Typography>
-            <Typography variant="body2" noWrap>Researcher: {operation.name}</Typography>
-            <Typography variant="body2" noWrap>Op Id: {operation.operation_id}</Typography>
+          <div className={`${globalClasses.flexCol2}`}>
+            <Typography variant="body2" noWrap>Updated: {operation.updated_at.substring(0, 16).replace('T', ' ')}</Typography>
+            <Typography variant="body2" noWrap>Researcher: {operation.user_name}</Typography>
+            <Typography variant="body2" noWrap>Op Id: {operation.id}</Typography>
           </div>
         ) : (
           <>
             <div role="cell" className={`${globalClasses.flexCol2}`}>
               <Typography variant="body2" noWrap>{operation.updated_at.substring(0, 16).replace('T', ' ')}</Typography>
             </div>
-            <div role="cell" className={`${globalClasses.flexCol2}`}>
-              <Typography variant="body2" noWrap>{operation.name}</Typography>
+            <div className={`${globalClasses.flexCol2}`}>
+              <Typography variant="body2" noWrap>{operation.user_name}</Typography>
             </div>
             <div role="cell" className={`${globalClasses.flexCol1}`}>
               <Typography variant="body2" noWrap>{operation.operation_id}</Typography>

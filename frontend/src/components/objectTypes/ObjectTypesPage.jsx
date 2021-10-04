@@ -12,11 +12,12 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Handlers from './Handlers';
 import ShowObjectTypesByHandler from './ShowObjectTypesByHandler';
 import { LinkButton } from '../shared/Buttons';
-import objectsAPI from '../../helpers/api/objects';
+import objectsAPI from '../../helpers/api/objectsAPI';
 import Page from '../shared/layout/Page';
 import Main from '../shared/layout/Main';
 import SideBar from '../shared/layout/SideBar';
 import ListScroll from '../shared/layout/ListScroll';
+import globalUseSyles from '../../globalUseStyles';
 
 // Route: /object_types
 // Linked in LeftHamburgeMenu
@@ -36,6 +37,7 @@ const useStyles = makeStyles(() => ({
 // eslint-disable-next-line no-unused-vars
 const ObjectTypesPage = ({ setIsLoading, setAlertProps }) => {
   const classes = useStyles();
+  const globalClasses = globalUseSyles();
 
   const [objectTypeHandlers, setObjectTypeHandlers] = useState([]);
   const [currentObjectTypeHandler, setCurrentObjectTypeHandler] = useState([]);
@@ -71,41 +73,43 @@ const ObjectTypesPage = ({ setIsLoading, setAlertProps }) => {
         />
       </SideBar>
 
-      <Main
-        item
-        name="object-types-main-container"
-        data-cy="object-types-main-container"
-        overflow="visible"
-      >
-        <Toolbar className={classes.header}>
-          <Breadcrumbs
-            separator={<NavigateNextIcon fontSize="small" />}
-            aria-label="breadcrumb"
-            component="div"
-            data-cy="page-title"
-          >
-            <Typography display="inline" variant="h6" component="h1">
-              Object Type Handlers
-            </Typography>
-            <Typography display="inline" variant="h6" component="h1">
-              {currentObjectTypeHandler}
-            </Typography>
-          </Breadcrumbs>
+      <Main title={(
+        <>
+          <Toolbar className={classes.header}>
+            <Breadcrumbs
+              separator={<NavigateNextIcon fontSize="small" />}
+              aria-label="breadcrumb"
+              component="div"
+              data-cy="page-title"
+            >
+              <Typography display="inline" variant="h6" component="h1">
+                Object Type Handlers
+              </Typography>
+              <Typography display="inline" variant="h6" component="h1">
+                {currentObjectTypeHandler}
+              </Typography>
+            </Breadcrumbs>
 
-          <div>
-            <LinkButton
-              name="New Object Type"
-              testName="new_object_type_btn"
-              text="New"
-              dark
-              type="button"
-              linkTo="/object_types/new"
-            />
+            <div>
+              <LinkButton
+                name="New Object Type"
+                testName="new_object_type_btn"
+                text="New"
+                dark
+                type="button"
+                linkTo="/object_types/new"
+              />
+            </div>
+          </Toolbar>
+          <div className={`${globalClasses.flex} ${globalClasses.flexTitle}`}>
+            <Typography className={globalClasses.flexCol1}><b>Name</b></Typography>
+            <Typography className={globalClasses.flexCol3}><b>Description</b></Typography>
+            <Typography className={globalClasses.flexColAutoHidden}>Edit</Typography>
+            <Typography className={globalClasses.flexColAutoHidden}>Delete</Typography>
           </div>
-        </Toolbar>
-
-        <Divider />
-
+        </>
+      )}
+      >
         {currentObjectTypesByHandler ? (
           /* eslint-disable-next-line max-len */
           <ShowObjectTypesByHandler

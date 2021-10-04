@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 
-import groupsAPI from '../../helpers/api/groups';
+import groupsAPI from '../../helpers/api/groupsAPI';
 import tokensAPI from '../../helpers/api/tokensAPI';
 import { StandardButton, LinkButton } from '../shared/Buttons';
 import Page from '../shared/layout/Page';
@@ -36,14 +36,6 @@ const useStyles = makeStyles((theme) => ({
 
   spaceBelow: {
     marginBottom: theme.spacing(1),
-  },
-
-  show: {
-    display: 'block',
-  },
-
-  hide: {
-    display: 'none',
   },
 }));
 
@@ -97,7 +89,7 @@ const GroupForm = ({ setIsLoading, setAlertProps, match }) => {
     event.preventDefault();
 
     // set formData
-    const form = document.querySelector('form');
+    const form = document.querySelector('#group-form');
     const data = new FormData(form);
     const formData = Object.fromEntries(data);
 

@@ -254,7 +254,7 @@ const ShowByOperation = ({
           {tablet ? (
             <div className={`${globalClasses.flexCol2}`}>
               <Typography variant="body2" noWrap>Updated: {operation.updated_at.substring(0, 16).replace('T', ' ')}</Typography>
-              <Typography variant="body2" noWrap>Researcher: {operation.name}</Typography>
+              <Typography variant="body2" noWrap>Researcher: {operation.user_name}</Typography>
               <Typography variant="body2" noWrap>Op Id: {operation.id}</Typography>
             </div>
           ) : (
@@ -263,7 +263,7 @@ const ShowByOperation = ({
                 <Typography variant="body2" noWrap>{operation.updated_at.substring(0, 16).replace('T', ' ')}</Typography>
               </div>
               <div className={`${globalClasses.flexCol2}`}>
-                <Typography variant="body2" noWrap>{operation.name}</Typography>
+                <Typography variant="body2" noWrap>{operation.user_name}</Typography>
               </div>
               <div className={`${globalClasses.flexCol1}`}>
                 <Typography variant="body2" noWrap>{operation.id}</Typography>

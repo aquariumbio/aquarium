@@ -14,9 +14,12 @@ import Button from '@material-ui/core/Button';
 
 import ShowUsers from './ShowUsers';
 import { LinkButton } from '../shared/Buttons';
-import usersAPI from '../../helpers/api/users';
-import permissionsAPI from '../../helpers/api/permissions';
+import usersAPI from '../../helpers/api/usersAPI';
+import permissionsAPI from '../../helpers/api/permissionsAPI';
 import Alphabet from '../shared/Alphabet';
+import Page from '../shared/layout/Page';
+import Main from '../shared/layout/Main';
+import globalUseSyles from '../../globalUseStyles';
 
 // Route: /object_types
 // Linked in LeftHamburgeMenu
@@ -40,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
 // eslint-disable-next-line no-unused-vars
 const UsersPage = ({ setIsLoading, setAlertProps, match }) => {
   const classes = useStyles();
+  const globalClasses = globalUseSyles();
   const history = useHistory();
 
   // const [userLetters, setUserLetters] = useState([]);
@@ -57,13 +61,13 @@ const UsersPage = ({ setIsLoading, setAlertProps, match }) => {
       setCurrentLetter('All');
       setCurrentUsers(response.users);
     }
-
-    // screen does not refresh (we do not want it to) because only query parameters change
-    // allows user to hit refresh to reload
-    history.push('/users');
   };
 
   const fetchLetter = async (letter) => {
+    // allows user to hit refresh to reload the page
+    // change before calling the API so the URL persists if the token has timed out
+    history.push(`/users?letter=${letter}`.toLowerCase());
+
     // wrap the API call
     const response = await usersAPI.getUsersByLetter(letter);
     if (!response) return;
@@ -73,10 +77,6 @@ const UsersPage = ({ setIsLoading, setAlertProps, match }) => {
       setCurrentLetter(letter.toUpperCase());
       setCurrentUsers(response.users);
     }
-
-    // screen does not refresh (we do not want it to) because only query parameters change
-    // allows user to hit refresh to reload
-    history.push(`/users?letter=${letter}`.toLowerCase());
   };
 
   // initialize users and get permissions
@@ -111,41 +111,53 @@ const UsersPage = ({ setIsLoading, setAlertProps, match }) => {
   }, []);
 
   return (
-    <>
-      <Toolbar className={classes.header}>
-        <Breadcrumbs
-          separator={<NavigateNextIcon fontSize="small" />}
-          aria-label="breadcrumb"
-          component="div"
-          data-cy="page-title"
-        >
-          <Typography display="inline" variant="h6" component="h1">
-            Users
-          </Typography>
-          <Typography display="inline" variant="h6" component="h1">
-            {currentLetter}
-          </Typography>
-        </Breadcrumbs>
+    <Page>
+      <Main title={(
+        <>
+          <Toolbar className={classes.header}>
+            <Breadcrumbs
+              separator={<NavigateNextIcon fontSize="small" />}
+              aria-label="breadcrumb"
+              component="div"
+              data-cy="page-title"
+            >
+              <Typography display="inline" variant="h6" component="h1">
+                Users
+              </Typography>
+              <Typography display="inline" variant="h6" component="h1">
+                {currentLetter}
+              </Typography>
+            </Breadcrumbs>
 
-        <div>
-          <LinkButton
-            name="New User"
-            testName="new_user_btn"
-            text="New User"
-            dark
-            type="button"
-            linkTo="/users/new"
-          />
-        </div>
-      </Toolbar>
+            <div>
+              <LinkButton
+                name="New User"
+                testName="new_user_btn"
+                text="New User"
+                dark
+                type="button"
+                linkTo="/users/new"
+              />
+            </div>
+          </Toolbar>
 
-      <Alphabet fetchLetter={fetchLetter} fetchAll={fetchAll} />
+          <Alphabet fetchLetter={fetchLetter} fetchAll={fetchAll} />
 
-      {currentUsers
-        /* eslint-disable-next-line max-len */
-        ? <ShowUsers users={currentUsers} setIsLoading={setIsLoading} setAlertProps={setAlertProps} permissionsList={permissionsList} currentLetter={currentLetter} />
-        : ''}
-    </>
+          <div className={`${globalClasses.flex} ${globalClasses.flexTitle}`}>
+            <Typography className={globalClasses.flexCol1}><b>Name</b></Typography>
+            <Typography className={globalClasses.flexCol1}><b>Description</b></Typography>
+            <Typography className={globalClasses.flexCol1}><b>Since</b></Typography>
+            <Typography className={globalClasses.flexCol1}>Status</Typography>
+          </div>
+        </>
+      )}
+      >
+        {currentUsers
+          /* eslint-disable-next-line max-len */
+          ? <ShowUsers users={currentUsers} setIsLoading={setIsLoading} setAlertProps={setAlertProps} permissionsList={permissionsList} currentLetter={currentLetter} />
+          : ''}
+      </Main>
+    </Page>
   );
 };
 
