@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { Link as RouterLink } from 'react-router-dom';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme) => ({
   dark: {
@@ -49,19 +50,21 @@ export const StandardButton = ({
   };
 
   return (
-    <Button
-      name={name}
-      className={`${cname} ${noMargin}`}
-      type={type}
-      onClick={handleClick}
-      data-cy={testName}
-      disabled={disabled}
-      color="primary"
-      startIcon={validIcons[icon]}
-      variant={variant}
-    >
-      {text}
-    </Button>
+    <Tooltip title={name}>
+      <Button
+        name={name}
+        className={`${cname} ${noMargin}`}
+        type={type}
+        onClick={handleClick}
+        data-cy={testName}
+        disabled={disabled}
+        color="primary"
+        startIcon={validIcons[icon]}
+        variant={variant}
+      >
+        {text}
+      </Button>
+    </Tooltip>
   );
 };
 StandardButton.propTypes = {
@@ -101,16 +104,18 @@ export const LinkButton = ({
   const cname = dark ? classes.dark : classes.light;
   const noMargin = dense ? classes.dense : '';
   return (
-    <Button
-      name={name}
-      className={`${cname} ${noMargin}`}
-      component={RouterLink}
-      to={linkTo}
-      data-cy={testName}
-      disabled={disabled} // aria-disabled
-    >
-      {text}
-    </Button>
+    <Tooltip title={name}>
+      <Button
+        name={name}
+        className={`${cname} ${noMargin}`}
+        component={RouterLink}
+        to={linkTo}
+        data-cy={testName}
+        disabled={disabled} // aria-disabled
+      >
+        {text}
+      </Button>
+    </Tooltip>
   );
 };
 LinkButton.propTypes = {

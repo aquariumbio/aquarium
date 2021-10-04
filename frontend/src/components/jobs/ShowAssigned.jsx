@@ -64,7 +64,7 @@ const ShowAssigned = () => {
             <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{job.operations_count}</Typography>
           </div>
           <div className={`${globalClasses.flexCol1}`}>
-            <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{job.created_at ? job.created_at.substring(0, 16).replace('T', ' ') : '-'}</Typography>
+            <Typography variant={tablet ? 'body2' : 'body1'} noWrap>{job.updated_at ? job.updated_at.substring(0, 16).replace('T', ' ') : '-'}</Typography>
           </div>
         </div>
       ))

@@ -15,7 +15,7 @@ import { useWindowDimensions } from '../../WindowDimensionsProvider';
 
 const useStyles = makeStyles((theme) => ({
   title: {
-    padding: theme.spacing(2),
+    padding: `${theme.spacing(2)}px ${theme.spacing(4)}px`,
     borderBottom: '1px solid #DDD',
     fontWeight: 'bold',
 

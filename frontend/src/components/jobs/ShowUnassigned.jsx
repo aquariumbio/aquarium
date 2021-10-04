@@ -9,6 +9,7 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { makeStyles } from '@material-ui/core';
+import Tooltip from '@material-ui/core/Tooltip';
 import globalUseSyles from '../../globalUseStyles';
 import jobsAPI from '../../helpers/api/jobsAPI';
 import Main from '../shared/layout/Main';
@@ -98,7 +99,7 @@ const ShowUnassigned = (props) => {
         <div className={`${globalClasses.flexCol1}`}><Typography variant="body2">Job</Typography></div>
         <div className={`${globalClasses.flexCol1}`}><Typography variant="body2">Operations</Typography></div>
         <div className={`${globalClasses.flexCol1}`}><Typography variant="body2">Created</Typography></div>
-        <div className={`${globalClasses.flexCol1}`}><Typography variant="body2" /></div>
+        <div className={`${globalClasses.flexCol1}`}><Typography variant="body2">Cancel</Typography></div>
       </div>
     </div>
   );
@@ -131,7 +132,9 @@ const ShowUnassigned = (props) => {
                 aria-label={`expand job ${job.job_id}`}
                 onClick={() => toggleExpand(job.job_id)}
               >
-                {expand[job.job_id].open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                {expand[job.job_id].open
+                  ? <Tooltip title={`Collapse Job ${job.job_id}`}><ExpandLessIcon /></Tooltip>
+                  : <Tooltip title={`Expand Job ${job.job_id}`}><ExpandMoreIcon /></Tooltip>}
               </IconButton>
             </div>
             <div className={`${globalClasses.flexCol2}`}>
