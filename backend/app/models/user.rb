@@ -70,8 +70,8 @@ class User < ActiveRecord::Base
   # return the user
   def self.create_from(user)
     # Read the parameters
-    name = Input.text_field(user[:name])
-    login = Input.text_field(user[:login])
+    name = Input.text(user[:name])
+    login = Input.text(user[:login])
     password = user[:password]
 
     # create the user and check whether it is valid
@@ -115,9 +115,9 @@ class User < ActiveRecord::Base
     valid = true
 
     # update info
-    self.name = Input.text_field(user_data[:name])
-    email = Input.text_field(user_data[:email])
-    phone = Input.text_field(user_data[:phone])
+    self.name = Input.text(user_data[:name])
+    email = Input.text(user_data[:email])
+    phone = Input.text(user_data[:phone])
     valid = false if !self.valid_info?(email, phone)
 
     return { errors: self.errors }, :ok if !valid
@@ -130,6 +130,25 @@ class User < ActiveRecord::Base
     # Update the user email and phone
     UserProfile.set_user_profile(self.id, "email", email)
     UserProfile.set_user_profile(self.id, "phone", phone)
+
+    # Return user with extended info
+    return { user: User.find_id_show_info(self.id) }, :ok
+  end
+
+  # Update a user's password (password tab)
+  #
+  # @param user_data [Hash] the user
+  # return the user with extended info
+  def update_password(user_data)
+    valid = true
+
+    # update password
+    password1 = Input.text(user_data[:password1])
+    password2 = Input.text(user_data[:password2])
+    return { errors: { password: "Passwords do not match" } }, :ok if password1 != password2
+
+    self.password = password1
+    return { errors: self.errors }, :ok if !self.save
 
     # Return user with extended info
     return { user: User.find_id_show_info(self.id) }, :ok
@@ -203,11 +222,6 @@ class User < ActiveRecord::Base
       [401, "Invalid"]
     elsif user.timenow.to_s[0, 19] < timeok
       # Session timeout
-      # Delete the token
-      deletes = sanitize_sql(['token = ? and ip = ?', option_token, option_ip])
-      sql = "delete from user_tokens where #{deletes} limit 1"
-      User.connection.execute sql
-
       [401, "Session timeout"]
     elsif !user.permission?(check_permission_id)
       # Forbidden

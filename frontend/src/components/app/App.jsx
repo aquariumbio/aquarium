@@ -8,7 +8,6 @@ import LoginDialog from '../auth/LoginDialog';
 import UserMenu from '../navigation/UserMenu';
 import ManagerPage from '../manager/ManagerPage';
 import PlansPage from '../plans/PlansPage';
-import SamplesPage from '../samples/SamplesPage';
 import HomePage from '../HomePage';
 import DeveloperPage from '../developer/DeveloperPage';
 import DesignerPage from '../designer/DesignerPage';
@@ -18,12 +17,14 @@ import UsersPage from '../users/UsersPage';
 import UserForm from '../users/UserForm';
 import SampleTypesPage from '../sampleTypes/SampleTypesPage';
 import ObjectTypesPage from '../objectTypes/ObjectTypesPage';
+import ObjectTypePage from '../objectTypes/ObjectTypePage';
 import ObjectTypeForm from '../objectTypes/ObjectTypeForm';
 import DirectPurchasePage from '../directPurchase/DirectPurchasePage';
 import ExportWorkflowsPage from '../exportWorkflows/ExportWorkflowsPage';
 import InvoicesPage from '../invoices/InvoicesPage';
 import WizardsPage from '../wizards/WizardsPage';
 import WizardForm from '../wizards/WizardForm';
+import WizardPage from '../wizards/WizardPage';
 import LogsPage from '../logs/LogsPage';
 import Header from '../navigation/Header';
 import UserProfilePage from '../users/UserProfilePage';
@@ -35,8 +36,10 @@ import GroupPage from '../groups/GroupPage';
 import GroupForm from '../groups/GroupForm';
 import JobsPage from '../jobs/JobsPage';
 import AlertToast from '../shared/AlertToast';
+import SamplesPage from '../samples/SamplesPage';
 import WindowDimensionsProvider from '../../WindowDimensionsProvider';
 import theme from '../../theme';
+import Interceptor from '../shared/Interceptor';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -53,6 +56,22 @@ const useStyles = makeStyles(() => ({
     width: '100%',
   },
 
+  modal_wrapper: {
+    display: '',
+    position: 'fixed',
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    zIndex: '1000',
+  },
+
+  modal_content: {
+    width: '400px',
+    margin: 'auto',
+    padding: '20px',
+    backgroundColor: 'white',
+    border: '1px solid black',
+  }
 }));
 
 export default function App() {
@@ -65,6 +84,9 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <WindowDimensionsProvider>
+        {/* Session Timeout / Unexpected Error popup */}
+        <Interceptor setAlertProps={setAlertProps} />
+
         <AlertToast
           open={alertProps.open}
           severity={alertProps.severity}
@@ -106,6 +128,7 @@ export default function App() {
 
                 <Route exact path="/wizards" render={(props) => <WizardsPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
                 <Route exact path="/wizards/new" render={(props) => <WizardForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
+                <Route exact path="/wizards/:id/show" render={(props) => <WizardPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
                 <Route exact path="/wizards/:id/edit" render={(props) => <WizardForm setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />
 
                 <Route exact path="/object_types" render={(props) => <ObjectTypesPage setIsLoading={setIsLoading} setAlertProps={setAlertProps} {...props} />} />

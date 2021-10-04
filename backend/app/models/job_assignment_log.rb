@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# job_assignment_logs table
 class JobAssignmentLog < ActiveRecord::Base
   # NOTE: belongs_to will automatically validate if not optional
   # NOTE: the belongs_to names cannot be the same as the table column names

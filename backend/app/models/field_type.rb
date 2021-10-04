@@ -90,7 +90,7 @@ class FieldType < ActiveRecord::Base
     if ftype == "sample" and field_type[:allowable_field_types].kind_of?(Array)
       field_type[:allowable_field_types].each do |allowable_field_type|
         # Update the allowable field type and append the id to list of allowable_field_type_ids
-        allowable_field_type_ids << AllowableFieldType.update(field_type_id, allowable_field_type)
+        allowable_field_type_ids << AllowableFieldType.update_with(field_type_id, allowable_field_type)
       end
     end
 

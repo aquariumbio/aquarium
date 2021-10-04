@@ -13,7 +13,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 
 import { LinkButton, StandardButton } from '../../shared/Buttons';
-import usersAPI from '../../../helpers/api/users';
+import usersAPI from '../../../helpers/api/usersAPI';
+import globalUseSyles from '../../../globalUseStyles';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -39,28 +40,17 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
   },
 
-  show: {
-    display: 'block',
-  },
-
-  hide: {
-    display: 'none',
-  },
-
   header: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-  },
-
-  wrapper: {
-    padding: '0 24px',
   },
 }));
 
 // eslint-disable-next-line no-unused-vars
 const Preferences = ({ setIsLoading, setAlertProps, id }) => {
   const classes = useStyles();
+  const globalClasses = globalUseSyles();
 
   const [userName, setUserName] = useState('');
   const [labName, setLabName] = useState('');
@@ -91,7 +81,7 @@ const Preferences = ({ setIsLoading, setAlertProps, id }) => {
     event.preventDefault();
 
     // set formData
-    const form = document.querySelector('form');
+    const form = document.querySelector('#preferences-form');
     const data = new FormData(form);
     const formData = Object.fromEntries(data);
 
@@ -157,14 +147,22 @@ const Preferences = ({ setIsLoading, setAlertProps, id }) => {
 
       <Divider />
 
-      <div className={classes.wrapper}>
-        <form id="information-form" name="information-form" data-cy="information-form" onSubmit={handleSubmit}>
+      <div className={globalClasses.wrapper}>
+        <Typography variant="h4">
+          Preferences
+        </Typography>
+
+        <Divider />
+
+        <form id="preferences-form" name="preferences-form" data-cy="preferences-form" onSubmit={handleSubmit}>
           <FormGroup>
             <FormControlLabel
               control={<Switch data-cy="privatetoggle" checked={samplesPrivate} onChange={toggleChecked} />}
               label="Make new samples private"
             />
           </FormGroup>
+
+          <br />
 
           <Typography variant="h4" className={classes.inputName} display="inline">
             Lab Name

@@ -6,7 +6,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
-import samplesAPI from '../../helpers/api/samplesAPI';
+import sampleTypesAPI from '../../helpers/api/sampleTypesAPI';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -32,6 +32,7 @@ const SideBar = ({ sampleTypes, setCurrentSampleType, setIsLoading }) => {
 
     // clear timeout and clear overlay
     setIsLoading(false);
+    if (!response) return;
 
     // success
     setCurrentSampleType(response);

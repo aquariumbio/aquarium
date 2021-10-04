@@ -9,7 +9,8 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Toolbar from '@material-ui/core/Toolbar';
 
 import { LinkButton, StandardButton } from '../../shared/Buttons';
-import usersAPI from '../../../helpers/api/users';
+import usersAPI from '../../../helpers/api/usersAPI';
+import globalUseSyles from '../../../globalUseStyles';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -35,28 +36,17 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
   },
 
-  show: {
-    display: 'block',
-  },
-
-  hide: {
-    display: 'none',
-  },
-
   header: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-  },
-
-  wrapper: {
-    padding: '0 24px',
   },
 }));
 
 // eslint-disable-next-line no-unused-vars
 const AquariumAgreement = ({ setIsLoading, setAlertProps, id }) => {
   const classes = useStyles();
+  const globalClasses = globalUseSyles();
 
   const [userName, setUserName] = useState('');
   const [aquariumAgreement, setAquariumAgreement] = useState('');
@@ -113,10 +103,12 @@ const AquariumAgreement = ({ setIsLoading, setAlertProps, id }) => {
 
       <Divider />
 
-      <div className={classes.wrapper}>
-        <Typography>Agreement</Typography>
+      <div className={globalClasses.wrapper}>
+        <Typography variant="h4">
+          Aquarium Agreement
+        </Typography>
 
-        <Divider style={{ marginTop: '0px' }} />
+        <Divider />
 
         {aquariumAgreement ? (
           <Typography>___ agreed on ___</Typography>

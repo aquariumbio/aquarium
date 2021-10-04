@@ -122,12 +122,7 @@ RSpec.describe Api::V3::GroupsController, type: :request do
 
     # create membership
     it "create_membership" do
-      # membership parameters
-      params = {
-        user_id: 1
-      }
-
-      post "/api/v3/groups/#{@group_ids[0]}/create_membership?token=#{@token_1[0]}", :params => params
+      post "/api/v3/groups/#{@group_ids[0]}/create_membership/1?token=#{@token_1[0]}"
       expect(response).to have_http_status 200
       resp = JSON.parse(response.body)
 

@@ -55,7 +55,7 @@ class Announcement < ActiveRecord::Base
   # @option announcement[:message] [String] the message
   # @option announcement[:active] [String] active - interpreted as Boolen
   # return the announcement
-  def update(announcement)
+  def update_with(announcement)
     # Read the parameters
     input_title = Input.text(announcement[:title])
     input_message = Input.text(announcement[:message])

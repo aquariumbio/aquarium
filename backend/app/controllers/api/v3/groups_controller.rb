@@ -88,6 +88,14 @@ module Api
       #       created_at: <datetime>,
       #       updated_at: <datetime>
       #     }
+      #     members: [
+      #       {
+      #         id: <user_id>,
+      #         name: <name>,
+      #         login: <login>,
+      #       },
+      #       ...
+      #     ]
       #   }
       #
       # @!method show(token, id)
@@ -103,7 +111,10 @@ module Api
         group = Group.find_id(id)
         render json: { error: "Group not found" }.to_json, status: :not_found and return if !group
 
-        render json: { group: group }.to_json, status: :ok
+        # Get members
+        members = Membership.group_members(id)
+
+        render json: { group: group, members: members }.to_json, status: :ok
       end
 
       # Create a new group.
@@ -192,7 +203,7 @@ module Api
         params_group = params[:group] || {}
 
         # Update group
-        group, errors = group.update(params_group)
+        group, errors = group.update_with(params_group)
         render json: { errors: errors }.to_json, status: :ok and return if !group
 
         render json: { group: group }.to_json, status: :ok

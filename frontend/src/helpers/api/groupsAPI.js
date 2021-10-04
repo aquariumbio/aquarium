@@ -36,4 +36,14 @@ groupsAPI.delete = (id) => axiosInstance
   .then((response) => response.data)
   .catch((error) => error);
 
+groupsAPI.addMember = (id, userId) => axiosInstance
+  .post(`/groups/${id}/create_membership/${userId}`)
+  .then((response) => response.data)
+  .catch((error) => error);
+
+groupsAPI.removeMember = (id, userId) => axiosInstance
+  .post(`/groups/${id}/delete_membership/${userId}`)
+  .then((response) => response.data)
+  .catch((error) => error);
+
 export default groupsAPI;

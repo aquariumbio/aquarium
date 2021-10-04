@@ -3,12 +3,17 @@
 #
 # We use find_or_create_by to make seeding idempotent
 
-Permission.find_or_create_by( id: 1, name: 'admin', sort: 1 )
+Permission.find_or_create_by( id: 1, name: 'admin',   sort: 1 )
 Permission.find_or_create_by( id: 2, name: 'manage',  sort: 2 )
 Permission.find_or_create_by( id: 3, name: 'run',     sort: 3 )
 Permission.find_or_create_by( id: 4, name: 'design',  sort: 4 )
 Permission.find_or_create_by( id: 5, name: 'develop', sort: 5 )
 Permission.find_or_create_by( id: 6, name: 'retired', sort: 6 )
+
+FieldTypeSort.find_or_create_by( id: 1, ftype: 'string',  sort: 1 )
+FieldTypeSort.find_or_create_by( id: 2, ftype: 'number',  sort: 2 )
+FieldTypeSort.find_or_create_by( id: 3, ftype: 'url',     sort: 3 )
+FieldTypeSort.find_or_create_by( id: 4, ftype: 'sample',  sort: 4 )
 
 # Cannot use find_or_create_by for User b/c cannot do a where clause on password
 # Note that passwords must be 10 visible characters

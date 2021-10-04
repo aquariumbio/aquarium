@@ -13,9 +13,17 @@ class ObjectType < ActiveRecord::Base
   # Return a specific object type.
   #
   # @param id [Int] the id of the object type
-  # @return the object types
+  # @return the object type plus the location wizard id
   def self.find_id(id)
-    ObjectType.find_by(id: id)
+    sql = "
+      select ot.*, w.id as 'wizard_id', st.name as 'sample_type'
+      from object_types ot
+      left join wizards w on w.name = ot.prefix
+      left join sample_types st on st.id = ot.sample_type_id
+      where ot.id = #{id.to_i}
+      limit 1
+    "
+    (ObjectType.find_by_sql sql)[0]
   end
 
   # Return all object types.
@@ -28,13 +36,34 @@ class ObjectType < ActiveRecord::Base
     ObjectType.find_by_sql sql
   end
 
-  # Return objects for a specific object types.
+  # Return objects for a specific object type.
   #
   # @return the objects
   def self.find_by_handler(handler)
     wheres = sanitize_sql(['handler = ?', handler])
     sql = "
-      select * from object_types where #{wheres} order by name
+      select ot.*, w.id as 'wizard_id', st.name as 'sample_type'
+      from object_types ot
+      left join wizards w on w.name = ot.prefix
+      left join sample_types st on st.id = ot.sample_type_id
+      where #{wheres}
+      order by name
+    "
+    ObjectType.find_by_sql sql
+  end
+
+  # Return objects for a specific sample type id.
+  #
+  # @return the objects
+  def self.find_by_sample_id(id)
+    wheres = sanitize_sql(['id = ?', id])
+    sql = "
+      select ot.*
+      from object_types ot
+      where sample_type_id in (
+        select sample_type_id from samples where #{wheres}
+      )
+      order by name
     "
     ObjectType.find_by_sql sql
   end
@@ -145,7 +174,7 @@ class ObjectType < ActiveRecord::Base
   # @option object_type[:vendor] [String] the vendor information
   # @option object_type[:image] [String] the image (TODO)
   # return the object type
-  def update(object_type)
+  def update_with(object_type)
     # Read and auto-correct parameters
     input_name = Input.text(object_type[:name]) || self.name
     input_description = Input.text(object_type[:description]) || self.description
