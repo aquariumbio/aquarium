@@ -9,7 +9,7 @@ class JobAssociation < ActiveRecord::Base
   # order by operation.upated_at desc, operation.id desc
   def self.job_operations(job_id)
     sql = "
-      select ja.id, ja.operation_id, o.updated_at, o.status, pa.plan_id, u.name
+      select ja.id, ja.operation_id, o.updated_at, o.status, pa.plan_id, u.name as 'user_name'
       from jobs j
       inner join job_associations ja on ja.job_id = j.id
       inner join operations o on o.id = ja.operation_id

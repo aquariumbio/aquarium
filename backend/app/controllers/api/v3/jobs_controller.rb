@@ -286,7 +286,7 @@ module Api
           # get data_associations for operation
           data_associations = DataAssociation.data_associations(operation_id)
 
-          operations << { id: jo.id, operation_id: jo.operation_id, updated_at: jo.updated_at, status: jo.status, plan_id: jo.plan_id, inputs: inputs, outputs: outputs, data_associations: data_associations }
+          operations << { id: jo.id, user_name: jo.user_name, operation_id: jo.operation_id, updated_at: jo.updated_at, status: jo.status, plan_id: jo.plan_id, inputs: inputs, outputs: outputs, data_associations: data_associations }
         end
 
         render json: { operations: operations }, status: :ok
