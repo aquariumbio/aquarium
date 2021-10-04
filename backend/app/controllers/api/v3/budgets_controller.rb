@@ -191,7 +191,7 @@ module Api
         params_budget = params[:budget] || {}
 
         # Update budget
-        budget, errors = budget.update(params_budget)
+        budget, errors = budget.update_with(params_budget)
         render json: { errors: errors }.to_json, status: :ok and return if !budget
 
         render json: { budget: budget }.to_json, status: :ok

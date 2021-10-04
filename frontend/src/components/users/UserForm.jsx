@@ -10,11 +10,12 @@ import Divider from '@material-ui/core/Divider';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
-import usersAPI from '../../helpers/api/users';
-import permissionsAPI from '../../helpers/api/permissions';
+import usersAPI from '../../helpers/api/usersAPI';
+import permissionsAPI from '../../helpers/api/permissionsAPI';
 import { StandardButton, LinkButton } from '../shared/Buttons';
 import Page from '../shared/layout/Page';
 import Main from '../shared/layout/Main';
+import globalUseSyles from '../../globalUseStyles';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -39,19 +40,12 @@ const useStyles = makeStyles((theme) => ({
   spaceBelow: {
     marginBottom: theme.spacing(1),
   },
-
-  show: {
-    display: 'block',
-  },
-
-  hide: {
-    display: 'none',
-  },
 }));
 
 // eslint-disable-next-line no-unused-vars
 const UserForm = ({ setIsLoading, setAlertProps, match }) => {
   const classes = useStyles();
+  const globalClasses = globalUseSyles();
   const history = useHistory();
 
   const [disableSubmit, setDisableSubmit] = useState(false);
@@ -88,7 +82,7 @@ const UserForm = ({ setIsLoading, setAlertProps, match }) => {
     event.preventDefault();
 
     // set formData
-    const form = document.querySelector('form');
+    const form = document.querySelector('#user-form');
     const data = new FormData(form);
     const formData = Object.fromEntries(data);
 
@@ -219,7 +213,7 @@ const UserForm = ({ setIsLoading, setAlertProps, match }) => {
           }
           <div>
             { Object.keys(permissionsList).map((key) => (
-              <div className={permissionsList[key] === 'retired' ? classes.hide : classes.show}>
+              <div className={permissionsList[key] === 'retired' ? globalClasses.hide : globalClasses.show}>
                 <FormControlLabel
                   control={(
                     <Checkbox

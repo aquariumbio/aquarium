@@ -1,0 +1,59 @@
+{
+    "counts": {
+        "jobs": {
+            "assigned": 7,
+            "unassigned": 20,
+            "finished": 200
+        },
+        "operations": {
+            "active": {
+                "Cloning": 10,
+                "Cloning Sandbox": 5,
+                "Control Blocks": 12,
+                "Flow Cytometry": 8,
+                "High Throughput Culturing": 4,
+                "Illumina NGS": 4,
+                "Library Cloning": 35,
+                "Manager": 7,
+                "Misc.": 31,
+                "Next Gen Prep": 32,
+                "OLASimple (old)": 4,
+                "Plant Work": 96,
+                "Preparative qPCR": 17,
+                "qPCR": 60,
+                "Reagents": 12,
+                "RNA": 40,
+                "SynAg": 33,
+                "Tissue Culture": 21,
+                "Yeast": 54,
+                "Yeast Display": 13
+            },
+            "inactive": [
+                "Agrobacterium work",
+                "Hydra Husbandry",
+                "Hydra Transgenics",
+                "Illumina NGS Libs",
+                "Induction - High Throughput",
+                "Misc. (old)",
+                "OBSOLETE",
+                "OLASimple",
+                "PCR Libs",
+                "pFish Tests",
+                "Plant Work (defunct)",
+                "Plant Work-Duckweed",
+                "Plate Reader",
+                "Protein Purification",
+                "SplitSeq",
+                "Test",
+                "testing",
+                "Tissue Culture Lentivirus",
+                "Tissue Culture Libs",
+                "Tutorial",
+                "Unsorted",
+                "Yeast Multiplex Integration",
+                "Yeast Trash",
+                "YG_Harmonization"
+            ]
+        }
+    }
+}

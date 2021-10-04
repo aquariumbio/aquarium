@@ -27,10 +27,11 @@ class SampleType < ActiveRecord::Base
   def self.details(id)
     # Get feild types
     sql = "
-      select *, null as 'allowable_field_types'
+      select ft.*, null as 'allowable_field_types'
       from field_types ft
+      inner join field_type_sorts fts on fts.ftype = ft.ftype
       where ft.parent_class = 'SampleType' and ft.parent_id = #{id}
-      order by ft.name
+      order by fts.sort, ft.name
     "
     field_types = FieldType.find_by_sql sql
 
@@ -47,7 +48,7 @@ class SampleType < ActiveRecord::Base
         "
         allowable_field_types = AllowableFieldType.find_by_sql sql
 
-        ft = ft.update({ allowable_field_types: allowable_field_types })
+        ft[:allowable_field_types] = allowable_field_types
       end
     end
 
@@ -109,7 +110,7 @@ class SampleType < ActiveRecord::Base
   # @option sample_type[:description] [String] the description of the sample type
   # @option sample_type[:field_types] [Hash] the field_type attributes associated with the sample type
   # @return the sample type
-  def update(sample_type)
+  def update_with(sample_type)
     input_name = Input.text(sample_type[:name])
     input_description = Input.text(sample_type[:description])
 

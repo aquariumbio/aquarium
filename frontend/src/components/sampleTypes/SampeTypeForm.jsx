@@ -9,7 +9,7 @@ import Alert from '@material-ui/lab/Alert';
 import Divider from '@material-ui/core/Divider';
 import SampleTypeFieldForm from './fields/SampleTypeFieldForm';
 import FieldLabels from './fields/FieldLabels';
-import samplesAPI from '../../helpers/api/samplesAPI';
+import sampleTypesAPI from '../../helpers/api/sampleTypesAPI';
 import { StandardButton, LinkButton } from '../shared/Buttons';
 import utils from '../../helpers/utils';
 import AlertToast from '../shared/AlertToast';
@@ -64,21 +64,12 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
   });
 
   const fetchDataNew = async () => {
-    // loading overlay - use delay (window.$timeout) to avoid screen flash on quick API return
-    const loading = setTimeout(() => {
-      setIsLoading(true);
-    }, window.$timeout);
-
-    const response = await samplesAPI.getTypes();
-
-    // break if the HTTP call resulted in an error ("return false" from API.js)
-    if (!response) {
-      return;
-    }
-
-    // clear timeout and clear overlay
+    // wrap the API call with the spinner
+    const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
+    const response = await sampleTypesAPI.getTypes();
     clearTimeout(loading);
     setIsLoading(false);
+    if (!response) return;
 
     // success
     setState({
@@ -88,28 +79,15 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
   };
 
   const fetchDataEdit = async () => {
-    // loading overlay - delay by window.$timeout to avoid screen flash
-    const loading = setTimeout(() => {
-      setIsLoading(true);
-    }, window.$timeout);
-
-    //  Make more than one API in parallel
-    //  Call both functions
-    const getAll = samplesAPI.getTypes();
-    const getCurrent = samplesAPI.getTypeById(match.params.id);
-
-    //  Await both responses
+    // wrap the API call with the spinner
+    const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
+    const getAll = sampleTypesAPI.getTypes();
+    const getCurrent = sampleTypesAPI.getTypeById(match.params.id);
     const responseGetAll = await getAll;
     const responseGetCurrent = await getCurrent;
-
-    // break if either API call resulted in an error ("return false" from API.js)
-    if (!responseGetAll || !responseGetCurrent) {
-      return;
-    }
-
-    // clear timeout and clear overlay
     clearTimeout(loading);
     setIsLoading(false);
+    if (!responseGetAll || !responseGetCurrent) return;
 
     // success
     setState({
@@ -232,23 +210,14 @@ const SampleTypeDefinitionForm = ({ setIsLoading, match }) => {
     const update = !!state.sampleType.id;
     let alertProps;
 
-    // loading overlay - delay by window.$timeout to avoid screen flash
-    const loading = setTimeout(() => {
-      setIsLoading(true);
-    }, window.$timeout);
-
+    // wrap the API call with the spinner
+    const loading = setTimeout(() => { setIsLoading(true); }, window.$timeout);
     const response = update
-      ? await samplesAPI.update(formData, state.sampleType.id)
-      : await samplesAPI.create(formData);
-
-    // break if the HTTP call resulted in an error ("return false" from API.js)
-    if (!response) {
-      return;
-    }
-
-    // clear timeout and clear overlay
+      ? await sampleTypesAPI.update(formData, state.sampleType.id)
+      : await sampleTypesAPI.create(formData);
     clearTimeout(loading);
     setIsLoading(false);
+    if (!response) return;
 
     // success
     const action = update ? 'updated' : 'saved';

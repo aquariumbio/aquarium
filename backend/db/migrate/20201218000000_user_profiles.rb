@@ -2,59 +2,63 @@
 class UserProfiles < ActiveRecord::Migration[4.2]
   def change
     # backup parameters table
-    execute <<-SQL
-      create table parameters_bak
-      select * from parameters
-    SQL
+    unless table_exists?(:parameters_bak)
+      execute <<-SQL
+        create table parameters_bak
+        select * from parameters
+      SQL
+    end
 
     # create user_profiles table from parameters_bak
-    execute <<-SQL
-      create table user_profiles
-      select p.id, p.key, p.value, p.created_at, p.updated_at, p.user_id
-      from parameters_bak p
-      where id in (select max(id) as 'id' from parameters_bak up where up.key = 'email' group by up.user_id)
-      or id in (select max(id) as 'id' from parameters_bak up where up.key = 'phone' group by up.user_id)
-      or id in (select max(id) as 'id' from parameters_bak up where up.key = 'biofab' group by up.user_id)
-      or id in (select max(id) as 'id' from parameters_bak up where up.key = 'aquarium' group by up.user_id)
-      or id in (select max(id) as 'id' from parameters_bak up where up.key = 'Make new samples private' group by up.user_id)
-      or id in (select max(id) as 'id' from parameters_bak up where up.key = 'Lab Name' group by up.user_id)
-    SQL
+    unless table_exists?(:user_profiles)
+      execute <<-SQL
+        create table user_profiles
+        select p.id, p.key, p.value, p.created_at, p.updated_at, p.user_id
+        from parameters_bak p
+        where id in (select max(id) as 'id' from parameters_bak up where up.key = 'email' group by up.user_id)
+        or id in (select max(id) as 'id' from parameters_bak up where up.key = 'phone' group by up.user_id)
+        or id in (select max(id) as 'id' from parameters_bak up where up.key = 'biofab' group by up.user_id)
+        or id in (select max(id) as 'id' from parameters_bak up where up.key = 'aquarium' group by up.user_id)
+        or id in (select max(id) as 'id' from parameters_bak up where up.key = 'Make new samples private' group by up.user_id)
+        or id in (select max(id) as 'id' from parameters_bak up where up.key = 'Lab Name' group by up.user_id)
+      SQL
 
-    # set user_profiles.id as the primary key
-    execute <<-SQL
-      alter table user_profiles
-      add primary key(id);
-    SQL
+      # set user_profiles.id as the primary key
+      execute <<-SQL
+        alter table user_profiles
+        add primary key(id);
+      SQL
 
-    # set user_profiles.id to auto-increment
-    execute <<-SQL
-      alter table user_profiles
-      modify column id int auto_increment;
-    SQL
+      # set user_profiles.id to auto-increment
+      execute <<-SQL
+        alter table user_profiles
+        modify column id int auto_increment;
+      SQL
 
-    # change 'biofab' to 'lab_agreement'
-    execute <<-SQL
-      update user_profiles up
-      set up.key = 'lab_agreement' where up.key = 'biofab'
-    SQL
+      # change 'biofab' to 'lab_agreement'
+      execute <<-SQL
+        update user_profiles up
+        set up.key = 'lab_agreement' where up.key = 'biofab'
+      SQL
 
-    # change 'aquarium' to 'aquarium_agreement'
-    execute <<-SQL
-      update user_profiles up
-      set up.key = 'aquarium_agreement' where up.key = 'aquarium'
-    SQL
+      # change 'aquarium' to 'aquarium_agreement'
+      execute <<-SQL
+        update user_profiles up
+        set up.key = 'aquarium_agreement' where up.key = 'aquarium'
+      SQL
 
-    # change 'Make new samples private' to 'new_samples_private'
-    execute <<-SQL
-      update user_profiles up
-      set up.key = 'new_samples_private' where up.key = 'Make new samples private'
-    SQL
+      # change 'Make new samples private' to 'new_samples_private'
+      execute <<-SQL
+        update user_profiles up
+        set up.key = 'new_samples_private' where up.key = 'Make new samples private'
+      SQL
 
-    # change 'Lab Name' to 'lab_name'
-    execute <<-SQL
-      update user_profiles up
-      set up.key = 'lab_name' where up.key = 'Lab Name'
-    SQL
+      # change 'Lab Name' to 'lab_name'
+      execute <<-SQL
+        update user_profiles up
+        set up.key = 'lab_name' where up.key = 'Lab Name'
+      SQL
+    end
 
     # remove user_profile data from parameters table
     execute <<-SQL

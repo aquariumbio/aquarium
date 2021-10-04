@@ -495,7 +495,7 @@ module Api
 
         # Get operation_types for selected category, status
         operation_types = OperationType.operation_types(category, status)
-        render json: { error: "No operation types" }.to_json, status: :not_found and return if !operation_types[0]
+        render json: { operation_types: [], '' => { operations: [] } }.to_json, status: :ok and return if !operation_types[0]
 
         # Get operations for first operation_type = operation_typs[0].name and status
         operations = Operation.operations_for_category_type_status(category, operation_types[0].name, status)

@@ -9,7 +9,9 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Toolbar from '@material-ui/core/Toolbar';
 
 import { LinkButton } from '../../shared/Buttons';
-import usersAPI from '../../../helpers/api/users';
+import usersAPI from '../../../helpers/api/usersAPI';
+import ShowMemerships from './ShowMemerships';
+import globalUseSyles from '../../../globalUseStyles';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -35,30 +37,20 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
   },
 
-  show: {
-    display: 'block',
-  },
-
-  hide: {
-    display: 'none',
-  },
-
   header: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-  },
-
-  wrapper: {
-    padding: '0 24px',
   },
 }));
 
 // eslint-disable-next-line no-unused-vars
 const Memberships = ({ setIsLoading, setAlertProps, id }) => {
   const classes = useStyles();
+  const globalClasses = globalUseSyles();
 
   const [userName, setUserName] = useState('');
+  const [groups, setGroups] = useState('');
 
   useEffect(() => {
     const init = async () => {
@@ -69,6 +61,13 @@ const Memberships = ({ setIsLoading, setAlertProps, id }) => {
       // success
       const user = response.user;
       setUserName(user.name);
+
+      // wrap the API call
+      const responses = await usersAPI.getGroups(id);
+      if (!responses) return;
+
+      // success
+      setGroups(responses.groups);
     };
 
     init();
@@ -107,8 +106,17 @@ const Memberships = ({ setIsLoading, setAlertProps, id }) => {
 
       <Divider />
 
-      <div className={classes.wrapper}>
-        Memberships
+      <div className={globalClasses.wrapper}>
+        <Typography variant="h4">
+          Memberships
+        </Typography>
+
+        <Divider />
+
+        {groups
+          /* eslint-disable-next-line max-len */
+          ? <ShowMemerships groups={groups} setIsLoading={setIsLoading} setAlertProps={setAlertProps} />
+          : 'nothing here'}
       </div>
     </>
   );

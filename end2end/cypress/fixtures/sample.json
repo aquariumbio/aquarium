@@ -1,0 +1,377 @@
+{
+  "sample": {
+    "id": 36319,
+    "name": "Twist pool template for Payload PCR",
+    "description": "twist template",
+    "sample_type": "FRAGMENT",
+    "user_name": "Nick Cardozo",
+    "login": "nickc94",
+    "type": "string",
+    "created_at": "2021-03-03T21:53:27.000Z",
+    "fields": [
+      {
+        "type": "string",
+        "name": "Restriction Enzyme(s)",
+        "value": "",
+        "child_sample_id": null,
+        "child_sample_name": null
+      },
+      {
+        "type": "string",
+        "name": "Yeast Marker",
+        "value": "",
+        "child_sample_id": null,
+        "child_sample_name": null
+      },
+      {
+        "type": "number",
+        "name": "Length",
+        "value": "150.0",
+        "child_sample_id": null,
+        "child_sample_name": null
+      },
+      {
+        "type": "url",
+        "name": "Sequence",
+        "value": "http://please.link.your.sequences.com",
+        "child_sample_id": null,
+        "child_sample_name": null
+      },
+      {
+        "type": "sample",
+        "name": "Forward Primer",
+        "value": null,
+        "child_sample_id": 36317,
+        "child_sample_name": "Cas9_payload_F"
+      },
+      {
+        "type": "sample",
+        "name": "Fragment Mix Array",
+        "value": null,
+        "child_sample_id": null,
+        "child_sample_name": null
+      },
+      {
+        "type": "sample",
+        "name": "Reverse Primer",
+        "value": null,
+        "child_sample_id": 36316,
+        "child_sample_name": "Cas9_payload_R"
+      },
+      {
+        "type": "sample",
+        "name": "Template",
+        "value": null,
+        "child_sample_id": null,
+        "child_sample_name": null
+      }
+    ]
+  },
+  "inventory": [
+    {
+      "type_id": 421,
+      "type": "1 ng/µL Fragment Stock",
+      "count_inventory": 2,
+      "count_deleted": 0,
+      "data": [
+        {
+          "item_id": 510028,
+          "type_id": 421,
+          "type": "1 ng/µL Fragment Stock",
+          "location": "M20.22.1.33",
+          "date": "2021-03-03T22:39:12.000Z",
+          "key_values": [
+            {
+              "uid": 1037777,
+              "key": "diluted_from",
+              "object": "{\"diluted_from\":510022}",
+              "upload_id": null,
+              "upload_file_name": null,
+              "upload_content_type": null
+            }
+          ]
+        },
+        {
+          "item_id": 510469,
+          "type_id": 421,
+          "type": "1 ng/µL Fragment Stock",
+          "location": "M20.22.11.73",
+          "date": "2021-03-05T01:02:04.000Z",
+          "key_values": [
+            {
+              "uid": 1038211,
+              "key": "diluted_from",
+              "object": "{\"diluted_from\":\"510185\"}",
+              "upload_id": null,
+              "upload_file_name": null,
+              "upload_content_type": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type_id": 295,
+      "type": "Fragment Stock",
+      "count_inventory": 3,
+      "count_deleted": 0,
+      "data": [
+        {
+          "item_id": 510022,
+          "type_id": 295,
+          "type": "Fragment Stock",
+          "location": "M20.21.13.55",
+          "date": "2021-03-03T21:56:33.000Z",
+          "key_values": [
+            {
+              "uid": 1038174,
+              "key": "key",
+              "object": "{\"key\":\"Twist stock\"}",
+              "upload_id": null,
+              "upload_file_name": null,
+              "upload_content_type": null
+            },
+            {
+              "uid": 1037775,
+              "key": "concentration",
+              "object": "{\"concentration\":394}",
+              "upload_id": null,
+              "upload_file_name": null,
+              "upload_content_type": null
+            }
+          ]
+        },
+        {
+          "item_id": 510185,
+          "type_id": 295,
+          "type": "Fragment Stock",
+          "location": "M20.22.3.49",
+          "date": "2021-03-04T18:26:02.000Z",
+          "key_values": [
+            {
+              "uid": 1037928,
+              "key": "notes",
+              "object": "{\"notes\":\"0\"}",
+              "upload_id": null,
+              "upload_file_name": null,
+              "upload_content_type": null
+            },
+            {
+              "uid": 1037927,
+              "key": "concentration",
+              "object": "{\"concentration\":30.5}",
+              "upload_id": null,
+              "upload_file_name": null,
+              "upload_content_type": null
+            }
+          ]
+        },
+        {
+          "item_id": 510631,
+          "type_id": 295,
+          "type": "Fragment Stock",
+          "location": "M20.22.14.11",
+          "date": "2021-03-05T19:06:59.000Z",
+          "key_values": [
+            {
+              "uid": 1038597,
+              "key": "notes",
+              "object": "{\"notes\":\"0\"}",
+              "upload_id": null,
+              "upload_file_name": null,
+              "upload_content_type": null
+            },
+            {
+              "uid": 1038596,
+              "key": "concentration",
+              "object": "{\"concentration\":37.4}",
+              "upload_id": null,
+              "upload_file_name": null,
+              "upload_content_type": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type_id": 292,
+      "type": "Gel Slice",
+      "count_inventory": 0,
+      "count_deleted": 2,
+      "data": [
+        {
+          "item_id": 510183,
+          "type_id": 292,
+          "type": "Gel Slice",
+          "location": "deleted",
+          "date": "2021-03-04T18:16:27.000Z",
+          "key_values": [
+            {
+              "uid": 1037922,
+              "key": "gel_510110",
+              "object": "{\"gel_510110\":\"Your fragment is in row 1 and column 3\"}",
+              "upload_id": 46226,
+              "upload_file_name": "gel_510110.JPG",
+              "upload_content_type": "image/jpeg"
+            },
+            {
+              "uid": 1037923,
+              "key": "weight",
+              "object": "{\"weight\":0.19}",
+              "upload_id": null,
+              "upload_file_name": null,
+              "upload_content_type": null
+            }
+          ]
+        },
+        {
+          "item_id": 510594,
+          "type_id": 292,
+          "type": "Gel Slice",
+          "location": "deleted",
+          "date": "2021-03-05T18:46:25.000Z",
+          "key_values": [
+            {
+              "uid": 1038410,
+              "key": "gel_510484",
+              "object": "{\"gel_510484\":\"Your fragment is in row 1 and column 3\"}",
+              "upload_id": 46248,
+              "upload_file_name": "gel_510484.JPG",
+              "upload_content_type": "image/jpeg"
+            },
+            {
+              "uid": 1038411,
+              "key": "weight",
+              "object": "{\"weight\":0.223}",
+              "upload_id": null,
+              "upload_file_name": null,
+              "upload_content_type": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type_id": 456,
+      "type": "50 mL 0.8 Percent Agarose Gel in Gel Box",
+      "count_inventory": 0,
+      "count_deleted": 2,
+      "data": [
+        {
+          "item_id": 510110,
+          "type_id": 456,
+          "type": "50 mL 0.8 Percent Agarose Gel in Gel Box",
+          "location": "deleted",
+          "date": "2021-03-04T16:03:51.000Z",
+          "collections": [
+            {
+              "row": 0,
+              "column": 2
+            }
+          ],
+          "key_values": [
+            {
+              "uid": 1037912,
+              "key": "gel_510110",
+              "object": "{\"gel_510110\":\"successfully imaged gel\"}",
+              "upload_id": 46226,
+              "upload_file_name": "gel_510110.JPG",
+              "upload_content_type": "image/jpeg"
+            }
+          ]
+        },
+        {
+          "item_id": 510484,
+          "type_id": 456,
+          "type": "50 mL 0.8 Percent Agarose Gel in Gel Box",
+          "location": "deleted",
+          "date": "2021-03-05T16:07:29.000Z",
+          "collections": [
+            {
+              "row": 0,
+              "column": 2
+            },
+            {
+              "row": 0,
+              "column": 4
+            }
+          ],
+          "key_values": [
+            {
+              "uid": 1038365,
+              "key": "gel_510484",
+              "object": "{\"gel_510484\":\"successfully imaged gel\"}",
+              "upload_id": 46248,
+              "upload_file_name": "gel_510484.JPG",
+              "upload_content_type": "image/jpeg"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type_id": 440,
+      "type": "Stripwell",
+      "count_inventory": 0,
+      "count_deleted": 4,
+      "data": [
+        {
+          "item_id": 36357,
+          "type_id": 440,
+          "type": "Stripwell",
+          "location": "deleted",
+          "date": "2015-05-29T19:27:42.000Z",
+          "collections": [
+            {
+              "row": 0,
+              "column": 0
+            }
+          ],
+          "key_values": []
+        },
+        {
+          "item_id": 510029,
+          "type_id": 440,
+          "type": "Stripwell",
+          "location": "deleted",
+          "date": "2021-03-03T22:47:49.000Z",
+          "collections": [
+            {
+              "row": 0,
+              "column": 0
+            }
+          ],
+          "key_values": []
+        },
+        {
+          "item_id": 510465,
+          "type_id": 440,
+          "type": "Stripwell",
+          "location": "deleted",
+          "date": "2021-03-05T00:55:19.000Z",
+          "collections": [
+            {
+              "row": 0,
+              "column": 0
+            }
+          ],
+          "key_values": []
+        },
+        {
+          "item_id": 510470,
+          "type_id": 440,
+          "type": "Stripwell",
+          "location": "deleted",
+          "date": "2021-03-05T01:03:20.000Z",
+          "collections": [
+            {
+              "row": 0,
+              "column": 0
+            }
+          ],
+          "key_values": []
+        }
+      ]
+    }
+  ]
+}

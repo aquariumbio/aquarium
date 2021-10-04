@@ -49,4 +49,9 @@ jobsAPI.cancelJob = (jobId) => axiosInstance
   .then((response) => response.data)
   .catch((error) => error);
 
+jobsAPI.removeOperation = (jobId, opId) => axiosInstance
+  .post(`/jobs/${jobId}/remove/${opId}`)
+  .then((response) => response.data)
+  .catch((error) => error);
+
 export default jobsAPI;

@@ -15,4 +15,19 @@ class Membership < ActiveRecord::Base
     sql = "select * from memberships where #{wheres} limit 1"
     (Membership.find_by_sql sql)[0]
   end
+
+  # Get group members
+  #
+  # return the group members
+  def self.group_members(group_id)
+    sql = "
+      select u.id, u.name, u.login
+      from memberships m
+      inner join users u on u.id = m.user_id
+      where m.group_id = #{group_id}
+      order by u.name, u.id
+    "
+    Membership.find_by_sql sql
+  end
+
 end

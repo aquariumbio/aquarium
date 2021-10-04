@@ -4,7 +4,7 @@
 module Input
   # Return text (nil if blank)
   def self.text(str)
-    str = str.to_s.strip
+    str = str.to_s.strip.gsub(/ +/, ' ')
     str = nil if str == ""
 
     return str
@@ -38,13 +38,5 @@ module Input
     bool = str == "true" || str == "on" || str == "1"
 
     return bool
-  end
-
-  # Return a text_field
-  def self.text_field(str)
-    str = str.to_s.strip.gsub(/ +/, ' ')
-    str = nil if str == ""
-
-    return str
   end
 end

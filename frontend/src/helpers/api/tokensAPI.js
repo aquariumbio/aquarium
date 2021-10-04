@@ -34,6 +34,7 @@ tokensAPI.signIn = async (login, password, setLoginError) => {
       const [data] = [response.data];
       setLoginError();
       localStorage.setItem('token', data.token);
+      localStorage.setItem('userId', data.user.id);
       localStorage.setItem('user', JSON.stringify(data.user));
       signInSuccessful = true;
       window.location.reload();
@@ -50,12 +51,14 @@ tokensAPI.signOut = () => {
     .then((response) => {
       localStorage.clear('token');
       localStorage.clear('user');
+      localStorage.clear('userId');
       window.location.reload();
       return response;
     })
     .catch((error) => {
       localStorage.clear('token');
       localStorage.clear('user');
+      localStorage.clear('userId');
       window.location.reload();
       return error;
     });

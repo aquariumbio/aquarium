@@ -56,7 +56,7 @@ class Parameter < ActiveRecord::Base
   # @option parameter[:value] [String] the value
   # @option parameter[:description] [String] description - interpreted as Boolen
   # return the parameter
-  def update(parameter)
+  def update_with(parameter)
     # Read the parameters
     input_key = Input.text(parameter[:key])
     input_value = Input.text(parameter[:value])

@@ -10,9 +10,11 @@ describe('/sample_types', () => {
       cy.get('div[name="sample-types-side-bar"]');
       cy.get('div[name="sample-types-main-container"]');
       cy.get('[data-cy="page-title"]');
-      cy.get('[data-cy="edit_sample_type_btn"]');
+      // no edit button when no sample types
+      // cy.get('[data-cy="edit_sample_type_btn"]');
       cy.get('[data-cy="new_sample_type_btn"]');
-      cy.get('[data-cy="delete_sample_type_btn"]');
+      // no delete button when no sample types
+      // cy.get('[data-cy="delete_sample_type_btn"]');
     });
 
     it('navigates to new form using new button', () => {

@@ -51,7 +51,7 @@ describe('/object_types', () => {
     // not worried about field names here
     // they are just sent to the backend as a json string
 
-    cy.get("form").submit()
+    cy.get("#object-type-form").submit()
     cy.wait('@newobject_type').should(({ request, response }) => {
       // NOTE: per v2 you stay on the same page after creating a new object type.  This should probably be changed.
       // wait for up to 3 seconds for the page to load
@@ -92,7 +92,7 @@ describe('/object_types', () => {
       .type("2")
       .should("have.value", "description2");
 
-    cy.get("form").submit()
+    cy.get("#object-type-form").submit()
     cy.wait('@editobject_type').should(({ request, response }) => {
       // wait for up to 3 seconds for the page to load
       cy.location('pathname', {timeout: 3000}).should('eq', `/object_types/${thisId}/edit`);

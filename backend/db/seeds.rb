@@ -12,4 +12,4 @@ Permission.find_or_create_by( id: 6, name: 'retired', sort: 6 )
 
 # Cannot use find_or_create_by for User b/c cannot do a where clause on password
 # Note that passwords must be 10 visible characters
-User.create(id: 1, name: 'Alice Neptune', login: 'neptune', password: 'aquarium123', permission_ids: '.1.') unless User.find_by(login: 'neptune')
+User.create(name: 'Alice Neptune', login: 'neptune', password: 'aquarium123', permission_ids: '.1.') unless User.find_by(login: 'neptune')

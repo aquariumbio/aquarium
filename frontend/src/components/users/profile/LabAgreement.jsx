@@ -9,7 +9,8 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Toolbar from '@material-ui/core/Toolbar';
 
 import { LinkButton, StandardButton } from '../../shared/Buttons';
-import usersAPI from '../../../helpers/api/users';
+import usersAPI from '../../../helpers/api/usersAPI';
+import globalUseSyles from '../../../globalUseStyles';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -35,28 +36,17 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
   },
 
-  show: {
-    display: 'block',
-  },
-
-  hide: {
-    display: 'none',
-  },
-
   header: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-  },
-
-  wrapper: {
-    padding: '0 24px',
   },
 }));
 
 // eslint-disable-next-line no-unused-vars
 const LabAgreement = ({ setIsLoading, setAlertProps, id }) => {
   const classes = useStyles();
+  const globalClasses = globalUseSyles();
 
   const [userName, setUserName] = useState('');
   const [labAgreement, setLabAgreement] = useState('');
@@ -103,7 +93,7 @@ const LabAgreement = ({ setIsLoading, setAlertProps, id }) => {
             {userName}
           </Typography>
           <Typography display="inline" variant="h6" component="h1">
-            LabAgreement
+            Lab Agreement
           </Typography>
         </Breadcrumbs>
 
@@ -120,11 +110,13 @@ const LabAgreement = ({ setIsLoading, setAlertProps, id }) => {
 
       <Divider />
 
-      <div className={classes.wrapper}>
-        <Typography>
-          Agreement
+      <div className={globalClasses.wrapper}>
+        <Typography variant="h4">
+          Lab Agreement
         </Typography>
-        <Divider style={{ marginTop: '0px' }} />
+
+        <Divider />
+
         {labAgreement ? (
           <Typography>
             ___ agreed on ___

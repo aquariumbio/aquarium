@@ -9,7 +9,7 @@ describe('/login', () => {
   });
 
   it('requires username', () => {
-    cy.get('form').contains('SIGN IN').click();
+    cy.get('#login-form').contains('SIGN IN').click();
     cy.get('p').should('contain', 'Invalid login/password combination');
   });
 
@@ -21,7 +21,7 @@ describe('/login', () => {
   it('requires valid username and password', () => {
     cy.get('[data-test=username]').type('wantthistofail');
     cy.get('[data-test=password]').type('invalid');
-    cy.get('form').contains('SIGN IN').click().then(() => {
+    cy.get('#login-form').contains('SIGN IN').click().then(() => {
       cy.get('p').should('contain', 'Invalid login/password combination');
     });
   });
@@ -34,7 +34,7 @@ describe('/login', () => {
 
     cy.get('[data-test=username]').type('test_user ');
     cy.get('[data-test=password]').type('aquarium123');
-    cy.get('form').contains('SIGN IN').click();
+    cy.get('#login-form').contains('SIGN IN').click();
     // TODO: this is timing out on end2end w/in Docker
     cy.url().should('eq', `${Cypress.config().baseUrl}/`);
 

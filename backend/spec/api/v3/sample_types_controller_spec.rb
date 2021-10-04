@@ -111,7 +111,7 @@ RSpec.describe Api::V3::SampleTypesController, type: :request do
       this_ft      = response_body["sample_type"]["field_types"]
       this_ft_id_0 = this_ft[0]["id"]
       this_ft_id_1 = this_ft[1]["id"]
-      this_aft_0   = this_ft[0]["allowable_field_types"]
+      this_aft_0   = this_ft[1]["allowable_field_types"]
       this_aft_id_0_0 = this_aft_0[0]["id"]
       this_aft_id_0_1 = this_aft_0[1]["id"]
 

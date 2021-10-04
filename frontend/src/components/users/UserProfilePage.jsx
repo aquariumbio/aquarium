@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
@@ -9,8 +10,9 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 
-import usersAPI from '../../helpers/api/users';
+import usersAPI from '../../helpers/api/usersAPI';
 import Information from './profile/Information';
+import Permissions from './profile/Permissions';
 import Statistics from './profile/Statistics';
 import Preferences from './profile/Preferences';
 import Memberships from './profile/Memberships';
@@ -41,27 +43,22 @@ const useStyles = makeStyles(() => ({
 const UserProfilePage = ({ setIsLoading, setAlertProps, match }) => {
   const classes = useStyles();
   const userId = match.params.id;
+  const history = useHistory();
 
   const [currentPage, setCurrentPage] = useState('');
 
-  /* Get object types top populate object options menu
-     We cannot use async directly in useEffect so we create an async function that we will call
-     from w/in useEffect.
-     Our async function gets and sets the objectTypes.
-     We only want to fetch data when the component is mounted so we pass an empty array as the
-     second argument to useEffect */
   useEffect(() => {
-    const init = async () => {
-      // wrap the API call
-      const response = await usersAPI.getProfile(userId);
-      if (!response) return;
+    var search = window.location.search.replace('?','')
+    if (['permissions','statistics','preferences','memberships','change_password','lab_agreement','aquarium_agreement'].indexOf(search) == -1) search = 'information'
 
-      // success
-      setCurrentPage('information');
-    };
-
-    init();
+    setCurrentPage(search)
   }, []);
+
+  const changePage = async (page) => {
+    history.push(`/users/${userId}/profile?${page}`.toLowerCase());
+
+    setCurrentPage(page)
+  }
 
   return (
     <Page>
@@ -77,6 +74,16 @@ const UserProfilePage = ({ setIsLoading, setAlertProps, match }) => {
                 onClick={() => setCurrentPage('information')}
               >
                 <ListItemText primary="Information" primaryTypographyProps={{ noWrap: true }} />
+              </ListItem>
+
+              <ListItem
+                button
+                key="permissions"
+                data-cy="permissions"
+                selected={null}
+                onClick={() => setCurrentPage('permissions')}
+              >
+                <ListItemText primary="Permissions" primaryTypographyProps={{ noWrap: true }} />
               </ListItem>
 
               <ListItem
@@ -146,6 +153,7 @@ const UserProfilePage = ({ setIsLoading, setAlertProps, match }) => {
       {/* MAIN CONTENT */}
       <Main>
         { currentPage === 'information' && <Information setIsLoading={setIsLoading} setAlertProps={setAlertProps} id={userId} /> }
+        { currentPage === 'permissions' && <Permissions setIsLoading={setIsLoading} setAlertProps={setAlertProps} id={userId} /> }
         { currentPage === 'statistics' && <Statistics setIsLoading={setIsLoading} setAlertProps={setAlertProps} id={userId} /> }
         { currentPage === 'preferences' && <Preferences setIsLoading={setIsLoading} setAlertProps={setAlertProps} id={userId} /> }
         { currentPage === 'memberships' && <Memberships setIsLoading={setIsLoading} setAlertProps={setAlertProps} id={userId} /> }

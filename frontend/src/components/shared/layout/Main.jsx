@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     paddingLeft: theme.spacing(1),
-    height: 'calc(100% - 40px)',
+    height: 'inherit',
     overflow: 'hidden',
     display: 'flex',
     flexDirection: 'column',
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'scroll',
   },
   divider: {
-    height: '32px',
+    paddingTop: '30px',
     borderBottom: '1px #DDD solid',
   },
 }));
@@ -38,7 +38,7 @@ const Main = (props) => {
   const { title, children } = props;
 
   return (
-    <Grid item lg className={classes.root}>
+    <Grid item xs className={classes.root} zeroMinWidth>
       <Paper elevation={0} className={classes.paper}>
         <div className={classes.divider} />
         {title && (

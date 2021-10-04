@@ -125,14 +125,18 @@ module Api
         list = SampleType.find_all
         render json: { sample_types: [] }.to_json, status: :ok and return if list.length == 0
 
+        # Return list only
+        render json: { sample_types: list }.to_json, status: :ok and return if params[:list_only].to_i == 1
+
         # Get details of first sample type in list
         details = SampleType.details(list[0].id)
-        details = details.update({ id: list[0].id, name: list[0].name, description: list[0].description })
+        details.merge!({ id: list[0].id, name: list[0].name, description: list[0].description })
 
         render json: {
           sample_types: list,
           first: details
         }.to_json, status: :ok
+
       end
 
       # Returns details for a specific sample type.
@@ -222,7 +226,7 @@ module Api
 
         # Get details for sample type
         details = SampleType.details(id)
-        details = details.update({ id: id, name: sample_type.name, description: sample_type.description })
+        details.merge!({ id: id, name: sample_type.name, description: sample_type.description })
 
         render json: {
           sample_type: details
@@ -245,7 +249,7 @@ module Api
       #           required: <required>,
       #           array: <array>,
       #           choices: <choices>,
-      #           allowable_field_types: [             # (for ftype == "sample")
+      #           allowable_field_types: [ # (only used when ftype = "sample")
       #             {
       #               sample_type_id: <sample_type_id>
       #             },
@@ -287,13 +291,6 @@ module Api
         render json: { sample_type: sample_type }.to_json, status: :created
       end
 
-      # Update a sample type.
-      #
-      # @param token [String] a token
-      # @param id [Int] the id of the sample type
-      # @param sample_type [Hash] the sample type
-      # @return the sample type
-
       # Update a sample_type.
       #
       # <b>API Call:</b>
@@ -312,7 +309,7 @@ module Api
       #           required: <required>,
       #           array: <array>,
       #           choices: <choices>,
-      #           allowable_field_types: [             # (for ftype == "sample")
+      #           allowable_field_types: [ # (only used when ftype = "sample")
       #             {
       #               id: <allowable_field_type_id>,
       #               sample_type_id: <sample_type_id>
@@ -356,7 +353,7 @@ module Api
 
         # Update sample type
         # Note: any errors handled automatically and silently
-        sample_type = sample_type.update(params_sample_type)
+        sample_type = sample_type.update_with(params_sample_type)
 
         render json: { sample_type: sample_type }.to_json, status: :ok
       end
