@@ -494,7 +494,7 @@ CREATE TABLE `parameters` (
   `updated_at` datetime NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1190 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `parameters_bak`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -585,7 +585,7 @@ CREATE TABLE `sample_types` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `samples`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -631,7 +631,7 @@ CREATE TABLE `timings` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `index_timings_on_parent_class_and_parent_id` (`parent_class`,`parent_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=147 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=148 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `uploads`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -968,5 +968,3 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20210301000020'),
 ('20210601000000'),
 ('20210601000010');
-
-
