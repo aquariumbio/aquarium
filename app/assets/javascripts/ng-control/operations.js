@@ -42,7 +42,9 @@ var no_race = "init";
             switch_user: false,
             active_jobs: false,
             active: {},
-            activity_report: { selected: false, date: new Date() }
+            activity_report: { selected: false, date: new Date() },
+            show_historic: false,
+
           }
         }
 
@@ -71,7 +73,7 @@ var no_race = "init";
       }
 
       function get_numbers() {
-        return AQ.OperationType.numbers($scope.current.selected_user, $scope.current.filter_user)
+        return AQ.OperationType.numbers($scope.current.selected_user, $scope.current.filter_user, $scope.current.show_historic)
       }
 
       $scope.get_numbers = get_numbers;
@@ -153,7 +155,8 @@ var no_race = "init";
           activity_report: {
             selected: $scope.current.activity_report.selected,
             date: $scope.current.activity_report.date
-          }
+          },
+          show_historic: $scope.current.show_historic,
         });
       }
 
@@ -177,6 +180,21 @@ var no_race = "init";
         $scope.current.show_completed = !$scope.current.show_completed;
         store_cookie();
         $scope.current.show_completed = !$scope.current.show_completed;
+
+        // Update data on toggle
+        window.location.reload();
+      }
+
+      $scope.toggle_show_historic = function() {
+        // This is a hack. When you click the toggle switch, the ng-click method is called first.
+        // After that, the md-switch directive changes the value of show_historic to reflect the
+        // new switch state.
+        $scope.current.show_historic = !$scope.current.show_historic;
+        store_cookie();
+        $scope.current.show_historic = !$scope.current.show_historic;
+
+        // Update data on toggle
+        window.location.reload();
       }
 
       $scope.select_first_operation_type = function(cat_index) {
@@ -233,6 +251,10 @@ var no_race = "init";
           criteria.user_id = $scope.current.selected_user.id
         } else if (!$scope.current_user.is_admin) {
           criteria.user_id = $scope.current_user.id;
+        }
+
+        if ($scope.current.show_historic) {
+          options.show_historic = $scope.current.show_historic;
         }
 
         AQ.Operation.manager_list(criteria, options).then(operations => {
