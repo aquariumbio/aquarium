@@ -58,8 +58,15 @@
         <md-switch ng-model="current.show_completed"
                    aria-label="Show completed"
                    ng-click="toggle_show_completed()"
-                   style="padding-left: 16px; padding-top: 16px">
+                   style="display: inline-flex; padding-top: 16px;">
           Completed
+        </md-switch>
+
+        <md-switch ng-model="current.show_historic"
+                   aria-label="Show historic"
+                   ng-click="toggle_show_historic()"
+                   style="display: inline-flex; ">
+          Historic
         </md-switch>
       </th>
       <th ng-repeat="status in [ 'Waiting', 'Delayed', 'Pending', 'Deferred', 'Batched', 'Running', 'Error', 'Done' ]"
