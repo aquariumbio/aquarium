@@ -24,10 +24,10 @@ AQ.OperationType.all_with_content = function(deployed) {
   if ( deployed ) {
 
     return this.array_query(
-        'where', {deployed: true}, 
+        'where', {deployed: true},
         { methods: [ 'field_types', 'cost_model', 'documentation', 'timing' ] }
       ).then((ots) => {
-        aq.each(ots,function(ot) { 
+        aq.each(ots,function(ot) {
           ot.upgrade_field_types();
           if ( ot.timing ) {
             ot.timing = AQ.Timing.record(ot.timing);
@@ -40,14 +40,14 @@ AQ.OperationType.all_with_content = function(deployed) {
   } else {
 
     return this.array_query(
-        'all', [], 
+        'all', [],
         { methods: [ 'field_types', 'cost_model', 'documentation', 'timing' ] }
       ).then((ots) => {
-        aq.each(ots,function(ot) { 
-          ot.upgrade_field_types(); 
+        aq.each(ots,function(ot) {
+          ot.upgrade_field_types();
           if ( ot.timing ) {
             ot.timing = AQ.Timing.record(ot.timing);
-          }          
+          }
         })
         this.compute_categories(ots);
         return ots;
@@ -60,13 +60,13 @@ AQ.OperationType.all_with_content = function(deployed) {
 AQ.OperationType.deployed_with_timing = function() {
 
   return new Promise(function(resolve, reject) {
-    
+
     AQ.get("/operation_types/deployed_with_timing").then(raw_ots => {
 
       let ots = aq.collect(raw_ots.data, raw_ot => {
         let ot = AQ.OperationType.record(raw_ot);
         ot.timing = AQ.Timing.record(ot.timing);
-        return ot;        
+        return ot;
       });
 
       console.log(raw_ots)
@@ -101,12 +101,13 @@ AQ.OperationType.all_fast = function(deployed_only=false) {
 
 AQ.OperationType.all_with_field_types = AQ.OperationType.all_fast;
 
-AQ.OperationType.numbers = function(user,filter) {
+AQ.OperationType.numbers = function(user,filter,show_historic) {
 
   var id = user ? user.id : null;
+  var limit = show_historic ? "/show_historic" : ""
 
-  return new Promise(function(resolve,resject) {
-    AQ.get("/operation_types/numbers/" + id + "/" + filter).then(response => {
+  return new Promise(function(resolve,reject) {
+    AQ.get("/operation_types/numbers/" + id + "/" + filter + limit).then(response => {
       resolve(response.data);
     })
   });
@@ -116,7 +117,7 @@ AQ.OperationType.numbers = function(user,filter) {
 // RECORD METHODS ==================================================
 
 AQ.OperationType.record_methods.upgrade_field_types = function() {
-  this.field_types = aq.collect(this.field_types,(ft) => { 
+  this.field_types = aq.collect(this.field_types,(ft) => {
     var upgraded_ft = AQ.FieldType.record(ft);
     upgraded_ft.allowable_field_types = aq.collect(ft.allowable_field_types, aft => {
       var uaft = AQ.AllowableFieldType.record(aft);
@@ -190,7 +191,7 @@ AQ.OperationType.record_getters.stats = function() {
 
   delete ot.stats;
   ot.stats = {};
-  
+
   AQ.get("/operation_types/"+ot.id+"/stats").then((response) => {
     ot.stats = response.data;
   }).catch((response) => {
@@ -248,7 +249,7 @@ AQ.OperationType.record_methods.code = function(component_name) {
   AQ.Code.where({parent_class: "OperationType", parent_id: operation_type.id, name: component_name}).then(codes => {
     if ( codes.length > 0 ) {
       operation_type[component_name] = codes[codes.length-1];
-    } else { 
+    } else {
       operation_type[component_name]= { content: "# Add code here.", name: "name" };
     }
     AQ.update();
@@ -277,7 +278,7 @@ AQ.OperationType.record_getters.precondition = function() {
 // Add entry for Test?
 
 AQ.OperationType.record_getters.field_types = function() {
-  
+
   var ot = this;
   delete ot.field_types;
   ot.field_types = [];
@@ -313,7 +314,7 @@ AQ.OperationType.record_getters.versions = function() {
             cost_model: costs.reverse(),
             precondition: pres.reverse(),
             documentation: docs.reverse()
-          };          
+          };
           AQ.update();
         });
       });
@@ -345,12 +346,12 @@ AQ.OperationType.record_getters.rendered_docs = function() {
   AQ.Code.where({parent_class: "OperationType", parent_id: operation_type.id, name: 'documentation'}).then(codes => {
     if ( codes.length > 0 ) {
       docs = codes[codes.length-1];
-    } else { 
+    } else {
       docs = { content: "# Add code here.", name: "name" };
     }
     operation_type.rendered_docs = AQ.sce.trustAsHtml(md.render(docs.content));
     AQ.update();
-  });  
+  });
 
   return AQ.sce.trustAsHtml("Rendering ...");
 
