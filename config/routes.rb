@@ -58,7 +58,7 @@ Bioturk::Application.routes.draw do
 
   get '/operation_types/test_all', to: 'operation_types#test_all'
   post '/operation_types/import',                    to: 'operation_types#import'
-  get '/operation_types/numbers/:user_id/:filter',   to: 'operation_types#numbers'
+  get '/operation_types/numbers/:user_id/:filter(/:show_historic)',   to: 'operation_types#numbers'
   get '/operation_types/:id/stats',                  to: 'operation_types#stats'
   get '/operation_types/:id/random/:num',            to: 'operation_types#random'
   get '/operation_types/:id/export',                 to: 'operation_types#export'
