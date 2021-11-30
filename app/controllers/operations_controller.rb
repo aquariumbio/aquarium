@@ -131,8 +131,12 @@ class OperationsController < ApplicationController
 
   def manager_list
     currentDate = DateTime.now
+    if params[:options] && params[:options][:show_historic]
+      ops = Operation.where(params[:criteria])
+    else
+      ops = Operation.where( 'updated_at > ?', [currentDate - 6.months]).where(params[:criteria])
+    end
 
-    ops = Operation.where( 'updated_at > ?', [currentDate - 2.years]).where(params[:criteria])
     ops = ops.limit(params[:options][:limit])   if params[:options] && params[:options][:limit] && params[:options][:limit].to_i.positive?
     ops = ops.offset(params[:options][:offset]) if params[:options] && params[:options][:offset] && params[:options][:offset].to_i.positive?
     ops = ops.order('updated_at DESC')          if params[:options] && params[:options][:reverse]

@@ -340,23 +340,40 @@ class OperationType < ActiveRecord::Base
     r
   end
 
-  def self.numbers(user = nil)
+  def self.numbers(user = nil, show_historic = false)
     q = if user.nil?
-          "
-            SELECT   status, operation_type_id, COUNT(status)
-            FROM     operations
-            WHERE updated_at >= DATE_SUB(NOW(),INTERVAL 2 YEAR)
-            GROUP BY operation_type_id, status
-          "
-        else
-          "
-            SELECT   status, operation_type_id, COUNT(status)
-            FROM     operations
-            WHERE    user_id = #{user.id}
-            WHERE updated_at >= DATE_SUB(NOW(),INTERVAL 2 YEAR)
-            GROUP BY operation_type_id, status
-          "
-        end
+      if show_historic
+        "
+          SELECT   status, operation_type_id, COUNT(status)
+          FROM     operations
+          GROUP BY operation_type_id, status
+        "
+      else
+        "
+          SELECT   status, operation_type_id, COUNT(status)
+          FROM     operations
+          WHERE updated_at >= DATE_SUB(NOW(),INTERVAL 6 MONTH)
+          GROUP BY operation_type_id, status
+        "
+      end
+    else
+      if show_historic
+        "
+          SELECT   status, operation_type_id, COUNT(status)
+          FROM     operations
+          WHERE    user_id = #{user.id}
+          GROUP BY operation_type_id, status
+        "
+      else
+        "
+          SELECT   status, operation_type_id, COUNT(status)
+          FROM     operations
+          WHERE    user_id = #{user.id}
+          AND updated_at >= DATE_SUB(NOW(),INTERVAL 6 MONTH)
+          GROUP BY operation_type_id, status
+        "
+      end
+    end
 
     r = ActiveRecord::Base.connection.execute(q).entries
 
