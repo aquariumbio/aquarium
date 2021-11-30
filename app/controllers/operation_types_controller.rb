@@ -494,14 +494,14 @@ class OperationTypesController < ApplicationController
 
     if current_user.admin?
       if params[:user_id] && params[:filter] == 'true'
-        render json: OperationType.numbers(User.find(params[:user_id])),
+        render json: OperationType.numbers(User.find(params[:user_id]), params[:show_historic]),
                status: :ok
       else
-        render json: OperationType.numbers,
+        render json: OperationType.numbers(nil, params[:show_historic]),
                status: :ok
       end
     else
-      render json: OperationType.numbers(current_user),
+      render json: OperationType.numbers(current_user, params[:show_historic]),
              status: :ok
     end
 
