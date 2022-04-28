@@ -11,7 +11,7 @@ gem 'activerecord-nulldb-adapter'
 gem 'alphabetical_paginate'
 
 # Authentication and cross origin
-gem 'angular_rails_csrf', '2.1.1'
+gem 'angular_rails_csrf', '3.1.0'
 
 gem 'anemone', path: 'components/anemone'
 gem 'aquadoc', path: 'components/aquadoc'
@@ -43,7 +43,7 @@ gem 'protected_attributes_continued'
 
 gem 'rack-cors', '~> 1.0.5', require: 'rack/cors'
 
-gem 'rails', '4.2.11.3'
+gem 'rails', '5.2.7.1'
 gem 'mimemagic', '>= 0.3.10'
 
 gem 'redcarpet', '>= 3.5.1'
