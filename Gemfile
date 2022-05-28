@@ -41,9 +41,9 @@ gem 'paperclip', '~> 6.1', '>= 6.1.0'
 # Needed for rails 3.2 => 4.0 upgrade
 gem 'protected_attributes_continued'
 
-gem 'rack-cors', '~> 1.0.5', require: 'rack/cors'
+gem 'rack-cors', '~> 1.0.6', require: 'rack/cors'
 
-gem 'rails', '4.2.11.3'
+gem 'rails', '5.0.0'
 gem 'mimemagic', '>= 0.3.10'
 
 gem 'redcarpet', '>= 3.5.1'
