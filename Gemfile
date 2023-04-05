@@ -11,7 +11,7 @@ gem 'activerecord-nulldb-adapter'
 gem 'alphabetical_paginate'
 
 # Authentication and cross origin
-gem 'angular_rails_csrf', '2.1.1'
+gem 'angular_rails_csrf', '4.0.0'
 
 gem 'anemone', path: 'components/anemone'
 gem 'aquadoc', path: 'components/aquadoc'
@@ -39,11 +39,11 @@ gem 'oj'
 gem 'paperclip', '~> 6.1', '>= 6.1.0'
 
 # Needed for rails 3.2 => 4.0 upgrade
-gem 'protected_attributes_continued'
+gem 'protected_attributes_continued', '>= 1.4.0'
 
-gem 'rack-cors', '~> 1.0.5', require: 'rack/cors'
+gem 'rack-cors', '~> 1.0.6', require: 'rack/cors'
 
-gem 'rails', '4.2.11.3'
+gem 'rails', '6.1.7.3'
 gem 'mimemagic', '>= 0.3.10'
 
 gem 'redcarpet', '>= 3.5.1'
@@ -81,5 +81,5 @@ gem 'sorbet-rails', '0.5.6'
 gem 'sorbet-runtime'
 
 group :production do
-  gem 'puma'
+  gem 'puma', '>= 5.6.4'
 end
