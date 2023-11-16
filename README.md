@@ -13,7 +13,7 @@ Aquarium is the operating system of the [UW BIOFAB](http://www.uwbiofab.org), a 
 
 ## Users
 
-Users should start at the [Getting Started](http://klavinslab.org/aquaverse?category=Getting%20Started&content=Installation) page of [aquaverse](http://klavinslab.org/aquaverse/)
+Users should start at the "Getting Started" page of [aquaverse](http://klavinslab.org/aquaverse/)
 
 ## Developers
 
