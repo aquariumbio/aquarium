@@ -64,9 +64,9 @@ group :development do
   gem 'ipaddress' # used to determine subnet for docker containers for web-console
   gem 'rspec-rails', '>= 4.1.2'
   gem 'rspec-sorbet'
-  gem 'rubocop'
-  gem 'rubocop-rails'
-  gem 'rubocop-sorbet'
+  gem 'rubocop', '>= 1.19.0'
+  gem 'rubocop-rails', '>= 2.12.0'
+  gem 'rubocop-sorbet', '>= 0.6.3'
   gem 'simplecov', require: false
   gem 'web-console', '~> 3.3', '>= 3.3.0'
   gem 'yard', '>= 0.9.20'
