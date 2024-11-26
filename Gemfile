@@ -81,5 +81,5 @@ gem 'sorbet-rails', '0.5.6'
 gem 'sorbet-runtime'
 
 group :production do
-  gem 'puma'
+  gem 'puma', '>= 5.6.4'
 end
