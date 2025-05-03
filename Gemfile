@@ -62,7 +62,7 @@ gem 'will_paginate'
 group :development do
   gem 'factory_bot_rails', '>= 5.2.0'
   gem 'ipaddress' # used to determine subnet for docker containers for web-console
-  gem 'rspec-rails', '>= 4.1.2'
+  gem 'rspec-rails', '>= 8.0.0'
   gem 'rspec-sorbet'
   gem 'rubocop'
   gem 'rubocop-rails'
