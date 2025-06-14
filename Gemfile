@@ -60,7 +60,7 @@ gem 'where-or'
 gem 'will_paginate'
 
 group :development do
-  gem 'factory_bot_rails', '>= 5.2.0'
+  gem 'factory_bot_rails', '>= 6.5.0'
   gem 'ipaddress' # used to determine subnet for docker containers for web-console
   gem 'rspec-rails', '>= 4.1.2'
   gem 'rspec-sorbet'
