@@ -17,7 +17,7 @@ gem 'anemone', path: 'components/anemone'
 gem 'aquadoc', path: 'components/aquadoc'
 
 # For uploads and cloud storage
-gem 'aws-sdk', '>= 1.67.0', '< 2.0'
+gem 'aws-sdk', '~> 2.0', '>= 2.0.22'
 gem 'aws-sdk-s3'
 
 # For email
@@ -43,7 +43,7 @@ gem 'protected_attributes_continued'
 
 gem 'rack-cors', '~> 1.0.5', require: 'rack/cors'
 
-gem 'rails', '4.2.11.3'
+gem 'rails', '7.0.0'
 gem 'mimemagic', '>= 0.3.10'
 
 gem 'redcarpet', '>= 3.5.1'
