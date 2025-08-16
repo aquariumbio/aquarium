@@ -3,10 +3,10 @@
 source 'https://rubygems.org'
 
 # For bulk inserts (e.g. for loading a collection from a matrix)
-gem 'activerecord-import'
+gem 'activerecord-import', '>= 1.3.0'
 
 # Used to fake db during asset compilation in Dockerfile
-gem 'activerecord-nulldb-adapter'
+gem 'activerecord-nulldb-adapter', '>= 0.5.0'
 
 gem 'alphabetical_paginate'
 
@@ -43,7 +43,7 @@ gem 'protected_attributes_continued'
 
 gem 'rack-cors', '~> 1.0.5', require: 'rack/cors'
 
-gem 'rails', '4.2.11.3'
+gem 'rails', '7.1.5.2'
 gem 'mimemagic', '>= 0.3.10'
 
 gem 'redcarpet', '>= 3.5.1'
