@@ -18,7 +18,7 @@ gem 'aquadoc', path: 'components/aquadoc'
 
 # For uploads and cloud storage
 gem 'aws-sdk', '>= 1.67.0', '< 2.0'
-gem 'aws-sdk-s3'
+gem 'aws-sdk-s3', '>= 1.208.0'
 
 # For email
 gem 'aws-sdk-ses'
